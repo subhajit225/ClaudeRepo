@@ -1,0 +1,38 @@
+{
+  "mcpServers": {
+    "salesforce": {
+      "command": "npx",
+      "args": [
+        "--prefer-offline",
+        "-y",
+        "@salesforce/mcp",
+        "--orgs",
+        "<YOUR_SALESFORCE_ORG_ALIAS>",
+        "--toolsets",
+        "all"
+      ],
+      "cwd": "<ABSOLUTE_PATH_TO_PROJECT>"
+    },
+    "mcp-atlassian": {
+      "command": "/Users/<YOUR_USERNAME>/.local/bin/uvx",
+      "args": [
+        "mcp-atlassian"
+      ],
+      "env": {
+        "JIRA_URL": "https://<YOUR_DOMAIN>.atlassian.net/",
+        "JIRA_USERNAME": "<YOUR_JIRA_EMAIL>",
+        "JIRA_API_TOKEN": "<YOUR_JIRA_API_TOKEN>"
+      }
+    },
+    "github": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "<YOUR_GITHUB_PAT>"
+      }
+    }
+  }
+}
