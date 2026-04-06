@@ -1,0 +1,18 @@
+<template>
+    <template if:true={_showPromoBannerModal}>
+        <lightning-layout multiple-rows class="slds-text-align_center slds-p-top_x-large">
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+                <a href={wizardNavigateURL} target="_blank"><img src={imageUrl} alt="Rubrik" class="banner-img"></img></a>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+                <h2 class="heading-58 slds-m-bottom_small slds-m-top_medium">
+                    {heading}</h2>
+                <p class="cardBodyDescription"><lightning-formatted-rich-text value={subHeading}></lightning-formatted-rich-text></p>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+                <lightning-button variant="brand" label={buttonLabel} title={buttonLabel} onclick={handleSignUp}
+                    ></lightning-button>
+            </lightning-layout-item>
+        </lightning-layout>
+    </template>
+</template>

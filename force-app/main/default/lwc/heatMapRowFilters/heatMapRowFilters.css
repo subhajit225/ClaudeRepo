@@ -1,0 +1,76 @@
+/*.navbar {
+    display: flex;
+    padding: 10px 0;
+    color: white;
+    font-size: 13px;
+    font-weight: bold;
+    border-bottom: 2px solid white;
+}
+
+.navbar-item {
+    position: relative;
+    margin: 0 15px;
+    cursor: pointer;
+    padding: 7px;
+}
+
+.dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: white;
+    color: black;
+    border: 1px solid #ccc;
+    z-index: 1000;
+    display: none;
+}
+
+.dropdown-item {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background-color: #eee;
+}
+
+.navbar-item:hover .dropdown {
+    display: block;
+}
+.chevron-icon {
+    margin-left: 5px;
+}*/
+.navbarContainer{
+    /* display: flex; */
+    /* background-color: #463A93; Adjust the color to match your navbar */
+    padding: 10px 0;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    border-bottom: 2px solid white;
+}
+.applyFilterClass{
+    --slds-c-button-brand-color-background: white;
+    --slds-c-button-brand-text-color: #065789;
+    --slds-c-button-brand-text-color-active: #065789;
+    --slds-c-button-brand-text-color-hover: #065789;
+    --slds-c-button-brand-spacing-inline-start: 7px;
+    --slds-c-button-brand-spacing-inline-end: 7px;
+}
+.resetFilterClass{
+    --slds-c-button-brand-color-background: white;
+    --slds-c-button-brand-text-color: #065789;
+    --slds-c-button-brand-text-color-active: #065789;
+    --slds-c-button-brand-text-color-hover: #065789;
+    --slds-c-button-brand-spacing-inline-start: 7px;
+    --slds-c-button-brand-spacing-inline-end: 7px;
+}
+.button{
+    --sds-c-button-text-color-hover: #ececf2 !important;
+}
+
+.accountFilterClass{
+    font-size: 15px !important;
+    font-weight: 300 !important;
+    --slds-c-button-shadow-focus:none;
+}

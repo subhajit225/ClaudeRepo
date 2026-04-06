@@ -1,0 +1,79 @@
+<apex:page StandardController="Portal_News__c" cache="false" standardStylesheets="false" sidebar="false" showheader="false" title="News - Rubrik Community" applyBodyTag="false" action="{!case($User.UserType,
+                          "Standard",urlFor($Action.Portal_News__c.View, Portal_News__c.Id, null, true),
+                          "PowerPartner",null,
+                          "CSPLitePortal",null,
+                          "CustomerSuccess",null,
+                          "PowerCustomerSuccess",null,
+                          "CsnOnly",null,
+                          null)}">
+    <style>
+    .pbSubsection, pbBody {
+    padding: 25px;
+    }
+    table {
+    padding: 5px;
+    }
+    td.labelCol {
+    font-size: 16px;
+    font-family: Gotham-Medium;
+    padding-left: 10px
+    }
+    td.dataCol {
+    padding: 5px;
+    padding-right: 15px;
+    }
+
+    td.data2Col {
+    padding: 5px;
+    padding-left: 15px;
+    }
+    td {
+    padding: 15px;
+    }
+    wrapper{
+    padding-bottom: 5px;
+    }
+    
+    .btnpad{
+    padding: 15px;
+    }
+    
+    </style>
+    <c:visualstrapblock >
+
+        <!--start header-->
+        <c:siteheader ></c:siteheader>
+        <!--end Header-->
+
+        
+        <!--start the Container-->
+        <div class="container">
+        <div class="row rowcontainer" >
+          <div class="col-md-12">
+          <c:pageTitle Name="{!Portal_News__c.Name}"></c:pageTitle>
+    
+            <div class="row" style="table" >
+                  <div class="col-md-1"><!--left spacing--></div>
+                  <div class="col-md-10">
+                   <apex:outputfield value="{!Portal_News__c.Publish_Date__c}" /><br/><br/>
+                    <apex:outputText value="{!Portal_News__c.Content__c}" escape="false"/><br/><br/>
+              </div><!--end the row-->
+        </div>
+       
+
+        <br/>
+        <br/>
+                <a href="{!URLFOR($Site.BaseUrl)}">Return to Home</a>
+                
+
+        </div>
+        </div>
+        </div>
+
+          <!--start the footer-->
+        <c:sitefooter rendered="{!NOT(ISPICKVAL($User.UserType,'PowerPartner'))}"/>
+        <c:psitefooter rendered="{!ISPICKVAL($User.UserType,'PowerPartner')}"/>
+        
+    </c:visualstrapblock>           
+                
+</apex:page>

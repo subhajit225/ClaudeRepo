@@ -1,0 +1,437 @@
+<apex:page showHeader="false" sidebar="false" cache="false" contentType="text/xml" controller="ScaleUtilitySegmentedLineViewController">
+    
+    
+      <block>
+        
+        <table table-layout="fixed" >
+            <table-body>
+                <table-row>
+                    <table-cell display-align="center">
+                        <block text-align="left" font-size = "10px" font-weight="bold" margin-bottom = "5px"> 
+                            <apex:outputText rendered="{! IF((pricinglstToDisplay.size > 0), true, false)}">
+                                Pricing
+                            </apex:outputText>
+                        </block>
+                    </table-cell>
+                </table-row>
+            </table-body>
+        </table>
+        <apex:outputText rendered="{! IF((pricinglstToDisplay.size > 0), true, false)}" escape="false"> 
+            <table table-layout="fixed"  border-color="#000000" border-width="1px" border-style="solid">
+                <table-column column-width="10.67%"/>
+                <table-column column-width="13.33%"/>
+                <table-column column-width="20%"/>
+                <table-column column-width="7.73%"/>
+                <table-column column-width="7.73%"/> 
+                <table-column column-width="12.80%"/>
+                <table-column column-width="6%"/>
+                <table-column column-width="9.47%"/>
+                <table-column column-width="12.80%"/>
+                
+                <table-header>
+                    <table-row font-weight="bold" font-size="0.7em" text-align="left" background-color="#47baef" color="#ffffff" >
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="15pt" text-align="left"><block>Product Code</block></table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="15pt" text-align="Left"><block>Product Description</block></table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="25pt" text-align="Left"><block>Comments</block></table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="25pt" text-align="center"><block>Term</block></table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="25pt" text-align="center"><block>Qty</block></table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="15pt" text-align="right"><block>Total List Price</block></table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="5pt" text-align="center"><block>Total Disc.(%)</block></table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="15pt" text-align="right"><block>Unit Net Price</block></table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="15pt" text-align="right"><block>Total Net Price</block></table-cell>
+                        
+                    </table-row>
+                </table-header>
+                {!pricinglstToDisplay}
+                
+                <table-body>
+                    <apex:repeat var="varWrap" value="{!pricinglstToDisplay}">
+                        <table-row font-size="0.7em" >
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left" >
+                                <block>{!varWrap.prodCode}</block>
+                            </table-cell>
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left" >
+                                <block>{!varWrap.prodDescription}</block>
+                            </table-cell>
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left" >
+                                
+                                <apex:repeat var="spt" value="{!varWrap.commentsList}" rendered="{! IF((varWrap.commentsList.size > 0), true, false)}">
+                                    <block>{!spt}</block>
+                                </apex:repeat>
+                                <block></block>
+                            </table-cell>
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="center" >
+                                <block>{!varWrap.prodTerm}</block>
+                            </table-cell>
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="center" >
+                                <block>{!varWrap.prodQtyStr}</block>
+                            </table-cell>
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="right" >
+                                <block>${!varWrap.totalListPriceStr}</block>
+                            </table-cell>
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="center" >
+                                <block>{!varWrap.totalDiscount}</block>
+                            </table-cell>
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="right" >
+                                <block>${!varWrap.unitNetPriceStr}</block>
+                            </table-cell>
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="right" >
+                                
+                                <block>${!varWrap.totalNetPriceStr}</block>
+                            </table-cell>
+                        </table-row>
+                    </apex:repeat>
+                </table-body>
+            </table>
+            
+            
+            <table table-layout="fixed" border-color="#000000" >
+                <table-column column-width="87.73%"/>
+                <table-column column-width="12.80%"/>
+                
+                <table-body>
+                    <table-row font-size="0.7em">
+                        <table-cell margin="0pt" padding="3pt" padding-left="2pt" padding-right="2pt" text-align="right"> 
+                            <block>TOTAL</block>
+                        </table-cell> 
+                        <table-cell border="1px solid black" margin="0pt" padding="3pt" padding-left="2pt" padding-right="2pt" text-align="right" >
+                            <block>{!pricingTableTotal}</block>
+                        </table-cell>
+                        
+                    </table-row>
+                    
+                </table-body>
+            </table>          
+        </apex:outputText>
+        
+        <table table-layout="fixed" >
+            <table-body>
+                <table-row>
+                    <table-cell display-align="center">
+                        <block text-align="left" font-size = "10px" font-weight="bold" margin-bottom = "5px" margin-top = "25px"> 
+                            <apex:outputText rendered="{! IF((lstQuoteLinesToDisplay.size > 0), true, false)}">
+                                <apex:outputText rendered="{!NOT(hasPayGoProduct)}">
+                                    Reserve Capacity
+                                </apex:outputText>
+                                <apex:outputText rendered="{!hasPayGoProduct}">
+                                    PayGo
+                                </apex:outputText>
+                            </apex:outputText>
+                        </block>
+                    </table-cell>
+                </table-row>
+            </table-body>
+        </table>            
+        <apex:outputText rendered="{! IF((lstQuoteLinesToDisplay.size > 0), true, false)}"> 
+            <table table-layout="fixed" border-color="#000000" border-width="1px" border-style="solid">
+                <apex:outputText rendered="{!NOT(hasPayGoProduct)}">
+                    <table-column column-width="10.67%"/>
+                </apex:outputText>
+                <apex:outputText rendered="{!hasPayGoProduct}">
+                    <table-column column-width="13.67%"/>
+                </apex:outputText>
+                <apex:outputText rendered="{!NOT(hasPayGoProduct)}">
+                    <table-column column-width="13.33%"/>
+                </apex:outputText>
+                <apex:outputText rendered="{!hasPayGoProduct}">
+                    <table-column column-width="29.17%"/>
+                </apex:outputText>
+                <table-column column-width="20%"/>
+                <table-column column-width="7.73%"/>
+                <table-column column-width="7.73%"/> 
+                <apex:outputText rendered="{!NOT(hasPayGoProduct)}">
+                    <table-column column-width="12.80%"/>
+                    <table-column column-width="6%"/>
+                </apex:outputText>
+                <table-column column-width="9.47%"/>
+                <table-column column-width="12.80%"/>
+                
+                <table-header>
+                    <table-row font-weight="bold" font-size="0.7em" text-align="left" background-color="#47baef" color="#ffffff" >
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="15pt" text-align="left"><block>Product Code</block></table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="15pt" text-align="Left"><block>Product Description</block></table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="25pt" text-align="Left"><block>Comments</block></table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="25pt" text-align="center"><block>Term</block></table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="15pt" text-align="center"><block>Total Qty</block></table-cell>
+                        <apex:outputText rendered="{!NOT(hasPayGoProduct)}">
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="15pt" text-align="right"><block>Total List Price</block></table-cell>
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="5pt" text-align="center"><block>Total Disc.(%)</block></table-cell>
+                        </apex:outputText>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="15pt" text-align="right"><block>Unit Net Price</block></table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="15pt" text-align="right">
+                            <apex:outputText rendered="{!NOT(hasPayGoProduct)}">
+                                <block>Total Net Price</block>
+                            </apex:outputText>
+                                <apex:outputText rendered="{!hasPayGoProduct}">
+                                <block>Total Commit</block>
+                            </apex:outputText>
+                        </table-cell>                       
+                    </table-row>
+                </table-header>
+                {!lstQuoteLinesToDisplay}
+                
+                <table-body>
+                    <apex:repeat var="varWrap" value="{!lstQuoteLinesToDisplay}">
+                        <table-row font-size="0.7em">
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left" >
+                                <block>{!varWrap.prodCode}</block>
+                            </table-cell>
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left" >
+                                <block>{!varWrap.prodDescription}</block>
+                            </table-cell>
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left" >
+                                 
+                                <apex:repeat var="spt" value="{!varWrap.commentsList}" rendered="{! IF((varWrap.commentsList.size > 0), true, false)}">
+                                    <block>{!spt}</block>
+                                </apex:repeat>
+                                <block></block>
+                                
+                            </table-cell>
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="center" >
+                                <block>{!varWrap.prodTerm}</block>
+                            </table-cell>
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="center" >
+                                <block>{!varWrap.prodQtyStr}</block>
+                            </table-cell>
+                            <apex:outputText rendered="{!NOT(hasPayGoProduct)}">
+                                <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="right" >
+                                    <block>${!varWrap.totalListPriceStr}</block>
+                                </table-cell>
+                                <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="center" >
+                                    <block>{!varWrap.totalDiscount}</block>
+                                </table-cell>
+                            </apex:outputText>
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="right" >
+                                <block>${!varWrap.unitNetPriceStr}</block>
+                            </table-cell>
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="right" >
+                                
+                                <block>${!varWrap.totalNetPriceStr}</block>
+                                
+                            </table-cell>
+                        </table-row>
+                    </apex:repeat>
+                </table-body>
+            </table>
+            
+            
+            
+            <table table-layout="fixed">
+                <table-column column-width="87.73%"/>
+                <table-column column-width="12.80%"/>
+                
+                <table-body>
+                    <table-row font-size="0.7em">
+                        <table-cell  margin="0pt" padding="3pt" padding-left="2pt" padding-right="2pt" text-align="right" > 
+                            <block>TOTAL</block>
+                        </table-cell>  
+                        <table-cell border="1px solid black" margin="0pt" padding="3pt" padding-left="2pt" padding-right="2pt" text-align="right" >
+                            <block>{!reserveTableTotal}</block>
+                        </table-cell>
+                        
+                    </table-row>
+                </table-body>
+            </table>             
+        </apex:outputText>
+        
+        <apex:outputText > 
+            <table table-layout="fixed" width="99%" border-color="#000000" border-width="1px" border-style="solid" margin-top = "25px">
+                <table-column column-width="22%"/>
+                <table-column column-width="79%"/>
+                
+                <table-body>
+                    
+                    <table-row font-size="1.1em" font-weight="bold" >
+                        <table-cell border="1px solid black" margin="0pt" padding-bottom="4pt" padding-top="5pt" padding-left="2pt" text-align="left" > 
+                            <block>GRAND TOTAL:</block>
+                        </table-cell>  
+                        <table-cell border="1px solid black" margin="0pt" padding-bottom="4pt" padding-top="5pt" padding-left="2pt" text-align="right" >
+                            <block>{!grandTotal}</block>
+                        </table-cell>
+                        
+                    </table-row>
+                    
+                </table-body>
+            </table>             
+        </apex:outputText>
+        
+        <table table-layout="fixed" >
+            <table-body>
+                <table-row>
+                    <table-cell display-align="center">
+                        <block text-align="left" font-size = "10px" font-weight="bold" margin-bottom = "5px" margin-top = "25px"> 
+                            <apex:outputText rendered="{! IF((onDemandlstToDisplay.size > 0), true, false)}">
+                                On Demand Capacity
+                            </apex:outputText>
+                        </block>
+                    </table-cell>
+                </table-row>
+            </table-body>
+        </table> 
+        <apex:outputText rendered="{! IF((onDemandlstToDisplay.size > 0), true, false)}"> 
+            <table table-layout="fixed" width="99%" border-color="#000000" border-width="1px" border-style="solid">
+                <table-column column-width="20%"/>
+                <table-column column-width="16.67%"/>
+                <table-column column-width="24.40%"/>
+                <table-column column-width="7.73%"/>
+                <table-column column-width="9.47%"/>
+                <table-column column-width="9.47%"/>
+                <table-column column-width="12.40%"/>
+                
+                <table-header>
+                    <table-row font-weight="bold" font-size="0.7em" text-align="left" background-color="#47baef" color="#ffffff" >
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="25pt" text-align="left"><block>Product Code</block></table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="15pt" text-align="Left"><block>Product Description</block></table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="25pt" text-align="Left"><block>Comments</block></table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="25pt" text-align="center"><block>Term</block></table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="15pt" text-align="right"><block>Unit List Price</block></table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="15pt" text-align="center"><block>Total Disc.(%)</block></table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="25pt" text-align="right"><block>Unit Net Price</block></table-cell>
+                        
+                    </table-row>
+                </table-header>
+                {!onDemandlstToDisplay}
+                
+                <table-body>
+                    <apex:repeat var="varWrap" value="{!onDemandlstToDisplay}">
+                        <table-row font-size="0.7em">
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left" >
+                                <block>{!varWrap.prodCode}</block>
+                            </table-cell>
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left" >
+                                <block>{!varWrap.prodDescription}</block>
+                            </table-cell>
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left" >
+<apex:repeat var="spt" value="{!varWrap.commentsList}" rendered="{! IF((varWrap.commentsList.size > 0), true, false)}">
+<block>{!spt}</block>
+</apex:repeat>
+<block></block>
+</table-cell>
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="center" >
+                                <block>{!varWrap.prodTerm}</block>
+                            </table-cell>
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="right" >
+                                <block>${!varWrap.totalListPriceStr}</block>
+                            </table-cell>
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="center" >
+                                <block>{!varWrap.totalDiscount}</block>
+                            </table-cell>
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="right" >
+                                <block>${!varWrap.unitNetPriceStr}</block>
+                            </table-cell>
+                        </table-row>
+                    </apex:repeat>
+                </table-body>
+            </table>
+        </apex:outputText>
+        
+        <table table-layout="fixed" >
+            <table-body>
+                <table-row>
+                    <table-cell display-align="center">
+                        <block text-align="left" font-size = "10px" font-weight="bold" margin-bottom = "5px" margin-top = "25px"> 
+                            <apex:outputText rendered="{! IF((hardwarelstToDisplay.size > 0), true, false)}"> 
+                                Hardware To Source
+                            </apex:outputText>
+                        </block>
+                    </table-cell>
+                </table-row>
+            </table-body>
+        </table> 
+        
+        <apex:outputText rendered="{! IF((hardwarelstToDisplay.size > 0), true, false)}"> 
+            <table table-layout="fixed" border-color="#000000" border-width="1px" border-style="solid">
+                <table-column column-width="20%"/>
+                <table-column column-width="26.67%"/>
+                <table-column column-width="18.67%"/>
+                <table-column column-width="7.33%"/>
+                <table-column column-width="7.33%"/>
+                <table-column column-width="20%"/>
+                
+                <table-header>
+                    <table-row font-weight="bold" font-size="0.7em" text-align="left" background-color="#47baef" color="#ffffff" >
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="25pt" text-align="left"><block>Product Code</block></table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="25pt" text-align="Left"><block>Product Description</block></table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="15pt" text-align="Left"><block>Associated SW Support</block></table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="25pt" text-align="center"><block>Qty</block></table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="15pt" text-align="center"><block>Unit TB</block></table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="25pt" text-align="center"><block>HW Price</block></table-cell>
+                    </table-row>
+                </table-header>
+                {!hardwarelstToDisplay}
+                
+                <table-body>
+                    <apex:repeat var="varWrap" value="{!hardwarelstToDisplay}">
+                        <table-row font-size="0.7em">
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left" >
+                                <block>{!varWrap.prodCode}</block>
+                            </table-cell>
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left" >
+                                <block>{!varWrap.prodDescription}</block>
+                            </table-cell>
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left" >
+                                <apex:repeat var="spt" value="{!varWrap.associatedHwSupportlist}" rendered="{! IF((varWrap.associatedHwSupportlist.size > 0), true, false)}">
+                                    <block>{!spt}</block>
+                                </apex:repeat>
+                                <block></block>
+                            </table-cell>
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="center" >
+                                <block>{!varWrap.prodQtyStr}</block>
+                            </table-cell>
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="center" >
+                                <block>{!varWrap.unitTB}</block>
+                            </table-cell>
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="center" >
+                                <block>{!varWrap.HWPrice}</block>
+                            </table-cell>
+                        </table-row>
+                    </apex:repeat>
+                </table-body>
+            </table>
+        </apex:outputText>
+        
+        <table table-layout="fixed" >
+            <table-body>
+                <table-row>
+                    <table-cell display-align="center">
+                        <block text-align="left" font-size = "10px" font-weight="bold" margin-bottom = "5px" margin-top = "25px"> 
+                            <apex:outputText rendered="{! IF((coveredAssetlstToDisplay.size > 0), true, false)}">
+                                Covered Assets
+                            </apex:outputText>
+                        </block>
+                    </table-cell>
+                </table-row>
+            </table-body>
+        </table> 
+        <apex:outputText rendered="{! IF((coveredAssetlstToDisplay.size > 0), true, false)}"> 
+            <table table-layout="fixed" border-color="#000000" border-width="1px" border-style="solid" margin-bottom = "25px">
+                <table-column column-width="60%"/>
+                <table-column column-width="20%"/>
+                
+                
+                <table-header>
+                    <table-row font-weight="bold" font-size="0.7em" text-align="left" background-color="#47baef" color="#ffffff" >
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="2pt" text-align="center"><block>Serial Numbers</block></table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="2pt" text-align="Left"><block>Product Code</block></table-cell>
+                        
+                    </table-row>
+                </table-header>
+                {!coveredAssetlstToDisplay}
+                
+                <table-body>
+                    <apex:repeat var="varWrap" value="{!coveredAssetlstToDisplay}">
+                        <table-row font-size="0.7em">
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left" >
+                                <block>{!varWrap.serialNumbers}</block>
+                            </table-cell>
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left" >
+                                <block>{!varWrap.prodCode}</block>
+                            </table-cell>                                    
+                        </table-row>
+                    </apex:repeat>
+                </table-body>
+            </table>
+        </apex:outputText>    
+        
+    </block> 
+</apex:page>

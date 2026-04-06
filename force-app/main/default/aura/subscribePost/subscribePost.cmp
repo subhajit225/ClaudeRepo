@@ -1,0 +1,21 @@
+<aura:component controller ="SubscribePostController" implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,force:hasRecordId" access="global" >
+    <aura:attribute name="isSubscribed" type="Boolean"/>
+   <!-- <aura:attribute name="recordId" type="String" /> -->
+    <aura:attribute name="isBookmarked" type="Boolean"/>
+    <aura:attribute name="questionId" type="String"/>
+    <aura:attribute name="currentUserId" type="String"/>
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+    <aura:attribute name="networkId" type="String" default="0DB1W00000001vMWAQ"/>
+    
+    <div class="slds-m-top_xx-large slds-align_absolute-center">
+        <lightning:buttonStateful class="manageBtn"
+                                  state="{! v.isSubscribed }"
+                                  variant="brand"
+                                  labelWhenOff="Subscribe to post"
+                                  labelWhenOn="Unsubscribe to post"
+                                  onclick="{! c.manageSubscription }"/>
+        <!-- added for Forum Gamification CS21-712-->
+        <!--<lightning:button class="manageBtn" label="My Forums Profile" title="Profile Page" onclick="{!c.navigateToUserProfile}" />-->
+        <!-- End - CS21-712 -->
+    </div>
+</aura:component>

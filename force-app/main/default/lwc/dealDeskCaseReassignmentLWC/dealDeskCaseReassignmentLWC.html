@@ -1,0 +1,117 @@
+<template>
+    <lightning-card variant="Narrow" icon-name="standard:change_request" title="Deal Desk Case Reassignment">
+        <lightning-layout multiple-rows padding="around-small" class="slds-grid" role="grid">
+            <lightning-layout-item padding="around-small" class="slds-align-top" size="3">
+                <lightning-dual-listbox name="status"
+                    label="Search with multiple Status:"
+                    source-label=""
+                    selected-label=""
+                    options={statusPickListValues}
+                    onchange={handleStatusChange}>
+                </lightning-dual-listbox>
+            </lightning-layout-item>
+            <lightning-layout-item padding="around-small" class="slds-m-top_xx-small" size="3">
+                <div class="slds-text-title">Search with multiple Owners:</div>
+                <c-multiselect-lookup-l-w-c objectname="User" fieldnames=" Id, Name, Title"
+                onselected={handleselectedUserRecords} icon-name="standard:user" placeholder="Search User..">
+            </c-multiselect-lookup-l-w-c>
+            
+        </lightning-layout-item>
+            <lightning-layout-item padding="around-small" class="slds-align-top" size="2">
+                <lightning-combobox
+                         name="team"
+                         label="Search with Team:"
+                         value={team}
+                         placeholder="Select Team"
+                         options={teamPickListValues}
+                         onchange={handleTeamChange}
+                     ></lightning-combobox>
+                     <br/>
+            <lightning-button label="Search" icon-name="utility:search" onclick={handleSearchButton} variant="brand" class="slds-float_right"></lightning-button>
+                 </lightning-layout-item>
+                <lightning-layout-item padding="around-small" class="slds-m-top_x-small" size="1"></lightning-layout-item>
+                <lightning-layout-item padding="around-small" class="slds-m-top_x-small" size="3">
+                     <div class="slds-text-title">Reassign To:</div>
+                                <div class="slds-combobox_container" onmouseleave = {handleMouseLeave}>
+                                    <div id="box" aria-expanded="true" aria-haspopup="listbox" role="combobox">
+                                        <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right" role="none">
+                                            <template if:true={isValueSelected} >
+                                                <div class="slds-box slds-box_x-small">
+                                                    <span class="slds-icon_container slds-combobox__input-entity-icon">
+                                                        <lightning-icon icon-name=standard:user size="x-small" alternative-text="icon"></lightning-icon>  
+                                                      </span>
+                                                      <span class="slds-m-left_large">{reassignUserName}</span>
+                                                    <button class="slds-button slds-button_icon slds-input__icon slds-input__icon_right" title="Remove selected option">
+                                                    <lightning-icon icon-name="utility:close" size="x-small" alternative-text="close icon" onclick={handleRemovePill}></lightning-icon> 
+                                                   </button>  
+                                                </div>
+                                                </template>
+                                            <template if:false={isValueSelected}>
+                                                <div class="slds-p-top_none">
+                                                    <lightning-input  type="search" id="input" value={searchTerm}
+                                                                     onclick={handleSearchClick} onchange={onChangeSearchKey} is-loading={isSearchLoading}
+                                                                     variant="label-hidden" autocomplete="off" placeholder="Search User..">
+                                                    </lightning-input>
+                                                </div>
+                                            </template>
+                                        </div>
+                                        <!--<div >-->
+                                        <div if:true={showSearchTable} style="margin-top:0px" id="listbox-id-1" class="slds-dropdown slds-dropdown_length-with-icon-7 slds-dropdown_fluid" role="listbox">
+                                            <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+                                                <template for:each={reassignUserSearchList} for:item="record">
+                                                    <li key={record.Id} role="presentation" class="slds-listbox__item">
+                                                        <div data-id={record.Id} data-name={record.Name} onclick={onSelectReassignUser}
+                                                            class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta"
+                                                            role="option">
+                                                            <span style="pointer-events: none;" class="slds-media__figure slds-listbox__option-icon" >
+                                                                <span class="slds-icon_container" >
+                                                                    <lightning-icon icon-name="standard:user" size="small" alternative-text="icon" ></lightning-icon>  
+                                                                </span>
+                                                            </span>
+                                                            <span style="pointer-events: none;" class="slds-media__body" >
+                                                                <span  class="slds-listbox__option-text slds-listbox__option-text_entity">{record.Name}</span>
+                                                            <span class="slds-listbox__option-meta slds-listbox__option-meta_entity">{record.Title}</span>
+                                                            </span>
+                                                        </div>
+                                                    </li>
+                                                </template>
+                                                <template if:true={messageFlag}>
+                                                    <li class="slds-listbox__item" style="text-align: center; font-weight: bold;">No Records
+                                                        Found...</li>
+                                                </template>
+                                             </ul>
+                                        </div>
+                                    <!--</div>-->
+                                    </div>
+                                </div>
+                                <br/>
+                                <lightning-button label="Reassign" icon-name="utility:reassign" onclick={handleReassign} variant="brand" class="slds-float_right" disabled={isReassignDisable}></lightning-button>
+                                </lightning-layout-item>
+                 </lightning-layout>
+
+        <lightning-layout class="slds-border_top">
+             <lightning-layout-item size="12" padding="around-small">
+                <template if:true={isLoading}>
+                <div>
+                    <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+                </div>
+            </template>
+                <template if:true={dataFound}>
+                <div class="slds-p-horizontal_small">
+                    <div if:true={filteredCases}>
+                        <b>Your search returned {filteredCases.length} results:</b></br>
+                        <lightning-datatable data={filteredCases} columns={columns} key-field="id" onrowselection={handleSelectedRows}></lightning-datatable>
+                    </div>
+                </div>
+            </template>
+            <template if:true={dataNotFound}>
+                <div style="text-align: center; font-weight: bold;"><span>No Data found for the applied filters</span></div>
+            </template>
+            <template if:true={isInitialMsg}>
+                <div style="text-align: center; font-weight: bold;"><span>Search data to display</span></div>
+              </template>
+            </lightning-layout-item>
+        </lightning-layout>
+
+    </lightning-card>
+</template>

@@ -1,0 +1,117 @@
+<aura:component controller="IdeaListController" implements="forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:handler name="init" value="this" action="{!c.init}"/>
+    <aura:attribute name="VoteCheck" type="String"/>
+    <aura:attribute name="commId" type="String"/>
+    <aura:attribute name="allIdeas" type="Idea"/>
+    <aura:attribute name="IdeasList" type="Idea"/>
+    <aura:attribute name="categories" type="List"/>
+    <aura:attribute name="selectedCateg" type="String" />
+    <aura:attribute name="selectedFilter" type="String" default="Browse All Ideas"/>
+    <aura:attribute name="pageNum" type="Integer" default="1"/>
+    <aura:attribute name="recordsPerPage" type="Integer" default="50"/>
+    <aura:attribute name="totalPages" type="Integer" default="0"/>
+    <aura:attribute name="startNum" type="Integer"/>
+    <aura:attribute name="endNum" type="Integer"/>
+     <aura:attribute name="ModalOpen" type="boolean" default="false"/>
+    <div class ="conatinerDiv">
+        <div class="slds-wrap slds-grid slds-size_12-of-12 conatainer">
+            <div class="slds-large-size--6-of-12 slds-Medium-size--6-of-12 slds-small-size--6-of-12 slds-max-small-size--6-of-12 ideaTitle">Ideas</div>
+            
+            <br/><br/>
+            <div class="slds-large-size--6-of-12 slds-Medium-size--6-of-12 slds-small-size--6-of-12 slds-max-small-size--6-of-12 submitIdeaBtn">
+                <a href="" class="blueBtn" onclick="{!c.openModalCreateIdea}">Submit an Idea</a>
+            </div>
+            <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 tagLine">
+                <p class="status">
+                    The Ideas page allows customers to submit valuable product enhancement requests. In addition, users can reference and interact with Ideas submitted by other customers. The Product Management team at Rubrik reviews and prioritizes the enhancement requests on a periodic basis to implement the suggested features into Rubrik products. As features are deployed in the product, Product Management updates each Idea on the release status. <br /><a href="https://support.rubrik.com/s/article/000001548" target="_blank">Video overview of Ideas</a>
+                </p>
+               
+            </div>
+            <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 tagLine">
+                <div class="slds-large-size--6-of-12 slds-Medium-size--6-of-12 slds-small-size--6-of-12 slds-max-small-size--12-of-12 ideaTitle"> 
+                    <!--<c:SUAuthBanner_b6b3 advanceFilterData='_type' advanceFilterValue='idea' isEnableTitleRedirect="true"/>-->
+                    <c:sU_AuthBannerComponent_b6b3_13 advanceFilterData='_type' advanceFilterValue='idea' isEnableTitleRedirect="true"/>
+                </div>
+               
+            </div>
+            <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 filterDiv">
+                <ul>
+                    <li class ="filterList"><a  class ="filterLink" id= "Browse All Ideas" onclick="{!c.changeFilter}" style="{!if(v.selectedFilter == 'Browse All Ideas', 'color: #23527c;','')}">Browse All Ideas</a></li>|
+                    <li class ="filterList"><a  class ="filterLink"  id= "Recent Ideas" onclick="{!c.changeFilter}"  style="{!if(v.selectedFilter == 'Recent Ideas', 'color: #23527c;','')}">Recent Ideas</a></li>|
+                    <li class ="filterList"><a  class ="filterLink" id= "Top Ideas" onclick="{!c.changeFilter}"  style="{!if(v.selectedFilter == 'Top Ideas', 'color: #23527c;','')}"> Top Ideas</a></li>|
+                    <li class ="filterList"><a  class ="filterLink" id= "Popular Ideas" onclick="{!c.changeFilter}"  style="{!if(v.selectedFilter == 'Popular Ideas', 'color: #23527c;','')}">Popular Ideas</a></li>|
+                    <li class ="filterList"><a  class ="filterLink" id= "Recent Comments" onclick="{!c.changeFilter}"  style="{!if(v.selectedFilter == 'Recent Comments', 'color: #23527c;','')}">Recent Comments</a></li>|
+                    <li class ="filterList"><a  class ="filterLink" id= "My Ideas" onclick="{!c.changeFilter}"  style="{!if(v.selectedFilter == 'My Ideas', 'color: #23527c;','')}">My Ideas</a></li>|
+                    <li class ="filterList"><a  class ="filterLink"  id= "My Votes" onclick="{!c.changeFilter}"  style="{!if(v.selectedFilter == 'My Votes', 'color: #23527c;','')}">My Votes</a></li>
+                </ul>
+            </div>
+            <div class="filterAndPagination slds-size_12-of-12">
+                <div class="slds-wrap slds-grid slds-size_12-of-12">
+                    <div class="slds-large-size--6-of-12 slds-Medium-size--6-of-12 slds-small-size--6-of-12 slds-max-small-size--12-of-12 leftFilter">
+                        <div class="slds-col slds-size_2-of-4 filterDiv">
+                            <lightning:select name="select" label="" value="{!v.selectedCateg}">
+                                <aura:iteration items="{!v.categories}" var="categ">
+                                    <option text="{!categ}"></option>
+                                </aura:iteration>
+                            </lightning:select>
+                        </div>
+                        <div class="slds-col slds-size_1-of-4 paginationDiv">
+                            <lightning:button class="blueBtn" label="Filter Ideas" title="Filter Ideas" onclick="{!c.filterIdeas}"/>
+                        </div>
+                    </div>
+                    <aura:if isTrue="{!v.allIdeas.length != 0}">
+                        <div class="slds-large-size--6-of-12 slds-Medium-size--6-of-12 slds-small-size--6-of-12 slds-max-small-size--12-of-12 rightPagDiv slds-wrap">
+                            <p class ="totalresults slds-max-small-size--12-of-12">Showing {!v.startNum}-{!v.endNum} of {!v.allIdeas.length} Ideas</p>
+                            <p class ="paginationBtnsTop slds-max-small-size--12-of-12">
+                                <span class="btnSpacing"><lightning:button class="{!if(v.pageNum == 1, 'disabled', 'paginationBlueBtn')}"  label="|&#60;" title="First Page" onclick="{!c.firstPage}" disabled="{!if(v.pageNum == 1,true,false)}"/></span>
+                                <span class="btnSpacing"><lightning:button class="{!if(v.pageNum == 1, 'disabled', 'paginationBlueBtn')}"   label="&#60;" title="Previous Page" onclick="{!c.previousPage}" disabled="{!if(v.pageNum == 1,true,false)}"/></span>
+                                <span class="btnSpacing"><lightning:button class="{!if(or(v.recordsPerPage > v.allIdeas.length,v.endNum == v.allIdeas.length), 'disabled', 'paginationBlueBtn')}" label="&#62;" title="Next Page" onclick="{!c.nextPage}" disabled="{!if(v.pageNum == v.totalPages,true,false)}"/></span>
+                                <span class="btnSpacing"><lightning:button class="{!if(or(v.recordsPerPage > v.allIdeas.length,v.endNum == v.allIdeas.length), 'disabled', 'paginationBlueBtn')}" label="&#62;|" title="Last Page" onclick="{!c.lastPage}" disabled="{!if(v.pageNum == v.totalPages,true,false)}"/></span>
+                            </p>
+                        </div>
+                    </aura:if>
+                  
+                  <!--  <div class="slds-col slds-size_2-of-4 paginationDiv slds-text-align_right" style="display:flex;text-align:right;">
+                      
+                    </div>-->
+                </div> 
+                
+                <div class="slds-size_12-of-12">
+                    <aura:if isTrue="{!v.allIdeas.length == 0}">
+                        <p class ="slds-max-small-size--12-of-12 noIdeas">No Ideas found.</p>
+                    </aura:if>
+                    <aura:iteration items="{!v.IdeasList}" var="idea">
+                        <c:IdeaRowComponent idea="{!idea}" commId="{!v.commId}"/>
+                    </aura:iteration>
+                    
+                    
+                </div>
+            </div>
+        </div>
+        <div class ="slds-large-size--12-of-12 slds-Medium-size--8-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 paginationDiv">
+            <div class="slds-wrap slds-grid slds-size_12-of-12">
+            <div class="slds-large-size--6-of-12 slds-Medium-size--6-of-12 slds-small-size--6-of-12 slds-max-small-size--12-of-12 ">
+            </div>
+                <aura:if isTrue="{!v.allIdeas.length != 0}">
+                    <div class="slds-large-size--6-of-12 slds-Medium-size--6-of-12 slds-small-size--6-of-12 slds-max-small-size--12-of-12 rightPagDiv slds-wrap">
+                        <div class ="totalresults slds-max-small-size--12-of-12">Showing {!v.startNum}-{!v.endNum} of {!v.allIdeas.length} Ideas</div>
+                        <div class ="paginationBtnsTop slds-max-small-size--12-of-12">
+                            <span class="btnSpacing"><lightning:button class="{!if(v.pageNum == 1, 'disabled', 'paginationBlueBtn')}"  label="|&#60;" title="First Page" onclick="{!c.firstPage}" disabled="{!if(v.pageNum == 1,true,false)}"/></span>
+                            <span class="btnSpacing"><lightning:button class="{!if(v.pageNum == 1, 'disabled', 'paginationBlueBtn')}"   label="&#60;" title="Previous Page" onclick="{!c.previousPage}" disabled="{!if(v.pageNum == 1,true,false)}"/></span>
+                            <span class="btnSpacing"><lightning:button class="{!if(or(v.recordsPerPage > v.allIdeas.length,v.endNum == v.allIdeas.length), 'disabled', 'paginationBlueBtn')}" label="&#62;" title="Next Page" onclick="{!c.nextPage}" disabled="{!if(v.pageNum == v.totalPages,true,false)}"/></span>
+                            <span class="btnSpacing"><lightning:button class="{!if(or(v.recordsPerPage > v.allIdeas.length,v.endNum == v.allIdeas.length), 'disabled', 'paginationBlueBtn')}" label="&#62;|" title="Last Page" onclick="{!c.lastPage}" disabled="{!if(v.pageNum == v.totalPages,true,false)}"/></span>
+                        </div>
+                    </div>
+                </aura:if>
+            
+        </div>
+        </div>
+    </div>
+    
+    <!-- Modal Create Idea-->
+    <aura:if isTrue="{!v.ModalOpen}">
+        <c:NewIdea ModalOpen="{!v.ModalOpen}" commId="{!v.commId}"/>
+        <div class="slds-backdrop slds-backdrop--open"></div>
+    </aura:if>
+    <lightning:spinner aura:id="spinner" alternativeText="Loading" size="medium" class="slds-show" />
+</aura:component>

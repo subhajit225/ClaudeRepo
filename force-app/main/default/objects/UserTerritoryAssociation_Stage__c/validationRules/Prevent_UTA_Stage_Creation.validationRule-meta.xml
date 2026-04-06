@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Prevent_UTA_Stage_Creation</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+NOT($Setup.ShGl_DisableFunctionalityLogic__c.ETM_Manage_UTA_Stage__c),
+$Profile.Name = &quot;Sales Operations&quot;
+)</errorConditionFormula>
+    <errorMessage>You do not have access to manage UTA Stage records. Please contact salesops.psteam@rubrik.com to get the access.</errorMessage>
+</ValidationRule>

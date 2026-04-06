@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Account_Preference_Top_Accounts__c</fullName>
+    <description>CS21-3702</description>
+    <externalId>false</externalId>
+    <formula>IF(
+INCLUDES(Account__r.Account_Preference__c, &quot;Top Accounts&quot;),
+&quot;Top Accounts&quot;,
+IF(
+INCLUDES(Account__r.Account_Preference__c, &quot;Top Accounts (Manual exception)&quot;),
+&quot;Top Accounts (Manual exception)&quot;,
+NULL
+)
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Account Preference [Top Accounts]</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

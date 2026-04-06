@@ -1,0 +1,22 @@
+<apex:page standardController="Case" showHeader="false" sidebar="false" lightningStylesheets="false">
+    <apex:pageBlock >
+        <apex:pageBlockSection columns="2" showHeader="false">
+            <apex:outputText label="Opportunity Owner" value="{!Case.Opportunity_Lookup__r.Owner.Name}"></apex:outputText>
+            <apex:outputText label="Stage" value="{!Case.Opportunity_Lookup__r.StageName}"></apex:outputText>
+            <apex:outputText label="Sales Engineer" value="{!Case.Opportunity_Lookup__r.Rubrik_Sales_Engineer__r.Name}"></apex:outputText>
+            <apex:outputText label="Amount" value="{!Case.Opportunity_Lookup__r.Amount}"></apex:outputText>
+            <apex:outputText label="Renewal Owner" value="{!Case.Opportunity_Lookup__r.Owner.Name}"></apex:outputText>
+            <apex:outputText label="Closed Date" value="{!Case.Opportunity_Lookup__r.CloseDate}"></apex:outputText>
+            <!-- CS21-2545: New fields to Renewal Case page -->
+            <apex:outputText label="Renewals Sentiment" value="{!Case.Opportunity_Lookup__r.Renewals_Sentiment__c}"></apex:outputText>
+            <apex:outputText label="Renewals Program Risk" value="{!Case.Opportunity_Lookup__r.Renewals_Forecast_Risk__c}"></apex:outputText>
+            <!-- CS21-2545: New fields to Renewal Case page -->
+            <apex:outputPanel ></apex:outputPanel> 
+            <apex:outputText label="Quote" value="{!Case.Opportunity_Lookup__r.SBQQ__PrimaryQuote__r.Name}"></apex:outputText>
+            <apex:outputPanel ></apex:outputPanel> 
+            <apex:outputText label="Quote Created Date	" value="{!Case.Opportunity_Lookup__r.SBQQ__PrimaryQuote__r.CreatedDate}"></apex:outputText>
+            <apex:outputPanel ></apex:outputPanel> 
+            <apex:outputText label="Quote Expiration Date" value="{!Case.Opportunity_Lookup__r.SBQQ__PrimaryQuote__r.Expiration_Date__c}"></apex:outputText>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+</apex:page>

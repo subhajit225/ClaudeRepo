@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ApexPage xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>38.0</apiVersion>
+    <availableInTouch>false</availableInTouch>
+    <confirmationTokenRequired>false</confirmationTokenRequired>
+    <description>Partner Community page for Deal Registrations.
+
+&lt;!--action=&quot;{!case($User.UserType,
+                          &quot;Standard&quot;,urlFor($Action.Partner_Registration_Request__c.Tab, $ObjectType.Partner_Registration_Request__c, null, true),
+                          &quot;PowerPartner&quot;,urlFor($Action.Partner_Registration_Request__c.Tab, $ObjectType.Partner_Registration_Request__c, null, true),
+                          &quot;CSPLitePortal&quot;,null,
+                          &quot;CustomerSuccess&quot;,null,
+                          &quot;PowerCustomerSuccess&quot;,null,
+                          &quot;CsnOnly&quot;,null,
+                          null)}&quot; --&gt;</description>
+    <label>DealRegHome</label>
+</ApexPage>

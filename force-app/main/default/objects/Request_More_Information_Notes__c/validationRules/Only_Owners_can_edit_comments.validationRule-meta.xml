@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Only_Owners_can_edit_comments</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(OR( ISCHANGED(Feedback_Groups__c) , ISCHANGED( Requestor_Comments__c )) , $User.Id  &lt;&gt;  OwnerId )</errorConditionFormula>
+    <errorMessage>Only the requestor is allowed to edit the Feedback Groups or Requestor Comments!</errorMessage>
+</ValidationRule>

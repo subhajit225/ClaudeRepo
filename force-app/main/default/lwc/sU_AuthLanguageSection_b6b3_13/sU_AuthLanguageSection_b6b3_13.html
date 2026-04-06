@@ -1,0 +1,23 @@
+<template>
+    <div class="su__language su__LanguageIconColor su__loading-view su__circle-hover Was-above-result-helpful ">
+        <!-- Following section containes Language code -->
+        <div class="lgc-bg iconEarth">
+            <lightning-button-menu title={translationObject.Language} class="su__lang-dropdown"
+                alternative-text="Show menu" variant="border-filled" icon-name="utility:world">
+                <template for:each={langlist} for:item="action">
+                    <div class="classLang" key={action.code} id={action.code} onclick={handleMenuSelect}>
+                        <template if:true={action.selected}>
+                            <lightning-menu-item class="colorChanged menuItem" label={action.name} value={action.value}
+                                data-id={action.code}></lightning-menu-item>
+                        </template>
+                        <template if:false={action.selected}>
+                            <lightning-menu-item class="menuItem" label={action.name} value={action.value}
+                                data-id={action.code}></lightning-menu-item>
+                        </template>
+                    </div>
+                </template>
+            </lightning-button-menu>
+        </div>
+        <!-- Language section ended here -->
+    </div>
+</template>

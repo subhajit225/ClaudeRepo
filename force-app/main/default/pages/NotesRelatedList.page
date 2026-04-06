@@ -1,0 +1,52 @@
+<!--
+* Visualforce Page Name :- NotesRelatedList
+* Controller :- UpdateAssistRequestController
+* Author :- Shiva Sharma
+* Created Date :- 05-03-2020
+* Description : This Page is being used in displaying next steps in assist request 
+* 
+*************Change Logs***************************************************************************
+* 
+* Modified By          Date           Description 
+* Shiva Sharma         21-01-2021     Displaying serial number and del button for draft notes
+*************Change Logs Ends**********************************************************************
+-->
+<apex:page standardController="Assist_Request__c" extensions="UpdateAssistRequestController" showHeader="false" standardStylesheets="true" sidebar="false" docType="html-5.0" lightningStylesheets="true">
+    <apex:slds rendered="{!$User.UITheme != 'Theme3'}"/>
+    <head>
+        <apex:slds /> 
+    </head>
+    <body>
+        <apex:form >
+            <apex:pageBlock id="notelist">
+                <apex:pageBlockTable value="{!notes}" var="item" >
+                    <apex:column ><apex:facet name="header">
+                        <apex:outputPanel >
+                            <apex:outputText value="S.No."></apex:outputText><br/>
+                        </apex:outputPanel>
+                        </apex:facet><span style="padding-left: 15px;">{!item.num}</span></apex:column>
+                    <apex:column ><apex:outputLink value="/apex/ViewAndEdit?id={!item.nt.Id}" target="_blank">View/Edit</apex:outputLink></apex:column>
+                    <apex:column ><apex:commandLink style="display:{!If(item.nt.isPrivate,'block','none')}" reRender="notelist" action="{!deleteARNote}">Del</apex:commandLink></apex:column>
+                    <apex:column >
+                        <apex:facet name="header">
+                            <apex:outputPanel >
+                                <apex:outputText value="Body"></apex:outputText><br/>
+                            </apex:outputPanel>
+                        </apex:facet>
+                        <span style="display:{!If(item.nt.isPrivate,'block','none')};padding-top:3px" class="slds-pill slds-pill_link">
+                            
+                            <a href="javascript:void(0);" class="slds-pill__action" title="Full pill label verbiage mirrored here">
+                                <span class="slds-pill__label">DRAFT : {!item.nt.body}</span>
+                            </a>
+                        </span>
+                        <span style="display:{!If(item.nt.isPrivate,'none','block')}">
+                            <apex:outputField value="{!item.nt.body}"/>
+                        </span>
+                    </apex:column>
+                    <apex:column value="{!item.nt.CreatedBy.Name}"></apex:column>
+                    <apex:column value="{!item.nt.CreatedDate}"></apex:column>
+                </apex:pageBlockTable>
+            </apex:pageBlock>
+        </apex:form>
+    </body>
+</apex:page>

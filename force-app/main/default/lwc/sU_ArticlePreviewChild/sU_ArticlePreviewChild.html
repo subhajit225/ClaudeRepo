@@ -1,0 +1,37 @@
+<template>
+    <div class="preview-child">
+        <div class="scroll">
+            <lightning-accordion class="example-accordion accord" onsectiontoggle={handleToggleSection}
+                active-section-name={accordianSection} allow-multiple-sections-open>
+                <lightning-accordion-section name="A" label="Information" class="paddingBottom">
+                    <lightning-record-form record-id={kid} object-api-name={object} layout-type="Full" mode="readonly">
+                    </lightning-record-form>
+                    <!-- Show Attachmenents Depriciated by Salesforce Now FYI -->
+                    <template for:each={attachment} for:item="tab" for:index="ind">
+                        <div class="slds-form-element slds-form-element_readonly attachments slds-p-left-large attach" key={tab}>
+                            <span class="slds-form-element__label">{tab.fieldLabel}</span>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static">
+                                    <template if:true={tab.Title}>
+                                        <a href={tab.Link} target="_blank">{tab.Title}</a>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <!-- Show Files Uploaded from related List -->
+                    <template if:true={fileattachments}>
+                        <div class="slds-form-element slds-form-element_readonly attachments slds-p-left-large attach">
+                            <span class="slds-form-element__label">Files</span>
+                            <template for:each={fileattachments} for:item="tab" for:index="ind">
+                                <div class="slds-form-element__static" key={tab.link}>
+                                    <a href={tab.link} target="_blank">{tab.name}</a>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                </lightning-accordion-section>
+            </lightning-accordion>
+        </div>
+    </div>
+</template>

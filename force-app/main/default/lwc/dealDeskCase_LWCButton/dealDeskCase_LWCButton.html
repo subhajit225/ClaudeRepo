@@ -1,0 +1,196 @@
+<template>
+    <template if:true={renderForm}>
+    <lightning-record-edit-form columns="2" object-api-name="Deal_Desk_Case__c" onsuccess={handleSuccess} onerror={handleError} onsubmit ={handleSubmit}>
+        <lightning-quick-action-panel header="New Deal Desk Case">
+            <div class="slds-is-relative">
+                <template if:true={isLoading}>
+                    <lightning-spinner alternative-text="Loading" variant="brand" size="medium"> 
+                    </lightning-spinner>    
+                </template>
+     <h3 class="slds-section__title slds-theme_shade" style="background-color: #f3f2f2;">
+        <lightning-icon class="slds-button__icon_left slds-p-left_x-small slds-p-left_x-small" size="x-small" icon-name="utility:chevrondown" alternative-text="chevrondown" title="chevrondown"></lightning-icon><span class="slds-truncate" title="Section Title" style="font-weight: 400;">Deal Desk Request Details</span>
+    </h3>
+    <!--<lightning-layout >
+          <lightning-layout-item padding="around-small" size="6">
+            <lightning-input-field field-name="Case_Subject__c" required="true"> </lightning-input-field>
+        </lightning-layout-item>
+        <lightning-layout-item padding="around-small" size="6">
+            <lightning-input-field field-name="OwnerId"> </lightning-input-field>
+        </lightning-layout-item>
+     </lightning-layout>-->
+
+         <lightning-layout >
+          <lightning-layout-item padding="around-small" size="6">
+            <lightning-input-field field-name="Deal_Desk_Team__c" required="true" onchange={handleDDTeamChange}> </lightning-input-field>
+        </lightning-layout-item>
+    </lightning-layout>
+
+    <lightning-layout >
+        <lightning-layout-item padding="around-small" size="8" >
+            <lightning-input-field field-name="Request_Type__c" required="true" onchange={handlereqTypeChange}> </lightning-input-field>
+        </lightning-layout-item>
+        <!--<lightning-layout-item padding="around-small" size="4">
+            <lightning-input-field field-name="Request_Sub_Type__c"> </lightning-input-field>
+        </lightning-layout-item>-->
+    </lightning-layout>
+    <!--<lightning-layout >
+        <lightning-layout-item padding="around-small" size="8">
+            <lightning-input-field field-name="Request_Sub_Type__c" required="true"> </lightning-input-field>
+        </lightning-layout-item>
+    </lightning-layout>-->
+   <lightning-layout >
+        <lightning-layout-item padding="around-small" size="6">
+            <lightning-input-field field-name="Urgent__c"> </lightning-input-field>
+        </lightning-layout-item>
+        <lightning-layout-item padding="around-small" size="6">
+            <lightning-input-field field-name="Quote__c"> </lightning-input-field>
+        </lightning-layout-item>
+    </lightning-layout>
+
+    <!--<lightning-layout >
+        <lightning-layout-item padding="around-small" size="6">
+            <lightning-input-field field-name="Requestor__c" value={ddReqId} disabled="true"> </lightning-input-field>
+        </lightning-layout-item>
+        <lightning-layout-item padding="around-small" size="6">
+            <lightning-input-field field-name="Comments__c"> </lightning-input-field>
+        </lightning-layout-item>
+    </lightning-layout> -->
+
+    <!--<lightning-layout>
+        <lightning-layout-item padding="around-small" size="6">
+            <lightning-input-field field-name="Requestor__c" value={ddReqId} disabled="true"> </lightning-input-field>
+        </lightning-layout-item>
+         <lightning-layout-item padding="around-small" size="6">
+            <lightning-input-field field-name="Summary_of_Approval__c"> </lightning-input-field>
+        </lightning-layout-item>
+    </lightning-layout>-->
+
+    <!--<lightning-layout >
+        <lightning-layout-item padding="around-small" size="6">
+            <lightning-input-field field-name="SubmittedDate__c" disabled="true"> </lightning-input-field>
+        </lightning-layout-item>
+        <lightning-layout-item padding="around-small" size="6">
+            <lightning-input-field field-name="SubmittedUser__c" disabled="true"> </lightning-input-field>
+        </lightning-layout-item>
+    </lightning-layout>-->
+
+    <h3 class="slds-section__title slds-theme_shade" style="background-color: #f3f2f2;">
+        <lightning-icon class="slds-button__icon_left slds-p-left_x-small slds-p-left_x-small" size="x-small" icon-name="utility:chevrondown" alternative-text="chevrondown" title="chevrondown"></lightning-icon><span class="slds-truncate" title="Section Title" style="font-weight: 400;">Questionnaire</span>
+    </h3>
+    <lightning-layout >
+         <lightning-layout-item padding="around-small" size="6">
+            
+        </lightning-layout-item>
+          <lightning-layout-item padding="around-small" size="6">
+            <lightning-input-field field-name="Case_Subject__c" required="true"> </lightning-input-field>
+        </lightning-layout-item>
+    </lightning-layout>
+    <lightning-layout >
+        <lightning-layout-item padding="around-small" size="6">
+          <lightning-input-field field-name="Business_Justification_Questions__c" value={bizJustQuestVal} disabled="true" class="bizJust"> </lightning-input-field>
+      </lightning-layout-item>
+    
+      <lightning-layout-item padding="around-small" size="6">
+          <lightning-input-field field-name="Business_Justification__c" required="true" class="bizJust"> </lightning-input-field>
+      </lightning-layout-item>
+    </lightning-layout>
+    <div class ="hidden">
+    <h3 class="slds-section__title slds-theme_shade" style="background-color: #f3f2f2;">
+        <lightning-icon class="slds-button__icon_left slds-p-left_x-small slds-p-left_x-small" size="x-small" icon-name="utility:chevrondown" alternative-text="chevrondown" title="chevrondown"></lightning-icon><span class="slds-truncate" title="Section Title" style="font-weight: 400;">Opportunity Details</span>
+    </h3></div>
+    <lightning-layout >
+        <lightning-layout-item padding="around-small" size="6">
+          <lightning-input-field field-name="Opportunity__c" value={oppVal} disabled = "true" class="hidden"> </lightning-input-field>
+      </lightning-layout-item>
+    
+      <lightning-layout-item padding="around-small" size="6">
+          <lightning-input-field field-name="Opportunity_Owner__c" value={oppOwner} disabled = "true" class="hidden"> </lightning-input-field>
+      </lightning-layout-item>
+    </lightning-layout>
+<template if:true = {isVisible}>
+    <lightning-layout >
+        <lightning-layout-item padding="around-small" size="6">
+          <lightning-input-field field-name="Account_Name__c" value={accName} disabled = "true"> </lightning-input-field>
+      </lightning-layout-item>
+    
+      <lightning-layout-item padding="around-small" size="6">
+          <lightning-input-field field-name="Close_Date__c" value={closeDateVal} disabled = "true"> </lightning-input-field>
+      </lightning-layout-item>
+    </lightning-layout>
+
+    <lightning-layout >
+        <lightning-layout-item padding="around-small" size="6">
+          <lightning-input-field field-name="Amount_TCV__c" value={amtTcvVal} disabled = "true"> </lightning-input-field>
+      </lightning-layout-item>
+    
+      <lightning-layout-item padding="around-small" size="6">
+          <lightning-input-field field-name="ETM_Theatre__c" value={ETMThtrVal} disabled = "true"> </lightning-input-field>
+      </lightning-layout-item>
+    </lightning-layout>
+    <lightning-layout >
+        <lightning-layout-item padding="around-small" size="6">
+          <lightning-input-field field-name="Amount_ACV__c" value={amtAcvVal} disabled = "true"> </lightning-input-field>
+      </lightning-layout-item>
+      <lightning-layout-item padding="around-small" size="6">
+          <lightning-input-field field-name="ETM_Area__c" value={ETMArVal} disabled = "true"> </lightning-input-field>
+      </lightning-layout-item>
+    </lightning-layout>
+    <lightning-layout >
+        <lightning-layout-item padding="around-small" size="6">
+         <lightning-input-field field-name="Deal_Structuring_Notes__c" value={dsnVal} disabled = "true"> </lightning-input-field>
+      </lightning-layout-item>
+      <lightning-layout-item padding="around-small" size="6">
+          <lightning-input-field field-name="ETM_Region__c" value={ETMRegVal} disabled = "true"> </lightning-input-field>
+      </lightning-layout-item>
+    </lightning-layout>
+
+    <lightning-layout >
+        <lightning-layout-item padding="around-small" size="6">
+          <lightning-input-field field-name="Primary_Quote__c" value={prQuoteVal} disabled = "true"> </lightning-input-field>
+      </lightning-layout-item>
+      <lightning-layout-item padding="around-small" size="4">
+        <table class="">
+            <tr class="">
+                <td scope="col">Primary Quote Status</td>
+                <td scope="col" style="align:left;">{prQuoteStVal}</td>
+            </tr>
+        </table>
+          <!--<lightning-output-field field-name="Primary_Quote_Status__c" > </lightning-output-field>-->
+      </lightning-layout-item>
+    </lightning-layout>
+    <lightning-layout >
+        <lightning-layout-item padding="around-small" size="6">
+            <lightning-input-field field-name="In_Forecast_GVP__c" value={inForGVPVal} disabled = "true"> </lightning-input-field>
+      </lightning-layout-item>
+      <lightning-layout-item padding="around-small" size="6">
+          </lightning-layout-item>
+    </lightning-layout>
+    
+    
+    <lightning-layout >
+        <lightning-layout-item padding="around-small" size="6">
+            <lightning-input-field field-name="Opportunity_Record_Type__c" value={oppRecType} disabled = "true"> </lightning-input-field>
+      </lightning-layout-item>
+       </lightning-layout>
+    </template>
+                
+    </div>
+        <div slot="footer"> 
+            <lightning-layout class="slds-clearfix slds-align_absolute-center">
+                <lightning-layout-item padding="around-small" size="1">
+                    <lightning-button variant="nuetral" type="Cancel" label="Cancel" name="Cancel" onclick={handleCancel} >
+                    </lightning-button>
+                    </lightning-layout-item>
+
+                <lightning-layout-item padding="around-small" size="1">
+                <lightning-button variant="brand" type="submit" label="Save" name="Save" >
+                </lightning-button>
+                </lightning-layout-item>
+              </lightning-layout>
+            </div> 
+        
+         </lightning-quick-action-panel> 
+
+</lightning-record-edit-form>
+</template>
+</template>

@@ -1,0 +1,19 @@
+<apex:page standardController="Case" extensions="CaseTriageFormController" action="{!updateTriageStatus}">
+<apex:form > 
+    <apex:pageBlock > 
+        <apex:pageBlockSection columns="1" title="Triage Case">
+            
+            <div style="text-align:center;">
+                <apex:outPutText Value="Please add your triager comments to help move the case forward." style="font-size: 15px;text-align: center;"/>  
+            </div>
+           
+            <apex:inputField value="{!caseComm.CommentBody}" style="width: 600px; height: 250px" label="Comment Body"/>
+            
+        </apex:pageBlockSection>
+        <apex:pageBlockButtons location="bottom">
+        	<apex:commandButton value="Save Comment" action="{!saveForm}"/>
+            <apex:commandButton value="Cancel" action="{!Cancel}"/>
+        </apex:pageBlockButtons>
+    </apex:pageBlock>
+</apex:form>
+</apex:page>

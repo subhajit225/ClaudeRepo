@@ -1,0 +1,126 @@
+:host {
+  --sds-c-checkbox-color-background-checked: #3e7555;
+  --sds-c-checkbox-mark-color-foreground: white;
+  --slds-c-checkbox-color-border: #707070;
+  --slds-c-checkbox-color-border: unset;
+  --slds-c-checkbox-color-border-checked: #3e7555;
+}
+.parentPopUpClass {
+  border: 1px solid red;
+}
+.displayNone {
+  display: none;
+}
+
+.popOver {
+  border: 1px solid rgb(148, 147, 147);
+}
+.heading {
+  font-weight: 500;
+  font-size: medium;
+  padding-left: 10px;
+}
+.subHeadingTab {
+  background-color: rgb(247, 247, 247);
+}
+.divValue {
+  border-bottom: 1px solid rgb(240, 235, 235);
+}
+.fieldValue {
+  font-size: smaller;
+}
+.field {
+  font-size: small;
+  font-weight: 400;
+  min-height: 20px;
+}
+.fieldData {
+  width: 100%;
+  padding: 0 1.5rem 1.5rem 1.5rem;
+}
+.d-flex-column {
+  display: flex;
+  flex-direction: column;
+  column-gap: 2rem;
+}
+.font_family {
+  color: #1c1c1c;
+  font-size: 14px;
+  opacity: 0.4;
+  font-family: 'Roboto Regular';
+  height: 25px;
+}
+.text_truncate {
+  width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.detailed_text {
+  color: #5b5b5b;
+  font-size: 16px;
+  font-family: 'Roboto Medium';
+}
+.border_bottom {
+  border: 0.5px solid #1c1c1c;
+  opacity: 0.2;
+  margin-bottom: 0.7rem;
+  margin-top: 0.3rem;
+}
+.knowbler__upload-files-list-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px;
+  margin: 5px auto;
+  border: 1px solid #D8DDE6;
+  border-radius: 4px;
+  background-color: #FAFAFA;
+}
+
+.knowbler__upload-files-list-wrapper .knowbler__upload-file-wrapper{
+  display: flex;
+  align-items: center;
+  width: calc(100% - 30px);
+}
+
+.knowbler__upload-files-list-wrapper .knowbler__upload-file-name{
+  color: #36B8FF;
+  font-size: 13px;
+  font-family: 'Poppins Medium', sans-serif;
+  margin-left: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.knowbler__file-upload-loader-wrapper {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+.knowbler__load-file-text {
+  font-size: 13px;
+  font-family: 'Poppins Medium', sans-serif;
+  color: #5b5b5b;
+  margin-right: 5px;
+}
+.knowbler__custom-loader {
+  border: 3.5px solid #D2D2D2;
+  border-radius: 50%;
+  border-top: 3.5px solid #5B5B5B;
+  width: 20px;
+  height: 20px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

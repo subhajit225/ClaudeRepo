@@ -1,0 +1,15 @@
+<apex:component controller="ResourceSearchController">
+
+       <!--render if follow on page-->
+         <apex:outputText rendered="{!Featured!=null}">
+         <div class="col-md-12"><h3>Featured Items</h3></div></apex:outputText>
+                 <apex:datatable var="f" value="{!Featured}" id="featuredresults" styleClass="table" rendered="{!Featured!=null}">
+                    <apex:column headervalue="Title">
+                     <a href="{!$Page.ContentView}?id={!f.id}">{!f.title}</a>
+                    </apex:column>                   
+                    <apex:column headervalue="Author" value="{!f.CreatedBy.Name}"/>
+                    <apex:column headervalue="Date" value="{!f.CreatedDate}"/>
+            </apex:datatable>
+ 
+            
+</apex:component>

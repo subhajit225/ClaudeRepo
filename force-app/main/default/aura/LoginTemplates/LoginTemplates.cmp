@@ -1,0 +1,17 @@
+<aura:component implements="forceCommunity:themeLayout" access="global" description="Customer Community Theme Layout">
+    <aura:attribute name="communityHeader" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="communityfooter" type="Aura.Component[]" required="false"/>
+   <aura:attribute name="profileMenu" type="Aura.Component[]" required="false"/>
+
+  
+    
+    <div class="slds-size_1-of-1 communityBody">
+        {!v.body}
+    </div>
+    
+    <div class="slds-size_1-of-1 communityfooter" style="bottom: 0;">
+        {!v.communityfooter}
+    </div>
+    
+    
+</aura:component>

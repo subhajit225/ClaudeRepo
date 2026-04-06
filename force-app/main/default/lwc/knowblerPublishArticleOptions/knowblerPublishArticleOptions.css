@@ -1,0 +1,97 @@
+.contentMsg {
+  display: block;
+  margin: auto;
+}
+
+.contentMsg:has(lightning-calendar) {
+  width: 100% !important;
+}
+
+.error {
+  color: #3e7555;
+  font-size: 11px;
+  padding: 0 22px;
+}
+
+.publishBox,
+.publishAndAttachBox {
+  display: flex;
+  opacity: 100%;
+  font-family: 'Poppins Medium', sans-serif;
+}
+
+.resolution {
+  height: 69px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.disabledradiobutton {
+  margin-bottom: -10px;
+  margin-top: 7px;
+}
+
+.disableButton .imgCenter.publish {
+  opacity: 0.5 !important;
+}
+
+.imgCenter {
+  display: flex;
+  line-height: 2rem;
+  padding-left: 22px;
+  padding-top: 20px;
+  font-size: 16px;
+  padding-bottom: 4px;
+  flex: 1 1;
+  font-family: 'Poppins Medium', sans-serif;
+}
+
+:host {
+  --sds-c-radio-mark-color-foreground: #3e7555;
+}
+
+.buttonCenter {
+  margin: auto;
+  margin-top: 25px;
+  margin-bottom: 11px;
+  background: var(--secondary-colour, #3e7555);
+  border: 1px solid #3e7555;
+  border-radius: 5px;
+}
+
+.iconposition {
+  cursor: pointer;
+  padding-top: 22px;
+  padding-right: 22px;
+  flex-basis: content;
+}
+
+.publishLargeScreenWidth {
+  width: 74%;
+}
+
+.disableButton,
+.disableButtonattach {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.slds-modal__content {
+  overflow: visible !important;
+}
+.modal-save-progress-msg {
+  font-size: 16px;
+  color: #0f0a39;
+  font-family: 'Roboto Medium', 'Helvetica Neue', sans-serif;
+  margin: 0.4rem 0 0.6rem 0;
+  line-height: 20px;
+  word-wrap: break-word;
+}
+
+.modal-save-progress-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 46px;
+}

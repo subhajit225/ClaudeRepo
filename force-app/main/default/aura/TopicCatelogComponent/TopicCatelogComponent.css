@@ -1,0 +1,596 @@
+.THIS .pointer{
+    cursor: pointer;
+}
+.THIS .tableStyle{
+    margin: 0 0!important;
+    
+    border: 1px solid #c4c4c4;
+}
+.THIS .leaderboard{
+    margin: 0px 20px 0px 0px !important;
+}
+.THIS .icons{
+    width:50px;
+    height:50px;
+}
+.THIS.slds-popover__body{
+    white-space: break-spaces;
+}
+.THIS .slds-popover__body{
+    white-space: break-spaces;
+}
+
+.THIS .theadBlock{
+    border: 1px solid #c4c4c4;
+}
+.THIS .theadCol{padding: 1rem 0; }
+.THIS .iconClass{
+    height: 40px;
+    width: 40px;
+}
+.THIS .titleClass{
+    font-size:20px;
+    font-family:Gotham-medium;
+    padding-left:2rem;
+    padding-top:.3rem;
+    color: #4a4a4a!important;
+    text-decoration: none;
+    transition: color .1s linear;
+}
+.THIS .titleClass:hover{
+    color: #009dac!important;    
+}
+.THIS .detail-right-section{
+    
+}
+.THIS .basic-details{
+    padding-bottom: 15px;
+    padding-top: 15px;
+}
+.THIS .basic-details2{
+    padding-right: 15px;
+}
+.THIS .detail-block>img{
+    border-radius: 50%;
+    height: 40px;
+    margin-right: 10px;
+    object-fit: cover;
+    width: 40px;
+    max-width: none;
+    box-shadow: 0 0 1px 0 #c4c4c4 inset, 0 0 1px 0 #c4c4c4;
+}
+.THIS .detail-block span.title{
+    font-size: 18px;
+    font-weight: normal;
+}
+.THIS table.help-block{
+    border: 1px solid #c4c4c4 !important; 
+}
+.THIS table.help-block tr{
+    width: 100%;
+}
+.THIS .heading{
+    text-shadow: none;
+    left: 0;
+    padding: 8.5px 40px;
+    right: 0;
+    top: 0;
+    color: rgb(81, 79, 77);
+    font-weight: 700;
+    line-height: normal;
+}
+.THIS .textdecorate{
+    border: none;
+    color: #009dac;
+    font-family: Gotham-Medium;
+    font-size: 16px;
+}
+.THIS .textdecorate:hover{
+    border: none;
+    color: #23527c;
+}
+.THIS .filterList{
+    display : inline-block;
+}
+.THIS .filterLink{
+    color: #009DAC;
+    text-decoration: none !important;
+    font-family: Gotham-Medium;
+    font-size: 16px;
+    
+    text-decoration: none !important;
+    padding : 0px 10px 0px 0px;
+}
+.THIS .filterLink:hover{
+    color: #23527c;
+}
+.THIS .filterDiv{
+    padding-left: 15px;
+    padding-bottom: 20px;
+}
+.THIS .detail-block2{
+    float: right;
+    padding: 20px 25px; 
+}
+.THIS .base-count-number{
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.71428571;
+    padding: 0 5px;
+    vertical-align: top;
+}
+.THIS .paddingAround table thead th{
+    background: unset;
+}
+
+.THIS .manageBtn{
+    color:white;
+    background:#009DAC;
+    font-family: Gotham-Light;
+    font-size: 16px;
+    display: block;
+    /* border-width: 2px;
+    border-style: solid; */
+    padding: 5px 24px;
+    min-width: 60px;
+    border-color: #009DAC;
+    /* border-color: var(--sds-c-button-neutral-color-border, var(--lwc-buttonColorBorderPrimary,#D4D4D4)); */
+}
+.THIS .manageBtn:hover{
+    color:white;
+    background:#23527c;
+    border-color: #009DAC;
+}
+
+
+/*Mobile*/
+@media only screen and (min-width: 320px) and (max-width: 767px){
+    /*.THIS.paddingAround{
+    width: 40px;
+    overflow-x:auto;
+}*/
+    .THIS .paddingAround {
+        padding-right: 8px;
+        padding-left: 10px;
+    }
+    .THIS .detail-right-section{
+        text-align: center;
+        padding: 13px;
+        margin-right: -15px;
+        margin-left: 10px;
+    }
+    .THIS .detail-block2 svg{
+        width: 15px;
+    }
+    .THIS .slds-title{
+        white-space: normal;
+    }
+    .THIS .slds-thead{
+        WHITE-SPACE: normal;
+    }
+    .THIS .titleClass{
+        padding-left: 1rem;
+    }
+    .THIS .titleClass div, .THIS .theadCol div{
+        font-size: 15px;
+        letter-spacing: 1px;
+    }
+    .THIS .tableStyle{
+        width:97%;
+    }
+    .THIS .detail-block{
+        margin-left: 15px; 
+    }
+}
+
+
+
+
+
+
+
+
+
+/*Ipad*/
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+    .THIS .paddingAround {
+        text-align: center;
+        padding: 1px;
+        margin-right: -15px;
+        margin-left: 10px;
+    }
+    .THIS .detail-right-section{
+        text-align: center;
+        padding: 13px;
+        margin-right: -15px;
+        margin-left: 10px;
+    }
+    .THIS .slds-thead{
+        WHITE-SPACE: normal;
+        /*WORD-WRAP: break-word;*/
+    }
+    .THIS .slds-title{
+        white-space: normal;
+        
+    }
+    .THIS .slds-date{
+        white-space: normal;
+        word-wrap: break-word;
+    }
+    
+    .THIS .titleClass, .THIS .theadCol div {
+        font-size: 17px;
+        letter-spacing: 1px;
+        
+    }
+    .THIS .tableStyle{
+        width:97%;
+    }
+    .THIS .detail-block{
+        margin-left: 15px; 
+    }
+}
+@media only screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape) {
+    .THIS .paddingAround{     
+        width: 100%;
+        text-align: center;
+        padding: 1px;
+        margin-right: -15px;
+        margin-left: 10px;
+    } 
+    .THIS .detail-right-section{
+        text-align: center;
+        padding: 13px;
+        margin-right: -15px;
+        margin-left: 10px;
+        width: 100%;
+    }
+    .THIS .detail-block{
+        margin-left: 15px;
+    }
+    .THIS .basic-details2 {
+        padding-right: 15px;
+    }
+    .THIS .detail-block2 {
+        float: right;
+        padding: 20px 25px;
+    }
+    .THIS .slds-title{
+        white-space: normal;
+    }
+}
+
+/*Laptop*/
+@media only screen  and (min-width: 1281px) and (max-width: 1366px){
+    .THIS .paddingAround{
+        padding: 0 1rem; 
+        padding-bottom: 1rem;
+    }
+}
+
+/*Large Screen*/
+@media only screen and (min-width: 1367px) {    
+    .THIS .paddingAround{
+        padding: 0 2rem; 
+        padding-bottom: 1rem;
+    }
+}
+@media only screen and (max-width: 1350px) and (min-width:770px) {
+    .THIS .paddingAround{
+        width:100% !important
+    } 
+    .THIS .detail-right-section{
+        width:100% !important
+    }
+}.THIS .HeadingDiv {
+    font-size: 30px;
+    font-family: "Gotham-medium";
+    padding-bottom: 10px!important;
+    color: #333;
+    padding-top: 30px;
+}
+.THIS .HeadingDiv2 {
+    padding-bottom: 10px!important;
+    font-family: "Gotham-medium";
+    border-bottom: 1px solid #eee;
+}
+
+.THIS.containerDiv{
+    width : 1140px;
+    margin: auto;
+    display : block;
+}
+.THIS  .modalHeading{   float: right;
+    font-family: Gotham-Medium;
+    font-size: 16px;
+    text-decoration: none;
+    color: #009DAC;
+    padding-top:2.5px;
+    font-weight: 600;
+}
+.THIS  .modalHeading:hover{
+    color: #23527c;
+    
+}
+.THIS .categoriesPtag{
+    float: left;
+    font-family: Gotham-Medium;
+    font-size: 16px;
+    text-decoration: none;
+}
+.THIS .slds-button__icon{
+    margin-bottom: 5px;
+}
+.THIS .mainDiv{
+    text-align : center;
+    border : 1px solid #eee;
+    padding: 35px !important;
+    margin-bottom : 20px;
+    text-decoration : none ;
+    color : #333;
+    font-family: Gotham-Light !important;
+    color: #4A4A4A;
+}
+.THIS .iconsDiv{
+    padding-bottom : 10px;
+}
+.THIS .iconsDiv img{max-height:52px;min-height:52px;}
+.THIS .iconsDivHover img{max-height:52px;min-height:52px;}
+
+.THIS .minHeightDiv{height:2rem;    word-break: break-word;}
+.THIS .dataCategValue{
+    color: #4A4A4A;
+    font-family : Gotham-Light;
+    font-size : 16px;
+    word-break: break-word;
+    
+}
+.THIS .container   {
+    padding : 20px 0px;
+}
+.THIS .ManageSubscriptionButton{
+    text-align : right;
+}
+
+.THIS .mainDiv:hover .iconsDivHover{
+    display : block;
+}
+.THIS .mainDiv:hover .iconsDiv{
+    display : none;
+}
+.THIS .mainDiv .iconsDivHover{
+    display : none;
+}
+.THIS .mainDiv .iconsDiv{
+    display : block;
+}
+.THIS .mainDiv:hover {
+    background-color: #009DAC;
+    color: #fff;
+    background: linear-gradient(136.42deg, #00B388 0%, #00B097 13.16%, #00A9BF 51.16%, #00A6D0 72.37%, #00A6D0 72.37%, #00A5D7 81.43%, #00A3E0 100%);
+}
+.THIS .mainDiv>.iconsDivHover{
+    padding-bottom : 10px; 
+}
+.THIS .modalImg>.slds-icon_container{
+    height : 0px;
+}
+.THIS .slds-checkbox_add-button [type="checkbox"]:checked ~ .slds-checkbox_faux, .THIS .slds-checkbox_add-button .slds-checkbox_faux{
+    width: 100%;
+    position: absolute;
+    left: 0px;
+    max-g: 41px;
+    max-height: 100px;
+    min-height: 100px;
+    opacity: 0;
+}
+.THIS .modalImg{
+    margin-bottom : 10px;
+}
+.THIS .modalDiv{
+    text-align : center;
+    border : 1px solid #eee;
+    padding: 35px !important;
+    margin-bottom : 20px;
+    text-decoration : none ;
+    color : #333;
+    height: 13rem;
+}
+.THIS .slds-modal__container {
+    max-width : none;
+    width: 60%;
+}
+.THIS .slds-modal__footer {
+    border-top: none !important;
+    border-bottom-right-radius: .25rem;
+    border-bottom-left-radius: .25rem;
+    padding: .75rem 1rem;
+    background-color: #fff;
+    text-align: right;
+    box-shadow: none;
+}
+.THIS .categ{
+    font-size: 20px;
+    text-transform: uppercase;
+    font-family: "Gotham-light";
+    padding-bottom: 20px !important;
+    color: #1d2632;
+    padding-top: 30px !important;
+}
+
+
+.THIS .tooltip1 {
+    position: relative;
+    display: inline;
+    
+}
+
+.THIS  .tooltip1 .tooltiptext {
+    visibility: hidden;
+    width: 400px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -380px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    text-transform: none !important;
+    font-size: 15px !important;
+    
+}
+
+.THIS   .tooltip1 .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 95%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+.THIS    .tooltip1:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+.THIS .SaveBtnDiv>.slds-button{
+    font-family : Gotham-light;
+    font-size : 16px;
+    background-color:#009DAC;
+    color : #fff;
+    text-transform : uppercase;
+}
+.THIS  .SaveBtnDiv>.slds-button:hover{
+    color: #ffffff;
+    background-color: #286090;
+    border-color: #204d74;
+}
+.THIS .cancelBtnDiv>.slds-button{
+    font-family: Gotham-light;
+    font-size: 16px;
+    background: #fff;
+    color: #4A4A4A;
+    text-transform : uppercase;
+    border: 1px solid #eee;
+    background: ;
+    
+}
+.THIS li.slds-tabs_default__item.slds-is-active::after{
+    background-color: #009DAC !important;
+    height: 10px !important;
+}
+.THIS .cancelBtnDiv{
+    padding-left: 6px !important;
+}
+.THIS .canclbtn{
+    font-family: Gotham-light !important;
+    font-size: 16px;
+    background-color:#009DAc !important;
+    color: #fff !important;
+    text-transform: uppercase !important;
+    padding-left: 10px;
+    padding-right: 10px;
+    
+}
+.THIS .canclbtn:hover{
+    color:white;
+    background:#23527c !important;
+}
+.THIS.ManageSubscriptionButton>.slds-button{
+    margin-right: 5px;
+    font-family: Gotham-Light;
+    font-size: 16px;
+}
+.THIS .modalIcon>.modalImg>.slds-icon_container svg{
+    fill: green;
+    position: relative;
+    bottom: 75px;
+    left: 70px;
+    width: 25px;
+}
+.THIS .topic-buttons {
+    display: flex;
+}
+
+@media screen and (max-width:768px){
+    .THIS.containerDiv {
+        width : 100%;
+    }
+    .THIS .ManageSubscriptionButton>.slds-button{
+        font-size: 14px;
+    }
+    .THIS  .slds-modal__container {
+        max-width: none;
+        width: 100%;
+        position: relative;
+        right: 32px;
+    }
+    .THIS .manageBtn{
+        width:120px;
+        
+    }
+    .THIS .slds-checkbox_faux{width: 300px !important;}
+    
+}
+@media screen and (max-width:1024px){
+    .THIS.containerDiv {
+        width : 100%;
+    }
+}
+.THIS .link{
+    font-size: 13px;
+    color: #009dac!important;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-family: Gotham-medium;
+    text-decoration:none;
+    margin-top:20px;
+    margin-bottom: 56px;
+}
+.THIS .ddd{
+    width:auto;
+    height:70px;
+}
+/* CS21-1172*/
+.THIS .customRadioClass{
+    text-align: left;
+}
+.THIS .slds-form-element__control {
+   /*display: inline-block;*/
+    display: flex;
+}
+/* CS21-1172*/
+.THIS .emailFilters{
+    font-family: Gotham-medium;
+}
+.THIS .customDiv{
+    text-align: left;
+    font-family: Gotham-medium;
+    color: #315e63;
+}
+.THIS .customModalDiv{
+    position: fixed;
+    top: 47.5px;
+    bottom: 80px;
+    height: unset;
+}
+.THIS .redirectAnchor{
+    text-decoration: none;
+    color: #fff;
+}
+.THIS .CategoryPara{
+    font-family: Gotham-Light; 
+    font-size: 16px;
+}
+.THIS .canclbtn:hover{
+    color:white;
+    background:#23527c !important;
+    border-color: #204d74;
+}

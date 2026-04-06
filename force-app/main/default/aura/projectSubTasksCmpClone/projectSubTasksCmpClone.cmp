@@ -1,0 +1,87 @@
+<aura:component controller="projectSubTasksController" access="global" >
+    <aura:attribute type="List" name="subtasksWrapperList" />
+    <aura:attribute type="List" name="datearr" />
+    <aura:attribute type="string" name="projId"/>
+    <aura:attribute type="Date" name="firstday"/>
+    <aura:attribute type="Date" name="lastday"/>
+    <aura:attribute name="refreshParent" type="Boolean"/>
+    <aura:attribute type="string" name="Message"/>
+    <aura:attribute name="isSuccess" type="Boolean"/>
+    <aura:attribute name="changed" type="Boolean" default="false"/>
+    <aura:attribute name="disablePrev" type="Boolean" default="false"/>
+    <aura:attribute name="disableNext" type="Boolean" default="false"/>
+    <aura:attribute name="counter" type="Integer" default="3"/>
+    <aura:attribute name="firstDayMonth" type="Date"/>
+    <aura:attribute name="lastDayMonth" type="Date"/>
+    <aura:attribute name="currentMonth" type="Integer"/>
+    <aura:attribute name="openSecId" type="string"/>
+    <aura:attribute name="buttonClicked" type="string"/>
+    <aura:attribute name="initialAllopen" type="Boolean" default="false"/>
+	<aura:handler event="c:PSSubTasksEvent" action="{!c.callfromParent}"/>
+    <aura:handler value="{!this}" name="init" action="{!c.doInit}"/>
+    <aura:method name="commentValidationMethod" action="{!c.commentValidation}"
+      description="bar controller function" />
+    
+                    <aura:if isTrue="{!not(empty(v.Message))}">
+                        <c:showPageMessages messageString="{!v.Message}" isSuccess="{!v.isSuccess}"/>
+                    </aura:if>
+
+                    <div class="slds-align_absolute-center">
+                        <lightning:button variant="brand" label="Previous week" disabled="{!v.disablePrev}" onclick="{! c.handlePrevious }"/>
+                        <lightning:button variant="brand" label="Next week" disabled="{!v.disableNext}" onclick="{! c.handleNext }"/>
+                    </div>
+   					
+
+                            <table class="slds-table slds-table_bordered"> 
+                                <thead>
+                                    <tr class="slds-text-title_caps">
+                                        <th class="slds-size_2-of-12 paddingClass slds-text-align_center"> <div class="slds-truncate"> Name</div></th> <!--  slds-cell-fixed -->
+                                        <aura:iteration items="{!v.datearr}" var="date">
+                                            <th class="slds-col slds-size_0.8-of-12 slds-text-align_center"><div class="slds-truncate">{!date}</div></th>  <!--  slds-cell-fixed -->
+                                        </aura:iteration>
+                                        <th class="slds-col slds-size_1-of-12 slds-text-align_center"><div class="slds-truncate">Total hours</div></th>  <!--  slds-cell-fixed -->
+                                        <th class="slds-col slds-size_4-of-12 slds-text-align_center"><div class="slds-truncate">Weekly Comments</div></th>  <!--  slds-cell-fixed -->
+                                    </tr>    
+                                </thead>
+                                <tbody>
+                                    <aura:iteration items="{!v.subtasksWrapperList}" var="item" indexVar="indx">
+                                        <tr>
+                                            <div class="slds-page-header" style="cursor: pointer;" data-index="{!indx}" onclick="{!c.section}">
+                                                    <div class="slds-float--left ">
+                                                        <div class="{!indx}" style="display:none"><lightning:icon aura:id="{!indx}" iconName="utility:chevronright" size="x-small" alternativeText="Indicates add" /></div>
+                                                        <div class="{!indx}" style="display:block"><lightning:icon  aura:id="{!indx}" iconName="utility:chevrondown" size="x-small" alternativeText="Indicates dash"/></div>
+                                                    </div>
+                                                    <div class="slds-m-left--large"><td  colspan="9" class="slds-size_2-of-12 slds-hyphenate paddingClass">{!item.taskName}</td></div>
+                                            </div>
+                                            
+                                        </tr>  
+                                        
+                                        <aura:iteration items="{!item.innerWrapperList}" var="wrap" indexVar="innerindx">
+                                            
+                                            <tr  id="{!indx+'-'+innerindx}" aura:id="{!innerindx}">
+                                                <td class="slds-size_2-of-12 slds-hyphenate paddingClass"><div class="slds-p-left_x-small">{!wrap.subtaskName}</div> </td>
+                                                <aura:iteration items="{!wrap.psoList}" var="pso">
+                                                    <td class="slds-size_0.8-of-12 paddingClass"><lightning:input type="currency" onchange="{!c.valuechanged}" value="{!pso.Hours_Spent__c}" style="width:auto"/></td>
+                                                </aura:iteration>
+                                                <td class="slds-size_1-of-12 paddingClass"><lightning:input type="currency" disabled="true" value="{!wrap.totalhours}" style="width:auto"/></td>
+                                                <td class="slds-size_4-of-12 paddingClass"><lightning:textarea value="{!wrap.notes}"  maxlength="1000" onchange="{!c.valuechanged}"  style="width:auto"/></td>
+                                            </tr>
+                                            
+                                            
+                                        </aura:iteration>
+                                    </aura:iteration>
+                                </tbody>
+                            </table>
+                            
+                     <!--   </div>
+                    </div>-->
+                        <div class="slds-align_absolute-center slds-p-top_small">
+                           <!-- <lightning:button variant="brand" disabled="{!!v.changed}" label="Save" onclick="{! c.handleSave }"/>-->
+                            <lightning:button variant="brand" disabled="{!!v.changed}" name="save" label="Save" onclick="{! c.commentValidation }"/>
+                            <lightning:button variant="brand" disabled="{!!v.changed}" name="saveandsubmit" label="Save and Submit" onclick="{! c.saveAndSubmit}"/>
+                            <lightning:button variant="neutral" label="Cancel" onclick="{! c.handleCancel }"/>    
+                        </div> 
+
+
+
+</aura:component>

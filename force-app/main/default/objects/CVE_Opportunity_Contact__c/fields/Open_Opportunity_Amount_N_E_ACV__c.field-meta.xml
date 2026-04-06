@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Open_Opportunity_Amount_N_E_ACV__c</fullName>
+    <description>SAL26-641: shows opportunity New Expansion ACV amount if opportunity is open</description>
+    <formula>IF(
+   AND(Opportunity__c != null, !Opportunity__r.IsClosed),
+   Opportunity__r.New_Expansion_ACV__c ,
+   0
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Open Opportunity Amount (N/E ACV)</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

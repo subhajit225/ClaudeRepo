@@ -1,0 +1,9 @@
+<apex:page showHeader="false" sidebar="false" cache="false"  controller="RCV_Quote_TeamsClr" contentType="text/xml" action="{!init}">
+ <block>
+    <apex:outputPanel layout="none" rendered="{!hasTerms}">
+        <apex:repeat var="terms" value="{!QuoteTerms}">
+            <block padding-top="5pt">{!terms}</block>
+        </apex:repeat>
+        </apex:outputPanel>        
+    </block>
+</apex:page>

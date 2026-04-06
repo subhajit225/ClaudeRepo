@@ -1,0 +1,285 @@
+<template>
+    <lightning-card  title="POC Request From" >
+        <div if:false={hideSpinner} class="">
+            <lightning-spinner
+                alternative-text="Loading..." variant="brand">
+            </lightning-spinner>
+        </div>
+
+        <div if:true={persistBanner}>
+            <div class="demo-only" style="height:4rem">
+                <div class="slds-notify_container slds-is-relative">
+                    <div class="slds-notify slds-notify_toast slds-theme_info" role="status">
+                        <span class="slds-assistive-text">info</span>
+                        <lightning-icon icon-name="utility:info" alternative-text="Approved" title="Approved"></lightning-icon>
+                        <div class="slds-notify__content">
+                            <h2 class="slds-text-heading_small">
+                                File Upload in Progress. Please do not close current tab or press back button.
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+     
+         <c-custom-toast auto-close-time="5000"></c-custom-toast>
+         <div class="slds-card slds-theme_shade" >
+            <div class="slds-card__header slds-grid">
+            <div style="border-radius:6px;" class="slds-notify slds-notify_alert slds-alert_warning" role="alert">
+            <span class="slds-assistive-text">warning</span>
+            <b><lightning-icon icon-name="utility:warning"></lightning-icon> If a customer has the old Polaris UI, all POC submissions for appliances, cloud cluster, and edge will automatically upgrade them to RSC.</b>
+            </div>
+            </div>
+            </div>
+
+        <lightning-record-edit-form object-api-name="POC__c" onsubmit ={handleSubmit}>
+            <lightning-messages>  </lightning-messages>
+            <template if:true={isRecordReturn} >
+                <!--TODO: hide when form is not launched from Oppty-->
+                <template if:false={hideOpportunitySection} >
+                <div class="demo-only demo-only--sizing slds-grid slds-box slds-box_x-small">
+                    <div class="slds-size_1-of-2">
+                    <div class=" slds-text-align_center slds-m-around_x-small" style="text-align: left;">
+                    <b>Account Name :</b> {oppRecord.Account.Name}
+                    </div>
+                    <div class=" slds-text-align_center slds-m-around_x-small" style="text-align: left;">
+
+                    <b> Opportunity  Name :</b> {oppRecord.Name}
+                    </div>
+                    <div class=" slds-text-align_center slds-m-around_x-small" style="text-align: left;">
+
+                    <b> Opportunity  Owner :</b> {oppRecord.Owner.Name}
+                    </div>
+                    <div class=" slds-text-align_center slds-m-around_x-small" style="text-align: left;">
+
+                    <b> Partner Name :</b> <template if:true={oppRecord.Partner_Lookup__c}>{oppRecord.Partner_Lookup__r.Name}</template>
+                    </div>
+                    <div class=" slds-text-align_center slds-m-around_x-small" style="text-align: left;">
+
+                    <b> Distributor Name :</b> <template if:true={oppRecord.Distributor_Lookup__c}>
+                               {oppRecord.Distributor_Lookup__r.Name} </template>
+                    </div>
+
+                    </div>
+                </div>
+            </template>
+                <lightning-card  title="POC Request Information"> 
+                    <div class="demo-only demo-only--sizing slds-grid slds-box slds-box_x-small">
+                        <div class="slds-size_1-of-2">
+                            <div class=" slds-text-align_center slds-m-around_x-small" style="text-align: left;">
+                                <template if:true={hideOpportunitySection} >
+                                <lightning-input-field field-name="POC_Account__c" value={pocRecord.POC_Account__c} required="true" variant="label-stacked"> 
+                                </lightning-input-field>  
+                                </template>
+                                <lightning-input-field field-name="POC_Type__c" value={pocRecord.POC_Type__c} required="true" variant="label-stacked" onchange={handleChangePOCType}> 
+                                </lightning-input-field>  
+
+                                <!--<template if:true={hidesctionfortrybuy}>
+                                    <lightning-checkbox-group name="Checkbox Group"
+                                                                         label=""
+                                                                         options={TryBuyAgreementOption}
+                                                                         value=""
+                                                                         required="true"
+                                                                         onchange={handleChangeTrybuyCheckbox}>
+                                                                     </lightning-checkbox-group>
+                                                                     
+                                                                     <template if:true={showtrybuyfieluploadsection}>
+                                                                     Try and Buy Agreement :
+                                                                     <div class="slds-m-around_medium">
+                                                                        Please upload max of 20 MB file size
+                                                                         <lightning-input type="file" required={fileUploadValidation}
+                                                                         accept=".xlsx, .xls, .csv, .png, .doc, .docx, .pdf"
+                                                                         label="Attachment" onchange={openfileUploadAgreementTryBuy}></lightning-input>
+                                                                     </div>
+                                                                     <template if:true={fileDataAgreementTryBuy}>
+                                                                         <p>{fileDataAgreementTryBuy.filename}</p>
+                                                                     </template>
+                                                                    
+                                                                 </template>
+                                   
+                                     </template>-->
+				    
+                                     <template if:true={showVirtualTab}>
+                                     <lightning-input-field field-name="Lab_Type__c" value={pocRecord.Lab_Type__c} required="true" variant="label-stacked" >
+                                    </lightning-input-field> 
+
+                                    <lightning-input-field field-name="POC_Qty__c" value={pocQty}  variant="label-stacked" >
+                                    </lightning-input-field>  
+                                    </template>
+
+                                <template if:false={hidepocrelocation}>
+                                    <lightning-input-field field-name="POC_Relocation__c" value={pocRecord.POC_Relocation__c} required="true" variant="label-stacked" onchange={handleChangePOCRelocation}>
+                                    </lightning-input-field>                                       
+                                    <template if:true={showPOcAssetrelocation} >
+                                        <lightning-input-field field-name="POC_Relocation_Asset__c" value={pocRecord.POC_Relocation_Asset__c} required="true" variant="label-stacked"> 
+                                        </lightning-input-field>   
+                                    </template>
+                                </template>
+                                <template if:true={displayPOCJustification}>
+                                    <lightning-input-field field-name="POC_Justification__c" value={pocRecord.POC_Justification__c} required="true" variant="label-stacked">  
+                                    </lightning-input-field>
+                                </template>
+                               <template if:true={showRscInstanceFields}>
+                                    <lightning-combobox name="progress" label="RSC AccountType" value={selectedRscAccountType} options={rscAccountType} onchange={handleAccTypeChange} required></lightning-combobox>
+                                    <lightning-combobox name="progress1" label="Select Existing RSC Instance" value={selectedRscUrl} options={rscExistingRscUrl} onchange={handleSelectedExistingUrl} disabled={isExistingUrlDisabled} required={isExistingUrlRequired}></lightning-combobox>
+                                    <lightning-input type="text" data-id="suggestedUrl" label="Create New POC RSC Instance" value={suggestedUrl} onchange ={handleSuggestedUrlChange} disabled ={isSuggestedUrlDisabled} field-level-help="Enter the domain name only. For example, 'abc' becomes https://abc.my.rubrik.com."> </lightning-input>
+                                </template>
+                            </div>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            <div class="slds-text-align_center slds-m-around_x-small planInstDate" style="text-align: left;">
+                                <lightning-input-field field-name="Planned_Installation_Date__c" value={pocRecord.Planned_Installation_Date__c} required="true" variant="label-stacked"  onchange={handleChangePlanDateChange} >  
+                                </lightning-input-field>
+                                <div class="expectedDate">
+                                    <lightning-input-field field-name="New_Expected_End_Date__c" value={pocRecord.New_Expected_End_Date__c} required="true" variant="label-stacked" disabled={disabledexpectedendDate} onchange={handleChangeExpectedDateChange} > 
+                                    </lightning-input-field>
+                                </div>
+                                <div class="incidentManager">
+                                    <template if:true={showIncidentManager}>
+                                        <lightning-input-field field-name="RRT_Incident_Manager__c" value={pocRecord.RRT_Incident_Manager__c} required="true" variant="label-stacked" > 
+                                        </lightning-input-field>
+                                    </template>
+                                </div>
+                                <template if:false={hidesctionforwebvirtual}>
+                                    <template if:true={showTestPlan}>
+                                    Test Plan :
+                                    <div class="slds-m-around_medium">
+                                       Please upload max of 20 MB file size
+                                        <lightning-input type="file" required={fileUploadValidation}
+                                        accept=".xlsx, .xls, .csv, .png, .doc, .docx, .pdf"
+                                        label="Attachment" onchange={openfileUpload}></lightning-input>
+                                    </div>
+                                    <template if:true={fileData}>
+                                        <p>{fileData.filename}</p>
+                                    </template>
+                                </template>
+                                </template>
+                            </div>
+                        </div>       
+                    </div>
+                </lightning-card>
+                <!--TODO: hide if poc type = virtual lab-->
+                <template if:true={displayProductPicker}>
+                    <!--<lightning-input-field field-name="Polaris_Platfrom__c" value={pocRecord.Polaris_Platfrom__c} disabled="true" variant="label-stacked" > </lightning-input-field>	
+                    -->
+                    <lightning-card  title="Product Picker">
+                        <c-poc-product-picker poc-product-attributes={productAttributes} show-toast-method={showToastMethodInst} poc-type={pocType} onucledition={uclEditionMethod} ongovdataandstorage ={handleGovDataAndStorage} poc-rscg-contact={oppRecord.Rubrik_Security_Cloud_Gov_t_Owner__c} poc-rscg-contact-name={rscGContactName}></c-poc-product-picker>
+                    </lightning-card>
+                </template>
+                <template if:true={isWebTryAndBuy}>
+                    <lightning-card  title="Product Information">
+                        <c-poc-product-picker poc-product-attributes={productAttributes} show-toast-method={showToastMethodInst} is-web-try-and-buy="true"></c-poc-product-picker>
+                    </lightning-card>
+                </template>
+                <template if:false={hidesctionforwebvirtual}>
+                <lightning-card  title="Agreement Information ">
+                    <div class="demo-only demo-only--sizing slds-grid slds-box slds-box_x-small">
+                        <div class="slds-size_1-of-2">
+                            <div class=" slds-text-align_center slds-m-around_x-small" style="text-align: left;">
+								<template if:false={hidesctionforwebvirtual}>
+                                    <lightning-checkbox-group name="Checkbox Group"
+                                        label=""
+                                        options={addendumOption}
+                                        value={PartnerDistributorSignedPOCAddendum}
+                                        disabled>
+                                    </lightning-checkbox-group>
+                               </template>
+                                <lightning-checkbox-group name="Checkbox Group"
+                                    label=""
+                                    options={agreementOption}
+                                    value={setOnlineAgreementSigned}
+                                    disabled>
+                                </lightning-checkbox-group>
+                                <lightning-checkbox-group name="Checkbox Group"
+                                    label=""
+                                    options={agreementWaivedOffOption}
+                                    value={setAgreementWaivedOff}
+                                    disabled>
+                                </lightning-checkbox-group>
+                                <template if:false={hidesctionforwebvirtual}>                     
+                                    <lightning-checkbox-group name="Checkbox Group"
+                                        label=""
+                                        options={ManualPOCAgreementOption}
+                                        value=""
+                                        required={fileUploadValidationManual}
+                                        onchange={handleChangePOCAgreement}>
+                                    </lightning-checkbox-group>
+                                    <p>POC Agreement must be signed by Customer when requesting POC </p>
+                                    <template if:true={showAgreementFileUpload}>
+                                        <div class="slds-m-around_medium">
+						 Please upload max of 20 MB file size
+                                            <lightning-input type="file"  required="true"
+                                            accept=".xlsx, .xls, .csv, .png, .doc, .docx, .pdf"
+                                            label="Attachment" onchange={openfileUploadAgreement}></lightning-input>
+                                        </div>
+                                        <template if:true={fileDataAgreement}>
+                                            <p>{fileDataAgreement.filename}</p>
+                                        </template>
+                                    </template>
+                                </template>
+				            </div>
+			            </div>
+                        <div class="slds-size_1-of-2">
+                            <div class=" slds-text-align_center slds-m-around_x-small" style="text-align: left;">
+                                <lightning-input-field field-name="Disty_with_Signed_POC_Addendum__c" value={pocRecord.Disty_with_Signed_POC_Addendum__c}  variant="label-stacked" disabled>  </lightning-input-field>
+                            </div>
+                        </div>
+			        </div>
+                </lightning-card>
+                </template>
+                <template if:false={hidesctionforwebvirtual}>
+                    <lightning-card  title="Shipping Information">
+                        <div class="demo-only demo-only--sizing slds-grid slds-box slds-box_x-small">
+                            <div class="slds-size_1-of-2">
+                                <div class=" slds-text-align_center slds-m-around_x-small" style="text-align: left;">    
+                                    <lightning-input-field field-name="Contact__c" value={pocRecord.Contact__c}  variant="label-stacked">  </lightning-input-field>
+                                    <lightning-input-field field-name="Shipping_Contact__c" value={pocRecord.Shipping_Contact__c} required="true" variant="label-stacked">  </lightning-input-field>
+                                    <lightning-input-field field-name="Shipping_Contact_Email__c" value={pocRecord.Shipping_Contact_Email__c} required="true" variant="label-stacked">  </lightning-input-field>
+                                    <lightning-input-field field-name="Shipping_Contact_Phone__c" value={pocRecord.Shipping_Contact_Phone__c} required="true" variant="label-stacked">  </lightning-input-field>
+                                    <lightning-input-field field-name="POC_Shipping_Information_Comments__c" value={pocRecord.POC_Shipping_Information_Comments__c}  variant="label-stacked">  </lightning-input-field>
+                                </div>
+                            </div>
+                            <div class="slds-size_1-of-2">
+                                <div class="slds-text-align_center slds-m-around_x-small" style="text-align: left;">
+                                    <lightning-checkbox-group name="Checkbox Group"
+                                        label=""
+                                        options={copyAddressfromAccount}
+                                        value=""
+                                        onchange={copyAddressFromAccountfunction}></lightning-checkbox-group>
+                                        
+                                    <lightning-input-field field-name="Shipping_Street__c" value={shipStreet} required="true" variant="label-stacked" onchange={handleStreetChange}>  </lightning-input-field>
+                                    <lightning-input-field field-name="Shipping_City__c" value={shipCity} required="true" variant="label-stacked" onchange={handleCityChange}>  </lightning-input-field>
+                                    <lightning-input-field field-name="Ship_To_Country__c" value={shipCountry} required="true" variant="label-stacked" onchange={displayStatebyCountry}></lightning-input-field>
+                                    <lightning-combobox name="Select State" label="Ship To State" placeholder="Select State" options={stateoptions}
+                                    onchange={handleStateChange} value={selectedStateValue} required={isRecordReturnState} ></lightning-combobox>
+
+                                    <lightning-input-field field-name="Shipping_Zip_Postal_Code__c" value={shipPostalCode} required="true" variant="label-stacked" onchange={handlePostalCodeChange}>  </lightning-input-field>
+					
+                                </div>     
+                            </div>
+                        </div>
+                    </lightning-card>
+                </template>
+                <template if:true={isWebTryAndBuy}>
+                    <lightning-card  title="Agreement Information">
+                        <div class="demo-only demo-only--sizing slds-grid slds-grid_vertical slds-box slds-box_x-small">
+                            <div class="slds-size_1-of-2">
+                                <lightning-input-field field-name="Online_Agreement_Signed__c" value={pocRecord.Online_Agreement_Signed__c} variant="label-stacked" disabled="true"></lightning-input-field>
+                            </div>
+                            <div class="slds-size_1-of-2" style="text-align: left;">
+                                <lightning-input-field field-name="POC_Agreement_Waived_Customer__c" value={pocRecord.POC_Agreement_Waived_Customer__c} variant="label-stacked" disabled="true"></lightning-input-field>
+                            </div>
+                        </div>
+                    </lightning-card>
+                </template>
+                <div class="buttonCenter">
+                    <lightning-button-group>
+			    
+                       <lightning-button class="slds-m-top_small" variant="brand" type="submit" name="update" label="Submit" disabled={isConditionalPOC}>  </lightning-button>
+                        <lightning-button class="slds-m-top_small" variant="neutral" type="button" name="update" label="Cancel" onclick={cancelPOC}>  </lightning-button>
+                    </lightning-button-group>
+                </div>
+            </template>
+        </lightning-record-edit-form>
+    </lightning-card>
+</template>

@@ -1,0 +1,29 @@
+<apex:page controller="ApproverListController" lightningStylesheets="true">
+    <apex:slds rendered="{!$User.UITheme != 'Theme3'}"/>
+    <apex:form >
+        <apex:pageBlock >
+            
+            <apex:pageBlockTable value="{!ApprovalRecordList}" var="ab">
+                <apex:column headerValue="Action">
+                    <apex:commandLink target="_parent" value="Reassign" action="/{!ab.actionId+'/e?et=REASSIGN&retURL=%2Fhome%2Fhome.jsp'}"/>
+                    |&nbsp;
+                    <apex:commandLink target="_parent" value="Approve / Reject" action="/{!'p/process/ProcessInstanceWorkitemWizardStageManager?id='+ab.actionId}"/>
+                </apex:column>
+                <apex:column headerValue="Related To" >
+                    <apex:commandLink target="_parent" value="{!ab.relatedToName}" action="/{!ab.relatedToId}"/>
+                </apex:column>
+                <apex:column headerValue="Type" value="{!ab.objectName}" />
+                <apex:column headerValue="Owner">
+                    <apex:commandLink target="_parent" value="{!ab.ownerName}" action="/{!ab.ownerId}"/>
+                </apex:column>
+                <apex:column headerValue="Submiteed ">
+                    <apex:commandLink target="_parent" value="{!ab.submitterName}" action="/{!ab.submitterId}"/>
+                </apex:column>
+                <apex:column headerValue="Date Submitted">
+                    <apex:outputText value="{0,date,MM/dd/yy}"> <apex:param value="{!ab.submittedDate}" /> </apex:outputText>
+                </apex:column>
+            </apex:pageBlockTable> 
+        </apex:pageBlock>
+    </apex:form>
+    
+</apex:page>

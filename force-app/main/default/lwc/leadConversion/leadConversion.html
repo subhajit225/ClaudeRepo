@@ -1,0 +1,242 @@
+<template>
+    <div class="slds-theme_default container">
+        <div class="outer-container">
+            <div class="demo-only" style="height:6rem;position:relative" if:true={showLoader}>
+                <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+            <div class="inner-container" if:false={showLoader}>
+                <div class="header">                    
+                    <div class="slds-clearfix">
+                        <div class="slds-float_left">
+                            <lightning-icon icon-name="standard:lead" alternative-text="Lead" size="large"></lightning-icon>
+                        </div>
+                        <div class="slds-m-left_small slds-float_left header-tb">
+                            <div class="header-tb-title">Convert Lead</div>
+                            <div class="header-tb-ln">{ldSource.Name}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="body">
+                    <div class="">
+                        <ul style="list-style: inside;" class="slds-m-left_medium slds-m-top_small">
+                            <li>Leads can be converted to accounts, contacts, opportunities, and followup tasks.</li>
+                            <li>You should only convert a lead once you have identified it as qualified.</li>
+                            <li>After this lead has been converted, it can no longer be viewed or edited as a lead, but can be viewed in lead reports.</li>
+                        </ul>
+                        <div style="width: 600px;margin: auto;padding: 2%;">
+                            <lightning-layout multiple-rows>
+                                <lightning-layout-item size="12">
+                                    <div class="slds-form-element slds-form-element_horizontal">
+                                        <label class="slds-form-element__label" for="horizontal-input-id-01">Account Owner</label>
+                                        <div class="slds-form-element__control">
+                                            <c-custom-look-up-l-w-c class="custom-lookup" name="Account Owner" objectname="User" iconname="standard:user" placeholder="Search user..." onselected={handleChange}></c-custom-look-up-l-w-c>
+                                        </div>
+                                    </div>
+                                    <!--<lightning-input type="text" name="Account Owner" label="Account Owner" variant="label-inline" onchange={handleChange} class="required-field" required></lightning-input>-->                                    
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12">                                    
+                                    <div class="slds-form-element slds-form-element_horizontal">
+                                        <label class="slds-form-element__label" for="horizontal-input-id-01">Send Email to the Owner</label>
+                                        <div class="slds-form-element__control">
+                                            <lightning-input type="checkbox" name="Send Email to the Owner" variant="label-hidden" onchange={handleChange}></lightning-input>
+                                        </div>
+                                    </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12">
+                                    <div class="slds-form-element slds-form-element_horizontal">
+                                        <label class="slds-form-element__label" for="horizontal-input-id-01">Account Name</label>
+                                        <div class="slds-form-element__control">
+                                            <div class="slds-clearfix">
+                                                <div class="slds-float_left" style="width:340px;">
+                                                    <lightning-input type="text" name="Account Name" variant="label-hidden" onchange={handleChange} value={accountName}></lightning-input>
+                                                </div>
+                                                <div class="slds-float_left">
+                                                    <lightning-button-icon icon-name="utility:search" variant="border-filled" alternative-text="Zoom out" title="Click here to choose Account" onclick={searchAccountNames}></lightning-button-icon>
+                                                </div>
+                                            </div>                                            
+                                        </div>
+                                    </div>                                    
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12">
+                                    <lightning-input type="text" name="Opportunity Name" label="Opportunity Name" variant="label-inline" onchange={handleChange} value={oppName}></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12">
+                                    <lightning-input type="text" name="Opportunity Amount" label="Opportunity Amount" variant="label-inline" onchange={handleChange} data-id="oppamt"></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12">
+                                    <div class="slds-form-element slds-form-element_horizontal">
+                                        <label class="slds-form-element__label" for="horizontal-input-id-02">Do Not Create Opportunity</label>
+                                        <div class="slds-form-element__control">
+                                            <lightning-input type="checkbox" name="Do Not Create Opportunity" variant="label-hidden" onchange={handleChange}></lightning-input>
+                                        </div>
+                                    </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12">                            
+                                    <lightning-combobox name="Converted Status"
+                                                        label="Converted Status"
+                                                        value={value}                                                        
+                                                        options={convertedStatusOptions}
+                                                        onchange={handleChange}
+                                                        variant="label-inline"
+                                                        class="required-field" 
+                                                        message-when-value-missing="Value is required"
+                                                        required>
+                                    </lightning-combobox>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer">
+                    <lightning-button variant="brand" label="Convert" title="Convert" onclick={handleConvert} disabled={disableConvertButton}></lightning-button>
+                    <lightning-button label="Cancel" title="Cancel" onclick={handleCancel} class="slds-m-left_x-small" disabled={disableCancelButton}></lightning-button>                    
+                </div>
+            </div>
+        </div>
+    </div>   
+    <div if:true={accountsModal}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" class="slds-modal slds-fade-in-open slds-modal_large">
+            <div class="slds-modal__container">                
+                <div class="slds-modal__header">
+                    <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Choose Account</h1>
+                </div>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1" style="min-height:350px;">
+                    <div style="height:6rem;position:relative" if:true={accountsModalSpinner}>
+                        <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+                            <span class="slds-assistive-text">Loading</span>
+                            <div class="slds-spinner__dot-a"></div>
+                            <div class="slds-spinner__dot-b"></div>
+                        </div>
+                    </div>
+                    <div style="height:6rem;position:relative" if:false={accountsModalSpinner}>
+                        <div if:true={result.isError} class="slds-box slds-text-align_center">                            
+                            {result.errMsg}
+                        </div>
+                        <div if:false={result.isError}>
+                            <div class="tb-box" if:true={showTable_1}>
+                                <div style="font-weight: bold;font-size: 16px;padding: 10px;">
+                                    Similar Accounts Found
+                                </div>
+                                <div style="width:100%; overflow-x:auto;">
+                                    <table style="width:100%;" class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Name</th>
+                                                <th>Status</th>
+                                                <th>Record Type</th>
+                                                <th>Owner</th>
+                                                <th>Id</th>
+                                                <th>Billing Street</th>
+                                                <th>Billing City</th>
+                                                <th>Billing State</th>
+                                                <th>Billing Postal Code</th>
+                                                <th>Billing Country</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <template for:each={potentialAccMatch} for:item="account" for:index="index">
+                                                <tr key={account.Id}>
+                                                    <td>
+                                                        <input type="radio" name="account" value={account.idxVal} onchange={handleChange}/>
+                                                    </td>
+                                                    <td>{account.accountName}</td>
+                                                    <td>{account.accountStatus}</td>
+                                                    <td>{account.recTypeName}</td>
+                                                    <td>{account.accountOwner}</td>
+                                                    <td>{account.sourceID}</td>
+                                                    <td>{account.addressLine1} {account.addressLine2}</td>
+                                                    <td>{account.city}</td>
+                                                    <td>{account.state}</td>
+                                                    <td>{account.postalCode}</td>
+                                                    <td>{account.country}</td>
+                                                </tr>
+                                            </template>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tb-box" if:true={checkCurrentUserProfile}>
+                            <div class="tb-box" if:true={showTable_2}>
+                                <div style="font-weight: bold;font-size: 16px;padding: 10px;">
+                                    {title_2}
+                                </div>
+                                <div style="width:100%; overflow-x:auto;">
+                                    <table style="width:100%;" class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Name</th>                                                
+                                                <th if:true={showAdditionalColumnsInTable_2}>Status</th>
+                                                <th if:true={showAdditionalColumnsInTable_2}>Record Type</th>
+                                                <th if:true={showAdditionalColumnsInTable_2}>Owner</th>
+                                                <th if:true={showAdditionalColumnsInTable_2}>Id</th>                                                
+                                                <th>Billing Street</th>
+                                                <th>Billing City</th>
+                                                <th>Billing State</th>
+                                                <th>Billing Postal Code</th>
+                                                <th>Billing Country</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <template for:each={exactAccMatch} for:item="account" for:index="index">
+                                                <tr key={account.Id}>
+                                                    <td>
+                                                        <input type="radio" name="account" value={account.idxVal} onchange={handleChange}/>
+                                                    </td>
+                                                    <td>{account.accountName}</td>                                                    
+                                                    <td if:true={showAdditionalColumnsInTable_2}>{account.accountStatus}</td>
+                                                    <td if:true={showAdditionalColumnsInTable_2}>{account.recTypeName}</td>
+                                                    <td if:true={showAdditionalColumnsInTable_2}>{account.accountOwner}</td>
+                                                    <td if:true={showAdditionalColumnsInTable_2}>{account.sourceID}</td>                                                    
+                                                    <td>{account.addressLine1} {account.addressLine2}</td>
+                                                    <td>{account.city}</td>
+                                                    <td>{account.state}</td>
+                                                    <td>{account.postalCode}</td>
+                                                    <td>{account.country}</td>
+                                                </tr>
+                                            </template>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tb-box" if:false={checkCurrentUserProfile}>
+                            <div style="font-weight: bold;font-size: 16px;padding: 10px;">
+                                Create New Account
+                            </div>
+                            <div style="width:100%; overflow-x:auto;">
+                                <table style="width:100%;" class="slds-table slds-table_bordered">
+                                    <tr> <th><b>{accountMessage}</b></th></tr>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="tb-box" if:true={checkTitleCheck}>
+                            <div style="font-weight: bold;font-size: 16px;padding: 10px;">
+                                Create New Account
+                            </div>
+                            <div style="width:100%; overflow-x:auto;">
+                                <table style="width:100%;" class="slds-table slds-table_bordered">
+                                    <tr> <th><b>{accountMessage}</b></th></tr>
+                                </table>
+                            </div>
+                        </div>
+                        </div>                        
+                        <br/>
+                    </div>
+                </div>
+                <div class="slds-modal__footer">
+                    <lightning-button variant="brand" label="Ok" title="Save" onclick={selectAccount}></lightning-button>
+                    <lightning-button label="Cancel" title="Cancel" onclick={closeAccountsModal} class="slds-m-left_x-small"></lightning-button>  
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </div> 
+</template>

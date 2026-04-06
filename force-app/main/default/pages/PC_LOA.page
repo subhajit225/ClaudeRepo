@@ -1,0 +1,40 @@
+<apex:page applyBodyTag="false" showHeader="false" standardController="Account" extensions="PC_LetterOfAuthorization">
+    <apex:stylesheet value="{!URLFOR($Resource.PartnerCommunityResource, 'PartnerCommunityResource/Stylesheets/PartnerCommunityCSS.css')}"/>
+    <apex:form >
+        
+        <div style="box-shadow: 0px 20px 60px rgb(7 15 82 / 20%);border-radius: 10px;border: 0;margin: 50px;padding: 70px 90px 120px;">
+            <apex:outputpanel rendered="{!if(contractStatus =='Signed-Active' && channelProg != null,true,false)}">
+                <apex:commandLink action="{!renderAsPDF}" target="_blank" style="text-decoration: none;">
+                    <apex:commandButton value="Download PDF" style="background:#00D3C1;min-height: 40px;border-radius: 25px;font-size: 14px;padding-left: 17px;padding-right: 17px;border: 0;color: #070F52;"
+                                        />
+                </apex:commandLink>
+                <div style="text-align:right;">
+                    
+                    <apex:image url="{!URLFOR($Resource.PC_LOA, 'RubrikLogo.png')}" width="150" height="50"/>
+                    <div>
+                        <apex:outputText value="{!$Label.PC_RubrikAddress}" escape="false" style="font-size:15px; color:#000000;"/>
+                    </div>
+                </div>
+                <div style="font-family: 'Inter-Regular';font-style: normal;font-weight: 400;font-size: 20px;line-height: 150%;color: #6C7174;margin-top: 55px;">
+                    <div>
+                        {!currentMonth} {!DAY(TODAY())}, {!YEAR(TODAY())}
+                        <br/>
+                    </div>
+                    <div>
+                        <apex:outputText value="{!letterContent}" style="font-weight:bold;display:block;text-align: justify;" escape="false" /> 
+                    </div>
+                    <div>
+                        <apex:image url="{!URLFOR($Resource.PC_LOA, 'AlokAgrawalSignature.png')}" width="150" height="50"/>
+                        <apex:outputText value="{!$Label.PC_LetterSignature}" escape="false"/>
+                    </div>
+                    
+                </div>
+            </apex:outputpanel>
+            <apex:outputPanel rendered="{!if(contractStatus !='Signed-Active' || channelProg == null,true,false)}">
+                <div style="font-family: 'Inter-Regular';font-style: normal;font-weight: 400;font-size: 20px;line-height: 150%;color: #6C7174;margin-top: 55px;">
+                    <apex:outputText value="{!$Label.PC_LetterNoAccessMessage}" escape="false"/>
+                </div>
+            </apex:outputPanel>
+        </div>
+    </apex:form>
+</apex:page>

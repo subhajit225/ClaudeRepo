@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+	<apiVersion>54.0</apiVersion>
+	<isExposed>true</isExposed>
+	<description>Buttons to navigate the journey in the MIP form flow</description>
+	<targets>
+		<target>lightning__FlowScreen</target>
+	</targets>
+	<targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <property name="backToElement" type="boolean" label="Back to Element" role="outputOnly"/>
+            <property name="addMilestone" type="boolean" label="Add Milestone" role="outputOnly"/>
+			<property name="rebateMilestone" type="boolean" label="Rebate Milestone Element" role="outputOnly"/>
+			<property name="psnlBookings" type="boolean" label="PSNL Bookings Element" role="outputOnly"/>
+			<property name="totalBookings" type="boolean" label="Total Bookings Element" role="outputOnly"/>
+			<property name="elementType" type="String" label="Element Type" role="inputOnly"/>
+			<property name="rebateType" type="String" label="Rebate Type" role="inputOnly"/>
+			<property name="milestoneCreated" type="boolean" label="Milestone Created" role="inputOnly"/>
+			<property name="comingFromRebateMilestone" type="boolean" label="Coming From Rebate Milestone" role="inputOnly"/>
+			<property name="psnlOrTotalOrRebateCreated" type="String" label="PSNL Or Total Or Rebate Created" role="inputOnly"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

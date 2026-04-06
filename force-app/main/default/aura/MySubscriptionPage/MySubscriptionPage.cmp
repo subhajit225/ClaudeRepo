@@ -1,0 +1,21 @@
+<aura:component controller="LntgMySubscriptionController" implements="flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+    <aura:attribute name="dataCategList" type="List" />
+    <aura:attribute name="catMAp" type="Map" />
+    <div class ="containerDiv">
+        <div class ="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 backToCateg">
+            <a class ="backtoCateg" href="../s/knowledgecategoryhome">Back to Knowldge Categories</a>
+        </div>
+        <div class ="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 HeadingDiv">Subscribed Knowledge Categories
+            <p class ="para">This page provides more granular control of your knowledge subscriptions. Knowledge articles are grouped under your subscribed categories, and you may unsubscribe to individual articles under a category by clicking the Unsubscribe link to the right of each article.</p>
+        </div>
+        <div class ="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 CloudAndArchive">
+            <aura:iteration items="{!v.dataCategList}" var="dc" indexVar="key">
+                <div class ="titleDiv">
+                    <h1 class ="headingTitle">{!dc}</h1>
+                    <div class ="nameList"><c:InnerSubscriptionComponent dataString="{!dc}" catMAp = "{!v.catMAp}"/></div>
+                </div>
+            </aura:iteration>
+        </div>
+    </div>
+</aura:component>

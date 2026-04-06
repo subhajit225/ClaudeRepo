@@ -1,0 +1,38 @@
+<apex:page showHeader="true" sidebar="true" controller="EntitlementAccountMismatchcontroller" readOnly="true" lightningStylesheets="true">
+    <apex:slds rendered="{!$User.UITheme != 'Theme3'}"/> 
+    <apex:dataTable value="{!EntitlementData}" var="ent" rules="all" cellpadding="5" style="border: 1px;">
+            <apex:column >
+                <apex:facet name="header">Entitlement Id</apex:facet>
+                {!ent.Id}
+            </apex:column>
+            <apex:column >
+                <apex:facet name="header">Entitlement Name</apex:facet>
+                <a href="/{!ent.Id}">{!ent.Name}</a>
+            </apex:column>
+            <apex:column >
+                <apex:facet name="header">Order</apex:facet>
+                <a href="/{!ent.Order_Service_Item__r.OrderId}">{!ent.Order_Service_Item__r.Order.OrderNumber}</a>
+            </apex:column>
+            <apex:column >
+                <apex:facet name="header">Entitlement Account</apex:facet>
+                 <a href="/{!ent.AccountId}">{!ent.Account.Name}</a>
+            </apex:column>
+            <apex:column >
+                <apex:facet name="header">Quote Account</apex:facet>
+                <a href="/{!ent.Order_Service_Item__r.SBQQ__QuoteLine__r.SBQQ__Quote__r.SBQQ__Account__r.Id}">{!ent.Order_Service_Item__r.SBQQ__QuoteLine__r.SBQQ__Quote__r.SBQQ__Account__r.Name}</a>
+            </apex:column>
+            <apex:column >
+                <apex:facet name="header">Asset Account</apex:facet>
+                 <a href="/{!ent.Asset.Account.Id}">{!ent.Asset.Account.Name}</a>
+            </apex:column>
+            <!-- newly fields added -->
+            <apex:column >
+                <apex:facet name="header">Asset Name</apex:facet>
+                 <a href="/{!ent.Asset.Id}">{!ent.Asset.Name}</a>
+            </apex:column>  
+            <apex:column >
+                <apex:facet name="header">Asset Product</apex:facet>
+                 <a href="/{!ent.Asset.Product2.Id}">{!ent.Asset.Product2.Id}</a>
+            </apex:column>   
+        </apex:dataTable>
+</apex:page>

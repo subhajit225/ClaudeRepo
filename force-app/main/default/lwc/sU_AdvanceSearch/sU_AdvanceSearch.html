@@ -1,0 +1,56 @@
+<template>
+    <div>
+        <div class="slider-Advance" onclick={handleRefineSearch}>
+            <template if:true={showAdvanceSearch}>
+                <lightning-icon icon-name="utility:switch" alternative-text="Advanced Search"
+                    size="xx-small" title={translationObject.Advanced_Search}>
+                </lightning-icon>
+            </template>
+            <template if:false={showAdvanceSearch}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
+                    <path fill="none" d="M0,0H14V14H0Z"/>
+                    <path fill="#7c7a78" d="M16.355,5.664a.846.846,0,0,0-1.2,0L11.006,9.808,6.853,5.656a.847.847,0,0,0-1.2,1.2l4.152,4.152L5.656,15.158a.847.847,0,0,0,1.2,1.2L11.006,12.2l4.152,4.152a.847.847,0,0,0,1.2-1.2L12.2,11.006l4.152-4.152A.851.851,0,0,0,16.355,5.664Z" transform="translate(-4.006 -4.006)"/>
+                </svg>
+            </template>
+        </div>
+        <div data-id="formBlock" class="mainFormDiv">
+            <div class="formDiv">
+                <div class="su__advance_group">
+                    <lightning-input placeholder={translationObject.With_the_exact_phrase} type="text" autocomplete="off"
+                        name="exactPhrase" value={exactPhrase} class="refineSearchBox" onkeyup={enterKeyAdvanceSearch}>
+                    </lightning-input>
+                </div>
+                <div class="su__advance_group">
+                    <lightning-input placeholder={translationObject.With_one_or_more_words} type="text" autocomplete="off"
+                        name="withOneOrMore" value={withOneOrMore} class="refineSearchBox" onkeyup={enterKeyAdvanceSearch}>
+                    </lightning-input>
+                </div>
+                <div class="su__advance_group">
+                    <lightning-input placeholder={translationObject.Without_the_words} type="text" autocomplete="off"
+                        name="withoutTheWords" value={withoutTheWords} class="refineSearchBox" onkeyup={enterKeyAdvanceSearch}>
+                    </lightning-input>
+                </div>
+                <div class="su__advance_group">
+                    <lightning-input placeholder={translationObject.With_the_wildcard_search} type="text" autocomplete="off"
+                        name="withWildcardSearch" value={withWildcardSearch} class="refineSearchBox" onkeyup={enterKeyAdvanceSearch}>
+                    </lightning-input>
+                </div>
+                <div class="su__flex-vcenter">
+                    <div class={addClassToAdvanceSearch}>
+                        <lightning-button label={translationObject.Refine_Search} class="su__refineSearchButton su__outline-none su__text-capitalize font-12 su__loading-view" onclick={refineSearch}>
+                        </lightning-button>
+                    </div>
+                    <template if:true={advancedSearchSelected}>
+                        <div class="su-clear-advance-filters">
+                            <span onclick={clearAllAdvFilters}
+                                class="su-clear-filters-button-screen su__loading-view su__custom-margin-0">
+                                {translationObject.Clear_all}
+                            </span>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+        <div class="su__backdrop su__d-none" onclick={handleRefineSearch}></div>
+    </div>
+</template>

@@ -1,0 +1,8 @@
+<aura:component implements="lightning:availableForFlowScreens" access="global">
+    <aura:attribute name="caseRecord" type="Case"/>
+    <aura:attribute name="timezone" type="String"/>
+    <aura:attribute name="businessHours" type="String"/>
+    <aura:attribute name="workingDays" type="String"/>
+    <aura:attribute name="withinBusinessHours" type="Boolean"/>
+    <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
+</aura:component>

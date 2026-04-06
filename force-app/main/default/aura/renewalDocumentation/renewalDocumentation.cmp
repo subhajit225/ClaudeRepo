@@ -1,0 +1,92 @@
+<aura:component controller = "renewalDocumentationController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="oppId" type="String"/>
+    <aura:attribute name="attachmentId" type="String"/>
+    <aura:attribute name="emails" type="String"/>
+    <aura:attribute name="retryCount" type="Integer" default="0"/>
+    <aura:attribute name ="showData" type="boolean" default="false"/>
+    <aura:attribute name ="hasError" type="boolean" default="false"/>
+    <aura:attribute name="errorMess" type="String"/>
+    <aura:attribute name ="showSuccessNotification" type="boolean" default="false"/>
+    <aura:attribute name ="showBothNotification" type="boolean" default="false"/>
+    <aura:attribute name ="showDocNotification" type="boolean" default="false"/>
+    <aura:attribute name ="showEmailNotification" type="boolean" default="false"/>
+    <aura:attribute name ="showButton" type="boolean" default="false"/>
+    <aura:attribute name ="showSpinner" type="boolean" default="true"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="data" type="Object"/>
+    <aura:attribute name="maxRowSelection" type="Integer" default="1"/>
+    <aura:attribute name="options" type="List"/>
+    <aura:attribute name="ccOptions" type="List"/>
+    <aura:attribute name="value" type="List" />
+    <aura:attribute name="ccValue" type="List" />
+    <aura:handler name="change" value="{!v.recordId}" action="{!c.doInit}"/>
+    <aura:handler name="change" value="{!v.retryCount}" action="{!c.getAttach}"/>
+    <aura:if isTrue="{!v.showData}">
+        <lightning:datatable
+                             columns="{! v.columns }"
+                             data="{! v.data }"
+                             keyField="id"
+                             maxRowSelection="{! v.maxRowSelection }"
+                             onrowselection="{!c.onChange }"/>
+        <lightning:radioGroup  name="Select Recepient"
+                                 label="Select Recepient"
+                                 options="{! v.options }"
+                                 value="{! v.value }"
+                                />
+         <lightning:checkboxGroup name="Select CC Recepient"
+                             label="Select CC Recepient"
+                             options="{! v.ccOptions }"
+                             value="{! v.ccValue }"/>
+        <lightning:textarea name="mail" label="Recepient Mail(Comma separated values)" value="{!v.emails}"/>
+        <aura:if isTrue="{!v.showBothNotification}">
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert">
+                <span class="slds-icon_container slds-m-right_x-small" title="Error Notification">
+                    <lightning:icon iconName="utility:error" alternativeText="info" size="x-small" variant="inverse"/>
+                </span>
+                <h2>Please Select a Document and Recepient!!</h2>
+            </div>
+        </aura:if>
+        <aura:if isTrue="{!v.showDocNotification}">
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert">
+                <span class="slds-icon_container slds-m-right_x-small" title="Error Notification">
+                    <lightning:icon iconName="utility:error" alternativeText="info" size="x-small" variant="inverse"/>
+                </span>
+                <h2>Please Select a Document!!</h2>
+            </div>
+        </aura:if>
+        <aura:if isTrue="{!v.showEmailNotification}">
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert">
+                <span class="slds-icon_container slds-m-right_x-small" title="Error Notification">
+                    <lightning:icon iconName="utility:error" alternativeText="info" size="x-small" variant="inverse"/>
+                </span>
+                <h2>Please Select or Enter Recepient!!</h2>
+            </div>
+        </aura:if>
+        <div class="slds-align_absolute-center">
+            <lightning:button class="slds-m-top_medium" variant="brand" label="Send Email" title="Send Email" onclick="{! c.sendEmail }" disabled="{!v.showButton}" />
+            <lightning:button class="slds-m-top_medium" label="Cancel" title="Create" onclick="{! c.cancel }" />
+        </div>
+    </aura:if>
+    <aura:if isTrue="{!v.showSuccessNotification}">
+        <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_success" role="alert">
+            <span class="slds-icon_container slds-m-right_x-small" title="Success Sample Notification">
+                <lightning:icon iconName="utility:success" alternativeText="info" size="x-small" variant="inverse"/>
+            </span>
+            <h2>Email Sent Successfully!!</h2>
+        </div>
+    </aura:if>
+    <aura:if isTrue="{!v.hasError}">
+        <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning" role="alert">
+            <span class="slds-icon_container slds-m-right_x-small" title="Success Sample Notification">
+                <lightning:icon iconName="utility:success" alternativeText="info" size="x-small" variant="inverse"/>
+            </span>
+            <h2>{!v.errorMess}!!</h2>
+        </div>
+    </aura:if>
+    <aura:if isTrue="{!v.showSpinner}">
+        <div class="exampleHolder">
+            <lightning:spinner alternativeText="Loading" size="large" />
+        </div>
+    </aura:if>
+</aura:component>

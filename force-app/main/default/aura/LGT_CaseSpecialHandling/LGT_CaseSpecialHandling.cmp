@@ -1,0 +1,47 @@
+<aura:component controller="CaseDetailController" implements="flexipage:availableForRecordHome,force:hasRecordId">
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="currentCase" type="Object" description="" />
+    <aura:attribute name="CaseSpclHandlingSectionHide" type="Boolean" default="false"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <div class="slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12" aura:id="CSH_Div">
+        
+        <lightning:card>
+            <aura:if isTrue="{!not(empty(v.currentCase.Account.Heads_Up_to_Support_Team__c))}">
+                <div class="slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12 slds-section slds-p-horizontal_x-small" style="font-size:1rem;">
+                    <lightning:icon aura:id= "CSH_DownArrowForNotEmpty" iconName="utility:chevrondown" class="slds-show slds-icon_container slds-p-left_xx-small slds-float_left" size="xx-small" onclick="{!c.hideCaseSpecialHandlingWhenNotEmpty}" style="padding:3px 3px 0 0;"></lightning:icon>
+                    <lightning:icon aura:id= "CSH_RightArrowForNotEmpty" iconName="utility:chevronright" class="slds-hide slds-icon_container slds-p-left_xx-small slds-float_left" size="xx-small" onclick="{!c.showCaseSpecialHandlingWhenNotEmpty}" style="padding:3px 3px 0 0;"></lightning:icon>
+                    <span class="slds-truncate" style="font-weight:bold;">Case Special Handling</span>
+                </div>
+                <aura:set attribute="else">
+                    <div class="slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12 slds-section slds-p-horizontal_x-small" style="font-size:1rem;">
+                        <lightning:icon aura:id= "CSH_DownArrowForEmpty" iconName="utility:chevrondown" class="slds-hide slds-icon_container slds-p-left_xx-small slds-float_left" size="xx-small" onclick="{!c.hideCaseSpecialHandling}" style="padding:3px 3px 0 0;"></lightning:icon>
+                        <lightning:icon aura:id= "CSH_RightArrowForEmpty" iconName="utility:chevronright" class="slds-show slds-icon_container slds-p-left_xx-small slds-float_left" size="xx-small" onclick="{!c.showCaseSpecialHandling}" style="padding:3px 3px 0 0;"></lightning:icon>
+                        <span class="slds-truncate" style="font-weight:bold;">Case Special Handling</span>
+                    </div>
+                </aura:set>
+            </aura:if>
+            <aura:if isTrue="{!!v.CaseSpclHandlingSectionHide}">
+                <div class="slds-grid slds-wrap slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12" style="background:yellow !important;    color: black  !important;">
+                    <aura:if isTrue="{!not(empty(v.currentCase.Account.Heads_Up_to_Support_Team__c))}">
+                        <div class="slds-p-horizontal--small slds-x-small-size_12-of-12 slds-snall-size_12-of-12 slds-medium-size_2-of-12 slds-large-size_2-of-12 CSH_highlightFields">
+                            <label class="font">Account Preference:</label>
+                            <div class="font">
+                                <aura:unescapedHtml value="{!v.currentCase.Account_Preference__c}" />
+                            </div>
+                        </div>
+                        <div class="slds-p-horizontal--small slds-x-small-size_12-of-12 slds-small-size_12-of-12 slds-medium-size_10-of-12 slds-large-size_10-of-12 CSH_highlightFields">
+                            <label class="font">Special Handling Instruction:</label>
+                            <!--<div class="spcl-handle">
+                                <ui:inputTextArea value="{!v.currentCase.Account.Heads_Up_to_Support_Team__c}" rows="{!v.currentCase.Account.Heads_Up_to_Support_Team__c.length > 100 ? '5' : '' }" cols="80" disabled="true" />
+                            </div>-->
+                            <div class="{!if(v.currentCase.Account.Heads_Up_to_Support_Team__c.length le 90 , 'commentsLess font' , 'accHeadsUpText font')}">
+                                <aura:unescapedHtml aura:id="spclHandlingField" value="{!v.currentCase.Account.Heads_Up_to_Support_Team__c}" />
+                            </div>
+                        </div>
+                        <aura:set attribute="else"><span class="CSH_highlightFields font">No Data Available</span></aura:set>
+                    </aura:if>
+                </div>
+            </aura:if>
+        </lightning:card>
+    </div>
+</aura:component>

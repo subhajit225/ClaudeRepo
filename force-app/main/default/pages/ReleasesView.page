@@ -1,0 +1,52 @@
+<apex:page standardController="Release_Version__c" extensions="ReleaseExtension" cache="false" showHeader="false" standardStylesheets="false" tabStyle="Release_Version__c" action="{!case($User.UserType,
+"Standard",urlFor($Action.Release_Version__c.View, Release_Version__c.Id, null, true),
+"PowerPartner",urlFor($Action.Release_Version__c.View, Release_Version__c.Id, null, true),
+"CSPLitePortal",null,
+"CustomerSuccess",null,
+"PowerCustomerSuccess",null,
+"CsnOnly",null,
+null)}">
+<c:visualstrapblock >
+    
+        <!--start header-->
+        <c:siteheader ></c:siteheader>
+        <!--end Header-->
+        <style>
+        .sectionheader{
+        color: #4A4A4A;
+                font-family: Gotham-Light !important;
+                font-size: 24px;
+                line-height: 29px;
+                font-weight:normal;
+                padding-bottom: 20px;
+                padding-top: 10px;
+        }.visualstrap .close {
+   
+            position: relative !important;
+            top: -20px !important;
+        }
+        </style>
+
+        <div class="container">
+        <div class="row rowcontainer" >
+          <div class="col-md-12">
+          <c:pageTitle Name="{!Release_Version__c.Name}"></c:pageTitle>
+
+           
+    
+            <div class="sectionheader">Software<br/></div>
+            <c:downloadSoftware versionidstring="{!Release_Version__c.Id}"></c:downloadSoftware>
+    
+            <div class="sectionheader">Documentation<br/></div>
+            <c:downloadResources versionidstring="{!Release_Version__c.Id}"></c:downloadResources>
+            <br/>
+            <br/>
+               <a href="{!URLFOR($Page.Downloads)}">Return to Downloads</a>
+            </div>
+            </div>
+            </div>
+        <!--start the footer-->
+        <c:sitefooter ></c:sitefooter>
+        
+    </c:visualstrapblock>
+</apex:page>

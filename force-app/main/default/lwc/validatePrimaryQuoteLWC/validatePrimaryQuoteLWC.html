@@ -1,0 +1,33 @@
+<template>
+    <lightning-card icon-name="custom:custom93">
+        <lightning-spinner lwc:if={showLoader}
+          alternative-text="Loading" 
+          variant="brand"
+        ></lightning-spinner>
+
+      <div slot="title">
+          Validate Quote
+      </div>      
+      <div>
+        <h1 lwc:if={errorMessage} class="font600 p-left">{errorMessage}</h1><br />
+        <template lwc:if={showOppLinks}>
+          <div class="div-box p-left">
+            <h1 class="font600">Following opportunities are marked as Invalid Duplicate. Please manually reverse Renewal Program Risk from “Invalid Duplicate” to “Subscription” before switching the primary quote.</h1>
+            <br />
+            <template for:each={listOfInvalidOppIds} for:item="ele">
+              <a href={ele.oppUrl} key={ele.oppId} target="_blank"> {ele.oppName}, </a>
+            </template> 
+          </div> 
+        </template>
+        <br />
+        <h1 lwc:if={showDtable} class="font600 p-left">The entitlements listed below are not associated with any other primary quote of Open Opportunities. Please review and correct them before changing the primary status; failure to do so will result in null tagging.</h1>
+        <br />
+        <lightning-datatable lwc:if={showDtable}
+          hide-checkbox-column
+          key-field="quoteId"
+          data={tableData}
+          columns={columns}
+        ></lightning-datatable>  
+      </div>
+    </lightning-card>
+</template>

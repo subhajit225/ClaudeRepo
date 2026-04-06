@@ -1,0 +1,24 @@
+<template>
+    <lightning-layout multiple-rows>
+        <template for:each={cardList} for:item="card">
+            <lightning-layout-item size="6" padding="around-small" key={card.Id}>
+                <lightning-card class="category-card">
+                    <div if:true={card.hasImage}>
+                        <img class="custom-global-resource-img" src={card.Image_Url__c}>
+                    </div>
+                    <div class="slds-p-bottom_x-small">
+                        <span class="slds-col cardBodyheading">
+                            <a href={card.url} class="pipelineViewAll">{card.Navigate_Text__c}<img class="link-arrow-img"
+                                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAtCAYAAADV2ImkAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAD3SURBVHgB7daxDcJADEBR+0BAGZiAESghHRtRAkIiaRAdMzABjEDFGmQClJImOXAqCoKcu+MuEn6tLeUrsqIACCGEEEKIPxZNl+NRvN6CIwq8wMRVtKdg4ibaYzCxj/YcTOyiAwQT8+hAwcQsGjlLw3hzQignYAzH9TOd3K+7FJi6nCWFOtL620NtVG8auNEBT+LdK3q2WnA2WxIMWdnXZ85iG4KzslfM88s+4yyzbhixSEGrIxjQiBFoONSMG8VWLfBj9POjVOf2YdQ4loQ6CaNYEiLYOJb4DraKJT6DrWOJr2AnsYT1WbMyGOQlPJzECiGEEKJ1nnbLYBZlR9+tAAAAAElFTkSuQmCC"></a>
+                        </span>
+                    </div>
+                    <div class="slds-p-bottom_x-small">
+                        <span class="slds-col cardBodyDescription">
+                            {card.Description__c}
+                        </span>
+                    </div>
+                </lightning-card>
+            </lightning-layout-item>
+        </template>
+    </lightning-layout>
+</template>

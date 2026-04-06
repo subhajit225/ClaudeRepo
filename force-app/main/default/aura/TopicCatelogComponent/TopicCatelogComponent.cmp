@@ -1,0 +1,277 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" controller="TopicCatelogController">
+    <aura:attribute name="networkId" type="String" default="0DB1W00000001vMWAQ"/>
+    <aura:attribute name="today" type="DateTime" />
+    <aura:attribute name="userRecord" type="Object"/>
+    <aura:attribute name="currentUser" type="Object"/>
+    <aura:attribute name="ModalOpen" type="boolean" default="false"/>
+    <aura:attribute name="Modal1Open" type="boolean" default="false"/>
+    <aura:attribute name="topicsList" type="Object" access="global"/>
+    <aura:attribute name="isSubscribed" type="Boolean"/>
+    <aura:attribute name="allSubscribed" type="Boolean" />
+    <aura:attribute name="changeSubscription" type="Boolean" default="false" />
+    <aura:attribute name="truthy" type="Boolean"  default="true"/>
+    <aura:attribute name="SubscribedTopicsLength" type="Integer" />
+    <aura:attribute name="modalToggle" type="Boolean" default="false"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:html tag="style">
+        .slds-popover__body{
+        white-space: break-spaces;
+        }
+    </aura:html>
+    
+    <aura:if isTrue="{!v.Modal1Open}">
+        <!--###### MODAL BOX Start From Here ######-->
+        <div class="demo-only" style="height: 640px;">
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">You have {!if( v.isSubscribed,'subscribed','unsubscribed')} to this topic.</h2>
+                    </header>
+                    <footer class="slds-modal__footer">
+                        <button class="slds-button slds-button--brand" onclick="{!c.close1Bttn}">Ok</button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+        
+        <div class="slds-backdrop slds-backdrop--open"></div>
+        <!--###### MODAL BOX Part END Here ######  {!$Label.c.S_R_Manage_Categories_Forums}-->
+    </aura:if>
+    <aura:if isTrue="{!v.ModalOpen}">
+        <!--###### MODAL BOX Start From Here ######-->
+        <div id="contactSupportModal" role="dialog" tabindex="-1" aria-labelledby="header99" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container ">
+                <!-- ###### MODAL BOX HEADER Part Start From Here ######-->
+                <div class="slds-modal__header">
+                    <div >
+                        <!-- class="slds-box slds-box_xx-small" --> 
+                        <p class="categoriesPtag">CATEGORIES <lightning:helptext class="tooltipCategories" content="Subscribe to your categories of interest to receive an email when users post in the categories. Click &quot;Additional subscription settings&quot; to select your preferred email frequency. "/></p>
+                        <a class="modalHeading" href="" onclick="{!c.modalHandler}">Additional subscription settings</a>
+                        
+                        	<aura:if isTrue="{!v.modalToggle}">
+                                <div id="contactSupportModal" role="dialog" tabindex="-1" aria-labelledby="header99" class="slds-modal slds-fade-in-open">
+                                    <div class="slds-modal__container ">
+                                       <div class="slds-modal__header slds-p-around--medium">
+                                       		<div>
+                                                <p class="CategoryPara">You did not save your categories of interest.Are you sure you want to leave the page?</p>
+                                            </div>
+                                       </div> 
+                                       <div class="slds-modal__footer">
+                                           <div class="resolveIssueBttns">
+                                                <span class ="SaveBtnDiv">
+                                                    <button class="slds-button slds-button--neutral"  onclick="{!c.yesButton}"><a class="redirectAnchor" href="../s/mypostsubscriptionpage">Yes</a></button>
+                                                </span>
+                                                <span class ="cancelBtnDiv">
+                                                    <button class="slds-button slds-button--brand canclbtn" onclick="{!c.closeButton}">No</button>
+                                                </span>
+                                            </div>
+                                       </div> 
+                                    </div>
+                                </div>
+                                <div class="slds-backdrop slds-backdrop--open customModalDiv"></div>
+                        	</aura:if>
+                        
+                    </div>
+                    
+                </div>
+                <!--###### MODAL BOX BODY Part Start From Here ######-->
+                <div class="slds-modal__content slds-p-around--medium">
+                    <div>
+                        <div class="maincontainer slds-grid slds-wrap tilemainDiv ">
+                            <!-- <a class =""  id ="test" onclick="{!c.getAll}"  >All</a>-->
+                            <!-- added by akashdeep for ALL  on 9 February2021-->    
+                            <aura:if isTrue="{!v.truthy}">
+                                <div class= "slds-large-size--3-of-12 slds-Medium-size--3-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 modalDiv">
+                                    <div> 
+                                        <div class="checkbox">
+                                            <lightning:input value="All" type="checkbox-button " label="Input Two" name="input2" checked="{!v.allSubscribed}" onchange="{!c.updateCheckbox}"/>
+                                        </div> 
+                                        <div class ="modalIcon">
+                                            <a class ="modalImg"><img src="{!$Resource.forumsIcons +'/logo/'+'All'+'.png'}" class="ddd"/>
+                                                <lightning:icon class="{!if(v.allSubscribed , 'slds-show','slds-hide')}" iconName="utility:check"/>
+                                            </a>
+                                        </div>
+                                        <div class ="dataCategValue" >All</div>
+                                    </div>
+                                </div>
+                            </aura:if>      
+                            <!-- added by akashdeep for ALL -->  
+                            <aura:iteration items="{!v.topicsList}" var="dc" indexVar="key">
+                                <!-- @@@@@@@@@@@@@@-->  
+                                
+                                <!-- @@@@@@@@@@@@@@ -->
+                                <div title="Subscribe by selecting categories of interest" class= "slds-large-size--3-of-12 slds-Medium-size--3-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 modalDiv">
+                                    <div> 
+                                        <div class="checkbox">
+                                            
+                                            <lightning:input value="{!dc.topic.Name}" id="{!dc.topic.Id}" type="checkbox-button " label="Input Two" name="{!dc.topic.Id}" checked="{!dc.IsSubscribed}" onchange="{!c.updateCheckbox}"/>
+                                        </div> 
+                                        <div class ="modalIcon">
+                                            <a class ="modalImg"><img src="{!$Resource.forumsIcons +'/logo/'+dc.imageName+'.png'}" class="ddd"/>
+                                                <lightning:icon class="{!if(dc.IsSubscribed , 'slds-show','slds-hide')}" iconName="utility:check"/>
+                                            </a>
+                                        </div>
+                                        <div class ="dataCategValue" >{!dc.topic.Name}</div>
+                                    </div>
+                                </div>
+                            </aura:iteration>
+                        </div>
+                        
+                    </div>
+                </div>
+                <!--###### MODAL BOX FOOTER Part Start From Here ######-->
+                <div class="slds-modal__footer">
+                    <div class="resolveIssueBttns">
+                        <span class ="SaveBtnDiv">
+                            <button class="slds-button slds-button--neutral"  onclick="{!c.saveBtn}">Save</button>
+                        </span>
+                        <span class ="cancelBtnDiv">
+                            <button class="slds-button slds-button--brand canclbtn" onclick="{!c.closeBttn}">Cancel</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slds-backdrop slds-backdrop--open"></div>
+        <!--###### MODAL BOX Part END Here ######-->
+    </aura:if>
+    <!-- ccccccc-->
+    
+    <div class="slds-grid slds-wrap ">
+        
+        <div class="slds-grid slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 filterDiv"
+             style="text-align: center;">
+            <div class="slds-col slds-small-size_1-of-1 slds-medium-size_1-of-1 slds-large-size_7-of-12 slds-align_absolute-center">
+                <ul>
+                    <li class="filterList"><a href="../s/leaderboard?type=Author&amp;filter=LeaderBoard" class="filterLink"
+                                              id="Author">Most Helpful Authors</a></li>|&nbsp;
+                    <li class="filterList"><a href="../s/leaderboard?type=Posts&amp;filter=MostPopular" class="filterLink"
+                                              id="Top Liked">Most Popular Posts</a></li>|&nbsp;
+                    <li class="filterList"><a href="../s/leaderboard?type=Posts&amp;filter=MostReplied" class="filterLink"
+                                              id="Top Replied">Most Replied Posts</a></li>|&nbsp;
+                    <li class="filterList"><a href="../s/leaderboard?type=Posts&amp;filter=Recent" class="filterLink"
+                                              id="Recent">Most Recent Posts</a></li>
+                </ul>
+            </div>
+            <div class="slds-col slds-small-size_1-of-1 slds-medium-size_1-of-1 slds-large-size_5-of-12">
+                <div class="slds-size_12-of-12  slds-medium-size_12-of-12 slds-small-size_12-of-12">
+                    <div class="topic-buttons slds-align_absolute-center" style="justify-content: right;padding-right: 21px"> 
+                        <!-- added for Forum Gamification CS21-712-->
+                        <lightning:button class="manageBtn" label="My Profile" title="Forums Profile Page"
+                                          onclick="{!c.navigateToForumsProfile}" />
+                        <!-- End - CS21-712 -->
+                        <!-- Added for CS21-1100 --> 
+                        <aura:if isTrue="{!!v.currentUser.Is_Rubrik_Employee__c}">
+                        <lightning:button class="manageBtn" label="Rewards" title="Redeem Coins"
+                        onclick="{!c.navigateToRedemptionPage}" />
+                    </aura:if>
+                    <!-- CS21-1100 ends -->
+                    <lightning:button label="Subscriptions" class="manageBtn" onclick="{!c.manageSubscription}" title="{!$Label.c.S_R_Manage_Categories_Forums}"/>
+                    <lightning:button class="manageBtn" label="Guidelines" title="Forums Community Guidelines"
+                        onclick="{!c.navigateToForumsGuidelines}" />
+                    <!--<div class="tooltip1 slds-m-right_medium">
+                        <lightning:helptext content="{!$Label.c.S_R_Manage_Categories_Forums}" />
+                    </div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="paddingAround slds-col slds-small-size_1-of-1 slds-medium-size_1-of-1 slds-large-size_8-of-12 " >        
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered tableStyle">
+                <thead class="theadBlock">
+                    <tr class="slds-line-height_reset">
+                        <th class="theadCol slds-thead" scope="col">
+                            <div class="slds-truncate " title="TITLE">TITLE</div>
+                        </th>
+                        <th class="theadCol" scope="col">
+                            <div class="slds-truncate slds-align_absolute-center" title="TOPICS">TOTAL <br/>POSTS</div>
+                        </th>
+                        <th class="theadCol" scope="col">
+                            <div class="slds-truncate slds-align_absolute-center" title="LAST POST">TOTAL <br/>REPLIES</div>
+                        </th>
+                        <th class="theadCol slds-thead" scope="col">
+                            <div class="slds-truncate slds-align_absolute-center" title="LAST POST">LAST POST</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <aura:iteration items="{!v.topicsList}" var="each">
+                        <tr class="slds-hint-parent">
+                            <th data-label="Opportunity Name" scope="row" style="display:flex;">
+                                <a href="{!'../s/topic/'+each.topic.Id}" class="icons">
+                                    <img src="{!$Resource.forumsIcons +'/logo/'+each.imageName+'.png'}" class="iconClass"/>
+                                </a>
+                                <a href="{!'../s/topic/'+each.topic.Id}" class="titleClass">
+                                    <div class="slds-truncate slds-title" title="{!each.Name}">{!each.topic.Name}
+                                        <aura:if isTrue="{!each.topic.Description != null}">
+                                            <lightning:helptext  content="{!each.topic.Description}"/>
+                                        </aura:if>
+                                    </div>
+                                </a>
+                            </th>
+                            <td data-label="Account Name">
+                                <div class="slds-truncate slds-align_absolute-center" title="{!each.topics.TopicAssignments.length}">{!if(each.topic.TopicAssignments.length > 0 ,each.topic.TopicAssignments.length,'-' )}</div>
+                            </td>
+                            <td data-label="Account Name">
+                                <div class="slds-truncate slds-align_absolute-center" title="{!each.comments}">{!if(each.comments > 0 ,each.comments,'-' )}</div>
+                            </td>
+                            <td data-label="Close Date">
+                                <div class="slds-truncate slds-date slds-align_absolute-center" ><!--<ui:outputDateTime aura:id="oDateTime" value="--> {!each.lastDateFormatted}
+                                </div>
+                            </td>
+                        </tr>
+                    </aura:iteration>
+                    
+                </tbody>
+            </table>
+        </div>
+        <div class="slds-col slds-small-size_1-of-1 slds-medium-size_1-of-1 slds-large-size_4-of-12" >
+            <!-- Commented for Gamification
+                <table class="slds-grid slds-wrap slds-grid_pull-padded help-block" style="border:0px;">
+                <div class="heading" style="border-bottom: 1px inset;width: 100%;">
+                    <div class="lia-panel-heading-bar" >
+                        <span aria-level="4" role="heading" class="lia-panel-heading-bar-title"><a class="textdecorate" href="{!$Label.c.Community_Base_URL+'leaderboard?type=Author'}"><span class="titlesize">Most Helpful Authors</span></a></span>
+                    </div>
+                </div>
+                <aura:iteration items="{!v.userRecord}" var="each" indexVar="number">
+                    <tr class="slds-p-horizontal_xx-small slds-size_1-of-1 slds-medium-size_1-of-3  detail-block-child" style="padding-left: 15px;">
+                        <div class="slds-grid" style="border-bottom: 1px inset;">
+                            
+                            <td class="basic-details slds-col slds-size_4-of-6 pointer" onclick="{!c.navigateToUserProfile}" data-id="{!each.u.Id}">-->
+            <!--<div class="slds-file slds-file_card slds-has-title" style="height: 90px;width:100%;margin-left: 24px;">-->
+            <!-- <div class="detail-block" data-id="{!each.u.Id}">
+                                    <span class="slds-assistive-text">{!each.u.CommunityNickname}</span>
+                                    <img src="{!each.u.FullPhotoUrl}"  alt="Description of the image" class="image"/>
+                                    <span class="title">{!each.u.CommunityNickname}</span>
+                                </div>
+                            </td>
+                            <td class="basic-details2 slds-col slds-size_1-of-6">
+                                <div class="detail-block2">
+                                    <span class="slds-file__text slds-truncate like-img">
+                                        <lightning:icon iconName="utility:like" size="small" />
+                                    </span>
+                                    <span class="base-count-number">{!each.chA.LikeReceivedCount}</span>
+                                </div>
+                            </td>
+                            <td class="basic-details2 slds-col slds-size_1-of-6">
+                                <div class="detail-block2">
+                                    <span class="slds-file__text slds-truncate like-img">
+                                        <lightning:icon iconName="utility:shield" size="small" />
+                                    </span>
+                                    <span class="base-count-number">{!each.badgeCount}</span>
+                                </div>
+                            </td>
+                        </div>
+                    </tr>
+                </aura:iteration>
+            </table>   --> 
+            <!-- added for Gamification-->
+            <div class="slds-box leaderboard">
+                <c:RubrikLeadershipBoard columns="1"></c:RubrikLeadershipBoard>
+            </div>
+            <!-- Gamification - End-->
+        </div>
+    </div>
+</aura:component>

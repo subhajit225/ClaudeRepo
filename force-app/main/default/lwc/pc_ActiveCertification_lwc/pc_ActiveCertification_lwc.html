@@ -1,0 +1,51 @@
+<template>
+    <lightning-spinner if:true={loadSpinner} alternative-text="Loading" size="medium" variant="brand" class="spinner-background"></lightning-spinner>
+    <!-- <lightning-layout multiple-rows="true" horizontal-align="end">
+        <lightning-layout-item size="12" large-device-size="12" medium-device-size="12" small-device-size="6" padding="around-small">        
+            <div class="heading-58">Active Certifications</div>  
+        </lightning-layout-item>
+        <lightning-layout-item size="12" large-device-size="3" medium-device-size="3" small-device-size="6"  padding="horizontal-small">
+            <c-pc_account-Hierarchy onaccountfilter={handleAccountFilter}></c-pc_account-Hierarchy>
+        </lightning-layout-item>
+        <lightning-layout-item size="12" large-device-size="3" medium-device-size="3" small-device-size="6"  padding="around-small"> 
+            <div class="slds-m-top_large">
+                <lightning-button variant="brand" label="Reset" title="Reset" onclick={handleResetClick} class="slds-m-left_x-small"></lightning-button>
+                <lightning-button variant="brand" label="Export" title="Export" onclick={handleExportClick} class="slds-m-left_x-small" icon-name="utility:download" disabled={disableExport}></lightning-button>
+            </div>
+        </lightning-layout-item>
+    </lightning-layout> -->
+    <br/>
+    <lightning-card class="opportunity-card">
+        <lightning-layout multiple-rows="true">
+            <lightning-layout-item size="12" large-device-size="12" medium-device-size="12" small-device-size="6">        
+                <div class="heading-36">Active Certifications</div>  
+                <div class="disclaimer slds-m-bottom_large left-padding">
+                    *Date shown is certification achievement date.
+                    Certifications are valid for 2 years from achievement date.
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" large-device-size="3" medium-device-size="3" small-device-size="6"  padding="horizontal-small">
+                <div class="left-padding">
+                    <c-pc_account-Hierarchy onaccountfilter={handleAccountFilter}></c-pc_account-Hierarchy>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" large-device-size="3" medium-device-size="3" small-device-size="6"  padding="horizontal-small"> 
+                <!-- <label class="slds-form-element__label slds-transition-hide slds-m-bottom_medium"> Search label</label> -->
+                <div class="margin-top">
+                    <lightning-button variant="brand" label="Reset" title="Reset" onclick={handleResetClick} class="slds-m-left_x-small"></lightning-button>
+                    <lightning-button variant="brand" label="Export" title="Export" onclick={handleExportClick} class="slds-m-left_x-small" icon-name="utility:download" disabled={disableExport}></lightning-button>
+                </div>
+            </lightning-layout-item>
+        </lightning-layout>
+        <div class="custom-table-wrapper custom-opportunity-table slds-m-top_large">
+            <lightning-datatable
+                    key-field="Id"
+                    data={conList}
+                    row-number-offset={rowOffset}
+                    show-row-number-column
+                    hide-checkbox-column
+                    columns={columns}>
+            </lightning-datatable>
+        </div>
+    </lightning-card>
+</template>

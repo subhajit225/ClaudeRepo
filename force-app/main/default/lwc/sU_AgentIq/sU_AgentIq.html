@@ -1,0 +1,277 @@
+<template>
+  <div class="data-loader ah_height_100 SUcheckingWidthClass" if:true={isLoading}></div>
+  <div class="ah-unavailable ah_height_100 SUcheckingWidthClass" if:true={somethingWentWrong}>
+    <div class="unavailable-figure"></div>
+    <p>Oops! Something Went Wrong!</p>
+  </div>
+
+  <div class="ah-unavailable ah_height_100 SUcheckingWidthClass" if:false={isvalidCase}>
+    <div class="unavailable-figure"></div>
+    <p>Please select a case to view Agent Helper.</p>
+  </div>
+
+  <div class="ah-unavailable ah_height_100" if:false={hasAccess}>
+    <div class="cat-image">
+      <img src={catGif}></img>
+      <p>Please Connect with your Admin.</p>
+    </div>
+  </div>
+
+  <template if:true={loadAH}>
+      <template if:false={smallScreenStr}>
+        <!-- header section starts -->
+        <div class="SUcheckingWidthClass">
+        <div class="aiq-header">
+            <div class="header-caseNumber-mainHeading-text">
+              <img class="ah-logo" src={ahLogo} alt=""/>
+              <span if:true={currentCaseNumberForAh} class="case-number-header-holder">
+                CASE NUMBER: {currentCaseNumberForAh}
+              </span>
+            </div>
+          
+            <ul class="aiq-tags aiq-tags-large-screen">
+              <template for:each={hashtags} for:item="tag" for:index="index">
+              <li key={tag}><span>{tag}</span></li>
+              </template>
+            </ul>
+        </div>
+        <!-- /header section ends -->
+      
+          <div class="btns-emoji-container">
+            <!-- tabs buttons starts -->
+            <div class="aiq-tab-btns">
+              <button if:true={overViewFirst} class={tabClassOverview} onclick={handleTabClick} data-city="overview">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                  <path id="dashboard_FILL1_wght500_GRAD200_opsz48" d="M14.622,10.774V5.8a.886.886,0,0,1,.9-.9h6.535a.886.886,0,0,1,.9.9v4.978a.886.886,0,0,1-.9.9H15.519a.886.886,0,0,1-.9-.9ZM4.95,14.03V5.8a.886.886,0,0,1,.9-.9h6.7a.886.886,0,0,1,.9.9V14.03a.886.886,0,0,1-.9.9h-6.7a.886.886,0,0,1-.9-.9Zm9.672,7.95V13.77a.856.856,0,0,1,.26-.649.888.888,0,0,1,.637-.248h6.535a.888.888,0,0,1,.637.248.856.856,0,0,1,.26.649v8.21a.9.9,0,0,1-.26.661.866.866,0,0,1-.637.26H15.519a.866.866,0,0,1-.637-.26A.9.9,0,0,1,14.622,21.98Zm-9.672,0V17.026a.9.9,0,0,1,.26-.661.866.866,0,0,1,.637-.26h6.7a.866.866,0,0,1,.637.26.9.9,0,0,1,.26.661V21.98a.9.9,0,0,1-.26.661.866.866,0,0,1-.637.26h-6.7a.866.866,0,0,1-.637-.26.9.9,0,0,1-.26-.661Z" transform="translate(-4.95 -4.9)" fill="#7081b9"/>
+                </svg>
+                Overview
+              </button>
+              <button class={tabClassActive} onclick={handleTabClick} data-city="actions">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25">
+                  <g id="hard-drive" transform="translate(12 12.007)">
+                    <g id="hard-drive-2" data-name="hard-drive" transform="translate(-12 -12)">
+                      <g id="hard-drive-3" data-name="hard-drive">
+                        <rect id="Rectangle_6969" data-name="Rectangle 6969" width="25" height="25" transform="translate(0 -0.007)" fill="#7081b9" opacity="0"/>
+                        <path id="Path_13507" data-name="Path 13507" d="M21.771,11.8,18.247,4.752A3.165,3.165,0,0,0,15.409,3H9.584A3.165,3.165,0,0,0,6.746,4.752L3.222,11.8A2.11,2.11,0,0,0,3,12.75v6.078a3.165,3.165,0,0,0,3.165,3.165H18.827a3.165,3.165,0,0,0,3.165-3.165V12.75A2.11,2.11,0,0,0,21.771,11.8Zm-13.5,5.972a1.055,1.055,0,1,1,1.055-1.055A1.055,1.055,0,0,1,8.276,17.772Zm8.441,0H12.5a1.055,1.055,0,0,1,0-2.11h4.221a1.055,1.055,0,1,1,0,2.11ZM5.764,11.441l2.87-5.751a1.055,1.055,0,0,1,.95-.58h5.824a1.055,1.055,0,0,1,.95.58l2.87,5.751Z" transform="translate(0 0)" fill="#7081b9"/>
+                      </g>
+                    </g>
+                  </g>
+                </svg>
+                Actions
+                </button>
+                <button if:false={overViewFirst} class={tabClassOverview} onclick={handleTabClick} data-city="overview">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                  <path id="dashboard_FILL1_wght500_GRAD200_opsz48two" d="M14.622,10.774V5.8a.886.886,0,0,1,.9-.9h6.535a.886.886,0,0,1,.9.9v4.978a.886.886,0,0,1-.9.9H15.519a.886.886,0,0,1-.9-.9ZM4.95,14.03V5.8a.886.886,0,0,1,.9-.9h6.7a.886.886,0,0,1,.9.9V14.03a.886.886,0,0,1-.9.9h-6.7a.886.886,0,0,1-.9-.9Zm9.672,7.95V13.77a.856.856,0,0,1,.26-.649.888.888,0,0,1,.637-.248h6.535a.888.888,0,0,1,.637.248.856.856,0,0,1,.26.649v8.21a.9.9,0,0,1-.26.661.866.866,0,0,1-.637.26H15.519a.866.866,0,0,1-.637-.26A.9.9,0,0,1,14.622,21.98Zm-9.672,0V17.026a.9.9,0,0,1,.26-.661.866.866,0,0,1,.637-.26h6.7a.866.866,0,0,1,.637.26.9.9,0,0,1,.26.661V21.98a.9.9,0,0,1-.26.661.866.866,0,0,1-.637.26h-6.7a.866.866,0,0,1-.637-.26.9.9,0,0,1-.26-.661Z" transform="translate(-4.95 -4.9)" fill="#7081b9"/>
+                </svg>
+                Overview
+              </button>
+            </div>
+            <!-- /tabs buttons ends -->
+            <!-- reactions container starts -->
+            <div class="aiq-reaction-container">
+              <ul>
+                <li>
+                  <button type="button" role="button" class="reaction-btn negative-sentiment-svg">
+                        <svg id="Component_55_12" data-name="Component 55 – 12" xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23">
+                          <g id="Group_207781" data-name="Group 207781">
+                          <path id="Path_18510" data-name="Path 18510" d="M75.538,11.5A11.5,11.5,0,1,1,64.038,0a11.5,11.5,0,0,1,11.5,11.5" transform="translate(-52.538 0.001)" fill="#cc2334"/>
+                          <path id="Path_18531" data-name="Path 18531" d="M204.851,222.845a1.839,1.839,0,1,1-1.839-1.839,1.839,1.839,0,0,1,1.839,1.839" transform="translate(-195.339 -212.331)"/>
+                          <path id="Path_18532" data-name="Path 18532" d="M396.126,222.845a1.839,1.839,0,1,0,1.839-1.839,1.839,1.839,0,0,0-1.839,1.839" transform="translate(-382.638 -212.331)"/>
+                          <path id="Path_18533" data-name="Path 18533" d="M258.682,379.522a.519.519,0,0,1-.44-.242,3.364,3.364,0,0,0-2.725-1.445,3.486,3.486,0,0,0-2.729,1.452.52.52,0,1,1-.87-.568,4.521,4.521,0,0,1,3.6-1.923,4.417,4.417,0,0,1,3.6,1.932.52.52,0,0,1-.44.8" transform="translate(-244.017 -362.002)"/>
+                          </g>
+                        </svg>
+      
+                        <div class="reaction-tooltip negative-reaction-tooltip">
+                          <h3 style="font-size: 12px; color: #000000; font-weight: bold; margin-bottom: 5px;">Initial Case Sentiment</h3>
+                            <ul class="su-caseSentiments-UL">
+                              <template for:each={sentimentSentences} for:item="list" for:index="index">
+                                      <lightning-formatted-rich-text key={list.sentence} value={list.sentenceHtml}>
+                                      </lightning-formatted-rich-text>
+                              </template>
+                            </ul>
+                        </div>
+                      </button>
+                </li>
+                <li>
+                  <button type="button" role="button" class="reaction-btn neutral-sentiment-svg">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23">
+                          <g id="Group_20777" data-name="Group 20777">
+                            <path id="Path_18514" data-name="Path 18514" d="M766.181,11.5A11.5,11.5,0,1,1,754.681,0a11.5,11.5,0,0,1,11.5,11.5" transform="translate(-743.181 0.001)" fill="#efb025"/>
+                            <path id="Path_18515" data-name="Path 18515" d="M895.494,247.95a1.839,1.839,0,1,1-1.839-1.839,1.839,1.839,0,0,1,1.839,1.839" transform="translate(-885.981 -236.45)"/>
+                            <path id="Path_18516" data-name="Path 18516" d="M1086.77,247.95a1.839,1.839,0,1,0,1.839-1.839,1.839,1.839,0,0,0-1.839,1.839" transform="translate(-1073.283 -236.45)"/>
+                            <path id="Path_18517" data-name="Path 18517" d="M949.324,420.661H943a.52.52,0,1,1,0-1.039h6.328a.52.52,0,0,1,0,1.039" transform="translate(-934.66 -403.142)"/>
+                          </g>
+                        </svg>
+                        <div class="reaction-tooltip neutral-reaction-tooltip">
+                            <h3 style="font-size: 12px; color: #000000; font-weight: bold; margin-bottom: 5px;">Initial Case Sentiment</h3>
+                            <ul class="su-caseSentiments-UL">
+                              <template for:each={sentimentSentences} for:item="list" for:index="index">
+                                      <lightning-formatted-rich-text key={list.sentence} value={list.sentenceHtml}>
+                                      </lightning-formatted-rich-text>
+                              </template>
+                            </ul>
+                        </div>
+                      </button>
+                </li>
+                <li>
+                  <button type="button" role="button" class="reaction-btn positive-sentiment-svg">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23">
+                          <g id="Group_20778" data-name="Group 20778">
+                            <path id="Path_18518" data-name="Path 18518" d="M1456.824,11.5a11.5,11.5,0,1,1-11.5-11.5,11.5,11.5,0,0,1,11.5,11.5" transform="translate(-1433.824 0.001)" fill="#6ebf43"/>
+                            <path id="Path_18519" data-name="Path 18519" d="M1586.136,222.845a1.839,1.839,0,1,1-1.839-1.839,1.839,1.839,0,0,1,1.839,1.839" transform="translate(-1576.982 -212.33)"/>
+                            <path id="Path_18520" data-name="Path 18520" d="M1777.413,222.845a1.839,1.839,0,1,0,1.839-1.839,1.839,1.839,0,0,0-1.839,1.839" transform="translate(-1764.284 -212.33)"/>
+                            <path id="Path_18521" data-name="Path 18521" d="M1636.8,379.522a4.417,4.417,0,0,1-3.6-1.932.52.52,0,0,1,.88-.553,3.364,3.364,0,0,0,2.725,1.445,3.485,3.485,0,0,0,2.729-1.452.52.52,0,0,1,.871.568,4.522,4.522,0,0,1-3.6,1.923" transform="translate(-1625.661 -362.001)"/>
+                          </g>
+                        </svg>
+                        <div class="reaction-tooltip positive-reaction-tooltip">
+                            <h3 style="font-size: 12px; color: #000000; font-weight: bold; margin-bottom: 5px;">Initial Case Sentiment</h3>
+                            <ul class="su-caseSentiments-UL">
+                              <template for:each={sentimentSentences} for:item="list" for:index="index">
+                                      <lightning-formatted-rich-text key={list.sentence} value={list.sentenceHtml}>
+                                      </lightning-formatted-rich-text>
+                              </template>
+                            </ul>
+                        </div>
+                      </button>
+                </li>
+              </ul>
+            </div>
+            <!-- /reactions container ends -->
+          </div>
+        </div>
+      </template>
+      <template if:true={smallScreenStr}>
+        <div class="responsive-aiq-header SUcheckingWidthClass">
+          <div class="header-caseNumber-mainHeading-text">
+            <div>
+            <img class="ah-logo" src={ahLogo} alt=""/>
+            </div>
+            <span if:true={currentCaseNumberForAh} class="case-number-header-holder">
+              CASE NUMBER: {currentCaseNumberForAh}
+            </span>
+          </div>
+          <div>
+            <ul class="aiq-tags smallScreen-aiq-tags">
+              <template for:each={hashtags} for:item="tag" for:index="index">
+              <li key={tag}><span>{tag}</span></li>
+              </template>
+            </ul>
+            <div class="aiq-reaction-container">
+            <ul>
+              <li>
+                <button type="button" role="button" class="reaction-btn negative-sentiment-svg">
+                      <svg id="smallScreenComponent_55_12" data-name="Component 55 – 12" xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23">
+                        <g id="smallScreenGroup_207781" data-name="Group 207781">
+                        <path id="smallScreenPath_18510" data-name="Path 18510" d="M75.538,11.5A11.5,11.5,0,1,1,64.038,0a11.5,11.5,0,0,1,11.5,11.5" transform="translate(-52.538 0.001)" fill="#cc2334"/>
+                        <path id="smallScreenPath_18531" data-name="Path 18531" d="M204.851,222.845a1.839,1.839,0,1,1-1.839-1.839,1.839,1.839,0,0,1,1.839,1.839" transform="translate(-195.339 -212.331)"/>
+                        <path id="smallScreenPath_18532" data-name="Path 18532" d="M396.126,222.845a1.839,1.839,0,1,0,1.839-1.839,1.839,1.839,0,0,0-1.839,1.839" transform="translate(-382.638 -212.331)"/>
+                        <path id="smallScreenPath_18533" data-name="Path 18533" d="M258.682,379.522a.519.519,0,0,1-.44-.242,3.364,3.364,0,0,0-2.725-1.445,3.486,3.486,0,0,0-2.729,1.452.52.52,0,1,1-.87-.568,4.521,4.521,0,0,1,3.6-1.923,4.417,4.417,0,0,1,3.6,1.932.52.52,0,0,1-.44.8" transform="translate(-244.017 -362.002)"/>
+                        </g>
+                      </svg>
+
+                    <div class="reaction-tooltip negative-reaction-tooltip">
+                      <h3 style="font-size: 12px; color: #000000; font-weight: bold; margin-bottom: 5px;">Initial Case Sentiment</h3>
+                      <ul class="su-caseSentiments-UL">
+                            <template for:each={sentimentSentences} for:item="list" for:index="index">
+                                    <lightning-formatted-rich-text key={list.sentence} value={list.sentenceHtml}>
+                                    </lightning-formatted-rich-text>
+                            </template>
+                      </ul>
+                    </div>
+                  </button>
+            </li>
+            <li>
+              <button type="button" role="button" class="reaction-btn neutral-sentiment-svg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23">
+                      <g id="smallScreenGroup_20777" data-name="Group 20777">
+                        <path id="smallScreenPath_18514" data-name="Path 18514" d="M766.181,11.5A11.5,11.5,0,1,1,754.681,0a11.5,11.5,0,0,1,11.5,11.5" transform="translate(-743.181 0.001)" fill="#efb025"/>
+                        <path id="smallScreenPath_18515" data-name="Path 18515" d="M895.494,247.95a1.839,1.839,0,1,1-1.839-1.839,1.839,1.839,0,0,1,1.839,1.839" transform="translate(-885.981 -236.45)"/>
+                        <path id="smallScreenPath_18516" data-name="Path 18516" d="M1086.77,247.95a1.839,1.839,0,1,0,1.839-1.839,1.839,1.839,0,0,0-1.839,1.839" transform="translate(-1073.283 -236.45)"/>
+                        <path id="smallScreenPath_18517" data-name="Path 18517" d="M949.324,420.661H943a.52.52,0,1,1,0-1.039h6.328a.52.52,0,0,1,0,1.039" transform="translate(-934.66 -403.142)"/>
+                      </g>
+                    </svg>
+                    <div class="reaction-tooltip neutral-reaction-tooltip">
+                        <h3 style="font-size: 12px; color: #000000; font-weight: bold; margin-bottom: 5px;">Initial Case Sentiment</h3>
+                        <ul class="su-caseSentiments-UL">
+                            <template for:each={sentimentSentences} for:item="list" for:index="index">
+                                    <lightning-formatted-rich-text key={list.sentence} value={list.sentenceHtml}>
+                                    </lightning-formatted-rich-text>
+                            </template>
+                        </ul>
+                    </div>
+                  </button>
+            </li>
+            <li>
+              <button type="button" role="button" class="reaction-btn positive-sentiment-svg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23">
+                      <g id="smallScreenGroup_20778" data-name="Group 20778">
+                        <path id="smallScreenPath_18518" data-name="Path 18518" d="M1456.824,11.5a11.5,11.5,0,1,1-11.5-11.5,11.5,11.5,0,0,1,11.5,11.5" transform="translate(-1433.824 0.001)" fill="#6ebf43"/>
+                        <path id="smallScreenPath_18519" data-name="Path 18519" d="M1586.136,222.845a1.839,1.839,0,1,1-1.839-1.839,1.839,1.839,0,0,1,1.839,1.839" transform="translate(-1576.982 -212.33)"/>
+                        <path id="smallScreenPath_18520" data-name="Path 18520" d="M1777.413,222.845a1.839,1.839,0,1,0,1.839-1.839,1.839,1.839,0,0,0-1.839,1.839" transform="translate(-1764.284 -212.33)"/>
+                        <path id="smallScreenPath_18521" data-name="Path 18521" d="M1636.8,379.522a4.417,4.417,0,0,1-3.6-1.932.52.52,0,0,1,.88-.553,3.364,3.364,0,0,0,2.725,1.445,3.485,3.485,0,0,0,2.729-1.452.52.52,0,0,1,.871.568,4.522,4.522,0,0,1-3.6,1.923" transform="translate(-1625.661 -362.001)"/>
+                      </g>
+                    </svg>
+                    <div class="reaction-tooltip positive-reaction-tooltip">
+                        <h3 style="font-size: 12px; color: #000000; font-weight: bold; margin-bottom: 5px;">Initial Case Sentiment</h3>
+                        <ul class="su-caseSentiments-UL">
+                            <template for:each={sentimentSentences} for:item="list" for:index="index">
+                                    <lightning-formatted-rich-text key={list.sentence} value={list.sentenceHtml}>
+                                    </lightning-formatted-rich-text>
+                            </template>
+                        </ul>
+                    </div>
+                  </button>
+            </li>
+          </ul>
+          </div>
+        </div>
+        </div>
+
+        <div class="tab-btns-container">
+          <div class="aiq-tab-btns">
+
+            <button if:true={overViewFirst} class={tabClassOverview} onclick={handleTabClick} data-city="overview">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                <path id="smallScreendashboard_FILL1_wght500_GRAD200_opsz48" d="M14.622,10.774V5.8a.886.886,0,0,1,.9-.9h6.535a.886.886,0,0,1,.9.9v4.978a.886.886,0,0,1-.9.9H15.519a.886.886,0,0,1-.9-.9ZM4.95,14.03V5.8a.886.886,0,0,1,.9-.9h6.7a.886.886,0,0,1,.9.9V14.03a.886.886,0,0,1-.9.9h-6.7a.886.886,0,0,1-.9-.9Zm9.672,7.95V13.77a.856.856,0,0,1,.26-.649.888.888,0,0,1,.637-.248h6.535a.888.888,0,0,1,.637.248.856.856,0,0,1,.26.649v8.21a.9.9,0,0,1-.26.661.866.866,0,0,1-.637.26H15.519a.866.866,0,0,1-.637-.26A.9.9,0,0,1,14.622,21.98Zm-9.672,0V17.026a.9.9,0,0,1,.26-.661.866.866,0,0,1,.637-.26h6.7a.866.866,0,0,1,.637.26.9.9,0,0,1,.26.661V21.98a.9.9,0,0,1-.26.661.866.866,0,0,1-.637.26h-6.7a.866.866,0,0,1-.637-.26.9.9,0,0,1-.26-.661Z" transform="translate(-4.95 -4.9)" fill="#7081b9"/>
+              </svg>
+              Overview
+            </button>
+            
+            <button class={tabClassActive} onclick={handleTabClick} data-city="actions">
+              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25">
+                <g id="smallScreenhard-drive" transform="translate(12 12.007)">
+                  <g id="smallScreenhard-drive-2" data-name="hard-drive" transform="translate(-12 -12)">
+                    <g id="smallScreenhard-drive-3" data-name="hard-drive">
+                      <rect id="smallScreenRectangle_6969" data-name="Rectangle 6969" width="25" height="25" transform="translate(0 -0.007)" fill="#7081b9" opacity="0"/>
+                      <path id="smallScreenPath_13507" data-name="Path 13507" d="M21.771,11.8,18.247,4.752A3.165,3.165,0,0,0,15.409,3H9.584A3.165,3.165,0,0,0,6.746,4.752L3.222,11.8A2.11,2.11,0,0,0,3,12.75v6.078a3.165,3.165,0,0,0,3.165,3.165H18.827a3.165,3.165,0,0,0,3.165-3.165V12.75A2.11,2.11,0,0,0,21.771,11.8Zm-13.5,5.972a1.055,1.055,0,1,1,1.055-1.055A1.055,1.055,0,0,1,8.276,17.772Zm8.441,0H12.5a1.055,1.055,0,0,1,0-2.11h4.221a1.055,1.055,0,1,1,0,2.11ZM5.764,11.441l2.87-5.751a1.055,1.055,0,0,1,.95-.58h5.824a1.055,1.055,0,0,1,.95.58l2.87,5.751Z" transform="translate(0 0)" fill="#7081b9"/>
+                    </g>
+                  </g>
+                </g>
+              </svg>
+              Actions
+            </button>
+
+            <button if:false={overViewFirst} class={tabClassOverview} onclick={handleTabClick} data-city="overview">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                <path id="smallScreendashboard_FILL1_wght500_GRAD200_opsz48two" d="M14.622,10.774V5.8a.886.886,0,0,1,.9-.9h6.535a.886.886,0,0,1,.9.9v4.978a.886.886,0,0,1-.9.9H15.519a.886.886,0,0,1-.9-.9ZM4.95,14.03V5.8a.886.886,0,0,1,.9-.9h6.7a.886.886,0,0,1,.9.9V14.03a.886.886,0,0,1-.9.9h-6.7a.886.886,0,0,1-.9-.9Zm9.672,7.95V13.77a.856.856,0,0,1,.26-.649.888.888,0,0,1,.637-.248h6.535a.888.888,0,0,1,.637.248.856.856,0,0,1,.26.649v8.21a.9.9,0,0,1-.26.661.866.866,0,0,1-.637.26H15.519a.866.866,0,0,1-.637-.26A.9.9,0,0,1,14.622,21.98Zm-9.672,0V17.026a.9.9,0,0,1,.26-.661.866.866,0,0,1,.637-.26h6.7a.866.866,0,0,1,.637.26.9.9,0,0,1,.26.661V21.98a.9.9,0,0,1-.26.661.866.866,0,0,1-.637.26h-6.7a.866.866,0,0,1-.637-.26.9.9,0,0,1-.26-.661Z" transform="translate(-4.95 -4.9)" fill="#7081b9"/>
+              </svg>
+              Overview
+            </button>
+            
+          </div>
+        </div>
+      </template>
+
+    
+    <!-- tabs body starts -->
+    <template if:true={isOverviewActive}>
+      <c-s-u_-aiq-overview record-id={caseId} event-code={eventCode} end-point={endPoint} token = {token} s3endpoint = {s3endpoint} uid = {uid} is-utility={isUtility} su-component-height={suComponentHeight} logged-in-user-data={loggedInUserData} meta-data={metaData}></c-s-u_-aiq-overview>
+    </template>
+    <template if:true={isActionsActive}>
+      <c-s-u_-aiq-actions record-id={caseId} event-code={eventCode} maincontainerwidth={maincontainerwidth} end-point={endPoint} token = {token} s3endpoint = {s3endpoint} uid = {uid} logged-in-user-data={loggedInUserData} meta-data={metaData}></c-s-u_-aiq-actions>
+    </template>
+  <!-- /tabs body ends -->
+
+
+</template>
+</template>

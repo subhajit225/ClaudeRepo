@@ -1,0 +1,30 @@
+<apex:page >
+    <apex:includeLightning />
+    <div id="Con" />
+    
+    <script>
+        console.log('POC Id', '{!$CurrentPage.parameters.id}');
+        $Lightning.use("c:POCReturnApp", function(){
+            $Lightning.createComponent(
+                "c:aura_POCReturnComponent",
+                {"recordId":'{!$CurrentPage.parameters.id}',"showPOCReturnForm":true,"callfromVfPage":true},
+                "Con",
+                function(cmp) {
+                    $A.eventService.addHandler({
+                        event: 'force:navigateToSObject',
+                        handler: function(event) {
+                            window.location = '/' + event.getParam("recordId");
+                            console.log('event', event.getParam("recordId"));
+                        }
+                    });
+                    $A.eventService.addHandler({
+                        event: 'force:showToast',
+                        handler: function(event) {
+                            console.log('event Called');
+                        }
+                    });
+                });
+            });        
+      </script>
+    
+</apex:page>

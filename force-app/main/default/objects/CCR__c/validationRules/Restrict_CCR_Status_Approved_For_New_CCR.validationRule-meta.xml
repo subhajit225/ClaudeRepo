@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Restrict_CCR_Status_Approved_For_New_CCR</fullName>
+    <active>true</active>
+    <description>SAL25-42 - CCR Status can not be set as Approved while creating new CCR</description>
+    <errorConditionFormula>AND(
+    NOT($Setup.ShGl_DisableBusinessLogic__c.Disable_CCR_Validation_Rules__c),
+    $Profile.Name &lt;&gt; &quot;System Administrator&quot;,
+    ISNEW(),
+    ISPICKVAL(User__c,&apos;Approved&apos;)
+)</errorConditionFormula>
+    <errorDisplayField>User__c</errorDisplayField>
+    <errorMessage>CCR Status can not be set as Approved while creating new CCR</errorMessage>
+</ValidationRule>

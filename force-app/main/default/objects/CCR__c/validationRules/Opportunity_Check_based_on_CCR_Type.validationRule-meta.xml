@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Opportunity_Check_based_on_CCR_Type</fullName>
+    <active>true</active>
+    <description>If Commission Relief CCR Type is selected opportunity field is required</description>
+    <errorConditionFormula>AND(NOT($Setup.ShGl_DisableBusinessLogic__c.Disable_CCR_Validation_Rules__c), ISBLANK(Opportunity__c),OR(TEXT(CCR_Type__c) == &apos;Commission Relief&apos;, TEXT(CCR_Type__c) == &apos;Referral Fee&apos;))</errorConditionFormula>
+    <errorDisplayField>Opportunity__c</errorDisplayField>
+    <errorMessage>Opportunity field is required when CCR type is Commission Relief or Referral Fee</errorMessage>
+</ValidationRule>

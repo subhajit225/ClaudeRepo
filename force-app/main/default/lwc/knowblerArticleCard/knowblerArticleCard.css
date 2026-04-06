@@ -1,0 +1,357 @@
+.article_card_top {
+  align-items: center;
+}
+
+.article_number::before {
+  content: '.';
+  font-weight: 800;
+  margin-right: 5px;
+  color: black;
+}
+
+.slds-truncate.article_usernamouseOutme {
+  font-family: 'Roboto Medium', Arial, Helvetica, sans-serif;
+  font-size: 14px;
+}
+
+.card_item {
+  flex-direction: column;
+}
+
+.card_inner_top_content {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.inner_top_main_content {
+  align-items: center;
+  max-width: calc(100% - 30px);
+}
+
+.article_dot {
+  color: #707070;
+  font-weight: bold;
+  padding-left: 2px;
+}
+
+.article_username {
+  color: #42526e;
+  font-size: 14px;
+  padding: 0 3px 0px 5px;
+  width: calc(100% - 84px);
+  white-space: nowrap;
+  overflow: unset;
+  text-overflow: ellipsis;
+  font-family: 'Roboto Medium', Arial, Helvetica, sans-serif;
+}
+.owner_name_label {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.article_number {
+  color: #7b7890b3;
+  font-size: 14px;
+  padding: 0 3px;
+  font-family: 'Roboto Regular', 'Helvetica Neue', sans-serif;
+}
+
+.article_title {
+  font-size: 16px;
+  color: #0f0a39;
+  font-family: 'Roboto Medium', Arial, Helvetica, sans-serif;
+  margin: 0.4rem 0 0.6rem 0;
+  line-height: 20px;
+  cursor: pointer;
+  word-wrap: break-word;
+}
+
+.article_title:hover {
+  text-decoration: underline;
+}
+
+.card_calender_img {
+  width: 18px;
+  top: -1px;
+  position: relative;
+  cursor: pointer;
+}
+
+.article_type {
+  max-width: 50%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 14px;
+  color: #7b7890;
+  padding-right: 5px;
+  font-family: 'Roboto Regular', 'Helvetica Neue', sans-serif;
+}
+
+.article_date {
+  padding: 0 3px;
+  color: #7b7890;
+  font-size: 14px;
+  font-family: 'Roboto Regular', 'Helvetica Neue', sans-serif;
+}
+
+.article_time {
+  padding: 0 3px;
+  color: #7b7890;
+  font-size: 14px;
+  font-family: 'Roboto Regular', 'Helvetica Neue', sans-serif;
+}
+
+span.slds-col.article_time {
+  padding: 0 3px;
+}
+
+.edit-article {
+  text-align: right;
+  cursor: pointer;
+}
+
+.article_date {
+  cursor: pointer;
+}
+
+.SMALL .article_type {
+  max-width: unset;
+}
+
+.MEDIUM .article_card_bottom {
+  align-items: end;
+}
+
+.SMALL .article_card_bottom {
+  align-items: center;
+}
+
+.edit_popup {
+  background: #fff;
+  z-index: 9;
+}
+
+.manage_salesforce {
+  display: flex;
+  padding: 0.8rem 0.1rem;
+  font-size: 13px;
+  color: #172b4d;
+  cursor: pointer;
+}
+
+.edit_article {
+  display: flex;
+  color: #172b4d;
+  font-size: 13px;
+  position: relative;
+  padding: 0 0.1rem 0.8rem 0.1rem;
+  cursor: pointer;
+}
+
+.attach {
+  margin-top: 5px;
+}
+
+.detach {
+  height: 20px;
+}
+
+.publishmenu {
+  padding: 5px;
+}
+
+.tooltip_text {
+  color: #fff;
+  font-size: 16px;
+  font-family: 'Roboto Regular', 'Helvetica Neue', sans-serif;
+}
+
+.tooltip_button {
+  color: #fff;
+  font-size: 14px;
+  margin-top: 12px;
+  font-family: 'Roboto Medium', Arial, Helvetica, sans-serif;
+  cursor: pointer;
+}
+
+.owner_name,
+.card_calander {
+  display: flex;
+  position: relative;
+  padding-left: 4px;
+}
+
+.owner_name_tooltip,
+.calander_tooltip {
+  font-size: 14px;
+  color: #fff;
+  font-family: 'Roboto Regular', 'Helvetica Neue', sans-serif;
+}
+.owner_name .slds-popover.slds-popover_tooltip.slds-nubbin_top-left {
+  position: absolute;
+  max-width: 200px;
+  width: max-content;
+  white-space: break-spaces;
+  word-break: break-all;
+  top: 27px;
+  left: -9px;
+  background: var(--primary-colour, #546c7e);
+  border-radius: 8px;
+  padding: 0.4rem;
+}
+
+.owner_name .slds-popover_tooltip,
+.card_calander .slds-popover_tooltip {
+  display: none;
+}
+
+.owner_name:hover .slds-popover_tooltip,
+.card_calander:hover .slds-popover_tooltip {
+  display: block;
+}
+
+.name_truncate {
+  max-width: calc(100% - 32px);
+  display: flex;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.tooltip_background {
+  position: absolute;
+  top: -59px;
+  right: 0;
+  background: #151726;
+  height: calc(100% + 59px);
+  width: 100%;
+  z-index: 9;
+  opacity: 0.78;
+}
+
+@keyframes slideLeftToRight {
+  0% {
+    transform: translateX(0%);
+  }
+
+  25% {
+    transform: translateX(-20%);
+  }
+
+  50% {
+    transform: translateX(0%);
+  }
+
+  75% {
+    transform: translateX(20%);
+  }
+
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+.manage_salesforce:hover .manage_salesforce_icon {
+  animation: 0.6s ease-in-out 0s 1 slideLeftToRight;
+}
+
+.edit_article:hover .manage_salesforce_icon {
+  animation: 0.6s ease-in-out 0s 1 slideLeftToRight;
+}
+
+.article_card_bottom {
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+span {
+  z-index: 9999;
+  padding: 0;
+  width: auto;
+  display: inline;
+  position: fixed;
+  top: 10px;
+  border-radius: 6px;
+  opacity: 1;
+  background: #fff;
+  box-shadow: 0px 0px 30px #474747c9;
+}
+
+a {
+  text-decoration: none;
+  position: absolute;
+}
+
+.slds-modal {
+  visibility: visible;
+  opacity: 1;
+  position: unset !important;
+}
+
+.ModelTooltip {
+  width: 100px;
+}
+
+.copytoclipboardinput {
+  opacity: 0;
+}
+
+.knowbler__salesforce-matching-percentage {
+  background: transparent linear-gradient(267deg, #DCEBFE 0%, #FFFFFF 100%) 0% 0% no-repeat padding-box;
+  padding: 6px 6px 6px 40px;
+  margin-top: auto;
+  margin-left: auto;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.knowbler__salesforce-matching-percentage .percentage {
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+  border: 1px solid #5A9F73;
+  border-radius: 3px;
+  padding: 2px 7px;
+  font-size: 13px;
+  color: #2F3941;
+  white-space: nowrap;
+}
+
+.knowbler__salesforce-dropdown-trigger-parent{
+  display: flex;
+  gap: 8px;
+}
+
+.tooltip_parent{
+  position: relative;
+}
+
+.tooltip_parent .tooltip_content{
+    width: max-content;
+    height: max-content;
+    position: absolute;
+    top: 35px;
+    right: -15px;
+    background: var(--primary-colour, #546C7E);
+    border-radius: 5px;
+    color: white;
+    padding: 5px 8px;
+    display: none;
+}
+.tooltip_parent .tooltip_content::after{
+    width: 0.7rem;
+    height: 0.7rem;
+    top: 0;
+    margin-top: -0.25rem;
+    box-shadow: -1px -1px 0 0 rgba(0, 0, 0, 0.16);
+    position: absolute;
+    transform: rotate(45deg);
+    content: '';
+    background-color: inherit;
+    left: auto;
+    right: var(--lwc-spacingLarge, 1.5rem);
+    margin-right: -.5rem;    
+}
+.tooltip_parent:hover .tooltip_content{
+    display: block;
+}

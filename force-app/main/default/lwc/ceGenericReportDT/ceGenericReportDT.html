@@ -1,0 +1,71 @@
+<template>
+	<article class="slds-card slds-card_boundary">
+		<div class="slds-page-header slds-p-vertical_xx-small">
+			<div class={style}>
+				<div class="slds-col slds-has-flexi-truncate slds-card__header slds-grid slds-theme_shade no-pad">
+					<header class="slds-media slds-media_center slds-has-flexi-truncate ">
+						<div class="slds-media__figure">
+							<lightning-icon icon-name='standard:case' size="small"></lightning-icon>
+						</div>
+						<div class="slds-media__body">
+							<h2 class="slds-card__header-title">
+								<a class="slds-card__header-link">{title} ({totalCount})</a>
+							</h2>
+						</div>
+					</header>
+				</div>
+				<!--
+				<div class="slds-col slds-no-flex slds-grid slds-align-top">
+					<div class="slds-col">
+						<lightning-button-icon variant="border-filled" icon-name="utility:refresh"
+							alternative-text="refresh" title="refresh" onclick={handleAction} data-action="refresh">
+						</lightning-button-icon>
+					</div>
+				</div>
+				-->
+			</div>
+			<template if:true={totalItems}>
+				<div class="slds-grid slds-p-vertical_x-small">
+					<div class="slds-col slds-align-bottom">
+						<p class="slds-text-body--small">{totalCount} Items • {filterStatus} • Updated {lastUpdatedInterval}</p>
+					</div>
+				</div>
+			</template>
+
+		</div>
+		<!--
+		<template if:false={isLoaded}>
+			<lightning-spinner alternative-text="Loading" variant="brand" size="medium"></lightning-spinner>
+		</template>
+        -->
+
+		<template lwc:if={error}>
+			<div class="slds-box slds-align_absolute-center">
+				<p class="slds-text-color_error">{error}</p>
+			</div>
+		</template>
+		<template lwc:else>
+			<template lwc:if={totalItems}>
+				<!--
+				<div class="slds-card__body slds-card__body_inner no-pad border-top-lightgray scroll">
+					<c-my-custom-datatable key-field="textCol" columns={columns} data={dtData}
+						onrowaction={handleRowAction} wrap-text-max-lines="3" show-row-number-column
+						max-column-width="4000">
+					</c-my-custom-datatable>
+					
+				</div>
+				-->
+				<div class="slds-card__body slds-card__body_inner no-pad border-top-lightgray ">
+					<c-ce-datatable key-field="Id" columns={columns} dt-data={dtData} onrowaction={handleRowAction}>
+					</c-ce-datatable>					
+				</div>
+			</template>
+			<template lwc:else>
+				<div class="slds-box slds-box_large slds-align_absolute-center">
+					<p>No Records</p>
+				</div>
+			</template>
+		</template>
+
+	</article>
+</template>

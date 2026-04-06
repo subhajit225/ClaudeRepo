@@ -1,0 +1,32 @@
+<template>
+            <template if:true={relatedRecordLinks}>
+                <div class="slds-grid slds-wrap slds-p-horizontal_small ">
+                <template for:each={relatedRecordLinks} for:item="link">
+                    <div key={link.relationshipApiName} class=" relatedListQuickLinksGrid ">
+                        <div class="">
+                            <div class="slds-media">
+                                <div class="slds-media__figure">
+                                    <lightning-icon icon-name={link.iconName} alternative-text="Connected" size="xx-small" title={link.relationshipApiName}></lightning-icon>
+                                </div>
+                                <div class="slds-media__body slds-truncate">
+                                    <a onclick={handleLinkClick} data-relationship-api-name={link.relationshipApiName} title={link.title}>{link.title}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+                </div>
+            </template>         
+        <template lwc:if={error}>
+            <div class="slds-m-around_medium slds-align_absolute-center slds-p-bottom_medium">
+                <p class="slds-text-color_error">{error}</p>
+            </div>
+        </template>
+        <template lwc:else>
+            <template lwc:if={noData}>
+                <div class="slds-m-around_medium slds-align_absolute-center slds-p-bottom_medium">
+                    <p>No Quick Links found.</p>
+                </div>
+            </template>
+        </template>   
+</template>

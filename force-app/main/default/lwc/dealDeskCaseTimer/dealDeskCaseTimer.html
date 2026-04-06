@@ -1,0 +1,39 @@
+<template>
+    <template if:true={showTimer}>
+        <!--<template if:true={savedElapsedTime}>
+            <lightning-card title="Time To First Response" icon-name="standard:case">
+                <div class="slds-p-around_medium slds-text-align_center">
+                    <div class="slds-text-heading_large slds-text-color_success">
+                        {savedElapsedTime}
+                    </div>
+                </div>
+            </lightning-card>
+        </template>
+        <template if:false={savedElapsedTime}>
+            <lightning-card title="Time To First Response" icon-name="standard:case">
+                <div class="slds-p-around_medium slds-text-align_center">
+                    <div class="slds-text-heading_large slds-text-color_success">
+                        {elapsedTime}
+                    </div>
+                </div>
+            </lightning-card>
+        </template>
+    </template>-->
+   
+   <div class="slds-form slds-form_readonly slds-p-top_x-small">
+        <div class="slds-form-element slds-hint-parent">
+            <span class="slds-form-element__label">Time to First Response</span>
+            <div class="slds-form-element__control">
+                <div class="slds-form-element__static {timerClass}">
+                    <template if:true={savedElapsedTime}>
+                        {savedElapsedTime}
+                    </template>
+                    <template if:false={savedElapsedTime}>
+                        {elapsedTime}
+                    </template>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</template>

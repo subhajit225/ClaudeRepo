@@ -1,0 +1,52 @@
+<template>
+    <lightning-spinner if:true={loadSpinner} alternative-text="Loading" size="medium" variant="brand" class="spinner-background"></lightning-spinner>
+    <lightning-card class="opportunity-card">
+        <div class="heading-36 slds-m-bottom_x-large">Partner Opportunity Pipeline</div>
+        <lightning-layout multiple-rows="true" horizontal-align="spread" class="slds-grid slds-wrap opportunity-cols">
+            <lightning-layout-item size="12" large-device-size="2" medium-device-size="3" small-device-size="12" class="slds-p-left_small slds-p-top_xx-small slds-p-right_xx-small slds-p-bottom_xx-small">
+                <lightning-combobox name="Fiscal Year" label="Fiscal Year" value={fiscalYear} placeholder={currentFiscalYear} options={fiscalYearOptions} onchange={handlefiscalYearChange}></lightning-combobox>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" large-device-size="2" medium-device-size="3" small-device-size="12" class="slds-p-around_xx-small">
+                <lightning-input type="test" name="" label="Customer Account Name" onchange={handleSearchChange} value={accountSearch}></lightning-input>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" large-device-size="2" medium-device-size="3" small-device-size="12" class="slds-p-left_xx-small slds-p-top_xx-small slds-p-right_xx-small slds-p-bottom_xx-small">
+                <lightning-combobox name="Deal Initiated Type" label="Deal Initiated Type" value={dealInitiatedType} placeholder="Select Deal Initiated Type" options={dealInitiatedTypeOptions} onchange={handleDealInitiatedTypeChange}></lightning-combobox>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" large-device-size="3" medium-device-size="3" small-device-size="12" class="slds-p-around_xx-small">
+                <c-pc_account-Hierarchy onaccountfilter={handleAccountFilter}></c-pc_account-Hierarchy>
+            </lightning-layout-item>
+            <!--<lightning-layout-item size="12" large-device-size="2" medium-device-size="3" small-device-size="12" class="slds-p-around_xx-small">
+                <div class="slds-form-element slds-m-top_x-large slds-float_right" style="display:flex;">
+                    <label class="slds-checkbox_toggle slds-grid">
+                        <span class="slds-form-element__label slds-m-bottom_none" style="margin-top: 1px;">TCV</span>
+                        <input type="checkbox" name="amountToggle"  onchange={handleToggleChange}/>
+                        <span id="toggle" class="slds-checkbox_faux_container" style="margin-top: 4px;">
+                        <span class="slds-checkbox_faux toggleClass"></span>
+                        <span class="slds-p-top_xx-small slds-m-left_xx-small">Amount</span>
+                        </span>
+                    </label>
+                    <div class="slds-form-element__label slds-m-left_x-small">ACV</div>
+                </div>
+            </lightning-layout-item>-->
+            <lightning-layout-item size="12" large-device-size="3" medium-device-size="3" small-device-size="12" class="slds-p-right_small slds-p-top_xx-small slds-p-left_xx-small slds-p-bottom_xx-small">
+                <div class="slds-m-top_large slds-p-top_xx-small slds-float_right">
+                    <template if:true={showSPIFFButton}>
+                        <lightning-button variant="brand" label="SPIFF Claims" title="SPIFF Claims" onclick={handleSPIFFClaimClick} class="slds-m-left_xx-small"></lightning-button>
+                    </template>
+                    <lightning-button variant="brand" label="Reset" title="Reset" onclick={handleResetClick} class="slds-m-left_xx-small"></lightning-button>
+                    <lightning-button variant="brand" label="Export" title="Export" onclick={handleExportClick} class="slds-m-left_xx-small" icon-name="utility:download" disabled={disableExport}></lightning-button>
+                </div>
+            </lightning-layout-item>
+        </lightning-layout>
+        <div class="custom-table-wrapper custom-opportunity-table slds-m-top_medium">
+            <lightning-datatable
+                    key-field="id"
+                    data={oppList}
+                    row-number-offset={rowOffset}
+                    show-row-number-column
+                    hide-checkbox-column
+                    columns={columns}>
+            </lightning-datatable>
+        </div>
+    </lightning-card>
+</template>

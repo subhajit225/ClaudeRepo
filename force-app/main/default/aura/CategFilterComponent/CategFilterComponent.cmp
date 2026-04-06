@@ -1,0 +1,22 @@
+<aura:component controller ="LtngKnowledgeCategoryHome" implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="categList" type="string"/>
+    <aura:attribute name="Selectedcategory" type="String" default="All"/>
+    <aura:attribute name="clickedCateg" type="String"/>
+    <aura:attribute name="parentCategory" type="String"/>
+
+    <aura:registerEvent name="categFilter" type="c:CategFilterEvent"/>
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+    <div class="slds-large-size--12-of-12 slds-Medium-size--9-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 categTitle">Categories</div>
+    <div class="containter">
+        <aura:iteration items="{!v.categList}" var="dc" indexVar="key">
+            <div  onclick="{!c.changeCateg}" id="{!dc.value}" class="{!if(v.clickedCateg == dc.value,'dCateg specialEffect','dCateg')}">
+                
+                  <img src="{!$Resource.RubrikCommunityAssets +'/images/afterClickedimages/'+dc.value+'.png'}" id="{!dc.value}" class ="icons" style="{!if(dc.key == v.clickedCateg,'display:inline-block;','display:none;     width: 16px;')}"/>
+              
+               <img src="{!$Resource.RubrikCommunityAssets +'/images/categdListpageImages/'+dc.value+'.png'}" class="icons" id="{!dc.value}" style="{!if(dc.key == v.clickedCateg,'display:none;','display:inline-block; margin-left : 3px;     width: 16px;')}"/>
+               <span class="categName" onclick="{!c.changeCateg}" id="{!dc.value}">{!dc.key} </span>
+            </div>
+            
+        </aura:iteration>
+    </div>
+</aura:component>

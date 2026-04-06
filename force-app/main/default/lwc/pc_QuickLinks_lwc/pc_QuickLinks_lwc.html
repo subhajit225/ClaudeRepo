@@ -1,0 +1,22 @@
+<template>
+<lightning-layout multiple-rows class="card-blue-bg">
+	<lightning-layout-item size="12" small-device-size="4" medium-device-size="4" large-device-size="4" padding="around-large">
+		<div class="heading-58">Helpful Links</div>
+	</lightning-layout-item>
+    <template if:true={showLinks}>
+	<lightning-layout-item size="12" small-device-size="8" medium-device-size="8" large-device-size="8" padding="around-large">
+		<div class="link-items">
+            <template for:each={details} for:item="detail">
+                <a href={detail.navigateURL} target={detail.target} key={detail.id}>
+                <div>
+                    <lightning-icon icon-name="standard:people" alternative-text="people" title="people" size="medium" class="slds-m-right_x-large"></lightning-icon>
+                    <span class="linkName">{detail.navigateText}</span>
+                    <lightning-icon icon-name="utility:forward" alternative-text="arrow" title="arrow" size="x-small" class="arrow slds-m-left_medium"></lightning-icon>
+                </div>
+                </a>
+            </template>
+        </div>
+	</lightning-layout-item>
+    </template>
+</lightning-layout>
+</template>

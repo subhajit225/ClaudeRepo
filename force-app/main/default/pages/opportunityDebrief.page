@@ -1,0 +1,112 @@
+<apex:page standardController="Opportunity" extensions="opportunityDebrief" sidebar="false" lightningStylesheets="true">
+  <apex:slds rendered="{!$User.UITheme != 'Theme3'}"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script type='text/javascript'>
+    function setEndDate(svcElementId) {
+            console.log('setEndDate: ');
+            var svcElementValue = document.getElementById(svcElementId).value;
+            var svcElement = document.getElementById(svcElementId); 
+            var serviceTerm = Math.round(svcElementValue);
+            svcElement.value = serviceTerm;
+        }        
+  </script>
+  <style>  
+    .hideDropdown select{
+        visibility: hidden !important;
+        display: block !important;
+    }
+
+    .columnXLarge{
+      width:40%;
+      max-width: 300px;
+    }
+
+    .columnLarge{
+      width:20%;
+      max-width: 150px;
+    }
+    .columnMed{
+      width:15%;
+      max-width: 150px;
+    }
+
+    .columnSmall{
+      width:7%;
+      max-width: 25px;
+    }
+    .columnXSmall{
+      width:5%;
+      max-width: 15px;
+    }
+    .maxWidth{
+      width:100%;
+    }
+</style>
+
+  <apex:form >
+    <apex:pageMessages />
+    <apex:pageBlock title="Opportunity Debrief - Details" id="opportuntiyDebriefDetails">
+    <apex:pageBlockSection columns="2">
+    <apex:inputField value="{!theOpp.Primary_Competitor__c}" />
+    <apex:inputField value="{!theOpp.Other_Competitor_Field__c}" />
+    <apex:inputField value="{!theOpp.Incumbent__c}" />
+    <apex:inputField value="{!theOpp.Other_Incumbent__c}" />
+    <apex:inputField value="{!theOpp.Lost_To_Won_Against__c}" />
+    <apex:inputField value="{!theOpp.StageName}"  html-disabled="true"/>    
+    <apex:inputField value="{!theOpp.Lost_Reason__c}" />
+    <apex:commandButton value="Save" action="{!saveOpp}" />
+    </apex:pageBlockSection>
+    </apex:pageBlock>
+    <apex:pageBlock title="Opportunity Debrief" id="opportuntiyDebrief">
+      <apex:pageBlockSection columns="1">
+      <apex:inputField value="{!theOpp.What_did_we_think_would_happen__c}" style="width: 100%; height: 100px"/>
+      <apex:inputField value="{!theOpp.What_really_happened__c}" style="width: 100%; height: 100px"/>
+      <apex:inputField value="{!theOpp.What_was_the_difference__c}" style="width: 100%; height: 100px"/>
+      <apex:inputField value="{!theOpp.What_worked_well__c}" style="width: 100%; height: 100px"/>
+      <apex:inputField value="{!theOpp.What_didn_t_work__c}" style="width: 100%; height: 100px"/>    
+      <apex:inputField value="{!theOpp.What_would_we_do_different_next_time__c}" style="width: 100%; height: 100px"/>
+      </apex:pageBlockSection>
+    </apex:pageBlock> 
+    <apex:pageBlock title="Key Learnings" id="keyLearnings">
+      <apex:pageMessages />      
+      <apex:variable var="rowNumber" value="{!0}"/>
+        <apex:pageBlockTable id="thetable" title="Reasons" var="acc" value="{!contactList}">
+          <apex:column headerValue="No." style="width:20px; text-align:center;" headerClass="centertext" styleClass="columnXSmall">
+            <apex:outputText value="{0}" style="text-align:center;">
+              <apex:param value="{!rowNumber+1}" />
+            </apex:outputText>
+             </apex:column>
+            <apex:column headerValue="Area" styleClass="columnMedium">
+               <apex:inputField id="area" value="{!acc.Area__c}" styleClass="maxWidth" required="TRUE"  style="width: auto;"/>
+            </apex:column>
+            <apex:column headerValue="Area Details" styleClass="columnSmall">
+               <apex:inputField id="areaDetails" value="{!acc.Area_Detail__c}" styleClass="maxWidth" required="TRUE"  style="width: auto;"/>
+            </apex:column>
+            <apex:column headerValue="Area - Sub-Detail" styleClass="columnMedium">
+               <apex:inputField id="areaSubDetails" value="{!acc.Area_Sub_Detail__c}" styleClass="maxWidth" required="TRUE"  style="width: auto;"/>
+            </apex:column>
+            <apex:column headerValue="Severity" styleClass="columnSmall">
+               <apex:inputField id="severity" value="{!acc.Severity__c}" styleClass="maxWidth"/>
+            </apex:column>
+            <apex:column headerValue="Impact" styleClass="columnSmall">
+               <apex:inputField id="impact" value="{!acc.Impact__c}" styleClass="maxWidth" required="TRUE"/>
+            </apex:column>
+            <apex:column headerValue="Details" styleClass="columnXLarge">
+               <apex:inputField id="details" value="{!acc.Details__c}" styleClass="maxWidth"/>
+            </apex:column>
+            <apex:column headerValue="Delete" styleClass="columnSmall">
+                <apex:commandButton value="Delete" action="{!deleteRow}" reRender="keyLearnings" immediate="TRUE" styleClass="maxWidth">
+                  <apex:param name="rowIndex" value="{!rowNumber}"/>
+                </apex:commandButton>
+                <apex:variable var="rowNumber" value="{!rowNumber+1}"/>
+           </apex:column>
+        </apex:pageBlockTable>
+      <apex:commandButton action="{!addRow}" value="Add Key Learning" reRender="keyLearnings" immediate="TRUE"/>      
+      <apex:pageBlockButtons >
+        <apex:commandButton value="Save" action="{!save}" />
+        <apex:commandButton value="Cancel" action="{!cancel}"/>
+        
+      </apex:pageBlockButtons>           
+    </apex:pageBlock>
+  </apex:form>
+</apex:page>

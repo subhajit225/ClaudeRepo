@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CCR_Validation_for_Quota</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+ISNEW(), 
+ISPICKVAL( CCR_Type__c,&apos;Virgin / Non-Virgin Territory &amp; Quota&apos;),  
+ISBLANK( Quota__c ),
+TODAY()  &gt;  DATE(2017,03,23) 
+)</errorConditionFormula>
+    <errorDisplayField>Quota__c</errorDisplayField>
+    <errorMessage>Please enter this field when Type is &quot;Virgin / Non-Virgin Territory &amp; Quota&quot;</errorMessage>
+</ValidationRule>

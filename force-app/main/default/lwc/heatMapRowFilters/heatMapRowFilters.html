@@ -1,0 +1,44 @@
+<template>
+    <div class="navbarContainer slds-grid slds-grid_vertical-align-center">
+        <div class="navbarTitle" style="margin-left: 10px;">
+            <span style="font-size: 20px;">Artemis</span>
+        </div>
+        <div class="navigationItem" style="margin-left: 30px;">
+            <ul class="slds-list_horizontal slds-has-flexi-truncate">
+                <template if:true={showRowData}>
+                    <template for:each={rowOptions} for:item="opt">
+                    <!-- <template for:each={rowFilterOptions} for:item="opt"> -->
+                        <li key={opt.Id} class="slds-is-relative slds-list__item"
+                            style="font-size: 15px !important;font-weight: 300 !important;padding: 0px 10px 0px 10px;">
+                            <lightning-button
+                                class="slds-container_fluid slds-button slds-button--reset slds-truncate button"
+                                variant="base" name={opt.name} onclick={handleClick}
+                                icon-name='utility:chevrondown' icon-position="right" label={opt.label}>
+                            </lightning-button>
+                            <template if:true={opt.showFilter}>
+                                    <c-filter-section-for-heat-map section-style={opt.sectionStyle}
+                                    filter-options-initial={opt.value} key-name={opt.name}
+                                    onclick={handleChildClick} onselectedfilteroptions={handleFilterSelection} onselectorclearalloptions={handleSelectAndClearAll}></c-filter-section-for-heat-map>
+                            </template>
+                        </li>
+                    </template>
+                </template>
+            </ul>
+        </div>
+        <div class="slds-col_bump-left" style="margin-right:1%">
+            <lightning-button class="applyFilterClass" variant="brand" label="Apply Filters"
+                onclick={handleApplyFilters}></lightning-button>
+            <lightning-button class="resetFilterClass slds-m-left_x-small" variant="brand" label="Reset Filters"
+                onclick={handleResetFilters}></lightning-button>
+            <lightning-button
+                class="slds-m-left_x-small  slds-button slds-button--reset  button accountFilterClass" 
+                variant="base" name="accountFilter" onclick={handleAccountFilters}
+                icon-name='utility:chevrondown' icon-position="right" label="Account"></lightning-button> 
+                <template if:true={showAccountFilter}>
+                    <c-heat-map-account-filters section-style={sectionStyleAccountFilter}
+                    filter-options-initial={accountDetails} key-name="account"
+                    onclick={handleChildClick} onselectedfilteraccounts={handleSelectedAccounts} onselectorclearalloptions={handleSelectAndClearAll}></c-heat-map-account-filters>
+                </template>
+        </div>
+    </div>
+</template>

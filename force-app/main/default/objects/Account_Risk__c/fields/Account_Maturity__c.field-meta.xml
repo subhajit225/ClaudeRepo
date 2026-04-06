@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Account_Maturity__c</fullName>
+    <formula>IF( 
+   AND( 
+      NOT( ISNULL(Account__r.Close_Won_Date__c )),
+      TODAY() - Account__r.Close_Won_Date__c &gt; 90
+      ),
+   TRUE, 
+   FALSE
+  )</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Account Maturity</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

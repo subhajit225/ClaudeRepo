@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Troubleshooting_Skills_Reason__c</fullName>
+    <label>Troubleshooting Skills Reason</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>Troubleshooting_Skills_Category__c</controllingField>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Logical Ability(Connecting dots)</fullName>
+                <default>false</default>
+                <label>Making Logical conclusions</label>
+            </value>
+            <value>
+                <fullName>Realtime log analysis</fullName>
+                <default>false</default>
+                <label>Realtime log analysis</label>
+            </value>
+            <value>
+                <fullName>Environmental Impact (config, network related, switch, 3rd party)</fullName>
+                <default>false</default>
+                <label>Environmental Impact (config, network related, switch, 3rd party)</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>No</controllingFieldValue>
+            <valueName>Logical Ability(Connecting dots)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>No</controllingFieldValue>
+            <valueName>Realtime log analysis</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>No</controllingFieldValue>
+            <valueName>Environmental Impact (config, network related, switch, 3rd party)</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

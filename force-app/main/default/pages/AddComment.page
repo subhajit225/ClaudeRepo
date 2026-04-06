@@ -1,0 +1,62 @@
+<apex:page standardController="Case" cache="false" extensions="CommunityCommentExtension" standardStylesheets="false" sidebar="false" showheader="false" title="Case Comments: {!Case.CaseNumber} - Rubrik Community" applyBodyTag="false">
+    <c:visualstrapblock >
+
+        <!--start header-->
+        <c:siteheader ></c:siteheader>
+        <!--end Header-->
+
+
+         <apex:form >
+        <!--start the Container-->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                 <h3>Add a Comment to Case {!Case.CaseNumber}</h3> 
+                    <div class="col-md-6">
+
+                    <apex:outputPanel layout="block" styleClass="alert alert-danger" rendered="{!$CurrentPage.parameters.escalate=='1'}">
+                    Once your comment is submitted, it will also submit a request to escalate this case.<br/>
+                    </apex:outputpanel>  
+               
+                        <apex:inputField value="{!comment.ParentID}"  rendered="false"/>
+                        <apex:inputtextarea value="{!comment.commentbody}" label="Body" style="height:200px;" html-maxlength="3750" styleclass="form-control input-sm"/>
+                        </div>
+                        <div class="col-md-6">
+                        <apex:commandButton action="{!saveComment}" title="Add Comment" value="Add Comment" styleClass="btn rubrik-btn" rendered="{!$CurrentPage.parameters.escalate==null}"/>&nbsp;
+                        <apex:commandButton action="{!reopen}" title="Add Comment" value="Request Reopen" styleClass="btn rubrik-btn" rendered="{!$CurrentPage.parameters.escalate=='0'}"/>&nbsp;
+                        <apex:commandButton action="{!escalate}" title="Add Comment" value="Request Escalation" styleClass="btn rubrik-btn" rendered="{!$CurrentPage.parameters.escalate=='1'}"/>&nbsp;
+                        <apex:commandButton action="{!cancel}" title="Add Comment" value="Cancel" styleClass="btn rubrik-btn"/>
+
+                    </div>
+                </div>
+        
+        <div class="col-md-12">
+        <h3>Case Comment History</h3>  
+            <!--start the case comments-->
+            <apex:datatable var="c" value="{!comments}" id="comments" styleClass="table"  >
+                    <apex:column headervalue="Comment">
+                     <apex:outputfield value="{!c.commentbody}" />
+                    </apex:column>                    
+                    <apex:column headervalue="Date">
+                     <apex:outputfield value="{!c.createdDate}"/>
+                    </apex:column> 
+                    <apex:column headervalue="Commentor">
+                     <apex:outputfield value="{!c.createdBy.Name}"/>
+                    </apex:column> 
+             </apex:datatable>
+
+       
+        
+              
+                </div>
+
+
+            </div>
+        </div>
+        <!--End the Container-->
+         </apex:form>
+        <!--start the footer-->
+        <c:sitefooter ></c:sitefooter>
+        
+    </c:visualstrapblock>           
+</apex:page>

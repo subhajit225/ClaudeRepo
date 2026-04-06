@@ -1,0 +1,125 @@
+<aura:component extends="c:PC_UtilityCmp" implements="lightning:isUrlAddressable,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,force:hasRecordId,lightning:actionOverride" access="global" 
+                controller="PC_PartnerFundClaimController">
+    
+    <aura:attribute name="Title" type="string" />
+    <aura:attribute name="Amount" type="string" />
+    <aura:attribute name="totalAmount" type="Decimal" />
+    <aura:attribute name="Description" type="string" />
+    <aura:attribute name="orgId" type="String" />
+    <aura:attribute name="RequestName" type="String" />
+    <aura:attribute name="requiredFields" type="List" default="Amount" />
+    <aura:attribute name="reqFieldMsg" type="string" default="Complete this field." />
+    <aura:attribute name="reqFileMsg" type="string" default="Upload a File" />
+    <aura:attribute name="recordId" type="string" />
+    <!-- PRIT26-12 -->
+    <aura:attribute name="showDedicatedResourceSection" type="boolean" default="false" />
+    <aura:attribute name="Fiscal_Quarter__c" type="string" />
+    <aura:attribute name="fiscalQuarterOptions" type="list" default="[]" />
+    <aura:attribute name="Measurements_of_Success_Q1__c" type="string" />
+    <aura:attribute name="Measurements_of_Success_Q2__c" type="string" />
+    <aura:attribute name="Measurements_of_Success_Q3__c" type="string" />
+    <aura:attribute name="Measurements_of_Success_Q4__c" type="string" />
+    <!-- PRIT26-12 -->
+    <!-- File Attachment -->
+    <aura:attribute name="downloadUrl" type="String" />
+    <aura:attribute name="contVersionId" type="String" />
+    <aura:attribute name="uploadedFileSize" type="integer" default="0" />
+    <aura:attribute name="remainingFileSize" type="integer" default="20" />
+    <aura:attribute name="fileList" type="List" />
+    <aura:attribute name="AttList" type="List" />
+    <aura:attribute name="vfHost" type="String" />
+    <aura:attribute name="fileURL" type="String" />
+    <aura:attribute name="removedFilesCVId" type="string" default="" />
+    <!-- PRIT24 639 start file size redefined from 10gb(10737418240) to 3.5mb(3670016) -->
+    <aura:attribute name="maxFileSize" type="integer"  default="3670016"/>
+    <!--PRIT24-639 end -->
+    <iframe aura:id="vfFrame1" src="{!v.vfHost +'/apex/FileUploadVF'}" style="display:none" />
+    <!-- File Attachment -->
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInIt}" />
+    
+    <lightning:messages />
+    
+    <lightning:card>
+        <aura:set attribute="title">
+            <div>  
+                <div class="heading-58">
+                    MDF Claim
+                    <span class="heading-58" data-aura-rendered-by="74:1505;a">
+                        {!v.RequestName}</span></div>
+            </div>
+        </aura:set>
+        <br/>
+        <div class="slds-p-left_small heading-22">Claim Information</div>
+        <div>
+            <lightning:layout multipleRows="true">
+                <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" padding="around-small">
+                    <div class="customRequired">
+                        <lightning:input aura:id="Amount" type="number" step="0.01" name="Amount" label="Claim Amount (PO Currency)" value="{!v.Amount}"/><!-- PRIT25-434 -->
+                    </div>
+                    <div role="alert" aura:id="Amount_help" class="form-element__helpError none">{!v.reqFieldMsg}</div>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" padding="around-small">
+                    <lightning:textarea aura:id="Description" label="Notes" value="{!v.Description}" placeholder=""/>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" padding="around-small">
+                    <div class="customRequired custom-upload-button">
+                        <lightning:input type="file" id="tempfileId" aura:id="tempfile" label="Proof of Performance Materials &amp; Invoice" multiple="true"
+                                         accept=".doc,.docx,.jpeg,.jpg,.pdf,.png,.svg,.ppt,.csv,.zip,.txt,.xsl,.xlsl" onchange="{! c.handleUploadFinished }" /><!-- PRIT26-168 -->
+                        
+                    </div>
+                    <div role="alert" aura:id="tempfile_help" class="form-element__helpError none">{!v.reqFileMsg}</div>
+                    <ul class="ulStyle">
+                        <aura:iteration items="{!v.fileList}" var="fl" indexVar="i">
+                            <span class="slds-pill spanStyle" role="option" tabindex="0" aria-selected="true"
+                                  style=" display: inline-block;">
+                                <img class="fileAttachmentIcon_PE imageStyle" src="{!$Resource.fileAttachmentIcon_PE}"
+                                     height="15" width="15" />
+                                <span class="slds-pill__label" title="{!fl}" id="{!fl}" aura:id="{!fl}">{!fl}</span>
+                                <span class="slds-pill__label" title="Option A">{!fl.value}</span>
+                                <span class="slds-icon_container slds-pill__remove" title="Remove"
+                                      onclick="{!c.clearAttachmemt}" data-index="{!i}" data-value="{!fl.value}">
+                                    <lightning:buttonIcon iconName="utility:close" name="{!fl}" variant="bare"
+                                                          alternativeText="Remove attachment." />
+                                </span>
+                            </span>
+                        </aura:iteration>
+                    </ul>
+                </lightning:layoutItem>
+                <aura:if isTrue="{!v.showDedicatedResourceSection}">
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" padding="around-small">
+                        <div class="customRequired">
+                            <lightning:select name="Fiscal_Quarter__c" aura:id="Fiscal_Quarter__c"
+                                              label="Fiscal Quarter" value="{!v.Fiscal_Quarter__c}">
+                                <aura:iteration items="{!v.fiscalQuarterOptions}" var="item">
+                                    <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}" />
+                                </aura:iteration>
+                            </lightning:select>
+                        </div>
+                        <div role="alert" aura:id="Fiscal_Quarter__c_help" class="form-element__helpError none">
+                            {!v.reqFieldMsg}</div>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" padding="around-small">
+                        <lightning:textarea aura:id="Measurements_of_Success_Q1__c" label="Measurements Of Success Q1" value="{!v.Measurements_of_Success_Q1__c}" placeholder="" disabled="{!v.showDedicatedResourceSection}"/>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" padding="around-small">
+                        <lightning:textarea aura:id="Measurements_of_Success_Q2__c" label="Measurements Of Success Q2" value="{!v.Measurements_of_Success_Q2__c}" placeholder="" disabled="{!v.showDedicatedResourceSection}"/>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" padding="around-small">
+                        <lightning:textarea aura:id="Measurements_of_Success_Q3__c" label="Measurements Of Success Q3" value="{!v.Measurements_of_Success_Q3__c}" placeholder="" disabled="{!v.showDedicatedResourceSection}"/>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" padding="around-small">
+                        <lightning:textarea aura:id="Measurements_of_Success_Q4__c" label="Measurements Of Success Q4" value="{!v.Measurements_of_Success_Q4__c}" placeholder="" disabled="{!v.showDedicatedResourceSection}"/>
+                    </lightning:layoutItem>
+                </aura:if>
+            </lightning:layout>
+            <div class="slds-m-top_xx-large">
+                <lightning:button label="Submit" variant="brand" onclick="{!c.handleSaveForm}"/>
+                <lightning:spinner aura:id="mySpinner" alternativeText="Saving.." title="Saving.." variant="brand" size="large" class="slds-hide"/>
+            </div>
+        </div>
+    </lightning:card>
+    
+    
+    
+</aura:component>

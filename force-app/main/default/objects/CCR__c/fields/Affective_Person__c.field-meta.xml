@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Affective_Person__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>Affected Person</label>
+    <lookupFilter>
+        <active>true</active>
+        <filterItems>
+            <field>User.Profile_Name__c</field>
+            <operation>notEqual</operation>
+            <value>&apos;Rubrik Customer Community Super Login User&apos;,&apos;Rubrik Customer Community Login User&apos;,&apos;Partner Community User&apos;, &apos;Rubrik Partner Community Manager&apos;, &apos;Rubrik Partner Community User&apos;, &apos;Partner - Buyer&apos;,&apos;Rubrik Community Super User&apos;</value>
+        </filterItems>
+        <isOptional>false</isOptional>
+    </lookupFilter>
+    <referenceTo>User</referenceTo>
+    <relationshipName>CCRs</relationshipName>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

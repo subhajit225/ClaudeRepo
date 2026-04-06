@@ -1,0 +1,22 @@
+<apex:page standardController="Escalation__c" extensions="EscalationManagementTeamController" showHeader="false" standardStylesheets="true" sidebar="false" docType="html-5.0" lightningStylesheets="true">
+    <apex:includeLightning />
+
+    <div id="LightningComponentid" />  
+      
+    <script>
+    $Lightning.use("c:NextStepsEscalationNotesApp", function() {
+        $Lightning.createComponent("c:customDataTable",
+          { 
+            tableName: 'Next Steps',
+            objectName: 'Note__c',
+            fieldSetName: 'ER_Next_Steps',
+            recordId: '{!$CurrentPage.parameters.Id}',
+            filterStr: 'Ransomware_Next_Steps'
+          },
+          "LightningComponentid",
+          function(cmp) {
+             console.log('Next Steps LWC Componenet added in VF page');
+          });
+    });
+    </script>
+</apex:page>

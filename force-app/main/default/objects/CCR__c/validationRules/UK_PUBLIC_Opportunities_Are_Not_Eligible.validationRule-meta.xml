@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>UK_PUBLIC_Opportunities_Are_Not_Eligible</fullName>
+    <active>true</active>
+    <description>SAL26-93</description>
+    <errorConditionFormula>AND(
+    NOT($Setup.ShGl_DisableBusinessLogic__c.Disable_CCR_Validation_Rules__c),
+    OR(
+        CONTAINS(Opportunity__r.ETM_Region__c, &apos;UK-PUBLIC&apos;),
+        CONTAINS(Opportunity__r.ETM_Region__c, &apos;UK-PUBLIC2&apos;)
+    ),
+    ISPICKVAL(CCR_Type__c, &apos;Partner Referral Fee&apos;),
+    ISNEW()
+)</errorConditionFormula>
+    <errorMessage>Public Sector opportunities are not eligible for Partner Referral Fees.</errorMessage>
+</ValidationRule>

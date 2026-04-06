@@ -1,0 +1,7 @@
+<aura:component implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:handler name="init" value="{!this}" action="{!c.doinit}"/>
+    <aura:attribute name="url" type="string"/>
+    <aura:attribute name="height" type="String" default="1000px"/>
+    <aura:attribute name="isDeskTop" type="string" default="true"/>
+    <iframe src="{!v.url}" width="100%" height="{!v.height}" class="iFrameContainer" id="myFrame" onload="{!c.resizeIframe}"/>
+</aura:component>

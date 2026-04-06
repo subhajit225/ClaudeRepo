@@ -1,0 +1,28 @@
+<template>
+    <lightning-card  title="Request Extension" if:true={wirePOCRecord}>
+        <div if:false={areDetailsVisible} class="">
+            <lightning-spinner
+                alternative-text="Loading..." variant="brand">
+            </lightning-spinner>
+        </div>
+          <c-custom-toast auto-close-time="5000"></c-custom-toast>
+
+        <lightning-record-edit-form object-api-name="POC__c"   record-id={recordId} onsubmit ={handleSubmit} onload={handleLoad}>
+            <lightning-messages>  </lightning-messages>
+            <lightning-layout multiple-rows >
+                <lightning-layout-item size="6" padding="around-small" >
+                    <div class="expectedEndDate">
+                    <lightning-input-field field-name="New_Expected_End_Date__c" variant="label-stacked" required="true" disabled={disableExpectedDateButton} value={newExpectedEndDate} onchange={handleChangeExpectedDateChange}>  </lightning-input-field>
+                </div>
+                </lightning-layout-item>
+                <lightning-layout-item size="6" padding="around-small">
+                    <lightning-input-field field-name="POC_Extension_Reason__c" variant="label-stacked" required="true" value={newExpectedComment}>  </lightning-input-field>
+                </lightning-layout-item>
+            </lightning-layout>
+            <div class="buttonCenter">
+                <lightning-button  class="slds-m-top_small" variant="brand" type="submit" name="update" label="Submit">  </lightning-button> &nbsp;
+                <lightning-button  class="slds-m-top_small" variant="brand" type="button" name="update" label="Cancel" onclick={cancleButtonEvent}>  </lightning-button>
+            </div>
+        </lightning-record-edit-form>
+    </lightning-card>
+</template>

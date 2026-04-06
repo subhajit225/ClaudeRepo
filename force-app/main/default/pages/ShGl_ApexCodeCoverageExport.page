@@ -1,0 +1,33 @@
+<!--  Page to show code coverage of classes / trigger as PDF / Excel -->
+<apex:page id="pg" controller="ShGl_ApexCodeCoveragePageController" 
+    renderAs="pdf"
+	showHeader="false" 
+	title="Apex Code Coverage" 
+	sidebar="false"  
+	standardStylesheets="false"
+	applyHTMLTag="false"
+    cache="true"
+>
+
+	<head>
+	    <meta http-equiv="Content-Type" content="application/x-excel;charset=UTF-8" />
+	</head>
+
+         <apex:pageBlock title="Total" id="total">
+             <b>Total Number of Lines Covered: </b><apex:outputText value="{!tc.NumLinesCovered}"/><br/>
+             <b>Total Number of Lines Not Covered: </b><apex:outputText value="{!tc.NumLinesUncovered}"/><br/>
+             <b>Total Coverage Percentage: </b><apex:outputText value="{!tc.CodeCoveragePercentage}"/>
+         </apex:pageBlock>
+         
+         <apex:pageBlock title="Code Coverage"  id="pb2"> <p/>
+             <apex:pageBlockTable id="pbt" value="{!coverages}" var="ind">
+                 <apex:column headerValue="Apex Class or Trigger">
+                    <apex:outputLink target="_blank" value="/{!ind.ApexClassOrTriggerId}">{!ind.ApexClassOrTrigger.Name}</apex:outputLink>
+                 </apex:column>
+                 <apex:column value="{!ind.NumLinesCovered}" headerValue="Number of lines covered"/>
+                 <apex:column value="{!ind.NumLinesUncovered}" headerValue="Number of Lines not covered"/>
+                 <apex:column value="{!ind.CodeCoveragePercentage}" headerValue="Code Coverage Percentage"/>
+             </apex:pageBlockTable>
+         </apex:pageBlock>  
+
+</apex:page>

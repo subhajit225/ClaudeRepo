@@ -1,0 +1,412 @@
+<apex:page standardController="Account" extensions="AccountSearch" action="{!init}" lightningStylesheets="true">
+<apex:slds rendered="{!$User.UITheme != 'Theme3'}"/>    
+<!--<apex:includeScript value="//code.jquery.com/jquery-2.1.1.min.js"/>
+<apex:includeScript value="//cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.18.3/js/jquery.tablesorter.js"/>
+<apex:includeScript value="//cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.18.3/js/jquery.tablesorter.widgets.js"/>
+<apex:stylesheet value="//cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.18.3/css/theme.jui.css"/>
+<script>
+    $(document).ready(function(){
+        debugger;
+        $("table").tablesorter({
+        debugger;
+        theme : 'jui', 
+
+        headerTemplate : '{content} {icon}',
+
+        widgets : ['uitheme', 'zebra'],
+
+        widgetOptions : {
+          zebra   : ["even", "odd"],
+        }
+
+  });
+    });
+</script> -->
+<head>
+  <!--<apex:slds /> -->
+</head>
+<style>
+.msgContainer{
+border: 1.2px solid #236fbd;
+    background-color: aliceblue;
+    margin: 10px;
+    border-radius: 7px;
+    padding: 10px;
+    width: max-content;
+}
+.msgHeader{
+font-family: Arial,Helvetica,sans-serif;
+    font-size: 1.083em;
+    color: #167cb1;
+    font-weight: bold;
+}
+
+.msgContent{
+color: #167cb1;
+}
+.message{
+  width: max-content;
+  padding-right: 40px;
+}
+
+ .pbTitle{
+    font-weight:600;
+ }
+body .bPageBlock .pbHeader {
+    margin:10px; 
+}
+.highlight
+    {
+        background-color: #2cc11a40;
+    }
+
+/*.tableheader{
+   background-color: white;
+   //text-align: center !important;
+}
+tr.dataRow td{
+  //text-align: center !important;
+} */
+.loadCenter{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+}
+
+.close{
+    width: 27px;
+    position: absolute;
+    border: 1px solid;
+    background: white;
+    border-radius: 50% !important;
+    top: 15px;
+    //height: 10%;
+    right: 7px;
+}
+
+
+.infomsg{
+    color: #167cb1;
+    font-weight: bold;
+    padding-left:31px;
+}
+.overview_background{
+   background-color: white;
+}
+.custPopup{  
+            z-index: 9999;
+            padding:10px;
+            position: absolute;
+            top:10px;
+            height: 90vh;
+            width: 70vw;
+           
+        }
+        .popupBackground{
+            background-color:black;
+            opacity: 0.20;
+            filter: alpha(opacity = 20);
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 9998;
+        }
+        
+        .odd { 
+        background-color:white;
+        }
+        .even {
+        background-color: lightgrey;
+        }
+   .custombtn{
+    background-color: rgba(221, 219, 218, 0.25);
+    border: solid #80808094 1px;
+    border-radius: 4px;
+    padding: 5px;
+    margin: 2px;
+    font-weight: 0.2 px;
+    display: inline-block;
+    margin: 6px;
+    cursor: pointer;
+        }
+    /*.tableheader{
+       background-color:white !important;
+       border:0px;!important
+    } */
+ 
+</style>
+<script type="text/javascript">
+  function setLoader(status,elename) {
+    if (status) {
+    debugger;
+      if(elename=='loadingAccSearch') 
+      document.querySelectorAll("[id$=accTable]")[0].style.display = 'none';
+           document.getElementById(elename).style.display = 'block';
+    }
+    else {
+      document.getElementById(elename).style.display = 'none';
+    }
+  }
+  function getStateName(){
+  debugger;
+   var stateNode = document.querySelectorAll("[id$=statecode]")[0]; 
+   document.getElementById('{!$Component.accSearchForm.BillingStateName}').value = stateNode.options[stateNode.selectedIndex].text;
+  }
+</script>
+   <apex:form id="accSearchForm">
+          
+
+  <apex:inputHidden id="BillingStateName" value="{!BillingStateName}" />
+   <apex:outputPanel rendered="{!ShowAccount}">
+      <apex:pageBlock title="Account Search" mode="maindetail">
+              <apex:pageBlockButtons location="top"> 
+                <apex:commandButton onclick="getStateName()" action="{!createSearchAccount}" value="Search/Create Account" reRender="accTable,error" status="loading"/>             
+                    <apex:actionStatus id="loading" onstart="setLoader(true,'loadingAccSearch')" onstop="setLoader(false,'loadingAccSearch')" /> 
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection title="" collapsible="false" columns="2">
+                 <apex:inputfield value="{!searchAccount.Name}" style="width:250px;"/>  
+                  <apex:inputfield label="Billing Country" value="{!searchAccount.Billingcountrycode}" required="true"/> 
+                  <apex:inputfield label="Billing State" value="{!searchAccount.BillingStateCode}" id="statecode"/>
+                 <apex:inputfield label="Billing City" value="{!searchAccount.BillingCity}"/>
+                  <apex:inputfield label="Billing Street" value="{!searchAccount.BillingStreet}"/>
+                  
+                  <apex:inputfield label="Billing Postal code" value="{!searchAccount.BillingpostalCode}"/>
+                  <apex:inputfield value="{!searchAccount.isFederalIntel__c}"/>
+                 <apex:inputfield label="Telephone" value="{!searchAccount.Phone}"/>
+                 <apex:inputfield label="Website" value="{!searchAccount.Website}"/>
+                 </apex:pageBlockSection>
+                 
+   </apex:pageBlock>
+    <!--<apex:outputText styleclass="infomsg mainTitle" value="Note:
+To search for account — Enter Account Name & Billing Country
+To create new account — Enter Account Name, Billing Street, Billing Country, and either Billing City, Billing State or Billing Postal Code"/> -->
+
+<div class="msgContainer">
+    <div class="msgHeader"> NOTE </div>
+     <div class="msgContent"> To search for an Account - Enter Account Name &amp; Billing Country  </div>
+     <apex:outputText styleClass="msgContent" value="To create new Account - Enter Account Name, Billing Street, Billing Country, and either Billing City, Billing State or Billing Postal Code" rendered="{!$ObjectType.Account.fields.isFederalIntel__c.Updateable == false}"></apex:outputText>
+     <div><apex:outputText styleClass="msgContent" value="To create a new Federal Account - Enter Account Name & Billing Country" rendered="{!$ObjectType.Account.fields.isFederalIntel__c.Updateable }"></apex:outputText></div>
+     <apex:outputText styleClass="msgContent" value="To create new Non-Federal Account - Enter Account Name, Billing Street, Billing Country, and either Billing City, Billing State or Billing Postal Code" rendered="{!$ObjectType.Account.fields.isFederalIntel__c.Updateable }"></apex:outputText>
+    
+</div>
+   <div class="slds-m-horizontal_small slds-m-top_xx-large">
+   <apex:pageMessages id="error"></apex:pageMessages>
+   </div>
+ <div id="loadingAccSearch" style="display:none;margin-top: 60px;">
+    <div style="text-align: center;"> Loading...
+      <img src="/img/loading.gif" alt="Loading graphic" style="height: 25px;"/>
+    </div>
+  </div>
+   
+  
+   
+   
+    <apex:outputPanel id="accTable">
+       <apex:pagemessage severity="info" summary="Salesforce internal search result" strength="2" rendered="{!searchType=='SF Internal'}"/>
+ <!--  <div style="margin-top:50px;"> -->
+   
+    <div style="padding:10px;"/>
+    <apex:pageBlock title="Similar accounts found" rendered="{!potentialMatch.size>0}"> 
+    <apex:variable var="index" value="{!0}"/>
+       <div style="overflow: scroll; max-height: 200px;">
+        <apex:pageBlockTable value="{!potentialMatch}" var="accRes" rowClasses="even,odd"> <!--style="display: block;  max-height: 200px;overflow-y: scroll"-->
+               <apex:column value="{!accRes.accountName}"> 
+             <apex:facet name="header">Name</apex:facet>
+          </apex:column>
+          <apex:column value="{!accRes.accountStatus}"> 
+             <apex:facet name="header">Status</apex:facet>
+          </apex:column>
+           <apex:column value="{!accRes.recTypeName}"> 
+                            <apex:facet name="header">Record Type</apex:facet> 
+                        </apex:column>      
+         <apex:column value="{!accRes.AccountOwner}"> 
+                           <apex:facet name="header">Owner</apex:facet>
+                        </apex:column> 
+          <apex:column value="{!accRes.sourceID}" > 
+                            <apex:facet name="header">ID</apex:facet>
+                        </apex:column> 
+                        <apex:column value="{!accRes.addressLine1} {!accRes.addressLine2}" > 
+                            <apex:facet name="header">Billing Street</apex:facet>
+                        </apex:column>
+                        <apex:column value="{!accRes.city}" > 
+                            <apex:facet name="header">Billing City</apex:facet>
+                        </apex:column>
+                        <apex:column value="{!accRes.state}"> 
+                            <apex:facet name="header">Billing State</apex:facet>
+                        </apex:column>
+                        <apex:column value="{!accRes.postalCode}"> 
+                            <apex:facet name="header">Billing Postal Code</apex:facet>
+                        </apex:column>
+                        <apex:column value="{!accRes.country}" > 
+                            <apex:facet name="header">Billing Country</apex:facet>
+                        </apex:column> 
+         <apex:column > 
+           <apex:commandLink rendered="{!IF(accRes.sourceID==null,true,false)}" action="{!RequestAccCreation}" value="Create" styleClass="btn"  style="padding: 4px 3px;color: #000000c4;
+    text-decoration: none;"> 
+           <apex:param name="create" value="{!index}-pm"
+                assignTo="{!selectedRow}"/>
+                </apex:commandLink>
+           <apex:commandLink rendered="{!IF(accRes.sourceID!=null,true,false)}" action="{!AccRedirect}" value="View" styleClass="btn" style="padding: 4px 3px;color: #000000c4;
+    text-decoration: none;">
+           <apex:param name="edit" value="{!accRes.sourceID}"
+                assignTo="{!RedirectTo}"/>
+                </apex:commandLink>
+          <apex:variable var="index" value="{!index +1}"/>
+         </apex:column>
+         </apex:pageBlockTable>
+         </div>
+   </apex:pageBlock> 
+   
+   <div style="padding:10px;"/>
+   <apex:pageBlock title="{!IF(exactMatch.size==1,IF(exactMatch[0].newAccount=='Y'||exactMatch[0].newAccount=='y','Create New Account','Account already exists'),'Account already exists')}" rendered="{!exactMatch.size>0}"> 
+       <apex:variable var="em_index" value="{!0}"/>
+      <apex:pageBlockTable value="{!exactMatch}" var="newaccRes" rowClasses="even,odd"> <!--style="display: block;  max-height: 200px;overflow-y: scroll"-->
+          <apex:column value="{!newaccRes.accountName}"> 
+                            <apex:facet name="header">Name</apex:facet>
+                        </apex:column> 
+                        <apex:column value="{!newaccRes.accountStatus}" rendered="{!IF(exactMatch.size==1,IF(exactMatch[0].newAccount=='Y'||exactMatch[0].newAccount=='y',false,true),true)}"> 
+                            <apex:facet name="header">Status</apex:facet> 
+                        </apex:column> 
+                       <apex:column value="{!newaccRes.recTypeName}" rendered="{!IF(exactMatch.size==1,IF(exactMatch[0].newAccount=='Y'||exactMatch[0].newAccount=='y',false,true),true)}"> 
+                            <apex:facet name="header">Record Type</apex:facet> 
+                        </apex:column> 
+                        <apex:column value="{!newaccRes.AccountOwner}" rendered="{!IF(exactMatch.size==1,IF(exactMatch[0].newAccount=='Y'||exactMatch[0].newAccount=='y',false,true),true)}"> 
+                            <apex:facet name="header">Owner</apex:facet>
+                        </apex:column> 
+                        <apex:column value="{!newaccRes.sourceID}" rendered="{!IF(exactMatch.size==1,IF(exactMatch[0].newAccount=='Y'||exactMatch[0].newAccount=='y',false,true),true)}"> 
+                            <apex:facet name="header">ID</apex:facet> 
+                        </apex:column> 
+                        <apex:column value="{!newaccRes.addressLine1} {!newaccRes.addressLine2}" > 
+                            <apex:facet name="header">Billing Street</apex:facet>
+                        </apex:column>
+                        <apex:column value="{!newaccRes.city}" > 
+                            <apex:facet name="header">Billing City</apex:facet>
+                        </apex:column>
+                        <apex:column value="{!newaccRes.state}"> 
+                            <apex:facet name="header">Billing State</apex:facet>
+                        </apex:column>
+                        <apex:column value="{!newaccRes.postalCode}"> 
+                            <apex:facet name="header">Billing Postal Code</apex:facet>
+                        </apex:column>
+                        <apex:column value="{!newaccRes.country}" > 
+                            <apex:facet name="header">Billing Country</apex:facet>
+                        </apex:column> 
+         <apex:column > 
+          <apex:commandLink rendered="{!IF(newaccRes.sourceID==null,true,false)}" action="{!RequestAccCreation}" value="Create" styleClass="btn"  style="padding: 4px 3px;color: #000000c4;
+    text-decoration: none;"> 
+           <apex:param name="create" value="{!em_index}-em"
+                assignTo="{!selectedRow}"/>
+                </apex:commandLink>
+           <apex:commandLink rendered="{!IF(newaccRes.sourceID!=null,true,false)}" action="{!AccRedirect}" value="View" styleClass="btn" style="padding: 4px 3px;color: #000000c4;
+    text-decoration: none;">
+           <apex:param name="edit" value="{!newaccRes.sourceID}"
+                assignTo="{!RedirectTo}"/>
+                </apex:commandLink>
+                <apex:variable var="em_index" value="{!em_index +1}"/>
+         </apex:column>
+         </apex:pageBlockTable>
+   </apex:pageBlock>  
+  
+    
+  <!-- </div>  -->
+   </apex:outputPanel>
+  
+ 
+ <!-- Pop-up screen for detail view of account -->
+  <!-- <apex:outputPanel styleClass="popupBackground" layout="block" rendered="{!displayPopUp}"/>
+            <apex:outputPanel styleClass="custPopup overview_background" layout="block" rendered="{!displayPopUp}">
+            
+                  <div class="slds-m-vertical_medium"><b> Account: {!potentialMatch[selectedRow].accountName}</b></div>
+                  <apex:pageBlock mode="maindetail">
+              
+            <apex:pageBlockSection title="Account Details" collapsible="false" columns="2">       
+                 <apex:outputtext label="Account Name" value="{!potentialMatch[selectedRow].accountName}"/>
+                 <apex:outputtext label="Duns Number" value="{!potentialMatch[selectedRow].dunsNumber}"/>
+                 <apex:outputtext label="Country" value="{!potentialMatch[selectedRow].isoCountrycode}"/>
+                 <apex:outputtext label="State" value="{!potentialMatch[selectedRow].state}"/>
+                 <apex:outputtext label="City" value="{!potentialMatch[selectedRow].city}"/>
+                 <apex:outputtext label="Street Name" value="{!potentialMatch[selectedRow].addressLine1} {!potentialMatch[selectedRow].addressLine2}"/> 
+                 <apex:outputtext label="Compny Master Id" value="{!potentialMatch[selectedRow].CMID}"/>
+            </apex:pageBlockSection>
+            <!-- <apex:pageBlockSection title="Additional" collapsible="false" columns="2">
+                 <apex:outputfield value="{!potentialMatch[selectedRow].Website}"/>
+                 <apex:outputfield label="Phone Number" value="{!potentialMatch[selectedRow].Phone}"/>
+                 <apex:outputfield value="{!potentialMatch[selectedRow].AnnualRevenue}"/>
+                 <apex:outputfield label="Number of Employees" value="{!potentialMatch[selectedRow].NumberOfEmployees}"/>
+ 
+                 <apex:outputfield label="NAIC Code" value="{!potentialMatch[selectedRow].NaicsCode}"/>
+                 <apex:outputfield label="NAIC description" value="{!≈[selectedRow].NaicsDesc}"/>
+                 
+                 <apex:outputfield label="Trade style" value="{!potentialMatch[selectedRow].TradeStyle}"/>
+                 <apex:outputfield label="SIC" value="{!potentialMatch[selectedRow].Sic}"/>
+                 
+            </apex:pageBlockSection>
+             <apex:pageBlockSection title="Account Hierarchy" collapsible="false" columns="2">
+                 <apex:outputfield value="{!potentialMatch[selectedRow].Site}"/>
+                 
+            </apex:pageBlockSection> 
+   </apex:pageBlock>
+          <apex:commandButton action="{!close}" value="x" styleClass="close"/>
+            </apex:outputPanel> -->
+       
+        </apex:outputPanel>   
+        
+        <!-- Account Record Type -->
+        
+        
+        <apex:outputPanel rendered="{!ShowAccount == false}" id="accRecType" >
+        <div class="bPageTitle"><div class="ptBody">
+        <div class="content">
+    <img src="/img/s.gif" alt="Account" class="pageTitleIcon" title="Account"/>
+    <h1 class="pageType">New Account<span class="titleSeparatingColon">:</span></h1>
+    <h2 class="pageDescription"> Select Account Record Type</h2><div class="blank">&nbsp;</div></div>
+        </div></div>
+        <apex:pageMessages ></apex:pageMessages>
+           <div class="bDescription">Select a record type for the new account.&nbsp;To skip this page in the future, change your record type settings on your personal setup page.</div>
+         
+         <apex:pageBlock title="Select Account Record Type"> 
+              <apex:pageBlockButtons location="bottom">
+               <!-- <apex:commandButton action="{!CreateAccount}" value="Continue" oncomplete="{!if(errAccInsert==false,'Postaccount()',null)}" status="startCreateProc" rerender="accRecType"/> 
+                 <apex:actionFunction name="Postaccount" action="{!PostAccounttoCM}" rerender="accRecType" status="stopCreateProc" /> <!--rendered="{!errAccInsert== false}"-->
+                   <apex:commandButton action="{!CreateAccount}" value="Continue" oncomplete="Postaccount()" status="startCreateProc"/> <!--rerender="accRecType" -->
+                 <apex:actionFunction name="Postaccount" action="{!PostAccounttoCM}" rerender="accRecType" status="stopCreateProc" /> <!--rendered="{!errAccInsert== false}"-->
+                   <apex:actionStatus id="startCreateProc" onstart="setLoader(true,'loadingAccCreate')" /> 
+                  <apex:actionStatus id="stopCreateProc"   onstop="setLoader(false,'loadingAccCreate')" /> 
+
+                <!-- <apex:actionStatus id="processing" onstart="setLoader(true,'loadingAccCreate')" onstop="setLoader(false,'loadingAccCreate')" /> -->
+                <apex:commandButton action="{!Cancel}" value="Cancel" />
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection columns="1">
+        <apex:inputfield label="Record Type of new record" value="{!accToinsert.RecordTypeId}" required="true"/> <!--accToinsert-->   
+        </apex:pageBlockSection>
+        </apex:pageBlock>  
+        <h3 class="recordTypesHeading">Available Account Record Types</h3>
+        <apex:pageBlock mode="maindetail">
+        <apex:pageBlockTable value="{!AccRectype}" var="RT" id="theTable">
+               <apex:column style="border: 1px solid #ededed">
+            <apex:facet name="header">Record Type Name</apex:facet>
+   
+            <apex:outputText value="{!RT.Name}"/>
+        </apex:column>
+
+        <apex:column style="text-align:left;border: 1px solid #ededed">
+            <apex:facet name="header">Description</apex:facet>
+            
+            <apex:outputText value="{!RT.Description}"/>
+        </apex:column>
+
+    </apex:pageBlockTable>
+    </apex:pageBlock> 
+   <div id="loadingAccCreate" style="display:none;">
+    <div class="popupBackground"/>
+    <div class="loadCenter">
+    <div style="text-align: center;"> Loading...
+      <img src="/img/loading.gif" alt="Loading graphic" style="height: 25px;"/>
+    </div> </div>
+  </div>
+        </apex:outputPanel>
+         <!-- End Record Type -->
+   </apex:form>
+</apex:page>

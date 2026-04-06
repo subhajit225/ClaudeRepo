@@ -1,0 +1,22 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" controller="PC_DealRegTableController">
+    <aura:attribute name="searchText" type="string" description="contains search value"/>
+    <aura:registerEvent name="searchEventName" type="c:searchEvent"/>
+    
+        <label class="slds-form-element__label slds-transition-hide"> Search label</label>
+        <div class="slds-form-element" style="width: 100%;">
+            
+            <div class="slds-form-element__control">
+                
+                <div class="slds-input-has-icon slds-input-has-icon--right " >
+                    
+                    <lightning:buttonIcon iconName="utility:search" variant="bare" onclick="{! c.handleSearch }" alternativeText="Search" class="slds-input__icon" />
+                    
+                    <ui:inputText value="{!v.searchText}" class="slds-lookup__search-input slds-input" placeholder="Search" keyup="{!c.onKeyUp}"/>
+                    
+                </div>
+                
+            </div>
+            
+        </div>
+    
+</aura:component>

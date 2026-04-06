@@ -1,0 +1,93 @@
+<apex:component >
+    <style>
+        .homeBannerBlock{height: 350px;}
+        .imageIcon{height:35px !important;}
+        .boxContainer{width: 100%;margin: 0 auto;max-width: 1200px;top: -70px;position: relative;}
+        .ContainerBox{background-color:#FFFFFF;padding: 30px 0px;z-index:1;border-top: 1px solid #eee;border-left: 1px solid #eee;}
+        .ContainerBox:hover{background-color:#009DAC;border-top:1px solid #009DAC;border-left:1px solid #009DAC;background:linear-gradient(136.42deg, #00B388 0%, #00B097 13.16%, #00A9BF 51.16%, #00A6D0 72.37%, #00A6D0 72.37%, #00A5D7 81.43%, #00A3E0 100%)}
+        .ContainerBox:hover > .imageBlock1 {display:none;}
+        .ContainerBox:hover > div > .herogroups a,.ContainerBox:hover > div > .herolinks{color:#fff;}
+        .ContainerBox:hover > div + .imageBlock2{display:block;}
+        .imageBlock1,.imageBlock2{text-align:center;}
+        .imageBlock2{display:none;z-index:1;}
+        .herogroups a{color:#4a4a4a;}
+        .herogroups {font-family: Gotham-medium;font-size: 20px;line-height: 19px;padding-bottom: 10px;color: #4a4a4a;}
+        a.herolinks{font-size:13px;line-height: 20px;color: #4a4a4a;font-family: Gotham-Light !important;word-wrap:break-word;}
+        @media only screen and (min-width : 320px) and (max-width : 480px) {
+        .Icontext{text-align:center !important;}
+        }
+        @media only screen and (min-width : 480px) and (max-width : 767px){
+        .Icontext{
+        text-align:center !important;
+        }
+        }
+        @media only screen and (min-width : 767px) and (max-width : 923px){
+        .boxContainer{width: 70%;}
+        .Icontext{text-align:center !important;}
+        .herogroups {font-size: 18px}
+        
+        }
+        @media only screen and (min-width : 924px) and (max-width : 1224px){
+        .herogroups {font-size: 18px;}
+        }
+        @media (min-width: 1200px){
+        .col-lg-3{width:20%!important}
+        }
+        @media (min-width: 992px){
+        .col-md-3{width:20%!important}
+        }
+    </style>
+    <div class="boxContainer">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad" style="box-shadow: 0px 0px 20px 0px #ccc;border-radius:10px;">
+            <div class='col-lg-3 col-md-3 col-sm-12 col-xs-12 ContainerBox' id='casesBlock'>
+                <div class="col-md-3 col-sm-5 imageBlock1 block "><apex:image value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/my_cases.png')}" styleClass=" imageIcon"/></div>
+                <div class="col-md-3 col-sm-5 imageBlock2 block "><apex:image value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/my_cases_hover.png')}" styleClass=" imageIcon"/></div>
+                <div class="col-md-9 col-sm-6 Icontext  block">
+                    <div class="herogroups"><a href="{!URLFOR($Action.Case.Tab, $ObjectType.Case)}">My Cases</a></div>
+                    <a href="{!URLFOR($Page.NewCase, null, null)}" class="herolinks">Create New Case &#8250;</a><br/>
+                    <!-- Updated above line and commented below line by Shiva-->
+                    <!--a href="{!URLFOR($Action.Case.NewCase,null,null,false)}" class="herolinks">Create New Case &#8250;</a><br/-->
+                    <a href="{!URLFOR($Action.Case.Tab, $ObjectType.Case)}" class="herolinks">Manage My Cases &#8250;</a>
+                </div>
+                <div class="col-sm-1 block"><!--empty--></div>
+            </div>
+            <div class='col-lg-3 col-md-3 col-sm-12 col-xs-12 ContainerBox' id='ideasBlock'>
+                <div class="col-md-3 col-sm-5 imageBlock1 block "><apex:image value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/ideas.png')}" styleClass="imageIcon"/></div>
+                <div class="col-md-3 col-sm-5 imageBlock2 block "><apex:image value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/ideas_hover.png')}" styleClass="imageIcon"/></div>
+                <div class="col-md-9 col-sm-6 Icontext  block"><div class="herogroups"><a href="{!URLFOR($Page.IdeasHome)}">Ideas</a></div>
+                    <a href="{!URLFOR($Page.NewIdea)}" Class="herolinks">Submit an Idea &#8250;</a><br/>
+                    <a href="{!URLFOR($Page.IdeasHome)}" Class="herolinks ">View Ideas &#8250;</a>
+                </div>
+                <div class="col-sm-1 block"><!--empty--></div>
+            </div>
+            <div class='col-lg-3 col-md-3 col-sm-12 col-xs-12 ContainerBox' id='videosBlock'>
+                <div class="col-md-3 col-sm-5 imageBlock1 block "><apex:image value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/video.png')}" styleClass="imageIcon"/></div>
+                <div class="col-md-3 col-sm-5 imageBlock2 block "><apex:image value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/video_hover.png')}" styleClass="imageIcon"/></div>
+                <div class="col-md-9 col-sm-6 Icontext  block"><div class="herogroups"><a href="/Knowledge?categoryType_Article=Videos">Videos</a></div>
+                    <a href="/Knowledge?categoryType_Article=Videos" Class="herolinks">View Videos &#8250;</a><br/>
+                    <a value="" style="visibility:hidden" Class="herolinks">1</a>
+                    <!-- <a href="/customers/Knowledge?categoryType_Article=All" Class="herolinks ">View New Articles &#8250;</a> -->
+                </div>
+                <div class="col-sm-1 block"><!--empty--></div>
+            </div>
+            <div class='col-lg-3 col-md-3 col-sm-12 col-xs-12 ContainerBox' id='dowloadsBlock'>
+                <div class="col-md-3 col-sm-5 imageBlock1 block "><apex:image value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/download.png')}" styleClass="imageIcon"/></div>
+                <div class="col-md-3 col-sm-5 imageBlock2 block "><apex:image value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/download_hover.png')}" styleClass="imageIcon"/></div>
+                <div class="col-md-9 col-sm-6  Icontext block"><div class="herogroups"><a href="{!URLFOR($Page.Downloads)}">Downloads</a></div>
+                    <a href="{!URLFOR($Page.Downloads)}" Class="herolinks">View Downloads &#8250;</a><br/>    
+                    <a value="" style="visibility:hidden" Class="herolinks">1</a>
+                </div>
+                <div class=" col-sm-1 block"><!--empty--></div>
+            </div>
+            <div class='col-lg-3 col-md-3 col-sm-12 col-xs-12 ContainerBox' id='documentationsBlock'>
+                <div class="col-md-3 col-sm-5 imageBlock1 block"><apex:image value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/documentations.png')}" styleClass="imageIcon" /></div>
+                <div class="col-md-3 col-sm-5 imageBlock2 block"><apex:image value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/docmentation_hover.png')}" styleClass="imageIcon" /></div>
+                <div class="col-md-9 col-sm-6 Icontext block"><div class="herogroups"><a href="{!URLFOR($Page.Downloads)}">Documentation</a></div>
+                    <a href="{!URLFOR($Page.Downloads)}" Class="herolinks">View Documentation &#8250;</a><br/> 
+                    <a href="{!URLFOR($Page.Downloads)}" style="visibility:hidden" Class="herolinks">Lorem Ipsum Text &#8250;</a>
+                </div>
+                <div class="col-sm-1 block"><!--empty--></div>
+            </div>
+        </div>
+    </div>
+</apex:component>

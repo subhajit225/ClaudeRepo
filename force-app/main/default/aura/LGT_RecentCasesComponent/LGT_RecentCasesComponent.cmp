@@ -1,0 +1,264 @@
+<aura:component controller="CaseDetailController" implements="flexipage:availableForAllPageTypes,force:hasRecordId" access="global" >
+    <!--attributes-->
+    <aura:attribute Name="casesList" type="List"/>
+    <aura:attribute Name="casesListLess" type="List"/>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="allRecords" type="Boolean" default="false"/>
+    <aura:attribute name="casesSectionHide" type="Boolean" default="false"/>
+    <aura:attribute name="showAllButton" type="Boolean" default="false"/>
+    <aura:attribute name="clusterUUID" type="String"/>
+    <aura:attribute name="openPopBox" type="Boolean" default="false"/>
+    <aura:attribute name="showInfoMsg" type="boolean" default="false"/>
+    <aura:attribute name="errorMessage" type="String"/>
+    <aura:attribute name="showError" type="boolean" default="false"/>
+    <aura:attribute name="hideCases" type="boolean" default="false"/>
+    <aura:attribute Name="casesListOriginal" type="List"/>
+    <aura:attribute name="sortedBy" type="String" default="LastModifiedDate"/>
+    <aura:attribute name="sortedDirection" type="String" default="desc"/>
+    <aura:attribute name="spinnerForRecentCases" type="boolean" default="false"/>
+    
+    <!--Handler-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <div class="slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12" aura:id="CRTS_Div">
+        <lightning:card>
+   			<!-- <Modifications By: Anmol Baweja 4 march, 2020>
+   			<Reason>
+    				To make Recent cases section collapsible by default and load the data on expansion as per CS-595
+    		</Reason>-->
+            <lightning:accordion aura:id="accordion" allowMultipleSectionsOpen="true" onsectiontoggle="{! c.handleSectionToggle}">
+                <lightning:accordionSection name="A" label="Recent Cases">
+                    <aura:set attribute="actions">
+                        <div class="slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12">
+                            <lightning:helptext class="helptext" content="Default Sorted By Last Modified Date"/>
+                        </div>
+                    </aura:set>
+                    <!--loading spinner start... style=Brand Medium (blue dots)-->
+                    <aura:if isTrue="{!v.spinnerForRecentCases}">	
+                        <div aura:id="spinnerId" class="slds-spinner_container">	
+                            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">	
+                                <span class="slds-assistive-text">Loading</span>	
+                                <div class="slds-spinner__dot-a"></div>	
+                                <div class="slds-spinner__dot-b"></div>	
+                            </div>	
+                        </div>	
+                    </aura:if>
+                    <!-- Loading spinner end-->
+          			<!-- </Modifications By: Anmol Baweja>-->
+                    <div class="slds-grid slds-wrap slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12 CRTS_highlightFields">
+                        <div class="slds-size_9-of-12 slds-medium-size_8-of-12"></div>
+                        <div class="slds-size_3-of-12 slds-medium-size_4-of-12 filterDiv" style="text-align:right;">
+                            <span onkeyup="{!c.getCasesOnEnter}">
+                                <lightning:input class="labelHide" type="text" style="display:inline-block;padding-right:5px;" aura:id="Subject" accesskey="Subject" value="{!v.clusterUUID}" /> 
+                            </span>
+                            <div style="font-size: 11px;position: absolute;right: 179px;">Filter by cluster UUID</div>
+                            <lightning:button variant="brand" class="supportBtn btnPosition" onclick="{!c.getCases}">Find Cases</lightning:button>
+                        </div>
+                        <!--Show errors-->
+                        <aura:if isTrue="{!v.showError}">
+                            <div class="slds-size_12-of-12 slds-m-bottom_x-small errorMsgDiv">
+                                <span style="font-size:14px;font-weight:bold;"></span>
+                                <div> {!v.errorMessage} </div>
+                            </div>
+                        </aura:if>
+                    </div>
+                    <div class="slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12 tableDiv">
+                        <div class="slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12 tableDiv1">
+                            <aura:if isTrue="{!!v.hideCases}">
+                                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered tableBorder">
+                                    <thead class="font">
+                                        <tr class="slds-line-height_reset">
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Case Number">
+                                                    <div class="arrowContain">
+                                                        <a class="casenocolor" href="javascript:void(0);" name="CaseNumber" id="desc"  onclick="{!c.Sorttable}">
+                                                            Case Number
+                                                        </a>
+                                                        <aura:if isTrue="{!v.sortedBy == 'CaseNumber'}">
+                                                            <aura:if isTrue="{!v.sortedDirection != 'desc'}">
+                                                                <lightning:icon class="right-alignment" iconName="utility:chevronup" size="xx-small" />
+                                                                <aura:set attribute="else">
+                                                                    <lightning:icon class="right-alignment" iconName="utility:chevrondown" size="xx-small" />
+                                                                </aura:set>
+                                                            </aura:if> 
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Status">
+                                                    <div class="arrowContain">
+                                                        <a class="casenocolor" href="javascript:void(0);" name="Status" id="desc"  onclick="{!c.Sorttable}">
+                                                            Status
+                                                        </a>
+                                                        <aura:if isTrue="{!v.sortedBy == 'Status'}">
+                                                            <aura:if isTrue="{!v.sortedDirection != 'desc'}">
+                                                                <lightning:icon class="right-alignment" iconName="utility:chevronup" size="xx-small" />
+                                                                <aura:set attribute="else">
+                                                                    <lightning:icon class="right-alignment" iconName="utility:chevrondown" size="xx-small" />
+                                                                </aura:set>
+                                                            </aura:if> 
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                            </th>
+                                            <th class="subjectField" scope="col">
+                                                <div class="slds-truncate" title="Subject">
+                                                    <div class="arrowContain">
+                                                        <a class="casenocolor" href="javascript:void(0);" name="Subject" id="desc"  onclick="{!c.Sorttable}">
+                                                            Subject
+                                                        </a>
+                                                        <aura:if isTrue="{!v.sortedBy == 'Subject'}">
+                                                            <aura:if isTrue="{!v.sortedDirection != 'desc'}">
+                                                                <lightning:icon class="right-alignment" iconName="utility:chevronup" size="xx-small" />
+                                                                <aura:set attribute="else">
+                                                                    <lightning:icon class="right-alignment" iconName="utility:chevrondown" size="xx-small" />
+                                                                </aura:set>
+                                                            </aura:if> 
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                            </th>
+                                            <th class="priorityField" scope="col">
+                                                <div class="slds-truncate" title="Priority">
+                                                    <div class="arrowContain">
+                                                        <a class="casenocolor" href="javascript:void(0);" name="Priority" id="desc"  onclick="{!c.Sorttable}">
+                                                            Priority
+                                                        </a>
+                                                        <aura:if isTrue="{!v.sortedBy == 'Priority'}">
+                                                            <aura:if isTrue="{!v.sortedDirection != 'desc'}">
+                                                                <lightning:icon class="right-alignment" iconName="utility:chevronup" size="xx-small" />
+                                                                <aura:set attribute="else">
+                                                                    <lightning:icon class="right-alignment" iconName="utility:chevrondown" size="xx-small" />
+                                                                </aura:set>
+                                                            </aura:if> 
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Owner Name">
+                                                    <div class="arrowContain">
+                                                        <a class="casenocolor" href="javascript:void(0);" name="Owner.Name" id="desc"  onclick="{!c.Sorttable}">
+                                                            Owner Name
+                                                        </a>
+                                                        <aura:if isTrue="{!v.sortedBy == 'Owner.Name'}">
+                                                            <aura:if isTrue="{!v.sortedDirection != 'desc'}">
+                                                                <lightning:icon class="right-alignment" iconName="utility:chevronup" size="xx-small" />
+                                                                <aura:set attribute="else">
+                                                                    <lightning:icon class="right-alignment" iconName="utility:chevrondown" size="xx-small" />
+                                                                </aura:set>
+                                                            </aura:if> 
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Resolution">
+                                                    <div class="arrowContain">
+                                                        <a class="casenocolor" href="javascript:void(0);" name="Resolution__c" id="desc"  onclick="{!c.Sorttable}">
+                                                            Resolution
+                                                        </a>
+                                                        <aura:if isTrue="{!v.sortedBy == 'Resolution__c'}">
+                                                            <aura:if isTrue="{!v.sortedDirection != 'desc'}">
+                                                                <lightning:icon class="right-alignment" iconName="utility:chevronup" size="xx-small" />
+                                                                <aura:set attribute="else">
+                                                                    <lightning:icon class="right-alignment" iconName="utility:chevrondown" size="xx-small" />
+                                                                </aura:set>
+                                                            </aura:if> 
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Cluster UUID">
+                                                    <div class="arrowContain">
+                                                        <a class="casenocolor" href="javascript:void(0);" name="Cluster__r.Name" id="desc"  onclick="{!c.Sorttable}">
+                                                            Cluster UUID
+                                                        </a>
+                                                        <aura:if isTrue="{!v.sortedBy == 'Cluster__r.Name'}">
+                                                            <aura:if isTrue="{!v.sortedDirection != 'desc'}">
+                                                                <lightning:icon class="right-alignment" iconName="utility:chevronup" size="xx-small" />
+                                                                <aura:set attribute="else">
+                                                                    <lightning:icon class="right-alignment" iconName="utility:chevrondown" size="xx-small" />
+                                                                </aura:set>
+                                                            </aura:if> 
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Last Modified">
+                                                    <div class="arrowContain">
+                                                        <a class="casenocolor" href="javascript:void(0);" name="LastModifiedDate" id="desc"  onclick="{!c.Sorttable}">
+                                                            Last Modified
+                                                        </a>
+                                                        <aura:if isTrue="{!v.sortedBy == 'LastModifiedDate'}">
+                                                            <aura:if isTrue="{!v.sortedDirection != 'desc'}">
+                                                                <lightning:icon class="right-alignment" iconName="utility:chevronup" size="xx-small" />
+                                                                <aura:set attribute="else">
+                                                                    <lightning:icon class="right-alignment" iconName="utility:chevrondown" size="xx-small" />
+                                                                </aura:set>
+                                                            </aura:if> 
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Created Date">
+                                                    <div class="arrowContain">
+                                                        <a class="casenocolor" href="javascript:void(0);" name="CreatedDate" id="desc"  onclick="{!c.Sorttable}">
+                                                            Created Date
+                                                        </a>
+                                                        <aura:if isTrue="{!v.sortedBy == 'CreatedDate'}">
+                                                            <aura:if isTrue="{!v.sortedDirection != 'desc'}">
+                                                                <lightning:icon class="right-alignment" iconName="utility:chevronup" size="xx-small" />
+                                                                <aura:set attribute="else">
+                                                                    <lightning:icon class="right-alignment" iconName="utility:chevrondown" size="xx-small" />
+                                                                </aura:set>
+                                                            </aura:if> 
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="font">
+                                        <aura:iteration items="{!if(v.allRecords,v.casesList,v.casesListLess)}" var="cases">
+                                            <tr class="bottomBorder">
+                                                <td><a href="javascript:void(0);" id="{!cases.Id}" onclick="{!c.openCaseDetailPage}" tabindex="-1">{!cases.CaseNumber}</a></td>
+                                                <td>{!cases.Status}</td>
+                                                <td class="subjectField">{!cases.Subject}</td>
+                                                <td class="priorityField">{!cases.Priority}</td>
+                                                <td>{!cases.Owner.Name}</td>
+                                                <td>{!cases.Resolution__c}</td>
+                                                <td><a href="javascript:void(0);" id="{!cases.Cluster__r.Id}" onclick="{!c.openClusterDetailPage}" tabindex="-1">{!cases.Cluster__r.Name}</a></td>
+                                                <td><ui:outputDate value="{!cases.LastModifiedDate}"/></td>
+                                                <td><ui:outputDate value="{!cases.CreatedDate}"/></td>
+                                            </tr>
+                                        </aura:iteration> 
+                                    </tbody>
+                                </table>
+                            </aura:if>  
+                        </div>
+                    </div>
+                    <div>
+                        <aura:if isTrue="{!!v.allRecords}">
+                            <aura:if isTrue="{!v.showAllButton}">
+                                <button onclick="{!c.showAllRecords}" class="showButton slds-button slds-button_icon slds-align_absolute-center" tabindex="0" title="Show All">
+                                    Show All
+                                </button>
+                            </aura:if>
+                            <aura:set attribute="else">
+                                <button onclick="{!c.showLessRecords}" class="showButton slds-button slds-button_icon slds-align_absolute-center" tabindex="0" title="Show Less">
+                                    Show Less
+                                </button>
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                </lightning:accordionSection> 
+            </lightning:accordion>
+        </lightning:card>
+    </div>
+    
+</aura:component>

@@ -1,0 +1,21 @@
+<aura:component controller="QuoteExtController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+	<aura:attribute name="fieldMap" type="Map"/>
+    <aura:handler name="init" value="{!this}" action="{!c.getLines}"/>
+    <aura:registerEvent name="vfEvent" type="c:getDynamicPicklistValue"/>
+    <aura:attribute access="public" name="qlInScope" type="String"/>
+    <aura:attribute access="public" name="prevSelection" type="String"/> 
+    
+    <aura:attribute name="lead" type="SBQQ__QuoteLine__c" default="{'sobjectType':'SBQQ__QuoteLine__c', 
+                                                       'Name': '',
+                                                       'SBQQ__ProductCode__c': '',
+                                                       'Licensing_Model__c': ''}"/>
+    
+    <div class="form-group">
+        <lightning:select aura:id="industryPicklist" value="{!v.lead.Licensing_Model__c}" onchange="{!c.handleOnChange}" name="industryPicklist" label="License Type" required="true">
+            <option value="">{!v.prevSelection}</option>
+            <aura:iteration items="{!v.fieldMap}" var="i" indexVar="key">
+                <option text="{!i.value}" value="{!i.key}" selected="{!i.key==v.lead.Licensing_Model__c}" />
+            </aura:iteration>
+        </lightning:select>
+    </div>
+</aura:component>

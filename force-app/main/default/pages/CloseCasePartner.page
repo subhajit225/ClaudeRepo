@@ -1,0 +1,16 @@
+<apex:page standardController="Case" showHeader="false" sidebar="false">
+    <apex:includeLightning />
+    <div id="lightning-container"></div>
+    <script>
+         $Lightning.use("c:CloseCasePartnerApp", function() {
+            $Lightning.createComponent(
+                "c:closeCaseCmpPartner",
+                {caseId: '{!$CurrentPage.parameters.id}'},
+                "lightning-container",
+                function(cmp) {
+                    // Component created callback
+                }
+            );
+        });
+    </script>
+</apex:page>

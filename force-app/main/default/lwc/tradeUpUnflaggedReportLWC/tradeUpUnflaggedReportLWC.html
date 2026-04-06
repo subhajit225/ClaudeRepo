@@ -1,0 +1,21 @@
+<template>
+    <lightning-spinner if:true={isLoading} alternative-text="Loading" size="medium"></lightning-spinner>
+
+    <div if:false={isLoading} class="slds-p-around_xx_small">
+        <template if:true={hasData}>
+            <!-- Data Table -->
+            <lightning-datatable
+                key-field="id"
+                data={data}
+                columns={columns}
+                hide-checkbox-column
+                show-row-number-column>
+            </lightning-datatable>
+        </template>
+        <template if:false={hasData}>
+            <div class="slds-align_absolute-center slds-m-vertical_large slds-text-heading_small">
+                No Data Found for the TradeUp Unflagged Report
+            </div>
+        </template>
+    </div>
+</template>

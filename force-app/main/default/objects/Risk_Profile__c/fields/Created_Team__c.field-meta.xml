@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Created_Team__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(
+  CONTAINS(LOWER(CreatedBy.Title), &quot;customer success manager&quot;),
+  &quot;CSM&quot;,
+  IF(
+    CONTAINS(LOWER(CreatedBy.Title), &quot;customer experience manager&quot;),
+    &quot;CEM&quot;,
+    IF(
+      CONTAINS(LOWER(CreatedBy.Title), &quot;field consultant&quot;),
+      &quot;PS&quot;,
+      IF(
+        CONTAINS(LOWER(CreatedBy.Title), &quot;renewals&quot;),
+        &quot;Renewals&quot;,
+        IF(
+          CONTAINS(LOWER(CreatedBy.Title), &quot;customer success engineer&quot;),
+          &quot;Support&quot;,
+          IF(
+            CONTAINS(LOWER(CreatedBy.Title), &quot;account executive&quot;),
+            &quot;Account Team&quot;,
+            &quot;Other&quot;
+          )
+        )
+      )
+    )
+  )
+)</formula>
+    <label>Created Team</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

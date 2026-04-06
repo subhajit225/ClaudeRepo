@@ -1,0 +1,59 @@
+<template>
+<template if:true={toast}>
+    <div class={toast.containerClass} role="status" aria-live="polite">
+        <div class={toast._class}>
+            <span class="slds-icon_container slds-m-right_small comments-icn">
+                <lightning-icon icon-name={toast.iconName} alternative-text={toast.altText} size="small"></lightning-icon>
+            </span>
+            <div class="Message">
+                <p class="slds-text-heading_small">{toast.title}</p>
+                <p>{toast.message}</p>
+            </div>
+            <span class="comments-icn cross">
+                <lightning-icon icon-name="utility:clear" onclick={handleToastCross} alternative-text={toast.altText} size="small"></lightning-icon>
+            </span>
+        </div>
+
+    </div>
+</template>
+<div class="slds-m-around_medium main">
+    <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading"></lightning-spinner>
+    </template>
+    <template if:false={alreadyClosed}>
+        <div class="slds-grid">
+            <div class="slds-col slds-size_2-of-3 slds-var-m-bottom_medium">
+                <p class="slds-float_right title">You are about to close case - {formattedCaseId}</p></div></div>
+            <lightning-record-edit-form object-api-name={objectApiName} record-id={caseId} record-type-id={recordTypeId} onsubmit={handleSubmit} onsuccess={handleSuccess} onload={handleLoad} onerror={handleError}>
+                <!-- https://rubrik.atlassian.net/browse/CS21-2110 -->
+                <lightning-messages> </lightning-messages>
+                <!-- https://rubrik.atlassian.net/browse/CS21-2110 -->
+                <div class="slds-grid">
+                    <div class="slds-col slds-size_1-of-4"></div>
+                    <div class="slds-col slds-size_2-of-4">
+                        <lightning-input-field field-name="Type__c" required=true> </lightning-input-field>
+                        <lightning-input-field field-name="Subtype__c" required=true> </lightning-input-field>
+                        <lightning-input-field field-name="Internal_Comments_Partner__c"> </lightning-input-field>
+                        <lightning-combobox label="Status" variant="label-inline" value={value} placeholder="Select Status" options={completeOptions}></lightning-combobox>
+                        <lightning-input-field field-name="Duplicate_Case_Id__c"> </lightning-input-field>
+                        <lightning-input-field field-name="Abra_Tags__c"></lightning-input-field>
+                    </div>
+                </div>
+                <div class="slds-grid">
+                    <div class="slds-col slds-size_1-of-4"></div>
+                        <div class="slds-col slds-size_2-of-4 slds-var-m-top_medium buttons">
+                            <div class="slds-align_absolute-center">
+                            <lightning-button class="slds-m-around_x-small" onclick={handleCancel} variant="brand" type="cancel" label="Cancel"></lightning-button>
+                            <lightning-button class="slds-m-around_x-small" variant="brand" type="submit" label="Close Case"></lightning-button>
+                            </div>
+                    </div>
+                </div>
+
+            </lightning-record-edit-form>
+        </template>
+    <template if:true={alreadyClosed}>
+        <p class="title">Case({caseNumber}) already closed</p>
+    </template>
+</div>
+
+</template>

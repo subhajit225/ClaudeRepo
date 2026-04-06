@@ -1,0 +1,36 @@
+<template>
+    <template if:true={userComment}>
+        <lightning-layout vertical-align="center">
+            <lightning-layout-item class="light circular standardSize cuf-actorImage slds-avatar slds-avatar--circle slds-avatar--medium">
+                <img src={userComment.CreatedBy.SmallPhotoUrl} alt="Profile photo" />
+            </lightning-layout-item>
+            <lightning-layout-item padding="around-small">
+                <a href="#" onclick={handleClick}>
+                    <p>{userComment.CreatedBy.Name}</p>
+                </a>
+                <p><small>
+                        <lightning-relative-date-time value={createdDate}></lightning-relative-date-time>
+                    </small>
+                </p>
+            </lightning-layout-item>
+            <lightning-layout-item>
+            </lightning-layout-item>
+        </lightning-layout>
+        <lightning-formatted-rich-text class="slds-var-m-bottom_medium" value={userComment.Body__c}>
+        </lightning-formatted-rich-text>
+        <br/>
+    <lightning-layout multiple-rows="false">
+        <template for:each={recipients} for:item="map">
+            <div key={map.key} class="slds-m-right_xx-small">
+        <a href={map.key}>
+            <p>{map.value}</p>
+          </a> 
+        </div>
+        </template>
+    </lightning-layout>
+    <br/>
+    </template>
+    <template if:false={userComment}>
+        <p>Share something here..</p>
+    </template>
+</template>

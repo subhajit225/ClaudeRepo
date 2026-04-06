@@ -1,0 +1,61 @@
+<template>
+  <template for:each={items} for:item="item" for:index="index">
+    <div key={item.label} class="su_main_cat">
+      <template if:true={item.listChildCategory.length}>
+        <template if:true={item.expanded}>
+          <img
+            alt="up"
+            src={up}
+            class="iconexpcol"
+            onclick={handleUpDown}
+            data-label={item.label}
+            data-id={index}
+          />
+        </template>
+        <template if:false={item.expanded}>
+          <img
+            alt="up"
+            src={down}
+            class="iconexpcol"
+            onclick={handleUpDown}
+            data-label={item.label}
+            data-id={index}
+          />
+        </template>
+        <lightning-input
+          class="chkInp"
+          label={item.label}
+          type="checkbox"
+          disabled={item.disabled}
+          checked={item.checked}
+          onchange={handleChange}
+        >
+        </lightning-input>
+        <div class="datacategory_label">{item.label}</div>
+      </template>
+      <template if:false={item.listChildCategory.length}>
+        <lightning-input
+          class="chkInp"
+          style="padding-left: 16px"
+          type="checkbox"
+          label={item.label}
+          disabled={item.disabled}
+          checked={item.checked}
+          onchange={handleChange}
+        >
+        </lightning-input>
+        <div class="datacategory_label">{item.label}</div>
+      </template>
+    </div>
+    <template if:true={item.expanded}>
+      <div class="su_child_cat" key={item.label}>
+        <c-knowbler-data-cat-child
+          items={item.listChildCategory}
+          parent={item.label}
+          ischild
+          onchangevalue={changeValue}
+        ></c-knowbler-data-cat-child>
+      </div>
+    </template>
+  </template>
+</template>

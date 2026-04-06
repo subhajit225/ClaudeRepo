@@ -1,0 +1,14 @@
+<apex:component controller="OrderProdController" access="global">
+  <apex:attribute name="OrderProduct" description="Order Products"
+                  type="String" required="required" assignTo="{!OrderId}"/>
+        <h3><u>PRODUCT INFORMATION:</u></h3>
+        <apex:datatable cellpadding="5" var="op" value="{!OrdProducts}" cellspacing="2" border="1px;" styleclass="blockStyle" rendered="{!OrdProducts.size>0}">
+            <apex:column value="{!op.SerialNumber__c}" headerValue="Serial Number" />
+            <apex:column value="{!op.product2.Name}" headerValue="Product"/>
+            <apex:column value="{!op.product2.Description}" headerValue="Product Description"/>
+            <apex:column value="{!op.Quantity}" headerValue="Quantity" />
+        </apex:datatable> 
+        <apex:outputPanel rendered="{!OrdProducts.size==0}">
+          <div> There are no hardware products with current order</div>
+        </apex:outputPanel>
+</apex:component>

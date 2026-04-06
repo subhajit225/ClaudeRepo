@@ -1,0 +1,159 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    <!-- Name of dropdown to display -->
+    <aura:attribute name="mslabel" type="String" default="" />
+    <aura:attribute name="arraList" type="list" default="" />
+    <aura:attribute name="notificationmessage" type="String"/>
+    <aura:attribute name="errorMessage" type="String"/> 
+    <!-- Option list to show in drop down -->
+    <aura:attribute name="msoptions" type="List" />
+    <aura:attribute name="MsOptionTrue" type="List" />
+     <aura:attribute name="msoptionsForTrue" type="List" />
+   
+    <!-- Show filter input box -->
+    <aura:attribute name="ShowDropdown" type="Boolean" default="false" />
+    <aura:attribute name="showFilterInput" type="Boolean" default="true" />
+    <aura:attribute name="IsDisableCheckbox" type="Boolean" default="false" />
+    <!-- Show filter input box -->
+    <aura:attribute name="showRefreshButton" type="Boolean" default="true" />
+    <!-- Show filter input box -->
+    <aura:attribute name="showClearButton" type="Boolean" default="true" />
+    <aura:attribute name="CheckCondition" type="Boolean" default="true" />
+    <!-- Selected options label -->
+    <aura:attribute name="msname" type="String" default="Select A Project.." />
+    
+    <!-- Selected option list -->
+    <aura:attribute name="selectedOptions" type="List" />
+    <!-- Selected options label -->
+    <aura:attribute name="selectedLabel" type="String" default="Select a Project.." />
+    <!-- Selected options label -->
+    <aura:attribute name="initializationCompleted" type="Boolean" default="false" />
+     <!-- Create by grazitti -->
+     <aura:attribute name="option" type="object"  />
+    
+    <!-- Render handler to execute on component initialization -->
+       <aura:handler name="render" value="{!this}" action="{!c.onRender}"/> 
+    <aura:handler name="render" value="{!this}" action="{!c.doinit}"/>
+      
+    <aura:registerevent name="SelectChange1" type="c:SelectChange1"/>
+    
+    <!-- DROPDOWN Component Code Starts HERE-->
+ 
+    <div class="slds-form-element" >
+        <aura:if isTrue="{! !empty(v.mslabel)}">
+            <label class="slds-form-element__label">{!v.mslabel}</label>
+        </aura:if>
+        <div class="slds-form-element__control" >
+            <div class="slds-combobox_container slds-size_small">
+                <div id="ms-picklist-dropdown" class="slds-dropdown-trigger slds-dropdown-trigger_click slds-picklist ms-picklist-dropdown" 
+                     aria-expanded="false" aria-haspopup="listbox" role="listbox" >
+                    <!-- MAIN BUTTON CODE -->
+                    <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right" role="none">
+                        <input disabled="{!v.ShowDropdown}" class="slds-combobox__input ms-input" id="ms-input" aria-controls="ms-dropdown-items" 
+                                role="textbox" type="text" placeholder="{!v.selectedLabel}" value="" readonly="true"/>
+                        <span class="slds-icon_container slds-icon-utility-down slds-input__icon slds-input__icon_right" title="Click to open dropdown">
+                            <lightning:icon iconName="utility:down" size="x-small" class="slds-icon slds-icon--selected slds-icon--x-small slds-icon-text-default slds-m-right--x-small" />
+                        </span>
+                    </div>
+                     <!-- MAIN BUTTON CODE ENDS -->
+                    <!-- Drop down list -->
+                    <div id="ms-dropdown-items" role="listbox" >
+                        <!-- Creating unordered list -->
+                        <ul class="slds-listbox slds-listbox_vertical slds-dropdown slds-dropdown_fluid ms-dropdown" role="presentation" style="width: 20rem;">
+                            
+                            <!-- showing filter input -->
+                            <aura:if isTrue="{!v.showFilterInput}">
+                                <input class="slds-listbox__item ms-filter-input" id="ms-filter-input" aria-controls="ms-dropdown-items" 
+                                role="textbox" type="text" placeholder="Filter values.." value="" oninput="{!c.onInputChange}"/>
+                            </aura:if>
+                            <!-- showing clear button -->
+                            <aura:if isTrue="{!v.showClearButton}">
+                                <lightning:buttonIcon iconName="utility:clear" alternativeText="Clear current filters" onclick="{!c.onClearClick}"/>
+                            </aura:if>
+                            <!-- Generating list item by iterating over options --> 
+                            <aura:iteration items="{!v.msoptions}" var="item" >
+                                <li role="presentation" class="{!'slds-listbox__item ms-list-item '+ (item.selected ? 'slds-is-selected' : '')}"
+                                    id="ms-list-item" data-id="{!item.project.Id}" data-name="{!item.project.Name}" data-recId="{!item.project.Id}">
+                                    <div id="listbox-option-unique-id-01" class="slds-media slds-listbox__option slds-listbox__option_plain slds-media_small slds-media_center" role="option" >
+                                        <!-- Icon for each list item -->
+                                        <span class="slds-media__figure">
+                                            <lightning:icon  iconName="utility:check" size="x-small" class="slds-icon slds-icon--selected slds-icon--x-small slds-icon-text-default slds-m-right--x-small" />
+                                        </span>
+                                        <!-- Body of each list item -->
+                                        <span class="slds-media__body">
+                                            <span class="slds-truncate"  value ="{!v.IsDisableCheckbox}" title="{!item.project.Name}">{!item.project.Name}</span>
+                                        </span>
+                                    </div>
+                                </li>
+                            </aura:iteration>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- DROPDOWN Component Code Ends HERE-->
+    
+    <div class="slds-modal slds-fade-in-open errorDiv slds-hide" aura:id="warningDiv">
+        <ui:inputText aura:id="articleURL"/>
+        <div class="demo-only" style="height: 4rem;">
+            <div class="slds-notify_container slds-is-relative">
+                <div class="slds-notify slds-notify_toast slds-theme_success" role="alert">
+                    <div class=" slds-m-left_xx-large">
+                        <div class="slds-notify__content slds-m-left_small slds-align_absolute-center slds-m-left_xx-large">
+                            <lightning:icon alternativeText="Success" iconName="utility:success" size="small"
+                                            class="buttonColor slds-m-right_small" />
+                            <h2 class="slds-text-heading_small ">{!v.notificationmessage}</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="slds-modal slds-fade-in-open errorDiv slds-hide" aura:id="errorDiv">
+        <div class="demo-only" style="height: 4rem;">
+            <div class="slds-notify_container slds-is-relative">
+                <div class="slds-notify slds-notify_toast slds-theme_error" role="alert">
+                    <div class=" slds-m-left_xx-large">
+                        <div class="slds-notify__content slds-m-left_small slds-align_absolute-center slds-m-left_xx-large">
+                            <lightning:icon alternativeText="Error" iconName="utility:error" size="small"
+                                            class="buttonColor slds-m-right_small" />
+                            <h2 class="slds-text-heading_small ">{!v.errorMessage}</h2>
+                            <lightning:icon alternativeText="close" iconName="utility:close" size="x-small"
+                                            class="buttonColor slds-m-left_medium" onclick ="{!c.OnCloseToast}" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+       <!-- 8888888888888888888888888888888888888888888888888888888888888888888888888 --> 
+     <aura:attribute name="showConfirmDialog" type="boolean" default="false"/> 
+   
+         
+         <aura:if isTrue="{!v.showConfirmDialog}">
+            
+            <div role="dialog" class="slds-modal slds-fade-in-open ">
+                <div class="slds-modal__container">
+                    
+                    <header class="slds-modal__header">
+                        <h1 class="slds-text-heading--medium">Confirmation</h1>
+                    </header>
+                    
+                    <div class="slds-modal__content slds-p-around--medium">
+                        <center><b>You will lose all unsaved changes when removing a project from your timecard. Before removing a project, make sure you have saved your timecard if you wish to keep time entered on other projects.</b></center>
+                    </div>
+                   
+                    <footer class="slds-modal__footer">
+                        <lightning:button name='No' label='Cancel' onclick='{!c.handleConfirmDialogNo}'/>
+                        <lightning:button variant="brand" name='Yes' label='Remove Project' onclick='{!c.handleConfirmDialogYes}'/>
+                    </footer>
+                   
+                </div>
+            </div>
+            <div class="slds-backdrop slds-backdrop--open"></div>            
+    </aura:if>  
+    
+     
+    <!--  8888888888888888888888888888888888888888888888888888888888888888888888888-->
+</aura:component>

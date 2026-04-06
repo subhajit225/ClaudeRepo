@@ -1,0 +1,23 @@
+<apex:component access="global" controller="PolarisOrderTemplateClass">
+    <apex:attribute name="orderId" description="Receive Order Id" type="Id" required="required" assignTo="{!ordId}" />
+    <apex:outputPanel rendered="{!OrderItemDetails}">
+        <br /><b>Access your Rubrik instance in the cloud</b> 
+        <br />
+        Rubrik simplifies backup and recovery for hybrid cloud environments and eliminates legacy backup complexity by integrating data orchestration, catalog management, and continuous data protection into a single software platform. We've created your Rubrik instance in the cloud and enabled the following Rubrik Security Cloud owner(s). Access your RSC instance with the following information.
+        <br />
+        <br />
+        <table style="border-collapse: collapse; border: 1px solid lightgrey; width: 95%;">
+            <tr>
+                <td style="padding: 8px; border: 1px solid lightgrey; width: 12%;"><b>RSC URL</b></td>
+                <td style="padding: 8px; border: 1px solid lightgrey;">{!polarisDetails.polarisURL}</td>
+            </tr>
+            <tr>
+                <td style="padding: 8px; border: 1px solid lightgrey; width: 12%;"><b>RSC owner</b></td>
+                <td style="padding: 8px; border: 1px solid lightgrey;">{!polarisDetails.polarisContactDetails}</td>
+            </tr>
+        </table>
+        <br />
+        Use the <b><i>Forgot Password</i></b> link to configure your login if you’re accessing your RSC instance for the first time. Additional users must be created by the RSC owner(s).
+        <br />
+    </apex:outputPanel> 
+</apex:component>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MNDA_must_be_signed_if_Disti_has_POC_Adn</fullName>
+    <active>true</active>
+    <description>MNDA must be signed by the Customer when there is a POC Agreement waiver</description>
+    <errorConditionFormula>POC_Agreement_Waived__c = TRUE &amp;&amp; MNDA_Signed__c &lt;&gt; TRUE</errorConditionFormula>
+    <errorMessage>MNDA must be signed by the Customer when there is a POC Agreement waiver</errorMessage>
+</ValidationRule>

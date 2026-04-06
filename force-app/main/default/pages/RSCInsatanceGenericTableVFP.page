@@ -1,0 +1,37 @@
+<apex:page standardController="Case">
+
+    <style>
+        .rsc-table-container {
+            margin-top: 15px;
+            margin-bottom: 2px;
+            border-top: 2px solid rgb(192, 190, 114);
+        }
+    </style>
+
+    <!-- Render ONLY in Salesforce Classic (Theme2 + Theme3) -->
+    <apex:outputPanel rendered="{!
+            OR(
+                $User.UITheme = 'Theme2',
+                $User.UITheme = 'Theme3'
+            )
+        }">
+
+        <apex:includeLightning />
+
+        <div id="tableContainer" class="rsc-table-container"></div>
+
+        <script>
+            $Lightning.use("c:RSCInsatanceGenericTableApp", function() {
+                $Lightning.createComponent(
+                    "c:RSCInsatanceGenericTable",
+                    { 
+                        recordId: "{!Case.Id}" 
+                    },
+                    "tableContainer"
+                );
+            });
+        </script>
+
+    </apex:outputPanel>
+
+</apex:page>

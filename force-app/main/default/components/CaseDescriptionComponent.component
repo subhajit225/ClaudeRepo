@@ -1,0 +1,6 @@
+<apex:component controller="CaseSubHistoryController" access="global" allowDML="true">
+<apex:attribute name="thecaseId" assignTo="{!cseID}" type="String" description="Id of the case"/>
+<apex:repeat value="{!Description}" var="cc">
+<apex:outputtext value="{!cc}" style="white-space:pre;"/> 
+</apex:repeat>
+</apex:component>

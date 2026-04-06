@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Sales_CCR_Status_cannot_be_changed</fullName>
+    <active>true</active>
+    <description>Sales CCR Status cannot be changed by users other than Sales Ops and Sys Admin</description>
+    <errorConditionFormula>AND(
+    NOT($Setup.ShGl_DisableBusinessLogic__c.Disable_CCR_Validation_Rules__c),
+    $Profile.Name &lt;&gt; &apos;System Administrator&apos;,
+    $Profile.Name &lt;&gt; &apos;Sales Operations&apos;,
+    RecordType.Name = &apos;Sales CCR&apos;,
+    ISCHANGED(User__c)
+)</errorConditionFormula>
+    <errorDisplayField>User__c</errorDisplayField>
+    <errorMessage>You do not have the access to change CCR Status.</errorMessage>
+</ValidationRule>

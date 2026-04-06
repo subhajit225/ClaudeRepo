@@ -1,0 +1,16 @@
+<apex:component controller="PartnerCommunityHomeController">
+
+  <apex:outputPanel rendered="{!$CurrentPage.Name=='PCommunityHome'}"><h2 class="sectionHeaders">Webinars<br/></h2></apex:outputPanel>
+  <apex:outputPanel rendered="{!$CurrentPage.Name=='PResources'}"><h3 class="sectionHeaders">Webinars<br/></h3></apex:outputPanel>
+ 
+  
+  <apex:repeat value="{!Webinars}" var="wb">
+  <ul class="links">
+ <li class="listItems">
+
+ <a href="{!$Page.ContentView}?id={!wb.id}" Class="lightlink">{!wb.title}</a>
+
+ </li>
+ </ul>
+ </apex:repeat>
+</apex:component>

@@ -1,0 +1,138 @@
+<aura:component controller="LCC_ButtonsController" extends="c:LCC_GenericLightningComponent"
+    implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickActionWithoutHeader"
+    access="global">
+    <aura:attribute name="AccountRec" type="Object" />
+    <aura:attribute name="RscProcess" type="Object" />
+
+    <aura:attribute name="reloadForm" type="boolean" default="true" />
+    <aura:attribute name="isReadOnly" type="boolean" default="true" />
+    <aura:attribute name="renderCluster" type="boolean" default="true" />
+    <aura:attribute name="showSpinner" type="boolean" default="true" />
+    <aura:attribute name="showFirstScreen" type="boolean" default="true" />
+    <aura:attribute name="isFreeTrial" type="boolean" default="true" />
+    <aura:attribute name="isGTCPassed" type="boolean" default="true" />
+    <aura:attribute name="showButton" type="boolean" default="true" />
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="rscRecordId" type="String" />
+
+    <!--Comment here -->
+    <aura:attribute name="setUploadAttribute" type="boolean" default="false" />
+    <!--<aura:handler name="init" value="{!this}" action="{!c.doInit}" />-->
+    <lightning:workspaceAPI aura:id="workspace" />
+
+    <aura:if isTrue="{!v.reloadForm}">
+        <aura:if isTrue="{!v.showSpinner}">
+            <div aura:id="spinnerId" class="slds-spinner_container">
+                <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                    <span class="slds-assistive-text">Loading...</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </aura:if>
+
+        <section class="{! v.showFirstScreen ? ' slds-show' : ' slds-hide' }">
+            <div>
+                <!-- Modal/Popup Box Header Starts here-->
+
+                <!--Modal/Popup Box Body Starts here-->
+                <div class="slds-modal__content slds-p-around_medium slds-align_absolute-center"
+                    id="modal-content-id-1">
+                    <p><b>Please select the appropriate RSC offering</b>
+                    </p>
+                </div>
+                <!--Modal/Popup Box Footer Starts here-->
+                <footer class="slds-modal__footer slds-align_absolute-center">
+                    <lightning:button variant="neutral" label="Free Trial" title="Free Trial"
+                        onclick="{! c.handleFreeTrial }" />
+                    <lightning:button variant="neutral" label="RSC Access" title="RSC Access"
+                        onclick="{!c.handlePaid}" />
+                </footer>
+            </div>
+        </section>
+        <lightning:recordEditForm class="{! v.showFirstScreen ? 'slds-hide' : 'slds-show' }" recordId="{!v.rscRecordId}"
+            objectApiName="RSC_Process__c" onload="{!c.handleCreateLoad}" onsubmit="{!c.handleOnSubmit}"
+            aura:id="rscRequestId">
+
+            <article class="slds-card">
+                <div class="slds-card__header slds-grid">
+                    <header class="slds-media slds-media_center slds-has-flexi-truncate">
+
+                        <div class="slds-media__body">
+                            <h2 class="slds-card__header-title">
+                                <a href="#" class="slds-card__header-link slds-truncate" title="Accounts">
+                                    <span>Create RSC Process</span>
+                                </a>
+                            </h2>
+                        </div>
+                        <div class="slds-no-flex">
+                            <aura:if isTrue="{!!v.isReadOnly}">
+                                <lightning:button class="slds-m-top_small" variant="brand" type="submit" name="update"
+                                    label="Submit" />
+
+
+                            </aura:if>
+
+                        </div>
+                    </header>
+                </div>
+            </article>
+
+            <lightning:messages aura:id="RSCAccess" />
+            <lightning:layout multipleRows="true">
+                <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6"
+                    padding="around-small">
+                    <!--lightning:inputField aura:id="AccountId"  fieldName="AccountID__c" value="{!v.AccountRec.Id}" required="true" disabled="{!v.isReadOnly}"/-->
+                    <lightning:inputField aura:id="AccountId" fieldName="AccountID__c" required="true"
+                        disabled="{!v.isReadOnly}" />
+                </lightning:layoutItem>
+                <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6"
+                    padding="around-small">
+                    <!--lightning:inputField aura:id="customerUrl"  fieldName="Customer_Suggest_URL__c" value="{!v.AccountRec.Customer_URL__c}" required="true" disabled="{!v.isReadOnly}"/-->
+                    <lightning:inputField aura:id="customerUrl" fieldName="Customer_Suggest_URL__c"
+                        disabled="{!v.isReadOnly}" />
+                </lightning:layoutItem>
+                <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6"
+                    padding="around-small">
+                    <aura:if
+                        isTrue="{!OR(v.AccountRec.Customer_URL__c != null, v.AccountRec.Customer_URL__c!=undefined)}">
+                        <!--lightning:outputField fieldName="PolarisRegion__c" /-->
+                        <lightning:inputField aura:id="polarisRegion1" fieldName="PolarisRegion__c" disabled="true" />
+                        <aura:set attribute="else">
+                            <lightning:inputField aura:id="polarisRegion" fieldName="PolarisRegion__c" required="true"
+                                disabled="{!!v.isReadOnly}" />
+                        </aura:set>
+                    </aura:if>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6"
+                    padding="around-small">
+                    <!--lightning:inputField aura:id="rsccontactEmail"  fieldName="RSC_Contact_Email__c" value = "{! v.AccountRec.Primary_Contact_Email__c}" required="true" disabled="{!!v.isReadOnly}"/-->
+                    <lightning:inputField aura:id="rsccontactEmail" fieldName="RSC_Contact_Email__c" required="true"
+                        disabled="{!!v.isReadOnly}" />
+                </lightning:layoutItem>
+
+                <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6"
+                    padding="around-small">
+                    <aura:if
+                        isTrue="{!OR(v.AccountRec.Customer_URL__c != null, v.AccountRec.Customer_URL__c!=undefined)}">
+                        <!--lightning:outputField fieldName="Polaris_Suggest_URL__c" /-->
+                        <lightning:inputField aura:id="polarisSuggestedEmail" fieldName="Polaris_Suggest_URL__c"
+                            disabled="true" />
+                        <aura:set attribute="else">
+                            <lightning:inputField aura:id="polarisSuggestedEmail" fieldName="Polaris_Suggest_URL__c"
+                                disabled="{!!v.isReadOnly}" />
+                        </aura:set>
+                    </aura:if>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6"
+                    padding="around-small">
+                    <!--lightning:inputField aura:id="expiryDate"  fieldName="Expiry_Date__c" value="{!v.AccountRec.Entitlements.length>0?v.AccountRec.Entitlements[0].EndDate:null}" disabled="{!!v.isReadOnly}"/-->
+                    <lightning:inputField aura:id="expiryDate" fieldName="Expiry_Date__c" disabled="true" />
+                </lightning:layoutItem>
+                <lightning:button class="slds-align_absolute-center slds-m-top_small slds-m-bottom_large"
+                    variant="brand" type="submit" name="Save" label="Submit" />
+
+            </lightning:layout>
+        </lightning:recordEditForm>
+    </aura:if>
+</aura:component>

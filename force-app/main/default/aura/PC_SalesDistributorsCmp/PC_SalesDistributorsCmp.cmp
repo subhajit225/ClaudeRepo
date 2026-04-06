@@ -1,0 +1,65 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,force:appHostable,flexipage:availableForAllPageTypes" access="global" controller="PC_SalesDistributorsController">
+    
+    <aura:attribute name="accountName" type="String" default=""/>
+    <aura:attribute name="country" type="String" default=""/>
+    <!--<aura:attribute name="territory" type="String" default=""/>-->
+    <aura:attribute name="distributorList" type="Contract[]" default ="[]" description="contains list of Ditributors" />
+    <aura:attribute name="countryList" type="List" default ="" description="contains list of countries" />
+    <!--<aura:attribute name="territoryList" type="List" default ="" description="contains list of territory" />-->
+    <aura:attribute name="showNoRecords" type="Boolean" default="false"/>
+    
+    <aura:handler name="init" value="this" action="{!c.doInit}"/>
+    
+    <div style="background:white;">
+    <lightning:layout multipleRows="true" horizontalAlign="spread">
+        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" padding="around-small">        
+            <div class="heading-58">Distributor List </div>  
+        </lightning:layoutItem>
+        <div class="form-parent">
+            <lightning:layoutItem size="5" smallDeviceSize="5" mediumDeviceSize="5" largeDeviceSize="5" padding="around-small">
+                <lightning:input aura:id="Name" label="Name" value="{!v.accountName}"/>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="5" smallDeviceSize="5" mediumDeviceSize="5" largeDeviceSize="5" padding="around-small">
+                <lightning:select name="Country" label="Country" aura:id="Country" value="{!v.country}">
+                    <option value="">Select Country...</option>
+                    <aura:iteration items="{!v.countryList}" var="option">
+                        <option text="{!option.label}" value="{!option.value}"/>
+                    </aura:iteration>
+                </lightning:select>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="2" smallDeviceSize="2" mediumDeviceSize="2" largeDeviceSize="2" padding="around-small" class="slds-m-bottom_xxx-small">        
+                <lightning:button label="Search" variant="brand" onclick="{!c.handleSearch}"/>
+                <lightning:button label="Reset" variant="Neutral" onclick="{!c.handleReset}"/>
+            </lightning:layoutItem> 
+        </div>
+    </lightning:layout>
+        </div>
+    
+    <table class="slds-table slds-m-bottom_medium">
+        <thead>
+            <tr>
+                <th>
+                    <div title="Distributor Name">Distributor Name</div>
+                </th>
+                <th>
+                    <div title="Country">Country</div>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <aura:iteration items="{! v.distributorList}" var="distributor" indexVar="index">
+                <tr class="slds-hint-parent">
+                    <th data-label="Distributor Name" scope="row">
+                        <div class="slds-truncate" title="{!distributor.Account.Name}">{!distributor.Account.Name}</div>
+                    </th>
+                    <td data-label="Country" class="slds-cell-wrap"> 
+                        <div class="slds-line-clamp" title="{!distributor.Territory_Country__c}">{!distributor.Territory_Country__c}</div>
+                    </td>
+                </tr>        
+            </aura:iteration>
+            <aura:if isTrue="{!v.showNoRecords}">
+                <div class="slds-text-align_center">No Available Distributor</div>
+            </aura:if>
+        </tbody>
+    </table> 
+</aura:component>

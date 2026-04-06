@@ -1,0 +1,43 @@
+<template>
+    <div class="slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12">
+        <div class="slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12">
+            <lightning-card>
+                <div class="slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12">
+                    <div class="slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12 slds-section slds-p-horizontal_x-small header">
+                        <lightning-icon icon-name="utility:chevrondown"
+                            class="downArrowlwc slds-show slds-icon_container slds-p-left_xx-small slds-float_left chevronstyle"
+                            size="xx-small" onclick={hidecasedesc}></lightning-icon>
+                        <lightning-icon icon-name="utility:chevronright"
+                            class="rightArrowlwc slds-hide slds-icon_container slds-p-left_xx-small slds-float_left chevronstyle"
+                            size="xx-small" onclick={showcasedesc}></lightning-icon>
+                        <span class="slds-truncate headerfont">
+                            Case Special Handling</span>
+                    </div>
+
+                    <template if:true={CaseDetailsSectionHide}>
+                        <div class="detail slds-border_bottom resize" id="containerID">
+                            <!--<div class="slds-grid slds-gutters slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12 detailmargin">
+                                <div class="slds-col slds-size_2-of-12">
+                                    <label class="label">Account Preference:</label>
+                                </div>
+                                <div class="slds-col slds-size_10-of-12">
+                                    <label class="label">Special Handling Instruction:</label>
+                                </div>
+                            </div>-->
+                            <div class="slds-grid slds-wrap slds-gutters slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12 slds-scrollable detailmargin">
+                                <!--<div class="slds-col slds-size_2-of-12">
+                                    <lightning-formatted-rich-text class="detailfontsize" value={accountpreference}>
+                                    </lightning-formatted-rich-text>
+                                </div>-->
+                                <div class="slds-col slds-size_12-of-12">
+                                    <lightning-formatted-rich-text class="detailfontsize"
+                                        value={headsuptosupportteam}></lightning-formatted-rich-text>
+                            </div>
+                            </div>
+                    </div>
+                    </template>
+                </div>
+            </lightning-card>
+        </div>
+    </div>
+</template>

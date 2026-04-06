@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Current_Owner_Manager__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>This field is only for use in the approval process and backend</description>
+    <inlineHelpText>Current Account Owner Manager (Internal use only)</inlineHelpText>
+    <label>Current Owner Manager</label>
+    <referenceTo>User</referenceTo>
+    <relationshipName>Operations_Requests3</relationshipName>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

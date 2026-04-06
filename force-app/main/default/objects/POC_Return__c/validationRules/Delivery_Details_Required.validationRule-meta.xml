@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Delivery_Details_Required</fullName>
+    <active>true</active>
+    <errorConditionFormula>!Pickup_Required__c &amp;&amp; !Return_to_Rubrik_warehouse__c 
+&amp;&amp; (
+    ISBLANK(  Delivery_Contact_Name__c  )
+    || ISBLANK( Delivery_Email__c )
+    || ISBLANK( Delivery_Phone__c )
+    || ISBLANK( TEXT(Delivery_Country__c ))
+)</errorConditionFormula>
+    <errorMessage>Please fill the delivery address</errorMessage>
+</ValidationRule>

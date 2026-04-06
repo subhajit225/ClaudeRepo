@@ -1,0 +1,547 @@
+<apex:page controller="ProductsController" readOnly="true" standardStylesheets="false" cache="false" sidebar="false" showheader="false"  title="Downloads: Rubrik Community"  applyBodyTag="false">
+<link rel="shortcut icon" href="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/favicon.ico')}" type="image/x-icon" />
+    <link rel="icon" href="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/favicon1.png')}" type="image/png" />
+    <style>
+
+    .clusterheader {
+    font-size:18px;
+    font-family: Gotham-Medium !important;
+    padding-bottom: 10px;
+
+    }
+        
+        .padBottom {
+        padding-bottom: 10px;
+        }
+    
+    .pad{
+    padding: 5px;
+    }
+  
+      .navbarsub .navbar-nav > li > a {
+        background-color: transparent !important;
+        color: #929292;
+        box-sizing: border-box;
+        font-family: Gotham-Light;
+        font-size: 16px;
+        line-height: 29px;
+        text-transform: none;
+   
+    }
+    
+    .container-fluid {
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    }
+    
+    .bottomshadow {
+          -webkit-box-shadow: 0px 4px 3px 1px rgba(209,209,209,1);
+        -moz-box-shadow: 0px 4px 3px 1px rgba(209,209,209,1);
+        box-shadow: 0px 4px 3px 1px rgba(209,209,209,1);
+    }
+    
+    .navbarsub > li > a:hover, .navbarsub > li > a:focus {
+        background-color: transparent !important;
+        color: #929292;
+    }
+    
+  
+   
+      
+     #subnav li.active {
+      border-bottom: 4px solid #009DAC;
+      font-color: #002432;
+    }
+
+     .cloudtabheader {
+        color: #4A4A4A;
+        font-family: Gotham-Light !important;
+        font-size: 24px;
+        line-height: 29px;
+        font-weight:normal;
+        padding-bottom: 20px;
+        padding-top: 10px;
+    }
+    
+    .subtabheader {
+        color: #4A4A4A;
+        font-family: Gotham-Light !important;
+        font-size: 32px;
+        line-height: 31px;
+        font-weight:normal;
+        padding-bottom: 20px;
+        padding-top: 10px;
+    }
+    
+        .subtabsubheader {
+        margin-top:5px;
+        color: #4A4A4A;
+        font-family: Gotham-Light !important;
+        font-size: 16px;   
+        font-weight: normal;   
+        line-height: 26px;
+        margin-bottom: 20px;
+    }
+    
+    .arrow-right {
+      width: 0; 
+      height: 0; 
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      
+      border-left: 5px solid green;
+    }
+
+    table.dataTable.no-footer {
+    border-bottom: 0px solid #111111 !important;
+    }
+  
+    div.roundedcard {
+      border-radius: 4px;
+      border: 1px solid #EEEEEE;  
+      box-shadow: 0 0 6px 0 #E9E9E9;
+      -moz-box-shadow: 0 0 6px 0 #E9E9E9;
+      -webkit-box-shadow: 0 0 6px 0 #E9E9E9;
+      -o-box-shadow: 0 0 6px 0 #E9E9E9;
+      text-align: left;
+      padding: 18px;
+      margin-top:12px;
+      margin-bottom:22px;
+    }
+    
+</style>
+
+    
+        
+    <style>
+    
+         ::-webkit-input-placeholder {
+           text-align: center;
+           opacity: 0.5;
+            padding-left: -10px;
+        }
+        
+        :-moz-placeholder { /* Firefox 18- */
+           text-align: center;  
+           opacity: 0.5;
+                       padding-left: -10px;
+
+        }
+        
+        ::-moz-placeholder {  /* Firefox 19+ */
+           text-align: center;  
+           opacity: 0.5;
+                       padding-left: -10px;
+
+        }
+        
+        :-ms-input-placeholder {  
+           text-align: center; 
+           opacity: 0.5;
+                       padding-left: -10px;
+
+        }
+          
+    
+    .downloadHeader {
+    line-height:38px;
+    }
+    
+    .downloadinput  {
+     border-radius:2px;
+     border: 1px solid #E5E5E5;
+     padding-left: 10px;
+     
+     
+    }
+    
+    input:focus {outline:none;}
+    
+    .full-width-div {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    }
+    
+    
+       @import url('//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css');
+        .accordion-toggle:after {
+            /* symbol for "opening" panels */
+            font-family: 'Glyphicons Halflings';  /* essential for enabling glyphicon */
+            content: "\e114";    /* adjust as needed, taken from bootstrap.css */
+            float: left;        /* adjust as needed */
+            color: #009DAC;         /* adjust as needed */
+        }
+        .accordion-toggle.collapsed:after {
+            /* symbol for "collapsed" panels */
+            content: "\e080";    /* adjust as needed, taken from bootstrap.css */
+        }
+        
+    </style>
+    
+   
+
+    <c:visualstrapblock >
+    
+        <!--start header-->
+        <c:siteheader ></c:siteheader>
+        <!--end Header-->
+
+        <!--start the Container-->
+        <div class="container-fluid">
+           <div class="row rowcontainer" >
+             
+              
+  
+  
+          <!--start--->
+          <div class="container" style="margin-bottom:-5px;">
+            <div class="row">
+                <div class="col-md-3 downloadHeader ">
+                    <c:pageTitle name="My Products" ></c:pageTitle>
+                </div>
+                <div class="col-md-5 downloadHeader ">
+                   <!--<input placeholder="Search by UUID or Serial Number" class="downloadinput" style="width:365px;"/>-->
+                   
+            <!--search-->
+            <form class="navbar-form" role="search" action="{!$Page.UnifiedSearch}">
+            <div class="input-group navsearch">
+                <input type="text" placeholder="Search by UUID or Serial Number" class="downloadinput" style="width:365px;" name="search" id="search" autocomplete="off"/>
+                <div class="input-group-btn">
+                    <input type="image" src="{!$REsource.whitesearchicon}" alt="Submit Me" height="20px" />
+                </div>
+            </div>
+            </form>
+            <!--search end-->
+            
+                </div>
+                <div class="col-md-4 downloadHeader ">
+                   <apex:outputlink value="{!$Page.InstallBaseDownloadList}">Download Entire Product List</apex:outputlink><br/>
+                    <apex:outputLink value="{!$Page.RegisterProduct}?uuid=&nn=">Register a Product</apex:outputLink>
+                   
+                </div>
+            </div>
+        </div>
+      <!--end-->     
+             
+             <div class="col-md-12">
+            
+               
+    <!--test1-->
+    <div class="row bottomshadow container-fluid" >
+    <!--start nav-->
+     <!-- Fixed navbar -->
+             <div class="container ">
+
+      <div class="navbarsub horizontal-navbar sticky-on-scroll" id="subnav">
+
+        <ul class="nav navbar-nav navbarsub inline block">
+            <apex:outputPanel layout="none">
+               <li class="active"><a href="#cloud" data-toggle="tab">Cloud Assets</a></li>
+              <li><a href="#clusters" data-toggle="tab" >Clusters</a></li>
+              <li><a href="#edge" data-toggle="tab">Edge Assets</a></li>
+              <li><a href="#un" data-toggle="tab">Unassigned Nodes</a></li>
+            </apex:outputPanel>
+        </ul>
+
+  </div>
+   <!--end nav-->
+
+    </div>
+   </div><!--row end-->
+    <!--test1-->
+
+
+    <div class="container">
+    <br/>
+    </div>
+    <!--empty div-->
+    
+    <div class="tab-content container">
+      <div id="cloud" class="tab-pane fade in active">
+        <div class="subtabheader">Cloud Assets<br/>
+        </div>
+
+
+        <div class="cloudtabheader">Cloud Out<br/></div>
+        
+        <!--start collapse-->
+        
+   
+        
+       
+         &nbsp;<a href="#cloudout" class="accordion-toggle padBottom collapsed" data-toggle="collapse"> <apex:outputPanel > {!IF(clout.size==null,0,clout.size)}</apex:outputPanel> {!IF(clout.size==1,"Asset","Assets")}</a>
+          <div id="cloudout" class="collapse">
+          <apex:outputPanel rendered="{!clout.size!=null}">
+           <apex:datatable value="{!clout}" var="c" styleClass="table"  >
+                        <apex:column headerValue="Subscription" value="{!c.Product__r.ProductCode}" styleClass="col-md-2"/>
+                        <apex:column headerValue="Name" styleClass="col-md-2">
+                        <apex:outputText value="{!c.Asset.Name}"></apex:outputText>
+                        </apex:column>
+                    
+                        <apex:column headerValue="Start" styleClass="col-md-2">
+                        <apex:outputfield value="{!c.StartDate}"/>
+                        </apex:column>
+                        <apex:column headerValue="End" styleClass="col-md-2">
+                        <apex:outputfield value="{!c.EndDate}"/>
+                        </apex:column>
+                        
+                        <apex:column headerValue="" styleClass="col-md-1">
+                        <apex:outputLink value="{!$Page.RegisterProduct}?uuid=&nn="><apex:image value="{!URLFOR($Resource.registerIcon)}"/></apex:outputLink>
+                        </apex:column>
+                      </apex:datatable>
+                      </apex:outputPanel>
+                      
+         <apex:outputpanel rendered="{!clout.size==null}">
+         <div class="subtabsubheader">
+            You have no products in this category. Please contact Sales if you wish to purchase one.<br/>
+           </div>
+         </apex:outputpanel>
+         </div>
+        
+        
+        <div class="cloudtabheader">Cloud On<br/></div>
+
+        <!--start collapse-->
+         &nbsp;<a href="#cloudon" class="accordion-toggle padBottom collapsed" data-toggle="collapse"><apex:outputPanel >{!IF(clon.size==null,0,clon.size)}</apex:outputPanel> {!IF(clon.size==1,"Asset","Assets")}</a>
+          <div id="cloudon" class="collapse">
+          <apex:outputPanel rendered="{!clon.size!=null}">
+          <apex:datatable value="{!clon}" var="c" styleClass="table"  >
+                        <apex:column headerValue="Subscription" value="{!c.Product__r.ProductCode}" styleClass="col-md-2"/>
+                        <apex:column headerValue="Name" styleClass="col-md-2">
+                        <apex:outputText value="{!c.Asset.Name}"></apex:outputText>
+                        </apex:column>
+                    
+                        <apex:column headerValue="Start" styleClass="col-md-2">
+                        <apex:outputfield value="{!c.StartDate}"/>
+                        </apex:column>
+                        <apex:column headerValue="End" styleClass="col-md-2">
+                        <apex:outputfield value="{!c.EndDate}"/>
+                        </apex:column>
+                        
+                        
+                        <apex:column headerValue="" styleClass="col-md-1">
+                        <apex:outputLink value="{!$Page.RegisterProduct}?uuid=&nn="><apex:image value="{!URLFOR($Resource.registerIcon)}"/></apex:outputLink>
+                        </apex:column>
+                      </apex:datatable>
+         </apex:outputpanel>
+         
+         <apex:outputpanel rendered="{!clon.size==null}">
+         <div class="subtabsubheader">
+            You have no products in this category. Please contact Sales if you wish to purchase one.<br/>
+           </div>
+         </apex:outputpanel>
+         </div>
+
+
+        <div class="cloudtabheader">Cloud Clusters<br/></div>
+
+        <!--start collapse-->
+         &nbsp;<a href="#cloudcl" class="accordion-toggle padBottom collapsed" data-toggle="collapse"><apex:outputPanel >{!IF(clcl.size==null,0,clcl.size)}</apex:outputPanel> {!IF(clcl.size==1,"Asset","Assets")}</a>
+          <div id="cloudcl" class="collapse">
+          <apex:outputPanel rendered="{!clcl.size!=null}">
+          <apex:datatable value="{!clcl}" var="c" styleClass="table"  >
+                        <apex:column headerValue="Subscription" value="{!c.Product__r.ProductCode}" styleClass="col-md-2"/>
+                        <apex:column headerValue="Name" styleClass="col-md-2">
+                        <apex:outputText value="{!c.Asset.Name}"></apex:outputText>
+                        </apex:column>
+                    
+                        <apex:column headerValue="Start" styleClass="col-md-2">
+                        <apex:outputfield value="{!c.StartDate}"/>
+                        </apex:column>
+                        <apex:column headerValue="End" styleClass="col-md-2">
+                        <apex:outputfield value="{!c.EndDate}"/>
+                        </apex:column>
+                        
+                        <apex:column headerValue="" styleClass="col-md-2">
+                        <apex:outputLink value="{!$Page.RegisterProduct}?uuid=&nn="><apex:image value="{!URLFOR($Resource.registerIcon)}"/></apex:outputLink>
+                        </apex:column>
+                      </apex:datatable>
+          </apex:outputpanel>            
+
+         <apex:outputpanel rendered="{!Clcl.size==null}">
+         <div class="subtabsubheader">
+            You have no products in this category. Please contact Sales if you wish to purchase one.<br/>
+           </div>
+         </apex:outputpanel>
+         </div>
+
+      </div>
+      
+      <div id="clusters" class="tab-pane fade">
+          <div class="subtabheader">Clusters<br/></div>
+    
+         <apex:repeat value="{!Clusters}" var="w" >
+    
+                     
+                       <apex:pageBlock rendered="{!w.clustr.archived__c=false}">
+                       <div class="pad roundedcard">
+                       <div class="clusterheader"> UUID: {!w.clustr.uuid__c}<br/></div>
+                       Name: &nbsp;<apex:outputtext value="{!IF(w.clustr.tag__c=null, "Not Available", w.clustr.tag__c)}"/><br/>
+                        <br/>
+                       <!-- <apex:outputPanel layout="block" styleClass="alert alert-warning" rendered="{!w.nodes.size==0}" style="width:50%;">
+                        There are no nodes associated to this Cluster.<br/>
+                        </apex:outputpanel>-->
+                        <!--<div class="arrow-right"></div>-->
+                        <a href="#{!w.clustr.uuid__c}" data-toggle="collapse" class="accordion-toggle collapsed" >&nbsp;{!w.nodes.size} Nodes</a>
+                        <div id="{!w.clustr.uuid__c}" class="collapse">
+                            
+                        <apex:datatable value="{!w.nodes}" var="c" styleClass="table" rendered="{!w.nodes.size!=0}" >
+                        <apex:column headerValue="Serial Number" value="{!c.serial_number__c}" styleClass="col-md-2"/>
+                        <apex:column headerValue="Asset" styleClass="col-md-2">
+                        <apex:outputText value="{!c.asset__r.Name}"></apex:outputText>
+                        </apex:column>
+                        <apex:column headerValue="Product Code" styleClass="col-md-2">
+                        <apex:outputText value="{!c.asset__r.Product2.ProductCode}"></apex:outputText>
+                        </apex:column>
+                        <apex:column headerValue="Chassis" styleClass="col-md-2">
+                        <apex:outputText value="{!c.chassis__r.Name}"></apex:outputText>
+                        </apex:column>
+                        <apex:column headerValue="Maintenance Start" styleClass="col-md-2">
+                        <apex:outputfield value="{!c.asset__r.Support_Start_Date__c}"/>
+                        </apex:column>
+                        <apex:column headerValue="Maintenance End" styleClass="col-md-2">
+                        <apex:outputfield value="{!c.asset__r.Premium_Support_End_Date__c}"/>
+                        </apex:column>
+                         <apex:column headerValue="">
+                        <apex:outputLink value="{!$Page.RegisterProduct}?uuid=&nn="><apex:image value="{!URLFOR($Resource.registerIcon)}"/></apex:outputLink>
+                        </apex:column>                       
+                        
+                      </apex:datatable>
+                      </div>
+                      <!--end collapse-->
+                       </div>
+                      </apex:pageBlock>
+                      
+                      </apex:repeat>
+      </div>
+      <div id="edge" class="tab-pane fade">
+     <!--start edge nodes-->
+
+                       <div class="subtabheader"> Edge Assets<br/></div>
+                        <apex:datatable value="{!EdgeNodes}" var="e" styleClass="table" rendered="{!EdgeNodes!=null}" id="edgedetails" >
+                        <apex:column headerValue="Subscription" value="{!e.Product__r.ProductCode}" styleClass="col-md-3"/>
+                        <apex:column headerValue="Start" styleClass="col-md-3">
+                        <apex:outputfield value="{!e.StartDate}"></apex:outputfield>
+                        </apex:column>
+                       <apex:column headerValue="End" styleClass="col-md-3">
+                       <apex:outputfield value="{!e.EndDate}"></apex:outputfield>
+                        </apex:column>
+                        <apex:column headerValue="" styleClass="col-md-1">
+                        <apex:outputLink value="{!$Page.RegisterProduct}?uuid=&nn="><apex:image value="{!URLFOR($Resource.registerIcon)}"/></apex:outputLink>
+                        </apex:column>
+                      </apex:datatable>
+                      
+                     
+                      
+                       <apex:outputPanel rendered="{!EdgeNodes==null}">
+                       <div class="subtabsubheader">
+                       You have no products in this category. Please contact Sales if you wish to purchase one.<br/>
+                       </div>
+                       </apex:outputPanel>
+      </div>
+             <div id="un" class="tab-pane fade">
+              <!--start dark sites-->
+                      <apex:outputPanel >
+                       <div class="subtabheader"> Unassigned Nodes</div>
+                       
+                        <apex:outputPanel layout="block" rendered="{!DarkNodes!=null}">
+                        
+                        <div class="subtabsubheader">
+                        These nodes have not been assigned to a cluster.<br/>
+                        Please notify <a href="{!URLFOR($Action.Case.NewCase)}">Rubrik Support</a> with the names of the clusters that have been created.<br/>
+                        </div>
+                        </apex:outputpanel> 
+                        <apex:outputPanel layout="block" rendered="{!DarkNodes!=null}">
+                        <apex:datatable value="{!DarkNodes}" var="a" styleClass="table" id="unassigned" html-cid="unassigned">
+                        <apex:column headerValue="Serial Number" value="{!a.serial_number__c}" styleClass="col-md-2"/>
+                        <apex:column headerValue="Asset" styleClass="col-md-2">
+                        <apex:outputText value="{!a.asset__r.Name}"></apex:outputText>
+                        </apex:column>
+                        <apex:column headerValue="Product Code" styleClass="col-md-2">
+                        <apex:outputText value="{!a.asset__r.Product2.ProductCode}"></apex:outputText>
+                        </apex:column>
+                        <apex:column headerValue="Chassis" styleClass="col-md-2">
+                        <apex:outputText value="{!a.chassis__r.Name}"></apex:outputText>
+                        </apex:column>
+                        <apex:column headerValue="Maintenance Start" styleClass="col-md-2">
+                        <apex:outputfield value="{!a.asset__r.Support_Start_Date__c}"></apex:outputfield>
+                        </apex:column>
+                        <apex:column headerValue="Maintenance End" styleClass="col-md-2">
+                        <apex:outputfield value="{!a.asset__r.Premium_Support_End_Date__c}"></apex:outputfield>
+                        </apex:column>  
+                        <apex:column headerValue="" styleClass="col-md-3">
+                        <apex:outputLink value="{!$Page.RegisterProduct}?uuid=&nn="><apex:image value="{!URLFOR($Resource.registerIcon)}"/></apex:outputLink>
+                        </apex:column>                  
+    
+    
+                      </apex:datatable>
+                      </apex:outputpanel>
+                      
+                      <apex:outputPanel layout="block" rendered="{!DarkNodes==null}">
+                      You have no unassigned nodes.
+                      </apex:outputpanel>
+                      <br/>
+                      </apex:outputPanel>
+                      
+                      
+          
+          </div>
+          
+          
+          
+        </div>
+          
+               </div>
+               </div> 
+            </div>
+            <!--End the Container-->
+            
+
+       <apex:includescript value="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js" />
+        <apex:stylesheet value="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.css" />
+        <script>
+            j$ = jQuery.noConflict();
+            j$(document).ready( function () {
+                var contactTable = j$('[id$="unassigned"]').DataTable({
+                    "searching": false,
+                    "lengthChange": false,
+                    
+                    "columnDefs": [
+                    
+                    { "orderable": false, "targets": 6}]
+                    
+                });
+            });
+            
+            
+             
+        
+              j$(document).ready(function() {
+              j$(function(){
+                  var hash = window.location.hash;
+                  hash && j$('ul.nav a[href="' + hash + '"]').tab('show');
+                });
+                
+        })
+                    
+            
+            
+        </script>
+    
+            <script>
+            $(".nav a").on("click", function(){
+              $(".nav").find(".active").removeClass("active");
+              $(this).parent().addClass("active");
+            });
+            </script>
+    
+
+        
+        <!--start the footer-->
+        <c:sitefooter ></c:sitefooter>
+        
+    </c:visualstrapblock>
+</apex:page>

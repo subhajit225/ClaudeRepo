@@ -1,0 +1,52 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,forceCommunity:layout" access="global" >
+    <aura:attribute name="userProfileheader" type="Aura.Component[]" required="false"></aura:attribute>
+    <aura:attribute name="userProfileCard" type="Aura.Component[]" required="false"></aura:attribute>
+    <aura:attribute name="userInfluenceComponent" type="Aura.Component[]" required="false"></aura:attribute>
+    <aura:attribute name="userBadges" type="Aura.Component[]" required="false"></aura:attribute>
+    <aura:attribute name="userActivities" type="Aura.Component[]" required="false"></aura:attribute>
+    <aura:attribute name="reputationboard" type="Aura.Component[]" required="false"></aura:attribute>
+    <aura:attribute name="redeemButton" type="Aura.Component[]" required="false"></aura:attribute>
+    
+    <div class="slds-grid slds-wrap">       
+        <!--<div class="slds-size_5-of-5 bannerHeight">
+            <div class="slds-text-align_center" style="{!'background: url('+ $Resource.CustomerCommunityUserInfluenceBackgroundV1 + ');
+                                                       background-position:center;
+                                                       background-size: cover;'}"> 
+                <div class="slds-text-align_center alignment">
+                    <div class="supportCommunityPhoto">{!v.userProfileheader}</div>
+                    <div>{!v.userProfileCard}</div>
+                    <div>{!v.userInfluenceComponent}</div>
+                </div>
+            </div>
+        </div>-->
+        <div class="slds-size_5-of-5 bannerHeight">
+            <div class="" style="{!'background: url('+ $Resource.CustomerCommunityUserInfluenceBackgroundV1 + ');
+                                                       background-position:center;
+                                                       background-size: cover;'}">
+                <div class="">
+                    <div style="position: relative;padding: 0;margin: 0;display: flex;flex-direction: row;justify-content: center;align-items: center;">{!v.userProfileheader}
+                        <div style="position: absolute;top: 0;right: 152px;">
+                            {!v.redeemButton}
+                        </div>
+                    </div>
+                    <div class="slds-text-align_center">{!v.userProfileCard}</div>
+                    <div class="slds-text-align_center">
+                        <div class="alignment">{!v.userInfluenceComponent}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slds-size_3-of-6">
+            <div class="slds-box">
+                {!v.userBadges}
+            </div>
+            <div class="slds-box">
+                {!v.userActivities}
+                <!--<img src="{!$Resource.RansomImage}" onclick="{!c.redirect}"/>-->
+            </div>
+        </div>
+        <div class="slds-size_3-of-6">
+            <div class="slds-box">{!v.reputationboard}</div>
+        </div>
+    </div>
+</aura:component>

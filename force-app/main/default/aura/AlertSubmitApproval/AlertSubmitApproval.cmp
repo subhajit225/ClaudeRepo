@@ -1,0 +1,65 @@
+<aura:component controller="QuoteExtController" access="global">
+    <aura:attribute name="alertMessage" type="String[]" default="[]"/> 
+    <aura:attribute name="isApproval" type="Boolean"/> 
+	<aura:attribute name="ApproveQuote" type="Boolean"/> 
+    <aura:attribute name="quoteRec" type="Object" />
+    <!-- CPQ22-5846 starts-->
+    <aura:attribute name="alertExceptionMessage" type="String[]" default="[]"/> 
+    <aura:attribute name="isException" type="Boolean" default="false"/> 
+    <aura:attribute name="exceptionTitle" type="string" default=""/>
+    <!-- CPQ22-5846 Ends-->
+
+    <aura:registerEvent name="sendForApprovalEvt" type="c:SendForApprovalEvt"/>
+
+	<!--FY26WL-534 spinner -->
+	<aura:attribute name="showSpinner" type="Boolean" default="false"/>
+
+    <div>
+		<div role="dialog"
+			 class="slds-modal slds-modal__open slds-fade-in-open">
+	        <div class="slds-modal__container">
+				 <!--FY26WL-534 spinner -->
+				<lightning:spinner alternativeText="Loading" size="medium" class="{!v.showSpinner ? '' : 'slds-hide'}"></lightning:spinner>
+				
+	            <div class="slds-modal__header">
+	           		<h2 class="slds-text-heading--medium">
+	           			Attention!
+	           		</h2>
+	            </div>
+
+				<div class="slds-modal__content slds-p-around--medium">
+                    <!-- CPQ22-5846 starts-->
+                    <aura:if isTrue="{!v.isException}">
+                        <div style="padding-left:10px !important;font-weight: 700;">
+                            {!v.exceptionTitle}
+                        </div>
+                        <div style="padding-left:10px !important;">
+                            <ul style="list-style-type:'*';color: red;">
+                                <aura:iteration items="{!v.alertExceptionMessage}" var="emsg">
+                                    <li class="slds-m-around_small"><aura:unescapedHTML value="{!emsg}"/></li>
+                                </aura:iteration>
+                            </ul>
+                        </div>
+                    </aura:if>
+                    <!-- CPQ22-5846 Ends-->
+                    <div style="padding-left:10px !important;">
+                        <ul style="list-style-type:'•';">
+                            <aura:iteration items="{!v.alertMessage}" var="msg">
+                                <li class="slds-m-around_small"><aura:unescapedHTML value="{!msg}"/></li>
+                            </aura:iteration>
+                        </ul>
+                    </div>
+                    <center>
+						<div style="padding-top:5px !important;">Do you want to submit Quote for Approval?</div>
+                    </center>
+				</div>
+
+	           <div class="slds-modal__footer">
+	           	    
+	               	<button class="slds-button slds-button--neutral" onclick="{!c.handleNoEvent}">No</button>
+	               <button class="slds-button slds-button--neutral" onclick="{!c.handleYesEvent}">Yes</button>
+	           </div>
+	       </div>
+	   </div>
+    </div>
+</aura:component>

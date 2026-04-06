@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Task_EndDate_Cant_be_Less_Than_StartDate</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(NOT(ISNULL(Task_End_date__c)),Task_End_date__c &lt;Task_Start_Date__c )</errorConditionFormula>
+    <errorDisplayField>Task_End_date__c</errorDisplayField>
+    <errorMessage>Task end date should not be less than start date</errorMessage>
+</ValidationRule>

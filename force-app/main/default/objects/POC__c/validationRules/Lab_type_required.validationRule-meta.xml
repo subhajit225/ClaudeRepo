@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Lab_type_required</fullName>
+    <active>false</active>
+    <errorConditionFormula>if(AND(Text(POC_Type__c) == &apos;Virtual Lab&apos;, ISBlank(Text(Lab_Type__c))),true,false)</errorConditionFormula>
+    <errorDisplayField>Lab_Type__c</errorDisplayField>
+    <errorMessage>Lab type is required</errorMessage>
+</ValidationRule>

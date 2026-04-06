@@ -1,0 +1,166 @@
+<aura:component controller="RegisterProduct" implements="forceCommunity:availableForAllPageTypes" access="global" >
+    <!-- meta -->
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+
+    <!-- attribute -->
+    <!-- Callout Response -->
+    <aura:attribute name="success" type="Boolean" default="false"/>
+    <aura:attribute name="error" type="Boolean" default="false"/>
+    <aura:attribute name="regString" type="string"/>
+    <aura:attribute name="nodeRes" type="Object"/>
+    <aura:attribute name="regdownload" type="string"/>
+    <!-- Input Fields -->
+    <aura:attribute name="nodename" type="string"/>
+    <aura:attribute name="uuid" type="string"/>
+    <aura:attribute name="manufacturingtime" type="string"/>
+    <aura:attribute name="teleporttoken" type="string"/>
+    <aura:attribute name="isuuidreq" type="Boolean" default="true"/>
+    <aura:attribute name="ismanufacturingtimereq" type="Boolean" default="false"/>
+    <aura:attribute name="isteleporttokenreq" type="Boolean" default="false"/>
+    <aura:attribute name="islegacy" type="Boolean" default="false"/>
+    <!-- Spinner -->
+    <aura:attribute name="showSpinner" type="Boolean" default="true"/>
+    <!-- handler -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <div class ="conatinerDiv">
+        <aura:if isTrue="{!v.showSpinner}">
+            <lightning:spinner alternativeText="Processing.." class="spins"/>
+        </aura:if>
+        <div class="slds-wrap slds-grid slds-size_12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 conatainer">
+            <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 slds-size_12-of-12 slds-text-align_center ideaTitle">Register your Rubrik Cluster</div>
+            <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 prodDecp">
+                For Rubrik clusters with no internet access to perform online registration, complete offline registration by obtaining a registration token.<br/><br/>
+                <ul>
+                    <li>● <b >Cluster registration required with RSC for CDM 7.0.2 (or later): </b>An improved and unified product registration process with Rubrik Security Cloud (RSC) is now required for clusters bootstrapped on CDM 7.0.2 (or later). To complete offline registration for new clusters, navigate to your RSC instance using the following example path (instead of registering with this page): <code style="background-color: #80808045;">https://[your-company-name].my.rubrik.com/offlineregistration</code>. Reference <a href="https://support.rubrik.com/s/article/000006367" target="_blank">Register your cluster - Learn more</a> for additional information.</li>
+                    <li>● <b >CDM 7.0.1 through CDM 6.0.3-p6: </b> The <i>Node ID, Manufacturing time,</i> and <i>Teleport token</i> fields are required. Use the <code style="background-color: #80808045;">rkcli cluster entitle_node</code> command to obtain the required fields for offline product registration.</li>
+                    <li>● <b >All other previous CDM versions: </b>The <i>Node ID</i> and <i>Cluster UUID</i> fields are required. </li>
+                </ul>
+            </div>
+
+            <aura:if isTrue="{!v.nodeRes.integrationError}">
+                <div class="errorDiv slds-notify slds-theme_alert-texture" role="alert" style="width: 100%;font-size: 1.2rem;font-family:Gotham-Light!important;border-radius:10px;">
+                    <p class="" title="{!$Label.c.Third_Party_Hardware_Error_Message}">
+                        <b style="font-family:Gotham-medium;">{!$Label.c.Third_Party_Hardware_Error_Message}</b>
+                    </p>
+                    <aura:if isTrue="{!or(v.nodeRes.statusCode == 400,v.nodeRes.statusCode == 400)}">
+                        <p class="" title="{!$Label.c.Third_Party_Hardware_Error_Message}">
+                            <aura:unescapedHtml value="{!v.nodeRes.errorMessage}"/>
+                        </p>
+                    </aura:if>
+                </div>
+            </aura:if>
+            <aura:if isTrue="{!v.nodeRes.success}">
+                <div class="slds-notify" role="alert" style="background-color: #f0f8e2;width: 100%;padding: 1rem;font-size: 1.2rem;font-family: Gotham-Light!important;border-radius: 10px;">
+                    <p class="{!v.islegacy? 'slds-hide' : 'slds-show' }" title="Description of icon when needed">
+                        <ul>
+                            <li><lightning:icon style="font-size:0rem;" iconName="action:approval" alternativeText="Approved" title="Approved" size="xx-small"/> 
+                                &nbsp;{!$Label.c.CDM_Teleport_Registration_Success_Message}&nbsp; <code style="background-color: #80808045;">rkcli cluster entitle_node</code> command).</li><br/>
+                            <li><b>Registration token for Node ID {!v.nodename}:</b></li><br/>
+                            <!-- <li><b>Success! Your registration token has been generated.</b></li> -->
+                        </ul>
+                    </p>
+                    <p class="{!v.islegacy? 'slds-show' : 'slds-hide' }" title="Description of icon when needed">
+                        <b>Success! Your registration token has been generated.</b><br/><br/>
+                    </p>
+                    <p class="{!v.islegacy? 'legacytoken slds-show' : 'slds-hide' }">
+                        <aura:unescapedHtml  value="{!v.regString}"/>
+                    </p>
+                    <p class="{!v.islegacy? 'slds-hide' : 'latesttoken slds-show' }">
+                        <aura:unescapedHtml  value="{!v.nodeRes.regMessage}"/>
+                    </p>
+                    <p>
+                        <a href="{!'data:text/plain;charset=utf-8;base64,'+v.regdownload}" download="{!v.uuid+'_regcode.txt'}">Download Key
+                        </a>
+                    </p>
+                </div>
+            </aura:if>
+            
+            <br/><br/>
+            
+            <div class="slds-wrap slds-grid slds-large-size--12-of-12" style="margin-top:2rem;">
+                <div class="slds-large-size--6-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 fields">
+                    <lightning:input aura:id="nname"
+                                        name="nodename"
+                                        label="Node Id or Serial Number"
+                                        value="{!v.nodename}"
+                                        required="true"
+                                        variant="label-stacked"
+                                        pattern="{!$Label.c.NodeId_Pattern}"
+                                        fieldLevelHelp="The node ID is obtained in the Rubrik CLI from the output of the “rkcli cluster entitle_node” command (running CDM 6.0.3-p6 or later)."
+                                        messageWhenValueMissing="{!$Label.c.Missing_Value_Error}"
+                                        messageWhenPatternMismatch="{!$Label.c.Node_name_Pattern_Mismatch_Error}"
+                                        onblur="{!c.onBlur}"
+                                        disabled="false"/>
+                </div>
+                <div class="slds-large-size--6-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 fields">
+                    <lightning:input aura:id="uuid"
+                                        name="uuid"
+                                        label="Cluster UUID"
+                                        value="{!v.uuid}"
+                                        variant="label-stacked"
+                                        pattern="{!$Label.c.UUID_Pattern}"
+                                        fieldLevelHelp="The cluster UUID (e.g., 5A8E3225-7BD1-094D-B38C-B4A105BF629D) is obtained in the Rubrik CLI from the output of the “rkcli cluster entitle_node” command (running CDM 6.0.3-p6 or later)."
+                                        messageWhenValueMissing="{!$Label.c.Missing_Value_Error}"
+                                        messageWhenPatternMismatch="{!$Label.c.UUID_Pattern_Mismatch_Error}"
+                                        onblur="{!c.onBlur}"
+                                        onchange="{!c.onchange}"
+                                        disabled="false"/>
+                    <aura:if isTrue="{!v.isuuidreq}">
+                        <p style="color:red;">This field is required</p>
+                    </aura:if>
+                </div>
+                <br/>
+                <!-- <p onclick="{!c.createNewFields}">New CDM</p>
+                {!v.body} -->
+                <!-- CS21-1150 Offline cluster registration enhancements -->
+                <div class="slds-large-size--6-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 fields">
+                    <lightning:input aura:id="mtime"
+                                        name="manufacturingtime"
+                                        label="Manufacturing time"
+                                        value="{!v.manufacturingtime}"
+                                        pattern="{!$Label.c.Manufacturing_Time_Pattern}"
+                                        variant="label-stacked"
+                                        fieldLevelHelp="The manufacturing time (e.g., 2022-04-12T12:05:34) is obtained in the Rubrik CLI from the output of the “rkcli cluster entitle_node” command (running CDM 6.0.3-p6 or later)."
+                                        messageWhenValueMissing="{!$Label.c.Missing_Value_Error}"
+                                        messageWhenPatternMismatch="{!$Label.c.Manufacturing_Time_Pattern_Mismatch_Error}"
+                                        onblur="{!c.onBlur}"
+                                        onchange="{!c.onchange}"
+                                        disabled="false"/>
+                    <aura:if isTrue="{!v.ismanufacturingtimereq}">
+                        <p style="color:red;">This field is required</p>
+                    </aura:if>
+                </div>
+                <div class="slds-large-size--6-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 fields">
+                    <lightning:input aura:id="ttoken"
+                                        name="teleporttoken"
+                                        label="Teleport token"
+                                        value="{!v.teleporttoken}"
+                                        variant="label-stacked"
+                                        fieldLevelHelp="The teleport token is obtained in the Rubrik CLI from the output of the “rkcli cluster entitle_node” command (running CDM 6.0.3-p6 or later)."
+                                        messageWhenValueMissing="{!$Label.c.Missing_Value_Error}"
+                                        onblur="{!c.onBlur}"
+                                        onchange="{!c.onchange}"
+                                        disabled="false"/>
+                    <aura:if isTrue="{!v.isteleporttokenreq}">
+                        <p style="color:red;">This field is required</p>
+                    </aura:if>
+                </div>
+            </div>
+
+            <div class="slds-wrap slds-grid slds-large-size--12-of-12 prodDecp">
+                <p class ="probNote"><b>Note:</b></p>
+                <ul>
+                    <li>● For Edge, specify the Node Name or serial number of the Edge device in the <b >Node Name or Serial Number</b> field. The node name or serial number can be obtained from a console session for the Edge (e.g., VRVW4222C1234). Use the '<b >hostname</b>' (Node Name) and the '<b >cluster_uuid</b>' (UUID) commands at the console.</li>
+                    <li>● For a Cluster (e.g. Cloud Cluster for AWS or Azure), perform the registration for each node on this Product Registration page. Then, use one Registration ID to complete the registration in the Web UI for the cluster. In a future release, the Rubrik Support Portal will allow mass registration with a comma-delimited list of node serial numbers.</li>
+                </ul>
+                <p>For more product registration details, please reference <a class="kbnewtab" href="https://support.rubrik.com/s/article/000001158">KB 1158.</a></p>
+            </div>
+            <div class="slds-wrap slds-grid slds-large-size--12-of-12 buttoncenter">
+                <div>
+                <lightning:button class="hovercolor" label="Register Product" title="Register Product" onclick="{!c.register}"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

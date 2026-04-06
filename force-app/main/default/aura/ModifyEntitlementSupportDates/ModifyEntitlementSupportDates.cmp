@@ -1,0 +1,176 @@
+<aura:component controller="LCC_ButtonsController" extends="c:LCC_GenericLightningComponent"
+  implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickActionWithoutHeader">
+  <aura:attribute name="entitlementSupportRec" type="Object" />
+  <aura:attribute name="entitlementSupportRecClone" type="Object" />
+  <aura:attribute name="entitlementRec" type="Object" />
+  <aura:attribute name="reloadForm" type="boolean" default="true" />
+  <aura:attribute name="showpicklist" type="boolean" default="false" />
+
+  <aura:attribute name="minChar" type="Integer" default="3" description="Minimum character to type for search" />
+  <aura:attribute name="options" type="Object" default="" required="true" />
+  <aura:attribute name="clusterid" type="Id" default="" required="true" />
+  <aura:attribute name="accountId" type="Id" default="" required="true" />
+  <aura:attribute name="searcht" type="String" />
+  <aura:attribute name="selectedLabel" type="String" />
+
+  <aura:attribute name="isReadOnly" type="boolean" default="true" />
+  <aura:attribute name="renderCluster" type="boolean" default="true" />
+  <aura:attribute name="showSpinner" type="boolean" default="true" />
+  <aura:attribute name="showButton" type="boolean" default="true" />
+  <aura:attribute name="callcluster" type="boolean" default="true" />
+
+  <!--Comment here -->
+  <aura:attribute name="setUploadAttribute" type="boolean" default="false" />
+  <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+  <lightning:workspaceAPI aura:id="workspace" />
+  <aura:if isTrue="{!v.reloadForm}">
+    <lightning:recordEditForm recordId="{!v.entitlementSupportRec.Id}" objectApiName="Entitlement_Warranty_Details__c"
+      onload="{!c.handleCreateLoad}" onsubmit="{!c.handleOnSubmit}">
+      <article class="slds-card">
+        <div class="slds-card__header slds-grid">
+          <header class="slds-media slds-media_center slds-has-flexi-truncate">
+
+            <div class="slds-media__body">
+              <h2 class="slds-card__header-title">
+                <a href="#" class="slds-card__header-link slds-truncate" title="Accounts">
+                  <span>Ransomware Warranty Details</span>
+                </a>
+              </h2>
+            </div>
+            <div class="slds-no-flex">
+              <aura:if isTrue="{!!v.isReadOnly}">
+                <lightning:button class="slds-m-top_small" variant="brand" type="submit" name="update" label="Save" />
+                <lightning:button class="slds-m-top_small" variant="brand" onclick="{! c.handleCancel }" name="cancel"
+                  label="Cancel" />
+
+
+              </aura:if>
+              <aura:if isTrue="{!v.isReadOnly}">
+                <lightning:button class="slds-m-top_small" variant="brand" label="Create New"
+                  onclick="{!c.editableForm}" />
+                <aura:if isTrue="{!v.entitlementSupportRec.Id}">
+                  <lightning:button class="slds-m-top_small" variant="brand" label="View Details"
+                    onclick="{!c.goToRec}" />
+                </aura:if>
+              </aura:if>
+            </div>
+          </header>
+        </div>
+      </article>
+
+
+      <lightning:messages />
+      <lightning:layout multipleRows="true">
+        <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6"
+          padding="around-small">
+          <lightning:inputField class="date-format-hide" fieldName="Start_Date__c" required="true"
+            value="{!v.entitlementRec.StartDate}" disabled="true" />
+
+        </lightning:layoutItem>
+        <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6"
+          padding="around-small">
+          <lightning:inputField class="date-format-hide" fieldName="End_Date__c" value="{!v.entitlementRec.EndDate}"
+            required="true" disabled="true" />
+        </lightning:layoutItem>
+      </lightning:layout>
+      <article class="slds-card">
+        <div class="slds-card__header slds-grid">
+          <header class="slds-media slds-media_center slds-has-flexi-truncate">
+            <div class="slds-media__body">
+              <h2 class="slds-card__header-title">
+                <a href="#" class="slds-card__header-link slds-truncate">
+                  <span>Health Check Details</span>
+                </a>
+              </h2>
+            </div>
+
+          </header>
+        </div>
+      </article>
+      <lightning:layout multipleRows="true">
+        <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6"
+          padding="around-small">
+          <div class="slds-form-element">
+            <div class="slds-form-element__control">
+              <div class="slds-combobox_container">
+                <div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open">
+                  <div
+                    class="slds-form-element_horizontal slds-form-element slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right"
+                    role="none">
+                    <lightning:input autoComplete="off" disabled="{!v.isReadOnly}" label="Select Cluster"
+                      class="{!v.isReadOnly? 'pointerNone':''}" aura:id="searchText" name="searchtxt"
+                      onblur="{!c.hidePicklist}" onkeyup="{!c.searchField}" value="{!v.searcht}" type="search"
+                      required="true" />
+                  </div>
+                  a
+                  <div class="{!v.showpicklist? '':'slds-hide'}">
+                    <div id="listbox-id-3" class="slds-dropdown slds-dropdown_length-with-icon-7 slds-dropdown_fluid"
+                      role="listbox" aria-label="{{Placeholder for Dropdown Items}}" tabindex="0" aria-busy="false">
+                      <ul aura:id="ullist" class="slds-listbox slds-listbox_vertical" role="presentation">
+                        <aura:iteration items="{!v.options}" var="item" indexVar="i">
+                          <li id="{!item.Id}" name="{!item.Name}"
+                            class="{!'slds-listbox__item eachItem' + if(item.isVisible,'',' slds-hide')}"
+                            onclick="{!c.itemSelected}" role="presentation">
+                            <div aria-selected="true" id="option229" class=" slds-has-focus" role="option" tabindex="0">
+                              <span class="slds-media__figure slds-listbox__option-icon">
+                                <span class="slds-icon_container slds-icon-standard-account">
+                                </span>
+                              </span>
+                              <span class="slds-media__body">
+                                <span name="{!item.Name}" data-name="{!item.Id}"
+                                  class="slds-listbox__option-text slds-listbox__option-text_entity">{!item.Name}</span>
+                              </span>
+                            </div>
+                          </li>
+                        </aura:iteration>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </lightning:layoutItem>
+        <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6"
+          padding="around-small">
+          <lightning:inputField class="date-format-hide" fieldName="CEM_Health_Check_Date__c" required="true"
+            disabled="{!v.isReadOnly}" />
+        </lightning:layoutItem>
+        <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6"
+          padding="around-small">
+          <lightning:inputField fieldName="Warranty_Compliant__c" required="true" disabled="{!v.isReadOnly}" />
+        </lightning:layoutItem>
+        <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6"
+          padding="around-small">
+          <lightning:inputField fieldName="CEM_Notes__c" disabled="{!v.isReadOnly}" />
+        </lightning:layoutItem>
+
+
+        <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6"
+          padding="around-small">
+          <lightning:inputField fieldName="Warranty_Status__c" required="true" disabled="{!v.isReadOnly}" />
+        </lightning:layoutItem>
+
+      </lightning:layout>
+    </lightning:recordEditForm>
+  </aura:if>
+  <aura:if isTrue="{!and(v.entitlementSupportRec.Id ,v.isReadOnly)}">
+
+
+    <c:LightningFileUpload recordId="{!v.entitlementSupportRec.Id}"></c:LightningFileUpload>
+
+
+  </aura:if>
+  <aura:if isTrue="{!v.showSpinner}">
+    <div aura:id="spinnerId" class="slds-spinner_container">
+      <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+        <span class="slds-assistive-text">Loading...</span>
+        <div class="slds-spinner__dot-a"></div>
+        <div class="slds-spinner__dot-b"></div>
+      </div>
+    </div>
+  </aura:if>
+
+
+
+</aura:component>

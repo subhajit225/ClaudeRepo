@@ -1,0 +1,40 @@
+<apex:page controller="CommunityHomeController" readOnly="false" cache="false" standardStylesheets="false" sidebar="false" showheader="false"  title="Rubrik Partner Community" applyBodyTag="false" action="{!forwardToCustomPage}">
+    <c:visualstrapblock >
+
+        <!--start header-->
+        <c:psiteheader ></c:psiteheader>
+        <!--end Header-->
+
+
+        <!--start main content-->
+
+        <!--this is the gradient header-->
+        <c:pheroheader />
+        <!--end the gradient header-->
+
+        <c:row >
+            <!--center content-->
+            <div class="container">
+                <div class="span12">
+                    <!--left column-->
+                    <c:column type="col-md-4">
+                        <c:pwebinars />
+                        <br/><br/>
+                        <c:pincentives />
+                        <br/><br/>
+                    </c:column>
+                    <!--right column-->
+                    <c:column type="col-md-6">
+                        <c:pannouncements />
+                    </c:column>
+                </div>
+                <!--end the centering div-->
+            </div>
+        </c:row>
+        <!--end main content-->
+
+        <!--start the footer-->
+        <c:psitefooter ></c:psitefooter>
+
+    </c:visualstrapblock>
+</apex:page>

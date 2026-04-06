@@ -1,0 +1,80 @@
+<!-- newCaseForm.html -->
+<template>
+
+    <template if:true={spinnerLoad}>
+        <lightning-spinner variant="brand" size="large"> </lightning-spinner>
+    </template>
+
+    <div class="slds-card">
+        <div class="slds-p-around_xxx-small">
+            <h1 class="heading-36">{formTitle}</h1>
+        </div>
+        <lightning-layout multiple-rows>
+
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+
+                <lightning-combobox name="CaseCategory" label="Case Category" value={selectedCategory}
+                    placeholder="Select Case Category" options={caseCategoryOptions} onchange={handleCategoryChange}
+                    required="true" class="slds-p-horizontal_small slds-p-top_small inputClass cmpInfo">
+                </lightning-combobox>
+
+                <!-- Case Type (Fetched from Type__c Picklist) -->
+                <template if:true={isGoForward}>
+                    <lightning-combobox name="CaseType" label="Case Type" value={selectedGoType}
+                        placeholder="Select Case Type" options={goTypeOptions} onchange={handleTypeChange}
+                        required="true" class="slds-p-horizontal_small slds-p-top_small inputClass cmpInfo">
+                    </lightning-combobox>
+                </template>
+
+                <template if:true={isTAP}>
+                    <!-- Case Subtype (Fetched from SubType__c Picklist, visible only for TAP) -->
+                    <lightning-combobox name="CaseSubType" label="Case Subtype" value={selectedSubType}
+                        placeholder="Select Case Subtype" class="slds-p-horizontal_small slds-p-top_small inputClass cmpInfo"
+                        options={subTypeOptions} onchange={handleTypeChange} required="true">
+                    </lightning-combobox>
+                </template>
+
+                <lightning-input label="Subject" name='Subject' value={subjectValue} onchange={handleInputChange}
+                    class="slds-p-horizontal_small slds-p-top_small inputClass cmpInfo" required>
+                </lightning-input>
+
+                <lightning-textarea name="Description" label="Description" value={descriptionValue}
+                    onchange={handleInputChange} class="slds-p-horizontal_small slds-p-top_small inputClass cmpInfo" required>
+                </lightning-textarea>
+
+                <div class="slds-p-horizontal_small slds-p-top_small">
+                    <lightning-file-upload label="Upload Files" multiple onuploadfinished={handleFileUpload}>
+                    </lightning-file-upload>
+    
+                    <template if:true={caseFiles.length}>
+                        <div class="slds-p-around_small inputClass cmpInfo">
+                            <template for:each={caseFiles} for:item="file" for:index="index">
+                                <div key={file.documentId}>
+                                    <span>{file.name}</span>
+                                    <span class="slds-p-top_x-small">
+                                        <lightning-button-icon icon-name="utility:delete" 
+                                            alternative-text="Remove File" variant="bare"
+                                            onclick={handleRemoveFile} data-index={index}>
+                                        </lightning-button-icon>
+                                    </span>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+                
+            </lightning-layout-item>
+
+            <lightning-layout-item>
+                <div class="slds-p-vertical_small">
+                    <lightning-button variant="brand" label="Submit" title="Submit" onclick={handleSubmit}
+                        class="slds-p-left_small">
+                    </lightning-button>
+                </div>
+            </lightning-layout-item>
+        </lightning-layout>
+    </div>
+
+
+
+</template>

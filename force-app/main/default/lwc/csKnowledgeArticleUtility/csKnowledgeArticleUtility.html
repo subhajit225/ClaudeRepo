@@ -1,0 +1,97 @@
+<template>
+    <lightning-card title="Knowledge Article Utility">
+        <div class="slds-p-around_medium slds-is-relative">
+            <!-- Upload Section - Always visible -->
+            <div class="slds-p-bottom_medium slds-grid slds-grid_align-center">
+                <div class="slds-col">
+                    <lightning-input type="file" accept=".csv" label="Upload CSV File" onchange={handleFileChange}>
+                    </lightning-input>
+                </div>
+            </div>
+
+            <!-- Data Display Section -->
+            <template if:true={isDataLoaded}>
+                <!-- Controls Section -->
+                <div class="slds-grid slds-gutters slds-p-bottom_small">
+                    <!-- Left side - Action buttons -->
+                    <div class="slds-col slds-size_4-of-12 slds-grid slds-grid_vertical-align-end">
+                        <div class="slds-button-group" role="group">
+                            <lightning-button-stateful label-when-off="Process" label-when-on="Processing"
+                                label-when-hover="Process" icon-name-when-off="utility:process"
+                                icon-name-when-on="utility:process" icon-name-when-hover="utility:process"
+                                selected={isLoading} variant={processButtonVariant} class="slds-m-right_xx-small"
+                                onclick={handleProcessRecords} disabled={isProcessButtonDisabled}>
+                            </lightning-button-stateful>
+                            <lightning-button-icon icon-name="utility:download" alternative-text="Download Records"
+                                title="Download Records" variant="brand-outline" onclick={handleDownload}
+                                disabled={isDownloadDisabled}>
+                            </lightning-button-icon>
+                            <lightning-input type="checkbox" label="Send email after processing"
+                                checked={sendEmailAfterProcessing} onchange={handleEmailCheckboxChange}
+                                class="slds-m-left_small">
+                            </lightning-input>
+                        </div>
+                    </div>
+
+                    <!-- Right side - Comboboxes -->
+                    <div class="slds-col slds-size_8-of-12 slds-grid slds-grid_align-end">
+                        <div class="slds-col slds-size_4-of-12 slds-p-left_x-small">
+                            <lightning-combobox label="Records per Page" value={pageSize} options={pageSizeOptions}
+                                onchange={handlePageSizeChange}>
+                            </lightning-combobox>
+                        </div>
+                        <div class="slds-col slds-size_4-of-12 slds-p-left_x-small">
+                            <lightning-combobox label="Batch Size" value={batchSize} options={batchSizeOptions}
+                                onchange={handleBatchSizeChange}>
+                            </lightning-combobox>
+                        </div>
+                        <div class="slds-col slds-size_4-of-12">
+                            <lightning-combobox label="Group By" value={selectedGroupingField} options={groupingOptions}
+                                onchange={handleGroupingChange}>
+                            </lightning-combobox>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Select All Button -->
+                <div class="slds-p-bottom_small slds-border_bottom">
+                    <a onclick={handleSelectAll} class="slds-text-link">
+                        {selectAllButtonLabel}
+                    </a>
+                </div>
+
+                <!-- Data Table Section -->
+                <lightning-tabset variant="scoped" active-tab-value={activeTab}>
+                    <template for:each={groupedData} for:item="group">
+                        <lightning-tab key={group.value} label={group.label} value={group.value}
+                            onactive={handleTabChange}>
+                            <div class="slds-p-around_small datatable-container"
+                                style="max-height: 400px; overflow-y: auto;">
+                                <lightning-datatable key-field="Id" data={paginatedData} columns={columns}
+                                    selected-rows={selectedRows} onrowselection={handleRowSelection}
+                                    enable-infinite-loading max-column-width='2000'>
+                                </lightning-datatable>
+                            </div>
+                            <div class="slds-grid slds-grid_align-spread slds-p-top_small">
+                                <lightning-button label="Previous" onclick={handlePrevious}
+                                    disabled={isPreviousDisabled}>
+                                </lightning-button>
+                                <span>Page {currentPage} of {totalPages}</span>
+                                <lightning-button label="Next" onclick={handleNext} disabled={isNextDisabled}>
+                                </lightning-button>
+                            </div>
+                        </lightning-tab>
+                    </template>
+                </lightning-tabset>
+            </template>
+
+            <!-- Loading Spinner -->
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Processing..." size="medium"></lightning-spinner>
+                <div class="loading-text slds-text-align_center slds-p-around_small slds-text-heading_medium">
+                    Processing {processedCount}/{totalSelectedCount} records
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

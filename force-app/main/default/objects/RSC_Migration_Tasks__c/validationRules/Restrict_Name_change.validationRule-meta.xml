@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Restrict_Name_change</fullName>
+    <active>false</active>
+    <description>CS21-1939</description>
+    <errorConditionFormula>AND( 
+
+ISCHANGED(Name),
+
+($Profile.Name!=&apos;System Administrator&apos; ),
+
+($Profile.Name!=&apos;API Integration User&apos; )
+
+)</errorConditionFormula>
+    <errorDisplayField>Name</errorDisplayField>
+    <errorMessage>Task name can&apos;t be changed.</errorMessage>
+</ValidationRule>

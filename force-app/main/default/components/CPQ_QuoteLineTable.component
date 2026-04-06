@@ -1,0 +1,27 @@
+<apex:component controller="CPQ_QuoteLineTableController" access="global">
+
+<apex:attribute assignTo="{!conFieldSetName}" name="fieldSetName" description="Name of the Fields need for Template"
+                type="String"/>
+                
+<apex:attribute assignTo="{!conQuoteLineType}" name="quoteLineType" description="Renewal or Non Renewal"
+                type="String"/>   
+             
+<apex:attribute assignTo="{!conQuoteID}" name="quoteID" description="ID of the quote for which lines are to be shown"
+                type="String"/>   
+                     
+<table Border= "1"  CELLSPACING="0" CELLPADDING="3" id="resources">
+            <tr>
+                <apex:repeat value="{!fieldSetMemberList}" var="fieldValue">
+                    <th class="tableHeader">{!fieldValue.Label}</th>
+                </apex:repeat>
+            </tr>
+            <apex:repeat value="{!QuoteLineDetails}" var="quoteLineRec">
+                <tr>
+                    <apex:repeat value="{!fieldSetMemberList}" var="f">
+                        <td><apex:outputField value="{!quoteLineRec[f.fieldPath]}"/></td>
+                    </apex:repeat>
+                </tr>
+            </apex:repeat>
+      </table>
+
+</apex:component>

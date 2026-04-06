@@ -1,0 +1,47 @@
+<apex:page showHeader="true" sidebar="true" controller="EntitlementsWithEntitlemntUseController" lightningStylesheets="true">
+    <apex:slds rendered="{!$User.UITheme == 'Theme4d'}"/> 
+    <apex:form >
+        <apex:pageBlock title="Entitlements With Node and Asset">
+            <apex:pageBlockButtons >
+                <apex:commandButton action="{!previous}" value="Previous" rendered="{!hasPrevious}" />
+                <apex:commandButton action="{!next}" value="Next" rendered="{!hasNext}" />
+            </apex:pageBlockButtons>
+            <apex:outputText value="Showing Page {!currentPage} of {!pages}" style="float: right;"/>
+            <apex:pageBlockTable value="{!entitlements}" var="ent">
+            <apex:column headerValue="ID">
+                    <apex:outputLink value="/{!ent.Id}" target="_blank">{!ent.ID}</apex:outputLink>
+                </apex:column>
+                <apex:column headerValue="Account Name">
+                    <apex:outputLink value="/{!ent.entitlement__r.Account.Id}" target="_blank">{!ent.entitlement__r.Account.name}</apex:outputLink>
+                </apex:column>
+                <apex:column headerValue="Product Name">
+                    <apex:outputText value="{!ent.entitlement__r.Order_Service_Item__r.Product_Name__c}"></apex:outputText>
+                </apex:column>
+                 <apex:column headerValue="Serial Number">
+                    <apex:outputText value="{!ent.serial_number__c}" ></apex:outputText>
+                </apex:column>
+                <apex:column headerValue="Node">
+                    <apex:outputText value="{!ent.node__r.serial_number__c}" ></apex:outputText>
+                </apex:column>
+                <apex:column headerValue="Chassis">
+                    <apex:outputText value="{!ent.node__r.chassis__r.serial_number__c}"></apex:outputText>
+                </apex:column>
+                 <apex:column headerValue="Asset Name">
+                    <apex:outputText value="{!ent.node__r.asset__r.Name}"></apex:outputText>
+                </apex:column>
+                
+                <apex:column headerValue="Entitlement Start date">
+                    <apex:outputText value="{0,date,MM/dd/yyyy}">
+                        <apex:param value="{!ent.entitlement__r.StartDate}"/>
+                </apex:outputText>
+                </apex:column>
+                <apex:column headerValue="Entitlement End date">
+                    <apex:outputText value="{0,date,MM/dd/yyyy}">
+                        <apex:param value="{!ent.entitlement__r.EndDate}"/>
+                    </apex:outputText>
+                </apex:column>
+                
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,9 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes"  access="global">
+    <aura:handler name="init" value="this" action="{!c.doInit}"/>						
+	<aura:attribute name="showloader" type="boolean" default="true"/>
+   
+    <div class="exampleHolder">
+        <lightning:spinner aura:id="mySpinner" />
+    </div>
+
+</aura:component>

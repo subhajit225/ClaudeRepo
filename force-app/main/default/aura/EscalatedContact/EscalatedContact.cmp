@@ -1,0 +1,61 @@
+<aura:component >
+    <aura:attribute name="sortedBy" type="String"/>
+     <aura:attribute name="sortedDirection" type="String" default=""/>
+    <aura:attribute name="mycolumns" type="Object[]" default=""/>
+    <aura:attribute name="contacts" type="Object[]" default=""/>
+    <aura:attribute name="primaryContacts" type="Object[]" default=""/>
+    <aura:handler name="init" value="{!this}" action="{!c.doinit}"/>
+    <table class="slds-table tableClass slds-max-medium-table_stacked" id="viewTable"  style="width:90%;">
+        <thead class="TableHead">
+            <tr class="slds-line-height_reset ">
+                <aura:iteration items="{!v.mycolumns}" var="label">
+                    <th class="thclass slds-cell-wrap" scope="col">
+                        <div class="slds-truncate" title="{!label.label}"></div>
+                        <a href="javascript:void(0);" name="{!label.fieldName}" id="desc" class="textStyle" onclick="{!c.Sorttable}">{!label.label}</a>
+                        <div class="padd-dis">
+                            <aura:if isTrue="{!v.sortedBy == label.fieldName}">
+                                <aura:if isTrue="{!v.sortedDirection != 'desc'}">
+                                    <lightning:icon iconName="utility:chevronup" size="xx-small" />
+                                </aura:if> 
+                            </aura:if>
+                        </div>
+                        <div class="padd-dis">
+                            <aura:if isTrue="{!v.sortedBy == label.fieldName}">
+                                <aura:if isTrue="{!v.sortedDirection == 'desc'}">
+                                    <lightning:icon iconName="utility:chevrondown" size="xx-small" />
+                                </aura:if> 
+                            </aura:if>
+                        </div>
+                    </th>
+                </aura:iteration>
+                <th scope="col"  class="textStyle slds-cell-wrap">
+                    <div class="slds-truncate padd" title="Authorized">Action
+                        
+                    </div>
+                </th>
+            </tr>
+        </thead>
+        <tbody class="textStyle">
+            <aura:iteration items="{!v.contacts}" var="con" indexVar="index">
+                <tr class="rowborder">
+                    <td class="slds-cell-wrap" scope="row" data-label="First Name">
+                        {!con.Name}
+                    </td>
+                    <td class="slds-cell-wrap" data-label="Last Name">
+                        {!con.Title}
+                    </td>
+                    <td class="slds-cell-wrap WrdBrk" data-label="Email">
+                        {!con.Email}
+                    </td>
+                    <td class="slds-cell-wrap"  data-label="Title">
+                        {!con.Phone}
+                    </td>
+                    <th class="slds-cell-wrap slds-text-align_center" scope="row" data-label="Authorized">
+                        <lightning:button variant="brand" label="Remove" value="{!index}" title="Base action" onclick="{! c.removeContact }"/>
+                        
+                    </th>
+                </tr>
+            </aura:iteration>
+        </tbody>
+    </table> 
+</aura:component>

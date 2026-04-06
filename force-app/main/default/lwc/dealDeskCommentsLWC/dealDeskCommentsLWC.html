@@ -1,0 +1,38 @@
+<template>
+    <!--<lightning-card title="Private Comments" icon-name="utility:lock">-->
+        <div>
+             <lightning-layout>
+                    <lightning-layout-item padding="around-small">
+                        <lightning-textarea value={commentBody} class="comment" onchange={handleChange} placeholder="Share an update..." style="width: 350px;">
+                        </lightning-textarea>
+                    </lightning-layout-item>
+                </lightning-layout>
+                <lightning-layout>
+                    <lightning-layout-item padding="around-small">
+                    Recipients:
+                        <c-multiselect-lookup-l-w-c objectname="User" fieldnames=" Id, Name, Title"
+                        onselected={handleselectedUserRecords} icon-name="standard:user" placeholder="Lookup User...">
+                    </c-multiselect-lookup-l-w-c>
+                    </lightning-layout-item>
+                </lightning-layout>
+                <lightning-layout class="slds-border_bottom">
+                    <lightning-layout-item padding="around-small" class="slds-float_right">
+                        <lightning-button name="post" label="Share" variant="brand" onclick={handlePostClick} class="slds-float_right"></lightning-button>
+                    </lightning-layout-item>
+                </lightning-layout>
+            <div if:false={isLoaded} >
+                <lightning-spinner
+                    alternative-text="Loading..." variant="brand">
+                </lightning-spinner>
+            </div>
+        </div>
+        
+        <div class="slds-var-m-around_medium">
+            <template if:true={comments.data}>
+                <template for:each={comments.data} for:item="userComment">
+                    <c-deal-desk-user-comment-tile class="slds-show slds-is-relative slds-border_bottom" key={userComment.Id}
+                        user-comment={userComment} onselect={handleSelect}></c-deal-desk-user-comment-tile>
+                </template>
+            </template>
+        </div>
+</template>

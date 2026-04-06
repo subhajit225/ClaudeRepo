@@ -1,0 +1,58 @@
+<template>
+    <div class="slds-grid slds-grid_align-end">
+        <c-play-book-templates record-id={recordId} onrefreshview={handleRefresh}></c-play-book-templates>
+        <lightning-button-icon class="slds-m-left_x-small" label="" size="medium" icon-name="utility:refresh" onclick={handleRefresh}>
+        </lightning-button-icon>
+    </div>
+    <div class="slds-is-relative">
+        
+        <template if:false={loaded}>
+            <lightning-spinner alternative-text="Loading"></lightning-spinner>
+        </template>
+        
+        <template if:false={groupedData}>
+            <div class="demo-only demo-only_viewport" style="height:6rem;position:relative">
+                <div role="status" class="slds-spinner slds-spinner_medium">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </template>
+
+        <lightning-accordion allow-multiple-sections-open class="example-accordion">
+            <template for:each={groupedData} for:item="playbook">
+                <lightning-accordion-section key={playbook.Id} name={playbook.Name} label={playbook.Name}>
+                    <lightning-card>
+                        <div class="slds-p-around_medium">
+                            <div class="slds-grid slds-gutters  ">
+                                <div class="slds-col slds-size_1-of-3 border-gray th-heading">
+                                    <p>Completion Percentage</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-3 border-gray th-heading">
+                                    <p>Total Sub Tasks</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-3 border-gray th-heading">
+                                    <p>Total Sub Tasks Completed</p>
+                                </div>
+                            </div>
+                            <div key={playbook.Id} class="slds-grid slds-gutters">
+                                <div class="slds-col slds-size_1-of-3 border-gray">
+                                        <p>{playbook.completion_percentage__c} %</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-3 border-gray">
+                                    <p>{playbook.Total_Sub_Tasks__c}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-3 border-gray">
+                                    <p>{playbook.Total_Sub_Tasks_Completed__c}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </lightning-card>
+                    <c-playbook-data-grid-item has-sub-tasks={playbook.hasSubTasks} subtasks={playbook.subtasks} playbook-id={playbook.Id} onrefreshview={handleRefresh} onrequestloading={handleLoading}></c-playbook-data-grid-item>
+                    
+                </lightning-accordion-section>
+            </template>
+        </lightning-accordion>
+    </div>
+</template>

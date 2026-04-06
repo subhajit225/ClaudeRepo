@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Task_Sub_Type__c</fullName>
+    <label>Task Sub-Type</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>Task_Type__c</controllingField>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Portal Triggered Escalation</fullName>
+                <default>false</default>
+                <label>Portal Triggered Escalation</label>
+            </value>
+            <value>
+                <fullName>Manual (Rubrik Internal)</fullName>
+                <default>false</default>
+                <label>Manual (Rubrik Internal)</label>
+            </value>
+            <value>
+                <fullName>Red Alert</fullName>
+                <default>false</default>
+                <label>Red Alert</label>
+            </value>
+            <value>
+                <fullName>Yellow Alert</fullName>
+                <default>false</default>
+                <label>Yellow Alert</label>
+            </value>
+            <value>
+                <fullName>NPS &lt;= 7</fullName>
+                <default>false</default>
+                <label>NPS &lt;= 7</label>
+            </value>
+            <value>
+                <fullName>CSAT &lt;= 3</fullName>
+                <default>false</default>
+                <label>CSAT &lt;= 3</label>
+            </value>
+            <value>
+                <fullName>NCC Expiry</fullName>
+                <default>false</default>
+                <label>NCC Expiry</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Customer Escalation</controllingFieldValue>
+            <valueName>Portal Triggered Escalation</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Customer Escalation</controllingFieldValue>
+            <controllingFieldValue>Lessons Learnt</controllingFieldValue>
+            <valueName>Manual (Rubrik Internal)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Customer Thermometer</controllingFieldValue>
+            <valueName>Red Alert</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Customer Thermometer</controllingFieldValue>
+            <valueName>Yellow Alert</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative Survey Feedback</controllingFieldValue>
+            <valueName>NPS &lt;= 7</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative Survey Feedback</controllingFieldValue>
+            <valueName>CSAT &lt;= 3</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>NCC Expiry</controllingFieldValue>
+            <valueName>NCC Expiry</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

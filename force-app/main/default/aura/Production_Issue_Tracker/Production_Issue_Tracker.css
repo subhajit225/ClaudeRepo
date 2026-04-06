@@ -1,0 +1,53 @@
+.THIS .tableStyle {
+    border: 1px solid black; 
+    border-collapse: collapse; 
+    table-layout: fixed;
+    width: 100%;
+}
+
+.THIS .innerTable{
+    vertical-align: top;
+}
+  
+.THIS .tableStyle .innerTable td {
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+  .THIS .tooltip {
+    position: relative;
+    display: inline-block;
+    padding: 0;
+    border-bottom: 1px dotted blue;
+    cursor: context-menu;
+  }
+  
+   .THIS .tooltip .tooltiptext {
+    visibility: hidden;
+    width: 350px;
+    background-color: rgb(84,105,141);
+    color: #fff;
+    text-align: left;
+    border-radius: 6px;
+    padding: 5px 0 10px 10px;
+    position: absolute;
+    z-index: 1;
+    top: 150%;
+    left: 50%;
+    margin-left: -60px;
+  }
+  
+  .THIS .tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 18%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent rgb(84,105,141) transparent;
+}
+
+.THIS .tooltip:hover .tooltiptext {
+    visibility: visible;
+  }

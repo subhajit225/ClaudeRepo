@@ -1,0 +1,200 @@
+<template>
+  <div class={addEvaluateDataClass}>
+    <div class="header">
+      <div>
+        <lightning-icon
+          size="small"
+          class="my-iconchevronleft"
+          icon-name="utility:chevronleft"
+          alternative-text="chevronleft"
+          onclick={closedetail}
+        ></lightning-icon>
+      </div>
+      <template if:false={alreadyevaluted}>
+        <template if:false={waiting}>
+          <template if:false={languagechanged}>
+            <div class="projectedScorebox" onclick={handlePredictedScore}>
+              <div
+                class="projectedScore"
+                onmouseover={handlehover}
+                onmouseout={handlehoverout}
+              >
+                <span>
+                  <img
+                    src={starimg}
+                    alt="tick Image"
+                    height="16px"
+                    width="16px"
+                  />
+                </span>
+                <span class="predictedScoreText"
+                  >Predicted Score : {predictedscore}%
+                </span>
+                <lightning-icon
+                  class="predictedScoreArrowIcon"
+                  icon-name="utility:forward"
+                  alternative-text="Chat"
+                  size="xx-small"
+                ></lightning-icon>
+              </div>
+            </div>
+          </template>
+        </template>
+        <template if:true={waiting}>
+          <div
+            class="projectedScorebox evaluatebox"
+            onclick={handlePredictedScore}
+          >
+            <div
+              class="projectedScore"
+              onmouseover={handlehover}
+              onmouseout={handlehoverout}
+            >
+              <span class="predictedScoreText">Evaluate</span>
+              <lightning-icon
+                class="predictedScoreArrowIcon"
+                icon-name="utility:forward"
+                alternative-text="Chat"
+                size="xx-small"
+              ></lightning-icon>
+            </div>
+          </div>
+        </template>
+      </template>
+      <template if:true={alreadyevaluted}>
+        <div class="circularbar">
+          <span
+            class={circularcontainer}
+            data-id={largevalue}
+            data-pct={predictedscore}
+          >
+            <svg>
+              <circle
+                r="22"
+                cx="28"
+                cy="28"
+                fill="transparent"
+                class={progressBackground}
+                stroke-dasharray="314"
+              ></circle>
+              <circle
+                r="22"
+                cx="28"
+                cy="28"
+                fill="transparent"
+                class={progress}
+                data-id="progressid"
+                stroke-dashoffset="0"
+                stroke-linecap="butt"
+                transform="rotate(270,28,28)"
+              ></circle>
+            </svg>
+          </span>
+        </div>
+      </template>
+      <div></div>
+    </div>
+    <div class="contentHealthSection">
+      <div class="contentSection">
+        <template if:true={alreadyevaluted}>
+          <img
+            class="img"
+            alt="Avatar"
+            src={avatarLogoUrl}
+            style="
+              border-radius: 50%;
+              width: 45px;
+              height: 45px;
+              margin-top: 10px;
+            "
+          />
+          <p class="articleName">{ownername}</p>
+          <p class="dot">.</p>
+          <p class="articleNumber">{articlenumber}</p>
+          <span onclick={handlealreadyevaluated} class="alreadyevaluated"
+            ><u>Already evaluated</u></span
+          >
+        </template>
+        <template if:false={alreadyevaluted}>
+          <img
+            class="img"
+            alt="Avatar Logo"
+            src={avatarLogoUrl}
+            style="border-radius: 50%; width: 45px; height: 45px"
+          />
+          <p class="articleName">{ownername}</p>
+          <p class="dot">.</p>
+          <p class="articleNumber">{articlenumber}</p>
+        </template>
+      </div>
+    </div>
+    <div class="fieldData">
+      <template if:false={knowblerTemplateExist}>
+        <lightning-record-form
+          record-id={articleid}
+          class="article-preview-form-component"
+          object-api-name={destobj}
+          layout-type="Full"
+          mode="readonly"
+          onerror={handleFormError}
+        >
+        </lightning-record-form>
+      </template>
+      <template if:true={knowblerTemplateExist}>
+        <lightning-record-view-form
+          record-id={articleid}
+          record-type-id={recordtypeID}
+          object-api-name={destobj}
+          onerror={handleViewFormError}
+        >
+          <template for:each={currentArticleDetail} for:item="item">
+            <div class="manage_title d-flex-column" key={item.label}>
+              <label
+                for={item.label}
+                class="font_family text_truncate article-preview-field-label"
+                >{item.label}</label
+              >
+              <lightning-output-field
+                class="detailed_text"
+                id={item.label}
+                variant="label-hidden"
+                field-name={item.name}
+              ></lightning-output-field>
+            </div>
+            <div class="border_bottom" key={item.key}></div>
+          </template>
+          <div class="manage_title d-flex-column">
+            <div class="font_family text_truncate article-preview-field-label">
+              Data Category
+            </div>
+            <template if:false={datacat.length}>
+              <div style="height: 28px"></div>
+            </template>
+            <template for:each={datacat} for:item="item">
+              <div key={item.label} class="detailed_text">
+                {item.label} : {item.value}
+              </div>
+            </template>
+          </div>
+          <div class="border_bottom"></div>
+          <div class="border_bottom_last"></div>
+        </lightning-record-view-form>
+      </template>
+    </div>
+    <template if:true={evaluatedata}>
+      <c-kcs_knowblermodal-component
+        evaluatedata={evaluatedata}
+        predicteddatafromcard={articlepredictiondata}
+        alreadyevaluatedflag={alreadyevaluatedflag}
+        articlenumber={articlenumber}
+        contenthealthdata={contenthealthdata}
+        oncloseevaluate={closeevaluate}
+        largescreen={largescreen}
+        newnumber={newnumber}
+        languagechanged={languagechanged}
+        parameters={parameters}
+      >
+      </c-kcs_knowblermodal-component>
+    </template>
+  </div>
+</template>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Status__c</fullName>
+    <label>Status</label>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Approved</fullName>
+                <default>false</default>
+                <label>Approved</label>
+            </value>
+            <value>
+                <fullName>In progress</fullName>
+                <default>false</default>
+                <label>In progress</label>
+            </value>
+            <value>
+                <fullName>New</fullName>
+                <default>true</default>
+                <label>New</label>
+            </value>
+            <value>
+                <fullName>Pending for Approval</fullName>
+                <default>false</default>
+                <label>Pending for Approval</label>
+            </value>
+            <value>
+                <fullName>Rejected</fullName>
+                <default>false</default>
+                <label>Rejected</label>
+            </value>
+            <value>
+                <fullName>Unknown email domain</fullName>
+                <default>false</default>
+                <label>Unknown email domain</label>
+            </value>
+            <value>
+                <fullName>Waiting for internal Rubrik</fullName>
+                <default>false</default>
+                <label>Waiting for internal Rubrik</label>
+            </value>
+            <value>
+                <fullName>Waiting for registration user</fullName>
+                <default>false</default>
+                <label>Waiting for registration user</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

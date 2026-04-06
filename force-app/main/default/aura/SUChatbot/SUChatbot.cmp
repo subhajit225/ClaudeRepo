@@ -1,0 +1,345 @@
+<aura:component
+    implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+    access="global" controller="su_vf_console.SUAuthentication">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" access="global" />
+    <aura:attribute name="fontURL" type="String"
+        default="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700" />
+    <aura:attribute name="fontURL1" type="String"
+        default="https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700'" />
+    <aura:attribute name="endPoint" type="String" />
+    <aura:attribute name="uid" type="String" />
+    <aura:attribute name="welcomeMsg" type="String" default="Hello, How can I help you?" />
+    <aura:attribute name="ExitMsg" type="String" default="Good Bye..." />
+    <aura:attribute name="currentUserEmail" type="String" default="" />
+    <aura:attribute name="customSettingErrorMessage" type="String" />
+    <aura:attribute name="commBaseURL" type="String" />
+    <aura:attribute name="showChatBot" type="Boolean" default="false" />
+    <aura:attribute name="icon" type="String" default="utility:chat" />
+    <aura:attribute name="sid" type="String" />
+    <aura:attribute name="robot" type="String" />
+    <aura:attribute name="form" type="Boolean" default="false" />
+    <aura:attribute name="entity" type="string" />
+    <aura:attribute name="date" type="string" />
+    <aura:attribute name="required" type="Boolean" default="false" />
+    <aura:attribute name="userSession" type="String" />
+    <aura:attribute name="slotValue" type="String" />
+    <aura:attribute name="setSlots" type="String" />
+    <aura:attribute name="isWelcome" type="String" />
+    <!-- <aura:attribute name="skip" type="Boolean" default="false"/> -->
+    <aura:attribute name="responseData" type="String" />
+    <aura:attribute name="sessionID" type="String" />
+    <aura:attribute name="Bearer" type="string" />
+    <aura:attribute name="isLive" type="Boolean" default="true" />
+    <aura:attribute name="cPermission" type="Boolean" default="true" />
+    <aura:attribute name="errorsMsg" type="String" />
+    <aura:attribute name="showDatepicker" type="Boolean" default="false" />
+    <aura:attribute name="sfdc_affinity_key" type="String" />
+    <aura:attribute name="setIntervalId" type="Integer" />
+    <aura:attribute name="clienPollTime" type="Integer" />
+    <aura:attribute name="sfdc_key" type="String"
+        default="7a90e9cb-0442-4c30-9831-e06987d07942!1568896324549!cevVUgKs3a5BA+hJMGQePXbMnh0=" />
+    <aura:attribute name="liveAgentjs" type="String" default="" />
+    <aura:attribute name="buttonId" type="String" />
+    <aura:attribute name="flatpicker" type="Object" />
+    <aura:attribute name="deploymentId" type="String" />
+    <aura:attribute name="agnetEndpoint" type="String" />
+    <aura:attribute name="test" type="String" default="" />
+    <aura:attribute name="orgId" type="String" />
+    <link href="{!v.fontURL}" style="text/css" />
+    <link href="{!v.fontURL1}" style="text/css" />
+    <aura:attribute name="languages" type="List" />
+
+    <aura:attribute name="currentLanguage" type="String" default="en" />
+    <aura:attribute name="defaultLang" type="Object" />
+    <aura:attribute name="startBot" type="Boolean" default="false" />
+    <aura:attribute name="append" type="Boolean" default="false" />
+    <aura:attribute name="nlp" type="string" default="true" />
+    <aura:attribute name="storySelected" type="string" default="" />
+    <aura:attribute name="previousParty" type="string" default="" />
+    <aura:attribute name="partyCheck" type="Boolean" default="false" />
+    <aura:attribute name="previousResponseType" type="string" default="" />
+    <aura:attribute name="responseTypeLimit" type="integer[]" />
+    <aura:attribute name="previousResponse" type="integer[]" />
+    <aura:attribute name="ent_type" type="string" default="" />
+    <aura:attribute name="bot_memory" type="string" default="" />
+    <aura:attribute name="isPrompt" type="string" default="" />
+    <aura:attribute name="caseResponse" type="Object" />
+	<aura:attribute name="responseType" type="string" default=""/>
+	<aura:attribute name="Subject" type="string" default=""/>
+    <aura:attribute name="Description" type="string" default=""/>
+    <aura:attribute name="errorMessage" type="string" default=""/>
+    <aura:attribute name="sendResponse" type="Boolean" default="false" />
+    <aura:attribute name="inactive" type="Object" />
+
+    <!--================SALESFORCE LIVE AGENT VARIABLES-->
+    <aura:attribute name="SFDC_liveAgent_invoked" type="Boolean" default="false" />
+    <aura:attribute name="sendAgain" type="Boolean" default="true" />
+    <aura:attribute name="SFDCendchatclicked" type="Boolean" default="false" />
+    <aura:attribute name="agentName" type="String" default="Connecting SFDC Agent..." />
+    <aura:attribute name="actualBotHeading" type="String" />
+    <aura:attribute name="sessionKey" type="String" default="null" />
+    <aura:attribute name="affinityToken" type="String" default="null" />
+    <aura:attribute name="clientPollTimeout" type="Integer" default="40" />
+    <aura:attribute name="apiVersion" type="String" default="50" />
+    <aura:attribute name="language" type="String" default="en-US" />
+    <aura:attribute name="screenResolution" type="String" default="2560x1440" />
+    <aura:attribute name="prechatDetails" type="List" default="[]" />
+    <aura:attribute name="prechatEntities" type="List" default="[]" />
+    <aura:attribute name="receiveQueueUpdates" type="Boolean" default="true" />
+    <aura:attribute name="isPost" type="Boolean" default="true" />
+    <aura:attribute name="ack" type="String" default="-1" />
+    <aura:attribute name="HOST_URL" type="String" default="" />
+    <!--================SALESFORCE LIVE AGENT VARIABLES-->
+
+    <aura:attribute name="timeLimitArray" type="integer[]" />
+    <aura:attribute name="timeLimit" type="Integer" />
+    <aura:attribute name="inactivityMessage" type="string" />
+    <aura:attribute name="inactivityLimitArray" type="integer[]" />
+    <aura:attribute name="inactivityLimit" type="Integer" />
+    <aura:attribute name="count" type="Integer" />
+    
+    <aura:attribute name="user_feedback" type="Boolean" default="false" />
+    <aura:attribute name="feedback_response" type="Boolean" default="false" />
+    <aura:attribute name="feedback_type" type="string" default= "" />
+
+    <!--case creation -->
+    <aura:attribute name="CaseUid" type="String" />
+    <aura:attribute name="fieldsArray" type="List" />
+    <aura:attribute name="isLoaded" type="Boolean" default="false" />
+    <!--case creation end -->
+
+    <lightning:recordEditForm aura:id="recorded" recordId="{!v.recordId}" objectApiName="Case"
+        onsuccess="{!c.handleSaveSuccess}" onerror="{!c.handleOnError}">
+        <aura:iteration items="{!v.fieldsArray}" var="field" indexVar="indexVar">
+            <lightning:inputField fieldName="{!field.value}" value="{!field.setValue}"
+                class="{!if(field.required, 'customErrorMessageIn','')}" onchange="{!c.getResults}" />
+        </aura:iteration>
+        <aura:if isTrue="{!v.isLoaded}">
+            <div class="slds-m-top_medium slds-text-align_center">
+                <lightning:button variant="brand" label="Submit" type="submit" />
+            </div>
+        </aura:if>
+    </lightning:recordEditForm>
+
+
+    <div id="searchUnifyChat">
+        <aura:if isTrue="{!if(v.customSettingErrorMessage == '',true,false)}">
+            <c:SUAuthHeaderDynamic aura:id="SuAnalytics" endPoint="{!v.endPoint}" uid="{!v.uid}" currentUserEmail="{!v.currentUserEmail}" customSettingErrorMessage="{!v.customSettingErrorMessage}" />
+            <!-- <ltng:require
+                styles="{!join(',',v.endPoint+'/resources/search_clients_custom/'+v.uid+'/bot/css/index.css',v.endPoint+'/resources/search_clients_custom/'+v.uid+'/bot/css/common.css')}" /> -->
+            <ltng:require
+                styles="{!join(',',v.endPoint+'/resources/search_clients_custom/'+v.uid+'/bot/css/index.css')}" />
+
+            <aura:if isTrue="{!v.showChatBot}">
+                <div class="container">
+                    <div class="row">
+                        <div class="wrapper">
+                            <div class="contact-form-page" aura:id="contact-form">
+                                <div id="live-chat">
+                                    <div class="border-chat">
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <div class="row">
+                                                <div class="col-md-8 col-sm-6 col-xs-6 left-first-section"
+                                                    id="notLoading">
+                                                    <p>
+                                                        <img class="logo-bot"
+                                                            src="{!v.endPoint+'/resources/Assets/searchunify_bot.svg'}" />
+                                                        <input type="hidden"
+                                                            id="{!v.buttonId+'_online' }">online</input>
+                                                        <input type="hidden"
+                                                            id="{!v.buttonId+'_offline'}">offline</input>
+                                                        <span class="heading-chat">SearchUnify Bot
+                                                        </span>
+
+                                                        <span class="settings" onclick="{!c.openLang}">
+                                                            <img src="{!v.endPoint+'/resources/Assets/settings.svg'}" />
+                                                        </span>
+                                                        <!--<span onclick="{!c.getAgentChat}" class="heading-chat">get chat
+                                                        </span> -->
+
+                                                        <img class="close-bot-icon"
+                                                            src="{!v.endPoint+'/resources/Assets/close_preview.svg'}"
+                                                            onclick="{!c.hideChat}" />
+                                                    </p>
+                                                </div>
+                                                <div class="col-md-8 col-sm-6 col-xs-6 first-section load-section"
+                                                    id="loading">
+                                                    <p>
+                                                    <div class="logo-bot"></div>
+                                                    <span class="loading-chat"> </span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="border-chat">
+                                        <div class="col-md-12 col-sm-12 col-xs-12 second-section">
+                                            <div class="chat-section">
+                                                <ul>
+                                                    <div class="chat">
+                                                        <div>
+                                                            <img id="load-img"
+                                                                src="{!v.endPoint+'/resources/Assets/loading-new.svg'}" />
+                                                            <span
+                                                                style="display: none; bottom: 9%; left: 4%; position: absolute;"
+                                                                id="agentTypingText"><i>Agent is typing...</i></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="loading">
+                                                        <div class="load-msg">
+                                                            <li>
+                                                                <div class="left-chat">
+                                                                    <div class="party"></div>
+                                                                </div>
+                                                                <div class="left-chat">
+                                                                    <div class="party"></div>
+                                                                </div>
+                                                            </li>
+                                                        </div>
+                                                        <div class="load-msg">
+                                                            <li>
+                                                                <div class="right-chat">
+                                                                    <p class="response"></p>
+                                                                </div>
+                                                                <div class="right-chat">
+                                                                    <p class="response"></p>
+                                                                </div>
+                                                            </li>
+                                                        </div>
+                                                        <div class="load-msg">
+                                                            <li>
+                                                                <div class="left-chat">
+                                                                    <div class="party"></div>
+                                                                </div>
+                                                                <div class="left-chat">
+                                                                    <div class="party"></div>
+                                                                </div>
+                                                            </li>
+                                                        </div>
+                                                        <div class="load-msg">
+                                                            <li>
+                                                                <div class="right-chat">
+                                                                    <p class="response"></p>
+                                                                </div>
+                                                                <div class="right-chat">
+                                                                    <p class="response"></p>
+                                                                </div>
+                                                            </li>
+                                                        </div>
+                                                    </div>
+                                                </ul>
+                                            </div>
+                                            <div class="start-over">
+                                                <a onclick="{!c.shownew}">
+                                                    <span><img src="{!v.endPoint+'/assets/img/start.svg'}"
+                                                            id="start-img" /></span>
+                                                    Start over Conversation
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="border-chat chatting">
+                                        <div class="col-md-12 col-sm-12 col-xs-12 third-section" id="third-section">
+                                            <div class="text-bar">
+                                                <div id="month_1">
+                                                    <ul class="month" name="month" id="monthnew">
+                                                        <li value="jan" class="month_li" onclick="{!c.jump}">Jan</li>
+                                                        <li value="feb" class="month_li" onclick="{!c.jump}">Feb</li>
+                                                        <li value="mar" class="month_li" onclick="{!c.jump}">Mar</li>
+                                                        <li value="apr" class="month_li" onclick="{!c.jump}">Apr</li>
+                                                        <li value="may" class="month_li" onclick="{!c.jump}">May</li>
+                                                        <li value="jun" class="month_li" onclick="{!c.jump}">Jun</li>
+                                                        <li value="jul" class="month_li" onclick="{!c.jump}">Jul</li>
+                                                        <li value="aug" class="month_li" onclick="{!c.jump}">Aug</li>
+                                                        <li value="sep" class="month_li" onclick="{!c.jump}">Sep</li>
+                                                        <li value="oct" class="month_li" onclick="{!c.jump}">Oct</li>
+                                                        <li value="nov" class="month_li" onclick="{!c.jump}">Nov</li>
+                                                        <li value="dec" class="month_li" onclick="{!c.jump}">Dec</li>
+                                                    </ul>
+                                                </div>
+                                                <aura:if isTrue="{!v.showDatepicker}">
+                                                    <ui:inputDate aura:id="EndDateField" value="{!v.date}"
+                                                        change="{!c.fldChanged}" displayDatePicker="true"
+                                                        format="yyyy-MM-dd" />
+                                                    <aura:set attribute="else">
+                                                        <input type="text" id="submit"
+                                                            placeholder="Start your Conversation"
+                                                            onkeydown="{!c.submitConv}" onfocus="{!c.myFunction}"
+                                                            onkeypress="{!c.keyPressFuntion}" autocomplete="off" />
+                                                    </aura:set>
+                                                </aura:if>
+                                                <span>
+                                                    <img src="{!v.endPoint+'/resources/Assets/skip_new.svg'}"
+                                                        id="skip-img" onclick="{!c.skipSubmit}" />
+                                                </span>
+
+                                                <a href="JavaScript:void(0);" onclick="{!c.submitClick}">
+                                                    <img src="{!v.endPoint+'/resources/Assets/Send.svg'}" />
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 col-sm-12 col-xs-12 third-section textLoad" id="loading">
+                                        </div>
+                                    </div>
+                                    <div class="settings-new">
+                                        <div>
+                                            <div class="top-bar">
+                                                <span class="lang-logo" onclick="{!c.closeLang}">
+                                                    <img src="{!v.endPoint+'/resources/Assets/back.svg'}" />
+                                                </span>
+                                                <p class="lang-heading">Settings</p>
+                                            </div>
+                                            <div class="pad-top">
+                                                <label>Languages</label>
+                                                <form>
+                                                    <lightning:select name="mySelect" aura:id="mySelect"
+                                                        onchange="{!c.changeLang}" value="{!v.currentLanguage}">
+                                                        <aura:iteration items="{!v.languages}" var="language">
+                                                            <option value="{!language.lang}"
+                                                                text="{!language.language_name}"></option>
+                                                        </aura:iteration>
+                                                    </lightning:select>
+                                                    <!-- <div class="Select__icon-container">
+                                       <img src="{!v.endPoint+'/resources/Assets/drop.svg'}" />
+                                    </div> -->
+                                                </form>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                    <div id="endAgentChatDialog" style="display: none;">
+                                        <div class="endAgentChatDialogContainer">
+                                            <img src="{!v.endPoint+'/resources/Assets/confirm-dialog.svg'}" width="32"
+                                                height="32" style="margin: 15px auto;" />
+                                            <h3>End Agent Chat</h3>
+                                            <p>Are you sure you want to end chat with agent ?</p>
+
+                                            <div class="endAgentChatDialogClearfix">
+                                                <button type="button" onclick="{!c.closeEndAgentChatDialog}"
+                                                    class="endAgentChatDialogCancelbtn">Cancel</button>
+                                                <button type="button" onclick="{!c.endAgentChatFromDialog}"
+                                                    class="endAgentChatDialogEndbtn">End</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="waitingLabel" id="waitingId"></div>
+                            <a class="buttom-btn btn-end" onclick="{!c.showResult}">
+                                <div class="startChat"></div>
+                                <!-- <img src="{!v.icon}" id="image" /> -->
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </aura:if>
+            <aura:set attribute="else">
+                <div
+                    class="slds-col slds-large-size--1-of-1 slds-small-size--1-of-1 slds-medium-size--1-of-1 su_errorMessage">
+                    <span>{!v.customSettingErrorMessage}</span>
+                </div>
+            </aura:set>
+        </aura:if>
+    </div>
+</aura:component>

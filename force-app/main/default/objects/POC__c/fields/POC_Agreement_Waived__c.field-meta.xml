@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>POC_Agreement_Waived__c</fullName>
+    <formula>IF(
+ OR(
+  Disty_with_Signed_POC_Addendum__r.Name = &apos;Commtech&apos;,
+  Disty_with_Signed_POC_Addendum__r.Name = &apos;VCP&apos;,
+  Disty_with_Signed_POC_Addendum__r.Name = &apos;Promark&apos;,
+  Disty_with_Signed_POC_Addendum__r.Name = &apos;Alturna Tech&apos;,
+  Disty_with_Signed_POC_Addendum__r.Name = &apos;Anexinet&apos;,
+  Disty_with_Signed_POC_Addendum__r.Name = &apos;Application 2U, LLC&apos;,
+  Disty_with_Signed_POC_Addendum__r.Name = &apos;Arrosoft Solutions LLC&apos;,
+  Disty_with_Signed_POC_Addendum__r.Name = &apos;Virtual Enterprises&apos;,
+  Disty_with_Signed_POC_Addendum__r.Name = &apos;Redicloud&apos;,
+  Disty_with_Signed_POC_Addendum__r.Name = &apos;Bay Pointe Technology&apos;,
+  Disty_with_Signed_POC_Addendum__r.Name = &apos;BEArena&apos;
+), TRUE, FALSE )</formula>
+    <inlineHelpText>Contingent Upon a Distributor having a signed POC Addendum</inlineHelpText>
+    <label>POC Agreement Waived</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

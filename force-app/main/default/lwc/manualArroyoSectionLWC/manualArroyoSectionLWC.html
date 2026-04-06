@@ -1,0 +1,62 @@
+<template>
+<lightning-card>
+    <h3 slot="title">
+        <lightning-icon icon-name="standard:update" alternative-text="Manual Arroyo Override" size="small"></lightning-icon>
+        &nbsp;Manual Arroyo Override  
+        &nbsp;&nbsp;&nbsp;&nbsp;<lightning-button variant="brand" onclick={handleManualOverride} name="Update Arroyo fields" disabled={disableMainButtons} label="Update Arroyo fields"></lightning-button>
+    </h3>
+    <template if:true={showSection}>
+        <template if:true={showLoader}>
+            <lightning-spinner alternative-text="Loading" size="medium" class="spinnerClass"></lightning-spinner>
+        </template>   
+            <lightning-layout>
+                <lightning-layout-item size="12" small-device-size="2" medium-device-size="4" large-device-size="2" padding="around-small">
+                        <lightning-input  value ={acvAmount} type="number"  step="0.00001" label="ACV Amount" onchange={handleACVChange}></lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" small-device-size="2" medium-device-size="4" large-device-size="2" padding="around-small">
+                        <lightning-input  value ={subsumedACV} type="number"  step="0.00001" label="Subsumed Renewal Amount" onchange={handleSubACVChange} ></lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" small-device-size="2" medium-device-size="4" large-device-size="2" padding="around-small">
+                        <lightning-input  value ={new_expansionACV} type="number"  step="0.00001" label="New/Expansion ACV"  onchange={handleNewExpACVChange} ></lightning-input>
+                </lightning-layout-item>
+            </lightning-layout>
+            <lightning-layout>
+                <lightning-layout-item size="12" small-device-size="2" medium-device-size="4" large-device-size="2" padding="around-small">
+                    <lightning-input  value ={subsumedTCV} type="number"  step="0.00001" label="Renewal Subsumed TCV" onchange={handleSubTCVChange}  ></lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" small-device-size="2" medium-device-size="4" large-device-size="2" padding="around-small">
+                        <lightning-input  value ={new_expansionTCV} type="number"  step="0.00001" label="New/Expansion TCV"  onchange={handleNewExpTCVChange}></lightning-input>
+                </lightning-layout-item>
+                 <lightning-layout-item size="12" small-device-size="1" medium-device-size="6" large-device-size="4" padding="around-small">
+                    <lightning-input  value ={core_new_expansionACV} type="number"  step="0.00001" label="Core New/Expansion ACV"   onchange={handleCoreNewExpACVChange}></lightning-input>
+            </lightning-layout-item>
+        </lightning-layout>
+        <lightning-layout>
+            <lightning-layout-item size="12" small-device-size="1" medium-device-size="6" large-device-size="4" padding="around-small">
+                    <lightning-input  value ={nas_new_expansionACV} type="number"  step="0.00001" label="Cloud New/Expansion ACV"   onchange={handleNasNewExpACVChange}></lightning-input>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" small-device-size="1" medium-device-size="6" large-device-size="4" padding="around-small">
+                    <lightning-input  value ={saas_new_expansionACV} type="number"  step="0.00001" label="SaaS New/Expansion ACV"   onchange={handleSaaSNewExpACVChange}></lightning-input>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" small-device-size="1" medium-device-size="6" large-device-size="4" padding="around-small">
+                <lightning-input  value ={ncd_new_expansionACV} type="number"  step="0.00001" label="NCD New/Expansion ACV"   onchange={handleNCDNewExpACVChange}></lightning-input>
+            </lightning-layout-item> <!-- SAL26-1291 -->
+        </lightning-layout>
+        <lightning-layout>
+            <lightning-layout-item size="12" small-device-size="1" medium-device-size="6" large-device-size="4" padding="around-small">
+                <lightning-input  value ={subsumed_renewal_churnACV} type="number"  step="0.00001" label="Subsumed Renewal Churn ACV"   onchange={handleSubsumedRenewalChurnACV}></lightning-input>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" small-device-size="1" medium-device-size="6" large-device-size="4" padding="around-small">
+                <lightning-input  value ={subsumed_renewal_churnTCV} type="number"  step="0.00001" label="Subsumed Renewal Churn TCV"   onchange={handleSubsumedRenewalChurnTCV}></lightning-input>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" small-device-size="1" medium-device-size="6" large-device-size="4" padding="around-small">
+                <lightning-input  value ={comp_uplift_acv} type="number"  step="0.00001" label="Comp Uplift ACV"   onchange={handleFieldChange} data-fieldname="comp_uplift_acv"></lightning-input>
+            </lightning-layout-item>
+        </lightning-layout>
+            <div slot="footer">
+                <lightning-button variant="brand" onclick={handleSubmit} name="submit" disabled={disableButtons} label="Submit"></lightning-button>
+                <lightning-button variant="neutral" onclick={handleCancel} name="cancel" label="Cancel">  </lightning-button>
+            </div>
+    </template>
+</lightning-card>  
+</template>

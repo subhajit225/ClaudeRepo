@@ -1,0 +1,48 @@
+<aura:component controller="ClusterChartController">
+    <ltng:require scripts="{!join(',',$Resource.chartbundle,
+                           $Resource.gaugeJs
+                           )}"/>
+    <aura:attribute name="allData" type="Map"/>
+    <aura:attribute name="ownData" type="Map"/>
+    <aura:attribute name="showChart" type="Boolean" default="false"/>
+    <aura:attribute name="chartType" type="String" default=""/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <br/><br/>
+    <div class="slds-grid">
+        <div class="slds-col slds-large-size_6-of-12 ">
+            <div class="chartHeader">{!$Label.c.All_Version_Header}</div>
+            <canvas aura:id="allData"></canvas>
+            <div class="dataPad">
+                    {!$Label.c.All_Version_Placeholder}
+                </div>
+        </div>
+        <div class="slds-col slds-large-size_6-of-12">
+            <div class="chartHeader">{!$Label.c.My_Version_Header}</div>
+            <canvas aura:id="myData"></canvas>
+            <div class="dataPad">
+                    {!$Label.c.My_Version_Placeholder}
+                </div>
+        </div>
+        
+    </div>
+    
+        <div class="slds-grid" style="{!if(v.showChart,'display:inline-block;width:100%;padding-top : 2rem;','')}">
+            	<a  style="{!if(v.showChart,'float:right;','display:none;')}" onclick="{!c.hideChart}" href="javascript:void();"> 
+                        <lightning:Icon iconName="action:reject"   variant="filled" size="x-small"/>
+                        <!-- <lightning:icon iconName="utility:close" size="x-small" class="slds-input__icon" alternativeText="Remove" /> -->
+                        
+                </a>
+            
+            <div class="chartHeader" style="text-align:center;">
+                <aura:if isTrue="{!and(v.chartType == 'pie',v.showChart)}">{!$Label.c.All_Version_Header}</aura:if>
+                <aura:if isTrue="{!and(v.chartType == 'doughnut',v.showChart)}">{!$Label.c.My_Version_Header}</aura:if>
+            </div>
+            <div class="slds-col slds-large-size_12-of-12 " id="childContainer">
+                
+            </div>
+            <div style="text-align:center;">
+                <aura:if isTrue="{!and(v.chartType == 'pie',v.showChart)}">{!$Label.c.All_Drill_Down_Placeholder}</aura:if>
+                <aura:if isTrue="{!and(v.chartType == 'doughnut',v.showChart)}">{!$Label.c.My_Drill_Down_Placeholder}</aura:if>
+            </div>
+    </div>
+</aura:component>

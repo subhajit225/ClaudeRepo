@@ -1,0 +1,39 @@
+<template>
+    <div class="slds-card slds-banner border-none">
+        <template if:true={showSpinner}>
+            <lightning-spinner alternative-text="Loading..." size="large" class="spinner-class slds-align_absolute-center"></lightning-spinner>
+        </template>
+        <lightning-layout multiple-rows>
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+                <div class="slds-p-around_xx-medium slds-m-bottom_medium">
+                        <h1 class="heading-36">Transform accelerator claim form</h1>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+                <div class="slds-p-around_xx-medium">
+                    <lightning-combobox name="Type" label="Type" placeholder="None" message-when-value-missing="Please select a Type"
+                                        options={optionsType} required onchange={handleTypeChange} value={type}
+                                        class="slds-p-around_small inputClass pc-dropdown">
+                    </lightning-combobox>
+                    <lightning-input type="text" label="Supporting URL" name="Supporting URL" placeholder="Enter valid URL here..." message-when-value-missing="Please enter a URL"
+                                     value={url} onchange={handleURLChange} class="slds-p-around_small inputClass">
+                    </lightning-input>
+                    <div class="slds-p-around_small">
+                        <lightning-file-upload  label="File Attachment Upload"
+                                                name="fileUploader"
+                                                onuploadfinished={handleUploadFinished}
+                                                multiple
+                                                required>
+                        </lightning-file-upload>
+                        <div if:true={fileNames} class="slds-text-body_small slds-text-color_error">{fileNames}</div>
+                    </div>
+                    <div class="slds-p-around_small">
+                        <lightning-button variant="brand" label="Submit" title="Submit"
+                                        onclick={handleSubmit}>
+                        </lightning-button>
+                    </div>
+                </div>
+            </lightning-layout-item>
+        </lightning-layout>
+    </div>
+</template>

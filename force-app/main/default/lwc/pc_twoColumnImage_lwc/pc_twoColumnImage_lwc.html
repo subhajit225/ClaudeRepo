@@ -1,0 +1,82 @@
+<template>
+    <template if:true={isData}>
+        <div class="slds-card two-col-img" >
+            <lightning-layout>
+                <template if:false={isImageRightAligned}>
+                    <lightning-layout-item size="6" small-device-size="6" medium-device-size="6" large-device-size="6">
+                        <div class="slds-col slds-p-around_x-large slds-p-horizontal_small">
+                            <span>
+                                <img src={imageURL}>
+                            </span>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="6" small-device-size="6" medium-device-size="6" large-device-size="6">
+                        <div class="slds-col slds-p-left_medium slds-p-around_x-large slds-p-horizontal_small">
+                            <span>
+                                <template if:true={showHeader}>
+                                    <div class="slds-p-around_xxx-small">
+                                        <h1 class="cardBodyTag">{headerValue}</h1>
+                                    </div>
+                                </template>
+                                <template if:true={showTitle}>
+                                    <div class="slds-p-around_xxx-small">
+                                        <h1 class="heading-58">{titleValue}</h1>
+                                    </div>
+                                </template>
+                                <template if:true={showImgText}>
+                                    <div class="slds-p-bottom-x-small">
+                                        <!--<p class="cardBodyDescription">{imageText}</p>-->
+                                        <lightning-formatted-rich-text value={imageText} class="ritchText"></lightning-formatted-rich-text>
+                                    </div>
+                                </template>
+                                <template if:true={showButton}>
+                                    <div class="slds-p-bottom-x-small slds-m-top_x-large">
+                                        <lightning-button variant="brand" label={buttonValue} title={buttonValue} onclick={handleButtonClick} class="slds-p-around_small slds-p-left_none">
+                                        </lightning-button>
+                                    </div>
+                                </template>
+                            </span>
+                        </div>
+                    </lightning-layout-item>
+                </template>
+                <template if:true={isImageRightAligned}>
+                    <lightning-layout-item size="6" small-device-size="6" medium-device-size="6" large-device-size="6">
+                        <div class="slds-col slds-p-left_medium slds-p-around_x-large slds-p-horizontal_small">
+                            <span>
+                                <template if:true={showHeader}>
+                                    <div class="slds-p-around_xxx-small">
+                                        <h1 class="cardBodyTag">{headerValue}</h1>
+                                    </div>
+                                </template>
+                                <template if:true={showTitle}>
+                                    <div class="slds-p-around_xxx-small">
+                                        <h1 class="heading-58">{titleValue}</h1>
+                                    </div>
+                                </template>
+                                <template if:true={showImgText}>
+                                    <div class="slds-p-bottom-x-small">
+                                        <!--<p class="cardBodyDescription">{imageText}</p>-->
+                                        <lightning-formatted-rich-text value={imageText} class="ritchText"></lightning-formatted-rich-text>
+                                    </div>
+                                </template>
+                                <template if:true={showButton}>
+                                    <div class="slds-p-bottom-x-small">
+                                        <lightning-button variant="brand" label={buttonValue} title={buttonValue} onclick={handleButtonClick} class="slds-p-around_small">
+                                        </lightning-button>
+                                    </div>
+                                </template>
+                            </span>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="6" small-device-size="6" medium-device-size="6" large-device-size="6">
+                        <div class="slds-col slds-p-around_x-large slds-p-horizontal_small">
+                            <span>
+                                <img class="imageClass"  src={imageURL}>
+                            </span>
+                        </div>
+                    </lightning-layout-item>
+                </template>
+            </lightning-layout>
+        </div>
+    </template>
+</template>

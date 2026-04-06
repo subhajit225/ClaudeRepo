@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Enable_Partner_Error</fullName>
+    <columns>NAME</columns>
+    <columns>Exception_Message__c</columns>
+    <columns>Functionality__c</columns>
+    <columns>CREATEDBY_USER</columns>
+    <columns>CREATED_DATE</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Class__c</field>
+        <operation>contains</operation>
+        <value>PO_Request_Service</value>
+    </filters>
+    <label>Enable Partner Error</label>
+</ListView>

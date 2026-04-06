@@ -1,0 +1,99 @@
+<!--
+* Visualforce Page Name :- ProvideResolution
+* Controller :- UpdateAssistRequestController
+* Author :- Shiva Sharma
+* Created Date :- 27-05-2020
+* Description : This Page is being used in providing resolution in assist request 
+* 
+*************Change Logs***************************************************************************
+* 
+* Modified By          Date           Description 
+* Shiva Sharma         21-01-2021	  Make resolution field mandatory when one of box is selected 
+									  in Mark assist request resolved section
+*************Change Logs Ends**********************************************************************
+-->
+<apex:page standardcontroller="Assist_Request__c" action="{!resolutionDraft}" extensions="UpdateAssistRequestController">
+    <apex:form >
+        <script>
+        function toggleDelbox() {
+            var elems = document.getElementById('checkboxRemove');
+            var shouldShowList = false;
+            //document.getElementById('j_id0:j_id1:thePageBlock:j_id58').value = '';
+            if (elems.checked) 
+                shouldShowList = true;
+            else
+                document.getElementById('j_id0:j_id1:thePageBlock:j_id58').value = '';
+            document.querySelector('#blockInsight').style.display = shouldShowList ? '' : 'none';
+        }
+        </script>
+        <apex:pageMessages />
+        <apex:sectionHeader title="Assist Request" subtitle="Provide Information"/>
+        <apex:pageBlock id="thePageBlock">
+            <apex:pageBlockSection >
+                <apex:actionRegion rendered="{!supporRecordType}"> 
+                    <apex:outputLabel style="padding-left: 60px;padding-right: 14px;" for="ProductImprovement" value="Brownbag Candidate "/>
+                    <apex:inputField value="{!assistRequest.Brownbag_Candidate__c}"> 
+                        <apex:actionSupport event="onchange" reRender="a1" status="Status"> 
+                        </apex:actionSupport> 
+                    </apex:inputField> 
+                </apex:actionRegion>
+                <apex:actionRegion > 
+                    <apex:outputLabel for="ProductImprovement" style="padding-left: 10px;padding-right: 14px;" value="Product Improvement Needed "/>
+                    <apex:inputField value="{!assistRequest.Product_Improvement_Needed__c}"> 
+                        <apex:actionSupport event="onchange" reRender="a2,a7" status="Status"> 
+                        </apex:actionSupport> 
+                    </apex:inputField> 
+                </apex:actionRegion>
+                <apex:inputTextarea label="Comments" disabled="{!(!assistRequest.Brownbag_Candidate__c)}" required="true"  rendered="{!supporRecordType}" value="{!brownbagCom}" id="a1"/>
+                <apex:inputTextarea label="Comments" disabled="{!(!assistRequest.Product_Improvement_Needed__c)}" required="true" rendered="{!supporRecordType}" value="{!improvementCom}"  id="a2"/> 
+                <apex:actionRegion > 
+                    <apex:outputLabel for="ProductImprovement" value="Issue Understanding/Troubleshooting "/>
+                    <apex:inputField value="{!assistRequest.Issue_Understanding_Troubleshooting__c}"> 
+                        <apex:actionSupport event="onchange" reRender="a3" status="Status"> 
+                        </apex:actionSupport> 
+                    </apex:inputField> 
+                </apex:actionRegion>
+                <apex:actionRegion rendered="{!supporRecordType}"> 
+                    <apex:outputLabel for="ProductImprovement" style="padding-left: 49px;padding-right: 14px;" value="Usage of Existing tools "/>
+                    <apex:inputField value="{!assistRequest.Usage_of_Existing_tools__c}"> 
+                        <apex:actionSupport event="onchange" reRender="a4" status="Status"> 
+                        </apex:actionSupport> 
+                    </apex:inputField> 
+                </apex:actionRegion>
+                <apex:inputTextarea label="Comments" disabled="{!(!assistRequest.Product_Improvement_Needed__c)}" required="true" rendered="{!NOT(supporRecordType)}" value="{!improvementCom}"  id="a7"/>
+                <apex:inputTextarea label="Comments" disabled="{!(!assistRequest.Issue_Understanding_Troubleshooting__c)}" required="true" value="{!troubleShootingCom}"  id="a3"/>  
+                <apex:inputTextarea label="Comments" value="{!existingToolCom}" disabled="{!(!assistRequest.Usage_of_Existing_tools__c)}" rendered="{!supporRecordType}" required="true" id="a4"/>    
+                <apex:actionRegion > 
+                    <apex:outputLabel for="ProductImprovement" rendered="{!supporRecordType}" value="Usage of Knowledge base/searchunify "/>
+                    <apex:outputLabel for="ProductImprovement" rendered="{!NOT(supporRecordType)}" value="Customer 360/Research "/>
+                    <apex:inputField value="{!assistRequest.Usage_of_Knowledge_base_searchunify__c}"> 
+                        <apex:actionSupport event="onchange" reRender="a5" status="Status"> 
+                        </apex:actionSupport> 
+                    </apex:inputField> 
+                </apex:actionRegion>
+                <apex:actionRegion > 
+                    <apex:outputLabel for="ProductImprovement" style="padding-right: 14px;padding-left: 135px;" value="Others "/>
+                    <apex:inputField value="{!assistRequest.Others__c}"> 
+                        <apex:actionSupport event="onchange" reRender="a6" status="Status"> 
+                        </apex:actionSupport> 
+                    </apex:inputField> 
+                </apex:actionRegion>
+                <apex:inputTextarea label="Comments" style="" disabled="{!(!assistRequest.Usage_of_Knowledge_base_searchunify__c)}" required="true" value="{!searchUnifyCom}"  id="a5"/>
+                <apex:inputTextarea label="Comments" disabled="{!(!assistRequest.Others__c)}"  value="{!othersCom}" required="true"  id="a6"/>
+                
+            </apex:pageBlockSection>
+            <apex:outputPanel rendered="{!supporRecordType}">
+            Does this AR need an insight?
+            <input type="checkbox" name="Does this AR need an insight?" id="checkboxRemove" value="" onclick="toggleDelbox();"/>
+            </apex:outputPanel>
+            <div id="blockInsight" style="display:none" >
+                <apex:outputLabel >Insight Id</apex:outputLabel>
+                <apex:inputField value="{!assistRequest.InsightId__c}" label="Insight Id"/>
+            </div>
+            <apex:pageBlockButtons location="bottom">
+                <apex:commandButton value="Resolve Assist Request" action="{!resolveRequest}"/>
+                <apex:commandButton value="Cancel" action="{!cancel}"/>
+            </apex:pageBlockButtons> 
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

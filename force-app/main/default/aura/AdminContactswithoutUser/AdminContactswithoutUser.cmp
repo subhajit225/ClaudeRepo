@@ -1,0 +1,148 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" controller="AdminPanelApexController">
+    <aura:attribute name="AccountInfo" type="Object"/>
+    <aura:attribute name="contactInfo" type="contact[]"/>
+    <aura:attribute name="sortedBy" type="String"/>
+    <aura:attribute name="mycolumns" type="List"/>
+    <aura:attribute name="sortedDirection" type="String" default=""/>
+    <aura:attribute name="Spnr" type="boolean"  default="false"/>
+    <!--<Additions By: Anmol Baweja 03 Mar, 2020>-->
+    <!--<Reason>
+  		To restrict any community user to make a new user with ignored email domain as per CS-582
+ 	</Reason>-->
+    <aura:attribute name="ignoredDomainList" type="List"/>
+    <aura:attribute name="IgnoredDomainError" type="boolean" default="false"/>
+    <aura:attribute name="showModal" type="boolean" default="false"/>
+    <aura:attribute name="modalMessage" type="String"/>
+    <aura:attribute name="selectedContactEmail" type="String"/>
+    <!--</Additions By: Anmol Baweja 03>-->
+    <aura:handler name="init" value="this" action="{!c.init}"/>
+    
+    <div class="slds-grid">
+        <div class="slds-small-size--8-of-12 slds-medium-size--12-of-12 slds-large-size--12-of-12 ">
+            <center> 
+                <aura:if isTrue="{!v.Spnr}">
+                    <lightning:spinner alternativeText="Loading" size="small" />
+                </aura:if>
+                <aura:if isTrue="{!!v.AccountInfo.isAuthorize}">
+                    <!--p style="width:70%;" class="Paragraph">
+                        The Admin Panel allows authorized users within an organization to manage access to the Support Portal. 
+                        The following users have been configured as authorized users in your organization.
+                    </p-->
+                    <lightning:button  class="rubrikbtn" label="REQUEST ADMIN PANEL ACCESS" title="REQUEST ADMIN PANEL ACCESS" onclick="{!c.ModalBtn}" />
+                    <lightning:helptext class="padd10" content="{!$Label.c.Community_Request_Label}" />
+                </aura:if>
+                <aura:if isTrue="{!v.AccountInfo.isAuthorize}">
+                    
+                    <!--Contacts without User Table start-->
+                    <h2 class="headStyle">Contacts without User</h2>
+                    <table class="slds-table tableClass slds-max-medium-table_stacked" style="width:90%;" id="viewTable">
+                        <thead class="TableHead">
+                            <tr class="slds-line-height_reset ">
+                                <aura:iteration items="{!v.mycolumns}" var="label">
+                                    <th class="thclass slds-cell-wrap" scope="col">
+                                        <div class="slds-truncate" title="{!label.label}"></div>
+                                        <a href="javascript:void(0);" name="{!label.fieldName}" id="desc" class="textStyle" onclick="{!c.Sorttable}">{!label.label}</a>
+                                        <div class="padd-dis">
+                                            <aura:if isTrue="{!v.sortedBy == label.fieldName}">
+                                                <aura:if isTrue="{!v.sortedDirection != 'desc'}">
+                                                    <lightning:icon iconName="utility:chevronup" size="xx-small" />
+                                                </aura:if> 
+                                            </aura:if>
+                                        </div>
+                                        <div class="padd-dis">
+                                            <aura:if isTrue="{!v.sortedBy == label.fieldName}">
+                                                <aura:if isTrue="{!v.sortedDirection == 'desc'}">
+                                                    <lightning:icon iconName="utility:chevrondown" size="xx-small" />
+                                                </aura:if> 
+                                            </aura:if>
+                                        </div>
+                                    </th>
+                                </aura:iteration>
+                                <th scope="col" class="textStyle slds-cell-wrap">
+                                    <div class="slds-truncate" title="Action">Action</div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="textStyle">
+                            <aura:iteration items="{!v.contactInfo}" var="usrInformation" IndexVar="rowNum2">
+                                <tr class="rowborder">
+                                    <td class="slds-cell-wrap" scope="row" data-label="First Name">
+                                        {!usrInformation.FirstName} 
+                                    </td>
+                                    <td class="slds-cell-wrap" data-label="Last Name">
+                                        {!usrInformation.LastName}
+                                    </td>
+                                    <td class="slds-cell-wrap" aura:Id="userEmail" data-label="Email">
+                                        {!usrInformation.Email}
+                                    </td>
+                                    <td class="slds-cell-wrap" data-label="Title">
+                                        {!usrInformation.Title}
+                                    </td>
+                                    <td class="slds-cell-wrap" data-label="Phone">
+                                        {!usrInformation.Phone}
+                                    </td>
+                                    <td class="slds-cell-wrap" data-label="Action">
+                                        <lightning:button class="rubrikbtn" name="{!usrInformation.Id}" label="CREATE USER" title="CREATE USER" onclick="{! c.OpenModal }" />
+                                    </td>
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table><br/><br/> 
+                    <!--Contacts without User Table start-->
+                </aura:if>
+            </center>
+        </div> 
+    </div>
+    
+    <!--Modal Div Start-->
+    <div class="demo-only slds-hide" style="height: 640px; " id="Modalbox">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <p class="textStyle">{!$Label.c.S_R_Request_to_add_user}</p>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral fontstyle" onclick="{!c.closeModal}" >Close</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </div>
+    <!--Modal Div End-->
+    
+    <div class="demo-only slds-hide" style="height: 640px; " id="Modal">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <p class="textStyle">Your request has been submitted to the authorized user(s). You will receive a welcome email once the request is approved.</p>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral fontstyle" onclick="{!c.closeModalBtn}" >Close</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </div>
+    <!--<Additions By: Anmol Baweja 03 Mar, 2020>-->
+    <!--<Reason>
+  		To restrict any community user to make a new user with ignored email domain as per CS-582
+ 	</Reason>-->
+    <!--Modal Div Start-->
+    <aura:if isTrue="{!v.showModal}" >
+        <div class="demo-only" style="height: 640px; " id="Modalbox">
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <p>{!v.modalMessage}</p>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <button class="slds-button slds-button_neutral fontstyle" onclick="{!c.closeModal}" >Close</button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </aura:if>
+    <!--Modal Div End-->
+    <!--</Additions By: Anmol Baweja>-->
+</aura:component>

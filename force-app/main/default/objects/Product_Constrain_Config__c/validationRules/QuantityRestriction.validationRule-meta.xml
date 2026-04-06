@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>QuantityRestriction</fullName>
+    <active>true</active>
+    <errorConditionFormula>((CONTAINS(Dependent_Product__c ,&quot;,&quot;))|| Could_be_Repurchased__c) &amp;&amp;  NOT(ISBLANK(Dependent_Product_Quantity__c ))</errorConditionFormula>
+    <errorMessage>Multiple Dependent Product or Repurchased group  can&apos;t have value in Dependent Product Quantity</errorMessage>
+</ValidationRule>

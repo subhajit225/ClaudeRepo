@@ -1,0 +1,7 @@
+<aura:component  implements="forceCommunity:availableForAllPageTypes,force:hasRecordId" access="global" controller="PC_TagsContentController">
+    <aura:attribute name="id" type="String"/> 
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="ContentdocIds" type="Id" /> 
+    <aura:handler name="init" value="{!this}" action="{!c.doinit}"/>
+    <lightning:fileCard fileId="{!v.ContentdocIds}"/>
+</aura:component>

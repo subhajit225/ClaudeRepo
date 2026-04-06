@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SalesDataOps_Request_Jinil</fullName>
+    <columns>NAME</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Issue__c</field>
+        <operation>notEqual</operation>
+        <value>Entitlement/Asset Transfer,Account Transfer</value>
+    </filters>
+    <filters>
+        <field>Status__c</field>
+        <operation>notEqual</operation>
+        <value>Complete,Rejected</value>
+    </filters>
+    <filters>
+        <field>Assigned_to__c</field>
+        <operation>notEqual</operation>
+        <value>Jelle Maes,Stefan Willemse,Nishan Aiyappa,Harshit Singh,Karthikeya UD,Samson R,Sales Ops Business Data Migration User</value>
+    </filters>
+    <label>SalesDataOps Request - Jinil</label>
+</ListView>

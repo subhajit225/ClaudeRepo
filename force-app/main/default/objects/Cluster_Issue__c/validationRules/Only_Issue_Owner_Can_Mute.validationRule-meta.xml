@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Only_Issue_Owner_Can_Mute</fullName>
+    <active>true</active>
+    <description>Users other than issue owner cannot mute notifications</description>
+    <errorConditionFormula>AND(
+$Profile.Name != &apos;System Administrator&apos;,
+$Profile.Name != &apos;Rubrik Light Administrator&apos;,
+PRIORVALUE(Mute_notifications__c) = false,
+Mute_notifications__c,
+$User.Id != Owner__c
+)</errorConditionFormula>
+    <errorMessage>You are not authorised to mute the notifications. Only issue owner can mute.</errorMessage>
+</ValidationRule>

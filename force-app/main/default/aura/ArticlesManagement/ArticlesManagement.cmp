@@ -1,0 +1,157 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:appHostable" access="global" controller="ArticlesInfoController">
+    <aura:attribute name='truthy' type = 'Boolean'/>
+    <aura:attribute name='showError' type = 'Boolean'/>
+    <aura:attribute name='ListOfArticles' type='Object'/>
+    <aura:attribute name='selectedArticles' type='List'/>
+    <aura:attribute name='dataCategories' type='List'/>
+    <aura:attribute name='selectedValue' type='String' />
+    <aura:attribute name='softwareVersions' type='List'/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:registerEvent name="MaxSelectionEvent" type="c:MaxSelectionEvent"/>
+
+    <aura:attribute name="options" type="List" default="[
+                                                        {'label': 'Draft Articles','value': 'Draft'},
+                                                        {'label': 'Published Articles', 'value': 'Online'},
+                                                        {'label': 'Archived Articles', 'value': 'Archived'},
+                                                        ]"/>
+    <aura:attribute name="statusMenuOpt" type="List" default="[{'label': 'Draft','value': 'Draft'},
+                                                              {'label': 'Publish', 'value': 'Online'},
+                                                              {'label': 'Archive', 'value': 'Archived'}]"/>
+    <aura:attribute name="statusMenuItems" type="List" default="[]"/>
+    <aura:attribute name="isOpen" type="boolean" default="false"/>
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+    <div class="mainDiv">
+        <aura:if isTrue="{!v.truthy}">
+            <lightning:spinner aura:id="spinner" variant="brand" size="large" />
+        </aura:if> 
+        <!-- PAGE HEADER -->
+        <div class="header slds-m-around_xx-small">
+            <lightning:layout class="slds-page-header slds-page-header--object-home">
+                <lightning:layoutItem>
+                    <lightning:icon iconName="standard:article" alternativeText="Articles"/>
+                </lightning:layoutItem>
+                <lightning:layoutItem padding="horizontal-small">
+                    <div class="page-section page-header">
+                        <h1 class="slds-text-heading--label"><b>Manage Articles</b></h1>
+                    </div>
+                </lightning:layoutItem>
+            </lightning:layout>
+        </div>
+        <!-- / PAGE HEADER -->
+        <div class="c-container slds-p-around_xx-small">
+            <aura:if isTrue="{!v.isOpen}">
+                
+                <!--###### MODAL BOX Start######--> 
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <!-- ###### MODAL BOX HEADER Start ######-->
+                        <header class="slds-modal__header">
+                            <lightning:buttonIcon iconName="utility:close"
+                                                  onclick="{! c.closeModel }"
+                                                  alternativeText="close"
+                                                  variant="bare-inverse"
+                                                  class="slds-modal__close"/>
+                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Select Categories</h2>
+                        </header>
+                        <!--###### MODAL BOX BODY Part Start######-->
+                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                            <lightning:dualListbox aura:id="categoryListBox"
+                                                   name="categories"
+                                                   label= "Select Categories"
+                                                   sourceLabel="Available"
+                                                   selectedLabel="Selected Categories"
+                                                   fieldLevelHelp="Select category in which you want to include the article"
+                                                   options="{!v.dataCategories}"/>
+                        </div>
+                        <!--###### MODAL BOX FOOTER Part Start ######-->
+                        <footer class="slds-modal__footer">
+                            <lightning:button variant="neutral" 
+                                              label="Cancel"
+                                              title="Cancel"
+                                              onclick="{! c.closeModel }"/>
+                            <lightning:button variant="brand" 
+                                              label="Save"
+                                              title="Save"
+                                              onclick="{! c.save }"/>
+                        </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+                <!--###### MODAL BOX Part END Here ######-->
+                
+            </aura:if>
+            <div class="slds-box slds-box_small slds-grid slds-wrap">
+                <div class="slds-col slds-size_6-of-12">
+                    <lightning:combobox aura:id="dropDown" class="ArticleStatus" name="ArticleStatus" label="Selected Article Type" value="Draft" placeholder="Select Article Type" options="{! v.options }" onchange="{! c.handleChange }"/>
+                </div>
+                <div onkeyup="{! c.handleKeyUp }" class="slds-col slds-size_6-of-12">
+                    <lightning:input class = "searchBox"
+                                     aura:id="enter-search"
+                                     name="enter-search"
+                                     label="Search Article"
+                                     type="search"
+                                     placeholder = "Type your search and press enter"
+                                     onchange = "{!c.onChangeSearch}"
+                                     />
+                    <aura:if isTrue="{!v.showError}">
+                        <ui:message severity="warning" closable="true">
+                            Please Enter Article Number.
+                        </ui:message>
+                    </aura:if>
+                    
+                </div>
+                
+            </div>
+            <div style="height: 300px">
+                
+                <lightning:datatable aura:id = 'articlesTable'
+                                     columns="{! v.columns }"
+                                     data="{! v.ListOfArticles }"
+                                     keyField="objId"
+                                     onrowselection="{! c.getSelectedRows }"
+                                     maxRowSelection="20"
+                                     />
+            </div>
+        </div>
+        <div class="c-container slds-p-around_xx-small">
+            <div class="slds-box slds-box_small">
+                <h4>Selected Articles</h4>
+            </div>
+            <div style="height: 300px">
+                <lightning:datatable aura:id='selectedArticleTable'
+                                     keyField="id"
+                                     data="{! v.selectedArticles }"
+                                     columns="{! v.columns }"
+                                     hideCheckboxColumn="true"/>
+            </div>
+        </div>
+        <div class="slds-grid slds-align_absolute-center slds-p-around_xx-small container slds-box slds-box_small">
+            <div class="slds-size_6-of-12 slds-align_absolute-center actionButtons">
+                <!--<lightning:buttonMenu aura:id="categoryMenu" class="slds-col slds-dropdown_bottom" label="Change to category" onselect="{! c.changeCategory }" alternativeText="Change to category">
+                <aura:iteration items="{!v.dataCategories}" var="category">
+                    <lightning:menuItem value="{!category.Value}" label="{!category.Name}" />
+                </aura:iteration>
+            </lightning:buttonMenu>-->
+            <aura:if isTrue="{!v.selectedValue != 'Online'}">
+                <div class="slds-col slds-size_1-of-3">
+                    <lightning:button class="changeCategBtn" label="Change Category" title="Change Category" onclick="{! c.openModel }"/>
+                </div>
+                </aura:if>
+                 
+                <lightning:buttonMenu aura:id="statusMenu" class="slds-col slds-size_1-of-3 statusDropDown" label="Change to status" onselect="{! c.changeStatus }" alternativeText="Change to status" onopen="{!c.setStatusItems}">
+                    <aura:iteration items="{!v.statusMenuItems}" var ="item">
+                        <lightning:menuItem value="{!item.value}" label="{!item.label}" />
+                    </aura:iteration>
+                </lightning:buttonMenu>
+                
+                 <aura:if isTrue="{!v.selectedValue != 'Online'}"> 
+                <lightning:buttonMenu aura:id="softwareVer" class="slds-col slds-size_1-of-3 changeSoftVer" label="Change software version"  onselect="{! c.changeSoftVer }" alternativeText="Change software version">
+                    <aura:iteration items="{!v.softwareVersions}" var ="version">
+                        <lightning:menuItem value="{!version.value}" label="{!version.label}" />
+                    </aura:iteration>
+                </lightning:buttonMenu>
+            </aura:if>
+            </div>
+        </div>
+    </div>
+</aura:component>

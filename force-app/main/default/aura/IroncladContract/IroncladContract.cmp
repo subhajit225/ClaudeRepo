@@ -1,0 +1,55 @@
+<aura:component
+    implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes"
+    controller="IroncladContractController" access="global">
+    <ltng:require scripts="{!join(',',
+                    $Resource.ironclad + '/pactsafe-min.js',
+                    $Resource.ironclad + '/pactsafe_initial.js')}" afterScriptsLoaded="{!c.scriptsLoaded}" />
+    <aura:attribute name="showError" type="Boolean" default="false" />
+    <aura:attribute name="errorMessage" type="Boolean" default="false" />
+    <aura:attribute name="isAgreedReceivedFromIronClad" type="Boolean" default="false" />
+    <aura:attribute name="userDetails" type="Map" default="" />
+    <aura:attribute name="releaseId" type="String" />
+    <aura:attribute name="releaseType" type="String" />
+    <aura:attribute name="softwareName" type="String" />
+    <aura:attribute name="contractSent" type="Boolean" default="false" />
+    <aura:attribute name="showSpinner" type="Boolean" default="true" />
+    <aura:attribute name="hasApexError" type="Boolean" default="false" />
+    <aura:attribute name="isProduction" type="Boolean" default="false" />
+    <aura:attribute name="isSoftwareDownloaded" type="Boolean" default="false" />
+    <aura:attribute name="versions" type="String"/>
+    <aura:attribute name="contracts" type="String"/>
+    <aura:attribute name="groupId" type="String"/>
+    
+    <aura:registerEvent name="downloadEvent" type="c:IroncladDownload"/>
+   <aura:handler name="downloadEvent" event="c:IroncladDownload" action="{!c.handleSoftwareDownload}"/> 
+    <aura:handler name="init" value="{!this}" action="{!c.handleInit}" />
+    
+    <aura:if isTrue="{!!v.isSoftwareDownloaded}">
+        <div aura:id="eula-contract-div">
+        </div>
+        <div id="eula-contract">
+        </div>
+        <aura:if isTrue="{!v.showError}">
+            <div class="errordesign">
+                <h4 class="errordesign">Error:</h4>
+                <p class="errordesign errorMessage">{!v.errorMessage}</p>
+            </div>
+        </aura:if>
+        
+        <div class="slds-m-left_medium slds-m-bottom_large slds-text-align_center">
+            <button class="slds-button slds-button_brand" onclick="{!c.handleFormSubmit}">
+             	Accept and download
+            </button>
+        </div> 
+    </aura:if>
+    <aura:if isTrue="{!v.isSoftwareDownloaded}">
+        <div class="softwareDownloaded">
+            <p class="softwareDownloaded">Software download started successfully<span class="redirectText">Redirecting to the Docs &amp; Downloads page</span></p>
+        </div>
+    </aura:if>
+    <aura:if isTrue="{!v.showSpinner}">
+        <lightning:spinner aura:id="spinner" alternativeText="Loading" size="medium" class="spins slds-show" />
+    </aura:if>
+  
+    
+</aura:component>

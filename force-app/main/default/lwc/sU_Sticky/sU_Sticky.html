@@ -1,0 +1,46 @@
+<template>
+    <template if:false={showNoResults}>
+        <template if:true={showClearFiltersButton1}>
+            <div id="sticky-box" class={stickyClass}>
+                <template for:each={stickyFacetsToShow} for:item="filterType" for:index="index">
+                    <c-s-u_-sticky-child key={filterType.label} event-code={eventCode}
+                        filter-type={filterType}></c-s-u_-sticky-child>
+                    <template if:true={viewAllStickyButton}>
+                        <span key={filterType}
+                            class="su__sticky-row su__flex-vcenter su__flex-wrap su__align-items-start">
+                            <span class="su-clear-filters su__loading-view su__ml-2 su-nowrap" onclick={getAllStickyFacets}
+                                data-val="viewAll">
+                                View All
+                            </span>
+                        </span>
+                    </template>
+                </template>
+                <div class={classesForSticky}>
+                    <template if:true={showAllFilters}>
+                        <div
+                            class="su__d-md-flex  su__align-items-center su__justify-content-center su__color-blue su__pt-1">
+                            <div class="su__show-less su__cursor su__loading-view su__text-center">
+                                <span class="su__arrow-down"></span>
+                                <span class="su__ml-3 su__rtlmr-3 su__rtlml-0 font-12" onclick={getAllStickyFacets}
+                                    data-val="less">Show
+                                    All</span>
+                            </div>
+                        </div>
+                    </template>
+                    <template if:true={showLessFilters}>
+                        <div
+                            class="su__d-md-flex  su__align-items-center su__justify-content-center su__color-blue su__pt-1">
+                            <div class="su__show-less su__cursor su__loading-view su__text-center">
+                                <span class="su__arrow-up"></span>
+                                <span class="su__ml-3 su__rtlmr-3 su__rtlml-0 font-12" onclick={getAllStickyFacets}
+                                    data-val="all">Show
+                                    Less</span>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </template>
+    </template>
+
+</template>

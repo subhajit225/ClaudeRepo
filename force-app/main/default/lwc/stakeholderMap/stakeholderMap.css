@@ -1,0 +1,279 @@
+.tooltip {
+    position: relative;
+    display: flex;
+    cursor: pointer;
+    max-width: 200px;
+    justify-content: center;
+  }
+  
+  .tooltiptext {
+    visibility: hidden;
+    display: flex;
+    background-color: #2F4F4F;
+    color: #F0FFFF;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 8px;
+    position: absolute;
+    z-index: 1;
+    bottom: 150%;
+
+  }
+  
+  .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: black transparent transparent transparent;
+  }
+  
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+  }
+
+  .lightningCard .key-cxo-container, .csuite-container {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-content: flex-start;
+    align-items: flex-start;
+  }
+
+  .cxo-title{
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-bottom: 8px;
+  }
+
+
+  /* make table distribute evenly according to --cols */
+  .lightningCard table {
+    table-layout: fixed;
+    width: 100%;
+  }
+
+  /* default: if --cols not set, columns will share equally via fixed layout */
+  .lightningCard table .lightningCard th,
+  .lightningCard table .lightningCard td {
+    overflow: hidden;      /* avoid overflow when name is long */
+    white-space: normal;   /* allow wrap */
+    text-overflow: ellipsis;
+    vertical-align: top;
+  }
+
+  /* when --cols is set on the table, each cell will take 100% / --cols */
+  .lightningCard table[style*="--cols"] .lightningCard th,
+  .lightningCard table[style*="--cols"] .lightningCard td {
+    width: calc(100% / var(--cols));
+  }
+
+
+  .lightningCard .key-cxo-container, .csuite-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 5px;
+    flex-direction: row;
+    align-content: flex-start;
+  }
+
+  /* Table styling */
+  .lightningCard .table-heading {
+    padding: 10px 0;
+    font-weight: 500;
+    background-color: #f3f3f3;
+    border-right: 1px solid grey !important;
+    border-left: 1px solid grey !important;
+  }
+
+  .lightningCard .main-table, .lightningCard .vp-table, .lightningCard .product-table {
+    border: 1px solid grey !important;
+    background-color: #f3f3f3;
+    border-collapse: collapse;
+    width: 100%; /* full width for responsiveness */
+  }
+
+  /* Product table */
+  .lightningCard .product-table {
+    border-top: 0;
+  }
+
+  .lightningCard .product-table thead th, 
+  .lightningCard .main-table thead th {
+    border-bottom: 1px solid grey !important;
+    border-right: 1px solid grey !important;
+    padding: 8px;
+    font-size: 0.95rem;
+  }
+
+  .lightningCard .product-table tbody td, 
+  .lightningCard .key-cxo-td {
+    border-right: 1px solid grey !important;
+    padding: 8px;
+    /*font-size: 0.9rem;*/
+  }
+
+  /* Responsive tables: horizontal scroll on mobile */
+  .lightningCard .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Media queries */
+  @media (max-width: 768px) {
+    .table-heading {
+      font-size: 0.9rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .lightningCard .key-cxo-container, .csuite-container {
+      flex-direction: column; /* stack vertically */
+      align-items: stretch;
+    }
+
+  .lightningCard .cxo-title {
+      text-align: center;
+      text-wrap:auto;
+      
+    }
+
+    .lightningCard .product-table thead th, 
+    .lightningCard .main-table thead th, 
+    .lightningCard .product-table tbody td {
+      font-size: 0.8rem;
+      padding: 6px;
+    }
+  }
+
+
+  /* ========== Responsive fixes (append after your current CSS) ========== */
+
+  /* Allow long names/URLs to break and prevent overflow */
+  .lightningCard table th,
+  .lightningCard table td,
+  .lightningCard .table-data,
+  .lightningCard .cxo-title,
+  .lightningCard a {
+    word-break: break-word;      /* break long words/URLs */
+    overflow-wrap: anywhere;     /* modern fallback */
+    -webkit-hyphens: auto;
+    hyphens: auto;
+  }
+
+  /* Make anchors easier to tap on mobile and avoid inline overflow */
+  .lightningCard a {
+    display: inline-block;       /* so padding increases hit area without breaking layout */
+    max-width: 100%;
+    white-space: normal;         /* allow wrapping */
+    text-decoration: underline;
+  }
+
+  /* Ensure cxos / c-suite flex children can shrink but keep a comfortable minimum width */
+  .lightningCard .key-cxo-container > .cxo-title,
+  .lightningCard .csuite-container > .table-data {
+    /*flex: 1 1 160px;            
+    min-width: 120px;            
+    box-sizing: border-box;*/
+  }
+
+  /* When the container wraps, center the items and keep consistent spacing */
+  .lightningCard .key-cxo-container,
+  .lightningCard .csuite-container {
+    /*justify-content: center;     /* center on narrow screens for better readibility */
+    gap: 5px;
+  }
+
+  /* Make the "Link for more..." more touch-friendly */
+  .lightningCard a[data-category] {
+    /*padding: 6px 8px;*/
+    border-radius: 6px;
+    display: inline-block;
+    line-height: 1.2;
+    text-align: center;
+  }
+
+  /* Ensure table horizontal scroll is consistent on narrow viewports */
+  .lightningCard .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+  }
+
+  /* Keep table layout fixed for predictable column widths, but allow minimal table shrink so scroll appears */
+  .lightningCard table {
+    table-layout: fixed;
+    min-width: 100%; /* allow columns to divide evenly; horizontal scroll will appear when needed */
+  }
+
+  /* Prevent excessive cell padding on very small screens to keep content readable */
+  @media (max-width: 480px) {
+    .lightningCard .product-table thead th,
+    .lightningCard .main-table thead th,
+    .lightningCard .product-table tbody td,
+    .lightningCard .key-cxo-td,
+    .lightningCard .vp-table td {
+      font-size: 0.82rem;
+      padding: 6px 6px;
+    }
+
+    /* On the smallest screens, let table cells behave like blocks inside scroller for easier vertical reading */
+    .lightningCard table tbody tr,
+    .lightningCard table thead tr {
+      display: table-row; /* keep table semantics but avoid forcing super-tight cells */
+    }
+
+    /* Make the cxo titles stack vertically and fill width for readability */
+    .lightningCard .key-cxo-container,
+    .lightningCard .csuite-container {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .lightningCard .key-cxo-container > .cxo-title,
+    .lightningCard .csuite-container > .table-data {
+      text-align: center;
+      width: 100%;
+      min-width: 0; /* allow full width fill inside scroller */
+    }
+
+    /* Slightly larger tap targets for small devices */
+    .lightningCard a[data-category] {
+      padding: 10px 12px;
+      margin-top: 6px;
+    }
+  }
+
+  /* Optional: if a very long name still overflows, force truncation only visually while preserving full text accessibility */
+  .lightningCard .truncate-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+    max-width: 100%;
+  }
+
+    .lightningCard .product-table-th
+  {
+    text-wrap:auto;
+  }
+
+  .lightningCard .slds-text-align_center
+  {
+      text-wrap:auto;
+      /*text-align: left;*/
+  }
+  .anc-tag{
+    padding-top: 8px;
+    text-align: left;
+  }

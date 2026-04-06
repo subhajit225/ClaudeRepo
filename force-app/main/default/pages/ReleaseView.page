@@ -1,0 +1,44 @@
+<apex:page standardController="Releases__c" cache="false" showHeader="false" standardStylesheets="false" tabStyle="Releases__c" action="{!case($User.UserType,
+                          "Standard",urlFor($Action.Releases__c.View, Releases__c.Id, null, true),
+                          "PowerPartner",urlFor($Action.Releases__c.View, Releases__c.Id, null, true),
+                          "CSPLitePortal",null,
+                          "CustomerSuccess",null,
+                          "PowerCustomerSuccess",null,
+                          "CsnOnly",null,
+                          null)}">
+<c:visualstrapblock >
+    
+        <!--start header-->
+        <c:siteheader ></c:siteheader>
+        <!--end Header-->
+
+
+        <div class="container">
+        <div class="row rowcontainer" >
+          <div class="col-md-12">
+          <c:pageTitle Name="{!Releases__c.Name}"></c:pageTitle>
+
+
+
+        <apex:dataTable value="{!Releases__c.CombinedAttachments}" var="ac" styleClass="table">
+        <apex:column headerValue="Document">
+        <apex:outputfield value="{!ac.Title} "/>
+        </apex:column>
+        <apex:column headerValue="" >
+          <a href="/servlet/servlet.FileDownload?file={!ac.id}" target="_blank" class="speciallinks">Download</a>
+        </apex:column>
+        </apex:dataTable>
+
+        <br/>
+        <br/>
+                <a href="{!URLFOR($Page.Downloads)}">Return to Downloads</a>
+
+        </div>
+        </div>
+        </div>
+
+ <!--start the footer-->
+        <c:sitefooter ></c:sitefooter>
+        
+    </c:visualstrapblock>
+</apex:page>

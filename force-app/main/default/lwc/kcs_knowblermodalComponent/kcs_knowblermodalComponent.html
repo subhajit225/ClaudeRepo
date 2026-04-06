@@ -1,0 +1,174 @@
+<template>
+  <template if:true={evaluatedata}>
+    <div id="evaluate" class="displayModal" style="overflow-y: auto">
+      <section class="modal slds-fade-in-open evaluatemodal">
+        <div class="slds-modal__content model-content evaluatemodalcontent">
+          <c-kcsknowblerevaluate-content1
+            destobj={destobj}
+            predicteddatafromcard={predicteddatafromcard}
+            disableflag={alreadyevaluatedflag}
+            articlenumber={articlenumber}
+            evaluatedata={evaluatedata}
+            contenthealthdata={contenthealthdata}
+            largescreen={largescreen}
+            evaluationscore={evaluationscore}
+            totalevaluationpoints={totalevaluationpoints}
+            parameters={parameters}
+            oncloseevaluate={closeevaluate}
+            owneremail={owneremail}
+            newnumber={newnumber}
+            languagechanged={languagechanged}
+            articledetails={articledetails}
+          >
+          </c-kcsknowblerevaluate-content1>
+        </div>
+      </section>
+    </div>
+  </template>
+  <template if:true={evaluatedsuccess}>
+    <div id="evaluatedsuccess" class="displayModal">
+      <section class="modal slds-fade-in-open modalpublish">
+        <div class="slds-modal__content model-content evaluatesuccessdiv">
+          <c-kcsknowbler-evaluated-successfully evaluatedsuccess>
+          </c-kcsknowbler-evaluated-successfully>
+        </div>
+      </section>
+    </div>
+  </template>
+  <template if:true={stayleave}>
+    <div data-id="alertModal" class={classKey}>
+      <section class="modal">
+        <header class="modal-header">
+          <img class="imgCenter" src={stayLeave} alt="Warning Image" />
+        </header>
+        <div class="modal-content">
+          <div class="contentMsg">
+            <p class="message">You'll need to start again.</p>
+            <p class="message">Are you sure you want to leave ?</p>
+            <div class="modalButton">
+              <a onclick={changeCSSStay} class="btn btnStay"> No,Stay </a>
+              <a onclick={handleLeave} class="btn btnLeave"> Yes, Leave </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </template>
+  <template if:true={showvideo}>
+    <div data-id="alertModal" class="displayModal">
+      <section class="modal">
+        <div class="modal-content">
+          <div class="slds-m-top_small embeddVideoDiv">
+            <div class="customTextEditorContent">
+              <div class="header">
+                <div class="mediaHeading">Embed Video</div>
+                <div
+                  class="closeModal"
+                  onclick={errorModal}
+                  data-id="errorModal"
+                >
+                  <img src={close} alt="" />
+                </div>
+              </div>
+              <div class="inputDiv">
+                <label class="inputVideoLabel"
+                  >Paste &lt;iframe&gt; code here to embed video</label
+                >
+                <lightning-textarea
+                  class="textAreaBody slds-p-top_x-small"
+                  data-id="videoLink"
+                  value={videolink}
+                  variant="label-hidden"
+                ></lightning-textarea>
+              </div>
+              <div class="exampleSection slds-p-top_medium">
+                <div class="exampleText">
+                  Example:&lt;iframe width="560" height="315"
+                  src="https://www.youtube.com/embed/KcOm0TNvKBA"
+                  frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;
+                </div>
+              </div>
+              <div class="footerContent slds-p-top_large">
+                <lightning-button
+                  variant="bare"
+                  label="Embed Video"
+                  value={videolink}
+                  onclick={handleSave}
+                >
+                </lightning-button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </template>
+  <template if:true={createsuccess}>
+    <div id="articleSuccessModal" class="displayModal">
+      <section class="modalSuccess">
+        <header class="modal-header">
+          <template if:true={successData.iscreate}>
+            <img
+              class="imgCenter"
+              src={articleSuccessful}
+              alt="Failed to load"
+            />
+          </template>
+          <template if:true={successData.isupdate}>
+            <img class="imgCenter" src={articleUpdate} alt="Failed to load" />
+          </template>
+          <template if:true={successData.isvideo}>
+            <img class="imgCenter" src={videoEmbed} alt="Failed to load" />
+          </template>
+          <template if:true={successData.isimage}>
+            <img class="imgCenter" src={imageInserted} alt="Failed to load" />
+          </template>
+          <template if:true={successData.issmartLink}>
+            <img class="imgCenter" src={smartLink} alt="Failed to load" />
+          </template>
+        </header>
+        <div class="modal-content">
+          <div class="contentMsg">
+            <p class="messageSuccess">{successMessage}</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </template>
+  <template if:true={saveprog}>
+    <div id="articleSaveProgress" class="displayModal">
+      <section class="modalProgress">
+        <header class="modal-header">
+          <img
+            class="imgCenterProgress"
+            src={saveProgress}
+            alt="Warning Image"
+          />
+        </header>
+        <div class="modal-content">
+          <div class="contentMsg">
+            <p class="message">Saving in progress</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </template>
+  <template if:true={errorsuccess}>
+    <div id="articleErrorModal" data-id="errorModal" class={classKey}>
+      <section class="modalError">
+        <header class="modal-header">
+          <h1 class="message">Error</h1>
+        </header>
+        <div class="modal-content">
+          <div class="contentMsg">
+            <img class="imgCenterError" src={errorImg} alt="Warning Image" />
+            <p class="message">{errorMessage}</p>
+          </div>
+        </div>
+        <footer class="modalFooter">
+          <a onclick={errorModal} class="btnTwo"> OK </a>
+        </footer>
+      </section>
+    </div>
+  </template>
+</template>

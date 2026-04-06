@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Partner_Disty_with_Signed_POC_Addendum</fullName>
+    <active>true</active>
+    <description>When Partner/Disty Signed POC Addendum is &quot;Yes,&quot; Partner/Disti with Signed POC Addendum field becomes required</description>
+    <errorConditionFormula>(
+ISPICKVAL( Partner_Disty_Signed_POC_Addendum__c,&apos;Yes&apos;)
+)
+&amp;&amp; ISNULL(Disty_with_Signed_POC_Addendum__c)</errorConditionFormula>
+    <errorMessage>Select a POC Addendum signed Partner/Disty name</errorMessage>
+</ValidationRule>

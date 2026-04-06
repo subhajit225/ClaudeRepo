@@ -1,0 +1,40 @@
+<template>
+  <div class="su__flex-vcenter su-p-input-header c-global-header__search-menu col-sm-12">
+    <div class="su__width-100">
+      <div class="su__flex-vcenter">
+        <template if:false={bigscreen}>
+          <lightning-button-icon title={translationObject.Filters} icon-name="utility:slider" disable class={filterButtonClass} onclick={handleUtilitySlider}></lightning-button-icon>
+        </template>
+        
+        <c-s-u_-Banner-Component event-code={eventCode} record-id={recordId} urlsopensinnewtab={urlopensinnewtab}
+        search-string={searchString} class="search-form su__mr-2 su__ml-2 su__position-relative" uid={uid}
+        end-point={endPoint} bearer={bearer} selected-type-filter={selectedTypeFilter} translation-object={translationObject} is-wild-card-enabled={isWildCardEnabled} casesubject={caseSubjectVal} result-per-page={resultperpage} withwildsearch={withwildcardsearches} exactword={exactphrase}  withonemore={withoneormore}  withoutword={withoutthewords} ></c-s-u_-Banner-Component>
+    </div>
+      <div class={dynamicClassHeader}>
+        <div data-id="filterBlock">
+          <c-s-u_-filter-section event-code={eventCode} show-clear-filters-button={showClearFiltersButton}
+            selected-type-filter={selectedTypeFilter} record-id={recordIdfromSUParent}
+            selected-sticky-filter={selectedStickyFilter} show-filter={showFilter} gototopcontainer={gototopcontainer}
+            tabs-filter={tabsFilter} uid={uid} end-point={endPoint} bearer={bearer} search-query={searchQuery}
+            merged-array-str={mergedArrayStr} aggregations-data-in={aggregationsData} translation-object={translationObject}
+        ></c-s-u_-filter-section>
+
+        </div>
+      </div>
+    </div>
+    <div class="su__flex-vcenter">
+      <template if:true={languageEnabled}>
+        <c-s-u_-Language-Section event-code={eventCode} lang-config={langlist}
+          translation-object={translationObject}></c-s-u_-Language-Section>
+      </template>
+      <template if:true={getBookmarkListLength}>
+        <div class="su__bookmark su__mr-2">
+          <c-s-u_-bookmark-component event-code={eventCode}></c-s-u_-bookmark-component>
+        </div>
+      </template>
+      <c-s-u_-Advance-Search event-code={eventCode} class="su__position-relative" record-id={recordId}
+        advanced-search-selected={advancedSearchSelected} translation-object={translationObject} exactword={exactphrase}
+        withonemore={withoneormore} withoutword={withoutthewords} withwildsearch={withwildcardsearches} search-string={searchString} is-wild-card-enabled={isWildCardEnabled}></c-s-u_-Advance-Search>
+    </div>
+  </div>
+</template>

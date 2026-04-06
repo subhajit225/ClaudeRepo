@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Tier_Quantity__c</fullName>
+    <description>This field will concatenate the Quantity Lower Bound and Quantity Upper Bound number fields.</description>
+    <externalId>false</externalId>
+    <formula>TEXT(Quantity_Lower_Bound__c) &amp;
+IF(
+    NOT(ISBLANK(Quantity_Upper_Bound__c)),
+    &apos;-&apos; &amp; TEXT(Quantity_Upper_Bound__c),
+    &apos;&apos;
+)</formula>
+    <inlineHelpText>concatenate the Quantity Lower Bound and Quantity Upper Bound.</inlineHelpText>
+    <label>Tier Quantity</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

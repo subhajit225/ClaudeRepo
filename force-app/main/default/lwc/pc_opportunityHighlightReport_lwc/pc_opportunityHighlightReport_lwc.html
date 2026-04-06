@@ -1,0 +1,149 @@
+<template>
+    <div class="slds-card">
+        <lightning-layout multiple-rows="true" horizontal-align="spread">
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+                <div class="slds-p-around_large">
+                    <span class="heading-36">
+                        Opportunity Pipeline Highlights
+                    </span>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="6" small-device-size="12" medium-device-size="6" large-device-size="6" class="slds-p-around_medium">
+                <div class="pipelineReportCard">
+                    <span class="pipelineCardNumber">
+                        {closedOppCount}
+                    </span>
+                    <span class="pipelineCardText">
+                        <p>closed Registrations</p>
+                    </span>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="6" small-device-size="12" medium-device-size="6" large-device-size="6" class="slds-p-around_medium">
+                <div class="pipelineReportCard">
+                    <span class="pipelineCardNumber">
+                        {openOppCount}
+                    </span>
+                    <span class="pipelineCardText">
+                        <p>New Registrations</p>
+                    </span>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12" class="slds-p-around_medium">
+                <!-- <table class="slds-table slds-table_cell-buffer slds-table_bordered1 custom-slds-table" aria-labelledby="element-with-table-label other-element-with-table-label">
+                    <thead class="">
+                        <tr class="pipelineTableHeader">
+                            <th class="pipelineTableHeaderElement account-header-col" scope="col">
+                                <div class="slds-truncate" title="Account Name">ACCOUNT NAME</div>
+                            </th>
+                            <th class="pipelineTableHeaderElement" scope="col">
+                                <div class="slds-truncate" title="Owner Name">OWNER NAME</div>
+                            </th>
+                            <th class="pipelineTableHeaderElement contact-header-col" scope="col">
+                                <div class="slds-truncate" title="AE Contact">AE CONTACT</div>
+                            </th>
+                            <th class="pipelineTableHeaderElement" scope="col">
+                                <div class="slds-truncate" title="Amount">AMOUNT</div>
+                            </th>
+                            <th class="pipelineTableHeaderElement" scope="col">
+                                <div class="slds-truncate" title="Stage">STAGE</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <template for:each={oppList} for:item="opp">
+                        <tbody key={opp.Id} class="pipelineTableBody">
+                            <tr class="slds-hint-parent">
+                                <td data-label="Account Name">
+                                    <div class="slds-truncate pipelineTableBodyText account-body-col">
+                                        {opp.Account.Name}
+                                    </div>
+                                </td>
+                                <td data-label="Owner Name">
+                                    <div class="slds-truncate pipelineTableBodyText">
+                                        {opp.Owner.Name}
+                                    </div>
+                                </td>
+                                <td data-label="AE Contact">
+                                    <div class="slds-truncate pipelineTableBodyText contact-body-col">
+                                        {opp.Owner.Email}
+                                    </div>
+                                </td>
+                                <td data-label="Amount">
+                                    <div class="slds-truncate pipelineTableBodyText">
+                                        <lightning-formatted-number value={opp.Amount} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                                    </div>
+                                </td>
+                                <td data-label="Stage">
+                                    <div class="slds-truncate pipelineTableBodyText">
+                                        {opp.StageName}
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </template>
+                </table> -->
+
+
+
+                <table class="slds-table slds-table_cell-buffer" aria-labelledby="element-with-table-label other-element-with-table-label">
+                    <thead class="">
+                        <tr>
+                            <th class="account-header-col" scope="col">
+                                <div title="Account Name">ACCOUNT NAME</div>
+                            </th>
+                            <th scope="col">
+                                <div title="Owner Name">OWNER NAME</div>
+                            </th>
+                            <th class="contact-header-col" scope="col">
+                                <div title="AE Contact">AE CONTACT</div>
+                            </th>
+                            <!--<th scope="col">
+                                <div title="Amount">AMOUNT</div>
+                            </th>-->
+                            <th scope="col">
+                                <div title="Stage">STAGE</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <template for:each={oppList} for:item="opp">
+                        <tbody key={opp.Id}>
+                            <tr>
+                                <td data-label="Account Name">
+                                    <div class="account-body-col">
+                                        {opp.Account.Name}
+                                    </div>
+                                </td>
+                                <td data-label="Owner Name">
+                                    <div class="">
+                                        {opp.Owner.Name}
+                                    </div>
+                                </td>
+                                <td data-label="AE Contact">
+                                    <div class="contact-body-col">
+                                        {opp.Owner.Email}
+                                    </div>
+                                </td>
+                                <!--<td data-label="Amount">
+                                    <div class="">
+                                        <lightning-formatted-number value={opp.Amount} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                                    </div>
+                                </td>-->
+                                <td data-label="Stage">
+                                    <div class="">
+                                        {opp.StageName}
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </template>
+                </table>
+
+
+
+            </lightning-layout-item>
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12" class="slds-p-around_large">
+                <a href={url} class="pipelineViewAll">View All <img class="link-arrow-img" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAtCAYAAADV2ImkAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAD3SURBVHgB7daxDcJADEBR+0BAGZiAESghHRtRAkIiaRAdMzABjEDFGmQClJImOXAqCoKcu+MuEn6tLeUrsqIACCGEEEKIPxZNl+NRvN6CIwq8wMRVtKdg4ibaYzCxj/YcTOyiAwQT8+hAwcQsGjlLw3hzQignYAzH9TOd3K+7FJi6nCWFOtL620NtVG8auNEBT+LdK3q2WnA2WxIMWdnXZ85iG4KzslfM88s+4yyzbhixSEGrIxjQiBFoONSMG8VWLfBj9POjVOf2YdQ4loQ6CaNYEiLYOJb4DraKJT6DrWOJr2AnsYT1WbMyGOQlPJzECiGEEKJ1nnbLYBZlR9+tAAAAAElFTkSuQmCC"></a>
+            </lightning-layout-item>
+        </lightning-layout>
+    </div>
+
+</template>

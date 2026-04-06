@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PS_Errors</fullName>
+    <columns>NAME</columns>
+    <columns>Failure_Job_ID__c</columns>
+    <columns>Failure_Message__c</columns>
+    <columns>CREATEDBY_USER</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>LAST_UPDATE</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Object_ID__c</field>
+        <operation>equals</operation>
+        <value>PS Project</value>
+    </filters>
+    <label>PS Errors</label>
+    <sharedTo>
+        <allInternalUsers></allInternalUsers>
+    </sharedTo>
+</ListView>

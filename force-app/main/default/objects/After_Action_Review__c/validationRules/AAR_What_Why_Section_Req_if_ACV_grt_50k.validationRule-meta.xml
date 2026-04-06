@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>AAR_What_Why_Section_Req_if_ACV_grt_50k</fullName>
+    <active>true</active>
+    <description>SAL23-508 AAR What &amp; Why Section Required if ACV&gt;50k for Opportunities belongs to AMER Theatre</description>
+    <errorConditionFormula>AND(
+CONTAINS(Opportunity__r.ETM_Theatre__c, &apos;AMER&apos;),
+Opportunity__r.ACV_Amount__c &gt; 50000 ,
+OR(
+ISBLANK( AAR_What_would_we_do_different_next_time__c ),
+ISBLANK( AAR_What_didn_t_work__c ),
+ISBLANK( AAR_What_did_we_think_would_happen__c ),
+ISBLANK( AAR_What_really_happened__c ),
+ISBLANK( AAR_What_was_the_difference__c ),
+ISBLANK( AAR_What_worked_well__c )
+)
+)</errorConditionFormula>
+    <errorMessage>Opportunity ACV &gt; 50k, please ensure all the fields in What and why section are populated.</errorMessage>
+</ValidationRule>

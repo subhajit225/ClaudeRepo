@@ -1,0 +1,12 @@
+<template>
+    <lightning-layout>
+        <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12" class="slds-p-vertical_x-large">
+            <template for:each={pageNameArray} for:item="pn">
+                <template if:true={pn.showCarrot} key={pn.key}>
+                    <span key={pn.key}> > </span>
+                </template>
+                <span key={pn.key} class="cardBodyDescription"><a href={pn.url} class={pn.class} >{pn.label}</a></span>
+            </template>
+        </lightning-layout-item>
+    </lightning-layout>
+</template>

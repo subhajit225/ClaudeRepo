@@ -1,0 +1,34 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="label" type="string"/>
+    <aura:attribute name="url" type="string"/>
+    <aura:attribute name="btnlabel" type="string"/>
+    <aura:attribute name="imgurl" type="string" default="{!$Resource.PCCardImages +'/PCBannerImages/DealReg/DealRegBanner.jpg'}"/>
+    <aura:attribute name="imgHeight" type="string" default="150"/>
+    
+    <!-- <lightning:tile label="{!v.label}" href="{!'/' + v.url}">
+        <lightning:button label="{!v.label}" variant="brand" onclick="{!c.handleClick}" class="slds-align_absolute-center"/>
+    </lightning:tile> -->    
+    <div class="slds-size_1-of-1" >        
+        <div class="slds-text-align_center tileMenuItemCard">
+            <div class="uiMenuItem forceCommunityTileMenuItem" data-aura-class="uiMenuItem forceCommunityTileMenuItem">
+                <span class="navTileLink" href="/dealreglist" role="menuitem" data-special-link="true" title="Register a Deal">
+                    <div class="slds-align--absolute-center backImage" style="{!'background-image: url('+ $Resource.PCBannerImages +v.imgurl+');height:'+v.imgHeight+'px;'}">
+                        <div class="slds-grid slds-grid_vertical">
+                            <div class="slds-col">
+                                <span><p class="textColor">{!v.label}</p></span>
+                            </div>
+                            <div class="slds-col">&nbsp;</div>
+                            <div class="slds-col">
+                                <span>
+                                    <p>
+                                        <lightning:button label="{!v.btnlabel}" variant="Neutral" onclick="{!c.handleClick}" class="slds-align_absolute-center"/>
+                                    </p>
+                                </span>
+                            </div>
+                        </div>                        
+                    </div>
+                </span>
+            </div>
+        </div>
+    </div>
+</aura:component>

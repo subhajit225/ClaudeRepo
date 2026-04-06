@@ -1,0 +1,234 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" controller="AdminPanelApexController">
+    <aura:attribute name="AccountInfo" type="Object"/>
+    <aura:attribute name="isEdit" type="Boolean" default="false"/>
+    <aura:attribute name="isAddUser" type="Boolean" default="false"/>
+    <aura:attribute name="sortedBy" type="String"/>
+    <aura:attribute name="modalMessage" type="String"/>
+    <aura:attribute name="showModal" type="Boolean" default="false"/>
+    <aura:attribute name="showSPConfirmationModal" type="Boolean" default="false"/>
+    <aura:attribute name="authorize" type="Boolean" default="false"/>
+    <aura:attribute name="mycolumns" type="List"/>
+    <aura:attribute name="ContList" type="List"  access="global"/> 
+    <aura:attribute name="sortedDirection" type="String" default=""/>
+    <aura:attribute name="isError" type="boolean"  default="false"/>
+    <aura:attribute name="Spnr" type="boolean"  default="false"/>
+    <aura:attribute name="isChecked" type="boolean"  default="true"/>
+    <!--Additions By: Anmol Baweja 03 Mar, 2020-->
+    <!-- <Reason>
+  To restrict any community user to make a new user with ignored email domain as per CS-582
+ </Reason>-->
+    <aura:attribute name="ignoredDomainList" type="List"/>
+    <aura:attribute name="showModalForInvalidEmail" type="boolean" default="false"/>
+    <!--/Additions By: Anmol Baweja-->
+    <aura:handler name="init" value="this" action="{!c.init}"/>
+    <aura:handler event="c:AdminContactEvent" action="{!c.newAdd}"/>    
+    
+    <div class="slds-grid slds-wrap">
+        <div class="slds-small-size--8-of-12 slds-medium-size--12-of-12 slds-large-size--12-of-12 ">
+            <center> 
+                <aura:if isTrue="{!v.Spnr}">
+                    <lightning:spinner alternativeText="Loading" size="small" />
+                </aura:if>
+                <!--Account Info table Start-->
+                <table class="slds-table slds-max-medium-table_stacked"  style="width: 50%;">
+                    <tbody>
+                        <tr class="Paragraph">
+                            <th class="slds-cell-wrap" scope="row" data-label="">
+                                <div class="slds-truncate" title=""><b>Account Name</b></div>
+                            </th>
+                            <td class="slds-cell-wrap" data-label="">
+                                <div class="slds-truncate" title="Account Name">{!v.AccountInfo.accName}</div>
+                            </td>
+                            <th class="slds-cell-wrap" scope="row" data-label="">
+                                <div class="slds-truncate" title=""><b>{!if(!v.AccountInfo.isAuthorize,'Number of Authorized users','Number of Support Portal users')}</b></div>
+                            </th>
+                            <td class="slds-cell-wrap" data-label="">
+                                <div class="slds-truncate" title="Number of User">{!v.AccountInfo.licenceUsed}</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!--Account Info table End-->
+                
+                <br/>
+                <aura:if isTrue="{!!v.AccountInfo.isAuthorize}"> 
+                    <br/> 
+                    <p style="width:70%;" class="Paragraph">
+                        The Admin Panel allows authorized users within an organization to manage access to the Support Portal. 
+                        The following users have been configured as authorized users in your organization.
+                    </p>
+                </aura:if>
+                <aura:if isTrue="{!v.AccountInfo.isAuthorize}"> 
+                <c:rubrikCommunityEnforceAdminPanel recordId="{!v.AccountInfo.accountId}"></c:rubrikCommunityEnforceAdminPanel>
+                </aura:if>
+                
+                <aura:if isTrue="{!v.AccountInfo.isAuthorize}"> 
+                    <!--Start Top Buttons-->
+                    <aura:if isTrue="{!! or(v.isAddUser,v.isEdit)}">
+                        <lightning:button class="rubrikbtn" label="Edit User" title="Edit User" onclick="{! c.EditClick }" />
+                    </aura:if>
+                    <aura:if isTrue="{!! or(v.isAddUser,v.isEdit)}">
+                        <lightning:button class="rubrikbtn" label="ADD CONTACT" title="ADD CONTACT" onclick="{! c.AddClick }" />
+                        <a  href="{!'/s/proactivedetails?id='+$SObjectType.CurrentUser.Id}" class="" style="margin-left:4px;">
+                            <lightning:button class="rubrikbtn" label="Proactive Contact" title="Proactive Contact" />
+                        </a>
+                    </aura:if>
+                    <aura:if isTrue="{!v.isEdit}">
+                        
+                        <lightning:button class="rubrikbtn" label="Update User" title="Update User" onclick="{! c.UpdateUser }" />
+                    </aura:if>
+                    <aura:if isTrue="{!v.isAddUser}">
+                        
+                        <lightning:button class="rubrikbtn" label="Save User" title="Save User" onclick="{! c.savecontact1 }" />
+                    </aura:if>
+                    <aura:if isTrue="{! or(v.isAddUser,v.isEdit)}">
+                        <lightning:button class="rubrikbtn" variant="Neutral" label="Cancel" title="Cancel" onclick="{! c.cnclClick }" />
+                    </aura:if>
+                    <!--End Top Buttons-->
+                </aura:if> 
+                <br/><br/> 
+                <!--AdminAddContact Component-->
+                <aura:if isTrue="{!v.isAddUser}">
+                    <c:AdminAddContact isChecked="{!v.isChecked}" ContList="{!v.ContList}"/>
+                </aura:if>  
+                
+                <!--AdminEditUser Component-->
+                <aura:if isTrue="{!v.isEdit}">
+                    <c:AdminEditUser AccountInfo="{!v.AccountInfo}"/>
+                </aura:if>  
+                
+                <aura:if isTrue="{!! or(v.isAddUser,v.isEdit)}">
+                    
+                    <!--Account Detail table Start-->
+                    <table class="slds-table tableClass slds-max-medium-table_stacked" id="viewTable"  style="width:90%;">
+                        <thead class="TableHead">
+                            <tr class="slds-line-height_reset ">
+                                <aura:iteration items="{!v.mycolumns}" var="label">
+                                    <th class="thclass slds-cell-wrap" scope="col">
+                                        <div class="slds-truncate" title="{!label.label}"></div>
+                                        <a href="javascript:void(0);" name="{!label.fieldName}" id="desc" class="textStyle" onclick="{!c.Sorttable}">{!label.label}</a>
+                                        <div class="padd-dis">
+                                            <aura:if isTrue="{!v.sortedBy == label.fieldName}">
+                                                <aura:if isTrue="{!v.sortedDirection != 'desc'}">
+                                                    <lightning:icon iconName="utility:chevronup" size="xx-small" />
+                                                </aura:if> 
+                                            </aura:if>
+                                        </div>
+                                        <div class="padd-dis">
+                                            <aura:if isTrue="{!v.sortedBy == label.fieldName}">
+                                                <aura:if isTrue="{!v.sortedDirection == 'desc'}">
+                                                    <lightning:icon iconName="utility:chevrondown" size="xx-small" />
+                                                </aura:if> 
+                                            </aura:if>
+                                        </div>
+                                    </th>
+                                </aura:iteration>
+                                <th scope="col" class="textStyle slds-cell-wrap ">
+                                    <div class="slds-truncate padd" title="Status">Support Portal Access  
+                                        <lightning:helptext  content="{!$Label.c.Community_Active_Label}" />
+                                    </div>
+                                </th>
+                                <th scope="col"  class="textStyle slds-cell-wrap">
+                                    <div class="slds-truncate padd" title="Authorized">Admin Panel Access
+                                        <lightning:helptext  content="{!$Label.c.Community_Authorized_Label}" />
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="textStyle">
+                            <aura:iteration items="{!v.AccountInfo.existingUsers}" var="usrInformation" IndexVar="rowNum2">
+                                <tr class="rowborder">
+                                    <td class="slds-cell-wrap" scope="row" data-label="First Name">
+                                        {!usrInformation.firstName}
+                                    </td>
+                                    <td class="slds-cell-wrap" data-label="Last Name">
+                                        {!usrInformation.lastName}
+                                    </td>
+                                    <td class="slds-cell-wrap WrdBrk" data-label="Email">
+                                        {!usrInformation.email}
+                                    </td>
+                                    <td class="slds-cell-wrap"  data-label="Title">
+                                        {!usrInformation.title}
+                                    </td>
+                                    <td class="slds-cell-wrap" data-label="Phone">
+                                        {!usrInformation.phone}
+                                    </td>
+                                    <td data-label="Status">
+                                        {!if(usrInformation.isActive,'Enabled','Disabled')}
+                                    </td>
+                                    <th class="slds-cell-wrap slds-text-align_center" scope="row" data-label="Authorized">
+                                        <lightning:input type="checkbox" disabled="true" checked="{!usrInformation.adminUser}"/>
+                                    </th>
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table> 
+                    <!--Account Detail table End-->
+                </aura:if><br/><br/> 
+            </center>
+        </div> 
+    </div>
+    
+    <!--AdminContactswithoutUser Component-->
+    <aura:if isTrue="{!! or(v.isAddUser,v.isEdit)}">
+        <c:AdminContactswithoutUser/> 
+    </aura:if>
+    
+    <aura:if isTrue="{!v.showModal}" >
+        <div class="demo-only" style="height: 640px;">
+            <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header slds-modal__header_empty">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.closeModal}">
+                            <lightning:icon iconName="action:remove" alternativeText="Approved" size="xx-small"/>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <p>{!v.modalMessage}</p>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <button class="slds-button slds-button_neutral"  onclick="{!c.closeModal}">Close</button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </aura:if>
+    <aura:if isTrue="{!v.showModalForInvalidEmail}" >
+        <div class="demo-only" style="height: 640px;">
+            <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header slds-modal__header_empty">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.closeModal}">
+                            <lightning:icon iconName="action:remove" alternativeText="Approved" size="xx-small"/>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <p>{!v.modalMessage}</p>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <button class="slds-button slds-button_neutral"  onclick="{!c.closeModal}">Close</button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </aura:if>
+    <aura:if isTrue="{!v.showSPConfirmationModal}">
+        <section role="dialog" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <div class="slds-modal__content slds-p-around_medium">
+                    <p>
+                        Please note that disabling a user’s Support Portal access removes their contact from the Admin Panel.
+                    </p>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning:button class="rubrikbtn rubrikbtnAck" label="Acknowledge" onclick="{!c.ackUserInactive}"/>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+</aura:component>

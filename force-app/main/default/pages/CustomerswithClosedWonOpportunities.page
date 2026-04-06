@@ -1,0 +1,99 @@
+<apex:page showHeader="true" sidebar="true" controller="CustomerReportController" readOnly="true" lightningStylesheets="true">
+    <apex:slds rendered="{!$User.UITheme != 'Theme3'}"/>
+<style>
+.topright {
+  position: absolute;
+  top: 10px;
+  right: 16px;
+  font-size: 15px;
+}
+
+</style>
+ <apex:pageBlock title="All Customers with Closed Won Opportunities">
+            <table style="border-collapse: collapse;border: 1px solid black;">
+                <tr style="background-color: darkgray;">
+                    <th style="border: 1px solid black; width: 10%;">Account Id</th>
+                    <th style="border: 1px solid black; width: 20%;">Account Name</th>
+                    <th style="border: 1px solid black; width: 40%;">Cluster Name</th>
+                    <th style="border: 1px solid black; width: 10%;">Cluster Call Home</th>
+                    <th style="border: 1px solid black; width: 10%;">Opportunity</th>
+                    <th style="border: 1px solid black; width: 10%;">Opportunity Close Date</th>
+                    
+                    
+                </tr>
+                <apex:variable var="color_bool" value="{!1}"   />
+                   <apex:repeat value="{!AccountClusterMap}" var="acct">
+                    <apex:repeat value="{!AccountClusterMap[acct]}" var="obj2">
+                         <tr style="background-color: {!IF(color_bool==1, 'lightgray', 'white')}">
+                           <td style="border: 1px solid black; padding: 5px;">
+                             
+                                <apex:outputText value="{!obj2.Id}"/>
+                            </td>
+                   
+                            <td style="border: 1px solid black; padding: 5px;">
+                             
+                                <apex:outputLink value="/{!obj2.Id}" target="_blank">{!obj2.Name}</apex:outputLink>
+                                
+                            </td>
+   
+                           <td style="border: 1px solid black; padding: 5px;">
+                           <apex:repeat value="{!AccountClusterMap[obj2].Clusters__r}" var="obj3" >
+                                <apex:outputLink value="/{!obj3.Id}" target="_blank">{!obj3.Name}</apex:outputLink>
+                               
+                                <br></br>
+                                
+                                
+                            </apex:repeat>
+                            </td>
+                            
+                             <td style="border: 1px solid black; padding: 5px;">
+                           <apex:repeat value="{!AccountClusterMap[obj2].Clusters__r}" var="obj3" >
+                                <apex:outputText value="{!obj3.is_callhome_on__c}"/>
+                               
+                                <br></br>
+                             </apex:repeat>
+                            </td>
+                             
+                             
+                           <td style="border: 1px solid black; padding: 5px;">
+                           <apex:repeat value="{!AccountClusterMap[obj2].Opportunities}" var="obj4">
+                
+                                <apex:outputLink value="/{!obj4.Id}" target="_blank">{!obj4.Name}</apex:outputLink>
+                                
+                                <br></br>
+                          
+                            </apex:repeat>
+                            </td>
+                            <td style="border: 1px solid black; padding: 5px;">
+                           <apex:repeat value="{!AccountClusterMap[obj2].Opportunities}" var="obj4">
+                               <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                                <apex:param value="{!obj4.CloseDate}" /> 
+                                </apex:outputText>
+                                    
+                                <!--<apex:outputText value="{!obj4.CloseDate}"/>-->
+                                
+                                <br></br>
+                          
+                            </apex:repeat>
+                            </td>
+                            
+                            
+                             </tr>
+        
+                    <apex:variable var="color_bool" value="{! IF(color_bool==1, 0, 1)}"  />
+                    </apex:repeat>
+                    </apex:repeat>
+                   <body>
+                   <div class="topright"><button type="button" onclick="pageRedirect()">Export In Excel</button></div>
+                   </body>
+                    <script>
+                    function pageRedirect() {
+                      window.location.href = "{!$Site.BaseUrl}/apex/ClosedWonOpt";
+                    }      
+                    </script> 
+                    
+                    
+            </table>
+    </apex:pageBlock>
+      
+</apex:page>

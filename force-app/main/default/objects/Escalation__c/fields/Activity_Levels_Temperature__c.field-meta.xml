@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Activity_Levels_Temperature__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF( ISPICKVAL(Activity_Levels__c,&apos;Daily or multiple times per day&apos;), IMAGE(&quot;/resource/Activity_Level_Red&quot;, &quot;Red&quot;),
+IF (ISPICKVAL(Activity_Levels__c,&apos;2 - 3 times per week&apos;), IMAGE(&quot;/resource/Activity_Level_Yellow&quot;, &quot;Yellow&quot;), 
+IF( ISPICKVAL(Activity_Levels__c, &apos;1 time per week&apos;) , IMAGE(&quot;/resource/Activity_Level_Green&quot;, &quot;Green&quot;), &apos;&apos;)))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Activity Levels Temperature</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

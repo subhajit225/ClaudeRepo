@@ -1,0 +1,185 @@
+<template>
+    <template if:false={isLoadingComplete}>
+        <div>
+            <lightning-spinner alternative-text="Loading..." variant="brand"></lightning-spinner>
+        </div>
+    </template>
+    <template if:true={isReady}>
+        <p class="title">Case Audit Form</p>
+        <template if:false={isAuditRecordExisting}>
+            <lightning-record-edit-form object-api-name="Case_Audit__c" onload={handleLoad} onsubmit={handleSubmit} onsuccess={handleSuccess}>
+                <lightning-messages>
+                </lightning-messages>
+                <div class="slds-grid slds-wrap slds-size_12-of-12 formDiv">
+                    <!--<div class="slds-size_8-of-12 slds-medium-size_8-of-12 slds-large-size_8-of-12">
+                        <lightning-input-field field-name="Case__c" value={caseRecord.Id} disabled></lightning-input-field>
+                        <lightning-input-field field-name="Case_Owner__c" value={caseRecord.OwnerId} disabled></lightning-input-field>
+                        <lightning-input-field field-name="Case_Owner_s_Manager__c" value={caseRecord.Owner_s_Manager__c} disabled></lightning-input-field>
+                        <lightning-input-field field-name="Case_Auditor__c" value={currentUser} disabled></lightning-input-field>
+
+                        <div class="tooltip">
+                            <span class="tooltiptext">SW Version, Product Line, Functional Area, Component, Sub Component (if others, specified well)</span>
+                            <lightning-input-field field-name="Case_Field_Classification__c" onchange={handleChange} data-name="Case_Field_Classification__c"></lightning-input-field>
+                        </div>
+
+                        <div class="tooltip">
+                            <span class="tooltiptext">Case includes logs, technical data, AR, Jira, Subject, Problem Description, clear documentation, Accurate documentation of log analysis</span>
+                            <lightning-input-field field-name="Case_Documentation__c" onchange={handleChange} data-name="Case_Documentation__c"></lightning-input-field>
+                        </div>
+
+                        <div class="tooltip">
+                            <span class="tooltiptext">Following the processes outlined in Support Handbook & CEMPRO, Set and met expectations, Displayed sense of urgency, Ownership, displayed positive attitude</span>
+                            <lightning-input-field field-name="Overall_Case_management__c" onchange={handleChange} data-name="Overall_Case_management__c"></lightning-input-field>
+                        </div>
+
+                        <div class="tooltip">
+                            <span class="tooltiptext">Resolution Code and Resolution Details were accurately classified</span>
+                            <lightning-input-field field-name="Resolution__c" onchange={handleChange} data-name="Resolution__c"></lightning-input-field>
+                        </div>
+
+                        <lightning-input-field field-name="Final_Audit_Score__c" value={auditScore} disabled></lightning-input-field>
+                        <lightning-input-field field-name="Auditor_Comments__c"></lightning-input-field>
+                        <lightning-input-field field-name="Case_Audit_Timestamp__c" value={nowTime} disabled></lightning-input-field>
+                        <lightning-input-field field-name="Send_Email_to_Case_Owner_s_Manager__c"></lightning-input-field>
+                    </div>-->
+
+                    <div class="slds-col slds-size_5-of-12">
+                        <lightning-input-field field-name="Case__c" value={caseRecord.Id} disabled variant="label-stacked"></lightning-input-field>
+                        <lightning-input-field field-name="Case_Owner__c" value={caseRecord.OwnerId} disabled variant="label-stacked"></lightning-input-field>
+                        <lightning-input-field field-name="Case_Field_Classification__c" onchange={handleChange} data-name="Case_Field_Classification__c" variant="label-stacked"></lightning-input-field>
+                        <lightning-input-field field-name="Overall_Case_management__c" onchange={handleChange} data-name="Overall_Case_management__c" variant="label-stacked"></lightning-input-field>
+                        <lightning-input-field field-name="Final_Audit_Score__c" value={auditScore} disabled variant="label-stacked"></lightning-input-field>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-12"></div>
+
+                    <div class="slds-col slds-size_5-of-12">
+                        <lightning-input-field field-name="Case_Owner_s_Manager__c" value={caseRecord.Owner_s_Manager__c} disabled variant="label-stacked"></lightning-input-field>
+                        <lightning-input-field field-name="Case_Auditor__c" value={currentUser} disabled variant="label-stacked"></lightning-input-field>
+                        <lightning-input-field field-name="Case_Documentation__c" onchange={handleChange} data-name="Case_Documentation__c" variant="label-stacked"></lightning-input-field>
+                        <lightning-input-field field-name="Resolution__c" onchange={handleChange} data-name="Resolution__c" variant="label-stacked"></lightning-input-field>
+                    </div>
+
+                    <div class="slds-size_11-of-12 slds-medium-size_11-of-12 slds-large-size_11-of-12">
+                        <lightning-input-field field-name="Auditor_Comments__c" variant="label-stacked"></lightning-input-field>
+                    </div>
+
+                    <div class="slds-col slds-size_5-of-12">
+                        <lightning-input-field field-name="Case_Audit_Timestamp__c" value={nowTime} disabled variant="label-stacked"></lightning-input-field>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-12"></div>
+
+                    <div class="slds-col slds-size_5-of-12">
+                        <lightning-input-field field-name="Send_Email_to_Case_Owner_s_Manager__c" variant="label-stacked"></lightning-input-field>
+                    </div>
+
+                    <div class="slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12 buttonAlign">
+                        <lightning-button class="slds-m-top_small" variant="brand" type="submit" name="save" label="Save"></lightning-button>
+                    </div>
+                </div>
+            </lightning-record-edit-form>
+        </template>
+
+        <template if:true={isAuditRecordExisting}>
+            <lightning-record-edit-form record-id={caseAuditRecordId} object-api-name="Case_Audit__c" onload={handleLoad} onsubmit={handleSubmit} onsuccess={handleSuccess}>
+                <lightning-messages>
+                </lightning-messages>
+                <div class="slds-grid slds-wrap slds-size_12-of-12 formDiv">
+
+                    <!--<div class="slds-size_8-of-12 slds-medium-size_8-of-12 slds-large-size_8-of-12">
+                        <lightning-input-field field-name="Case__c" disabled variant="label-stacked"></lightning-input-field>
+                        <lightning-input-field field-name="Case_Owner__c" disabled variant="label-stacked"></lightning-input-field>
+                        <lightning-input-field field-name="Case_Owner_s_Manager__c" disabled variant="label-stacked"></lightning-input-field>
+                        <lightning-input-field field-name="Case_Auditor__c" disabled variant="label-stacked"></lightning-input-field>
+
+                        <div class="tooltip">
+                            <span class="tooltiptext">SW Version, Product Line, Functional Area, Component, Sub Component (if others, specified well)</span>
+                            <lightning-input-field field-name="Case_Field_Classification__c" onchange={handleChange} data-name="Case_Field_Classification__c"></lightning-input-field>
+                        </div>
+
+                        <div class="tooltip">
+                            <span class="tooltiptext">Following the processes outlined in Support Handbook & CEMPRO, Set and met expectations, Displayed sense of urgency, Ownership, displayed positive attitude</span>
+                            <lightning-input-field field-name="Overall_Case_management__c" onchange={handleChange} data-name="Overall_Case_management__c"></lightning-input-field>
+                        </div>
+
+                        <div class="tooltip">
+                            <span class="tooltiptext">Case includes logs, technical data, AR, Jira, Subject, Problem Description, clear documentation, Accurate documentation of log analysis</span>
+                            <lightning-input-field field-name="Case_Documentation__c" onchange={handleChange} data-name="Case_Documentation__c"></lightning-input-field>
+                        </div>
+
+                        <div class="tooltip">
+                            <span class="tooltiptext">Resolution Code and Resolution Details were accurately classified</span>
+                            <lightning-input-field field-name="Resolution__c" onchange={handleChange} data-name="Resolution__c"></lightning-input-field>
+                        </div>
+
+                        <lightning-input-field field-name="Final_Audit_Score__c" value={auditScore} disabled></lightning-input-field>
+                        <lightning-input-field field-name="Auditor_Comments__c"></lightning-input-field>
+                        <lightning-input-field field-name="Case_Audit_Timestamp__c" disabled></lightning-input-field>
+                        <lightning-input-field field-name="Send_Email_to_Case_Owner_s_Manager__c"></lightning-input-field>
+                    </div>-->
+
+                    <div class="slds-col slds-size_5-of-12">
+                        <lightning-input-field field-name="Case__c" disabled variant="label-stacked"></lightning-input-field>
+                        <lightning-input-field field-name="Case_Owner__c" disabled variant="label-stacked"></lightning-input-field>
+                        <lightning-input-field field-name="Case_Field_Classification__c" variant="label-stacked" onchange={handleChange} data-name="Case_Field_Classification__c"></lightning-input-field>
+                        <lightning-input-field field-name="Overall_Case_management__c" variant="label-stacked" onchange={handleChange} data-name="Overall_Case_management__c"></lightning-input-field>
+                        <lightning-input-field field-name="Final_Audit_Score__c" variant="label-stacked" value={auditScore} disabled></lightning-input-field>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-12"></div>
+
+                    <div class="slds-col slds-size_5-of-12">
+                        <lightning-input-field field-name="Case_Owner_s_Manager__c" disabled variant="label-stacked"></lightning-input-field>
+                        <lightning-input-field field-name="Case_Auditor__c" disabled variant="label-stacked"></lightning-input-field>
+                        <lightning-input-field field-name="Case_Documentation__c" variant="label-stacked" onchange={handleChange} data-name="Case_Documentation__c"></lightning-input-field>
+                        <lightning-input-field field-name="Resolution__c" variant="label-stacked" onchange={handleChange} data-name="Resolution__c"></lightning-input-field>
+                    </div>
+
+                    <div class="slds-size_11-of-12 slds-medium-size_11-of-12 slds-large-size_11-of-12">
+                        <lightning-input-field field-name="Auditor_Comments__c" variant="label-stacked"></lightning-input-field>
+                    </div>
+
+                    <div class="slds-col slds-size_5-of-12">
+                        <lightning-input-field field-name="Case_Audit_Timestamp__c" disabled variant="label-stacked"></lightning-input-field>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-12"></div>
+
+                    <div class="slds-col slds-size_5-of-12">
+                        <lightning-input-field field-name="Send_Email_to_Case_Owner_s_Manager__c" variant="label-stacked"></lightning-input-field>
+                    </div>
+
+                    <div class="slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12 buttonAlign">
+                        <lightning-button class="slds-m-top_small" variant="brand" type="submit" name="save" label="Save"></lightning-button>
+                    </div>
+                </div>
+            </lightning-record-edit-form>
+        </template>
+
+        <template if:true={showMessage}>
+            <div style="position:absolute;top:30%;left:1rem;right:1rem">
+                <div class="demo-only" style="height:4rem">
+                    <div class="slds-notify_container slds-is-relative">
+                        <div class="slds-notify slds-notify_toast slds-theme_success" role="status">
+                            <span class="slds-assistive-text">success</span>
+                            <span
+                                class="slds-icon_container slds-icon-utility-success slds-m-right_small slds-no-flex slds-align-top"
+                                title="Description of icon when needed">
+                            </span>
+                            <div class="slds-notify__content">
+                                <template if:true={isAuditRecordExisting}>
+                                    <h2 class="slds-text-heading_small ">Case Audit succesfully updated.</h2>
+                                </template>
+
+                                <template if:false={isAuditRecordExisting}>
+                                    <h2 class="slds-text-heading_small ">Case Audit succesfully created.</h2>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </template>
+</template>

@@ -1,0 +1,118 @@
+<apex:page standardController="CCR__c" extensions="CCRExtension" cache="false" applyBodyTag="false" standardStylesheets="false" showHeader="false" sidebar="false" action="{!case($User.UserType,
+                          "Standard",urlFor($Action.CCR__c.New, CCR__c, null, true),
+                          "PowerPartner",null,
+                          "CSPLitePortal",null,
+                          "CustomerSuccess",null,
+                          "PowerCustomerSuccess",null,
+                          "CsnOnly",null,
+                          null)}">
+      <style>
+    .pbSubsection, pbBody {
+    padding: 25px;
+    }
+    table {
+    padding: 5px;
+    }
+    td.labelCol {
+    font-size: 16px;
+    font-family: Gotham-Medium;
+    padding-left: 10px
+    }
+    td.dataCol {
+    padding: 5px;
+    padding-right: 15px;
+    }
+
+    td.data2Col {
+    padding: 5px;
+    padding-left: 15px;
+    }
+    td {
+    padding: 15px;
+    }
+    wrapper{
+    padding-bottom: 5px;
+    }
+    
+    .btnpad{
+    padding: 15px;
+    }
+    
+        .control-label:after {
+      content:"*";
+      color:red;
+    }
+    
+    </style>
+    
+     <c:visualstrapblock >
+    
+        <!--start header-->
+        <c:siteheader ></c:siteheader>
+        <!--end Header-->
+
+
+  
+  
+       <!--start the Container-->
+       <div class="container">
+         <div class="row rowcontainer" >
+                <div class="col-md-12">
+                       <apex:form >
+                    
+                   <div class="col-md-12">
+                   <div class="row">
+                   <h3><apex:outputfield value="{!CCR__c.Incentive__c}"/> Incentive Claim Form</h3><br/>
+                    <apex:pageMessages escape="false" ></apex:pageMessages>
+                    
+    
+                    <apex:repeat value="{!fsm}" var="f">
+                        <div class="col-md-4">
+                        <apex:outputLabel styleclass="{!IF(f.required, 'control-label','')}" >{!f.label}</apex:outputLabel>
+                        
+                        <apex:inputField value="{!CCR__c[f]}" styleClass="form-control block inputrubrik" required="{!OR(f.required, f.dbrequired)}" rendered="{!f!= 'Deal_Registration_Number__c'}" />
+                        <apex:inputText value="{!CCR__c[f]}" styleClass="form-control block inputrubrik" required="{!OR(f.required, f.dbrequired)}" rendered="{!f== 'Deal_Registration_Number__c'}" html-placeholder="XXXXXXXX-XXXXXX" />
+                        <br/>
+                     </div>
+                    </apex:repeat>
+      
+   
+                  </div>
+                 </div>
+                 
+             <div class="container">
+                <div class="row text-center btnpad">
+                    <div>
+                       <apex:commandButton value="Save" onClick="SubmitCCROnClick(this);"  styleclass="btn rubrik-btn" />&nbsp;
+                       <apex:commandButton value="Cancel" immediate="true" html-formnovalidate="formnovalidate" action="{!URLFOR($Page.Incentives)}" styleclass="btn rubrik-btn" />
+                       <apex:actionFunction name="saveCCR" action="{!saveRecord}" />
+            
+             
+                    <script language="Javascript">
+                      function SubmitCCROnClick (objSubmitBtn) {
+                        objSubmitBtn.disabled = true;
+                        objSubmitBtn.value = 'Saving...';
+                        saveCCR();
+                      }
+                    </script>
+                       </div>
+                </div>
+            </div>
+              
+              </apex:form>
+               
+            </div>
+        </div>
+        </div>
+        <!--End the Container-->
+
+
+
+        <!--start the footer-->
+        <c:sitefooter rendered="{!NOT(ISPICKVAL($User.UserType,'PowerPartner'))}"/>
+        <c:psitefooter rendered="{!ISPICKVAL($User.UserType,'PowerPartner')}"/>
+        
+    </c:visualstrapblock>
+
+
+</apex:page>

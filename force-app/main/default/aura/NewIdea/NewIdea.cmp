@@ -1,0 +1,59 @@
+<aura:component controller="NewIdeaController" implements="forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:handler name="init" value="this" action="{!c.init}"/>
+    <aura:attribute name="ModalOpen" type="boolean" default="false"/>
+    <aura:attribute name="title" type="String"/>
+    <aura:attribute name="body" type="String"/>
+    <aura:attribute name="commId" type="String" default=""/>
+    <aura:attribute name="CategList" type="List" default="[]" description="Categories Picklist Values"/>
+    <aura:attribute name="selectedCategList" type="List" default="[]" description="Selected Categories Picklist Values"/>
+    
+    <aura:attribute name="myVal" type="String" />
+    <aura:attribute name="errorMessage" type="String" default="You haven't composed anything yet."/>
+    <aura:attribute name="validity" type="Boolean" default="true"/>
+    
+   
+    <div class="demo-only" style="height: 640px;">
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+            <div class="slds-modal__container mContainer">
+                <header class="slds-modal__header">
+                   <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.Cancel}">
+                        <lightning:icon iconName="action:remove" alternativeText="Approved" size="xx-small"/>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate" style="font-size:1.5rem;"> New Idea</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <div class="slds-wrap slds-grid slds-size_12-of-12 fldPadding">
+                        <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12">
+                            <span class ="ideaField">Title</span><span class ="astrick">*</span>
+                            <ui:inputText aura:id="title"  class="titleField "  value="{!v.title}" maxlength="255"  />
+                            
+                        </div>
+                    </div>
+                    <div class="slds-wrap slds-grid slds-size_12-of-12 bodyDiv fldPadding">
+                        <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 ">
+                            <span class ="ideaField">Idea body</span>
+                            <lightning:inputRichText value="{!v.body}" label="Idea Body" messageWhenBadInput="{!v.errorMessage}" valid="{!v.validity}">
+                                <lightning:insertImageButton/>
+                            </lightning:inputRichText> 
+                        </div>
+                    </div>
+                    <div class="slds-wrap slds-grid slds-size_12-of-12 fldPadding">
+                        <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 ">
+                            <span class ="ideaField">Categories</span>
+                            <lightning:dualListbox aura:id="selectCateg" name="Categories" label="" sourceLabel="Available"
+                                                   selectedLabel="Selected" options="{!v.CategList }" value="{!v.selectedCategList}" onchange="{!c.handleGenreChange}" min="1"/>
+                        </div>
+                    </div>
+                </div>
+                <footer class="slds-modal__footer">
+                    <div class ="saveandCancel">
+                    <lightning:button label="Save" onclick="{!c.save}"/>
+                    <lightning:button label="Cancel" onclick="{!c.Cancel}"/>
+                    </div>
+                </footer>
+            </div>
+        </section>
+    </div>
+       <lightning:spinner aura:id="spinner" alternativeText="Loading" size="medium" class="slds-show" />
+</aura:component>

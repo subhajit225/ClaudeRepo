@@ -1,0 +1,20 @@
+<apex:component access="global" controller="WelcomeEmail_ThirdPartyHardwareCont">
+<apex:variable var="doShow" value="false"/>
+<apex:attribute name="orderobj" description="Receive Order" type="Order" required="required"/>
+<apex:outputPanel rendered="{!PSTasks.size > 0}">
+<apex:repeat var="cx" value="{!orderobj.OrderItems}">
+<apex:repeat var="pst" value="{!PSTasks}">
+<apex:outputPanel rendered="{!IF(pst==cx.PricebookEntry.Product2.Name,true,false)}">
+ <apex:variable var="doShow" value="true"/>
+</apex:outputPanel>
+</apex:repeat>
+</apex:repeat>
+<apex:outputPanel rendered="{!doShow == 'true'}">
+<br/><b>Professional Services</b><br/>
+
+Terms and conditions for all professional services can be found at: https://www.rubrik.com/content/dam/rubrik/en/resources/policy/rubrik-ps-supplementary-terms.pdf
+<br/>
+</apex:outputPanel>
+</apex:outputPanel>
+
+</apex:component>

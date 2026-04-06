@@ -1,0 +1,524 @@
+<!--
+  @description       : 
+  @author            : Harshit Garg
+  @group             : 
+  @last modified on  : 02-02-2026
+  @last modified by  : Harshit Garg
+-->
+<aura:component extends="c:PC_UtilityCmp"
+    implements="forceCommunity:availableForAllPageTypes,force:lightningQuickAction,force:hasRecordId,lightning:actionOverride"
+    access="global" Controller="PC_DealRegController">
+    <!-- PRIT-340 start -->
+    <aura:attribute name="objectId" type="String" />
+    <aura:attribute name="objectName" type="String" />
+    <aura:attribute name="leadDashboardDisabled" type="boolean" default="false"/>
+    <aura:attribute name="companyDisabled" type="boolean" default="false"/>
+    <aura:attribute name="selectedCompanyValue" type="String" default=''/>
+    
+    <!-- PRIT-340 end -->
+    <!-- PRIT24-625 start -->
+    <aura:attribute name="isNotOEM" type="boolean" default="true"/>
+    <!-- PRIT24-625 end -->
+    <!-- PRIT24-445 start -->
+    <aura:attribute name="selectedPartnerRepNameValue" type="String" default=""/>
+    <!-- PRIT24-445 end -->
+    <aura:attribute name="newDealReg" type="Deal_Registration__c" />
+    <aura:attribute name="dealRegFields" type="Deal_Registration__c" />
+    <aura:attribute name="newRecordError" type="String" />
+    <aura:attribute name="user" type="User" />
+    <aura:attribute name="isDistributor" type="boolean" default="false" />
+    <aura:attribute name="isStateRequired" type="boolean" default="false" />
+    <aura:attribute name="sObjectType" type="string" default="Deal_Registration__c" description="object API Name" />
+    <aura:attribute name="recTypeName" type="string" default="Deal_Registration"
+        description="RecordType Developer Name" />
+    <aura:attribute name="recTypeId" type="Id" description="RecordType ID default = 0121W0000009pMdQAI" />
+    <aura:attribute name="reqFieldMsg" type="string" default="Complete this field." />
+
+    <!-- Picklist Attributes -->
+    <aura:attribute name="requiredStateCountry" type="List"
+        default="Australia,Canada,United States,United Arab Emirates" />
+    <aura:attribute name="requiredFields" type="List"
+        default="Customer_Category__c,Deal_Source__c,Intersted_Through_Marketplace__c,Replacing_existing_environment__c,Buyer_Group__c,Intersted_Through_Marketplace__c,Primary_Product_Type__c,Country__c,StateCode__c,Opportunity_Details__c,Company__c" />
+    <aura:attribute name="picklistFields" type="Map" default="{}"
+        description="map of object and picklist Fields Api names to get the picklist values" />
+    <aura:attribute name="Country__c" type="List" access="PRIVATE" />
+    <aura:attribute name="StateCode__c" type="List" access="PRIVATE" />
+    <aura:attribute name="Customer_Category__c" type="List" access="PRIVATE" />
+    <!-- Start PRIT26-546 -->
+    <!-- <aura:attribute name="Purchase_Timeframe__c" type="List" access="PRIVATE" />
+    <aura:attribute name="Number_of_protected_machines__c" type="List" access="PRIVATE" />
+    <aura:attribute name="Current_Backup_Vendor__c" type="List" access="PRIVATE" />
+    <aura:attribute name="Current_Storage_Vendor__c" type="List" access="PRIVATE" />
+    <aura:attribute name="Budget__c" type="List" access="PRIVATE" /> -->
+    <!-- End PRIT26-546 -->
+    <!--<aura:attribute name="Authority__c" type="List" access="PRIVATE" />-->
+    <!-- Start PRIT26-546 -->
+    <!--<aura:attribute name="Need__c" type="List" access="PRIVATE" /> -->
+     <!-- End PRIT26-546 -->
+    <aura:attribute name="Alliance_Partner_Name__c" type="List" access="PRIVATE" />
+    <!--  <aura:attribute name="timeframeOptions" type="List" access="PRIVATE"/>-->
+
+    <aura:attribute name="customerCategoryOptions" type="List" access="PRIVATE" />
+    <aura:attribute name="purchaseTimeframeOptions" type="List" access="PRIVATE" />
+    <aura:attribute name="countryOptions" type="List" access="PRIVATE" />
+    <aura:attribute name="stateOptions" type="List" access="PRIVATE" />
+    <aura:attribute name="protectedMachinesOptions" type="List" access="PRIVATE" />
+    <aura:attribute name="currentBackupVendorOptions" type="List" access="PRIVATE" />
+    <aura:attribute name="currentStorageVendorOptions" type="List" access="PRIVATE" />
+    <aura:attribute name="budgetOptions" type="List" access="PRIVATE" />
+    <!--<aura:attribute name="authorityOptions" type="List" access="PRIVATE" />-->
+    <aura:attribute name="needOptions" type="List" access="PRIVATE" />
+    <aura:attribute name="timeframeOptions" type="List" access="PRIVATE" />
+    <aura:attribute name="alliancePartnerNameOptions" type="List" access="PRIVATE" />
+    <!--<aura:attribute name="showRubrikCompleteEdition" type="Boolean"/>-->
+    <aura:attribute name="showDistributor" type="Boolean" default="false" access="PRIVATE" />
+    <aura:attribute name="optionsDistributor__c" type="List" access="PRIVATE" />
+    <aura:attribute name="distributorId" type="String" access="PRIVATE" />
+    <aura:attribute name="showManagedServicePopup" type="Boolean" default="false" access="PRIVATE" />
+	
+    <!--Start PRIT26-546 -->
+    <aura:attribute name="partnerAccountDetails" type="Object" />
+	<aura:attribute name="distiList" type="List" />
+    <!--End PRIT26-546 -->
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <!--PRIT24-776 start-->
+    <aura:if isTrue="{!v.showManagedServicePopup}">
+        <div class="slds-m-around_xx-large" aura:id="managedServBox">
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                            <div class="slds-grid slds-wrap slds-m-vertical_small">
+                                <div class="slds-size_1-of-2">
+                                    <div id="resellBtn" class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small slds-text-heading_medium custom-box" onclick="{!c.setService}">Resell Motion
+                                        <div  class="slds-text-title">I am acting as the Reseller for this opportunity</div>
+                                    </div>
+                                </div>
+                                <div class="slds-size_1-of-2">
+                                    <div id="managedServBtn" class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small slds-text-heading_medium custom-box" onclick="{!c.setService}">Managed Services
+                                        <div  class="slds-text-title">I am providing a managed service for this opportunity</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </aura:if>
+    <!--PRIT24-776 end-->
+
+    <force:recordData aura:id="dealRegRecordCreator" layoutType="FULL" targetRecord="{!v.newDealReg}"
+        targetFields="{!v.dealRegFields}" targetError="{!v.newRecordError}" />
+    <lightning:recordEditForm aura:id="recordEditForm" recordId="{!v.recordId}" recordTypeId="{!v.recTypeId}"
+        objectApiName="Deal_Registration__c">
+        <lightning:messages />
+
+        <!-- Display the new Deal Reg form -->
+        <lightning:card class="no-style-slds-card">
+            <div class="heading-58 slds-p-left_small">Deal Registration Form</div>
+            <br />
+            <div class="slds-p-around_small heading-22">End User Information</div>
+                <lightning:layout multipleRows="true">
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                        <label class="slds-form-element__label customRequired" for="lookupCmp">Company Name</label>
+                        <c:customLookUpLWC objectname="Account" iconname="standard:account"
+                            onselected="{!c.handleSelectedAccount}"
+                            placeholder="Enter Company Name and select from dropdown if shown" aura:id="Company__c" selectedValue="{!v.selectedCompanyValue}"
+                            isDisabled="{!v.companyDisabled}">
+                        </c:customLookUpLWC>
+                        <div role="alert" aura:id="Company__c_help" class="form-element__helpError none">
+                            {!v.reqFieldMsg}</div>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                        <lightning:input aura:id="dealRegField" label="First Name"
+                            value="{!v.dealRegFields.FirstName__c}" required="true" disabled="{!v.leadDashboardDisabled}"/>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                        <lightning:input aura:id="dealRegField" label="Last Name" value="{!v.dealRegFields.LastName__c}"
+                            required="true" disabled="{!v.leadDashboardDisabled}"/>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                        <lightning:input aura:id="dealRegField" label="Job Title" value="{!v.dealRegFields.Title__c}"
+                            required="true" />
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                        <lightning:input aura:id="dealRegField" label="Email Address" value="{!v.dealRegFields.Email__c}"
+                            required="true" type="email" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"
+                            messageWhenPatternMismatch="Please enter a valid email address" disabled="{!v.leadDashboardDisabled}"/>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                        <lightning:input aura:id="dealRegField" label="Phone Number" value="{!v.dealRegFields.Phone__c}"
+                            required="true" type="tel" messageWhenPatternMismatch="Please enter a valid phone number" />
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                        <lightning:inputField fieldName="Country__c" aura:id="Country__c"
+                            class="customRequired none" value="{!v.dealRegFields.Country__c}" />
+                        <div role="alert" aura:id="Country__c_help" class="form-element__helpError none">
+                            {!v.reqFieldMsg}</div>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                        <lightning:input aura:id="dealRegField" label="Address" value="{!v.dealRegFields.Street__c}"
+                            required="true" />
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                        <lightning:input aura:id="dealRegField" label="City" value="{!v.dealRegFields.City__c}"
+                            required="true" />
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                        <lightning:inputField fieldName="StateCode__c" aura:id="StateCode__c"
+                            class="customRequired"
+                            disabled="{!if(empty(v.dealRegFields.Country__c),true,false)}"
+                            value="{!v.dealRegFields.StateCode__c}" />
+                        <div role="alert" aura:id="StateCode__c_help"
+                            class="form-element__helpError none">{!v.reqFieldMsg}</div>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                        <lightning:input aura:id="dealRegField" label="Zip Code"
+                            value="{!v.dealRegFields.PostalCode__c}" required="true" />
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                        <lightning:inputField fieldName="Customer_Category__c" aura:id="Customer_Category__c"
+                            class="customRequired none" value="{!v.dealRegFields.Customer_Category__c}" 
+                                              onchange="{!c.handleCustomerCategoryChange}"/>
+                        <div role="alert" aura:id="Customer_Category__c_help"
+                            class="form-element__helpError none">{!v.reqFieldMsg}</div>
+                    </lightning:layoutItem>
+                </lightning:layout>            
+            <!-- PRIT26-546
+            <hr class="slds-m-horizontal_small"/>
+            <div class="heading-22 slds-p-around_small">Deal Registration Type</div>
+                <lightning:layout multipleRows="true">
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                        <lightning:input type="checkbox" aura:id="dealRegField" label="AWS Marketplace Registration"
+                            checked="{!v.dealRegFields.AWS_Marketplace_Registration__c}" />
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                        <lightning:input type="checkbox" label="Rubrik Complete Edition Registration"
+                            aura:id="Rubrik_Complete_Edition_Reg__c"
+                            checked="{!v.dealRegFields.Rubrik_Complete_Edition_Reg__c}"
+                            fieldLevelHelp="Please specify r6404 or r6408 in Opportunities Details section" />
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                        <lightning:inputField fieldName="Save_the_Data_Event__c"
+                            class="none1" aura:id="Save_the_Data_Event__c"
+                            label="This opportunity is a result of a Save the Data event"
+                            value="{!v.dealRegFields.Save_the_Data_Event__c}" required="true"
+                            onchange="{!c.checkValidateFields}" />
+                        <div role="alert" aura:id="Save_the_Data_Event__c_help"
+                            class="form-element__helpError none">{!v.reqFieldMsg}</div>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                        <lightning:inputField fieldName="End_User_attend_a_Marketing_Event__c"
+                            class="customRequired none" aura:id="End_User_attend_a_Marketing_Event__c"
+                            label="End User attend a Marketing Event?"
+                            value="{!v.dealRegFields.End_User_attend_a_Marketing_Event__c}" required="true"
+                            onchange="{!c.checkValidateFields}" />
+                        <div role="alert" aura:id="End_User_attend_a_Marketing_Event__c_help"
+                            class="form-element__helpError none">{!v.reqFieldMsg}</div>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                        <lightning:input type="date" aura:id="dealRegField" label="Date of Event"
+                            value="{!v.dealRegFields.Date_of_Event__c}"
+                            disabled="{!!if(v.dealRegFields.End_User_attend_a_Marketing_Event__c == 'Yes' || v.dealRegFields.Save_the_Data_Event__c == 'Yes',true,false)}"
+                            required="true" />
+                    </lightning:layoutItem>
+                </lightning:layout>
+			-->
+          <hr class="slds-m-horizontal_small"/>
+            <div class="heading-22 slds-p-around_small">Environment
+                Information</div>
+                <lightning:layout multipleRows="true">
+                    <!-- PRIT26-546
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                      
+                        <lightning:inputField fieldName="Number_of_protected_machines__c"
+                            aura:id="Number_of_protected_machines__c" class="customRequired none"
+                            value="{!v.dealRegFields.Number_of_protected_machines__c}" />
+                        <div role="alert" aura:id="Number_of_protected_machines__c_help"
+                            class="form-element__helpError none">{!v.reqFieldMsg}</div>
+`					
+                    </lightning:layoutItem>
+					
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                      
+                        <lightning:inputField fieldName="Current_Backup_Vendor__c" aura:id="Current_Backup_Vendor__c"
+                            class="customRequired none" value="{!v.dealRegFields.Current_Backup_Vendor__c}" />
+                        <div role="alert" aura:id="Current_Backup_Vendor__c_help"
+                            class="form-element__helpError none">{!v.reqFieldMsg}</div>
+                    </lightning:layoutItem>
+					
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                     
+                        <lightning:inputField fieldName="Current_Storage_Vendor__c" aura:id="Current_Storage_Vendor__c"
+                            class="customRequired none" value="{!v.dealRegFields.Current_Storage_Vendor__c}" />
+                        <div role="alert" aura:id="Current_Storage_Vendor__c_help"
+                            class="form-element__helpError none">{!v.reqFieldMsg}</div>
+                    </lightning:layoutItem>
+					
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                        <lightning:inputField fieldName="Budget__c" aura:id="Budget__c" class="customRequired none"
+                            value="{!v.dealRegFields.Budget__c}" />
+                        <div role="alert" aura:id="Budget__c_help" class="form-element__helpError none">
+                            {!v.reqFieldMsg}</div>
+                    </lightning:layoutItem>
+					-->
+                    <!-- PRIT26-546
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                     
+                        <lightning:inputField fieldName="Authority__c" aura:id="Authority__c"
+                            class="customRequired none" value="{!v.dealRegFields.Authority__c}" />
+                        <div role="alert" aura:id="Authority__c_help"
+                            class="form-element__helpError none">{!v.reqFieldMsg}</div>
+                    </lightning:layoutItem>
+                    
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                    
+                        <lightning:inputField fieldName="Need__c" aura:id="Need__c" class="customRequired none"
+                            value="{!v.dealRegFields.Need__c}" />
+                        <div role="alert" aura:id="Need__c_help" class="form-element__helpError none">
+                            {!v.reqFieldMsg}</div>
+                    </lightning:layoutItem>
+					-->
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                        <!--Start PRIT26-546 -->
+                        <lightning:textarea aura:id="Opportunity_Details__c" label="Explain characteristics/specifics of the Opportunity"
+                                    value="{!v.dealRegFields.Opportunity_Details__c}"  class="customRequired none" onchange="{!c.handleOppSpecificsChange}" />
+                        <!--<lightning:inputField variant="label-hidden" fieldName="Opportunity_Details__c" aura:id="Opportunity_Details__c"
+                            value="{!v.dealRegFields.Opportunity_Details__c}" /-->
+                         <!--End PRIT26-546 -->
+                        <div role="alert" aura:id="Opportunity_Details__c_help" class="form-element__helpError none">
+                            {!v.reqFieldMsg}</div>
+                    </lightning:layoutItem>
+                    <!-- PRIT26-546
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                     
+                        <lightning:inputField fieldName="Purchase_Timeframe__c" aura:id="Purchase_Timeframe__c"
+                            class="customRequired none" value="{!v.dealRegFields.Purchase_Timeframe__c}" />
+                        <div role="alert" aura:id="Purchase_Timeframe__c_help"
+                            class="form-element__helpError none">{!v.reqFieldMsg}</div>
+                    </lightning:layoutItem>
+					-->
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                      
+                        <lightning:inputField fieldName="Alliance_Partner_Name__c" aura:id="Alliance_Partner_Name__c"
+                        value="{!v.dealRegFields.Alliance_Partner_Name__c}" />
+                    </lightning:layoutItem>
+                    <!-- PRIT26-546 -->
+                    <!--lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                      
+                        <lightning:inputField fieldName="Purchase_Timeframe__c" aura:id="Timeframe__c"
+                            class="customRequired none" value="{!v.dealRegFields.Purchase_Timeframe__c}" />
+                        <div role="alert" aura:id="Timeframe__c_help"
+                            class="form-element__helpError none">{!v.reqFieldMsg}</div>
+                    </lightning:layoutItem-->
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                      <div> </div>
+                        <lightning:inputField fieldName="Primary_Product_Type__c" aura:id="Primary_Product_Type__c"
+                            class="customRequired none" value="{!v.dealRegFields.Primary_Product_Type__c}" />
+                        <div role="alert" aura:id="Primary_Product_Type__c_help"
+                            class="form-element__helpError none">{!v.reqFieldMsg}</div>
+                    </lightning:layoutItem>
+
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                                          padding="around-small">
+                        <!-- Replacing Existing Environment Picklist -->
+                         <label class="customLabel customRequired" aura:id="Intersted_Through_Marketplace__c">Is your customer interested in purchasing through a Marketplace? </label>
+                        <lightning:inputField variant="label-hidden" fieldName="Intersted_Through_Marketplace__c" aura:id="Intersted_Through_Marketplace__c"
+                             value="{!v.dealRegFields.Intersted_Through_Marketplace__c}" required="true"/>
+                        <div role="alert" aura:id="Intersted_Through_Marketplace__c_help"
+                            class="form-element__helpError none">{!v.reqFieldMsg}</div>
+                        
+                    </lightning:layoutItem>
+                   
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                        <label class="customLabel customRequired" aura:id="Replacing_existing_environment__c">Is this replacing an existing environment?</label>
+                        <lightning:inputField  variant="label-hidden" fieldName="Replacing_existing_environment__c" aura:id="Replacing_existing_environment__c"
+                            value="{!v.dealRegFields.Replacing_existing_environment__c}" />
+                        <div role="alert" aura:id="Replacing_existing_environment__c_help"
+                            class="form-element__helpError none">{!v.reqFieldMsg}</div>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                      
+                        <lightning:inputField fieldName="Buyer_Group__c" aura:id="Buyer_Group__c"
+                            class="customRequired none" value="{!v.dealRegFields.Buyer_Group__c}" />
+                        <div role="alert" aura:id="Buyer_Group__c_help"
+                            class="form-element__helpError none">{!v.reqFieldMsg}</div>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                      
+                        <lightning:inputField fieldName="Deal_Source__c" aura:id="Deal_Source__c"
+                            class="customRequired none" value="{!v.dealRegFields.Deal_Source__c}" />
+                        <div role="alert" aura:id="Deal_Source__c_help"
+                            class="form-element__helpError none">{!v.reqFieldMsg}</div>
+                    </lightning:layoutItem>
+                </lightning:layout>
+         <hr class="slds-m-horizontal_small"/>
+            <div class="slds-p-around_small heading-22">Partner Information</div>
+           
+                <lightning:layout multipleRows="true">
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+
+                        <aura:if isTrue="{!v.isDistributor}">
+                            <label class="slds-form-element__label" for="lookupCmp">Partner Company Name</label>
+                            <c:customLookUpLWC objectname="Account" iconname="standard:account"
+                                recordtype="Partner/Distributor" onselected="{!c.handleSelectedPartnerAccount}"
+                                onclear="{!c.handleClearPartnerAccount}"
+                                aura:id="Company__c"></c:customLookUpLWC>
+                            <aura:set attribute="else">
+                                <lightning:input aura:id="dealRegField" label="Partner Company Name"
+                                    value="{!v.dealRegFields.Partner__c}" disabled="true" />
+                            </aura:set>
+                        </aura:if>
+
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                        <!-- PRIT24- 445 - start -->
+                        <label class="slds-form-element__label" for="lookupCmp" aura:id="Rep_Name">Partner Sales Rep Name </label>
+                        <c:customLookUpLWC objectname="Contact" iconname="standard:contact"
+                                           onsearch="{!c.handleSelectedPartnerRepContactSearch}"
+                                           onselected="{!c.handleSelectedPartnerRepContact}"
+                                           onclear="{!c.handleClearPartnerRepContact}"
+                                           placeholder = "Enter Partner Rep Name"
+                                           accid = "{!v.dealRegFields.Partner_Lookup__c}"
+                                           selectedValue="{!v.selectedPartnerRepNameValue}"
+                                           isRequired ="{!v.isNotOEM}"
+                                           aura:id="Partner_Rep__c">
+                        </c:customLookUpLWC>
+                        <div role="alert" aura:id="Partner_Rep__c_help"
+                            class="form-element__helpError none">{!v.reqFieldMsg}</div>
+                        <!-- PRIT24-445 - end -->
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                        <lightning:input aura:id="dealRegField" label="Partner Rep Email Address"
+                            value="{!v.dealRegFields.Partner_Rep_Email_Address__c}" disabled="{!!v.isDistributor}"
+                            required="{!v.isNotOEM}" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                            messageWhenPatternMismatch="Please enter a valid email address"></lightning:input>
+                     
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                        <lightning:input aura:id="dealRegField" label="Partner Rep Title"
+                            value="{!v.dealRegFields.Partner_Rep_Title__c}" required="{!v.isNotOEM}" />
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                        <lightning:input aura:id="dealRegField" label="Partner Rep Phone Number"
+                            value="{!v.dealRegFields.Partner_Rep_Phone_Number__c}" required="{!v.isNotOEM}" type="tel"
+                            messageWhenPatternMismatch="Please enter a valid phone number" />
+                     
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                        <lightning:input aura:id="dealRegField" label="Secondary Email Address to Receive Confirmation"
+                            value="{!v.dealRegFields.Secondary_Email_for_Deal_Reg__c}" required="{!v.isNotOEM}" type="email"
+                            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                            messageWhenPatternMismatch="Please enter a valid email address" />
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                        <!-- PRIT24- 445 - start -->
+                        <label class="slds-form-element__label" for="lookupCmp" aura:id="SE_Name">Partner SE Name </label>
+                        <c:customLookUpLWC objectname="Contact" iconname="standard:contact"
+                                           onsearch="{!c.handleSelectedPartnerSEContactSearch}"
+                                           onselected="{!c.handleSelectedPartnerSEContact}"
+                                           onclear="{!c.handleClearPartnerSEContact}"
+                                           placeholder = "Enter Partner SE Name"
+                                           accid = "{!v.dealRegFields.Partner_Lookup__c}"
+                                           isRequired ="{!v.isNotOEM}"
+                                           aura:id="Partner_SE_Name__c">
+                        </c:customLookUpLWC>
+                        <div role="alert" aura:id="Partner_SE_Name__c_help"
+                        class="form-element__helpError none">{!v.reqFieldMsg}</div>
+                        <!-- PRIT24- 445 - end -->
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                        <lightning:input aura:id="dealRegField" label="Partner SE Email"
+                            value="{!v.dealRegFields.Partner_SE_Email__c}" required="{!v.isNotOEM}" type="email" />
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                      
+                        <lightning:input aura:id="dealRegField" label="Partner SE Phone"
+                            value="{!v.dealRegFields.Partner_SE_Phone__c}" required="{!v.isNotOEM}" type="tel"
+                            messageWhenPatternMismatch="Please enter a valid phone number" />
+                    </lightning:layoutItem>
+                </lightning:layout>
+        <hr class="slds-m-horizontal_small"/>
+            <div class="slds-p-around_small heading-22">Distributor Information</div>
+            
+                <lightning:layout multipleRows="true">
+                    <aura:if isTrue="{!v.showDistributor}">
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                            padding="around-small">
+                            <lightning:select name="Distributor__c" aura:id="DistributorSelect"
+                                label="Distributor Company Name" value="{!v.distributorId}"
+                                onchange="{!c.handleDistiSelect}">
+                                <aura:iteration items="{!v.optionsDistributor__c}" var="item">
+                                    <option text="{!item.label}" value="{!item.value}"
+                                        selected="{!item.value == v.distributorId}" />
+                                </aura:iteration>
+                            </lightning:select>
+                        </lightning:layoutItem>
+                        <aura:set attribute="else">
+                            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12"
+                                largeDeviceSize="12" padding="around-small">
+                                <lightning:input aura:id="dealRegField" label="Distributor Company Name"
+                                    value="{!v.dealRegFields.Distributor_Company_Name__c}" disabled="true" />
+                            </lightning:layoutItem>
+                        </aura:set>
+                    </aura:if>
+                </lightning:layout>
+        <hr class="slds-m-horizontal_small"/>
+                <lightning:layout multipleRows="false">
+                    <lightning:layoutItem size="12" largeDeviceSize="1" padding="around-small">
+                        <lightning:button label="Submit" variant="brand" onclick="{!c.handleSaveDealReg}"/>
+                        <lightning:spinner aura:id="mySpinner" alternativeText="Saving.." title="Saving.."
+                            variant="brand" size="large" class="slds-hide" />
+                    </lightning:layoutItem>
+                </lightning:layout>
+        </lightning:card>
+
+        <!-- Display Lightning Data Service errors -->
+        <aura:if isTrue="{!not(empty(v.newRecordError))}">
+            <div class="recordError">
+                {!v.newRecordError}</div>
+        </aura:if>
+    </lightning:recordEditForm>
+</aura:component>

@@ -1,0 +1,39 @@
+<apex:page controller="AssetEntitlementEndDateController">
+    <apex:slds />
+    <style>
+        .slds-card {
+            height: 600px;
+        }
+    </style>
+    <apex:pageBlock title="Mismatched Asset-Entitlemenents">
+        <apex:form >
+            <div class="slds-card__header slds-grid">
+                <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                    <div class="slds-media__body">
+                        <apex:outputPanel rendered="{!notificationPanel}">
+                    <apex:outputText escape="true">
+                        {!$Label.Asset_Entitlement_end_date_mismatch_report_Page_Notification}
+                    </apex:outputText>
+                    
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!!notificationPanel}">
+                    <apex:outputText >
+                        Report will have details about the assets whose end date dosent match the
+                        end date of related Entitlement records
+                    </apex:outputText>
+                </apex:outputPanel>
+                    </div>
+                    <div class="slds-no-flex">
+                        <apex:outputPanel rendered="{!!notificationPanel}">
+                            <apex:commandButton styleclass="slds-button slds-button_brand" value="Get Report" action="{!getReport}" />
+                        </apex:outputPanel>
+                    </div>
+                </header>
+            </div>
+            <div class="slds-card__body slds-card__body_inner">
+                
+    
+            </div>
+        </apex:form>
+    </apex:pageBlock>
+</apex:page>

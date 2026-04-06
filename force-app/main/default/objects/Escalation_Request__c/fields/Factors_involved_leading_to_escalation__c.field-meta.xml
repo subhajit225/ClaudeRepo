@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Factors_involved_leading_to_escalation__c</fullName>
+    <label>Factors involved leading to escalation</label>
+    <required>true</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Financial loss impacting the customer</fullName>
+                <default>false</default>
+                <label>Financial loss impacting the customer</label>
+            </value>
+            <value>
+                <fullName>Customer&apos;s business impact - Production system down</fullName>
+                <default>false</default>
+                <label>Customer&apos;s business impact - Production system down</label>
+            </value>
+            <value>
+                <fullName>Potential Data Loss/Corruption</fullName>
+                <default>false</default>
+                <label>Potential Data Loss/Corruption</label>
+            </value>
+            <value>
+                <fullName>Revenue Impact to Rubrik - Provide link to Sales force Opportunity</fullName>
+                <default>false</default>
+                <label>Revenue Impact to Rubrik - Provide link to Sales force Opportunity</label>
+            </value>
+            <value>
+                <fullName>Threat removal from account</fullName>
+                <default>false</default>
+                <label>Threat removal from account</label>
+            </value>
+            <value>
+                <fullName>Multiple customers impacted</fullName>
+                <default>false</default>
+                <label>Multiple customers impacted</label>
+            </value>
+            <value>
+                <fullName>Customer or Account team are dissatisfied with support progress</fullName>
+                <default>false</default>
+                <label>Customer or Account team are dissatisfied with support progress</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>4</visibleLines>
+</CustomField>

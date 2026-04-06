@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CVE_Stage__c</fullName>
+    <description>SAL26-639: Current lifecycle stage of the CVE, such as Discovery, Execution, Finalization.</description>
+    <inlineHelpText>Current lifecycle stage of the CVE, such as Discovery, Execution, Finalization.</inlineHelpText>
+    <label>CVE Stage</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>1-Request Received</fullName>
+                <default>true</default>
+                <label>1-Request Received</label>
+            </value>
+            <value>
+                <fullName>2-Qualifying</fullName>
+                <default>false</default>
+                <label>2-Qualifying</label>
+            </value>
+            <value>
+                <fullName>3-Active Engagement In-Progress</fullName>
+                <default>false</default>
+                <label>3-Active Engagement In-Progress</label>
+            </value>
+            <value>
+                <fullName>4-Engagement Completed</fullName>
+                <default>false</default>
+                <label>4-Engagement Completed</label>
+            </value>
+            <value>
+                <fullName>5-Stalled / Discontinued</fullName>
+                <default>false</default>
+                <label>5-Stalled / Discontinued</label>
+            </value>
+            <value>
+                <fullName>6-CVE Not Required</fullName>
+                <default>false</default>
+                <label>6-CVE Not Required</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

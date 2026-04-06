@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Is_there_a_Winning_Channel_Partner</fullName>
+    <active>true</active>
+    <description>Is there a Winning Channel Partner if true SAL24-179</description>
+    <errorConditionFormula>AND( ISPICKVAL( Is_there_a_Winning_Channel_Partner__c , &apos;Yes&apos;) , ISBLANK( AAR_Winning_Channel_partner__c ) )</errorConditionFormula>
+    <errorDisplayField>AAR_Winning_Channel_partner__c</errorDisplayField>
+    <errorMessage>please select Winning Channel Partner</errorMessage>
+</ValidationRule>

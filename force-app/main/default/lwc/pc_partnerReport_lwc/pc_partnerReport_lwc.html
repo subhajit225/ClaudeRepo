@@ -1,0 +1,40 @@
+<template>
+    <template if:true={showSpinner}>
+        <lightning-spinner alternative-text="Loading..." size="small"></lightning-spinner>
+    </template>
+    <div class="slds-card" lwc:if={showReport}>
+        <div>
+            <lightning-layout multiple-rows="true" horizontal-align="spread">
+                <lightning-layout-item size="12" large-device-size="9" medium-device-size="7" small-device-size="7"
+                    padding="around-small" class="slds-p-left_small">
+                    <div class="heading-36">{reportName}</div>
+                    <div class="disclaimer" lwc:if={showDisclaimer}>
+                        *Date shown is certification achievement date.
+                        Certifications are valid for 2 years from achievement date.
+                    </div>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" large-device-size="2" medium-device-size="2" small-device-size="2"
+                    padding="around-small">
+                    <div class="slds-float_right">
+                        <lightning-button variant="brand" label="Export" title="Export" onclick={handleExportClick}
+                            icon-name="utility:download" class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>
+        </div>
+        <div class="custom-table-wrapper custom-opportunity-table slds-m-top_large partner-report-table" >
+            <lightning-datatable key-field="Id" data={reportData} row-number-offset={rowOffset} show-row-number-column
+                hide-checkbox-column columns={columns}>
+            </lightning-datatable>
+        </div>
+        <template if:true={showDetailedReport}>
+            <lightning-layout multiple-rows="true" horizontal-align="spread">
+                <lightning-layout-item size="12" large-device-size="3" medium-device-size="3" small-device-size="3"
+                    padding="around-small">
+                    <a href={detailURL} class="pipelineViewAll">View Detailed Report<img class="link-arrow-img"
+                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAtCAYAAADV2ImkAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAD3SURBVHgB7daxDcJADEBR+0BAGZiAESghHRtRAkIiaRAdMzABjEDFGmQClJImOXAqCoKcu+MuEn6tLeUrsqIACCGEEEKIPxZNl+NRvN6CIwq8wMRVtKdg4ibaYzCxj/YcTOyiAwQT8+hAwcQsGjlLw3hzQignYAzH9TOd3K+7FJi6nCWFOtL620NtVG8auNEBT+LdK3q2WnA2WxIMWdnXZ85iG4KzslfM88s+4yyzbhixSEGrIxjQiBFoONSMG8VWLfBj9POjVOf2YdQ4loQ6CaNYEiLYOJb4DraKJT6DrWOJr2AnsYT1WbMyGOQlPJzECiGEEKJ1nnbLYBZlR9+tAAAAAElFTkSuQmCC"></a>
+                </lightning-layout-item>
+            </lightning-layout>
+        </template>
+    </div>
+</template>

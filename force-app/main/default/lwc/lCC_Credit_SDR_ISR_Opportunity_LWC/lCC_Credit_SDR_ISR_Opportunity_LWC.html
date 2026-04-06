@@ -1,0 +1,40 @@
+<!-- meetingApprovalForm.html -->
+<template>
+	<div>
+		<template if:true={isCriteriaSatisfy}>
+			<div class="mainDiv slds-p-vertical_large" style="height: 200px;">
+				<lightning-spinner alternative-text='alternativeText' size='small' if:true={isSpinner}>
+				</lightning-spinner>
+				<div class="inputcontainer" style="padding: 10px;">
+					<label class="slds-form-element__label" style="margin-right: 0.5rem;"> {labels.Credit_SDR_ISR_Meeting_link_Label} </label>
+					<lightning-helptext
+						content={labels.Credit_SDR_Meeting_Link_Helptext}
+						class="customIcon"></lightning-helptext>
+					<lightning-input type="text" name="Meetingevidencelink" label={labels.Credit_SDR_ISR_Meeting_link_Label}
+						variant="label-hidden" required value={meetingEvidenceLink}
+						onchange={handleMeetingEvidenceLinkChange} data-recid="Meetingevidencelink"></lightning-input>
+
+					<label class="slds-form-element__label" style="margin-right: 0.5rem;"> {labels.Credit_SDR_Notes_Label} </label>
+					<lightning-helptext content = {labels.Credit_SDR_Notes_Helptext} class = "customIcon">
+					</lightning-helptext>
+					<lightning-input type="text" name="Notes" label={labels.Credit_SDR_Notes_Label} variant="label-hidden" required
+						value={notes} onchange={handleNotesChange} data-recid="Notes"></lightning-input>
+				</div>
+
+				<div class="slds-align_absolute-center">{labels.Credit_SDR_Submit_confirmation}</div>
+				<div class="slds-align_absolute-center">
+					<lightning-button class="slds-button" onclick={close} label="Close" variant="neutral">
+					</lightning-button>
+					<lightning-button class="slds-button" onclick={sendForApproval} label="Yes" variant="brand">
+					</lightning-button>
+				</div>
+			</div>
+		</template>
+		<template if:false={isCriteriaSatisfy}>
+			<div style="height: 40px;" class="slds-align_absolute-center">
+               {displayMessage}
+            </div>
+		</template>
+	</div>
+
+</template>

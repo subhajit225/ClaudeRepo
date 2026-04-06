@@ -1,0 +1,132 @@
+<apex:component >
+
+<apex:attribute name="Name" type="String" description="add the text you want"/>
+
+
+<c:importbs />
+<c:communitystyle />
+
+
+    <!--header-->
+    <div class="headerbacktop">
+
+    <div class="container-fluid container-fluid-right">
+     <div class="col-md-8"></div>
+     <div class="col-md-4">
+     <!--right-->
+         <!--<apex:outputLink styleClass="headerlinks" value="{!URLFOR($Page.Profile)}" rendered="{!$User.LastName!='Site Guest User'}">{!$User.FirstName} {!$User.LastName}</apex:outputLink>&nbsp;&nbsp;<c:smallprofilephoto subject="{!$User.Id}"/>&nbsp;&nbsp;| &nbsp;<a href="/{!Usertype}s/secur/logout.jsp" class="headerlinks">Logout</a> -->
+     </div>
+
+    
+    </div>
+    <!--end container fluid-->  
+    </div>
+    <!--end header-->
+         <!--start tabs-->
+
+<style>
+
+
+        .navbar  
+        .navbar-nav > li > a:hover, .navbar .navbar-nav > li > a:focus {
+            background-color: #2E4E52;
+            color: #FFFFFF;
+        }
+    
+       .navbar .navbar-nav > li > a {
+            background-color: #2E4E52 !important;
+            color: #FFFFFF;
+            box-sizing: border-box;
+            font-family: Gotham-Light;
+            font-size: 25px;
+            line-height: 66px;
+            color: #FFFFFF; 
+            text-transform: none;           
+            
+        }    
+
+        .navbar-default 
+        .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+            background-color: #2E4E52 !important;
+            color: #FFFFFF; !important;
+                        font-size: 25px;
+
+        }
+        
+        .navbar-default {
+            background-color: #2E4E52 !important;
+            border-color: none !important;
+            position: absolute;
+                        font-size: 25px;
+
+        }
+    
+       .navbar-default .navbar-nav > li > a {
+            background-color: #2E4E52 !important;
+            color: #FFFFFF !important;
+            box-sizing: border-box !important;
+            font-family: Gotham-Light !important;
+            font-size: 13px !important;
+            line-height: 66px !important;
+            color: #FFFFFF !important; 
+            text-transform: none !important;           
+                        font-size: 25px;
+
+        }   
+        
+        .navbar-brand {
+        
+            min-height: 76px !important;
+        }
+
+        .headerlogo {
+        line-height: 76px;
+        width: 165px;
+        }
+        
+        .pageTitle {
+        font-size: 22px !important;
+        }
+   
+</style>   
+
+<apex:attribute name="theName" type="String" description="add the text you want"/>
+
+
+    <div class="row">
+    <div class="tabs">
+    <!--start nav-->
+     <!-- Fixed navbar -->
+      <div class="navbar navbar-default navbar-static-top">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            
+      <span class="navbar-brand block"><a href="http://partner.rubrik.com"><apex:image url="{!$Resource.pcommunitylogo}" styleClass="headerlogo text-left" /></a></span>           
+       
+       </div>
+      
+      <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar inline block">
+               <li><a href="#"><apex:outputText value="{!name}" styleClass="pageTitle" ></apex:outputText></a></li>
+        </ul>
+
+        
+
+      </div><!--/.nav-collapse -->
+    </div>
+  </div>
+    <!--end nav-->
+         
+
+         
+     
+    </div>
+   </div><!--row end-->
+                      
+
+</apex:component>

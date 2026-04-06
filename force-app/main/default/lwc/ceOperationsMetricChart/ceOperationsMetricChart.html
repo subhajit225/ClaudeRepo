@@ -1,0 +1,44 @@
+<template>
+
+	<article class="slds-card border-gray slds-p-vertical_large">
+		<div class="slds-card__body slds-card__body_inner">
+			<p class="slds-text-heading_small th-heading">{label}</p>
+			<div class=" th-heading">
+				<template lwc:if={isLoading}>
+					<div class="demo-only demo-only_viewport" style="height:6rem;position:relative">
+						<lightning-spinner variant="brand" alternative-text="Loading Data" size="large">
+						</lightning-spinner>
+					</div>
+				</template>
+				<template lwc:else>
+					<div class="slds-grid slds-grid_vertical">
+						<div class="slds-col">
+							<template lwc:if={chartConfiguration}>
+								<template lwc:if={isReportAvailable}>
+									<c-ce-generic-chart chart-config={chartConfiguration}></c-ce-generic-chart>
+								</template>
+								<template lwc:else>
+									<h1 title={currentValue} style="font-size: 5rem; color:#00716B">0</h1>
+
+									</template>
+							</template>
+							<template lwc:else>
+								<h1 title={currentValue} style="font-size: 5rem; color:#00716B">{value}
+								</h1>
+							</template>
+						</div>
+						<div class="slds-col">
+							<template lwc:if={isReportAvailable}>
+								<span class="slds-text-link  slds-p-top_large "  style="width: 274px; height: 76px; cursor:pointer" onclick={handleViewReport}>View Report</span>
+							</template>
+							<template lwc:else>
+								<span class=" slds-p-top_large isDisabled"  style="width: 274px; height: 76px;" >View Report</span>
+							</template>
+						</div>
+					</div>
+
+				</template>
+			</div>
+		</div>
+	</article>
+</template>

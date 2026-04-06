@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>AAR_Winning_Channel_partner__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>SAL23-…this field is manually populated by AE for Closed Lost opportunity based on the threshold.</description>
+    <inlineHelpText>Who did the customer end up purchasing their chosen solution through</inlineHelpText>
+    <label>Winning Channel Partner</label>
+    <lookupFilter>
+        <active>true</active>
+        <errorMessage>Found no Partner Accounts based on filter criteria.</errorMessage>
+        <filterItems>
+            <field>Account.Type</field>
+            <operation>equals</operation>
+            <value>Reseller, MSP-Reseller, MSP, Alliance Partner</value>
+        </filterItems>
+        <infoMessage>Partner Accounts</infoMessage>
+        <isOptional>false</isOptional>
+    </lookupFilter>
+    <referenceTo>Account</referenceTo>
+    <relationshipLabel>After Action Reviews</relationshipLabel>
+    <relationshipName>After_Action_Reviews</relationshipName>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

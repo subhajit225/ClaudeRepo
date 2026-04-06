@@ -1,0 +1,10 @@
+<apex:component controller="IdeaComments" access="global">
+<apex:attribute name="theideaId" assignTo="{!ideaID}" type="String" description="Id of the case"/>  
+<apex:attribute name="numberofrecords" assignTo="{!limitRecords}" type="integer" description="number of comments to get"/>  
+
+<apex:repeat value="{!IdeaComments}" var="ic">
+{!ic.CreatedBy.CommunityNickName} wrote on &nbsp;<apex:outputfield value="{!ic.CreatedDate}"/>:<br/>
+<apex:outputtext value="{!ic.CommentBody}" escape="False"></apex:outputtext><br/>
+<apex:outputText rendered="{!numberofrecords!=1}"><br/></apex:outputText>
+</apex:repeat>
+</apex:component>

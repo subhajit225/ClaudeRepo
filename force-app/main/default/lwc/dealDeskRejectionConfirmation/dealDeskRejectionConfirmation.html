@@ -1,0 +1,40 @@
+<template>
+    <template if:true={loaded}>
+        <template if:true={modal}>
+            <lightning-quick-action-panel header="Warning">
+                <div class="slds-modal__content slds-p-around_medium">
+                    Prior to rejecting the case, please consider requesting more information from business partners by using Request More Information button.
+                </div>
+                <div slot="footer"> 
+                    <lightning-button class="slds-m-around_small"
+                        variant="brand"
+                        label="Reject" 
+                        onclick={onReject}>
+                    </lightning-button>
+                    <lightning-button class="slds-m-around_small"
+                        variant="brand-outline"
+                        label="Cancel" 
+                        onclick={onCancel}>
+                    </lightning-button>
+                    <!-- <lightning-button 
+                        variant="brand" 
+                        label="Continue" 
+                        onclick={onContinueClick}>
+                    </lightning-button>
+                    <lightning-button 
+                        variant="neutral" 
+                        label="Reject" 
+                        onclick={onCancelClick}>
+                    </lightning-button> -->
+                </div>
+            </lightning-quick-action-panel>
+        </template>
+        <template if:false={modal}>
+                <c-d-d-c_-request-more-information record-id={recordId} default="true" onrmicomplete={handleRmiResponse} onloadevent={handleLoad}></c-d-d-c_-request-more-information>
+        </template>
+    </template>
+    <template if:false={loaded}>
+        <lightning-spinner alternative-text="Loading..." variant="brand"></lightning-spinner>
+    </template>
+     
+</template>

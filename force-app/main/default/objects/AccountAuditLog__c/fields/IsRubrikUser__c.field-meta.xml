@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>IsRubrikUser__c</fullName>
+    <description>Rubrik User - CS21-891</description>
+    <formula>If(ISBLANK(User__r.ContactId), true, false)</formula>
+    <label>Is Rubrik User</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

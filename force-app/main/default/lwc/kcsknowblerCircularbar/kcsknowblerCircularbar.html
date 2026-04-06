@@ -1,0 +1,25 @@
+<template>
+  <span class={container} data-id="containerid" data-pct="100">
+    <svg>
+      <circle
+        r="18"
+        cx="28"
+        cy="28"
+        fill="transparent"
+        class={progressBackground}
+        stroke-dasharray="314"
+      ></circle>
+      <circle
+        r="18"
+        cx="28"
+        cy="28"
+        fill="transparent"
+        class={progress}
+        data-id="progressid"
+        stroke-dashoffset="0"
+        stroke-linecap="butt"
+        transform="rotate(270,28,28)"
+      ></circle>
+    </svg>
+  </span>
+</template>

@@ -1,0 +1,142 @@
+<aura:component
+    implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+    extends="c:LCC_GenericLightningComponent">
+    <aura:attribute name="lstErroredOrders" type="List"></aura:attribute>
+    <aura:attribute name="quoteId" type="List"></aura:attribute>
+    <aura:attribute name="opptyId" type="List"></aura:attribute>
+    <aura:attribute name="opptyData" type="Map" default="{}" />
+    <aura:attribute name="quoteData" type="Map" default="{}" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <div style="background-color: white; padding:20px">
+        <aura:if isTrue="{!v.lstErroredOrders.length > 0}">
+            <div class="tooltip" style="font-style: inherit;"><span style="font-size: 15px; padding-left: 3px;">Active
+                    Validations</span>
+                <span class="tooltiptext">
+                    <ul style="list-style-type:disc; padding-left:10px">
+                        <li>Product is missing.</li>
+                        <li>Have Polaris Product is False.</li>
+                        <li>Manufacturing Entitlement is Missing.</li>
+                        <li>Linked assets missing.</li>
+                        <li>Quote - Opportunity Subtype Mismatch.</li>
+                    </ul>
+                </span>
+            </div>
+            <div dir="rtl" style="margin-bottom: 15px; padding-right: 5px; display:inline-block; float:right;">
+                <div class="slds-form-element">
+                    <label class="slds-checkbox_toggle slds-grid">
+                        <span aura:id="mySpan" class="slds-form-element__label slds-m-bottom_none"
+                            style="font-size: 15px; padding-top:0; font-style:inherit">Created</span>
+                        <input type="checkbox" name="checkbox-toggle-19" value="checkbox-toggle-19"
+                            aria-describedby="checkbox-toggle-19" checked="" onclick="{!c.shippedOrders}" />
+                        <span id="checkbox-toggle-19" class="slds-checkbox_faux_container" aria-live="assertive">
+                            <span class="slds-checkbox_faux"></span>
+                        </span>
+                    </label>
+                </div>
+            </div>
+            <table class="slds-table slds-table_bordered slds-table_striped 
+            slds-table_fixed-layout records-table tableStyle myTable">
+                <thead>
+                    <th class="slds-text-title_caps" style="width:70px; height: 45px;">
+                        Order #
+                    </th>
+                    <th class="slds-text-title_caps tableStyle" style="width:400px; height: 45px;">
+                        Order Error
+                    </th>
+                    <th class="slds-text-title_caps tableStyle" style="height: 45px;">
+                        Order Item
+                    </th>
+                </thead>
+                <tbody>
+                    <aura:iteration items="{!v.lstErroredOrders}" var="i">
+                        <aura:if isTrue="{!i.hasError}">
+                            <tr>
+                                <td class="tableStyle"><a href="{!'/lightning/r/Order/'+i.Order.order.Id+'/view'}">{!i.Order.order.OrderNumber}</a>
+                                </td>
+                                <td class="tableStyle innerTable">
+                                    <!-- Iteration for orderError -->
+                                    <aura:if isTrue="{!i.Order.orderError.length > 0}">
+                                        <table
+                                            class="slds-table slds-table_bordered slds-table_striped slds-table_fixed-layout records-table tableStyle">
+                                            <thead>
+                                                <th class="slds-is-sortable slds-is-resizable slds-text-title--caps slds-text-title_caps tableStyle"
+                                                    style="height: 45px;">
+                                                    Error Name
+                                                </th>
+                                                <th class="slds-is-sortable slds-is-resizable slds-text-title--caps slds-text-title_caps tableStyle"
+                                                    style="height: 45px;">
+                                                    Description
+                                                </th>
+                                            </thead>
+                                            <tbody>
+                                                <aura:iteration items="{!i.Order.orderError}" var="err">
+                                                    <tr>
+                                                        <td class="tableStyle">{!err.Name}</td>
+                                                        <td class="tableStyle">
+                                                            <aura:if isTrue="{!err.objRecord}">
+                                                                <a href="{!'/lightning/r/SBQQ__QuoteLine__c/'+err.objRecord.Id+'/view'}">{!err.objRecord.Name}</a>
+                                                                Doesn't have {!err.objRecord.SBQQ__Product__r.ProductCode}
+                                                                Order Product.
+                                                                <aura:set attribute="else">
+                                                                    {!err.type}
+                                                                </aura:set>
+                                                            </aura:if>
+                                                        </td>
+                                                    </tr>
+                                                </aura:iteration>
+                                            </tbody>
+                                        </table>
+                                    </aura:if>
+                                </td>
+                                <td class="tableStyle innerTable">
+                                    <!-- Iteration for orderItems -->
+                                    <aura:if isTrue="{!i.OrderItems.length > 0}">
+                                        <table
+                                            class="slds-table slds-table_bordered slds-table_striped slds-table_fixed-layout records-table tableStyle">
+                                            <thead>
+                                                <th class="slds-is-sortable slds-is-resizable slds-text-title--caps slds-text-title_caps tableStyle"
+                                                    style="width:150px; height: 45px;">
+                                                    OI #
+                                                </th>
+                                                <th class="slds-is-sortable slds-is-resizable slds-text-title--caps slds-text-title_caps tableStyle"
+                                                    style="width:200px; height: 45px;">
+                                                    OI Name
+                                                </th>
+                                                <th class="slds-is-sortable slds-is-resizable slds-text-title--caps slds-text-title_caps tableStyle"
+                                                    style="height: 45px;">
+                                                    OI Error
+                                                </th>
+                                            </thead>
+                                            <tbody>
+                                                <aura:iteration items="{!i.OrderItems}" var="oi">
+                                                    <tr>
+                                                        <td class="tableStyle"><a href="{!'/lightning/r/OrderItem/'+oi.orderItem.Id+'/view'}">{!oi.orderItem.OrderItemNumber}</a>
+                                                        </td>
+                                                        <td class="tableStyle">{!oi.orderItem.Product_Name__c}</td>
+                                                        <td class="tableStyle">
+                                                            <aura:iteration items="{!oi.orderItemError}" var="oie">
+                                                                <!-- {!oie} -->
+                                                                <aura:if isTrue="{!oie.objRecord}"> Linked assets missing for 
+                                                                <a href="{!'/lightning/r/Entitlement/'+oie.objRecord.Id+'/view'}">{!oie.objRecord.Name}</a> Entitlement.
+                                                                <aura:set attribute="else">
+                                                                    {!oie}
+                                                                </aura:set>
+                                                            </aura:if>
+                                                            </aura:iteration>
+                                                        </td>
+                                                    </tr>
+                                                </aura:iteration>
+                                            </tbody>
+                                        </table>
+                                    </aura:if> 
+                                </td>
+                            </tr>
+                        </aura:if>
+                    </aura:iteration>
+                </tbody>
+            </table>
+            <!-- </aura:iteration>  -->
+        </aura:if>
+    </div>
+</aura:component>

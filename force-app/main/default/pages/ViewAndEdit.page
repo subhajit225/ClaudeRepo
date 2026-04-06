@@ -1,0 +1,59 @@
+<apex:page standardcontroller="Note" extensions="UpdateAssistRequestController">
+    <style>
+        .bPageBlock .detailList .dataCol {
+        width: 0%;
+        }
+    </style>
+    <apex:form id="form1">
+        <apex:pageBlock id="assistBlock">
+            <apex:pageBlockSection >
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Owner"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputField value="{!noteRec.OwnerId}"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Related To"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputField value="{!noteRec.ParentId}"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Title"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputField value="{!noteRec.Title}"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="AR Comment"/>
+                </apex:pageBlockSectionItem>
+                <apex:outputPanel rendered="{!if(read , false ,true)}">  
+                    <apex:pageBlockSectionItem >
+                        <apex:inputField style="width: 25rem;height: 10rem;" value="{!noteRec.body}"> 
+                        </apex:inputField>
+                    </apex:pageBlockSectionItem>
+                    
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!if(read, true, false)}">  
+                    <apex:pageBlockSectionItem >
+                        <apex:outputField style="width: 25rem;height: 10rem;" value="{!noteRec.body}"> 
+                        </apex:outputField>
+                    </apex:pageBlockSectionItem>
+                </apex:outputPanel>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockButtons location="bottom">
+                <apex:outputPanel rendered="{!if(read , false ,true)}">
+                    <apex:commandButton value="Save" action="{!updateViewAndEditNotes}"/>
+                    <apex:commandButton value="Cancel" action="{!onCancel}"/>
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!if(read, true, false)}">
+                    <apex:commandButton value="Edit" action="{!onEdit}"/>
+                </apex:outputPanel>
+            </apex:pageBlockButtons>
+            
+            
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

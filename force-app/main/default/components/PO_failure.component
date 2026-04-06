@@ -1,0 +1,28 @@
+<apex:component access="global" >
+    <apex:attribute name="StageId" type="Id" description="Id of the StagePO"/>
+    <apex:attribute name="StageRec" type="PO_Stage__c" description="StagePO"/>
+
+    855 Rejection for PO:- {!StageRec.Name}<br/>
+
+    <table border="1px">
+        <tr>
+            <td>Name</td>
+            <td>Error Code</td>
+            <td>Error Message</td>            
+        </tr>
+        <apex:repeat value="{!StageRec.PO_Stage_Errors__r}" var="err">
+            <apex:outputpanel rendered="{!if(LOWER(err.Error_Type__c) == 'external',true,false)}">
+                <tr>
+                    <td>{!err.Name}</td>
+                    <td>{!err.Error_Code__c}</td>
+                    <td>{!err.Error_Message__c}</td>
+                </tr>
+            </apex:outputpanel>
+        </apex:repeat>
+    </table><br/><br/>
+    <apex:outputPanel rendered="{!If(StageRec.Rejection_Reason__c != null,true,false)}">
+        Rejection Note:- {!StageRec.Rejection_Reason__c}<br/><br/>
+    </apex:outputPanel>
+    Thanks<br/>
+    Rubrik OM Team
+</apex:component>

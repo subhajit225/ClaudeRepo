@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SLED_FED_opportunities_are_not_eligible</fullName>
+    <active>true</active>
+    <description>SAL25-647, SAL25-770, SAL26-287, SAL26-418, SAL26-417</description>
+    <errorConditionFormula>AND(
+     NOT($Setup.ShGl_DisableBusinessLogic__c.Disable_CCR_Validation_Rules__c),
+     OR
+     (
+        CONTAINS(Opportunity__r.ETM_Area__c, &apos;SLED&apos;), 
+        CONTAINS(Opportunity__r.ETM_Area__c, &apos;FED&apos;),
+        CONTAINS(Opportunity__r.ETM_Region__c, &apos;ANZFEDERAL&apos;),
+        Opportunity__r.Account.Industry_Category__c = &apos;SLED&apos;,
+        Opportunity__r.Account.Industry_Category__c = &apos;FED&apos;,
+        ISPICKVAL(Opportunity__r.Account.Customer_Category__c, &apos;State &amp; Local Govt/Education&apos;),
+        ISPICKVAL(Opportunity__r.Account.Customer_Category__c, &apos;Federal Govt&apos;)
+     ),
+     ISPICKVAL(CCR_Type__c, &apos;Partner Referral Fee&apos;),
+     ISNEW() 
+)</errorConditionFormula>
+    <errorMessage>SLED/FED opportunities are not eligible for Partner Referral Fees.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,81 @@
+<apex:component >
+    <style>
+        .row{margin:0px!important;}
+        body{margin:0px!important;}
+        .nopad{padding:0px;}
+        .navsearch::placeholder{color:#bbb}
+        .tabsContainer{width: 90%;margin: 0 auto;padding: 0 40px;}
+        .seachTopRight{margin:0px !important;}
+        .navbar .navbar-nav > li > a:hover, .navbar .navbar-nav > li > a:focus {background-color: #2E4E52;color: #009DAC;}
+        .navbar .navbar-nav > li > a {background-color: #2E4E52 !important;color: #FFFFFF;box-sizing: border-box;font-family: Gotham-Light;font-size: 13px;line-height: 50px;color: #FFFFFF;text-transform: uppercase;}    
+        .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {background-color: #2E4E52 !important;color: #009DAC !important;}
+        .navbar-default {background-color: #2E4E52 !important;border-color: none !important;position: absolute;}
+        .navbar-default .navbar-nav > li > a {background-color: #2E4E52 !important;color: #FFFFFF !important;box-sizing: border-box !important;font-family: Gotham-Light !important;font-size: 12.5px !important;line-height: 45px !important;color: #FFFFFF !important;text-transform: uppercase !important;
+        padding-left: 10px !important;padding-right:5px !important;}   
+        .navbar-brand {min-height: 65px !important;}    
+        .headerlogo {line-height: 50px;width: 140px;} 
+        input.navsearch, navsearch:focus {padding: 5px 0px;border-bottom: 1px solid #bbb !important;margin-top:22px;margin-left: 0px !important;background:transparent;border:none;font-size: 14px;outline: none;color: #ffffff !important;opacity: 0.8 !important;width:100px;}
+        .bottomsearch {border-bottom:1px;color: #ffffff !important;opacity: 0.8 !important;margin-left: 20px !important;}
+        @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+        .aboutUsContainer,.CategContainerBlock,.footerContent,.tabsContainer,.announcementArticleBlock{padding: 0px!important;}
+        .articleContainer{padding-left:0px; padding-right:0px;}
+        .searchBoxContainer{margin:0px !important}
+        .imageIcon{padding-bottom:10px}
+        }
+        @media only screen and (min-device-width : 481px) and (max-device-width : 768px) {
+        .tabsContainer{padding: 0px!important;width: 100%;}
+        
+        }
+    </style>  
+    <script  type="text/javascript">
+    function redirectPage(){
+        var searchText = document.getElementById('search').value;
+        window.location.href = '{!$Site.CurrentSiteUrl}UnifiedSearchSupport#/search?searchString=' +encodeURIComponent(searchText);
+    }
+    </script> 
+    <div class="row">
+        <div class="tabs">
+            <!--start nav-->
+            <!-- Fixed navbar -->
+            <div class="navbar navbar-default ">
+                <div class="tabsContainer">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar1">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <span class="navbar-brand block"><a href="{!URLFOR($Page.EdgeTrialHome)}"><apex:image url="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/logo.png')}" styleClass="headerlogo text-left" /></a></span>           
+                    </div>
+                    
+                    <div class="collapse navbar-collapse" id='myNavbar1'>
+                        <div class="col-sm-4 block hidden-xs hidden-md hidden-sm nopad"></div>
+                        <ul class="nav navbar-nav navbar navbarHeader inline block">
+                            <li class="active"><a href="{!URLFOR($Page.trialKnowledgeCategoryHome)}">Knowledge base</a></li>
+                            <li><a href="{!URLFOR($Page.Downloads)}">Documentation</a></li>
+                            <li><a href="{!URLFOR($Page.About)}">About</a></li>
+                            <li><a href="javascript:void(0);" class="hidden-md hidden-lg hidden-sm" onclick="redirectPage();">Search</a></li>
+                        </ul>
+                        
+                        <!--search-->
+                        
+                        <div class="col-sm-2 block hidden-xs hidden-md hidden-sm nopad">
+                            <form class="navbar-form seachTopRight" role="search" action="javascript:;" onsubmit="redirectPage(this);">
+                                <div class="input-group navsearch">
+                                    <input type="text" class="navsearch bottomsearch" placeholder="Search" name="search" id="search" autocomplete="off"/>
+                                    <div class="input-group-btn" style="top:11px;left:5px">
+                                        <img style="cursor:pointer;" src="{!$REsource.whitesearchicon}" alt="Submit Me" height="20px" onclick="redirectPage();"/>
+                                        <!-- <input type="image" src="{!$REsource.whitesearchicon}" alt="Submit Me" height="20px" onclick="redirectPage();" /> -->
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <!--end search-->                        
+                    </div><!--/.nav-collapse -->
+                </div>
+            </div>
+            <!--end nav-->
+        </div>
+    </div><!--row end-->
+</apex:component>

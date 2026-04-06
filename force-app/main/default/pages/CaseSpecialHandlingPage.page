@@ -1,0 +1,39 @@
+<apex:page standardController="Case" lightningStylesheets="true" rendered="{!AND(Case.Account.Heads_Up_to_Support_Team__c != Null,$User.UITheme == 'Theme3')}">
+        <apex:slds />
+    <style>
+    .specialHandling li{
+       
+        padding-left:2px;
+        
+    }
+    .specialHandling ul li{
+       padding-left:2px;
+    }
+    .specialHandling pre{
+       white-space: break-spaces;
+    }
+    .specialHandling ol li{
+     list-style-type: decimal;
+    list-style-position: inside;
+       padding-left:2px;
+    }
+    
+    </style>
+    <div class="slds-scope">
+    <apex:form >
+    <body style="background-color:yellow;">
+
+        <div >
+            <font size = "3" color="red"> <b>Account Preference:</b></font>
+            <font size = "3" ><apex:outputField value="{!Case.Account.Account_Preference__c }" ></apex:outputField></font> 
+        </div>
+        <div class="specialHandling">  
+            <font size = "3" color="red"><b>Special Handling Instruction:</b></font>
+            <font size = "3" > <!--apex:outputField value="{!Case.Account.Heads_Up_To_Support_Team__c }"  ></apex:outputField--> 
+             <apex:outputText value="{!Case.Account.Heads_Up_To_Support_Team__c }" escape="false" /> 
+            </font>                    
+        </div>  
+        </body>
+    </apex:form>                
+    </div>
+</apex:page>

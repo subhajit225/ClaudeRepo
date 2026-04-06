@@ -1,0 +1,162 @@
+.custom-header {
+  width: 100%;
+  background: var(--primary-colour, #546c7e);
+  padding: 16px 20px 16px 20px;
+}
+
+.kcs__top__text {
+  color: #fff;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  font-family: 'Roboto Regular', 'Helvetica Neue', sans-serif;
+}
+
+.min_icon {
+  cursor: pointer;
+  position: relative;
+}
+
+.max_icon {
+  cursor: pointer;
+  position: relative;
+}
+
+.slds-popover_tooltip {
+  display: none;
+}
+
+.max_icon:hover {
+  transform: scale(1.3);
+}
+
+.tooltip:hover .slds-popover_tooltip {
+  display: inline-flex;
+  position: absolute;
+  right: 60px;
+  top: 14px;
+  background: #fff;
+  border-radius: 8px;
+}
+
+.knowbler_logo {
+  transform: scale(1.2);
+  padding: 0 0.6rem;
+}
+
+.header-top {
+  align-items: center;
+  position: relative;
+}
+
+.SMALL .tooltip:hover .slds-popover_tooltip {
+  display: inline-flex;
+  position: absolute;
+  right: 62px;
+  top: 17px;
+  background: #fff;
+  border-radius: 8px;
+}
+
+.min_icon:hover {
+  transform: scale(1.3);
+}
+
+.SMALL .custom-header {
+  padding: 16px 20px 16px 20px;
+  border-radius: 20px 20px 0 0;
+  position: relative;
+}
+
+.tooltip.slds-col {
+  display: flex;
+  justify-content: end;
+}
+
+@media only screen and (max-width: 768px) {
+  .header-white-div {
+    margin-left: 15px;
+    display: block;
+  }
+
+  .header-mobile-view {
+    display: block;
+    margin-left: 15px;
+  }
+}
+.shadow {
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+}
+.knowbler__wrapperSwitchAndViewButton {
+  display: flex;
+  align-items: center;
+}
+.knowbler__modeSwitchButton {
+  margin-right: 14px;
+  box-shadow: 0px 0px 0px 4px rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  height: 18px;
+  width: 20px;
+  background: rgba(255, 255, 255, 0.2);
+}
+.instruction-tooltip_background {
+  position: absolute;
+  top: 0px;
+  right: 0;
+  background: #151726;
+  width: 100%;
+  z-index: 10;
+  opacity: 0.5;
+}
+.knowbler__switch-tooltip:hover .slds-popover_tooltip {
+  display: block;
+}
+.knowbler__switch-tooltip
+  .instruction-tooltip.slds-popover.slds-popover_tooltip.slds-nubbin_top-right {
+  padding: 10px;
+  position: absolute;
+  height: fit-content;
+  right: 44px;
+  top: 54px;
+  width: 180px;
+  background: var(--primary-colour, #3e7555);
+  border-radius: 8px;
+  z-index: 999999;
+}
+.knowbler__switch-tooltip
+  .slds-popover.slds-popover_tooltip.slds-nubbin_top-right {
+  position: absolute;
+  height: fit-content;
+  right: 44px;
+  top: 54px;
+  width: fit-content;
+  background: var(--primary-colour, #546c7e);
+  border-radius: 8px;
+  padding: 10px;
+  color: #ffffff;
+  font-size: 14px;
+  box-shadow: 0px 3px 20px #00000059;
+  font-family: 'Roboto Regular', 'Helvetica Neue', sans-serif;
+  z-index: 999999;
+}
+
+.instruction-tooltip .tooltip_text {
+  color: #fff;
+  font-size: 14px;
+  font-family: 'Roboto Regular', 'Helvetica Neue', sans-serif;
+}
+
+.instruction-tooltip .tooltip_button {
+  color: #fff;
+  font-size: 14px;
+  margin-top: 4px;
+  font-family: 'Roboto Medium', 'Helvetica Neue', sans-serif;
+  cursor: pointer;
+}
+.knowbler__switch-mode-btn {
+    color: #fff;
+    font-size: 14px;
+    /* margin-top: 4px; */
+    font-family: 'Roboto Medium', 'Helvetica Neue', sans-serif;
+    cursor: pointer;
+}

@@ -1,0 +1,470 @@
+<template>
+     <div lwc:if={alreadySubmitted}>
+        <div class="slds-notify slds-notify_alert slds-alert_offline" role="alert">
+            <span class="slds-assistive-text">offline</span>
+            <span class="slds-icon_container slds-icon-utility-offline slds-m-right_x-small" title="Description of icon when needed">
+            </span>
+            <h2>Audit Form for this Case is already Submitted! Please reach out to Case Owner or CSM team for more info. 
+            </h2>
+        </div>
+    </div>
+    <div lwc:else>
+        <div lwc:if={showSelectForm}>
+            
+            <br/><br/>
+            <lightning-radio-group name="radioGroup"
+                                label="Select option for Audit"
+                                options={radioOptions}
+                                value={Selected_Form}
+                                onchange={handleRadioChange}
+                                type="radio"></lightning-radio-group>
+            <br/><br/>
+        </div>
+        <template lwc:else>
+            <lightning-record-edit-form
+                    object-api-name={objectApiName}
+                    record-id={recordId}
+                    onsubmit={handleSubmit}
+                    onsuccess={handleSuccess}
+                >
+                
+            
+                    <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open slds-modal_full">
+                        <div class="slds-modal__container" style="width:100%;height:100%;">
+                            <lightning-messages></lightning-messages>
+                    
+                            <div class="slds-modal__header">
+                                <lightning-output-field field-name="OwnerId"> </lightning-output-field>
+                                <lightning-output-field field-name="CaseNumber"> </lightning-output-field>
+                                <lightning-output-field field-name="Auditor_Name__c"  > </lightning-output-field>
+                                <lightning-output-field field-name="Case_Audit_Timestamp__c"  > </lightning-output-field>
+                                <lightning-output-field field-name="Call_Audit_Timestamp__c"  > </lightning-output-field>
+                                 <br/>
+                                <b>Score </b> {percentage}     <lightning-progress-bar value={percentage} size="large" variant="circular"></lightning-progress-bar>
+                                <h1 class="slds-text-heading_large">
+                                    {formType} Audit Form
+                                </h1>
+                            </div>
+                            <div class="slds-modal__content slds-modal_full-content slds-p-around_medium" id="modal-content-id-1">
+                                
+                                <div lwc:if={showCaseForm}>
+                                        <div class="slds-grid slds-gutters">
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <span>1. Customer 360° Review<lightning-helptext content="Did the CSM Perform and update the customer 360° review?"></lightning-helptext></span>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <span>
+                                                    <lightning-radio-group 
+                                                    data-name="Customer_360_Review__c"
+                                                        name="Customer_360_Review__c"
+                                                        label="Customer 360° Review"
+                                                        options={options}
+                                                        value={Customer_360_Review}
+                                                        onchange={handleChange}
+
+                                                        variant="label-hidden"
+                                                        type="button"></lightning-radio-group>
+                                                </span>
+                                            </div><br/>
+                                            
+                                        </div>
+                                        <br/><br/>
+                                        <div class="slds-grid slds-gutters">
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <span>2. Case ownership and Initial Response<lightning-helptext content="Was the case taken on time and the CSM completed IR in 48 hours?"></lightning-helptext></span>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <span>
+                                                    <lightning-radio-group 
+                                                    data-name="PRD_Entitlement__c"
+                                                        name="PRD_Entitlement__c"
+                                                        label="PRD & Entitlement"
+                                                        options={options}
+                                                        value={PRD_Entitlement}
+                                                        onchange={handleChange}
+
+                                                        variant="label-hidden"
+                                                        type="button"></lightning-radio-group>
+                                                </span>
+                                            </div><br/>
+                                            
+                                        </div>
+                                        <br/><br/>
+                                        <div class="slds-grid slds-gutters">
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <span>3. Fields<lightning-helptext content="Customer Success Fields filled correctly"></lightning-helptext></span>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <span>
+                                                    <lightning-radio-group 
+                                                    data-name="Account_Customer_Name__c"
+                                                        name="Account_Customer_Name__c"
+                                                        label="Account & Customer Name"
+                                                        options={options}
+                                                        value={Account_Customer_Name}
+                                                        onchange={handleChange}
+
+                                                        variant="label-hidden"
+                                                        type="button"></lightning-radio-group>
+                                                </span>
+                                            </div><br/>
+                                            
+                                        </div>
+
+                                        <br/><br/>
+                                        <div class="slds-grid slds-gutters">
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <span>4. Comments<lightning-helptext content="Has all the comments private and public comments documented"></lightning-helptext></span>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <span>
+                                                    <lightning-radio-group 
+                                                    data-name="Record_Type__c"
+                                                        name="Record_Type__c"
+                                                        label="Record Type"
+                                                        options={options}
+                                                        value={Record_Type}
+                                                        onchange={handleChange}
+
+                                                        variant="label-hidden"
+                                                        type="button"></lightning-radio-group>
+                                                </span>
+                                            </div><br/>
+                                            
+                                        </div>
+
+
+
+                                        <br/><br/>
+                                        <div class="slds-grid slds-gutters">
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <span>5. Communication<lightning-helptext content="Has the CSM contacted the customer using the relevant mode of communication based on the case status? (Email/Phone-call / Voice mail)"></lightning-helptext></span>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <span>
+                                                    <lightning-radio-group 
+                                                    
+                                                        data-name="Customer_Success_Fields__c"
+                                                        name='Customer_Success_Fields__c'
+                                                        options={options}
+                                                        value={Customer_Success_Fields}
+                                                        onchange={handleChange}
+
+                                                        variant="label-hidden"
+                                                        type="button"
+                                                    
+                                                        ></lightning-radio-group>
+                                                </span>
+                                            </div><br/>
+                                            
+                                        </div>
+
+
+
+                                        <br/><br/>
+                                        <div class="slds-grid slds-gutters">
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <span>6. Follow-up<lightning-helptext content="Was the CSM proactive in following up with the customer to drive timely activation?"></lightning-helptext></span>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <span>
+                                                    <lightning-radio-group 
+                                                    
+                                                        data-name="Private_Public_Comments__c"
+                                                        name='Private_Public_Comments__c'
+                                                        options={options}
+                                                        value={Private_Public_Comments}
+                                                        onchange={handleChange}
+
+                                                        variant="label-hidden"
+                                                        type="button"></lightning-radio-group>
+                                                </span>
+                                            </div><br/>
+                                            
+                                        </div>
+
+
+
+
+                                        <br/><br/>
+                                        <div class="slds-grid slds-gutters">
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <span>7. Case closure documentation<lightning-helptext content="Did the CSM send out a structured MOM?"></lightning-helptext></span>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <span>
+                                                    <lightning-radio-group 
+                                                    
+                                                        data-name="Mode_of_Communication__c"
+                                                        name='Mode_of_Communication__c'
+                                                        options={options}
+                                                        value={Mode_of_Communication}
+                                                        onchange={handleChange}
+
+                                                        variant="label-hidden"
+                                                        type="button"></lightning-radio-group>
+                                                </span>
+                                            </div><br/>
+                                            
+                                        </div>
+
+
+                                        <br/><br/>
+                                        <div class="slds-grid slds-gutters">
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <span>8. Closure<lightning-helptext content=" Did the CSM fill all the resolution fields accurately? "></lightning-helptext></span>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <span>
+                                                    <lightning-radio-group 
+                                                    
+                                                        data-name="Customer_Follow_up__c"
+                                                        name='Customer_Follow_up__c'
+                                                        options={options}
+                                                        value={Customer_Follow_up}
+                                                        onchange={handleChange}
+
+                                                        variant="label-hidden"
+                                                        type="button"></lightning-radio-group>
+                                                </span>
+                                            </div><br/>
+                                            
+                                        </div>
+                                        <br/><br/>
+                                        <div class="slds-grid slds-gutters">
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <span>9. Onboarding/Adoption<lightning-helptext content="Did the CSM abide by the Onboarding/Adoption Completion compliance"></lightning-helptext></span>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <span>
+                                                    <lightning-radio-group 
+                                                    
+                                                        data-name="Onboarding_Completed__c"
+                                                        name='Onboarding_Completed__c'
+                                                        options={options}
+                                                        value={Onboarding_Completed}
+                                                        onchange={handleChange}
+
+                                                        variant="label-hidden"
+                                                        type="button"></lightning-radio-group>
+                                                </span>
+                                            </div><br/>
+                                            
+                                        </div>
+                                        <lightning-input-field field-name="Other_Feedback_Observations__c"> </lightning-input-field><br/>
+
+                                <br/><br/>
+
+                            </div>
+                            <div lwc:if={showCallForm}>
+                                <div class="slds-grid slds-gutters">
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <span>1. Pre-call prep<lightning-helptext content="Product prerequisites and 360 review"></lightning-helptext></span>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <span>
+                                            <lightning-radio-group 
+                                            
+                                                data-name="Technical_Skills__c"
+                                                name='Technical_Skills__c'
+                                                options={options}
+                                                value={Technical_Skills}
+                                                onchange={handleChange}
+
+                                                variant="label-hidden"
+                                                type="button"></lightning-radio-group>
+                                        </span>
+                                    </div><br/>
+                                    
+                                </div>
+                                <br/><br/>
+                                <div class="slds-grid slds-gutters">
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <span>2. Introduction/Agenda<lightning-helptext content="Did the CSM explain the agenda of the call to the customer"></lightning-helptext></span>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <span>
+                                            <lightning-radio-group 
+                                            
+                                                data-name="Case_Closure__c"
+                                                name='Case_Closure__c'
+                                                options={options}
+                                                value={Case_Closure}
+                                                onchange={handleChange}
+
+                                                variant="label-hidden"
+                                                type="button"></lightning-radio-group>
+                                        </span>
+                                    </div><br/>
+                                    
+                                </div>
+                                <br/><br/>
+                                <div class="slds-grid slds-gutters">
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <span>3. Discovery<lightning-helptext content="Did the CSM attempt to understand the customer's use case and security stack requirements before proceeding with activation and adoption?"></lightning-helptext></span>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <span>
+                                            <lightning-radio-group 
+                                            
+                                                data-name="Discovery__c"
+                                                name='Discovery__c'
+                                                options={options}
+                                                value={Discovery}
+                                                onchange={handleChange}
+
+                                                variant="label-hidden"
+                                                type="button"></lightning-radio-group>
+                                        </span>
+                                    </div><br/>
+                                    
+                                </div>
+                                <br/><br/>
+                                <div class="slds-grid slds-gutters">
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <span>4. Call Flow<lightning-helptext content="Was the call sequenced well?"></lightning-helptext></span>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <span>
+                                            <lightning-radio-group 
+                                            
+                                                data-name="Call_Flow__c"
+                                                name='Call_Flow__c'
+                                                options={options}
+                                                value={Call_Flow}
+                                                onchange={handleChange}
+
+                                                variant="label-hidden"
+                                                type="button"></lightning-radio-group>
+                                        </span>
+                                    </div><br/>
+                                    
+                                </div>
+                                <br/><br/>
+                                <div class="slds-grid slds-gutters">
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <span>5. Communication<lightning-helptext content="Did the CSM communicate with confidence?"></lightning-helptext></span>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <span>
+                                            <lightning-radio-group 
+                                            
+                                                data-name="Communication_Call_Audit__c"
+                                                name='Communication_Call_Audit__c'
+                                                options={options}
+                                                value={Communication_Call_Audit}
+                                                onchange={handleChange}
+
+                                                variant="label-hidden"
+                                                type="button"></lightning-radio-group>
+                                        </span>
+                                    </div><br/>
+                                    
+                                </div>
+                                <br/><br/>
+                                <div class="slds-grid slds-gutters">
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <span>6. Walkthrough and product awareness<lightning-helptext content="Did the CSM cover all the aspects of the product/feature in detail? "></lightning-helptext></span>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <span>
+                                            <lightning-radio-group 
+                                            
+                                                data-name="Walkthrough_and_product_awareness__c"
+                                                name='Walkthrough_and_product_awareness__c'
+                                                options={options}
+                                                value={Walkthrough_Product}
+                                                onchange={handleChange}
+
+                                                variant="label-hidden"
+                                                type="button"></lightning-radio-group>
+                                        </span>
+                                    </div><br/>
+                                    
+                                </div>
+                                <br/><br/>
+                                <div class="slds-grid slds-gutters">
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <span>7. Query handling/Issue Analysis<lightning-helptext content="Did the CSM understand the customer queries and address them correctly or ensured they would get back post research?"></lightning-helptext></span>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <span>
+                                            <lightning-radio-group 
+                                            
+                                                data-name="Query_handling_Issue_Analysis__c"
+                                                name='Query_handling_Issue_Analysis__c'
+                                                options={options}
+                                                value={Query_Handling}
+                                                onchange={handleChange}
+
+                                                variant="label-hidden"
+                                                type="button"></lightning-radio-group>
+                                        </span>
+                                    </div><br/>
+                                    
+                                </div>
+                                <br/><br/>
+                                <div class="slds-grid slds-gutters">
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <span>8. Call Sentiment<lightning-helptext content=" Did the CSM analyze the customer’s Rubrik experience? "></lightning-helptext></span>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <span>
+                                            <lightning-radio-group 
+                                            
+                                                data-name="Customer_Sentiment__c"
+                                                name='Customer_Sentiment__c'
+                                                options={options}
+                                                value={Customer_Sentiment}
+                                                onchange={handleChange}
+
+                                                variant="label-hidden"
+                                                type="button"></lightning-radio-group>
+                                        </span>
+                                    </div><br/>
+                                    
+                                </div>
+                                <br/><br/>
+                                <div class="slds-grid slds-gutters">
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <span>9. Call Documentation<lightning-helptext content="Did the CSM document and send out a structured MOM?"></lightning-helptext></span>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <span>
+                                            <lightning-radio-group 
+                                            
+                                                data-name="Call_Documentation__c"
+                                                name='Call_Documentation__c'
+                                                options={options}
+                                                value={Call_Documentation}
+                                                onchange={handleChange}
+
+                                                variant="label-hidden"
+                                                type="button"></lightning-radio-group>
+                                        </span>
+                                    </div><br/>
+                                    
+                                </div>
+                                <lightning-input-field field-name="Call_Feedback_and_Observation__c"> </lightning-input-field><br/>
+
+                                <br/><br/>
+                            </div>
+                            <!--lightning-input-field field-name="Overall_Evaluations_of_the_Audit__c"> </lightning-input-field><br/-->
+                        </div>
+                        <div class="slds-modal__footer">
+                            <!--div if:false={showSelectForm}>
+                                <lightning-button variant="Neutral" type="Back" label="Back" onclick={handleBack}>
+                                </lightning-button>
+                            </div-->
+                            <lightning-button variant="Neutral" type="close" label="Close" onclick={handleClose}>
+                            </lightning-button>
+                            <lightning-button variant="brand" type="submit" label="Save">
+                            </lightning-button>
+                        </div>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+            </lightning-record-edit-form>
+        </template>
+    </div>
+</template>

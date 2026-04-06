@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Commission_Impact__c</fullName>
+    <formula>OR(  ISPICKVAL(Type__c ,&apos;Revenue&apos;),
+     ISPICKVAL(Type__c ,&apos;Customer Returns / Refunds&apos;),
+     ISPICKVAL(Type__c ,&apos;Partner Referral Fee&apos;), 
+     ISPICKVAL(Type__c ,&apos;Non-Payment&apos;),
+     AND( 
+         ISPICKVAL(Type__c ,&apos;Incorrect Order/Mis-quote&apos;),
+          Impacts_Commission__c = True
+        ),
+     AND( 
+         ISPICKVAL(Type__c ,&apos;Change in Booking Policy / De-Risk Decision&apos;),
+          Impacts_Commission__c = True
+        ),
+    AND( 
+         ISPICKVAL(Type__c ,&apos;Unpaid Replacement Debooking&apos;),
+          Impacts_Commission__c = True
+        )
+     
+ )</formula>
+    <label>Commission Impact</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

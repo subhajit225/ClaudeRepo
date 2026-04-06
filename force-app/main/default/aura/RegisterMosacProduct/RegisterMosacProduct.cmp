@@ -1,0 +1,80 @@
+<aura:component controller="RegisterProduct" implements="forceCommunity:availableForAllPageTypes" access="global" >
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <aura:attribute name="nodename" type="string"/>
+    <aura:attribute name="uuid" type="string"/>
+    <aura:attribute name="success" type="Boolean" default="false"/>
+    <aura:attribute name="error" type="Boolean" default="false"/>
+    <aura:attribute name="regString" type="string"/>
+    <aura:attribute name="nodeRes" type="Object"/>
+    <aura:attribute name="regdownload" type="string"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <div class ="conatinerDiv">
+        <div class="slds-wrap slds-grid slds-size_12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 conatainer">
+            <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 slds-size_12-of-12 slds-text-align_center ideaTitle">Register your Rubrik Mosaic Cluster</div>
+            <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 prodDecp">
+                Use this page to register and unlock your Rubrik Mosaic installation. You'll need the UUID from your Rubrik Mosaic installation to generate a registration token on this page.            </div>
+            <aura:if isTrue="{!v.nodeRes.integrationError}">
+                <div class="errorDiv slds-notify slds-theme_alert-texture" role="alert" style="width: 100%;font-size: 1.2rem;font-family:Gotham-Light!important;border-radius:10px;">
+                    <p class="" title="{!$Label.c.Third_Party_Hardware_Error_Message}">
+                        <b style="font-family:Gotham-medium;">{!$Label.c.Third_Party_Hardware_Error_Message}</b>
+                    </p>
+                    <p class="" title="{!$Label.c.Third_Party_Hardware_Error_Message}">
+                        <aura:unescapedHtml value="{!v.nodeRes.errorMessage}"/>
+                    </p>
+                </div>
+            </aura:if>
+            <aura:if isTrue="{!v.nodeRes.success}">
+                <div class="slds-notify" role="alert" style="background-color: #F0F8E2;width: 100%;padding: 2rem;font-size: 1.2rem;font-family:Gotham-Light!important;border-radius:10px;">
+                    <p class="" title="Description of icon when needed">
+                        <b>Success! Your Registration key is below.</b>
+                    </p>
+                    <p style="font-size:10px; word-wrap: break-word;">
+                        <aura:unescapedHtml  value="{!v.regString}"/>
+                    </p>
+                    <p>
+                        <a href="{!'data:text/plain;charset=utf-8;base64,'+v.regdownload}" download="{!v.uuid+'_regcode.txt'}">Download Key
+                        </a>
+                    </p>
+                </div>
+            </aura:if>
+            
+            <aura:if isTrue="{!v.nodeRes.error}">
+                <div class="slds-notify" role="alert" style="background-color: #FCF8E3;width: 100%;padding: 2rem;font-size: 1.2rem;font-family:Gotham-Light!important;border-radius:10px;">
+                    <p class="" title="Description of icon when needed">
+                        <b>We cannot process your request because of the following errors:</b>
+                    </p>
+                    <aura:if isTrue="{!v.nodeRes.regMessage != null}" ><li>{!v.nodeRes.regMessage}</li></aura:if>
+                    <aura:if isTrue="{!or(v.uuid == null,v.uuid == '')}"><li>Please ensure UUID are not blank.</li></aura:if>
+                    <aura:if isTrue="{!!v.nodeRes.result}"><li>The UUID must match the following pattern 8-4-4-4-12.</li></aura:if>
+                   
+                    
+                </div>
+            </aura:if>
+            <br/><br/>
+            <div class="slds-wrap slds-grid slds-large-size--12-of-12" style="margin-top:2rem;">
+            	
+                <div class="slds-large-size--4-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12">
+                     <span class ="fieldLabel">UUID</span>
+                    <ui:inputText aura:id="uid"  label="" value="{!v.uuid}"/>
+                    <!--
+                    <label>UUID</label><br/>
+                    <input type="text" placeholder="Search by UUID" />
+					-->
+                </div>
+            </div>
+            <div class="slds-wrap slds-grid slds-large-size--12-of-12 prodDecp">
+                <p class ="slds-large-size--12-of-12 probNote">Note:</p><br/><br/>
+                <ul class="slds-large-size--12-of-12">
+                    <li>● To get UUID, go to your Rubrik Mosaic GUI(<b>http://&#x3C;YOUR_MOSAIC_IP&#x3E;:9090/</b>) and click Product Registartion</li>
+                    <li>● If you have mutiple Rubrik Mosaic installations, each installation will need to be registered with it's own specific UUID.</li>
+                </ul><br/>
+                <p>For more product registration details, please reference <a class="kbnewtab" href="https://support.rubrik.com/articles/How_To/000001158" >KB 1158.</a></p>
+            </div>
+            <div class="slds-wrap slds-grid slds-large-size--12-of-12 buttoncenter">
+                <div>
+                <lightning:button class="hovercolor" label="Register Product" title="Register Product" onclick="{!c.register}"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

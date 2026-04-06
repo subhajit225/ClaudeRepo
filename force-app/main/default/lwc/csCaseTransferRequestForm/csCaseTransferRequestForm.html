@@ -1,0 +1,150 @@
+<!--
+    Name: csCaseTransferRequestForm
+    JIRA : CS21-482 - Transfer Request Button - Automation
+    Created By : Veera Gandi
+-->
+<template>
+   
+    <lightning-record-edit-form object-api-name="Case" record-id={recordId} onsubmit={handleSubmit}
+        onsuccess={handleSuccess} onerror={handleError} onload={handleLoad}>
+        <lightning-messages> </lightning-messages>
+        <div if:true={isSubmitted}>
+            <lightning-output-field name="Reason to Transfer" field-name="CaseTransferType__c" variant="label-stacked">
+                    </lightning-output-field>
+        </div> 
+        <div class="slds-grid slds-wrap">
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field name="Product-line" onchange={handleOtherChange} field-name="Platform__c" variant="label-stacked" required>
+                </lightning-input-field>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field name="Functional Area" onchange={handleOtherChange} field-name="Product_Area__c" variant="label-stacked"
+                    required>
+                </lightning-input-field>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field name="Component" onchange={handleOtherChange} field-name="Problem_Type__c" variant="label-stacked" required>
+                </lightning-input-field>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field name="Sub Component" onchange={handleOtherChange} field-name="Sub_Component__c" variant="label-stacked"
+                    required>
+                </lightning-input-field>
+            </div>
+            <div if:true={isShowOther} class="slds-col slds-size_2-of-2">
+                <lightning-input-field name="Other" field-name="If_Other__c" variant="label-stacked"
+                    required>
+                </lightning-input-field>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field name="Software Version" field-name="Software_Version__c" variant="label-stacked" required>
+                </lightning-input-field>
+            </div>
+
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field name="Status" field-name="Status" variant="label-stacked" required>
+                </lightning-input-field>
+            </div>
+            <div class="slds-col slds-size_1-of-4">
+                <lightning-input-field name="NCC" field-name="NCC_date__c" variant="label-stacked">
+                </lightning-input-field>
+            </div>
+            <div class="slds-col slds-size_1-of-4" style="margin-top:3%;">
+                <lightning-output-field name="Time Zone" field-name="Case_Time_Zone__c" variant="label-hidden">
+            </lightning-output-field></div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field name="Slack Channel" field-name="Slack_channel__c" variant="label-stacked">
+                </lightning-input-field>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field name="Cluster" field-name="Cluster__c" variant="label-stacked">
+                </lightning-input-field>
+            </div>
+            <!--<div class="slds-col slds-size_1-of-2">
+                <lightning-input-field name="Transfer Requested By" field-name="TransferRequestedBy__c"
+                    variant="label-stacked" required>
+                </lightning-input-field>
+            </div>-->
+            <div if:true={isTransferForm} class="slds-col slds-size_1-of-2">
+                <lightning-input-field name="Customer Communication Frequency" onchange={handleFrequencyChange}
+                    field-name="CustomerCommunicationFrequency__c" value={customerCommunicationFrequencyValue} variant="label-stacked" required>
+                </lightning-input-field>
+            </div>
+            <div if:true={isShowCustomFrequency} class="slds-col slds-size_1-of-2">
+                <lightning-input-field name="Custom Frequency" field-name="CustomCommunicationFrequency__c"
+                    variant="label-stacked" required>
+                </lightning-input-field>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field field-name="SuggestedTransferQueue__c" variant="label-stacked" required>
+                </lightning-input-field>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field field-name="CaseTransferComment__c" variant="label-stacked">
+                </lightning-input-field>
+            </div>
+            <div class="slds-col slds-size_2-of-2">
+                <lightning-input-field field-name="Internal_Notes__c" variant="label-stacked" required>
+                </lightning-input-field>
+            </div>
+
+            <!-- <div class="slds-col slds-size_2-of-2">
+                <lightning-input-field field-name="Current_Status__c" variant="label-stacked" required={isTransferForm}>
+                </lightning-input-field>
+            </div>
+            <div class="slds-col slds-size_2-of-2">
+                <lightning-input-field field-name="Next_Step__c" variant="label-stacked" required={isTransferForm}>
+                </lightning-input-field>
+            </div> -->
+            <div class="slds-col slds-size_2-of-2">
+                <lightning-input-field field-name="CustomerImpactUrgencyAndExpectations__c" variant="label-stacked"
+                    required={isTransferForm}>
+                </lightning-input-field>
+            </div>
+            <div class="slds-col slds-size_2-of-2">
+                <lightning-input-field field-name="SuccessResolutionCriteria__c" variant="label-stacked" required={isTransferForm}>
+                </lightning-input-field>
+            </div>
+            <!-- <div class="slds-col slds-size_2-of-2">
+                <lightning-input-field field-name="NextActionTechnicalPlan__c" variant="label-stacked" required={isTransferForm}>
+                </lightning-input-field>
+            </div> -->
+            <div class="slds-col slds-size_2-of-2 slds-hide">
+                <lightning-input-field field-name="OwnerId" variant="label-stacked">
+                </lightning-input-field>
+            </div>
+
+            <br/>
+            <c-cs-case-transfer-a-r-list record-id={recordId}></c-cs-case-transfer-a-r-list>
+            <br/>
+            
+            <div class="slds-col slds-size_2-of-2">
+                <c-cs-case-transfer-custom-errors custom-errors={customErrors} show-errors={showErrors}
+                oncloseerrors={handleCloseCustomErrors}></c-cs-case-transfer-custom-errors>
+                <lightning-messages> </lightning-messages>
+            </div> 
+            <div class="slds-col slds-size_2-of-2">
+                <label>Jira</label>
+                <lightning-output-field disabled field-name="JIRA_References_URL__c" variant="label-hidden">
+                </lightning-output-field>
+            </div>
+            <div class="slds-col slds-size_2-of-2">
+                <label>Number of Escalations</label>
+                <lightning-output-field disabled field-name="Escalation_Count__c" variant="label-hidden">
+                </lightning-output-field>
+            </div>
+            <div class="slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12 buttonAlign">
+                <lightning-button class="slds-m-top_xx-large slds-m-right_small" variant="brand" type="submit" name="save" label={saveButtonName}>
+                </lightning-button>
+                <lightning-button if:true={isSubmitted} label="Not Approved To Handover" title="Not Approved To Handover" onclick={handleReject}
+                    class="slds-m-top_xx-large"></lightning-button>
+            </div>
+        </div>
+    </lightning-record-edit-form>
+
+    <c-cs-case-transfer-reject-message show-modal={showRejectView} onrejected={handleRejectmessage}></c-cs-case-transfer-reject-message>
+    
+    <div if:true={showSpinner}>
+        <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+    </div> 
+</template>

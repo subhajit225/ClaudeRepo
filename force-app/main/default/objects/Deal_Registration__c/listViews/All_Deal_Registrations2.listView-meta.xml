@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>All_Deal_Registrations2</fullName>
+    <columns>Account__c</columns>
+    <columns>Partner_Rep_Email_Address__c</columns>
+    <columns>Partner_Lookup__c</columns>
+    <columns>Company__c</columns>
+    <columns>Deal_Registration_Status__c</columns>
+    <columns>Deal_Reg_Submitted_Date__c</columns>
+    <columns>NAME</columns>
+    <columns>CDM__c</columns>
+    <columns>Country__c</columns>
+    <columns>CREATED_DATE</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Partner_Lookup__c</field>
+        <operation>equals</operation>
+    </filters>
+    <filters>
+        <field>Deal_Registration_Status__c</field>
+        <operation>notEqual</operation>
+        <value>Rejected</value>
+    </filters>
+    <label>No Partner Listed</label>
+</ListView>

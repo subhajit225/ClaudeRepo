@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Cannot_Edit_Order_Item</fullName>
+    <active>true</active>
+    <errorConditionFormula>ISCHANGED(Order_Item__c ) &amp;&amp;  !ISBLANK(PRIORVALUE(Order_Item__c )) &amp;&amp;  $Profile.Name != &apos;System Administrator&apos; &amp;&amp; $Profile.Name != &apos;Rubrik Light Administrator&apos;</errorConditionFormula>
+    <errorDisplayField>Order_Item__c</errorDisplayField>
+    <errorMessage>Updating existing Order Item is not allowed</errorMessage>
+</ValidationRule>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Roadblocks_Limitations__c</fullName>
+    <description>SAL26-1450 - Identifies the primary blocker or limitation affecting the opportunity, enabling structured tracking, trend analysis, and mitigation planning.</description>
+    <label>Roadblocks / Limitations</label>
+    <required>true</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>No Roadblock</fullName>
+                <default>false</default>
+                <label>No Roadblock</label>
+            </value>
+            <value>
+                <fullName>Technical-Product</fullName>
+                <default>false</default>
+                <label>Technical-Product</label>
+            </value>
+            <value>
+                <fullName>Limited Use Case</fullName>
+                <default>false</default>
+                <label>Limited Use Case</label>
+            </value>
+            <value>
+                <fullName>Licensing, Deal Desk</fullName>
+                <default>false</default>
+                <label>Licensing, Deal Desk</label>
+            </value>
+            <value>
+                <fullName>MSP Internal</fullName>
+                <default>false</default>
+                <label>MSP Internal</label>
+            </value>
+            <value>
+                <fullName>Field-Sales Conflict</fullName>
+                <default>false</default>
+                <label>Field-Sales Conflict</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

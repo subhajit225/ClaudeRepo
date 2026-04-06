@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>POC_MEDDIC_fields_Validation</fullName>
+    <active>false</active>
+    <description>MEDDIC fields should be populated on Opportunity before creating POC Request
+
+/*ISBLANK(Opportunity__r.Needs__c),
+ISPICKVAL(Opportunity__r.Purchase_Timeframe__c,&apos;&apos;),*/</description>
+    <errorConditionFormula>IF(AND(OR(ISBLANK(Opportunity__r.Economic_Buyer__c ), ISBLANK(Opportunity__r.Metric__c),
+ISBLANK(Opportunity__r.Decision_Process__c),
+ISBLANK( Opportunity__r.Decision_Criteria__c ),
+ISBLANK(Opportunity__r.Identified_Pain__c),
+ISBLANK(Opportunity__r.Champion__c)),$Profile.Name &lt;&gt; &apos;System Administrator&apos;, $User.Id &lt;&gt; &apos;00540000003tvRQ&apos;),true,false)</errorConditionFormula>
+    <errorDisplayField>Account__c</errorDisplayField>
+    <errorMessage>Please fill all MEDDIC and Qualification info fields before creating POC Request</errorMessage>
+</ValidationRule>

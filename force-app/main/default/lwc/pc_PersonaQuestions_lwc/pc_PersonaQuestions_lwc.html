@@ -1,0 +1,48 @@
+<template>
+    <template if:false={showLoader}>
+        <lightning-layout multiple-rows class="slds-text-align_center slds-p-top_x-large">
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+                <h2 class="heading-58">
+                    Welcome to the Partner Portal
+                </h2>
+                <p class="cardBodyDescription slds-m-top_small slds-p-bottom_x-large">
+                    Help us tailor a Partner Portal experience best suited for you.<br /> Which type of content is of
+                    most interest to you?
+                </p>
+            </lightning-layout-item>
+            <template for:each={cardList} for:item="detail">
+                <lightning-layout-item size="12" small-device-size="6" medium-device-size="3" large-device-size="3"
+                    key={detail.Primary_role__c} padding="around-medium" onclick={handleClick}
+                    data-role={detail.Primary_role__c}>
+                    <article class="slds-p-around_small slds-text-color--inverse cardBackdrop">
+                        <div class="slds-p-vertical_large">
+                            <img src={detail.Image_Url__c}>
+                        </div>
+                        <div class="persona-heading">
+                            <span>{detail.Primary_role__c}</span>
+                        </div>
+                        <div class="slds-p-around_x-small persona-desc">
+                            <span>{detail.Description__c}</span>
+                        </div>
+                    </article>
+                </lightning-layout-item>
+            </template>
+        </lightning-layout>
+    </template>
+    <template if:true={showLoader}>
+        <lightning-layout horizontal-align="center" multiple-rows class="thankyou-popup slds-text-align_center">
+            <lightning-layout-item class="icon">
+                <lightning-icon icon-name="action:approval" alternative-text="Approved" title="Approved"
+                    size="small"></lightning-icon>
+                    <h2 class="heading-36">
+                        Thank you!
+                    </h2>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+                <h2 class="heading-36">
+                    Crafting the best suited experience...
+                </h2>
+            </lightning-layout-item>
+        </lightning-layout>
+    </template>
+</template>

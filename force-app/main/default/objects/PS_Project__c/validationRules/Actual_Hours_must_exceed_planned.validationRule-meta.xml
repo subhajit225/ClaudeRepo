@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Actual_Hours_must_exceed_planned</fullName>
+    <active>true</active>
+    <description>The actual number of hours on a project must equal or exceed the expected number of hours on a project before it can become completed.</description>
+    <errorConditionFormula>AND(ISCHANGED(Project_Status__c) , ISPICKVAL(Project_Status__c , &quot;Completed&quot;) ,  Total_Billable_Hours_Approved__c &lt;  Total_Billable_Hours_Expected__c)</errorConditionFormula>
+    <errorDisplayField>Project_Status__c</errorDisplayField>
+    <errorMessage>Cannot mark the project completed if the Actual number of hours is less than the expected number of hours.</errorMessage>
+</ValidationRule>

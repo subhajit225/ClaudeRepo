@@ -1,0 +1,403 @@
+<template>
+    <template if:true={productCategories}>
+        <div class="slds-box slds-theme_shade slds-m-bottom_small" if:false={isPocTypeWebTryAndBuy}>
+            <lightning-card>
+                <p class="slds-p-horizontal_small" >
+                    <lightning-checkbox-group name="productCategory"
+                                                    label="Product Category"
+                                                    options={productCategories}
+                                                    value={selectedProductCategories}
+                                                    onchange={handleProductCategoryChange}></lightning-checkbox-group>
+                </p>                                    
+            </lightning-card>   
+        </div>
+        <div class="slds-box slds-theme_shade mainTable" if:true={showProductTable}>                         
+            <lightning-record-edit-form object-api-name="POC__c" onsubmit={handleSubmit}>
+                <div style="display:none;" class="dummyButton">
+                    <lightning-button class="slds-m-top_small" variant="brand" type="submit" name="dummyUpdate" label="Submit"></lightning-button>
+                </div>
+                <lightning-messages></lightning-messages>
+                <!-- <div class="slds-box slds-theme_shade"> -->
+                    <lightning-accordion data-position="main" allow-multiple-sections-open onsectiontoggle={handleSectionToggle} active-section-name={getSectionOnLoad}>
+                        <template for:each={mainProductList} for:item="type">   
+                            <div key={type.productName} class="slds-m-top_small dataProduct" data-product={type.productName} data-ismultiple={type.isMultiple} data-hasfields={type.doesProductHaveFields}>
+                                <lightning-card> 
+                                    <p class="slds-p-horizontal_small">
+                                        <lightning-accordion-section name={type.productName} label={type.productName} data-product-name={type.productName}>
+                                            <template if:true={type.isM365Selected}>
+                                                <span key={type.productName} class="slds-notify_alert"> Note: 20 GB will be provisioned per user.</span>
+                                            </template>
+                                            <template if:true={type.isProductM365}>
+                                                <span key={type.productName} class="slds-notify_alert"> Note: 20 GB will be provisioned per user.</span>
+                                            </template>
+                                            <template if:true={type.isSaaS}>
+                                                <span key={type.productName} class="slds-notify_alert"> Important: Due to company liability, please inform customer to evaluate Rubrik using only non-production environments. Otherwise, customer assumes all risk in using production data.</span>
+                                            </template>
+                                            <template if:true={type.identityResilience}>
+                                                <span key={type.productName} class="slds-notify_alert"> Identity Resilience includes Identity Recovery. Identity Recovery includes protecting Active Directory and Entra ID. AD: Domain Hosts, Orchestrated Forest Recovery, Attribute Comparison, and Recovery. Entra ID: Users, Groups, Enterprise Apps, App Registration, and Conditional Access. Identity Resilience adds: Identification of risks for Human and Non-Human identities, tracking of privilege escalations and changes to Group Policy Objects.</span>
+                                            </template>
+                                            <template if:true={type.identityRecovery}>
+                                                <span key={type.productName} class="slds-notify_alert"> Selecting Identity Recovery includes protecting Active Directory: Domain Hosts, Orchestrated Forest Recovery, Attribute Comparison, and Recovery. This does not include Entra ID yet.</span>
+                                            </template>
+                                            <template if:true={type.isCloudUnstructured}>
+                                                <span key={type.productName} class="slds-notify_alert"> If you require RCV, please choose it from the main product category.</span>
+                                            </template>
+                                            <template if:true={type.isProductM365AndGSpace}> <!-- added for MKT26-1556 -->
+                                                <span key={type.productName} class="slds-notify_alert"> Note: 20 GB will be provisioned per user.</span>
+                                            </template>
+                                            
+                                            <template if:true={type.showUCLBanner}>
+                                                <template if:true={isAzureSelected}>
+                                                    <span key={type.productName} class="slds-notify_alert"> If you require RCV, please choose it from the main product category. <br> Enterprise Edition includes Ransomware Monitoring and Sensitive Data Discovery.</span>
+                                                </template>
+                                                <template if:true={isAWSSelected}>
+                                                    <span key={type.productName} class="slds-notify_alert"> Enterprise Edition includes Ransomware Monitoring.</span>
+                                                </template>
+                                            </template>
+                                            <template if:true={type.isShowRedundancy}>
+                                                <template if:true={showDataRedundancyArchive}>
+                                                    <span key={type.productName} class="slds-notify_alert"> Only select ZRS if your opportunity requires ZRS. Otherwise, use LRS.</span>
+                                                </template>
+                                                <template if:true={showDataRedundancyBackup}>
+                                                    <span key={type.productName} class="slds-notify_alert"> Only select ZRS or GRS if your opportunity requires it. Otherwise, use LRS.</span>
+                                                </template>
+                                            </template>
+                                            <template if:true={type.isRubrikAgentCloud}>
+                                                <span key={type.productName} class="slds-notify_alert">Rubrik Agent Cloud Acknowledgement: To gain approval, please contact Eran Carmel or Damani Norman via the following <a href={labels.RubrikAgentCloudURL} target="_blank">Approval Form</a>.</span>
+                                                <span key={type.productName} class="slds-notify_alert"> Rubrik Agent Cloud will provision both VPC (Customer Hosted) and Rubrik Hosted (SaaS) SKUs. This provides flexibility for the POC deployment. When purchasing, make sure to purchase the correct SKU that will be implemented.</span>
+                                            </template>
+                                            <!-- Start MKT26-101 -->
+                                            <template if:true={type.isRubrikAppliance}>
+                                                <b><span key={type.productName} class="slds-notify slds-notify_alert slds-alert_warning"> Have you considered using the Roadrunner lab to avoid an on-site POC and accelerate the sales cycle? <a href={labels.RoadrunnerURL} target="_blank">Click here to submit a Roadrunner POC Lab</a> </span></b>
+                                            </template>
+                                            <!-- End MKT26-101 -->
+                                            <template if:true={type.isMultiple}>
+
+                                                <lightning-accordion allow-multiple-sections-open onsectiontoggle={handleSectionToggle} data-section-name="product" active-section-name={type.instances}>                                                
+                                                    <template iterator:fieldinst={type.instances}>
+                                                        <lightning-accordion-section key={fieldinst.value} name={fieldinst.value} label="Product" data-productindex={fieldinst.value} > 
+                                                            <lightning-button-group slot="actions">
+                                                                <lightning-button if:true={fieldinst.first} icon-name="utility:add" label="Add Product" variant="neutral" onclick={addMoreProductInstances} data-productname={type.productName} ></lightning-button>
+                                                                <lightning-button if:true={type.allowMultiProductDeletion} icon-name="utility:delete" label="Remove Product" variant="neutral" onclick={removeSelectedProduct} data-productname={type.productName} data-product-index={fieldinst.index}></lightning-button>
+                                                            </lightning-button-group>
+                                                            <template for:each={type.productFields} for:item="field">
+                                                                <lightning-input-field key={field.Field_Api_Name__c} 
+                                                                    field-name={field.Field_Api_Name__c} 
+                                                                    value={field.value} 
+                                                                    variant="label-stacked"
+                                                                    required="true"
+                                                                    data-apiname={field.Field_Api_Name__c}
+                                                                    data-fieldname={field.FieldLabel__c}>  
+                                                                </lightning-input-field>
+                                                            </template>
+                                                           
+                                                            <!-- add quantity here-->
+                                                            <lightning-input key={type.Quantity}
+                                                                label="Quantity"
+                                                                required="true"
+                                                                value={type.quantity}
+                                                                variant="label-stacked"
+                                                                >
+                                                            </lightning-input>
+                                                            
+                                                        </lightning-accordion-section>
+                                                    </template>
+                                                    
+                                                </lightning-accordion>
+
+                                                <template if:true={type.extraAccessories}>
+                                                    <lightning-accordion if:true={type.accessoryOptional} allow-multiple-sections-open onsectiontoggle={handleSectionToggle} data-section-name="accessory">
+                                                        <lightning-accordion-section name="Accessory" label="Add Accessories">
+                                                            <lightning-button-group slot="actions">
+                                                                <lightning-button icon-name="utility:add" label="Add Accessory" variant="neutral" onclick={addMoreAccessories} data-productname={type.productName} ></lightning-button>
+                                                            </lightning-button-group>
+                                                        </lightning-accordion-section>
+                                                    </lightning-accordion>
+                                                    <lightning-accordion if:false={type.accessoryOptional} allow-multiple-sections-open onsectiontoggle={handleSectionToggle} data-section-name="accessory">
+                                                        <template iterator:subaccess={type.accessories}>    
+                                                            <lightning-accordion-section key={subaccess.value} name={subaccess.value} label="Accessory">
+                                                                <lightning-button-group slot="actions">
+                                                                    <lightning-button if:true={subaccess.first} icon-name="utility:add" label="Add Accessory" variant="neutral" onclick={addMoreAccessories} data-productname={type.productName} ></lightning-button>
+                                                                    <lightning-button if:true={type.allowAccessoryDeletion} icon-name="utility:delete" label="Remove Accessory" variant="neutral" onclick={removeSelectedAccessories} data-productname={type.productName} data-product-index={subaccess.index}></lightning-button>
+                                                                </lightning-button-group>
+                                                                <lightning-input-field 
+                                                                        field-name="Additional_Accessories_Required__c"
+                                                                        variant="label-stacked"
+                                                                        data-fieldname="accessoryName"
+                                                                        required="true">
+                                                                </lightning-input-field>
+                                                                <!--lightning-input-field 
+                                                                        field-name="Accessories_with_Quantity__c"
+                                                                        variant="label-stacked"></lightning-input-field-->
+                                                                <lightning-input 
+                                                                        label="Quantity"
+                                                                        value={subaccess.quantity}
+                                                                        required="true"
+                                                                        variant="label-stacked">
+                                                                </lightning-input>                                                            
+                                                            </lightning-accordion-section>
+                                                        </template>
+                                                    </lightning-accordion>
+                                                </template>
+                                            </template>
+
+                                            <template if:false={type.isMultiple} for:each={type.productFields} for:item="field">
+
+                                                <template if:true={field.isCombobox}>
+                                                    <lightning-combobox key={field.Field_Api_Name__c} name={field.Field_Api_Name__c}
+                                                        variant="label-stacked"
+                                                        value={field.value}
+                                                        data-id={field.Field_Api_Name__c}
+                                                        data-apiname= {field.Field_Api_Name__c}
+                                                        data-fieldname={field.FieldLabel__c}
+                                                        placeholder="-Select-" options={field.options}
+                                                        label={field.label}
+                                                        onchange={handleCloudClusterLocationChange} required="true">
+                                                    </lightning-combobox>
+                                                </template> 
+                                                <template if:false={field.isCombobox}>
+                                                 <!-- Start MKT26-410, 405, 93 -->
+                                                    
+                                                    <template if:true={field.rscEEBanner}>
+                                                        <span key={field.POC_Product_Picker_Type__c} class="slds-notify_alert"> RSC Enterprise Edition includes: Ransomware Monitoring, Sensitive Data Monitoring, Threat Hunting, Threat Monitoring, and Cyber Recovery for CDM. If you need M365 EE, please select 'M365 and Entra ID. </span>
+                                                    </template>
+                                                    <template if:true={field.rscPEBanner}>
+                                                        <span key={field.POC_Product_Picker_Type__c} class="slds-notify_alert"> RSC Proactive Edition includes Enterprise Edition plus: User Intelligence and User Access Analysis. </span>
+                                                    </template>
+                                                  <template if:true={field.annapurnaBanner}>
+                                                    <span key={field.POC_Product_Picker_Type__c} class="slds-notify_alert" style="display:block;">Annapurna Acknowledgment: To gain approval, please contact Eran Carmel or Damani Norman via the following <a href={labels.AnnapurnaURL} target="_blank" style="padding-left: 2px;">Approval Form</a>. A total of 100 GB of Annapurna licensing will be made available. If objection handling has been completed and Annapurna is still needed, please confirm that your POC meets the outlined requirements.</span>
+                                                </template>
+                                                <template if:true={field.identityRecoveryBanner}>
+                                                    <span key={field.POC_Product_Picker_Type__c} class="slds-notify_alert"> Selecting Identity Recovery includes everything needed for Identity cyber recovery for Identity (Edge Forest Recovery, Attribute Recovery, Enterprise Apps, App Registration, and Conditional Access. Identity management system include Active Directory and Entra ID.).</span>
+                                                </template>
+                                                <template if:true={type.rscpAckBanner}>
+                                                        <div key={field.POC_Product_Picker_Type__c} class="slds-m-top_small" id="rscPrivateAck" data-ismultiple="false">
+                                                            <p class="slds-p-horizontal_xx-small">
+                                                                <!--<lightning-accordion-section label="RSC-Private Acknowledgment" name="Rubrik_Private_Ack">-->
+                                                                    <label style="font-size:1.1em">RSC-Private Acknowledgment</label><br/><br/>
+                                                                    <lightning-formatted-text value="RSC-Private is only intended for prospects and customers that absolutely cannot use SaaS for management. The POC must meet one of the following requirements"></lightning-formatted-text>
+                                                                    <lightning-vertical-navigation-item label="Federal government" name="Federal government"></lightning-vertical-navigation-item>
+                                                                    <lightning-vertical-navigation-item label=">$1 million ACV new deal" name=">$1 million ACV new deal"></lightning-vertical-navigation-item>
+                                                                    <lightning-vertical-navigation-item label="Dark site with Anneka Gupta approval" name="Dark site with Anneka Gupta approval"></lightning-vertical-navigation-item> <!-- updated for MKT26-93 -->
+                                                                    <lightning-combobox name="RubPvtAck"
+                                                                        value={rscPrivateValue}
+                                                                        label="If you have already gone through objection handling and still need RSC-Private please certify that your PoC meets one of the requirements above."
+                                                                        placeholder="Select"
+                                                                        options={rscPvtAck}
+                                                                        required="true">
+                                                                    </lightning-combobox>
+                                                                <!--</lightning-accordion-section>-->
+                                                            </p>
+                                                            
+                                                        </div>
+                                                </template>  
+                                                <!-- End MKT26-410, 405, 93 -->  
+
+                                                <lightning-input-field key={field.Field_Api_Name__c} 
+                                                    field-name={field.Field_Api_Name__c}
+                                                    class="fieldvalidate"
+                                                    name={field.Field_Api_Name__c}
+                                                    data-apiname= {field.Field_Api_Name__c}
+                                                    value={field.value} 
+                                                    required={field.Required__c}
+                                                    onchange={handleCloudClusterLocationChange}
+                                                    disabled={field.disable}
+                                                    variant="label-stacked">  
+                                                </lightning-input-field>
+                                                 </template>
+                                            </template>
+                                            <template if:true={type.isCloudUnstructured}>
+                                                <span key={type.productName} class="slds-notify_alert"> To provision Cloud Unstructured, NAS Cloud Direct is required. Please include NAS Cloud Direct in your request whether you need it or not. For edition, select bundled with Cloud Unstructured.</span>
+                                            </template>        
+
+                                            
+                                        </lightning-accordion-section> 
+                                    </p>
+                                </lightning-card>
+                            </div>
+                        </template>
+                        <template if:true={showRSC3rdParty}>
+                            <div class="slds-m-top_small" data-product="RSC 3rd Party S/W With Enterprise Ed." id="rsc3rdParty" data-ismultiple="false">
+                                <lightning-card>
+                                    <p class="slds-p-horizontal_small">
+                                        <lightning-accordion-section label="RSC 3rd Party S/W With Enterprise Ed." name="Rubrik_Third_Party">
+                                            <lightning-combobox 
+                                                name="3rdPartyAck"
+                                                label="The HW configuration has been verified to match the required configuration to load SW on 3rd party hardware and have engaged with the 3rd party hardware product team for approval of the POC"
+                                                value={value}
+                                                placeholder="Select"
+                                                options={thirdPartyAcknowledge}
+                                                required="true">
+                                            </lightning-combobox>
+                                        </lightning-accordion-section>
+                                    </p>
+                                </lightning-card>
+                            </div>
+                        </template>
+                        <template if:true={showRSCG3rdParty}>
+                            <div class="slds-m-top_small" data-product="RSC-G Third Party Software with Enterprise Edition" id="rscG3rdParty" data-ismultiple="false">
+                                <lightning-card>
+                                    <p class="slds-p-horizontal_small">
+                                        <lightning-accordion-section label="RSC-G Third Party Software with Enterprise Edition" name="Rubrik_Third_Party">
+                                            <lightning-combobox 
+                                                name="3rdPartyAck"
+                                                label="The HW configuration has been verified to match the required configuration to load SW on 3rd party hardware and have engaged with the 3rd party hardware product team for approval of the POC"
+                                                value={value}
+                                                placeholder="Select"
+                                                options={thirdPartyAcknowledge}
+                                                required="true">
+                                            </lightning-combobox>
+                                        </lightning-accordion-section>
+                                    </p>
+                                </lightning-card>
+                            </div>
+                        </template>
+                        <!--RSC-Private with Enterprise Edition-->
+                        <!--<template if:true={showRSCPrivateEd}>
+                            <div class="slds-m-top_small" data-product="RSC-Private with Enterprise Edition" id="rscPrivate" data-ismultiple="false">
+                                <lightning-card>
+                                    <p class="slds-p-horizontal_small">
+                                        <lightning-accordion-section label="RSC-Private Acknowledgment" name="Rubrik_Private_Ack">
+                                            <lightning-formatted-text value="RSC-Private is only intended for prospects and customers that absolutely cannot use SaaS for management. The POC must meet one of the following requirements"></lightning-formatted-text>
+                                            <lightning-vertical-navigation-item label="Federal government" name="Federal government"></lightning-vertical-navigation-item>
+                                            <lightning-vertical-navigation-item label=">$1 million ACV new deal" name=">$1 million ACV new deal"></lightning-vertical-navigation-item>
+                                            <lightning-vertical-navigation-item label="Dark site with Anneka Gupta approval" name="Dark site with Anneka Gupta approval"></lightning-vertical-navigation-item>
+                                            <lightning-combobox 
+                                                name="RubPvtAck"
+                                                value={rscPrivateValue}
+                                                label="If you have already gone through objection handling and still need RSC-Private please certify that your PoC meets one of the requirements above."
+                                                placeholder="Select"
+                                                options={rscPvtAck}
+                                                required="true">
+                                            </lightning-combobox>
+                                        </lightning-accordion-section>
+                                    </p>
+                                </lightning-card>
+                            </div>
+                        </template>-->
+                        <template if:true={showRSCSection}>
+                            <div class="slds-m-top_small" data-product="Rubrik Cloud Security" id="cloudVault" data-ismultiple="false">
+                                <lightning-card> 
+                                    <p class="slds-p-horizontal_small">
+                                        <lightning-accordion-section label="Rubrik Cloud Security" name="Rubrik_Cloud_Security">
+                                            <span class="slds-notify_alert"> RSC Enterprise Edition includes: Ransomware Monitoring, Sensitive Data Monitoring, Threat Hunting, Threat Monitoring, and Cyber Recovery for CDM. If you need M365 EE, please select the “M365 and Entra ID" </span>
+                                            <lightning-input type="checkbox" variant="label-stacked"  label="RSC Enterprise Edition Bundle" name="RSC Enterprise Edition" data-ismainbundle="true" onchange={handleRSCSelection} data-rscsection="true" onclick={preventAction} disabled="true" checked="true"></lightning-input>
+                                            <!--<template if:false={isRansomwareRecovery}>
+                                            <lightning-input type="checkbox" variant="label-stacked"  label="Ransomware Monitoring & Investigation" name="Ransomware Monitoring & Investigation" data-ismainbundle="false" onchange={handleRSCContentSelection} data-rscsection="true" if:false={showPartnerSoftwareAccessType}></lightning-input>
+                                            <lightning-input type="checkbox" variant="label-stacked"  label="Sensitive Data Monitoring & Remediation" name="Sensitive Data Monitoring & Remediation" data-ismainbundle="false" onchange={handleRSCContentSelection} data-rscsection="true" if:false={showPartnerSoftwareAccessType}></lightning-input>
+                                            <lightning-input type="checkbox" variant="label-stacked"  label="Orchestrated Application Recovery" name="Orchestrated Application Recovery" data-ismainbundle="false" onchange={handleRSCContentSelection} data-rscsection="true" if:false={showPartnerSoftwareAccessType}></lightning-input>
+                                            </template>  -->
+                                        </lightning-accordion-section>
+                                    </p>
+                                </lightning-card>
+                            </div>
+                        </template>
+                        <!-- RSC Enterprise Edition_Ransomware Recovery Software Acknowledgement -->
+                        <template if:true={showRansomeAck}>
+                            <div class="slds-m-top_small" data-product="RSC Enterprise Edition" id="rscEnterprise" data-ismultiple="false">
+                                <lightning-card>
+                                    <p class="slds-p-horizontal_small">
+                                        <lightning-accordion-section label="Ransomware Recovery Software Acknowledgement" name="Rubrik_Ransome_Ack">
+                                            <lightning-formatted-text value="Ransomware Recovery Software is only intended for customers"></lightning-formatted-text><br/>
+                                            <lightning-formatted-text value="The POC must meet all of the following requirements."></lightning-formatted-text>
+                                            <lightning-vertical-navigation-item label="> The Account team agrees they have a reasonable opportunity to sell the customer EE licensing, once the customer returns to normal business operations."></lightning-vertical-navigation-item>
+                                            <lightning-vertical-navigation-item label="> Particular to Threat Hunter (TH), the customer provides specific IOCs from the affected infrastructure to power the TH scans. Not providing specific IOCs can result in scans which yield no results and/or run excessively long. This can have a negative effect on the customer's perception and value of the product."></lightning-vertical-navigation-item>
+                                            <lightning-vertical-navigation-item label="> Notified Alok Agarwal and your leadership management chain."></lightning-vertical-navigation-item>
+                                            <lightning-vertical-navigation-item label="> Customer is facing an Cyber incident or emergency"></lightning-vertical-navigation-item><!--Added for MKT26-227 -->
+                                            <lightning-combobox 
+                                                name="RubEntEdi"
+                                                value={rscEnterpriseValue}
+                                                label="If you have already gone through objection handling and still need Ransomware Recovery Software please certify that your POC meets all of the requirements above."
+                                                placeholder="Select"
+                                                options={ransomeAck}
+                                                required="true">
+                                            </lightning-combobox>
+                                        </lightning-accordion-section>
+                                    </p>
+                                </lightning-card>
+                            </div>
+                        </template>
+                        <!--<template if:true={showRSCProactiveEd}>
+                            <div class="slds-m-top_small" data-product="RSC Proactive Edition" id="rscProactive" data-ismultiple="false">
+                                <lightning-card>
+                                    <p class="slds-p-horizontal_small">
+                                        <lightning-accordion-section label="RSC Proactive Edition Acknowledgement" name="Rubrik_Proactive_Ack">
+                                            <lightning-formatted-text value="RSC Proactive Edition includes Enterprise & Cloud data Protection (RCDM, CNP, CC-ES), Anomaly Detection, Threat Hunting, Threat Monitoring, Cyber Recovery, Sensitive Data Monitoring, User Access Analysis and User Activity Monitoring."></lightning-formatted-text><br/>
+                                            <lightning-formatted-text value="The POC must meet the following requirements:"></lightning-formatted-text>
+                                            <lightning-vertical-navigation-item label="> Notified and received approval from proactive-edition-poc-approval@rubrik.com"></lightning-vertical-navigation-item>
+                                            <lightning-combobox 
+                                                name="RubProEdi"
+                                                value={rscProactiveValue}
+                                                label="If you have already gone through objection handling and still need RSC Proactive Edition please certify that your POC meets the requirements above."
+                                                placeholder="Select"
+                                                options={proactiveAck}
+                                                required="true">
+                                            </lightning-combobox>
+                                        </lightning-accordion-section>
+                                    </p>
+                                </lightning-card>
+                            </div>
+                        </template> -->
+                        <template if:true={showPolarisDetails}>
+                            <div class="slds-m-top_small" data-product="polarisDetails" data-ismultiple="false">
+                                <lightning-card> 
+                                    <p class="slds-p-horizontal_small">
+                                        <lightning-accordion-section label="RSC Detail" name="SAP_Hana_Kubernetes_1">
+                                            <Template if:false={rscGProduct}>
+                                                <lightning-input-field 
+                                                        field-name="Polaris_Region__c"
+                                                        required="true"
+                                                        variant="label-stacked" ></lightning-input-field>
+                                                
+                                                    <lightning-input-field 
+                                                        field-name="Polaris_Contact__c"
+                                                        required="true"
+                                                        variant="label-stacked"></lightning-input-field>
+                                            </Template>
+                                            <Template if:true={rscGProduct}>
+                                                   <span class="slds-notify_alert"> The RSC-G Contact is the account owner and the primary user responsible for deploying and managing the RSC-G instance.</span>
+                                                <lightning-combobox  name="Polaris_Region__c"
+                                                        variant="label-stacked"
+                                                        value="US"
+                                                        options={rscRegion}
+                                                        label="RSC Region"
+                                                        required="true"
+                                                        disabled="true"
+                                                        onchange={handlePolarisRegionRSCG}>
+                                                    </lightning-combobox>
+                                                    <div class="slds-m-top_medium slds-m-bottom_x-large"> <!-- Added for MKT26-99 -->
+                                                        <h2 class="slds-text-heading_small">
+                                                            <label class="slds-form-element__label" part="label">Rubrik Security Cloud - Gov't Owner: </label>
+                                                            <template if:false={hideRscgUrl}>
+                                                                <lightning-formatted-url value={rscgContactURL} tooltip="Omit leading slash" target="_blank" label={pocRscgContactName}></lightning-formatted-url> 
+                                                            </template>
+                                                        </h2>
+                                                    </div>
+                                                <!--<lightning-input-field 
+                                                    name="rsgcontact"
+                                                    field-name="RSC_G_Contact__c"
+                                                    required="true"
+                                                    value={pocRscgContact}
+                                                    read-only={rscGReadOnly}
+                                                    variant="label-stacked" class="slds-is-disabled"></lightning-input-field>-->
+                                            </Template>        
+                                        </lightning-accordion-section>
+                                    </p>
+                                </lightning-card>
+                            </div>
+                        </template>
+                        <div class="slds-m-top_small" data-product="otherAccessories" data-ismultiple="false" if:false={isPocTypeWebTryAndBuy}>
+                            <lightning-card> 
+                                <p class="slds-p-horizontal_small">
+                                    <lightning-accordion-section label="Other Product Comments" name="OtherProductComments">
+                                        <lightning-input-field field-name="Other_Accessories__c" variant="label-stacked" data-required="false"></lightning-input-field>
+                                    </lightning-accordion-section>
+                                </p>
+                            </lightning-card>
+                        </div>
+                    </lightning-accordion>
+                <!-- </div> -->
+            </lightning-record-edit-form>
+        </div>
+    </template>
+</template>

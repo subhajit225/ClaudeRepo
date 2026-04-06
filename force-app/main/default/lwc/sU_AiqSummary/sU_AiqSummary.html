@@ -1,0 +1,170 @@
+<template>
+    <div class="summary-outer-div">
+        <div class="aiq-case-summary">
+            <!-- case title starts -->
+            <div class="aiq-case-title">
+                <h2>Case Summary
+                    <button type="button" role="button" class="summary-status su__ml-1 no-btn-style regenerate-button"
+                        onclick={refreshSummary} disabled={disableRegenerate}>
+                        <div class="tooltip-content">Regenerate</div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24.25" viewBox="0 0 24 24.25">
+                            <g id="Group_41919" data-name="Group 41919" transform="translate(-887 -221)">
+                                <g id="Component_133_4" data-name="Component 133 – 4" transform="translate(887 223)">
+                                    <rect class="highlight" id="Rectangle_12709" data-name="Rectangle 12709" width="24"
+                                        height="22" rx="5" fill="#edf4fe"/>
+                                    <g id="Group_19470" data-name="Group 19470" transform="translate(2.306 2.887)">
+                                        <g id="Group_15472" data-name="Group 15472" transform="translate(0.089 -0.103)">
+                                            <path id="Path_11739" data-name="Path 11739" d="M4.6,0V4.6H0"
+                                                transform="translate(3.244 9.156) rotate(-120)" fill="none"
+                                                stroke="#7081b9" stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-width="1.5" />
+                                            <path id="Path_11740" data-name="Path 11740" d="M0,4.6V0H4.6"
+                                                transform="translate(14.361 14.073) rotate(-120)" fill="none"
+                                                stroke="#7081b9" stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-width="1.5" />
+                                            <path id="Path_11741" data-name="Path 11741"
+                                                d="M1.4,4.433A6.347,6.347,0,0,1,5.438.029a4.7,4.7,0,0,1,5.055,1.721l2.769,3.22M-.191,8.212l2.769,3.22a4.7,4.7,0,0,0,5.055,1.721,6.347,6.347,0,0,0,4.034-4.4"
+                                                transform="translate(6.969 17.911) rotate(-120)" fill="none"
+                                                stroke="#7081b9" stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-width="1.5" />
+                                        </g>
+                                    </g>
+                                </g>
+                                <template if:true={updated}>
+                                    <circle id="Ellipse_445" data-name="Ellipse 444" cx="3.5" cy="3.5" r="3.5"
+                                        transform="translate(904 221)" fill="#f48b00" />
+                                </template>
+                            </g>
+                        </svg>
+                    </button>
+                </h2>
+                <div class="aiq-feedback-plusHolder">
+                    <template if:false={summayDataError}>
+                        <template if:false={summaryLoading}>
+                            <template if:true={reloadFeedback}>
+                                <c-s-u_-aiq-feedback class="feedback-buttons-container su-Actions-feedback-component"
+                                    feedback-location={feedbackType} key={keys.key3}
+                                    maincontainerwidth={maincontainerwidth} case-id={recordId} uid={uid}
+                                    generative-content={generativeContent} end-point={endPoint} token={token}
+                                    onsentimenttypechange={handleSentimentTypeChange}>
+                                </c-s-u_-aiq-feedback>
+                            </template>
+                        </template>
+                    </template>
+                    <button role="button" type="button" class="aiq-megnify-btn" onclick={toggleSummaryZoom}>
+                    <svg class="zoom-btn" xmlns="http://www.w3.org/2000/svg" width="15.811" height="15.811"
+                        viewBox="0 0 15.811 15.811">
+                        <g id="Icon_feather-zoom-in1" data-name="Icon feather-zoom-in" transform="translate(0.75 0.75)">
+                            <path id="Path_25581" data-name="Path 25584"
+                                d="M16.944,10.722A6.222,6.222,0,1,1,10.722,4.5,6.222,6.222,0,0,1,16.944,10.722Z"
+                                transform="translate(-4.5 -4.5)" fill="none" stroke="#9a9797" stroke-linecap="round"
+                                stroke-linejoin="round" stroke-width="1.5" />
+                            <path id="Path_25582" data-name="Path 25585" d="M28.358,28.358l-3.383-3.383"
+                                transform="translate(-14.358 -14.358)" fill="none" stroke="#9a9797"
+                                stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" />
+                            <path id="Path_25583" data-name="Path 25586" d="M16.5,12v4.667"
+                                transform="translate(-10.278 -8.111)" fill="none" stroke="#9a9797"
+                                stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" />
+                            <path id="Path_25589" data-name="Path 25587" d="M12,16.5h4.667"
+                                transform="translate(-8.111 -10.278)" fill="none" stroke="#9a9797"
+                                stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" />
+                        </g>
+                    </svg>
+                    <svg class="cross-btn" xmlns="http://www.w3.org/2000/svg" width="9.283" height="9.281"
+                        viewBox="0 0 9.283 9.281">
+                        <path id="Icon_ionic-ios-close1" data-name="Icon ionic-ios-close"
+                            d="M17.027,15.929l3.316-3.316a.777.777,0,1,0-1.1-1.1L15.928,14.83l-3.316-3.316a.777.777,0,1,0-1.1,1.1l3.316,3.316-3.316,3.316a.777.777,0,1,0,1.1,1.1l3.316-3.316,3.316,3.316a.777.777,0,1,0,1.1-1.1Z"
+                            transform="translate(-11.285 -11.289)" fill="#b0adad" />
+                    </svg>
+                </button>
+                </div>
+            </div>
+            <!-- /case title ends -->
+
+            <!-- tabs buttons starts -->
+            <div class="aiq-case-summary-tabs">
+                <section class="caseSummary-buttonsSection">
+                    <button class={tabClassBrief} onclick={handleTabClick} data-city="brief">Brief</button>
+                    <button class={tabClassDetailed} onclick={handleTabClick} data-city="detailed">Detailed</button>
+                </section>
+                <span if:true={last_updated} class="last-updated">Last Updated: {last_updated}</span>
+                <span if:true={last_updated} class="last-updated-responsive">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="11.922" height="11.922" viewBox="0 0 11.922 11.922">
+                        <path id="Icon_material-update" data-name="Icon material-update" d="M16.423,9.216H11.933l1.815-1.868A4.662,4.662,0,0,0,7.2,7.282a4.554,4.554,0,0,0,0,6.484,4.649,4.649,0,0,0,6.544,0A4.314,4.314,0,0,0,15.1,10.527h1.325a6.187,6.187,0,0,1-1.749,4.166,6,6,0,0,1-8.425,0,5.855,5.855,0,0,1-.013-8.332,5.953,5.953,0,0,1,8.379,0L16.423,4.5Zm-5.63-1.4v2.815L13.112,12l-.477.8L9.8,11.124V7.812Z" transform="translate(-4.502 -4.5)" fill="#9a9797"/>
+                        </svg>
+                    {last_updated}</span>
+
+            </div>
+            <!-- /tabs buttons ends -->
+
+            <!-- tabs body starts -->
+            <div class="section-container">
+                <template if:true={isBriefActive}>
+                    <div class="brief-caseSummary">
+                        <template if:true={summayDataError}>
+                            <div class="summary-unavailable brief-summary-unavailable">
+                                <figure class="unavailable-figure"></figure>
+                                <p>Oops! Unable to load Case Summary!</p>
+                            </div>
+                        </template>
+                        <template if:false={summayDataError}>
+                            <template if:false={summaryLoading}>
+                                <ul class="brief-data">
+                                    <!-- <template for:each={summayData} for:item="item" for:index="index">
+                                            <li key={item.Title}>
+                                                <h2>{item.Title}:</h2>
+                                                <template for:each={item.Value} for:item="dataValue">
+                                                    <p key={dataValue}>• {dataValue}</p>
+                                                </template>
+                                            </li>
+                                        </template> -->
+
+                                    <template for:each={summayData} for:item="item">
+                                        <li key={item.Title}>
+                                            <h2>{item.Title}</h2>
+                                            <template for:each={item.displayValue} for:item="dataValue">
+                                                <p key={dataValue.raw}>
+                                                    <template if:true={dataValue.showBullet}>• </template>
+                                                    <template if:true={dataValue.hasColon}>
+                                                        <b>{dataValue.colonTitle}:</b> {dataValue.colonRest}
+                                                    </template>
+                                                    <template if:false={dataValue.hasColon}>
+                                                        {dataValue.raw}
+                                                    </template>
+                                                </p>
+                                            </template>
+                                        </li>
+                                    </template>
+
+                                </ul>
+                            </template>
+                            <template if:true={summaryLoading}>
+                                <div class="data-loader"></div>
+                            </template>
+                        </template>
+                    </div>
+                </template>
+                <template if:true={isDetailedActive}>
+                    <template if:true={summayDataError}>
+                        <div class="summary-unavailable datailed-summary-unavailable">
+                            <figure class="unavailable-figure"></figure>
+                            <p>Oops! Unable to load Case Summary!</p>
+                        </div>
+                    </template>
+                    <template if:false={summayDataError}>
+                        <template if:false={summaryLoading}>
+                            <div class="detailed-data">
+                                <p>{summayDataDetailed}</p>
+                            </div>
+                        </template>
+                        <template if:true={summaryLoading}>
+                            <div class="data-loader"></div>
+                        </template>
+                    </template>
+
+                </template>
+            </div>
+            <!-- /tabs body ends -->
+        </div>
+    </div>
+</template>

@@ -1,0 +1,22 @@
+<apex:page standardController="Lessons_Learned__c" extensions="EscalationManagementTeamController" showHeader="false" standardStylesheets="true" sidebar="false" docType="html-5.0" lightningStylesheets="true">
+    <apex:includeLightning />
+
+    <div id="LightningComponentid" />    
+    
+    <script>
+    $Lightning.use("c:NextStepsEscalationNotesApp", function() {
+        $Lightning.createComponent("c:customDataTable",
+          { 
+            tableName: 'Areas of Improvement & Action Items',
+            objectName: 'Note__c',
+            fieldSetName: 'LL_Areas_of_Improvement',
+            recordId: '{!$CurrentPage.parameters.Id}',
+            filterStr: 'LL_Area_of_Improvement'
+          },
+          "LightningComponentid",
+          function(cmp) {
+             console.log('Background & Timeline LWC Componenet added in VF page');
+          });
+    });
+    </script>
+</apex:page>

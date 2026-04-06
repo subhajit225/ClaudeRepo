@@ -1,0 +1,316 @@
+<aura:component controller="ProcessTradeUpCalcController" 
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" > 
+    <ltng:require styles="{!$Resource.ModalSizeWithCSS}"/>
+    <aura:attribute name="data" type="Object" />
+    <aura:attribute name="customQLIList" type="Object" />
+    <aura:attribute name="columns" type="List" />
+    <aura:attribute name="isLoading" type="Boolean" default="false"/>
+    <aura:attribute name="hasFE" type="Boolean" default="false"/>
+    <aura:attribute name="recordId" type="String" />
+    <lightning:notificationsLibrary aura:id="notifLib"/> 
+ 
+    <aura:attribute name="tableData" type="Object"/>
+    <aura:attribute name="tableDataOriginal" type="Object"/>
+    <aura:attribute name="updatedTableData" type="Object"/>
+    <aura:attribute name="modifiedRecords" type="List"/>
+    <aura:attribute name="error" type="String" default=""/>
+    <aura:attribute name="startOffset" type="String" />
+    <aura:attribute name="buttonClicked" type="String" />
+    <aura:attribute name="buttonsDisabled" type="Boolean" />
+    <aura:attribute name="numberOfBundles" type="List" />
+    <aura:attribute name="recordsToUpdate" type="List" />
+    <aura:attribute name="bundleRecordId" type="String" />
+    <aura:attribute name="selectedRecords" 	type="List"   default="[]" description="selected Records Id Array" />
+    <aura:attribute name="mapOfBundleIdvsAssetIds" type="Map"  default="{}"/>
+    <aura:attribute name="numberOfAssets" type="Integer" />
+    <aura:attribute name="mapOfBundleIdvsNumberOfAssets" type="Map"  default="{}"/>
+    <aura:attribute name="comeBack" type="Boolean" default="false"/>
+    <aura:attribute name="validated" type="Boolean" default="false"/>
+    <aura:attribute name="trueUpWarningMsg" type="String"/>
+    <aura:method name="updateAcc" action="{! c.doInit}" description="method for rendered list after add new account "/>
+    
+    <aura:attribute name="status" type="String" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler event="c:Result" action="{!c.getValueFromApplicationEvent}"/>
+    
+    <!--<aura:if isTrue="{!or(v.recordsToUpdate.length == 0, v.comeBack==true)}" >-->
+    <aura:if isTrue="{!v.numberOfBundles.length > 0}">
+                            
+        <lightning:card title="Quote Lines">
+            <p class="slds-p-horizontal_small">
+               <!-- <aura:if isTrue="{!v.hasFE}">
+                    <ui:message title="Warning" severity="warning" closable="true">
+                        <aura:unescapedHtml value= "{!v.trueUpWarningMsg}"></aura:unescapedHtml> 
+                   </ui:message>
+                </aura:if>   
+           -->
+            
+                <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                    <thead>
+                        <tr class="slds-text-title_caps">
+                            <th scope="col" width="5%">
+                                <div class="slds-truncate" title="Number">#</div>
+                            </th>
+                            <th scope="col" width="25%">
+                                <div class="slds-truncate" title="Product Name">Product Name</div>
+                            </th>
+                            <th scope="col" width="10%">
+                                <div class="slds-truncate" title="Quantity">Quantity</div>
+                            </th>
+                            <th scope="col" width="10%">
+                                <div class="slds-truncate" title="TradeUpSN">Trade Up S/N</div>
+                            </th>
+                            <th scope="col" width="60%">
+                                <div class="slds-truncate" title="Lookup">Asset Details</div>
+                            </th>
+                            <th scope="col" width="60%">
+                                <!--<div class="slds-truncate" title="Refresh">Refresh</div>-->
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <aura:iteration items="{!v.numberOfBundles}" var="a" indexVar = "i">
+                                <tr> 
+                                    <td data-label="#">
+                                        <div class="slds-truncate" title="">{!i+1}</div>
+                                    </td>
+                                    <td data-label="Product Name">
+                                        <div class="slds-truncate" title="">{!a.SBQQ__ProductCode__c}</div>
+                                    </td>
+                                    <td data-label="Quantity">
+                                        <div class="slds-truncate" title="">{!a.SBQQ__Quantity__c}</div>
+                                    </td>
+                                    <td data-label="TradeUpSN">
+                                        <div class="slds-truncate" title="">
+										<!--code added by Prasenjeet start -->
+											<aura:iteration items="{!a.TradeUpSerialNumbers}" var="data" indexVar="indx">
+												{!data}
+												<aura:if isTrue="{!(indx)%2 != 0}" >
+													<br/>
+													<aura:set attribute="else">
+													  <aura:if isTrue="{!a.TradeUpSerialNumbers.length > 1}" >
+                                                        , 
+                                                        </aura:if>
+													</aura:set>
+												</aura:if>
+											</aura:iteration>
+										<!--code added by Prasenjeet End -->
+										</div>
+                                    </td>
+                                    <td>
+                                    
+                                    <aura:if isTrue="{!or(a.Product_Type__c == 'Edition Upgrade',and(a.SBQQ__Product__r.Tradeup_Pattern__c == 'License',NOT(empty(a.Replacement_Motion__c))),and(a.SBQQ__Product__r.Tradeup_Pattern__c != 'License',a.SBQQ__Product__r.Tradeup_Pattern__c != 'License : Sales Rep Exception'))}"> 
+                                        
+                                            <c:MultiSelectLookup recordId = "{!v.recordId}" bundleRecordId = "{!a.Id}"/>
+                                        
+                                    </aura:if>
+                                        </td>
+                                    <td></td>
+                                    <td>
+                                        <lightning:button label="CLEAR" variant="brand" onclick="{!c.clearValues}" value="{!a.Id}" />
+                                    </td>
+                                    
+                                </tr> 
+                                <aura:iteration items="{!v.data}" var="child" >
+                                    <aura:if isTrue="{!child.SBQQ__RequiredBy__c == a.Id}">
+                                        <tr>
+                                            <td data-label="#">
+                                                <div class="slds-truncate" title=""></div>
+                                            </td>
+                                            <td data-label="Product Name">
+                                                <div class="slds-truncate" title="">&nbsp;&nbsp;&nbsp;&nbsp;{!child.SBQQ__ProductCode__c}</div>
+                                            </td>
+                                            <td data-label="Industry">
+                                                <div class="slds-truncate" title="">{!child.SBQQ__Quantity__c}</div>
+                                            </td>
+                                        
+                                            <td data-label="srno">
+                                            <div>
+                                                <div class="slds-truncate" title="">{!child.Trade_Up_Serial_Number__c}</div>
+                                            </div>
+                                            </td>
+                                            <td>
+                                                <c:MultiSelectLookup recordId = "{!v.recordId}" bundleRecordId = "{!child.Id}"/>
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                        <!-- To display other Line Items present in the Quote
+                                        <aura:iteration items="{!v.data}" var="superChild" >
+                                            <aura:if isTrue="{!superChild.SBQQ__RequiredBy__c == child.Id}">
+                                                <tr>
+                                                    <td data-label="#">
+                                                        <div class="slds-truncate" title="">{!superChild.SBQQ__Number__c}</div>
+                                                    </td>
+                                                    <td data-label="Product Name">
+                                                        <div class="slds-truncate" title="">{!superChild.SBQQ__ProductCode__c}</div>
+                                                    </td>
+                                                    <td data-label="Industry">
+                                                        <div class="slds-truncate" title="">{!superChild.SBQQ__Quantity__c}</div>
+                                                    </td>
+                                                </tr>
+                                            </aura:if>
+                                        </aura:iteration>-->
+                                    </aura:if>
+                                </aura:iteration>
+                            
+                        </aura:iteration>
+                    </tbody>
+                </table>
+            </p>
+        </lightning:card>
+        <br/><br/>
+        <lightning:button label="CONFIRM" variant="brand" onclick="{!c.validate}" />
+    	<lightning:button label="CANCEL" variant="brand" onclick="{!c.goBack}" />
+        <!--<lightning:button label="Last Save" variant="brand" onclick="{!c.lastSave}" />-->
+        <br/><br/><br/>
+            </aura:if>
+    
+    <!--<aura:if isTrue="{!and(v.recordsToUpdate.length > 0, v.comeBack==false)}" >-->
+    <aura:if isTrue="{!v.recordsToUpdate.length > 0}" >
+        <!--<aura:if isTrue="{!v.selectedRecords.length > 0}" >-->
+        <aura:if isTrue="{!v.validated}" >
+        <lightning:card title="Details">
+    	    <div class="slds-scrollable">
+                <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                    <thead>
+                        <tr class="slds-text-title_caps">
+                            <th scope="col">
+                                <div class="slds-truncate" title="Product Name">Product Name</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Product Name">Quantity</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Product Name">Parent Product Name</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Product Name">Subscription Term</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Product Name">Trade Up Discount</div>
+                            </th>  
+                            <th scope="col">
+                                <div class="slds-truncate" title="Product Name">Eligible Trade Up Discount</div>
+                            </th> 
+                            <th scope="col">
+                                <div class="slds-truncate" title="Product Name">Trade Up S/N</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Calculated Values">Existing Editions</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Calculated Values">Existing RSC Discount</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Calculated Values">Max Credit Amount</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Calculated Values">Existing $/TB</div>
+                            </th>
+                            
+                            <th scope="col">
+                                <div class="slds-truncate" title="Calculated Values">Suggested Discount to Maximize ACV</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <aura:iteration items="{!v.recordsToUpdate}" var="a">
+                            <tr>
+                                <td data-label="Calculated Values">
+                                    <div class="slds-truncate" title="">{!a.SBQQ__ProductCode__c}</div>
+                                </td>
+                                <td data-label="Calculated Values">
+                                    <div class="slds-truncate" title="">{!a.SBQQ__Quantity__c}</div>
+                                </td>
+                                <td data-label="Calculated Values">
+                                    <div class="slds-truncate" title="">{!a.Required_By_Product_Code__c}</div>
+                                </td>
+                                <td data-label="Calculated Values">
+                                    <div class="slds-truncate" title="">{!a.SBQQ__SubscriptionTerm__c}</div>
+                                </td>
+                                <td data-label="Calculated Values">
+                                    <div class="slds-truncate" title="">
+                                        <aura:if isTrue="{!a.Expected_Trade_Up_Discount__c}">
+                                    <lightning:input  type="number" name="input7" value="{!a.Trade_Up_Discount__c}" max="{!a.Expected_Trade_Up_Discount__c}"/>
+                                        </aura:if>
+                                    </div>
+                                </td>
+                                <td data-label="Calculated Values">
+                                    <div class="slds-truncate" title="">{!a.Expected_Trade_Up_Discount__c}</div>
+                                </td>
+                                <td data-label="Calculated Values">
+                                    <div class="slds-truncate" title="">{!a.Trade_Up_Serial_Number__c}</div>
+                                </td>
+                                <td data-label="Calculated Values">
+                                    <div class="slds-truncate" title="">{!a.Existing_Editions__c}</div>
+                                </td>
+                                <td data-label="Calculated Values">
+                                    <div class="slds-truncate" title="">{!a.Existing_RSC_Discount_HW__c}</div>
+                                </td>
+                                <td data-label="Calculated Values">
+                                    <div class="slds-truncate" title="">{!a.Max_Credit_Amount__c}</div>
+                                </td>
+                                <td data-label="Calculated Values">
+                                    <div class="slds-truncate" title="">{!a.Existing_TB__c}</div>
+                                </td>
+                                
+                                <td data-label="Calculated Values">
+                                    <div class="slds-truncate" title="">{!a.Suggested_Discount_to_Maximize_ACV_HW__c}</div>
+                                </td>
+                            </tr>
+                        </aura:iteration>
+                    </tbody>
+                </table>
+            </div>
+        </lightning:card>
+        
+    	<lightning:button label="SAVE" variant="brand" onclick="{!c.lastSave}" />
+        <lightning:button label="CANCEl" variant="brand"  class="slds-m-right_medium" onclick="{!c.goBack}" />
+        
+        <!--</aura:if>-->
+            </aura:if>
+    </aura:if>
+    
+    <!--<aura:if isTrue="{!v.selectedRecords.length == 0}">-->
+    <!--<aura:if isTrue="{!and(v.numberOfBundles.length != 0,v.selectedRecords.length == 0)}">-->
+   
+        <aura:if isTrue="{!v.numberOfBundles.length != 0}">
+            <aura:if isTrue="{!not(v.validated)}">
+        <lightning:card title="Details">
+            <p class="slds-p-horizontal_small">
+                <div class="slds-truncate" title="">
+                    <b>Please select Asset Details and then click Confirm to see calculated values.</b>
+                </div>
+            </p>
+        </lightning:card>
+            </aura:if>
+    </aura:if>
+    <aura:if isTrue="{!v.numberOfBundles.length == 0}">
+        <lightning:card title="Details">
+            <aura:if isTrue="{!v.hasFE}">
+                 <ui:message title="Warning" severity="warning" closable="true">
+                     <aura:unescapedHtml value= "{!v.trueUpWarningMsg}"></aura:unescapedHtml> 
+                </ui:message>
+             </aura:if>
+            <p class="slds-p-horizontal_small">
+                <div class="slds-truncate" title="">
+                    <b>There are no Quote Lines eligible for Trade Up.</b>
+                </div>    
+                <br></br>
+            </p>
+            <div>
+             <lightning:button label="Back" variant="brand"  class="slds-m-right_medium" onclick="{!c.goBack}" />
+        </div>
+        </lightning:card>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.isLoading}">
+        <lightning:spinner alternativeText="Loading.." variant="brand"/>
+    </aura:if>       
+    <aura:if isTrue="{!v.status == 'Enqueued' || v.status == 'InProgress'}">
+        <p>Quote Recalculation Batch is running. Please wait...</p>
+    </aura:if>
+    
+    <lightning:navigation aura:id="navService"/>
+</aura:component>

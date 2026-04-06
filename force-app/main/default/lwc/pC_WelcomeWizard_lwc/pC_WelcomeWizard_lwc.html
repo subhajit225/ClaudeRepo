@@ -1,0 +1,59 @@
+<template>
+    <template if:true={showWelcomeWizard}>
+        <div>
+            <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+                class="slds-modal slds-fade-in-open slds-modal_medium">
+                <div class="slds-modal__container">
+                    <div class="slds-modal__content slds-p-around_xx-large custom-welcome-popup slds-p-bottom_none" id="modal-content-id-1">
+                        <template if:true={showSpinner}>
+                            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12"
+                                large-device-size="12" class="welcome-layout-item">
+                                <lightning-spinner class='loading' alternative-text="Loading" size="medium"
+                                    variant="brand"></lightning-spinner>
+                            </lightning-layout-item>
+                        </template>
+                        <template if:false={showSpinner}>
+                            <!--Terms of Use-->
+                            <template if:true={showTermsOfUse}>
+                                <c-p-C_terms-of-use_lwc oncallwizardvisibilty={handleCallWizardVisibility}
+                                    contact={_contactRecord}></c-p-C_terms-of-use_lwc>
+                            </template>
+                            <!-- Person Questions-->
+                            <template if:true={showPersonaQuestions}>
+                                <c-pc_-Persona-Questions_lwc conid={contactId}></c-pc_-Persona-Questions_lwc>
+                            </template>
+                            <!--Welcome Video-->
+                            <template if:true={showWelcomeVideo}>
+                                <c-pc_welcome-Wizard-Video_lwc onshowvidmodal={handleWelcomeVideoCall}></c-pc_welcome-Wizard-Video_lwc>
+                            </template>
+                            <!--Event Promo-->
+                            <template if:true={showEventPromo}>
+                                <c-pc_event-Promotional-Popup_lwc onshowpromobannermodal={handlePromoBannerCall}></c-pc_event-Promotional-Popup_lwc>
+                            </template>
+                            <!--Resources-->
+                            <template if:true={showResources}>
+                                <c-pc_pop-Up-Resources_lwc></c-pc_pop-Up-Resources_lwc>
+                            </template>
+                            <!--Amplify Terms of Use-->
+                            <template if:true={showAmplifyTerms}>
+                                <c-pc_amplify-terms-of-use oncallwizardvisibilty={handleCallWizardVisibility}
+                                    contact={_contactRecord}></c-pc_amplify-terms-of-use>
+                            </template>
+                        </template>
+                    </div>
+                    <div class="slds-modal__footer slds-modal__footer_directional slds-p-bottom_large">
+                        <div if:true={showNext}>
+                            <lightning-button variant="brand" label="Next" title="Next" onclick={handleNext}
+                                class="slds-m-left_x-small slds-float_right"></lightning-button>
+                        </div>
+                        <div if:true={showFinish}>
+                            <lightning-button variant="brand" label="Finish" title="Finish" onclick={handleFinish}
+                                class="slds-m-left_x-small slds-float_right"></lightning-button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </template>
+</template>

@@ -1,0 +1,33 @@
+<apex:page standardController="PS_Task__c" showHeader="false" sidebar="false" >
+    <apex:slds />
+    <apex:includeLightning />
+    <apex:includeScript value="/support/console/42.0/integration.js"/>
+    <div id="lightning" />       
+    <script type="text/javascript">
+    if(sforce.console.isInConsole()) {        
+    }
+    $Lightning.use("c:PSTaskContactAPP", function() {
+        $Lightning.createComponent(
+            "c:PSTaskContactCMP",
+            {"recordId" : "{!PS_Task__c.Id}"},
+            "lightning",
+            function(cmp) {
+                // do some stuff
+            });
+    });
+    function receiveMessage(event){
+        if(event.data == 'refresh'){
+            
+            var win = window.open('/apex/PSTaskInfoForm?id={!PS_Task__c.Id}','taskInfo','width=500,height=500');
+            
+            var timer = setInterval(function () {
+                if (win.closed) {
+                    clearInterval(timer);
+                    window.location.reload(); // Refresh the parent page
+                }
+            }, 1000);
+        }
+    }
+    window.addEventListener("message", receiveMessage, false);
+    </script>
+</apex:page>

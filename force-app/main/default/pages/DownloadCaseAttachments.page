@@ -1,0 +1,43 @@
+<apex:page standardController="Case" extensions="downloadCaseAttachments" >
+    <apex:includeScript value="/soap/ajax/48.0/connection.js"/>
+    <apex:includeScript value="/soap/ajax/48.0/apex.js"/>
+    <apex:includescript value="//code.jquery.com/jquery-1.11.1.min.js" />
+    <apex:includeScript value="{!URLFOR($Resource.ZipResource,'/jszip.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.fileSaver,'/FileSaver.js')}"/>
+     
+    <script type="text/javascript">
+    Visualforce.remoting.timeout = 120000; 
+    var j$ = jQuery.noConflict();
+    var caseId = '{!caseRecordId}';
+    var zipFile = new JSZip();
+    var jsAtt;
+    //Invokes apex method to get attachments
+    j$(document).ready(function() {
+        Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.downloadCaseAttachments.getAttachments}',
+            caseId,
+            function(result,event) {
+                if(event.status){
+                    console.log(result);
+                    jsAtt = result;
+                    j$.each(jsAtt, function(key,value) {
+                        compressFile(zipFile, value.attName, value.attEncodedBody);
+                    });
+                    downloadZip(zipFile);
+                }
+            });
+        
+    });
+    
+    function compressFile(zipFile, name, data) {
+        zipFile.file(name, data, {base64:true});
+    }
+    
+    function downloadZip(zipFile){
+        var attachmentData = zipFile.generate({type:"blob"});
+        var fileName = '{!fileName}.zip';
+        saveAs(attachmentData,fileName);
+        window.location.href = '/'+ caseId;
+    }
+    </script>
+</apex:page>

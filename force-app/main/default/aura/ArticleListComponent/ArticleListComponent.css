@@ -1,0 +1,262 @@
+.THIS .artDesc{font-size:14px;font-family:"Gotham-light";padding-bottom:10px !important;color:#666;overflow-wrap: break-word;}
+.THIS .artTitle{text-decoration : none; font-size:20px !important;font-family:"Gotham-light" !important;padding-bottom:10px !important;color:#1d2632 !important;overflow-wrap: break-word;}
+.THIS .artTitle:hover{color:#009DAC !important; text-decoration : none;}
+.THIS .articleList{    margin: 50px auto; ; width : 90%; display : block;}
+.THIS .eachBlock {    padding-bottom: 30px !important;    padding-top: 30px !important;    border-top: 1px solid #eee;}
+.THIS .artListDiv{
+    border-bottom: 1px solid #eee;
+}
+.THIS .dataCategoryDiv{
+    position: relative;
+    min-height: 1px;
+    padding-right: 15px;
+}
+.THIS .sub{
+    text-align: right;
+}
+.THIS .padLeft{margin-left: 12px;}
+.THIS .setWidth{    top: -23px;
+    width: 140px;}
+.THIS .pagination{
+    display : flex;
+    color:#009DAC;
+    font-size:16px;
+    font-family: Gotham-medium !important;
+}
+.THIS .categName {
+    font-size: 12px;
+    padding-left: 10px !important;
+    display: inline;
+    font-family: Gotham-Light !important;
+    color: #4A4A4A;
+}
+.THIS .prevSection , .THIS .NxtBtn {
+    padding : 10px;
+}
+.THIS .paginatinSection{
+    display: flex;
+    
+    justify-content: center;
+    padding: 20px 0px;
+}
+.THIS .Next , .THIS .prev{
+    text-decoration: none;
+    font-family: Gotham-Medium;
+    font-size: 16px;
+    font-weight: 700;
+    color: #23527c;
+}
+.THIS .Next:hover , .THIS .prev:hover  {
+    color: #009DAC;
+    text-decoration: none;
+}
+.THIS .nxt ,.THIS .privious{
+    text-decoration: none; 
+}
+.THIS .imTest,  .THIS .categName:active , .THIS .categName:focus {
+    color: #009DAC;
+    background-color: #eee;
+    border-left : 3px solid #009DAC;
+}
+.THIS .specialEffect{
+    color: #009DAC;
+    background-color: #eee;
+    border-left: 3px solid #009DAC;
+}
+.THIS .dCateg{
+    padding : 5px;
+}
+.THIS .artHeading{
+    font-size: 20px;
+    font-family: "Gotham-medium";
+    padding-bottom: 15px !important;
+    color: #4A4A4A;
+}
+.THIS .artPublishDate ,.THIS .dateFormat{
+    font-size: 12px; 
+    font-family: Gotham-light;
+    color: #4a4a4a;
+}
+.THIS .sub>.slds-button{
+    display: inline-block;
+    margin-bottom: 0;
+    font-weight: normal;
+    text-align: center;
+    vertical-align: middle;	
+    touch-action: manipulation;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    border-radius: 4px;
+    font-family : Gotham-Light;
+    background-color: #009dac;
+}
+.THIS .categTitle{
+    font-size: 12px;
+    text-transform: uppercase;
+    font-family: "Gotham-light";
+    padding-bottom: 5px !important;
+    padding-top: 20px !important;
+}
+.THIS .disabled{
+    pointer-events: none;
+    color: #009dac;
+    opacity: .65;
+    /* margin-right : 15px;  */
+}
+
+.THIS .disabled{
+    pointer-events: none;
+    color: #009dac;
+    /* margin-right : 15px;  */
+}
+.THIS .privious{
+    padding : 10px;
+}
+.THIS .tooltip1 {
+    position: relative;
+    display: inline;
+}
+
+.THIS .tooltip1 .tooltiptext {
+    visibility: hidden;
+    width: 400px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    font-family: Gotham-Light !important;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -380px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.THIS  .tooltip1 .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 95%;
+    margin-left: -5px;
+    border-width: 5px;
+    font-family: Gotham-Light !important;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+.THIS  .tooltip1:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+    line-height: 16px;
+}
+.THIS  .buttonTop{
+    padding-bottom: 10px !important;
+    border-bottom: 1px solid #eee;
+}
+@media screen and (max-width:768px){
+    .THIS .articleList {
+        width : 100%;
+        margin : 0px ;
+    }
+    
+    .THIS .articlesDiv{
+        padding: 5px;
+    }
+    .THIS .eachBlock{
+        border: 1px solid #ccc;
+        margin: 5px;
+        margin-bottom: 20px !important;
+    }
+    .THIS .sub{
+        text-align: right;
+    }
+    .THIS .artHeading{
+        padding: 0px 10px;
+    }
+    
+}
+
+.THIS .myMobileCategory  {
+    padding: 5px!important;
+    display: block !important;
+    background-color: #009DAC !important;
+    float: left !important;
+    margin: 30px 0px!important;
+    position: fixed!important;
+    bottom: 17px;
+    right: 38px;
+    z-index: 1;
+}
+.THIS .test{
+    position: absolute;
+    /* bottom: 50px; */
+    right: 45px;
+    padding: 5px!important;
+    display: block!important;
+    background-color: #009dac!important;
+    float: left!important;
+    /* margin: 30px 0!important; */
+    z-index: 1;
+    margin-top: 5px;
+}
+
+.THIS .categFilters a {
+    display: block;
+    transition: 200ms;
+    border-radius: 0 0 0 0;
+    border: 0;
+    margin: 0;
+    line-height: 1.2;
+    height: 40px;
+    padding: 10px 15px;
+    background: transparent;
+    text-align: left;
+    color: #222;
+    font-size: 14px;
+    font-family: source sans pro;
+}
+
+.THIS .categFilters a:hover {
+    color: #cf4900;
+    background: rgba(255, 255, 255, 0.8);
+    text-decoration : none ;
+}
+
+.THIS .categFilters {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    bottom: 0;
+    left: 0;
+    background-color: #FFF;
+    overflow-x: hidden;
+    transition: 0.3s;
+    /* padding-top: 60px;*/
+    z-index: 10002;
+    
+    
+}
+
+@media screen and (max-width:812px){
+    .THIS .dataCategoryDiv {
+        display : none ;
+    }
+}
+
+@media screen and (max-width:1024px){
+    .THIS .articleList {
+        width : 100%;
+    }
+    
+    
+    
+}

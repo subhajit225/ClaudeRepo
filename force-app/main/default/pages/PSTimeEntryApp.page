@@ -1,0 +1,21 @@
+<apex:page id="Time_card_App" sideBar="false" showHeader="false" >
+    <apex:includeLightning />
+    <body>
+    <div id="Form_Page"></div>
+    <script>
+        $Lightning.use("c:PSTimeCardHome", function () {
+            $Lightning.createComponent(
+                    "c:PSTimeCardComponent",
+                    {
+                     currenturl : '{!$CurrentPage.URL}', 
+                    },
+                    "Form_Page",
+                    function (cmp) {
+                    console.log('Welcome---->>>');
+                       
+                    }
+            );
+        });
+    </script>
+    </body>
+</apex:page>

@@ -1,0 +1,96 @@
+.THIS {
+}
+.THIS .customRequired{
+    font-weight: 400; 
+} 
+.THIS .customRequired:before{    
+    content: "*";
+    margin: 0 0.125rem 0 0.125rem;
+    color: rgb(194, 57, 52);
+    float: left; 
+} 
+
+.THIS .form-element__helpError {
+    color: rgb(194, 57, 52);
+}
+.THIS .slds-has-error [role=combobox] input[readonly] {
+    border-color: rgb(194, 57, 52);
+}
+
+.THIS .slds-text-heading_large, 
+.THIS .slds-text-heading--large {
+    font-weight: 600;
+    font-size: 36px;
+    line-height: 115%;
+    color: #070F52;
+}
+.THIS .slds-text-heading_small, 
+.THIS .slds-text-heading--small {
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 115%;
+    color: #070F52;
+}
+.THIS .form-element__group .slds-input, 
+.THIS .slds-form-element__control .slds-input,
+.THIS .form-element__group .textarea, 
+.THIS .slds-form-element__control .textarea,
+.THIS .slds-form-element__control .slds-dropdown-trigger{
+    background: #FFFFFF;
+    border: 1px solid #6C7174;
+    border-radius: 4px;
+    font-size: 17px;
+}
+.THIS .slds-form-element__label{
+	font-size: 1rem !important;
+    color: #727679;
+    font-weight: 400 !important;
+	hyphens: none;
+}
+.THIS .margin-bottom-16 {
+    margin-bottom: 8px;
+}
+.THIS .slds-form-element_horizontal .slds-form-element__control, 
+.THIS .slds-form_horizontal .slds-form-element .slds-form-element__control, 
+.THIS .slds-form_stacked .slds-form-element_horizontal .slds-form-element__control {
+    padding-left: 0;
+    clear: both;
+}
+.THIS .slds-combobox__input {
+    border: none;
+}
+/* .THIS .slds-combobox__input:focus, 
+.THIS .slds-combobox__input.slds-has-focus {
+    border: none;
+    box-shadow: none;
+} */
+.THIS .slds-button_brand {
+    padding: 20px 30px;
+    height: 50px;
+    background: #00D3C1;
+    border-radius: 60px;
+    color: #070F52;
+    font-size: 18px;
+    border: none;
+}
+.THIS .slds-button_brand:hover {
+    background: #070F52;
+    color: #fff
+}
+.THIS .text-normal {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 150%;
+    color: #6C7174;
+}
+.THIS .link a, 
+.THIS .link a:hover
+{
+    color:  #123A7B;
+}
+.THIS .slds-form-element_horizontal:not(.slds-is-editing), 
+.THIS .slds-form_horizontal .slds-form-element:not(.slds-is-editing), 
+.THIS .slds-form_stacked .slds-form-element_horizontal:not(.slds-is-editing) {
+    padding: 0
+}

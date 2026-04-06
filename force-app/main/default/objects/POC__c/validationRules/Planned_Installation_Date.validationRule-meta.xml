@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Planned_Installation_Date</fullName>
+    <active>true</active>
+    <description>Planned Installation Date &gt; + 1 days</description>
+    <errorConditionFormula>AND(
+	ISNEW(), 
+	Is_Cloned__c = FALSE,
+	Planned_Installation_Date__c  &lt; (TODAY() + 1),  
+	TEXT(POC_Type__c) &lt;&gt; &quot;Virtual Lab&quot;,  
+	TEXT(POC_Type__c) &lt;&gt; &quot;Web Try and Buy&quot;,
+        TEXT(POC_Type__c) &lt;&gt; &quot;Ransomware Recovery Software&quot;,
+        TEXT(POC_Type__c) &lt;&gt; &quot;Standard POC : RSC-G&quot;
+)</errorConditionFormula>
+    <errorDisplayField>Planned_Installation_Date__c</errorDisplayField>
+    <errorMessage>Date must be &gt; 1 day from Created Date</errorMessage>
+</ValidationRule>

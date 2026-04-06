@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Pending_ASN</fullName>
+    <columns>NAME</columns>
+    <columns>OBJECT_ID</columns>
+    <columns>Process_History__c</columns>
+    <columns>Status__c</columns>
+    <columns>JobId__c</columns>
+    <columns>OrderNumber__c</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>OrderItem__c</columns>
+    <columns>EDILineNumber__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Status__c</field>
+        <operation>equals</operation>
+        <value>Internal Failure,Failed</value>
+    </filters>
+    <label>Pending ASN</label>
+</ListView>

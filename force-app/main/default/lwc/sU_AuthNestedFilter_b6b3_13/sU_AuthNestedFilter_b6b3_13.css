@@ -1,0 +1,119 @@
+.filterLabel {
+  color: #A4A3A6;
+}
+
+.accordion:after {
+  content: '⏷';
+  color: #777;
+  font-weight: bold;
+  float: right;
+  margin-top: -22px;
+  font-size: 15px;
+  margin-left: 5px;
+}
+
+.active:after {
+  content: "⏶";
+}
+
+.showPanel {
+  display: none;
+}
+
+.accordionsection {
+  padding: 5px;
+}
+
+.filterDiv {
+  background-color: white;
+  overflow: hidden;
+}
+
+.filterValues {
+  margin: 10px 0px;
+  padding: 0px;
+  padding-left: 20px;
+  position: relative;
+}
+
+.arrow-position {
+  position: absolute;
+  left: 3px;
+}
+
+.iconBack {
+  background: #bbb;
+  height: 25px;
+  color: #fff;
+  font-weight: 700;
+  width: 25px;
+  border-radius: 50%;
+  padding: 0px 5px;
+  margin-right: 10px;
+}
+
+.menu {
+  background-color: #fff;
+  position: absolute;
+  width: 100%;
+  left: -110%;
+  height: 100%;
+  transition: all 1s;
+  z-index: 3;
+}
+
+.show {
+  left: 0;
+}
+
+.headerText {
+  color: #3E3E3C;
+  font-weight: 600;
+  font-size: 17px;
+  margin: auto;
+}
+
+.displayMenus {
+  display: none !important;
+}
+
+
+.hide {
+  display: none;
+}
+
+.cursorPointer {
+  cursor: pointer;
+}
+
+.dropdownList {
+  width: 15%;
+  background-color: white;
+  padding-left: 10px;
+  font-weight: 500
+}
+
+@media only screen and (max-width: 739px) {
+  .panel-Class {
+    height: 20px;
+  }
+}
+
+.child-filters-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.child-filters-block .child-filter {
+  margin: 5px 0px;
+}
+
+.filterSection1 {
+  background: #fff;
+}
+
+.sorting-dots {
+  position: absolute;
+  top: 6px;
+  left: 5px;
+}

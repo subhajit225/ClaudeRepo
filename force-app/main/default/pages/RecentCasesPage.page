@@ -1,0 +1,30 @@
+<apex:page standardController="Case" lightningStylesheets="true" extensions="RelatedListRecentCasesController" rendered="{!(Case.Account.Name != 'Rubrik' && Case.AccountId != Null && $User.UITheme == 'Theme3')}" showHeader="false" sidebar="false" >
+    <apex:slds />
+    <div class="slds-scope">
+    <apex:form >
+        <apex:pageBlock id="counter" rendered="{!Case.Account.Name != 'Rubrik'}">
+            <apex:pageBlockButtons >
+                <apex:commandButton id="OpenCases" action="{!getOpenCases}" value="Open Cases"/>
+                <apex:commandButton id="ClosedCases" action="{!getClosedCases}" value="Closed Cases"/>
+                <apex:commandButton id="RelatedCases" action="{!getRelatedCases}" value="Related Cases"/>             
+            </apex:pageBlockButtons>
+            <apex:pageBlockTable value="{!recentCaseList}" var="rec" rendered="{!Case.Account.Name != 'Rubrik'}">                
+                <apex:column headerValue="CaseNumber" width="10%">
+                <apex:outputLink value="{!URLFOR($Action.Case.View, rec.id)}" target="_new" > 
+                    <apex:outputText value="{!left(rec.CaseNumber,25)}">
+                    </apex:outputText> 
+                </apex:outputLink>
+                </apex:column>
+                <apex:column value="{!rec.Owner.Name}" />                
+                <apex:column value="{!rec.Status}"/>
+                <apex:column value="{!rec.Priority}"/>
+                <apex:column value="{!rec.Subject}"/>
+     <!--           <apex:column value="{!rec.Account.Name}"/> -->
+                <apex:column value="{!rec.Jira_Reference_urls__c}"/>
+                <apex:column value="{!rec.CreatedDate}" />
+                <apex:column value="{!rec.ClosedDate}" />
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+    </div>
+</apex:page>

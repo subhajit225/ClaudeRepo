@@ -1,0 +1,17 @@
+<apex:page standardController="Case" extensions="RelatedListStatusTrackerController" lightningStylesheets="true" showHeader="false" sidebar="false" rendered="{!$User.UITheme == 'Theme3'}">
+    <apex:slds />
+    <div class="slds-scope">
+    <apex:form >
+        <apex:pageBlock id="counter">
+            <apex:pageBlockTable value="{!caseTrackerList}" var="rec">
+                <apex:column value="{!rec.Tracking__c}"/>
+                <apex:column value="{!rec.Total_Time__c}"/>
+                <apex:column value="{!rec.Days__c}"/>
+                <apex:column value="{!rec.Hours__c}"/>
+                <apex:column value="{!rec.Minutes__c}"/>
+                <apex:column value="{!rec.Number_of_times_in_status__c}"/>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>   
+    </div>
+</apex:page>

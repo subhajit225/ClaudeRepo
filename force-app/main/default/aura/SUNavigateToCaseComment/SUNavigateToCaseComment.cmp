@@ -1,0 +1,11 @@
+<aura:component implements="flexipage:availableForAllPageTypes,lightning:isUrlAddressable" access="global">
+    <aura:attribute type="String" name="caseId"/>
+    <aura:attribute type="String" name="caseCommentVal"/>
+    <aura:attribute type="String" name="tabId"/>
+
+    <lightning:workspaceAPI aura:id="workspace" />
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>    
+    <div class="slds-card">
+        <c:sU_CreateCaseComment caseId="{!v.caseId}" caseComm = "{!v.caseCommentVal}" tabId="{!v.tabId}" />
+    </div>
+</aura:component>

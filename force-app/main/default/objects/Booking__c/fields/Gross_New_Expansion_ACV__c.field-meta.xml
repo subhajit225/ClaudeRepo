@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Gross_New_Expansion_ACV__c</fullName>
+    <label>Gross New/Expansion ACV</label>
+    <summarizedField>Booking_Line_Item__c.Gross_New_Expansion_ACV__c</summarizedField>
+    <summaryFilterItems>
+        <field>Booking_Line_Item__c.Impacts_Gross_Bookings__c</field>
+        <operation>equals</operation>
+        <value>True</value>
+    </summaryFilterItems>
+    <summaryForeignKey>Booking_Line_Item__c.Booking__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

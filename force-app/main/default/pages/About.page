@@ -1,0 +1,159 @@
+<apex:page standardStylesheets="false" sidebar="false" showheader="false"  title="About - Rubrik Community" applyBodyTag="false" cache="false" applyHtmlTag="true" controller="CustomerTemperatureController">
+    <link rel="shortcut icon" href="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/favicon.ico')}" type="image/x-icon" />
+    <link rel="icon" href="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/favicon1.png')}" type="image/png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+	
+    <c:visualstrapblock >
+        <style>
+            .aboutUsContainer{width:90%;padding:0 40px;margin: 50px auto;}
+            .actionColumn{display:none;}
+            .pbBody{padding: 5px;}
+            .visualstrap td, th {padding: 5px !important;}
+            .rolodex {padding: 4px !important;  }
+            .mainHeading{font-size: 36px;line-height: 38px;color:#333;font-family:gotham-light; border-bottom:1px solid #eee;padding-bottom: 20px;}
+            .Paragraph{font-size:16px;color:#666;font-family:"Gotham-light";margin:0px !important;}
+            .paragraphHeading{color:#666;font-family:"Gotham-medium";font-size:24px;padding:0px;}
+            .eachContainer{padding:50px 0px !important;border-bottom:1px solid #eee;}
+            .subContainer{padding:30px 0px !important;border-bottom:1px solid #eee;}
+        </style>
+        <c:siteheader />
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad">
+            <div class="aboutUsContainer" >
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
+                    <center class="mainHeading">Our Customer Advocates Ensure Your Success</center>
+                </div> 
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad eachContainer">
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 imageBox">
+                        <center><apex:image styleClass="img-responsive" value="{!$Resource.CEMPROLogo}" width=""/></center> 
+                    </div>  
+                    <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                        <p class="paragraphHeading" style="">CEMPRO Certified</p>
+                        <p class="Paragraph" style="padding-bottom:34px;">
+                            Rubrik has completely changed the cloud data management landscape. In addition to implementing new and disruptive approaches with our products, we’re innovating and changing the customer support experience. 
+                        </p>
+                        <p class="Paragraph" style="padding-bottom:34px;">
+                            Delighting customers is our highest priority. This starts by hiring the most experienced and brightest team members to own the success of our customers. Our trusted customer advocates come from storage and backup verticals, including advanced areas such as snapshots, replication, data recovery, networking, and VMware administration. 
+                        </p>
+                        <p class="Paragraph">
+                            All of our customer advocates have been trained and certified through the Customer Experience Management Professional (CEMPRO) certification. Certification for this first-of-its-kind training program demonstrates mastery of best practices and uniform standards of excellence that apply to implementing and managing customer satisfaction/loyalty and engagement.  
+                        </p>
+                    </div> 
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad eachContainer">
+                        <p class="paragraphHeading" style="">Real-time customer experience monitoring</p>
+                        <p class="Paragraph">
+                            At Rubrik, we truly care about our customers. All of our teams strive for the best experience both with our products and our customer interactions. Rubrik Support has implemented innovative tools to monitor the customer experience in real-time. For example, the Customer Thermometer tool was integrated with our Support Portal earlier this year, which surpasses basic case surveys for both timely follow up and proactive reach out. Rubrik Support measures various metrics including a Satisfaction Rating, Happiness Factor, Temperature Rating, and more.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad eachContainer">
+                        <p class="paragraphHeading" style="">Response Till Date : {!responseTillDate}</p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-12 col-md-12 col-sm-12 hidden-xs nopad">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad subContainer" style="display:table;">
+                        <span style="display:table-cell;vertical-align:middle;width:75%;">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <p class="paragraphHeading" style="">Satisfaction Rating</p>
+                                
+                                <p class="Paragraph">
+                                    At vital touch-points during a support case in progress, Rubrik Support measures customer satisfaction with one-click for Gold, Green, Yellow, and Red. Since December 2016 through {!CASE(MONTH(TODAY()),1, "January",2, "February",3, "March",4, "April",5, "May",6, "June",7, "July",8, "August",9, "September",10, "October",11, "November","December")} {!YEAR(TODAY())},
+                                    our customers have responded with {!mapCount2['Gold Star']}% for Gold (the highest customer satisfaction rating), {!mapCount2['Green Light']}% for Green, {!mapCount2['Yellow Light']}% for Yellow, and {!mapCount2['Red Light']}% for Red. Of course, our goal are all Gold responses!
+                                </p>
+                            </div>
+                        </span>
+                        <span style="width:25%;">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <c:CustomerTemperatureComponent ChartData="{!result2}" chartName="doughnut" mobileView="false"/>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 hidden-xs nopad">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad subContainer" style="display:table;">
+                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                            <apex:variable value="" var="asa"/>
+                            <c:CustomerTemperatureComponent ChartData="{!result1}" chartName="pie" mobileView="false"/>
+                        </div>
+                        <span style="display:table-cell;vertical-align:middle;">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <p class="paragraphHeading" style="">Happiness Factor </p>
+                                <p class="Paragraph">
+                                    Derived from the Satisfaction Rating, the Happiness Factor segments the responses between "happy" (e.g., Gold and Green) and "disappointed" (e.g., Yellow and Red) ratings. Since December 2016 through {!CASE(MONTH(TODAY()),1, "January",2, "February",3, "March",4, "April",5, "May",6, "June",7, "July",8, "August",9, "September",10, "October",11, "November","December")} {!YEAR(TODAY())}, our customers have given us a Happiness Factor of {!resultDegree1.result}%!
+                                </p>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 hidden-xs nopad">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad subContainer" style="display:table;">
+                        <span  class="" style="display:table-cell;vertical-align:middle;">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <p class="paragraphHeading" style="">Temperature Rating</p>
+                                <p class="Paragraph">
+                                    Our customer experience metrics are calculated in real-time. For example, the Temperature Rating is calculated as follows: The Customer Thermometer assigns a value of 0 to a Red response, 33 to a Yellow response, 66 to a Green response, and 99 to a Gold star response, and then divides this total by the number of responses received. So, for each Support touch-point, no matter how large or small, the system provides a Temperature Rating so that we can compare every interaction using the same metric. Therefore, a Temperature Rating of 66.6 or above indicates that our customers are universally satisfied. By tracking trends in the Temperature Rating over time, Rubrik can determine whether customer satisfaction levels across the board are improving, declining or staying the same, and take resulting action. As of {!CASE(MONTH(TODAY()),1, "January",2, "February",3, "March",4, "April",5, "May",6, "June",7, "July",8, "August",9, "September",10, "October",11, "November","December")} {!YEAR(TODAY())}, our customers have reported over {!resultDegree2.result}% for the Temperature Rating, which reflects the dedication we place in the best customer experience.
+                                </p>
+                            </div>
+                        </span>
+                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                            <c:CustomerTemperatureComponent ChartData="{!result3}" chartName="gauage" mobileView="false"/>            
+                        </div>
+                    </div>
+                </div>
+                <!-- mobile view -->
+                <div class="col-xs-12 hidden-lg hidden-sm hidden-md nopad">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad subContainer">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <c:CustomerTemperatureComponent ChartData="{!result2}" chartName="doughnut" mobileView="true"/>
+                        </div>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <apex:variable value="" var="asa"/>
+                            <p class="paragraphHeading" style="">Satisfaction Rating</p>
+                            <p class="Paragraph">
+                                At vital touch-points during a support case in progress, Rubrik Support measures customer satisfaction with one-click for Gold, Green, Yellow, and Red. Since December 2016 through {!CASE(MONTH(TODAY()),1, "January",2, "February",3, "March",4, "April",5, "May",6, "June",7, "July",8, "August",9, "September",10, "October",11, "November","December")} {!YEAR(TODAY())},
+                                our customers have responded with {!mapCount2['Gold Star']}% for Gold (the highest customer satisfaction rating), {!mapCount2['Green Light']}% for Green, {!mapCount2['Yellow Light']}% for Yellow, and {!mapCount2['Red Light']}% for Red. Of course, our goal are all Gold responses!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 hidden-lg hidden-sm hidden-md nopad">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad subContainer" style="display:table;">
+                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                            <c:CustomerTemperatureComponent ChartData="{!result1}" chartName="pie" mobileView="true"/>
+                        </div>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <p class="paragraphHeading" style="">Happiness Factor</p>
+                            <p class="Paragraph">
+                                Derived from the Satisfaction Rating, the Happiness Factor segments the responses between "happy" (e.g., Gold and Green) and "disappointed" (e.g., Yellow and Red) ratings. Since December 2016 through {!CASE(MONTH(TODAY()),1, "January",2, "February",3, "March",4, "April",5, "May",6, "June",7, "July",8, "August",9, "September",10, "October",11, "November","December")} {!YEAR(TODAY())}, our customers have given us a Happiness Factor of {!resultDegree1.result}%!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 hidden-lg hidden-sm hidden-md nopad">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad subContainer" >
+                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                            <c:CustomerTemperatureComponent ChartData="{!result3}" chartName="gauage" mobileView="true"/>  
+                            <br/>
+                            <center style="font-size: 22px;color: #D7C575;">
+                                {!resultDegree2.result}% 
+                            </center>
+                        </div>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <p class="paragraphHeading" style="">Temperature Rating</p>
+                            <p class="Paragraph">
+                                Our customer experience metrics are calculated in real-time. For example, the Temperature Rating is calculated as follows: The Customer Thermometer assigns a value of 0 to a Red response, 33 to a Yellow response, 66 to a Green response, and 99 to a Gold star response, and then divides this total by the number of responses received. So, for each Support touch-point, no matter how large or small, the system provides a Temperature Rating so that we can compare every interaction using the same metric. Therefore, a Temperature Rating of 66.6 or above indicates that our customers are universally satisfied. By tracking trends in the Temperature Rating over time, Rubrik can determine whether customer satisfaction levels across the board are improving, declining or staying the same, and take resulting action. As of {!CASE(MONTH(TODAY()),1, "January",2, "February",3, "March",4, "April",5, "May",6, "June",7, "July",8, "August",9, "September",10, "October",11, "November","December")} {!YEAR(TODAY())}, our customers have reported over {!resultDegree2.result}% for the Temperature Rating, which reflects the dedication we place in the best customer experience.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- mobile view -->
+            </div>
+        </div>
+        <c:sitefooter />
+    </c:visualstrapblock>
+
+</apex:page>

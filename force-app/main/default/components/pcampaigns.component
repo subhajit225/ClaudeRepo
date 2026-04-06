@@ -1,0 +1,13 @@
+<apex:component controller="PartnerCommunityHomeController">
+
+  <h3 class="sectionHeaders">Marketing Campaigns<br/></h3>
+  <apex:repeat value="{!campaigns}" var="mc">
+  <ul class="links">
+ <li class="listItems">
+
+<a href="{!$Page.ContentView}?id={!mc.id}" Class="lightlink">{!mc.title}</a>
+
+ </li>
+ </ul>
+ </apex:repeat>
+</apex:component>

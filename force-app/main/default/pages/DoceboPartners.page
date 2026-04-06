@@ -1,0 +1,91 @@
+<apex:page id="hs_tab" standardStylesheets="false" sidebar="false" showheader="false" title="Docebo">
+ <!-- <apex:includeScript value="{!URLFOR($Resource.highspot__hs_resource, '/jquery-2.1.1.min.js')}" />-->
+    <apex:includeScript value="{!URLFOR($Resource.jquery_2_1_1, '/jquery-2.1.1.min.js')}" />
+  <script type='text/javascript'>
+    $(function() { 
+        // var src = "https://rubriksandbox.docebosaas.com/partners";
+        var src = '{!URLFOR($Label.DoceboPartnerUrl)}';
+      var target = hs.getParams()['target'];
+      if(target && target.length) {
+        src = target; 
+      } 
+      if(src.indexOf('http:') === 0) {
+        src = src.replace('http:','https:');
+      }
+      $('#hs-frame').attr('src', src);
+
+      hs.setContentHeight(); 
+      $(window).resize(function(){ hs.setContentHeight(); });   
+    });
+
+    var hs = {
+      isLightning: function() {
+        return $('.hs-lightning-link').attr('href').indexOf('javascript:srcUp') === 0;
+      },
+      isCommunity: function() {
+        // detect if hosted in a Community
+        var host = location.hostname.split('.');
+        var n = host.length;
+        return (n > 2) && host[n-3] !== 'visual' && host[n-2] === 'force' && host[n-1] === 'com';
+      },
+      
+      setContentHeight: function() {
+        var h = $(window).height() - $('.bPageHeader').height() - $('.bPageFooter').height();
+        if (hs.isLightning()) {
+          h = h - 6;
+          $('body').css({
+            'padding': '0', 
+            'border-top': '6px solid #f7f9fb', 
+            'box-sizing': 'border-box'
+          });
+        } else {
+          h = h - 54;   // adjust height for Classic footer
+          $('#bodyTable').css('padding-bottom', 0);
+          $('#bodyTable td.noSidebarCell').css('padding', 0);
+        }
+        $('#hs-frame-container').css('height', Math.max(h, 480));
+      },
+      
+      getParams: function() {
+        var target = '';
+        // first check local storage for recent tab href
+        try {
+          if ((typeof Storage !== 'undefined') && localStorage) {
+            var href = localStorage['hs_tab_href'] || '';
+            if(href.length > 0) { 
+              timestamp = localStorage['hs_timestamp'] || 0;
+              timediff = Date.now() - timestamp;
+              if(Date.now() - timestamp < 10000) {
+                target = decodeURIComponent(href);
+                localStorage['hs_tab_href'] = '';
+              }
+              // console.log(timediff, target);
+            }
+          }
+        } catch(e) { }
+
+        if(target.length === 0) {
+          // check query params from window location for target
+          var qs = window.location.search;
+          if (qs && qs.length) {
+            var params = qs.substr(1).split("&");
+            for (var i in params) {
+              var p = params[i].split("=");
+              if(p[0] === 'target') {
+                target = decodeURIComponent(p[1]);
+              }
+            }
+          }
+        }
+
+        return { target: target };
+      }
+    }
+  </script>
+  
+  <div id="hs-frame-container" style="width:100%; height:100%;">
+    <apex:iframe id="hs-frame" height="100%" width="100%" scrolling="true" />
+    <!-- hidden link to detect hosted in Lightning -->
+    <apex:outputLink styleClass="hs-lightning-link" style="display:none" value="{!$Label.DoceboUrl}">Docebo</apex:outputLink>
+  </div>
+</apex:page>

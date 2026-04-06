@@ -1,0 +1,94 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+.containerred,
+.containeryellow,
+.containergreen,
+.containerblue {
+  display: flex;
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border-radius: 28px;
+}
+
+.containerred::after {
+  content: attr(data-pct) '%';
+  font-size: 10px;
+  position: absolute;
+  color: #ff2b2b !important;
+  top: 21px;
+  left: 19px;
+  transform: translate(0, 0);
+}
+
+.containeryellow::after {
+  content: attr(data-pct) '%';
+  font-size: 10px;
+  position: absolute;
+  color: #ffc71d !important;
+  top: 21px;
+  left: 19px;
+  transform: translate(0, 0);
+}
+
+.containergreen::after {
+  content: attr(data-pct) '%';
+  font-size: 10px;
+  position: absolute;
+  color: #4ac889 !important;
+  top: 21px;
+  left: 16px;
+  transform: translate(0, 0);
+}
+
+.containerblue::after {
+  content: attr(data-pct) '%';
+  font-size: 10px;
+  position: absolute;
+  color: #6c93ff !important;
+  top: 21px;
+  left: 19px;
+  transform: translate(0, 0);
+}
+
+svg circle {
+  stroke-dashoffset: 0;
+  stroke: #dee7ff;
+  stroke-width: 0.34em;
+  transition: stroke-dashoffset, linear;
+}
+
+.progressbargreen {
+  stroke: #dee7ff !important;
+}
+
+.progressbarblue {
+  stroke: #dee7ff !important;
+}
+
+.progressbaryellow {
+  stroke: #dee7ff;
+}
+
+.progressbarred {
+  stroke: #dee7ff;
+}
+
+.progressvaluered {
+  stroke: #ff2b2b !important;
+}
+
+.progressvaluegreen {
+  stroke: #4ac889 !important;
+}
+
+.progressvalueblue {
+  stroke: #6c93ff !important;
+}
+
+.progressvalueyellow {
+  stroke: #ffc71d !important;
+}

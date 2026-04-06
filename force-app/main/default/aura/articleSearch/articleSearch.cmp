@@ -1,0 +1,156 @@
+<aura:component controller="attachArticleToCase"  implements="force:appHostable,forceCommunity:availableForAllPageTypes,force:hasRecordId,lightning:actionOverride,lightning:isUrlAddressable,flexipage:availableForRecordHome,flexipage:availableForAllPageTypes" access="global">
+    <aura:attribute name="articleList" type="Object[]"/>
+    <aura:attribute name="kbIds" type="String[]"/>
+    <aura:attribute name="activeSections" type="List" default="['A','B']" />
+    <aura:attribute name="existingArticles" type="Object[]"/>
+    <aura:attribute name="isBVisible" type="Boolean" default="false" />
+    <aura:attribute name="noResult" type="Boolean" default="false"/>  
+    <aura:attribute name="articleNumber" type="String"/>  
+    <aura:attribute name="type" type="String"/>  
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="theme" type="String" default="Theme4u"/>
+    <aura:attribute name="currentPageRecord" type="Object"/>
+    <aura:attribute name="currentPageNumber" type="Integer" default="1"/>
+    <aura:attribute name="pageSize" type="Integer" default="25"/>
+    <aura:attribute name="totalPages" type="Integer" default="false"/>
+    <aura:attribute name="totalPagesList" type="List" default="false"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <lightning:workspaceAPI aura:id="workspace"/>
+    <lightning:layout >
+        <lightning:layoutItem  padding="around-large" size="12">
+            <div aria-labelledby="feedbackform">
+                <!-- BOXED AREA -->
+                
+                <div class="slds-grid">
+                    <div class="slds-medium-size_3-of-6" style="margin-right:10px;" onkeyup="{!c.getArticlesEnter}">
+                        <lightning:input class="labelHide" type="text" aura:id="Subject" accesskey="Subject" value="{!v.articleNumber}" /> 
+                    </div>
+                    <div class="slds-medium-size_3-of-6">
+                        <lightning:button variant="brand" class="supportBtn btnPosition" onclick="{!c.getArticlesCLick}">Find Article</lightning:button>
+                    </div>
+                </div>
+            </div>
+        </lightning:layoutItem>
+    </lightning:layout>
+    <div >
+        <lightning:accordion aura:id="accordion" activeSectionName="A" allowMultipleSectionsOpen="true">
+            <lightning:accordionSection name="A" label="Existing Articles">
+                <aura:if isTrue="{!and(and(v.existingArticles!=null,v.existingArticles!=undefined),v.existingArticles.length>0)}">
+                    <table  class="slds-table slds-table--bordered slds-table--striped">
+                        <thead class="font">
+                            <tr>
+                                <th scope="col"><span >Action</span></th>
+                                <th scope="col"><span >Article Number</span></th>
+                                <th scope="col"><span >Title</span></th>
+                                <th scope="col"><span >Status</span></th>
+                                <th scope="col" style="white-space:normal;"><span >Modified Date</span></th>
+                                <th scope="col"><span >Created By</span></th>
+                                
+                                <th scope="col" style="white-space:normal;"><span >Created Date</span></th>
+                                <th scope="col"><span >Summary</span></th>
+                            </tr>
+                        </thead>
+                        <tbody class="font">
+                            <aura:iteration items ="{!v.existingArticles}" var="each">
+                                <tr>
+                                    <td>
+                                        <button style="white-space: inherit;" type="button" class="slds-button slds-button_brand attachBtn" onclick="{!c.removeArticle}" id="{!each.KnowledgeArticleId }">Remove</button> 
+                                    </td>
+                                    <td><a href="{!'/'+each.Id}" target="_blank"> {!each.ArticleNumber}</a></td>
+                                    <td style="white-space: unset;">{!each.Title}</td>
+                                    <td style="white-space: unset;">{!each.PublishStatus}</td>
+                                    <td><ui:outputDateTime   value="{!each.LastModifiedDate}"/></td>
+                                    <td style="white-space: normal;">{!each.CreatedBy.Name}</td>
+                                    
+                                    <td><ui:outputDateTime   value="{!each.CreatedDate}"/></td>
+                                    <td style="white-space: unset;">{!each.Summary}</td>
+                                </tr>
+                                
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                </aura:if>
+            </lightning:accordionSection>
+            <lightning:accordionSection name="B" label="Articles To Attach" >
+                <aura:if isTrue="{!and(and(v.articleList!=null,v.articleList!=undefined),v.articleList.length>0)}">
+                    <button style="white-space: inherit;" type="button" class="slds-button slds-button_brand attachBtn" onclick="{!c.attachToCase}" >Attach Article</button> 
+                    <div style="overflow-x: auto;height:300px;">
+                        <table  class="slds-table slds-table--bordered slds-no-row-hover" style="margin-top: 20px;overflow:hidden;">
+                            <thead class="font">
+                                <tr>
+                                    
+                                    <th scope="col"><span >Action</span></th>
+                                    <th scope="col" style="white-space:normal;"><span >Article Number</span></th>
+                                    <th scope="col"><span >Title</span></th>
+                                    <th scope="col"><span >Status</span></th>
+                                    <th scope="col"><span >Modified Date</span></th>
+                                    <th scope="col"><span >Created By</span></th>
+                                    
+                                    <th scope="col"><span >Created Date</span></th>
+                                    <th scope="col"><span >Summary</span></th>
+                                </tr>
+                            </thead>
+                            <tbody class="font">
+                                <aura:iteration items ="{!v.currentPageRecord}" var="each">
+                                    <tr>
+                                        <td >
+                                            <lightning:input type="checkbox"  name="input1" onchange="{!c.updateKbIds}" accesskey="{!each.KnowledgeArticleId}"/>
+                                        </td>
+                                        <td><a href="{!'/'+each.Id}" target="_blank"> {!each.ArticleNumber}</a></td>
+                                        <td style="white-space:unset !important;width:300px;">{!each.Title}</td>
+                                        <td style="white-space:unset !important;width:300px;">{!each.PublishStatus}</td>
+                                        <td style="white-space: unset !important;"><ui:outputDateTime   value="{!each.LastModifiedDate}"/></td>
+                                        <td style="white-space: normal;">{!each.CreatedBy.Name}</td>
+                                        
+                                        <td style="white-space: unset !important;"><ui:outputDateTime   value="{!each.CreatedDate}"/></td>
+                                        <td style="white-space: unset;width:300px;">{!each.Summary}</td>
+                                        
+                                    </tr>
+                                </aura:iteration>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="slds-grid slds-gutters floatrow">
+                    <div class="slds-size_4-of-4 "    style=" padding-top: 10px;padding-bottom:8px;text-align:center;">
+                        <div class="paginationBlock">
+                            <aura:if isTrue="{!not(v.currentPageNumber == 1)}">
+                                <lightning:buttonIcon variant="bare" iconName="utility:chevronleft" alternativeText="View Left"
+                                                      disabled="{! v.currentPageNumber == 1}" onclick="{!c.onPrev}" />
+                            </aura:if>
+                            <div class="pagination">
+                                <aura:if isTrue="{!or(  v.currentPageNumber >= 5)}">
+                                    <a onclick="{!c.processMe}" name="1" class="{!if(v.currentPageNumber == pagi,'active','')}">1 </a>
+                                    <a>... </a>
+                                </aura:if>
+                                <aura:iteration items="{!v.totalPagesList}" var="pagi"  indexVar="index">
+                                    
+                                    <aura:if isTrue="{!v.currentPageNumber == pagi+ 1}">
+                                        <a onclick="{!c.processMe}" name="{!index+1}" class="{!if(v.currentPageNumber == pagi,'active','')}">{!pagi} </a>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.currentPageNumber == pagi}">
+                                        <a onclick="{!c.processMe}" name="{!index+1}" class="{!if(v.currentPageNumber == pagi,'active','')}">{!pagi} </a>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.currentPageNumber == pagi -1 }">
+                                        <a onclick="{!c.processMe}" name="{!index+1}" class="{!if(v.currentPageNumber == pagi,'active','')}">{!pagi} </a>
+                                    </aura:if>
+                                </aura:iteration>
+                                <aura:if isTrue="{!or(  v.totalPages -1 > v.currentPageNumber)}">
+                                    <a>... </a>
+                                    <a onclick="{!c.processMe}" name="{!v.totalPages}" class="{!if(v.currentPageNumber == pagi,'active','')}">{!v.totalPages} </a>
+                                </aura:if>
+                                <lightning:buttonIcon variant="bare" iconName="utility:chevronright" alternativeText="View Right"
+                                                      disabled="{! v.currentPageNumber == v.totalPages}" onclick="{!c.onNext}" />
+                            </div>                    
+                        </div>            
+                    </div>
+                </div>
+                </aura:if>
+                <aura:if isTrue="{!v.noResult}">
+                    <p>Either this article is already attached or there is no article found w.r.t search.</p>
+                </aura:if>
+            </lightning:accordionSection> 
+        </lightning:accordion>
+        
+    </div>
+</aura:component>

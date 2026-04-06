@@ -1,0 +1,96 @@
+<template>
+    <div class="slds-card">
+        <lightning-layout multiple-rows="true" horizontal-align="spread">
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+                <div class="slds-p-around_large">
+                    <span class="heading-36">
+                        Deal Registration Highlight Report
+                    </span>
+                    <div class="disclaimer">
+                        *Showing current fiscal year deals
+                        <span>
+                            <template if:true={showManageServiceButton}>
+                                <lightning-button variant="brand" label="Managed Service Engagement Request" title="Managed Service Engagement Request" onclick={handleClickManagedService} class="slds-p-left_x-small slds-p-top_medium slds-float_right"></lightning-button>
+                            </template>
+                            <lightning-button variant="brand" label="Deal Registration Form" title="Deal Registration Form" onclick={handleClick} class="slds-p-top_medium slds-float_right"></lightning-button>
+                        </span>
+                    </div>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="6" small-device-size="12" medium-device-size="6" large-device-size="6"
+                class="slds-p-around_medium">
+                <div class="pipelineReportCard">
+                    <span class="pipelineCardNumber">{submittedDRCount}
+                    </span>
+                    <span class="pipelineCardText">
+                        <p>Submitted Deals</p>
+                    </span>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="6" small-device-size="12" medium-device-size="6" large-device-size="6"
+                class="slds-p-around_medium">
+                <div class="pipelineReportCard">
+                    <span class="pipelineCardNumber">
+                        {approvedDRCount}
+                    </span>
+                    <span class="pipelineCardText">
+                        <p>Approved Deals</p>
+                    </span>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12"
+                class="slds-p-around_medium">
+                <table class="slds-table slds-table_cell-buffer"
+                    aria-labelledby="element-with-table-label other-element-with-table-label">
+                    <thead>
+                        <tr>
+                            <th class="account-header-col" scope="col">
+                                <div title="Account Name">ACCOUNT NAME</div>
+                            </th>
+                            <th class="number-header-col" scope="col">
+                                <div title="DR Number">DR NUMBER</div>
+                            </th>
+                            <th scope="col">
+                                <div title="Status">STATUS</div>
+                            </th>
+                            <th scope="col">
+                                <div title="Expiration Date">EXPIRATION DATE</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <template for:each={dealRegList} for:item="deal">
+                        <tbody key={deal.Id}>
+                            <tr>
+                                <td data-label="Account Name">
+                                    <div class="account-body-col">
+                                        {deal.Company__c}
+                                    </div>
+                                </td>
+                                <td data-label="DR Number">
+                                    <div>
+                                        {deal.Name}
+                                    </div>
+                                </td>
+                                <td data-label="Status">
+                                    <div>
+                                        {deal.Deal_Registration_Status__c}
+                                    </div>
+                                </td>
+                                <td data-label="Expiration Date">
+                                    <div>
+                                        {deal.Deal_Registration_Expiration__c}
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </template>
+                </table>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12"
+                class="slds-p-around_large">
+                <a class="pipelineViewAll" onclick={handleViewAll}>View All <img class="link-arrow-img"
+                        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAtCAYAAADV2ImkAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAD3SURBVHgB7daxDcJADEBR+0BAGZiAESghHRtRAkIiaRAdMzABjEDFGmQClJImOXAqCoKcu+MuEn6tLeUrsqIACCGEEEKIPxZNl+NRvN6CIwq8wMRVtKdg4ibaYzCxj/YcTOyiAwQT8+hAwcQsGjlLw3hzQignYAzH9TOd3K+7FJi6nCWFOtL620NtVG8auNEBT+LdK3q2WnA2WxIMWdnXZ85iG4KzslfM88s+4yyzbhixSEGrIxjQiBFoONSMG8VWLfBj9POjVOf2YdQ4loQ6CaNYEiLYOJb4DraKJT6DrWOJr2AnsYT1WbMyGOQlPJzECiGEEKJ1nnbLYBZlR9+tAAAAAElFTkSuQmCC"></a>
+            </lightning-layout-item>
+        </lightning-layout>
+    </div>
+</template>

@@ -1,0 +1,37 @@
+<!-- VisualForce Page Responsible for Entry of Customer Records -->
+<apex:page standardController="Order" extensions="OrderShippingAddressExtn" showHeader="false" sidebar="false"  lightningStylesheets="true"> 
+    <apex:slds />
+    <apex:form >
+        
+        <apex:pageBlock >
+            <apex:pageBlockSection title="Select Shipping Address" collapsible="false">
+                <apex:selectList size="1" value="{!selectedAddress}" >
+                    <apex:actionSupport event="onchange" action="{!setAddress}" reRender="AddressTable"/>
+                    <apex:selectOptions value="{!SAddresses}"></apex:selectOptions>
+                </apex:selectList>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockTable id="AddressTable" value="{!listAddress}" var="address">
+                <apex:column headerValue="Shipping Street">
+                    <apex:inputField value="{!address.Shipping_Street__c}"/>
+                </apex:column>
+                <apex:column headerValue="Shipping City">
+                    <apex:inputField value="{!address.Shipping_City__c}"/>
+                </apex:column>
+                <apex:column headerValue="Shipping State">
+                    <apex:inputField value="{!address.Shipping_State__c}"/>
+                </apex:column>
+                <apex:column headerValue="Shipping Country">
+                    <apex:inputField value="{!address.Shipping_Country__c}"/>
+                </apex:column>
+                <apex:column headerValue="Shipping Postal Code">
+                    <apex:inputField value="{!address.Shipping_Postal_Zip_Code__c}"/>
+                </apex:column>
+            </apex:pageBlockTable>
+            <apex:pageBlockButtons location="bottom">
+                <apex:commandButton value="Update Shipping Address" action="{!updateOrder}" />
+                <apex:commandButton value="Cancel" action="{!closePopup}"/>
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

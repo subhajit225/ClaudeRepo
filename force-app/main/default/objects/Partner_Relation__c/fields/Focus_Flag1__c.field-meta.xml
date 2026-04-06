@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Focus_Flag1__c</fullName>
+    <formula>IF(
+NOT(Opportunity__r.IsClosed),
+Partner_Account__r.Focused_Partner__c,
+Focus_Flag__c 
+)</formula>
+    <label>(Deprecate) Focus Flag</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

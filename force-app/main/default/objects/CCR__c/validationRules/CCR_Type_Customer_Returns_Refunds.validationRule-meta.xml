@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CCR_Type_Customer_Returns_Refunds</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    ISPICKVAL(CCR_Type__c ,&apos;Customer Returns / Refunds&apos;), 
+    OR( ISBLANK( Opportunity__c ),
+        Booking__r.Opportunity__r.Id  &lt;&gt;  Opportunity__r.Id, 
+        Booking__r.RecordType.Name  &lt;&gt; &apos;Booking&apos;,
+        Account_Name__c &lt;&gt;  Booking__r.Account_Name__c,
+        Impacts_Commission__c &lt;&gt; TRUE
+     )
+   )</errorConditionFormula>
+    <errorMessage>1)Opportunity and it&apos;s related Original Booking are required 
+2)AccountName should be equal to Account on Booking 
+3)Impacts Commisions should be checked for CCR type &quot;Customer Returns / Refunds&quot;</errorMessage>
+</ValidationRule>

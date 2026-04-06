@@ -1,0 +1,4 @@
+<apex:component controller="CloudOn_OrderProductNames" access="global">
+  <apex:attribute name="OrderId" description="Order id" type="ID" assignTo="{!ordid}" />
+  <apex:outputText value="{!productNames}"/>
+</apex:component>

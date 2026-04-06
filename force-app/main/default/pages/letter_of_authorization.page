@@ -1,0 +1,24 @@
+<apex:page applyBodyTag="false" showHeader="false" controller="PC_LetterOfAuthorization" renderAs="PDF">
+    <apex:stylesheet value="{!URLFOR($Resource.PartnerCommunityResource, 'PartnerCommunityResource/Stylesheets/PartnerCommunityCSS.css')}"/>
+    <div style="box-shadow: 0px 20px 60px rgb(7 15 82 / 20%);border-radius: 10px;border: 0; padding: 20px 5px 0px;">
+        <div style="text-align:right;">
+            <apex:image url="{!URLFOR($Resource.PC_LOA, 'RubrikLogo.png')}" width="150" height="50"/>
+            <div>
+                <apex:outputText value="{!$Label.PC_RubrikAddress}" escape="false" style="font-size:15px; color:#000000;"/>
+            </div>
+        </div>
+        <div style="font-family: 'Inter-Regular';font-style: normal;font-weight: 400;font-size: 20px;line-height: 150%;color: #6C7174;margin-top: 55px;">
+            <div>
+                {!currentMonth} {!DAY(TODAY())}, {!YEAR(TODAY())}
+                <br/>
+            </div>
+            <div>
+                <apex:outputText value="{!letterContent}" style="font-weight:bold;font-family: 'Inter-Regular';font-style: normal;font-weight: 400;font-size: 20px;line-height: 150%;color: #6C7174;margin-top: 55px;" escape="false" /> 
+            </div>
+            <div>
+                <apex:image url="{!URLFOR($Resource.PC_LOA, 'GhazalAsifSignature.png')}" width="150" height="40"/>
+                <apex:outputText value="{!$Label.PC_LetterSignature}" escape="false"/>
+            </div>
+        </div>
+    </div>
+</apex:page>

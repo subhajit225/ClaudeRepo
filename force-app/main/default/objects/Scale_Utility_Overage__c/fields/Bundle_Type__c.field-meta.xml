@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Bundle_Type__c</fullName>
+    <description>Check if the license order item belongs to M365H or not</description>
+    <externalId>false</externalId>
+    <formula>IF(INCLUDES(License_Order_Product__r.Product2.Bundle_Features__c, &apos;M365H&apos;) , &apos;M365H&apos;, &apos;Non-M365&apos;)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Bundle Type</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

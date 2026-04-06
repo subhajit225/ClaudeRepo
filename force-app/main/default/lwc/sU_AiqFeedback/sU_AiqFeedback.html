@@ -1,0 +1,128 @@
+<template>
+	<div class="feedback-button-container">
+		<button disabled={positiveButtonDisabler} class="positive-feedback-container" onclick={positiveFeedbackHandler} data-index={feedbackLocation}>
+			<svg id="Group_42048" data-name="Group 42048" xmlns="http://www.w3.org/2000/svg" width="22" height="22"
+				viewBox="0 0 22 22">
+				<g id="Group_42039" data-name="Group 42039">
+					<circle class="positive-feedback-svg-circle" id="Ellipse_87" data-name="Ellipse 87" cx="11" cy="11"
+						r="11" fill="rgba(171,248,184,0.43)" />
+				</g>
+				<path id="Icon_feather-thumbs-up" data-name="Icon feather-thumbs-up" class="positive-feedback-svg-path"
+					d="M8.514,6.216V4.378A1.378,1.378,0,0,0,7.135,3L5.3,7.135V12.19H10.48a.919.919,0,0,0,.919-.781l.634-4.135a.919.919,0,0,0-.919-1.057ZM5.3,12.19H3.919A.919.919,0,0,1,3,11.271V8.054a.919.919,0,0,1,.919-.919H5.3"
+					transform="translate(3.418 3.393)" fill="none" stroke="#16a842" stroke-linecap="round"
+					stroke-linejoin="round" stroke-width="1" />
+			</svg>
+		</button>
+		<button disabled={negativeButtonDisabler} class="negative-feedback-container" onclick={negativeFeedbackButtonHandler} data-index={feedbackLocation}>
+			<svg id="Group_42040" data-name="Group 42040" xmlns="http://www.w3.org/2000/svg" width="22" height="22"
+				viewBox="0 0 22 22">
+				<g id="Group_42042" data-name="Group 42042">
+					<circle id="Ellipse_537" data-name="Ellipse 537" cx="11" cy="11" r="11"
+						class="negative-feedback-svg-circle" transform="translate(22 22) rotate(180)"
+						fill="rgba(255,213,214,0.43)" />
+					<path id="Icon_feather-thumbs-up1" data-name="Icon feather-thumbs-up"
+						class="negative-feedback-svg-path"
+						d="M8.514,6.216V4.378A1.378,1.378,0,0,0,7.135,3L5.3,7.135V12.19H10.48a.919.919,0,0,0,.919-.781l.634-4.135a.919.919,0,0,0-.919-1.057ZM5.3,12.19H3.919A.919.919,0,0,1,3,11.271V8.054a.919.919,0,0,1,.919-.919H5.3"
+						transform="translate(18.462 19.583) rotate(180)" fill="none" stroke="#e91b37"
+						stroke-linecap="round" stroke-linejoin="round" stroke-width="1" />
+				</g>
+			</svg>
+		</button>
+		<div class="positive-thankyou">
+			<svg width="18" height="18" viewBox="0 0 15 15" fill="none">
+				<path fill-rule="evenodd" clip-rule="evenodd"
+					d="M0 7.5C0 3.35786 3.35786 0 7.5 0C11.6421 0 15 3.35786 15 7.5C15 11.6421 11.6421 15 7.5 15C3.35786 15 0 11.6421 0 7.5ZM7.0718 10.7106L11.3905 5.31232L10.6096 4.68762L6.92825 9.2893L4.32012 7.11586L3.67993 7.88408L7.0718 10.7106Z"
+					fill="#14A842" />
+			</svg>
+			<span>Thank You!</span>
+		</div>
+	</div>
+	<div class="negative-feedback-modal">
+		<div class="negative-feedback-modal-container">
+			<div>
+				<svg width="63" height="63" viewBox="0 0 63 63">
+					<g id="Group_42120" data-name="Group 42120" transform="translate(-699 -254)">
+						<circle id="Ellipse_538" data-name="Ellipse 538" cx="31.5" cy="31.5" r="31.5"
+							transform="translate(699 254)" fill="#ffeded" />
+						<path id="12" data-name="Icon feather-thumbs-up"
+							d="M15.258,8.9V3.815A3.815,3.815,0,0,0,11.444,0L6.358,11.444V25.43H20.7a2.543,2.543,0,0,0,2.543-2.162L25,11.825A2.543,2.543,0,0,0,22.455,8.9Zm-8.9,16.53H2.543A2.543,2.543,0,0,1,0,22.887v-8.9a2.543,2.543,0,0,1,2.543-2.543H6.358"
+							transform="translate(743.806 299.221) rotate(180)" fill="none" stroke="#e91b37"
+							stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" />
+					</g>
+				</svg>
+			</div>
+			<h3>Please select the issue you are facing<span>*</span></h3>
+			<div class="negative-feedback-modal-form">
+				<ul class="negative-feedback-modal-form-options">
+					<template for:each={negativeFeedbackOptions} for:item="options" for:index="index">
+						<li key={options} onclick={negativeFeedbackOptionsHandler} data-index={options.data} class="negative-options-li">
+							<div class="checked-box">
+								<svg class="tick-svg" width="9.409" height="6.703" viewBox="0 0 9.409 6.703">
+									<path id="Icon_feather-check" data-name="Icon feather-check"
+										d="M13.994,9,8.5,14.5,6,12" transform="translate(-5.293 -8.293)" fill="none"
+										stroke="#f48b00" stroke-linecap="round" stroke-linejoin="round"
+										stroke-width="1" />
+								</svg>
+							</div>
+							{options.data}
+							<svg class="more-info-svg" width="11.488" height="11.488" viewBox="0 0 13 13">
+								<g id="Icon_feather-info" data-name="Icon feather-info" transform="translate(-2.256 -2.256)">
+									<path id="Path_25709" data-name="Path 25709" d="M13.488,8.244A5.244,5.244,0,1,1,8.244,3,5.244,5.244,0,0,1,13.488,8.244Z" transform="translate(-0.244 -0.244)" fill="none" stroke="#5b5d5d" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+									<path id="Path_25710" data-name="Path 25710" d="M18,20.1V18" transform="translate(-9.756 -10.061)" fill="none" stroke="#5b5d5d" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+									<path id="Path_25711" data-name="Path 25711" d="M18,12h0" transform="translate(-9.756 -5.854)" fill="none" stroke="#5b5d5d" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+								</g>
+							</svg>
+							<div class="negative-li-hoverPopup">
+								{options.metaData}
+							</div>
+						</li>
+					</template>
+				</ul>
+				<textarea class="feedback-textarea" type="text" placeholder="Please share your thoughts"></textarea>
+				<div class="negative-modal-form-buttons">
+					<button onclick={handleSaveFeedbackModal} disabled={negativeSaveButtonDisabler}>Save</button>
+					<button onclick={closeFeedbackModalHandler}>
+						Cancel
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="negative-feedback-thanks-modal-backdrop">
+		<div class="negative-feedback-thanks-modal">
+			<section class="header-div">
+				<svg width="50.953" height="50.181" viewBox="0 0 50.953 50.181">
+					<g id="Icon_feather-check-circle" data-name="Icon feather-check-circle"
+						transform="translate(2.005 2.027)">
+						<path id="Path_25615" data-name="Path 25615"
+							d="M49.12,23.943v2.121A23.06,23.06,0,1,1,35.445,4.988" transform="translate(-3 -2.991)"
+							fill="none" stroke="#52d40e" stroke-linecap="round" stroke-linejoin="round"
+							stroke-width="4" />
+						<path id="Path_25616" data-name="Path 25616" d="M43.478,6,20.418,29.083,13.5,22.165"
+							transform="translate(2.642 -1.374)" fill="none" stroke="#52d40e" stroke-linecap="round"
+							stroke-linejoin="round" stroke-width="4" />
+					</g>
+				</svg>
+			</section>
+			<section class="thankyouModal-content">
+				<h6>Thank you for your valuable feedback.</h6>
+				<p>
+					Our team is dedicated to continuously monitoring and refining the content to enhance your
+					experience.
+				</p>
+			</section>
+		</div>
+	</div>
+	<div if:true={showConfirmationModal} class="popup-case-summary">
+		<div class="negative-feedback-thanks-modal confirmation-modalHolder">
+			<section class="confirmation-modal">
+				<h3>Are you sure you want to cancel?</h3>
+				<p>Your feedback will not be recorded if you cancel.</p>
+			</section>
+			<section class="confirmation-modalButtons">
+				<button onclick={confirmationHandler} data-index="keepEditing">Keep Editing</button>
+				<button onclick={confirmationHandler} data-index="cancelConfirmation">Cancel Anyway</button>
+			</section>
+		</div>
+	</div>
+</template>

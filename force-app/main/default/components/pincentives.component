@@ -1,0 +1,13 @@
+<apex:component controller="PartnerCommunityHomeController">
+
+  <h2 class="sectionHeaders">Incentives<br/></h2>
+  <apex:repeat value="{!Incentives}" var="in">
+  <ul class="links">
+ <li class="listItems">
+
+ <!--<a href="{!in.id}" Class="lightlink">{!in.Name}</a>-->
+<a href="/{!in.id}" Class="lightlink">{!in.Name}</a>
+ </li>
+ </ul>
+ </apex:repeat>
+</apex:component>

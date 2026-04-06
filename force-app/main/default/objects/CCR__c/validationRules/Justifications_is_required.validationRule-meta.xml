@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Justifications_is_required</fullName>
+    <active>true</active>
+    <description>Replaced Justifications__c with CCR_Subtype__c for SAL26-441</description>
+    <errorConditionFormula>AND(
+    RecordType.DeveloperName = &apos;Sales_CCR&apos;, ISBLANK(TEXT(CCR_Subtype__c)),
+    ISPICKVAL(CCR_Type__c, &apos;Compensation Exception&apos;)
+    )</errorConditionFormula>
+    <errorMessage>CCR Subtype is required</errorMessage>
+</ValidationRule>

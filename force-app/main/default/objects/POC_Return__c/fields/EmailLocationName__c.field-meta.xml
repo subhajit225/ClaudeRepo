@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>EmailLocationName__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(TEXT(Location__c) ==&apos;EMEA&apos;, &apos;Amsterdam 2B Refurb Primary&apos;,  IF(TEXT(Location__c) ==&apos;AMERICA&apos;, &apos;Sacramento 2B Refurb Primary&apos;, &apos;&apos;) )</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>EmailLocationName</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

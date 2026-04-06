@@ -1,0 +1,100 @@
+<aura:component  implements="forceCommunity:availableForAllPageTypes" access="global" controller="PC_DealRegTableController">
+    <lightning:navigation aura:id="navService"/>
+    <!--  Attribues section -->
+    <!-- Lightning Datatable Attributes -->
+    <aura:attribute name="drList" type="List" default ="[]" description="contains list of Deal Registration records" />
+    <aura:attribute name="col"  type="List" description="contains List of Column names and its type" />
+    <aura:attribute name="loadTable" type="Boolean" default ="false" description="flag variable used to show Table on page only after getting records from backend. Used only at page load." />
+    <aura:attribute name="returnFieldsinQuery" type="string" default="Id,Company__c,Name,Opp_Deal_Registration_Type__c,Opportunity__c,FirstName__c,LastName__c,Registration_Type__c,Deal_Registration_Status__c,Deal_Registration_Expiration__c,Deal_Reg_Submitted_Date__c,Approval_Timestamp__c,Created_By_Name__c,Partner_Lookup__r.Name,Partner_Rep__c,Partner__c,Distributor__r.Name" description="field api names separated by comma" />
+    <aura:attribute name="objTypeinQuery" type="string" default="Deal_Registration__c" description="Object name" />
+    <!-- Lightning Datatable Attributes -->
+    <!-- Load more Attributes -->
+    <aura:attribute name="flag" type="Boolean" default ="true"  description="to aviod multiple calls to backend which scrolling table"/>
+    <aura:attribute name="IdSet" type="List" default ="[]"  description="contains Id of records which are queried"/>
+    <aura:attribute name="totalSize" type="string" description="total size of records" />
+    <aura:attribute name="pageSize" type="Integer" default ="20" description="page size of records to be shown"/>
+    <aura:attribute name="loadMoreStatus" type="string" description="tells whether if any data is present at back side to load"/>
+    <!-- Load more Attributes -->
+    <!-- Sort Attributes -->
+    <aura:attribute name="sortedBy" type="String" default="Name" description="Field api name of field used in sorting"/>
+    <aura:attribute name="sortedDirection" type="String" default="desc" description="sorting direction"/>
+    <aura:attribute name="defaultSortDirection" type="String" description="default sort direction"/>
+    <aura:attribute name="sortedByValue" type="String" description="value of sorted field which is used to fetch next set of records"/>
+    <!-- Sort Attributes -->
+    <!-- Search Attributes -->
+    <aura:attribute name="searchText" type="string" default="" description="contains search value"/>
+    <!-- Search Attributes -->
+    <!--Export to CSV-->
+    <aura:attribute name="dealRegList" type="List" default="[]" description="Deals to export"/>
+    <aura:attribute name="disableExportButton" type="Boolean" default="true" description="enable/disable export button"/>
+    <aura:attribute name="userRecord" type="User" default="[]" description="User Record"/>
+
+    <!--PRIT24-489 start-->
+    <aura:attribute name="fiscalYearData" type="List" default="[]"/>
+    <aura:attribute name="fiscalYearOptions" type="List" default="[]"/>
+    <aura:attribute name="fiscalYear" type="String" default=""/>
+    <aura:attribute name="startDate" type="String" default=""/>
+    <aura:attribute name="endDate" type="String" default=""/>
+    <aura:attribute name="accIds" type="List" default="[]"/>
+    <!--PRIT24-489 end-->
+
+    <!--  Attribues section -->
+
+    <aura:handler name="init" value="this" action="{!c.doInit}"/>
+    <aura:handler event="c:searchEvent" name="searchEventName" action="{!c.handlesearchEvent}" class="reg-table-search" />
+
+    <lightning:card class="registration-card">
+        <div class="heading-36 slds-m-bottom_large slds-p-horizontal_small">My Deal Registrations</div>
+        <!--PRIT24-489 start-->
+        <div class="slds-grid slds-wrap slds-p-horizontal_small">
+            <div class="slds-col slds-size_12-of-12 slds-small-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_2-of-12">
+                <div class="slds-m-around_x-small slds-m-left_none">
+                	<c:searchTableCmp searchText="{!v.searchText}"/>
+                </div>
+            </div>
+            <div class="slds-col slds-size_12-of-12 slds-small-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_2-of-12">
+                <div class="slds-m-around_x-small">
+                    <lightning:combobox name="Fiscal Year" value="{!v.fiscalYear}" label="Fiscal Year" placeholder="Select Fiscal Year"
+                                        options="{!v.fiscalYearOptions}" onchange="{!c.handleFiscalYearChange}"></lightning:combobox>
+                </div>
+            </div>
+            <div class="slds-col slds-size_12-of-12 slds-small-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_4-of-12">
+                <div class="slds-m-around_x-small">
+                	<c:pc_accountHierarchy aura:id="accountHierarchy" onaccountfilter="{!c.handleAccountFilter}"/>
+                </div>
+            </div>
+            <div class="slds-col slds-size_12-of-12 slds-small-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_4-of-12">
+                <div class="margin-top slds-float_right">
+                    <!-- <lightning:button variant="brand" label="SPIFF Claims" title="SPIFF Claims" onclick="{!c.handleSPIFFClaimClick}" class="slds-m-left_xx-small"></lightning:button> -->
+                    <lightning:button variant="brand" label="Reset" title="Reset" onclick="{!c.handleReset}" class="slds-m-left_xx-small"></lightning:button>
+                    <lightning:button variant="brand" label="Export" title="Export" iconName="utility:download" onclick="{!c.handleExportClick}" disabled="{!v.disableExportButton}" class="slds-m-left_xx-small"></lightning:button>
+                </div>
+            </div>
+        </div>
+        <!--PRIT24-489 end-->
+        <!-- <aura:set attribute="actions">
+        </aura:set>-->
+            <div id="myDIV" class="slds-m-top_large">
+                <aura:If isTrue="{!v.loadTable}">
+                    <div class="custom-table-wrapper deal-reg-table">
+                    <lightning:datatable class="deal-reg-table-inner"
+                                         data="{!v.drList}"
+                                         columns="{!v.col}"
+                                         keyField="Id"
+                                         onrowselection="{!c.handleSelectedRow}"
+                                         sortedBy="{!v.sortedBy}"
+                                         sortedDirection="{!v.sortedDirection}"
+                                         defaultSortDirection="{!v.defaultSortDirection }"
+                                         onsort="{!c.handleColumnSorting}"
+                                         hideCheckboxColumn="true"
+                                         minColumnWidth = "120px"/>
+                    <div class="slds-align_absolute-center">
+                        {! v.loadMoreStatus }
+                    </div>
+                </div>
+                </aura:If>
+            </div>
+            <br/>
+            <br/>
+    </lightning:card>
+</aura:component>

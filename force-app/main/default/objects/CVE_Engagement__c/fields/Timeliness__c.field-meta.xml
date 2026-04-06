@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Timeliness__c</fullName>
+    <description>SAL26-639: Assessment of how timely the engagement was executed, relative to the deal cycle</description>
+    <inlineHelpText>Assessment of how timely the engagement was executed, relative to the deal cycle</inlineHelpText>
+    <label>Timeliness</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Engaged at correct time</fullName>
+                <default>false</default>
+                <label>Engaged at correct time</label>
+            </value>
+            <value>
+                <fullName>Engaged late in sales cycle</fullName>
+                <default>false</default>
+                <label>Engaged late in sales cycle</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

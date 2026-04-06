@@ -1,0 +1,33 @@
+<template>
+    <lightning-button icon-name="utility:add" label="Add Product" variant="brand" slot="actions" onclick={addMoreProductInstances} data-productname={type.productName} ></lightning-button>
+    <lightning-accordion allow-multiple-sections-open onsectiontoggle={handleSectionToggle}>                                                
+    <!--show only if field is not product-->
+    <template for:each={type.instances} for:item="fieldInst">
+        <lightning-accordion-section key={fieldInst} name="Product" label="Product">
+            <template  for:each={type.productFields} for:item="field">
+                <lightning-input-field key={field.Field_Api_Name__c} 
+                    field-name={field.Field_Api_Name__c} 
+                    value={field.value} 
+                    variant="label-stacked">  
+                </lightning-input-field>
+            </template>
+        </lightning-accordion-section>
+    </template>
+    </lightning-accordion>
+    
+    
+
+    <lightning-accordion if:true={type.extraAccessories} allow-multiple-sections-open onsectiontoggle={handleSectionToggle}>
+        <lightning-button icon-name="utility:add" label="Add Accessory" variant="brand" slots="actions" onclick={addMoreAccessories} data-productname={type.productName}></lightning-button>
+        <template for:each={type.accessories} for:item="subAccess" for:index="subItem"> 
+            <lightning-accordion-section key={subAccess} name="Accessory" label="Accessory">
+                <lightning-input-field 
+                        field-name="Additional_Accessories_Required__c"
+                        variant="label-stacked"></lightning-input-field>
+                <lightning-input-field 
+                        field-name="Accessories_with_Quantity__c"
+                        variant="label-stacked"></lightning-input-field>
+            </lightning-accordion-section>
+        </template>
+    </lightning-accordion>
+</template>

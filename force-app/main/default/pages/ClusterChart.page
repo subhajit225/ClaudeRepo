@@ -1,0 +1,6 @@
+<apex:page standardController="Cluster__c" extensions="clusterController">
+    <apex:slds />
+    <apex:includeLightning />
+    
+     <c:CustomerTemperatureComponent ChartData="{!payLoad}" chartName="doughnut" mobileView="false"/>  
+</apex:page>

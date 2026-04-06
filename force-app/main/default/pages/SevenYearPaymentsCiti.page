@@ -1,0 +1,124 @@
+<apex:page showHeader="false" sidebar="false" cache="false"  controller="SevenYearPayments" contentType="text/xml" action="{!init}">
+ <block>
+    <apex:outputPanel layout="none" rendered="{!IF(OR (AND(Quote.Payment_year_1__c!=null, Quote.Payment_year_1__c > 0), AND(Quote.Payment_year_2__c!=null, Quote.Payment_year_2__c > 0), AND(Quote.Payment_year_3__c!=null,Quote.Payment_year_3__c > 0), AND(Quote.Payment_year_4__c!=null , Quote.Payment_year_4__c > 0), AND(Quote.Payment_year_5__c!=null,Quote.Payment_year_5__c > 0), AND(Quote.Payment_year_6__c !=null,Quote.Payment_year_6__c > 0), AND(Quote.Payment_year_7__c!=null,Quote.Payment_year_7__c > 0)), true, false)}">
+        <table table-layout="fixed" >
+            <table-body>
+                <table-row>
+                    <table-cell display-align="center">
+                        <block text-align="left" font-size = "10px" margin-bottom = "5px"> 
+                            <apex:outputText >
+                                All payments are due within the contractual payment terms.
+                            </apex:outputText>
+                        </block>
+                    </table-cell>
+                </table-row>
+            </table-body>
+        </table>
+        </apex:outputPanel>
+        <apex:outputPanel layout="none" rendered="{!IF(AND(Quote.Payment_year_1__c!=null,Quote.Payment_year_1__c > 0),true,false)}">
+        <table table-layout="fixed" >
+            <table-body>
+                <table-row>
+                    <table-cell display-align="center">
+                        <block text-align="left" font-size = "10px"> 
+                            <apex:outputText >
+                                Payment #1 ${!QW.Payment_year_1} is billable upon shipment.
+                            </apex:outputText>
+                        </block>
+                    </table-cell>
+                </table-row>
+            </table-body>
+        </table>
+        </apex:outputPanel>
+        <apex:outputPanel layout="none" rendered="{!IF(AND(Quote.Payment_year_2__c!=null,Quote.Payment_year_2__c > 0),true,false)}">
+        <table table-layout="fixed" >
+            <table-body>
+                <table-row>
+                    <table-cell display-align="center">
+                        <block text-align="left" font-size = "10px"> 
+                            <apex:outputText >
+                                Payment #2 ${!QW.Payment_year_2} is due one year from the date of the initial shipment.
+                            </apex:outputText>
+                        </block>
+                    </table-cell>
+                </table-row>
+            </table-body>
+        </table>
+        </apex:outputPanel>
+        <apex:outputPanel layout="none" rendered="{!IF(AND(Quote.Payment_year_3__c!=null,Quote.Payment_year_3__c > 0),true,false)}">
+        <table table-layout="fixed" >
+            <table-body>
+                <table-row>
+                    <table-cell display-align="center">
+                        <block text-align="left" font-size = "10px"> 
+                            <apex:outputText >
+                                Payment #2 ${!QW.Payment_year_3} is due two years from the date of the initial shipment.
+                            </apex:outputText>
+                        </block>
+                    </table-cell>
+                </table-row>
+            </table-body>
+        </table>
+        </apex:outputPanel>
+        <apex:outputPanel layout="none" rendered="{!IF(AND(Quote.Payment_year_4__c!=null,Quote.Payment_year_4__c > 0),true,false)}">
+        <table table-layout="fixed" >
+            <table-body>
+                <table-row>
+                    <table-cell display-align="center">
+                        <block text-align="left" font-size = "10px"> 
+                            <apex:outputText >
+                                Payment #4 ${!QW.Payment_year_4} is due three years from the date of the initial shipment.
+                            </apex:outputText>
+                        </block>
+                    </table-cell>
+                </table-row>
+            </table-body>
+        </table>
+        </apex:outputPanel>
+        <apex:outputPanel layout="none" rendered="{!IF(AND(Quote.Payment_year_5__c!=null,Quote.Payment_year_5__c > 0),true,false)}">
+        <table table-layout="fixed" >
+            <table-body>
+                <table-row>
+                    <table-cell display-align="center">
+                        <block text-align="left" font-size = "10px"> 
+                            <apex:outputText >
+                                Payment #5 ${!QW.Payment_year_5} is due four years from the date of the initial shipment.
+                            </apex:outputText>
+                        </block>
+                    </table-cell>
+                </table-row>
+            </table-body>
+        </table>
+        </apex:outputPanel>
+        <apex:outputPanel layout="none" rendered="{!IF(AND(Quote.Payment_year_6__c!=null,Quote.Payment_year_6__c > 0),true,false)}">
+        <table table-layout="fixed" >
+            <table-body>
+                <table-row>
+                    <table-cell display-align="center">
+                        <block text-align="left" font-size = "10px"> 
+                            <apex:outputText >
+                                Payment #6 ${!QW.Payment_year_6} is due five years from the date of the initial shipment.
+                            </apex:outputText>
+                        </block>
+                    </table-cell>
+                </table-row>
+            </table-body>
+        </table>
+        </apex:outputPanel>
+        <apex:outputPanel layout="none" rendered="{!IF(AND(Quote.Payment_year_7__c!=null,Quote.Payment_year_7__c > 0),true,false)}">
+        <table table-layout="fixed" >
+            <table-body>
+                <table-row>
+                    <table-cell display-align="center">
+                        <block text-align="left" font-size = "10px"> 
+                            <apex:outputText >
+                                Payment #7 ${!QW.Payment_year_7} is due six years from the date of the initial shipment.
+                            </apex:outputText>
+                        </block>
+                    </table-cell>
+                </table-row>
+            </table-body>
+        </table>
+        </apex:outputPanel>
+    </block>
+</apex:page>

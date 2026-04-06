@@ -1,0 +1,57 @@
+<aura:component implements="forceCommunity:layout" description="2 columns, 3:1 ratio" access="global">
+    <aura:attribute name="ContentHeader" type="Aura.Component[]" required="false"></aura:attribute>
+    <aura:attribute name="ContentFooter" type="Aura.Component[]" required="false"></aura:attribute>
+    <aura:attribute name="Content" type="Aura.Component[]" required="false"></aura:attribute>
+    <aura:attribute name="Sidebar" type="Aura.Component[]" required="false"></aura:attribute>
+    <aura:attribute name="Content1" type="Aura.Component[]" required="false"></aura:attribute>
+    <aura:attribute name="Sidebar1" type="Aura.Component[]" required="false"></aura:attribute>
+    <aura:attribute name="Content2H" type="Aura.Component[]" required="false"></aura:attribute>
+    <aura:attribute name="Content2" type="Aura.Component[]" required="false"></aura:attribute>
+    <aura:attribute name="Sidebar2" type="Aura.Component[]" required="false"></aura:attribute>
+    <aura:attribute name="Content3H" type="Aura.Component[]" required="false"></aura:attribute>
+    <aura:attribute name="Content3" type="Aura.Component[]" required="false"></aura:attribute>
+    <aura:attribute name="Sidebar3" type="Aura.Component[]" required="false"></aura:attribute>
+    
+    <div class="container">
+        <lightning:layout multipleRows="true" horizontalAlign="spread"><!-- pullToBoundary="small"-->
+            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" padding="around-small">
+                {!v.ContentHeader}
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="9" largeDeviceSize="9" padding="around-small">
+                {!v.Content}
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="3" largeDeviceSize="3" padding="around-small">        
+                {!v.Sidebar}
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                {!v.Content1}
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                {!v.Sidebar1}
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" padding="around-small">
+                {!v.Content2H}
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                {!v.Content2}
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                {!v.Sidebar2}
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" padding="around-small">
+                {!v.Content3H}
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                {!v.Content3}
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                {!v.Sidebar3}
+            </lightning:layoutItem>
+            
+            
+            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" padding="around-small">
+                {!v.ContentFooter}
+            </lightning:layoutItem>                
+        </lightning:layout>
+    </div>
+</aura:component>

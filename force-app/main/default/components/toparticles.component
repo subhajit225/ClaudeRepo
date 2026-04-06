@@ -1,0 +1,87 @@
+<apex:component controller="CommunityHomeController">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad sectionHeaderArt">Popular Articles</div>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad">
+            <apex:repeat value="{!RankedSolutions}" var="ts">
+                <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 nopad eachBlock">
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-3 nopad">
+                        <apex:image styleClass="img-responsive announcementImg" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/article1.png')}" />
+                    </div>
+                    <div class="col-lg-10 col-md-10 col-xs-10 col-sm-9 nopad">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad" style="margin-bottom:5px">
+                            <span class="articleNumber">
+                            Article No: {!ts.ArticleNumber}
+                            </span>
+                        </div>
+                        <a href="/articles/How_To/{!ts.UrlName}">
+                            <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12 nopad artTitle">
+                                {!ts.title}
+                            </div>
+                        </a>
+                        <!--
+                        <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12 nopad artDesc">
+                            {!IF(AND(ts.summary != null,LEN(ts.summary) > 100),LEFT(ts.summary,100)+'...',ts.summary)}
+                        </div>
+                        -->
+                        <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12 nopad">
+                            <span class="artPublishDate">Created:&nbsp;</span>
+                            <apex:outputText value="{0,date,MMM' 'dd', 'yyyy}" styleClass="artPublishDate">
+                                <apex:param value="{!ts.FirstPublishedDate}" /> 
+                            </apex:outputText>
+                            <span class="artPublishDate">&#x25cf;&nbsp; Last modified:&nbsp;</span>
+                            <apex:outputText value="{0,date,MMM' 'dd', 'yyyy}" styleClass="artPublishDate">
+                                <apex:param value="{!ts.LastModifiedDate}" /> 
+                            </apex:outputText>
+                        </div>
+                    </div>
+                </div>
+            </apex:repeat>
+            <apex:repeat value="{!TopSolutions}" var="ts1">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad eachBlock">
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-3 nopad">
+                        <apex:image styleClass="img-responsive announcementImg" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/article1.png')}" />
+                    </div>
+                    <div class="col-lg-10 col-md-10 col-sm-10 col-xs-9 nopad">
+                        <a href="/articles/How_To/{!ts1.UrlName}">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad artTitle">
+                                {!ts1.title}
+                            </div>
+                        </a>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad artDesc">
+                            {!IF(AND(ts1.summary != null,LEN(ts1.summary) > 100),LEFT(ts1.summary,100)+'...',ts1.summary)}
+                        </div>
+                        <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12 nopad">
+                            <span class="artPublishDate">Created:&nbsp;</span>
+                            <apex:outputText value="{0,date,MMM' 'dd', 'yyyy}" styleClass="artPublishDate">
+                                <apex:param value="{!ts1.FirstPublishedDate}" /> 
+                            </apex:outputText>
+                            <span class="artPublishDate">&#x25cf;&nbsp; Last modified:&nbsp;</span>
+                            <apex:outputText value="{0,date,MMM' 'dd', 'yyyy}" styleClass="artPublishDate">
+                                <apex:param value="{!ts1.LastModifiedDate}" /> 
+                            </apex:outputText>
+                        </div>
+                    </div>
+                </div>
+            </apex:repeat>
+        </div>
+    </div>
+    <!--
+    <h2 class="sectionHeaders">Popular Articles<br></h2>
+    <apex:repeat value="{!RankedSolutions}" var="ts">
+        <ul class="links">
+            <li class="listItems">
+                <a href="/articles/How_To/{!ts.UrlName}" class="lightlink"><apex:outputtext styleclass="line-clamp" value="{!ts.Title}"/></a>
+            </li>
+        </ul>
+    </apex:repeat>
+    <apex:repeat value="{!TopSolutions}" var="ts1">
+        <ul class="links">
+            <li class="listItems">
+                <a href="/articles/How_To/{!ts1.UrlName}" class="lightlink"><apex:outputtext styleclass="line-clamp" value="{!ts1.Title}"/></a>
+            </li>
+        </ul>
+    </apex:repeat>
+    -->
+    
+    <br/>
+</apex:component>

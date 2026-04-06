@@ -1,0 +1,64 @@
+<apex:page standardController="SBQQ__QuoteLine__c" extensions="OverrideDelQuoteLine">
+    <apex:includeScript value="/support/console/51.0/integration.js"/>
+    <apex:stylesheet value="{!URLFOR($Resource.SLDS105, 'assets/styles/salesforce-lightning-design-system-vf.min.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.POCRequestForm, 'css/POCRequestForm.css')}" />
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js" />
+    <apex:stylesheet value="{!URLFOR($Resource.DealReg, 'DealRegCss.css')}" />
+    <apex:pageBlock mode="edit" id="block">
+        <apex:pageMessages ></apex:pageMessages>
+    </apex:pageBlock>
+  <script>
+    window.onload = function(){
+        AFCall();
+    }
+    function nav(){
+        if("{!$User.UITheme}" != 'Theme3'){
+            
+            // window.location.replace('/'+ "{!quoteId}" +"?dt="+(new Date()).getTime());
+            // setTimeout(function(){
+            // sforce.console.getEnclosingTabId(closeSubtab);
+            //sforce.one.back(true);  
+            //sforce.one.navigateToURL('/'+ "{!quoteId}" +"?dt="+(new Date()).getTime(),true);
+            sforce.console.getEnclosingTabId(closeSubtab);
+             sforce.one.back(true); 
+            //}, 2000);
+            //sforce.console.getEnclosingTabId(closeSubtab);
+        
+        }
+    }
+    var closeSubtab = function closeSubtab(result) {
+            //Now that we have the tab ID, we can close it
+            var tabId = result.id;
+            sforce.console.closeTab(tabId);
+        };
+    
+    function navigate(){
+     window.setTimeout(nav,1000); 
+    }
+    </script>
+    <apex:actionStatus id="myAjaxStatus" >
+        <apex:facet name="start" >
+            <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.25; z-index: 1000; background-color: black;">
+                &nbsp;
+            </div>
+            <div style="position: fixed; left: 0; top: 0; bottom: 0; right: 0; z-index: 1001; margin: 15% 50%">
+                <div style="display: inline-block; padding: 2px; background-color: #fff; width: 125px;">
+                    <img src="/img/loading.gif" style="float: left; margin: 8px;" />
+                    <span style="display: inline-block; padding: 10px 0px;">Please Wait...</span>
+                </div>
+            </div>
+        </apex:facet>
+    </apex:actionStatus>
+   <apex:form >
+       <apex:actionFunction name="AFCall" action="{!checkProfAndDel}" oncomplete="navigate();" rerender="qid,block" status="myAjaxStatus"/>
+   <div class="slds app" id="slds">
+        <div class="slds-grid slds-grid--align-center slds-m-top--medium">
+            <div class="slds-m-left--x-small">
+                 <apex:commandButton action="{!cancelDel}" value="Cancel" styleClass="slds-button slds-button--neutral"/>
+            </div>
+        </div>
+   </div>
+   <apex:inputHidden id="qid" value="{!quoteId}"/>    
+   </apex:form>
+   </apex:page>
+  <!---->

@@ -1,0 +1,615 @@
+<template>
+  <div class={largescreen}>
+    <template if:true={evaluatedata}>
+      <div class="container mainbox">
+        <lightning-card>
+          <div class="cardbody">
+            <div class="contentHealthSection">
+              <div class="contentSection">
+                Evaluate content health
+                <!-- <div class="iconSection"> -->
+                <lightning-icon size="xx-small" class="my-icon" icon-name="utility:close" alternative-text="Engage"
+                  title="Engage" onclick={closeevaluate}></lightning-icon>
+                <!-- </div> -->
+              </div>
+            </div>
+            <div class="mainDiv">
+              <template if:true={evaluateBox}>
+                <div class="commonDiv1 slds-border_bottom">
+                  <div class="commonDiv2">
+                    <h3>Parameters</h3>
+                  </div>
+                  <template if:false={languagechanged}>
+                    <div class="commonDiv2 prediction">
+                      <h3>Prediction</h3>
+                    </div>
+                  </template>
+                  <div class="commonDiv3 radioalignment yes">
+                    <h3>Yes</h3>
+                  </div>
+                  <div class="commonDiv3 radioalignment">
+                    <h3>No</h3>
+                  </div>
+                </div>
+              </template>
+              <template if:false={evaluateBox}>
+                <div class="commonDiv1 slds-border_bottom">
+                  <div class="headers">
+                    <h3> Content Parameters</h3>
+                  </div>
+                  <template if:false={languagechanged}>
+                    <div class="headers predictedDiv">
+                      <h3>Predicted Score%</h3>
+                    </div>
+                  </template>
+                  <template if:false={smallScreen}>
+                    <div class="headers newDiv">
+                      <h3>Your Evaluation</h3>
+                      <!-- </div>
+                        <div class="commonDiv3">
+                            <h3>No</h3> -->
+                    </div>
+                  </template>
+                  <template if:true={smallScreen}>
+                  <div class="evevaluateYesNoHeader">
+                    <div class="commonDiv3 radioalignmentsmallScreen yes">
+                      <h3>Yes</h3>
+                    </div>
+                    <div class="commonDiv3 radioalignmentsmallScreen">
+                      <h3>No</h3>
+                    </div>
+                  </div>
+                  </template>
+                </div>
+              </template>
+              <div class="notsmallscreen">
+                <template if:true={unique}>
+                  <div class="commonDiv1 slds-border_bottom">
+                    <div class="commonDiv2">
+                      <div class="headingClass tooltip-wrapper">
+                        <div class="slds-popover slds-popover_tooltip slds-nubbin_top-left" role="tooltip">
+                          <div class=" tooltip-font-styling">The article is not duplicate, there is no other article with the same content.</div>
+                        </div>
+                        <span>Unique</span>
+                      </div>
+                    </div>
+                    <template if:false={languagechanged}>
+                      <div class="commonDiv2">
+                        <template if:true={uniqueprediction}>
+                          <p>
+                            <progress class="progressBarClass" id="file1"
+                              value={predicteddatafromcard.uniqueness_prediction} max="100"></progress>
+                            <label class="progressBarLabel">{predicteddatafromcard.uniqueness_prediction}%</label>
+                          </p>
+                        </template>
+                        <template if:true={predictionExist}>
+                          <template if:false={uniqueprediction}>
+                            <p><strong>N.A.</strong></p>
+                          </template>
+                        </template>
+                        <template if:false={predictionExist}>
+                          <p><strong>--</strong></p>
+                        </template>
+                      </div>
+                    </template>
+                    <div class="radiodiv">
+                      <div class="commonDiv3">
+                        <lightning-input class="radioyes" type="radio" name="radio1" value="Yes" label="Yes"
+                          onchange={radio1} checked={uniqueyes} disabled={disableflag}></lightning-input>
+                      </div>
+                      <div class="commonDiv3">
+                        <lightning-input class="radiono" type="radio" name="radio1" value="No" onchange={radio1}
+                          label="No" checked={uniqueno} disabled={disableflag}>
+                        </lightning-input>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+                <template if:true={complete}>
+                  <div class="commonDiv1 slds-border_bottom">
+                    <div class="commonDiv2">
+                      <div class="headingClass tooltip-wrapper">
+                        <div class="slds-popover slds-popover_tooltip slds-nubbin_top-left" role="tooltip">
+                          <div class=" tooltip-font-styling">The article includes the problem, environment, cause and resolution.</div>
+                        </div>
+                        <span>Complete</span>
+                      </div>
+                    </div>
+                    <template if:false={languagechanged}>
+                      <div class="commonDiv2">
+                        <template if:true={completeprediction}>
+                          <p>
+                            <progress class="progressBarClass" id="file2"
+                              value={predicteddatafromcard.complete_prediction} max="100"></progress>
+                            <label class="progressBarLabel">{predicteddatafromcard.complete_prediction}%</label>
+                          </p>
+                        </template>
+                        <template if:false={completeprediction}>
+                          <p><strong>--</strong></p>
+                        </template>
+                      </div>
+                    </template>
+                    <div class="radiodiv">
+                      <div class="commonDiv3">
+                        <p>
+                          <lightning-input class="radioyes" type="radio" name="radio2" value="Yes" label="Yes"
+                            onchange={radio2} checked={completeyes} disabled={disableflag}>
+                          </lightning-input>
+                        </p>
+                      </div>
+                      <div class="commonDiv3">
+                        <p>
+                          <lightning-input class="radiono" type="radio" name="radio2" value="No" label="No"
+                            onchange={radio2} checked={completeno} disabled={disableflag}>
+                          </lightning-input>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+                <template if:true={contentClear}>
+                  <div class="commonDiv1 slds-border_bottom">
+                    <div class="commonDiv2">
+                      <div class="headingClass tooltip-wrapper">
+                        <div class="slds-popover slds-popover_tooltip slds-nubbin_top-left" role="tooltip">
+                          <div class=" tooltip-font-styling">Content is comprehensible to the intended user.</div>
+                        </div>
+                        <span>Content Clear</span>
+                      </div>
+                    </div>
+                    <template if:false={languagechanged}>
+                      <div class="commonDiv2">
+                        <template if:true={contentprediction}>
+                          <p>
+                            <progress class="progressBarClass" id="file3"
+                              value={predicteddatafromcard.content_clear_prediction} max="100"></progress>
+                            <label class="progressBarLabel">{predicteddatafromcard.content_clear_prediction}%</label>
+                          </p>
+                        </template>
+                        <template if:false={contentprediction}>
+                          <p><strong>--</strong></p>
+                        </template>
+                      </div>
+                    </template>
+                    <div class="radiodiv">
+                      <div class="commonDiv3">
+                        <p>
+                          <lightning-input type="radio" class="radioyes" name="radio3" value="Yes" label="Yes"
+                            onchange={radio3} checked={contentyes} disabled={disableflag}>
+                          </lightning-input>
+                        </p>
+                      </div>
+                      <div class="commonDiv3">
+                        <p>
+                          <lightning-input type="radio" class="radiono" name="radio3" value="No" label="No"
+                            onchange={radio3} checked={contentno} disabled={disableflag}>
+                          </lightning-input>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+                <template if:true={accurateTitle}>
+                  <div class="commonDiv1 slds-border_bottom">
+                    <div class="commonDiv2">
+                      <div class="headingClass tooltip-wrapper">
+                        <div class="slds-popover slds-popover_tooltip slds-nubbin_top-left" role="tooltip">
+                          <div class=" tooltip-font-styling">The title contains the main issue and environment.</div>
+                        </div>
+                        <span>Accurate Title</span>
+                      </div>
+                    </div>
+                    <template if:false={languagechanged}>
+                      <div class="commonDiv2">
+                        <template if:true={accurateprediction}>
+                          <p>
+                            <progress class="progressBarClass" id="file4"
+                              value={predicteddatafromcard.accurate_title_prediction} max="100"></progress>
+                            <label class="progressBarLabel">{predicteddatafromcard.accurate_title_prediction}%</label>
+                          </p>
+                        </template>
+                        <template if:true={predictionExist}>
+                          <template if:false={accurateprediction}>
+                            <p><strong>N.A.</strong></p>
+                          </template>
+                        </template>
+                        <template if:false={predictionExist}>
+                          <p><strong>--</strong></p>
+                        </template>
+                      </div>
+                    </template>
+                    <div class="radiodiv">
+                      <div class="commonDiv3">
+                        <p>
+                          <lightning-input class="radioyes" type="radio" name="radio4" value="Yes" label="Yes"
+                            onchange={radio4} checked={accurateyes} disabled={disableflag}>
+                          </lightning-input>
+                        </p>
+                      </div>
+                      <div class="commonDiv3">
+                        <p>
+                          <lightning-input class="radiono" type="radio" name="radio4" value="No" label="No"
+                            onchange={radio4} checked={accurateno} disabled={disableflag}>
+                          </lightning-input>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+                <template if:true={linksValid}>
+                  <div class="commonDiv1 slds-border_bottom">
+                    <div class="commonDiv2">
+                      <div class="headingClass tooltip-wrapper">
+                        <div class="slds-popover slds-popover_tooltip slds-nubbin_top-left" role="tooltip">
+                          <div class=" tooltip-font-styling">The hyperlinks and attachments added to the article are appropriate and functional.</div>
+                        </div>
+                        <span>Links Valid?</span>
+                      </div>
+                    </div>
+                    <template if:false={languagechanged}>
+                      <div class="commonDiv2">
+                        <template if:true={linksprediction}>
+                          <p>
+                            <progress class="progressBarClass" id="file5"
+                              value={predicteddatafromcard.link_valid_prediction} max="100"></progress>
+                            <label class="progressBarLabel">{predicteddatafromcard.link_valid_prediction}%</label>
+                          </p>
+                        </template>
+                        <template if:true={predictionExist}>
+                          <template if:false={linksprediction}>
+                            <p><strong>N.A.</strong></p>
+                          </template>
+                        </template>
+                        <template if:false={predictionExist}>
+                          <p><strong>--</strong></p>
+                        </template>
+                      </div>
+                    </template>
+                    <div class="radiodiv">
+                      <div class="commonDiv3">
+                        <p>
+                          <lightning-input type="radio" class="radioyes" name="radio5" value="Yes" label="Yes"
+                            onchange={radio5} checked={linkyes} disabled={disableflag}>
+                          </lightning-input>
+                        </p>
+                      </div>
+                      <div class="commonDiv3">
+                        <p>
+                          <lightning-input type="radio" class="radiono" name="radio5" value="No" label="No"
+                            onchange={radio5} checked={linkno} disabled={disableflag}>
+                          </lightning-input>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+                <template if:true={metadataCorrect}>
+                  <div class="commonDiv1 slds-border_bottom">
+                    <div class="commonDiv2">
+                      <div class="headingClass tooltip-wrapper">
+                        <div class="slds-popover slds-popover_tooltip slds-nubbin_top-left" role="tooltip">
+                          <div class=" tooltip-font-styling">If the tags, audience and other metadata is appropriate.</div>
+                        </div>
+                        <span>Metadata Correct</span>
+                      </div>
+                    </div>
+                    <template if:false={languagechanged}>
+                      <div class="commonDiv2">
+                        <template if:true={metaprediction}>
+                          <p>
+                            <progress class="progressBarClass" id="file6"
+                              value={predicteddatafromcard.metadata_correct_prediction} max="100"></progress>
+                            <label class="progressBarLabel">{predicteddatafromcard.metadata_correct_prediction}%</label>
+                          </p>
+                        </template>
+                        <template if:true={predictionExist}>
+                          <template if:false={metaprediction}>
+                            <p><strong>N.A.</strong></p>
+                          </template>
+                        </template>
+                        <template if:false={predictionExist}>
+                          <p><strong>--</strong></p>
+                        </template>
+                      </div>
+                    </template>
+                    <div class="radiodiv">
+                      <div class="commonDiv3">
+                        <p>
+                          <lightning-input type="radio" class="radioyes" name="radio6" value="Yes" label="Yes"
+                            onchange={radio6} checked={metayes} disabled={disableflag}>
+                          </lightning-input>
+                        </p>
+                      </div>
+                      <div class="commonDiv3">
+                        <p>
+                          <lightning-input type="radio" class="radiono" name="radio6" value="No" label="No"
+                            onchange={radio6} checked={metano} disabled={disableflag}>
+                          </lightning-input>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+              </div>
+              <div class="smallscreen">
+                <template if:true={unique}>
+                  <div class="commonDiv1 slds-border_bottom">
+                    <div class="commonDiv2">
+                      <div class="headingClass tooltip-wrapper">
+                        <div class="slds-popover slds-popover_tooltip slds-nubbin_top-left" role="tooltip">
+                          <div class=" tooltip-font-styling">The article is not duplicate, there is no other article with the same content.</div>
+                        </div>
+                        <span>Unique</span>
+                      </div>
+                    </div>
+                    <template if:false={languagechanged}>
+                      <div class="commonDiv2">
+                        <template if:true={uniqueprediction}>
+                          <p>
+                            <progress class="progressBarClass" id="file7"
+                              value={predicteddatafromcard.uniqueness_prediction} max="100"></progress>
+                            <label class="progressBarLabel">{predicteddatafromcard.uniqueness_prediction}%</label>
+                          </p>
+                        </template>
+                        <template if:true={predictionExist}>
+                          <template if:false={uniqueprediction}>
+                            <p><strong>N.A.</strong></p>
+                          </template>
+                        </template>
+                        <template if:false={predictionExist}>
+                          <p><strong>--</strong></p>
+                        </template>
+                      </div>
+                    </template>
+                    <div class="radiodiv">
+                      <div class="commonDiv3">
+                        <lightning-input class="radioyes" type="radio" name="radio7" value="Yes" onchange={radio1}
+                          checked={uniqueyes} disabled={disableflag}></lightning-input>
+                      </div>
+                      <div class="commonDiv3">
+                        <lightning-input class="radiono" type="radio" name="radio7" value="No" onchange={radio1}
+                          checked={uniqueno} disabled={disableflag}>
+                        </lightning-input>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+                <template if:true={complete}>
+                  <div class="commonDiv1 slds-border_bottom">
+                    <div class="commonDiv2">
+                      <div class="headingClass tooltip-wrapper">
+                        <div class="slds-popover slds-popover_tooltip slds-nubbin_top-left" role="tooltip">
+                          <div class=" tooltip-font-styling">The article includes the problem, environment, cause and resolution.</div>
+                        </div>
+                        <span>Complete</span>
+                      </div>
+                    </div>
+                    <template if:false={languagechanged}>
+                      <div class="commonDiv2">
+                        <template if:true={completeprediction}>
+                          <p>
+                            <progress class="progressBarClass" id="file8"
+                              value={predicteddatafromcard.complete_prediction} max="100"></progress>
+                            <label class="progressBarLabel">{predicteddatafromcard.complete_prediction}%</label>
+                          </p>
+                        </template>
+                        <template if:false={completeprediction}>
+                          <p><strong>--</strong></p>
+                        </template>
+                      </div>
+                    </template>
+                    <div class="radiodiv">
+                      <div class="commonDiv3">
+                        <p>
+                          <lightning-input class="radioyes" type="radio" name="radio8" value="Yes" onchange={radio2}
+                            checked={completeyes} disabled={disableflag}>
+                          </lightning-input>
+                        </p>
+                      </div>
+                      <div class="commonDiv3">
+                        <p>
+                          <lightning-input class="radiono" type="radio" name="radio8" value="No" onchange={radio2}
+                            checked={completeno} disabled={disableflag}>
+                          </lightning-input>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+                <template if:true={contentClear}>
+                  <div class="commonDiv1 slds-border_bottom">
+                    <div class="commonDiv2">
+                      <div class="headingClass tooltip-wrapper">
+                        <div class="slds-popover slds-popover_tooltip slds-nubbin_top-left" role="tooltip">
+                          <div class=" tooltip-font-styling">Content is comprehensible to the intended user.</div>
+                        </div>
+                        <span>Content Clear</span>
+                      </div>
+                    </div>
+                    <template if:false={languagechanged}>
+                      <div class="commonDiv2">
+                        <template if:true={contentprediction}>
+                          <p>
+                            <progress class="progressBarClass" id="file09"
+                              value={predicteddatafromcard.content_clear_prediction} max="100"></progress>
+                            <label class="progressBarLabel">{predicteddatafromcard.content_clear_prediction}%</label>
+                          </p>
+                        </template>
+                        <template if:false={contentprediction}>
+                          <p><strong>--</strong></p>
+                        </template>
+                      </div>
+                    </template>
+                    <div class="radiodiv">
+                      <div class="commonDiv3">
+                        <p>
+                          <lightning-input type="radio" class="radioyes" name="radio9" value="Yes" onchange={radio3}
+                            checked={contentyes} disabled={disableflag}>
+                          </lightning-input>
+                        </p>
+                      </div>
+                      <div class="commonDiv3">
+                        <p>
+                          <lightning-input type="radio" class="radiono" name="radio9" value="No" onchange={radio3}
+                            checked={contentno} disabled={disableflag}>
+                          </lightning-input>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+                <template if:true={accurateTitle}>
+                  <div class="commonDiv1 slds-border_bottom">
+                    <div class="commonDiv2">
+                      <div class="headingClass tooltip-wrapper">
+                        <div class="slds-popover slds-popover_tooltip slds-nubbin_top-left" role="tooltip">
+                          <div class=" tooltip-font-styling">The title contains the main issue and environment.</div>
+                        </div>
+                        <span>Accurate Title</span>
+                      </div>
+                    </div>
+                    <template if:false={languagechanged}>
+                      <div class="commonDiv2">
+                        <template if:true={accurateprediction}>
+                          <p>
+                            <progress class="progressBarClass" id="file10"
+                              value={predicteddatafromcard.accurate_title_prediction} max="100"></progress>
+                            <label class="progressBarLabel">{predicteddatafromcard.accurate_title_prediction}%</label>
+                          </p>
+                        </template>
+                        <template if:true={predictionExist}>
+                          <template if:false={accurateprediction}>
+                            <p><strong>N.A.</strong></p>
+                          </template>
+                        </template>
+                        <template if:false={predictionExist}>
+                          <p><strong>--</strong></p>
+                        </template>
+                      </div>
+                    </template>
+                    <div class="radiodiv">
+                      <div class="commonDiv3">
+                        <p>
+                          <lightning-input class="radioyes" type="radio" name="radio10" value="Yes" onchange={radio4}
+                            checked={accurateyes} disabled={disableflag}>
+                          </lightning-input>
+                        </p>
+                      </div>
+                      <div class="commonDiv3">
+                        <p>
+                          <lightning-input class="radiono" type="radio" name="radio10" value="No" onchange={radio4}
+                            checked={accurateno} disabled={disableflag}>
+                          </lightning-input>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+                <template if:true={linksValid}>
+                  <div class="commonDiv1 slds-border_bottom">
+                    <div class="commonDiv2">
+                      <div class="headingClass tooltip-wrapper">
+                        <div class="slds-popover slds-popover_tooltip slds-nubbin_top-left" role="tooltip">
+                          <div class=" tooltip-font-styling">The hyperlinks and attachments added to the article are appropriate and functional.</div>
+                        </div>
+                        <span>Links Valid?</span>
+                      </div>
+                    </div>
+                    <template if:false={languagechanged}>
+                      <div class="commonDiv2">
+                        <template if:true={linksprediction}>
+                          <p>
+                            <progress class="progressBarClass" id="file11"
+                              value={predicteddatafromcard.link_valid_prediction} max="100"></progress>
+                            <label class="progressBarLabel">{predicteddatafromcard.link_valid_prediction}%</label>
+                          </p>
+                        </template>
+                        <template if:true={predictionExist}>
+                          <template if:false={linksprediction}>
+                            <p><strong>N.A.</strong></p>
+                          </template>
+                        </template>
+                        <template if:false={predictionExist}>
+                          <p><strong>--</strong></p>
+                        </template>
+                      </div>
+                    </template>
+                    <div class="radiodiv">
+                      <div class="commonDiv3">
+                        <p>
+                          <lightning-input type="radio" class="radioyes" name="radio11" value="Yes" onchange={radio5}
+                            checked={linkyes} disabled={disableflag}>
+                          </lightning-input>
+                        </p>
+                      </div>
+                      <div class="commonDiv3">
+                        <p>
+                          <lightning-input type="radio" class="radiono" name="radio11" value="No" onchange={radio5}
+                            checked={linkno} disabled={disableflag}>
+                          </lightning-input>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+                <template if:true={metadataCorrect}>
+                  <div class="commonDiv1 slds-border_bottom">
+                    <div class="commonDiv2">
+                      <div class="headingClass tooltip-wrapper">
+                        <div class="slds-popover slds-popover_tooltip slds-nubbin_top-left" role="tooltip">
+                          <div class=" tooltip-font-styling">If the tags, audience and other metadata is appropriate.</div>
+                        </div>
+                        <span>Metadata Correct</span>
+                      </div>
+                    </div>
+                    <template if:false={languagechanged}>
+                      <div class="commonDiv2">
+                        <template if:true={metaprediction}>
+                          <p>
+                            <progress class="progressBarClass" id="file12"
+                              value={predicteddatafromcard.metadata_correct_prediction} max="100"></progress>
+                            <label class="progressBarLabel">{predicteddatafromcard.metadata_correct_prediction}%</label>
+                          </p>
+                        </template>
+                        <template if:true={predictionExist}>
+                          <template if:false={metaprediction}>
+                            <p><strong>N.A.</strong></p>
+                          </template>
+                        </template>
+                        <template if:false={predictionExist}>
+                          <p><strong>--</strong></p>
+                        </template>
+                      </div>
+                    </template>
+                    <div class="radiodiv">
+                      <div class="commonDiv3">
+                        <p>
+                          <lightning-input type="radio" class="radioyes" name="radio12" value="Yes" onchange={radio6}
+                            checked={metayes} disabled={disableflag}>
+                          </lightning-input>
+                        </p>
+                      </div>
+                      <div class="commonDiv3">
+                        <p>
+                          <lightning-input type="radio" class="radiono" name="radio12" value="No" onchange={radio6}
+                            checked={metano} disabled={disableflag}>
+                          </lightning-input>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+              </div>
+            </div>
+            <template if:false={disableflag}>
+              <button class="buttonCenter slds-button slds-button_brand 
+                slds-slds-p-vertical_x-small slds-grid slds-grid_vertical-align-center 
+                slds-button_stretch slds-size_2-of-6" onclick={handleClick} disabled={radioselected}>Submit
+              </button>
+            </template>
+          </div>
+        </lightning-card>
+      </div>
+    </template>
+  </div>
+</template>

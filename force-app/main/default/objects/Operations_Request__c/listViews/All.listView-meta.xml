@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>All</fullName>
+    <columns>Issue__c</columns>
+    <columns>NAME</columns>
+    <columns>Account_ETM_Theatre__c</columns>
+    <columns>Account_Tier__c</columns>
+    <columns>Status__c</columns>
+    <columns>Account_Transfer_Approval_Status__c</columns>
+    <columns>Current_account_owner__c</columns>
+    <columns>Current_Owner_Manager__c</columns>
+    <columns>Future_account_owner__c</columns>
+    <columns>Future_owner_manager__c</columns>
+    <columns>Assigned_to__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Status__c</field>
+        <operation>notEqual</operation>
+        <value>Complete,Rejected</value>
+    </filters>
+    <filters>
+        <field>Assigned_to__c</field>
+        <operation>notEqual</operation>
+        <value>jelle maes</value>
+    </filters>
+    <label>All</label>
+</ListView>

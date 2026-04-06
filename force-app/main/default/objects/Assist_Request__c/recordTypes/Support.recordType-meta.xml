@@ -1,0 +1,1956 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Support</fullName>
+    <active>true</active>
+    <label>Support</label>
+    <picklistValues>
+        <picklist>Assist_Request_Fullfilled__c</picklist>
+        <values>
+            <fullName>Isolated to Non Rubrik Issue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Provided Steps Resolved the Issue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Response Update Assist Request</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unresolved%2FRequest Reopen</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Case_Communication_Category__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Case_Communication_Reason__c</picklist>
+        <values>
+            <fullName>Case driven by AR engineer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Update Frequency</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Category__c</picklist>
+        <values>
+            <fullName>Customer Success</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Retention</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Close_loop_Dropdown__c</picklist>
+        <values>
+            <fullName>Feedback on Case-handling skills</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Feedback provided on AR quality</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Training required on certain component</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Component__c</picklist>
+        <values>
+            <fullName>ADFS</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AHV</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AHV - Backup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AHV - Re</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AHV - Recovery</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AHV - Rep</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AHV - Rest</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AHV - Restore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AHV - SLA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AHV - UI</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AMI deployment issue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AWS - Backup - CDM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AWS - Backup - Recovery - CDM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AWS - N</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AWS - R</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AWS - RDS - Backup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AWS - RDS - Restore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AWS - Rep</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AWS - Rest</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AWS - Restore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AWS - SLA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AWS - UI</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AWS-Archive</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AWS-Backups</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AWS-CO</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Activity</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Activity - NoSQL Protection %28Mosaic%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Add</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Add Node</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Add domain</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Add nodes</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Adding vcenter</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Administrative</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Administrative - CDM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Administrative - NoSQL Protection %28Mosaic%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Archive</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Archive Throttle</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Authentication Issue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Azure - Backup - CDM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Azure - N</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Azure - R</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Azure - Recovery - CDM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Azure - Rep</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Azure - Rest</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Azure - Restore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Azure - SLA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Azure - UI</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Azure Active Directory</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Azure SQL - Backup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Azure SQL - Restore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Azure-Archive</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Azure-Backups</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Azure-CO</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Background jobs</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Backup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Begin%2FEnd snapshot failure</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bootstrap</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Brik Relocation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Browse Cache Issue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Browser compatibility</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CLI</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Carbon Cache Memory Is Too High</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cassandra</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cassandra - Restore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cassandra - Restore - NoSQL Protection %28Mosaic%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cassandra - Security - NoSQL Protection %28Mosaic%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cassandra Partition Full</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cleversafe issue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cloud Cluster</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cloud Cluster - CDM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cloud Cluster - Infrastructure</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cloud Cluster - N</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cloud Cluster - R</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cloud Cluster - Rep</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cloud Cluster - Replication</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cloud Cluster - Rest</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cloud Cluster - SLA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cloud Cluster - Security - CDM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cloud Cluster - Security - NoSQL Protection %28Mosaic%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cloud Cluster - UI</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cloud Custer - HW</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cloud Mounts</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cloud Workload</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cloud-Cluster</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CloudCluster</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cluster maintenance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Complete Edition</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Configuration</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Configuration Consistency failure</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Configure</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Configure system</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Create Support Portal login</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Create report</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DB2 - Backup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DB2 - Restore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DIMM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DNS</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dashboard</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Delete</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Delete Relics</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Delete Unprotected</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Deleting vcenter</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Documentation missing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Download</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Download Failed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Downloads not working</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Duplicate %2F Spam %2F Junk</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Edge</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Edge - HW</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Edge - N</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Edge - R</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Edge - Rep</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Edge - Rest</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Edge - Security - CDM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Edge - UI</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Edge-Cluster</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Edge-HyperV</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Edge-HyperV- Replication</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Edge-VMware</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Edge-VMware - Replication</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Envoy</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Envoy - Cluster - CDM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Exchange DAGaware</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Exchange DAGaware - Restore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Exchange Setup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Exchange Snaps</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Export Failed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Export failure</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Failed Chassis</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Failed HDD</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Failed Node</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Failed PSU</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Failed SSD</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Failed to Snap</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>File Restore Failed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Fileset</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Fileset - Restore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Firewall ports</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Floating IP</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GC</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GCP - Restore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GCP-Backups</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>General question</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Google</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Google - R</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Google - Rep</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Google - Rest</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Google - SLA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Google - UI</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Graphite Partition Full</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Graphql API</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HOST%2FNAS</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HOST%2FNAS - Backup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HOST%2FNAS - Recovery - Rubrik Security Cloud %28Polaris%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HOST%2FNAS-Recovery</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hardware Health Check Failure</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hardware-C</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Health check</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hitachi HCP</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hyper - V</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hyper-V</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hyper-V - Re</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hyper-V - Recovery</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hyper-V - Rep</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hyper-V - Rest</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hyper-V - SLA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hyper-V - UI</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HyperV - Backup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HyperV - Restore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>IPMI Configuration</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Import users%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Increased NFS Archival Size</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Index issues</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Indexing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ingest</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Insight Notification</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Instant Recovery</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Invalid report</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Isilon issue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Job Complete Email Notification</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Job Froze While Cancelling</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kubernetes</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kubernetes - Restore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Linux Restore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Linux Setup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Linux Snaps</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Live Mount</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Live Mounts</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Log Partition Full</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MSSQL</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MSSQL - Backup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MSSQL - Re</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MSSQL - Recovery</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MSSQL - Rep</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MSSQL - Rest</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MSSQL - Restore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MSSQL - SLA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MSSQL - UI</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Managed Volume</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Managed Volume - Recovery</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ManagedVolume - Backup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ManagedVolume - Restore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Max BW Utilization</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Missed Snap</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MongoDB</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MongoDB - Restore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MongoDB - Restore - NoSQL Protection %28Mosaic%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MongoDB - Security - NoSQL Protection %28Mosaic%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NAS - Backup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NAS - Restore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NAS Archival</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NAS Cloud Direct</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NAS Fileset</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NAS Mounts</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NAS%2FNFS Fileset</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NFS</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NFS export issue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NTP</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Node Stale</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Node down</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>O365</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>O365 - Restore - Rubrik Security Cloud %28Polaris%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>O365 Mailbox - Backup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>O365 Mailbox - Restore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>O365 Onedrive - Backup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>O365 Onedrive - Restore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>O365 Sharepoint - Backup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>O365 Sharepoint - Restore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>O365 Teams - Backup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>O365 Teams - Restore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>OS Partition Full</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Okta</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>On Prem Cluster</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>On Prem Cluster - Security - NoSQL Protection %28Mosaic%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>OnePing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Oracle</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Oracle - Backup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Oracle - Recovery</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Oracle - Rep</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Oracle - Rest</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Oracle - Restore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Oracle - SLA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Oracle - UI</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Oracle -Re</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Oracle Restore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Oracle Setup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Oracle Snaps</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Orchestrated Application Recovery %28AppFlows%29 - Backup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Orchestrated Application Recovery %28AppFlows%29 - Restore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Out of space</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Over Subscription</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Over subscribed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Partition with high inode usage</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Performance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Permission Issue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Portal Access</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PowerShell</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Product fulfillment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Product registration</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>QStar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RBAC</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ransomware Investigation %28Radar%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Re-IP</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Read only filesystem</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RecoverX</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Reduced Retention</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Refresh</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Registration</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Remove</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Remove Domain</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Remove Node</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Remove nodes</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Replication</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Replication - SLA - CDM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Replication Throttle</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Reseat Drive</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rest API</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rest-API</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rest-API - NoSQL Protection %28Mosaic%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Restore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Restore Failed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Restore from DR</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Role Assignment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Routing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rubrik CDM - Hardware</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rubrik CDM - N</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rubrik CDM - Rep</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rubrik CDM Appliance - Capacity</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rubrik CDM Appliance - Cluster</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rubrik CDM Appliance - Replication</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rubrik CDM Appliance - Security</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rubrik Cloud Vault - Archive</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rubrik Hardware</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>S3-Compliant</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SAP HANA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SAP HANA - Backup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SAP HANA - Recovery</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SAP HANA - Restore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SDK</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SFP%2FGBICs</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SLA Domain - UI - CDM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SLA window</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SMB Share</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SQL Restore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SQL Setup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SQL Snaps</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SW Download Request</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SW Upgrade</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scality issue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scripting</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sensitive Data Discovery %28Sonar%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Server%26Apps</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Service Health</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Service account</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Setup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Slow Restore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Slow Upload%2FDownload</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Snap Length</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Snaps</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Snapshot Failed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Snapshot Retention</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Snapshot outside of window</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Space mismatch</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Storage vMotion</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Stuck Job Detected</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Support Portal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Support Portal - CDM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Support portal - NoSQL Protection %28Mosaic%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>System</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tape</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Third Party Hardware-Cluster</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Third-Party Hardware</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Third-party Hardware - Security - CDM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>UI - CDM Upgrades</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>UI - Dashboards</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>UI - Data Protection %28GPS%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>UI - Events</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>UI - Inventory</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>UI - Live Mounts</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>UI - Metadata Sync</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>UI - Orchestrated Application Recovery %28AppFlows%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>UI - Reports</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>UI - SAP HANA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>UI - SLA Domain</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unable to Install Agent</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unable to add NAS shares</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unable to add host</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unsupported Configuration</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Update%2Fupgrade</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Upgrade Failed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Upload</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Uploads not Working</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Usability</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>User Interface</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>User provisioning</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Users</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>VMware</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>VMware - N</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>VMware - Re</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>VMware - Recovery</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>VMware - Rep</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>VMware - Rest</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>VMware - SLA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>VMware - UI</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>VMware Backup - Rubrik Security Cloud %28Polaris%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>VMware Restore - Rubrik Security Cloud %28Polaris%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>VSS synchronization</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Virtual Machine</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Volume Group</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Volume Group - Backup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Volume Group - Recovery</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Volume Group - Restore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Web UI</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Web UI - Re</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Web UI - Reporting</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Web UI - Rest</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Web UI - SLA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Window Restore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Window Snaps</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Windows Setup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>how-to</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>livemount failed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>rksupport Password</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>space used</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>vCenter refresh failed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>vCenter%2FESXI Settings</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Critical_Situation_Reason__c</picklist>
+        <values>
+            <fullName>Account Escalation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Data Loss</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hot Customer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending Deal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Production Down</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ransomware Situation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Restore Issue</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Issue_Understanding_Category__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Issue_Understanding_Reason__c</picklist>
+        <values>
+            <fullName>Impact Analysis</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lab replication possibility and usage</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Probing skill</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Workflow Understanding</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Product_Name__c</picklist>
+        <values>
+            <fullName>Appflows</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Atlassian</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CDM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cloud Native Protection</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cloud Vault</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cloud Vault - Archive</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cloud Vault - Backup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DSPM M365</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Entra ID</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GPS - RSC Upgrade</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kubernetes</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Laminar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Laminar Lite</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>M365</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>M365 - Customer Hosted</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>M365 - Rubrik Hosted</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>M365-Radar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>M365-Sonar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NASCD</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NASCD - RADAR</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NASCD - RCV</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NASCD - SONAR</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>OnPrem AD</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Product - Multi</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RSC SLA Migration</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Radar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Salesforce</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sap Hana Cloud</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sonar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Threat Hunting</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Threat Monitoring</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Threat Monitoring - Cloud</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Threat Monitoring - M365</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Turbo Threat Hunting</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>UCL</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>UCL - Rubrik Cloud Vault</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>UCL-Radar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>UCL-Sonar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>User Access</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>User Intelligence</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Research_Skills_Category__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Research_Skills_Reason__c</picklist>
+        <values>
+            <fullName>Usage of Confluence</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Usage of Jira</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Usage of KB articles</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Usage of existing tools</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Resolution_Skill_Category__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Resolution_Skill_Reason__c</picklist>
+        <values>
+            <fullName>Workaround amicability</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Workaround offered</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Status__c</picklist>
+        <values>
+            <fullName>In Progress</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Open</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>Waiting On Support Engineer</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Troubleshooting_Skills_Category__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Troubleshooting_Skills_Reason__c</picklist>
+        <values>
+            <fullName>Environmental Impact %28config%2C network related%2C switch%2C 3rd party%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Logical Ability%28Connecting dots%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Realtime log analysis</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Type__c</picklist>
+        <values>
+            <fullName>Critical Situation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Need Assistance on Next Steps%2FTroubleshooting</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Request for CFD creation</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>

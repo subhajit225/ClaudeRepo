@@ -1,0 +1,127 @@
+<template>
+    
+    <template if:true={agentHelperClickFlag}>
+        <div class={agentHelperWidthCss}>
+            <div class="su__agent-helper su__h-100p">
+                <div class="containerNav agent-helper-body slds-col su__h-100p" >
+                    <div class="containerNavContent su__h-100p">
+                    <!-- Tabs that display on click of Agent Helper button  -->
+                        <!-- <template if:true={clickFlag}> -->
+                            <div data-id="topNav" class="topNav hide-320" >
+                            <template if:true={checkedDivOverview}>
+                                <div class="topNavItems su__agentHelperSelected-tab" onclick={updateOpenTab} data-tab="Overview" data-flag="true" data-section="Overview"><p class="su__ag-nav-tab">Overview</p></div>
+                            </template>
+                            <template if:false={checkedDivOverview}>
+                                <div class="topNavItems" onclick={updateOpenTab} data-tab="Overview" data-flag="true" data-section="Overview"><p class="su__ag-nav-tab">Overview</p></div>
+                            </template>
+                            <template if:true={checkedDiv}>
+                            <div class="topNavItems su__agentHelperSelected-tab" onclick={updateOpenTab} data-tab="Articles" data-flag="true" data-section="Top Articles"><p class="su__ag-nav-tab">Top Articles</p></div>
+                            </template>
+                            <template if:false={checkedDiv}>
+                                <div class="topNavItems" onclick={updateOpenTab} data-tab="Articles" data-flag="true" data-section="Top Articles"><p class="su__ag-nav-tab">Top Articles</p></div>
+                            </template>
+                            <template if:true={checkedDivCase}>
+                            <div class="topNavItems su__agentHelperSelected-tab" onclick={updateOpenTab}  data-tab="Cases" data-flag="true" data-section="Top Related Cases"><p class="su__ag-nav-tab">Top Related Cases</p></div>
+                            </template>
+                            <template if:false={checkedDivCase}>
+                                <div class="topNavItems" onclick={updateOpenTab} data-tab="Cases" data-flag="true" data-section="Top Related Cases"><p class="su__ag-nav-tab">Top Related Cases</p></div>
+                            </template>
+                            <template if:true={checkedDivExpert}>  
+                            <div class="topNavItems su__agentHelperSelected-tab" onclick={updateOpenTab}  data-tab="Experts" data-flag="true" data-section="Top Experts" ><p class="su__ag-nav-tab">Top Experts</p></div>
+                            </template>
+                            <template if:false={checkedDivExpert}>  
+                                <div class="topNavItems" onclick={updateOpenTab} data-tab="Experts" data-flag="true" data-section="Top Experts" ><p class="su__ag-nav-tab">Top Experts</p></div>
+                            </template>
+                            </div> 
+                        <!-- </template> -->
+                        <!-- Toolbar that displays on Agent Helper component when window size is less than 768px-->
+                        <div class="containerNavContentNavigate">
+                            <div>
+                                <lightning-icon class="su__ag-nav-tab-icon" icon-name="utility:justify_text" size="x-small" onclick={setDisplaySectionTab}></lightning-icon>
+                            </div>
+                            <div class="ag-tab-selected">
+                                <span class="agentHelperSelectedTab">{sectionName}</span>
+                                <span class="su__font-bold"> | Agent Helper</span>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="26.397" height="26.397" viewBox="0 0 26.397 26.397">
+                                <g id="Group_175" data-name="Group 175" transform="translate(2.308 2.308)" style="mix-blend-mode: normal;isolation: isolate">
+                                    <g id="Ellipse_54" data-name="Ellipse 54" transform="translate(0 18.606) rotate(-80.314)" fill="#FFE140" stroke="#fff" stroke-width="0">
+                                    <ellipse cx="9.437" cy="9.437" rx="9.437" ry="9.437" stroke="none"/>
+                                    <ellipse cx="9.437" cy="9.437" rx="10.437" ry="10.437" fill="none"/>
+                                    </g>
+                                    <g id="Group_171" data-name="Group 171" transform="translate(7.697 8.432)">
+                                    <ellipse id="Ellipse_55" data-name="Ellipse 55" cx="0.831" cy="1.123" rx="0.831" ry="1.123" transform="translate(0 0)" fill="#232d36"/>
+                                    <ellipse id="Ellipse_56" data-name="Ellipse 56" cx="0.831" cy="1.123" rx="0.831" ry="1.123" transform="translate(4.725 0)" fill="#232d36"/>
+                                    </g>
+                                    <line id="Line_38" data-name="Line 38" x2="6.715" transform="translate(7.697 14.422)" fill="none" stroke="#a72623" stroke-linecap="round" stroke-width="1"/>
+                                </g>
+                            </svg>
+                        </div>  
+                        <!-- Toolbar end -->
+                        <!-- Links that display on click of Agent Helper button -->
+                        <section data-id="tabSection" class="hideSection su__h-100p">
+                            <div class="navigation-section" >
+                                <div class="tabHeading slds-p-around_medium slds-m-bottom_medium" onclick={updateOpenTab} data-tab="Overview" data-flag="true" data-section="Overview">
+                           
+                                    <div class="tabMenu" >
+                                       <div>Overview</div>
+                                       <lightning-icon class="tabIcon" icon-name="utility:forward" size="x-small"></lightning-icon>
+                                    </div>
+                                   
+                                </div>
+                                <div class="tabHeading slds-p-around_medium slds-m-bottom_medium" onclick={updateOpenTab} data-tab="Articles" data-flag="true" data-section="Top Articles">
+                                
+                                    <div class="tabMenu" >
+                                    <div>Top Articles</div>
+                                    <lightning-icon class="tabIcon" icon-name="utility:forward" size="x-small"></lightning-icon>
+                                    </div>
+                                
+                                </div>
+                                <div class="tabHeading slds-p-around_medium slds-m-bottom_medium" onclick={updateOpenTab} data-tab="Cases" data-flag="true" data-section="Top Related Cases">
+                                    
+                                    <div class="tabMenu">
+                                    <div>Top Related Cases</div>
+                                    <lightning-icon class="tabIcon" icon-name="utility:forward" size="x-small" ></lightning-icon>
+                                    </div>
+                                
+                                </div>
+                                <div class="tabHeading slds-p-around_medium slds-m-bottom_medium" onclick={updateOpenTab} data-tab="Experts" data-flag="true" data-section="Top Experts">
+                                    
+                                    <div class="tabMenu" >
+                                        <div>Top Experts</div>
+                                        <lightning-icon class="tabIcon" icon-name="utility:forward" size="x-small" ></lightning-icon>
+                                    </div>
+                                
+                                </div>
+                            </div>
+                        </section>
+                        <!-- Displays data in Overview tab  -->
+                        <section data-id="case-overview" class="hideSection su__h-100p">
+                            <template if:true={caseOverview}>
+                                <c-s-u_-case-overview maincontainerwidth={maincontainerwidth} case-id={caseId} uid={uid} end-point={endPoint} token={token}></c-s-u_-case-overview>
+                            </template>
+                        </section>
+                        <!-- Displays data in Top Articles tab  -->
+                        <section data-id="articles" class="hideSection su__h-100p">
+                            <template if:true={articleTabActive}>
+                                <c-s-u_-top-articles maincontainerwidth={maincontainerwidth} case-ids={relatedCaseIds} section-name={sectionName}></c-s-u_-top-articles>
+                            </template>
+                        </section>
+                        <!-- Displays data in Top Related Cases tab  -->
+                        <section data-id="cases" class="hideSection su__h-100p">
+                            <template if:true={relatedCaseTabActive}>
+                                <c-s-u_-top-related-cases maincontainerwidth={maincontainerwidth} case-ids={relatedCaseIds} section-name={sectionName}></c-s-u_-top-related-cases>
+                            </template>
+                    </section>
+                    <!-- Displays data in Top Experts tab  -->
+                    <section data-id="experts" class="hideSection su-agent-section su__h-100p">
+                        <template if:true={expertsTabActive}>
+                            <c-s-u_-top-experts maincontainerwidth={maincontainerwidth} case-ids={relatedCaseIds} event-code={eventCode} record-id={caseId} height={height} uid={uid} end-point={endPoint} section-name={sectionName}></c-s-u_-top-experts>
+                        </template> 
+                    </section>
+                </div> 
+                </div>
+            </div>
+        </div>
+    </template>   
+</template>

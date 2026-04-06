@@ -1,0 +1,131 @@
+<template>
+	<div class="action-header-holder">
+	<!-- <template if:false={queryLoading}>
+		<template if:false={queryError}> -->
+		<!-- tabs buttons starts -->
+		<div class="action-tab-btns">
+			<button class={tabClassOverview} onclick={handleTabClick} data-city="responseAssist" style="position:relative">
+				Response Assist
+				<span onclick={avoidClick} class="responseAssistNewTag">New!</span>
+			</button>
+			<button disabled={articlesLoading} class={tabClassRelatedArticles} onclick={handleTabClick} data-city="relatedArticles">
+				Top Related Articles
+			</button>
+			<button disabled={queryLoading} class={tabClassRelatedCasesActive} onclick={handleTabClick} data-city="relatedCases">
+				Top Related Cases
+			</button>
+			<button disabled={queryLoading} class={tabClassTopExpertsActive} onclick={handleTabClick} data-city="topExperts">
+				Top Experts
+			</button>
+		</div>
+		<div class="action-tab-btns-300Px">
+			<button class={tabClassOverview} onclick={handleTabClick2} data-city="responseAssist">
+				Response Assist 
+				<svg xmlns="http://www.w3.org/2000/svg" width="15.811" height="15.811" viewBox="0 0 15.811 15.811">
+					<g id="Icon_feather-zoom-in1" data-name="Icon feather-zoom-in" transform="translate(0.75 0.75)">
+						<path id="Path_25584" data-name="Path 25584" d="M16.944,10.722A6.222,6.222,0,1,1,10.722,4.5,6.222,6.222,0,0,1,16.944,10.722Z" transform="translate(-4.5 -4.5)" fill="none" stroke="#1d1f20" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+						<path id="Path_25585" data-name="Path 25585" d="M28.358,28.358l-3.383-3.383" transform="translate(-14.358 -14.358)" fill="none" stroke="#1d1f20" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+						<path id="Path_25586" data-name="Path 25586" d="M16.5,12v4.667" transform="translate(-10.278 -8.111)" fill="none" stroke="#1d1f20" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+						<path id="Path_25587" data-name="Path 25587" d="M12,16.5h4.667" transform="translate(-8.111 -10.278)" fill="none" stroke="#1d1f20" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+					</g>
+				</svg>
+			</button>
+			<button disabled={articlesLoading} class={tabClassRelatedArticles} onclick={handleTabClick2} data-city="relatedArticles">
+				Top Related Articles 
+				<svg xmlns="http://www.w3.org/2000/svg" width="15.811" height="15.811" viewBox="0 0 15.811 15.811">
+					<g id="Icon_feather-zoom-in2" data-name="Icon feather-zoom-in" transform="translate(0.75 0.75)">
+						<path id="Path_255842" data-name="Path 25584" d="M16.944,10.722A6.222,6.222,0,1,1,10.722,4.5,6.222,6.222,0,0,1,16.944,10.722Z" transform="translate(-4.5 -4.5)" fill="none" stroke="#1d1f20" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+						<path id="Path_255852" data-name="Path 25585" d="M28.358,28.358l-3.383-3.383" transform="translate(-14.358 -14.358)" fill="none" stroke="#1d1f20" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+						<path id="Path_255862" data-name="Path 25586" d="M16.5,12v4.667" transform="translate(-10.278 -8.111)" fill="none" stroke="#1d1f20" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+						<path id="Path_255872" data-name="Path 25587" d="M12,16.5h4.667" transform="translate(-8.111 -10.278)" fill="none" stroke="#1d1f20" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+						</g>
+						</svg>
+			</button>
+			<button disabled={queryLoading} class={tabClassRelatedCasesActive} onclick={handleTabClick2} data-city="relatedCases">
+				Top Related Cases 
+				<svg xmlns="http://www.w3.org/2000/svg" width="15.811" height="15.811" viewBox="0 0 15.811 15.811">
+					<g id="Icon_feather-zoom-in3" data-name="Icon feather-zoom-in" transform="translate(0.75 0.75)">
+						<path id="Path_255843" data-name="Path 25584" d="M16.944,10.722A6.222,6.222,0,1,1,10.722,4.5,6.222,6.222,0,0,1,16.944,10.722Z" transform="translate(-4.5 -4.5)" fill="none" stroke="#1d1f20" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+						<path id="Path_255853" data-name="Path 25585" d="M28.358,28.358l-3.383-3.383" transform="translate(-14.358 -14.358)" fill="none" stroke="#1d1f20" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+						<path id="Path_255863" data-name="Path 25586" d="M16.5,12v4.667" transform="translate(-10.278 -8.111)" fill="none" stroke="#1d1f20" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+						<path id="Path_255873" data-name="Path 25587" d="M12,16.5h4.667" transform="translate(-8.111 -10.278)" fill="none" stroke="#1d1f20" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+						</g>
+						</svg>
+			</button>
+			<button disabled={queryLoading} class={tabClassTopExpertsActive} onclick={handleTabClick2} data-city="topExperts">
+				Top Experts 
+				<svg xmlns="http://www.w3.org/2000/svg" width="15.811" height="15.811" viewBox="0 0 15.811 15.811">
+					<g id="Icon_feather-zoom-in44" data-name="Icon feather-zoom-in" transform="translate(0.75 0.75)">
+						<path id="Path_255845" data-name="Path 25584" d="M16.944,10.722A6.222,6.222,0,1,1,10.722,4.5,6.222,6.222,0,0,1,16.944,10.722Z" transform="translate(-4.5 -4.5)" fill="none" stroke="#1d1f20" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+						<path id="Path_255855" data-name="Path 25585" d="M28.358,28.358l-3.383-3.383" transform="translate(-14.358 -14.358)" fill="none" stroke="#1d1f20" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+						<path id="Path_255865" data-name="Path 25586" d="M16.5,12v4.667" transform="translate(-10.278 -8.111)" fill="none" stroke="#1d1f20" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+						<path id="Path_255875" data-name="Path 25587" d="M12,16.5h4.667" transform="translate(-8.111 -10.278)" fill="none" stroke="#1d1f20" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+						</g>
+						</svg>
+			</button>
+		</div>
+		<!-- /tabs buttons ends -->
+
+		<!-- tabs body starts -->
+		<div class="width-530px">
+			<template if:false={openModal} >
+				<template if:true={isResponseAssistActive}>
+					<c-s-u_-aiq-response-assist record-id={caseId} event-code={eventCode} end-point={endPoint} token = {token} s3endpoint = {s3endpoint} uid = {uid} logged-in-user-data={loggedInUserData} meta-data={metaData}></c-s-u_-aiq-response-assist>
+				</template>
+				<template if:true={isRelatedArticlessActive}>
+					<c-s-u_-aiq-top-articles record-id={caseId} event-code={eventCode} end-point = {endPoint} uid={uid} token = {token} s3endpoint = {s3endpoint} case-ids={relatedCaseIds} top-articles-ids = {topArticlesIds} logged-in-user-data={loggedInUserData} meta-data={metaData} top-articles-data = {topArticlesData} refined-query = {refinedQuery}></c-s-u_-aiq-top-articles>
+				</template>
+
+				<template if:true={isRelatedCasesActive}>
+					<c-s-u_-aiq-top-related-cases record-id={caseId} event-code={eventCode} uid={uid} case-ids={relatedCaseIds} end-point={endPoint} token = {token} s3endpoint = {s3endpoint}  logged-in-user-data={loggedInUserData} meta-data={metaData}></c-s-u_-aiq-top-related-cases>
+				</template>
+				<template if:true={isTopExpertsActive}>
+					<c-s-u_-aiq-top-experts key={keys.key6} maincontainerwidth={maincontainerwidth} case-ids={relatedCaseIds}
+						event-code={eventCode} record-id={caseId} height={height} uid={uid} end-point={endPoint}
+						section-name={sectionName} logged-in-user-data={loggedInUserData} token = {token} s3endpoint = {s3endpoint} meta-data={metaData} owner-id={ownerId} ></c-s-u_-aiq-top-experts>
+				</template>
+			</template>
+		</div>
+
+		<template if:true={openModal} class="modal-components-530px">
+				<div class="backdrop-530px">		
+					<div class="tab-modal-container-530px">	
+						<header class="tab-modal-header">
+							{tabModalHeading}
+							<svg onclick={tabModalCloseHandler} width="10" height="10" viewBox="0 0 10 10">
+								<path id="Icon_ionic-ios-close" data-name="Icon ionic-ios-close" d="M17.47,16.289l3.572-3.573a.837.837,0,1,0-1.184-1.184L16.286,15.1l-3.572-3.573a.837.837,0,1,0-1.184,1.184L15.1,16.289l-3.572,3.573a.837.837,0,0,0,1.184,1.184l3.572-3.573,3.572,3.573a.837.837,0,0,0,1.184-1.184Z" transform="translate(-11.285 -11.289)" fill="#b0adad"/>
+							</svg>
+						</header>		
+						<template if:true={isResponseAssistActive}>
+							<c-s-u_-aiq-response-assist record-id={caseId} event-code={eventCode} end-point={endPoint}
+								token={token} s3endpoint={s3endpoint} uid={uid} logged-in-user-data={loggedInUserData} meta-data={metaData}></c-s-u_-aiq-response-assist>
+						</template>
+						<template if:true={isRelatedArticlessActive}>
+							<c-s-u_-aiq-top-articles  record-id={caseId} event-code={eventCode} end-point = {endPoint} uid={uid} token = {token} s3endpoint = {s3endpoint} case-ids={relatedCaseIds} top-articles-ids = {topArticlesIds} logged-in-user-data={loggedInUserData} meta-data={metaData} top-articles-data = {topArticlesData} refined-query = {refinedQuery} ></c-s-u_-aiq-top-articles>
+						</template>
+
+						<template if:true={isRelatedCasesActive}>
+							<c-s-u_-aiq-top-related-cases record-id={caseId} event-code={eventCode} case-ids={relatedCaseIds} end-point={endPoint} uid={uid} token = {token} s3endpoint = {s3endpoint} logged-in-user-data={loggedInUserData} meta-data={metaData}></c-s-u_-aiq-top-related-cases>
+						</template>
+						<template if:true={isTopExpertsActive}>
+							<c-s-u_-aiq-top-experts key={keys.key6} maincontainerwidth={maincontainerwidth}
+								case-ids={relatedCaseIds} event-code={eventCode} record-id={caseId} height={height}
+								uid={uid} end-point={endPoint} section-name={sectionName} logged-in-user-data={loggedInUserData} token = {token} s3endpoint = {s3endpoint}  meta-data={metaData} owner-id={ownerId}></c-s-u_-aiq-top-experts>
+						</template>
+					</div>
+				</div>
+		</template>
+		<!-- /tabs body ends -->
+		<!-- </template>
+	</template> -->
+	<!-- <template if:true={queryLoading}>
+		<div class="data-loader"></div>
+	</template> -->
+	<template if:true={queryError}>
+		<div class="query-error-screen">
+			<figure class="unavailable-figure"></figure>
+			<p>Oops! Unable to load!</p>
+		</div>
+	</template>
+	</div>
+</template>

@@ -1,0 +1,23 @@
+<apex:page standardController="Contact" sidebar="false" standardStylesheets="false" lightningStylesheets="true" recordSetVar="lead" showHeader="false">
+<apex:includeScript value="/soap/ajax/42.0/connection.js"/>
+<apex:includeScript value="/soap/ajax/42.0/apex.js"/> 
+<script type="text/javascript">    
+    sforce.connection.sessionId = "{!$Api.Session_ID}";
+    var records = "{!selected}";
+    var arr = [];
+    records = records.replace('[','');
+    records = records.replace(']','');
+    records = records.replace(/ /g,'');
+    if(records != "" && records.search(',') > 0 ){
+        arr = records.split(','); 
+    }else if(records != null && records != ""){     
+        arr.push(records);
+    }
+    var myurl = "https://app.salesloft.com/app/import/crm?contact=" + arr;
+    if("{!$User.UITheme}" != "Theme3"){
+        sforce.one.navigateToURL(myurl,false);  
+    }else{
+         window.open(myurl,'_self');    
+    }
+</script>
+</apex:page>

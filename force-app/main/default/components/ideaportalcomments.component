@@ -1,0 +1,18 @@
+<apex:component controller="IdeaComments" access="global">
+<apex:attribute name="theideaId" assignTo="{!ideaID}" type="String" description="Id of the case"/>  
+
+ <apex:datatable var="c" value="{!IdeaComments}" id="comments" styleClass="table" >
+                    <apex:column headervalue="Comment">
+                     <apex:outputtext value="{!c.commentbody}" escape="false"/>
+                    </apex:column>                    
+                    <apex:column headervalue="Date">
+                     <apex:outputfield value="{!c.createdDate}"/>
+                    </apex:column> 
+                    <apex:column headervalue="Commentor">
+                     <apex:outputfield value="{!c.createdBy.Name}"/>
+                    </apex:column> 
+             </apex:datatable>
+
+
+
+</apex:component>

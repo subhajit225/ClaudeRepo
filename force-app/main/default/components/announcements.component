@@ -1,0 +1,99 @@
+<apex:component controller="CommunityHomeController">
+    <style>
+        .announcementArticleBlock{width:90%;margin:0 auto;padding:0px 40px;}
+        .announcementContainer > .sectionHeaders{border: none !important;}
+        .announcementDate{color:#2BA290;}
+        .arrowHover{display:none;position: relative;top: 55px;}
+        .arrow{position: relative;top: 55px;}
+        .announcementDateSection{font-size: 12px;}
+        .sectionHeaders{font-size: 30px;color: #333333;border-bottom:1px solid #eee;padding-bottom:10px;font-family:"Gotham-light";}
+        .sectionBody{margin-bottom:50px;}
+        .eachBlockannouncements{border:1px solid #eee;margin-bottom:16px;padding:20px 5px;background-color:#fff;}
+        .PublishDate{text-transform:uppercase;font-size:11px;font-weight:bold;font-family: "Gotham-light";color:#999;}
+        .PostedBy{text-transform:uppercase;font-size:11px;font-weight:bold;font-family: "Gotham-light";color:#19a7b5;}
+        .title{font-size:20px;color:#4a4a4a;font-family: "Gotham-medium";padding-bottom:5px;padding-top:5px;}
+        .eachBlockannouncements:hover .title{color:#009DAC;}
+        .eachBlockannouncements:hover .arrow{display:none;}
+        .eachBlockannouncements:hover .arrowHover{display:block;}
+        .desc{font-size:16px;color:#666666;font-family: "Gotham-light";padding-bottom:20px;padding-top:15px;}
+    </style>
+    <div class="col-lg-12 col-md-12 col-xs-12 nopad announcementContainer">
+        <div class="col-lg-12 col-md-12 col-xs-12 nopad sectionHeaders">Announcements</div>
+        <div class="col-lg-12 col-md-12 col-xs-12 nopad sectionBody">
+            <apex:variable value="{!1}" var="rowNum"/>
+            <apex:repeat value="{!PortalNews}" var="w">
+                <apex:outputPanel rendered="{!IF(rowNum == 1,true,false)}">
+                    <div class="col-lg-12 col-md-12 col-xs-12 nopad">
+                        <a href="{!urlFor($Action.Portal_News__c.View, w.Id)}" class="anchor">
+                            <div class="col-lg-12 col-md-12 col-xs-12 nopad eachBlockannouncements">
+                                <div class="col-lg-12 col-md-12 col-xs-12">
+                                    <div class="col-lg-12 col-md-12 col-xs-12 nopad title">
+                                        <apex:outputText escape="false" rendered="{!w.Alert__c}">
+                                            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>&nbsp;
+                                        </apex:outputText>
+                                        <apex:outputtext value="{!IF(AND(w.name != null,LEN(w.name) > 100),LEFT(w.name ,100)+'...',w.name)}"  rendered="{!w.Name!=null}" escape="false"/>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 col-xs-12 nopad desc">
+                                        <apex:outputText value="{!IF(w.Summary__c != null,w.Summary__c,'')}" escape="false"></apex:outputText>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 col-xs-12 nopad">
+                                        <span class="artPublishDate">Created:&nbsp;</span>
+                                        <apex:outputText value="{0,date,MMM' 'dd', 'yyyy}" styleClass="artPublishDate">
+                                            <apex:param value="{!w.CreatedDate}" /> 
+                                        </apex:outputText>
+                                        <span class="artPublishDate"> &#x25cf;&nbsp; Last modified:&nbsp;</span>
+                                        <apex:outputText value="{0,date,MMM' 'dd', 'yyyy}" styleClass="artPublishDate">
+                                            <apex:param value="{!w.LastModifiedDate}" />
+                                        </apex:outputText>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!IF(rowNum == 2,true,false)}">
+                    <div class="col-lg-12 col-md-12 col-xs-12 nopad">
+                        <apex:variable value="{!1}" var="counter"/>
+                        <apex:repeat value="{!PortalNews}" var="w1">
+                            <apex:outputPanel rendered="{!IF(and(counter != null,counter >=2),true,false)}">
+                                <a href="{!urlFor($Action.Portal_News__c.View, w1.Id)}" class="anchor">
+                                    <div class="col-lg-12 col-md-12 col-xs-12 nopad eachBlockannouncements">
+                                        <div class="col-lg-11 col-md-11 col-xs-11 ">
+                                            <div class="col-lg-12 col-md-12 col-xs-12 nopad title">
+                                                <apex:outputText escape="false" rendered="{!w1.Alert__c}">
+                                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>&nbsp;
+                                                </apex:outputText>
+                                                <apex:outputtext value="{!IF(AND(w1.name != null,LEN(w.name) > 100),LEFT(w1.name ,100)+'...',w1.name)}"  rendered="{!w1.Name!=null}" escape="false"/>
+                                            </div>
+                                            <div class="col-lg-12 col-md-12 col-xs-12 nopad desc">
+                                                <apex:outputText value="{!IF(AND(w1.Summary__c != null,LEN(w1.Summary__c) > 100),LEFT(w1.Summary__c,100)+'...',w1.Summary__c)}" escape="false"></apex:outputText>
+                                            </div>
+                                            <div class="col-lg-12 col-md-12 col-xs-12 nopad">
+                                                <span class="artPublishDate">Created:&nbsp;</span>
+                                                <apex:outputText value="{0,date,MMM' 'dd', 'yyyy}" styleClass="artPublishDate">
+                                                    <apex:param value="{!w1.CreatedDate}" /> 
+                                                </apex:outputText>
+                                                <span class="artPublishDate"> &#x25cf;&nbsp; Last modified:&nbsp;</span>
+                                                <apex:outputText value="{0,date,MMM' 'dd', 'yyyy}" styleClass="artPublishDate">
+                                                    <apex:param value="{!w1.LastModifiedDate}" />
+                                                </apex:outputText>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-1 col-md-1 col-xs-1 nopad" style="">
+                                            <span>
+                                                <apex:image value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/right_arrow.png')}" styleClass="arrow"/>
+                                                <apex:image value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/right_arrow_hover.png')}" styleClass="arrowHover"/>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </apex:outputPanel>
+                            <apex:variable var="counter" value="{!counter + 1}"/>
+                        </apex:repeat>
+                    </div>
+                </apex:outputPanel>
+                <apex:variable var="rowNum" value="{!rowNum + 1}"/>
+            </apex:repeat>
+        </div>
+    </div>  
+</apex:component>

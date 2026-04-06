@@ -1,0 +1,78 @@
+.THIS .slds-card__header{
+    display: none;
+}
+.THIS .customRequired{
+    font-weight: 400; 
+} 
+.THIS .customLabel {
+    color: #727679;
+    font-size: medium;
+    font-weight: 100;
+    display: block;
+    margin-bottom: 4px;
+}
+.THIS .customRequired:before{    
+    content: "*";
+    margin: 0 0.125rem 0 0.125rem;
+    color: rgb(234, 0, 30);
+    float: left; 
+} 
+.THIS .none{
+    display:none; 
+}
+.THIS .form-element__helpError {
+    color: rgb(234, 0, 30);
+}
+.THIS .slds-has-error [role=combobox] input[readonly] {
+    border-color: rgb(234, 0, 30);
+}
+.THIS .slds-card .register-form-button{
+    border-bottom: 0;
+}
+.THIS .slds-card{
+    border: 0;
+}
+.THIS .slds-card__header{
+    margin-top: 10px;
+}
+.THIS .slds-form-element_horizontal .slds-form-element{
+    width:100% !important;
+}
+.THIS .slds-form-element_horizontal .slds-form-element__label{
+    float: unset !important;
+    max-width: unset !important;
+}
+.THIS .slds-form-element_horizontal .slds-form-element__control{
+    padding-left: 0 !important;
+}
+.THIS .slds-form-element_horizontal:not(.slds-is-editing){
+    padding: 0 !important;
+}
+.THIS .register-form-button{
+    justify-content: flex-start;
+    width: 100%;
+    margin-top: 40px;
+}
+.THIS .slds-card{
+    width: 50%;
+}
+.THIS .custom-box {
+    cursor: pointer;
+    /*color: var(--sds-c-button-text-color, var(--lwc-brandAccessible,rgb(1, 118, 211)));*/
+    padding: 23px;
+    color:#070F52;
+    background : linear-gradient(180deg, #EFF7FE 0%, #E6EFF8 100%);
+}
+.THIS .custom-box:hover {
+    background: #070f52;
+    color: white;
+    box-shadow: 1px 8px 20px grey !important;
+    transition: all 0.3s ease-out !important;
+    transform: scale(1.02) !important;
+}
+.THIS .custom-box:hover div{
+    color : white;
+}
+.THIS .slds-modal .slds-modal__container .slds-modal__content{
+    border-radius : 5px 5px 5px 5px;
+}

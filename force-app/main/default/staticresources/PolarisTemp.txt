@@ -1,0 +1,45 @@
+[[NOTE:  If the request is regarding one of the following then use “Prod change” project 
+ Remove cluster, owner-change,delete-account and domain-change]]
+
+*Customer:* [[Specify customer name]
+
+*RSC URL:* [[Customer RSC URL can be found in “Account Polaris URL” field from Salesforce support case]]
+
+*Summary* [IF THE REQUEST IS TO REMOVE SNAPSHOTS THEN SPECIFY SNAPSHOT NAMES, IDs and DATES explicitly]
+[[Provide a detailed and concise summary of the problem. Describe the customer scenario and provide the workflow of the problem at a high-level ]]
+e.g 1.: For O365 issues, Provide the mailbox’s affected
+e.g 2.: For Removing Snapshots, (Mention object names/ids, snapshot ID, Date(s) and the REASON for removing it)
+
+*Customer impact and current status*
+[[[For proper prioritization and visibility, provide the customer context regarding the impact. For example, if the customer is currently blocked, please be explicit. Given the volume of requests, providing clear status and visibility allows Engineering to prioritize all requests relative to the true customer impact and urgency. Also, provide clear and concise customer expectations on the path to address the issue from their perspective (e.g., the issue is resolved, but the customer requires a root cause analysis).]]
+
+*Support analysis*
+[[[Provide the detailed analysis taken thus far from Support and Customer Success perspectives. If any logs were reviewed, what was the analysis and reference log snippets. Please include any theories, etc. Please consider that new team members are the audience. The analysis provided facilitates self-learning for new team members. Including exact commands for log isolation will be very helpful (e.g., the commands used to grep the logs).]]]
+
+*Logz URL*
+[[[insert logz link here]]]
+
+*OrgID*(If applicable)
+
+*ObjectID*
+[[[insert object id/what we are investigating.]]]
+
+*ObjectType*: SnappableID/Org ID
+[[[(object type: ) (ID)]]]
+
+*JobType*:
+[[[Job type(UI/Backup/Index.Restore/Refresh/etc]]]
+*TaskchainID/TCID*
+[[[insert taskchain id from logz]]]
+
+*Terminal Error Message*
+[[[insert error message from logz]]]
+
+*Customer Consent to Debug(If Any)*
+[[[ Yes,No, or N/A]]]
+
+*3rd Party Vendor Support Ticket #*
+[[[insert ticket number from third party if working with another vendor on customer end]]]
+
+*What is being requested of Engineering*
+[[[Be specific of what exactly is required of Engineering to address the concern being raised in the JIRA request. Do not assume that Engineering knows what is being requested. Concise requests allow Engineering to focus on the solution instead of interpreting the requirements. For example, is a root cause being requested? Is a workaround being requested as the customer is blocked? Is an immediate fix being requested as the customer is currently blocked? Support and Customer Success have the customer perspective, so they must be conveyed properly in this section on the required next steps to address the customer concern. Finally, be sure to convey the timeline of the request (i.e.., when is the customer expecting a response from Rubrik?).]]]

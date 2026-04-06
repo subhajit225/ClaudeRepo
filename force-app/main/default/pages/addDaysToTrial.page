@@ -1,0 +1,17 @@
+<apex:page standardController="Contact" docType="HTML-5.0" extensions="addDaysToTrialController">
+    <apex:slds />
+    
+    <apex:form id="formData">
+        <apex:pageMessages id="showmsg"></apex:pageMessages>
+        <br/><br/>
+         <center>
+             <label class="slds-form-element__label" for="form-element-01">Extends By Days</label>
+             <apex:input type="number" value="{!daysToExtend}" label="Extends By Days" styleClass="slds-input" required="true" style="width:60%;" />
+             <br/><br/>
+             
+             <apex:commandButton value="Extend" action="{!extendDays}" reRender="showmsg" styleClass="slds-button slds-button_brand" />
+             <apex:commandLink action="/{!Contact.Id}" value="Cancel"  reRender="showmsg"  styleClass="slds-button slds-button_outline-brand" immediate="true"/>
+        </center>
+        
+    </apex:form>
+</apex:page>

@@ -1,0 +1,958 @@
+.mainContainer {
+  background-color: #ffffff;
+  border-radius: 16px;
+}
+
+.recordForm {
+  margin: auto;
+}
+
+.richtext {
+  display: none;
+}
+
+.richtextarea {
+  margin-bottom: 10px;
+  margin-left: 4px;
+}
+
+.topBarNav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.topBarLinks {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.topBarSave {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  background-color: #f8f5f5;
+  width: 134px;
+  height: 33px;
+  margin-right: 8px;
+}
+.plain-text-area-field .slds-form-element .textarea-container .slds-textarea {
+  padding-left: 6px !important;
+}
+
+.plain-text-area-field .slds-textarea {
+  padding-left: 6px !important;
+}
+.plain-text-area-field > textarea {
+  padding-left: 6px !important;
+}
+
+.menuitems {
+  background-color: white;
+  position: absolute;
+  top: 38px;
+  right: 36px;
+  border-radius: 6px;
+  text-size-adjust: 12px;
+  font-size: 13px;
+  box-shadow: 0 2px 5px grey;
+  font-family: 'Roboto Medium', sans-serif;
+  width: 134px;
+  z-index: 1;
+}
+
+.menuitems .item{
+  padding: 8px;
+  border-bottom: 1px solid #D2D2D2;
+}
+.menuitems .item:last-child{
+  border-bottom: none;
+}
+.menuitems .item:hover{
+  background: #E9ECEF 0% 0% no-repeat padding-box;
+  color: #3E7555;
+}
+
+
+.upicon,
+.menuitems {
+  display: none;
+}
+
+.attach {
+  margin-top: 5px;
+}
+
+.topBarSave,
+.savemenu {
+  cursor: pointer;
+}
+
+.topBarSave img {
+  width: 20px !important;
+  margin-right: 5px !important;
+}
+
+.downicon {
+  display: flex;
+}
+
+.closeIconTop {
+  cursor: pointer;
+}
+
+.closeIconTop img {
+  width: 80%;
+}
+
+.backIcon {
+  --lwc-colorTextIconDefault: #0f0a39;
+  padding-right: 16px;
+}
+
+.backIcon:hover {
+  cursor: pointer;
+}
+
+.saveIcon {
+  --lwc-colorTextIconDefault: #3e7555;
+  --lwc-squareIconMediumContentAlt: 19px;
+  cursor: pointer;
+}
+
+.newArticle {
+  color: #0f0a39;
+  font-family: 'Roboto Medium', sans-serif;
+  font-size: 14px;
+}
+
+.saveHeading {
+  font-family: 'Roboto Medium', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: #3e7555;
+  background-color: #f8f5f5;
+  border: none;
+}
+
+.formInp {
+  font-family: 'Poppins Medium', sans-serif;
+  font-weight: normal;
+  font-size: 14px;
+  margin-top: 4px;
+  margin-bottom: 12px;
+  padding: 0;
+}
+
+.dataCat {
+  padding-left: 5px;
+  margin-top: 1rem;
+}
+
+.layout-body-two {
+  padding-top: 0;
+  overflow-y: auto;
+  padding-bottom: 70px;
+}
+
+.fileUp {
+  width: 100%;
+}
+
+.upload_label {
+  width: 100%;
+  -webkit-text-fill-color: #767676;
+  font-family: 'Poppins Medium', sans-serif;
+  font-weight: normal;
+  font-size: 13.5px;
+  margin-left: 4px;
+}
+
+.upload_file_inner {
+  display: flex;
+  align-items: center;
+}
+
+.upload_file_outer {
+  padding-left: 5px;
+  border: 1px solid #eae9f0;
+  border-radius: 8px;
+  height: 41px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.picklist_tooltip {
+  font-size: 14px;
+  color: #fff;
+  font-family: 'Roboto Regular', sans-serif;
+  width: max-content;
+  max-width: 220px;
+}
+
+.picklist_hover,
+.knowbler__regenerate-hover {
+  position: relative;
+  cursor: pointer;
+  float: right;
+}
+
+.btnIconOverlay {
+  cursor: pointer;
+}
+
+.dependent_img {
+  margin-right: 0.5rem;
+}
+
+.controlling_img {
+  margin-right: 0.5rem;
+}
+
+.slds-popover_tooltip {
+  display: none;
+}
+
+.picklist_hover:hover .slds-popover_tooltip,
+.knowbler__regenerate-hover:hover .slds-popover_tooltip {
+  display: block;
+}
+
+.no_file_selected {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  font-size: 12px;
+}
+
+.SMALL .no_file_selected {
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 11px;
+}
+
+.file_upload {
+  width: 120px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.SMALL .file_upload {
+  width: unset !important;
+}
+
+.picklist_label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 70%;
+  font-size: 13.5px;
+  font-family: 'Poppins Regular', sans-serif;
+  margin-bottom: 3px;
+  color: #767676;
+  margin-left: 4px;
+}
+
+.border-bottom {
+  background: #546c7e;
+  height: 1px;
+  width: 94%;
+  margin: 1rem auto 0 auto;
+}
+
+:host {
+  --sds-c-checkbox-color-background-checked: #3e7555;
+  --sds-c-checkbox-mark-color-foreground: #fff;
+  --slds-c-checkbox-color-border: #707070;
+  --sds-c-checkbox-color-border-checked: #3E7555;
+  --slds-c-checkbox-box-shaxow-checked: box-shadow 0px 0px 6px #3e7555;
+}
+
+.SMALL .backIcon {
+  padding-right: 5px;
+}
+
+.ck_editor {
+  width: 100%;
+}
+
+.MEDIUM .file_uploaded {
+  width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.SMALL .file_uploaded {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.input_label {
+  margin-bottom: 2px;
+  font-size: 13.5px;
+  margin-left: 4px;
+  color: #767676;
+  font-family: 'Poppins Regular', sans-serif;
+}
+
+.input_error {
+  color: #767676;
+  font-family: 'Poppins Regular', sans-serif;
+  font-size: 12px;
+  top: -1px;
+}
+
+.input_label {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.viewForm {
+  font-family: 'Poppins Medium', sans-serif;
+  font-weight: normal;
+  font-size: 14px;
+  margin-top: 4px;
+  padding: 50px 100px;
+}
+
+.SMALL .viewForm {
+  font-family: 'Poppins Medium', sans-serif;
+  font-weight: normal;
+  font-size: 14px;
+  margin-top: 4px;
+  padding: 15px;
+}
+
+.cursor {
+  caret-color: transparent;
+}
+
+.knowbler-title-loader-wrapper {
+  display: flex;
+  width: auto;
+  border-radius: 0px 0px 10px 10px;
+  align-items: center;
+  height: 34px;
+  background: #eaf7ff;
+  min-width: fit-content;
+  max-width: 350px;
+  margin: 0 auto;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+.knowbler-title-blue-field {
+  width: 100%;
+  border-radius: 4px;
+  height: 38px;
+  background: #84cdfa33;
+  margin-bottom: 12px;
+}
+
+.knowbler-summary-blue-field {
+  width: 100%;
+  border-radius: 4px;
+  height: 60px;
+  background: #84cdfa33;
+  margin-bottom: 12px;
+}
+
+.knowbler-title-loader {
+  width: 52px;
+}
+
+.knowbler-title-loader-text {
+  color: #36b8ff;
+  width: calc(100% - 90px);
+  font-family: 'Poppins Regular', sans-serif;
+  font-size: 14px;
+  white-space: nowrap;
+  margin-right: 12px;
+}
+
+.knowbler-title-loader-cross-btn {
+  width: auto;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-right: 18px;
+}
+.knowbler-title-loader-cross-btn span {
+  cursor: pointer;
+}
+
+.slds-article_tooltip {
+  display: none;
+}
+
+.knowbler-title-loader-cross-btn
+  .slds-popover.slds-popover_tooltip.slds-nubbin_top-right {
+  position: absolute;
+  max-width: 200px;
+  width: max-content;
+  white-space: break-spaces;
+  word-break: break-all;
+  top: 32px;
+  right: -12px;
+  background: var(--primary-colour, #546C7E);
+  border-radius: 8px;
+  padding: 0.4rem;
+}
+
+.knowbler__calculate-health-btn .slds-popover.slds-popover_tooltip.slds-nubbin_top-left, .knowbler__file-upload-info-icon .slds-popover.slds-popover_tooltip.slds-nubbin_top-left  {
+  position: absolute;
+  max-width: 200px;
+  width: max-content;
+  white-space: break-spaces;
+  word-break: break-all;
+  top: 44px;
+  left: -14px;
+  background: var(--primary-colour, #546C7E);
+  border-radius: 8px;
+  padding: 0.4rem;
+}
+
+.knowbler__file-upload-info-icon .slds-popover.slds-popover_tooltip.slds-nubbin_top-left {
+  top: 34px;
+  left: -16px;
+}
+
+.knowbler-title-loader-tooltip, .knowbler__calculate-health-btn-tooltip {
+  font-size: 14px;
+  color: #fff;
+  font-family: "Roboto Regular", Arial, Helvetica, sans-serif;
+}
+.knowbler__calculate-health-btn-tooltip{
+  max-width: 175px;
+  word-break: break-word;
+}
+.knowbler__disable-article-save-button {
+  pointer-events: none;
+  opacity: 0.7;
+}
+.knowbler-title-loader-cross-btn:hover .slds-popover_tooltip, .knowbler__calculate-health-btn:hover .slds-popover_tooltip, .knowbler__file-upload-info-icon:hover .slds-popover_tooltip{
+  position: absolute;
+  border-radius: 8px;
+  display: block;
+}
+
+.kcs-loader-container {
+  position: relative;
+  top: 11px;
+  left: 60%;
+  border-radius: 50%;
+  height: 22px;
+  width: 22px;
+  animation: rotate_3922 1.2s linear infinite;
+  background-color: #9b59b6;
+  background-image: linear-gradient(#9b59b6, #84cdfa, #5ad1cd);
+}
+
+.kcs-loader-container span {
+  position: absolute;
+  border-radius: 50%;
+  height: 100%;
+  width: 100%;
+  background-color: #9b59b6;
+  background-image: linear-gradient(#9b59b6, #84cdfa, #5ad1cd);
+}
+
+.kcs-loader-container span:nth-of-type(1) {
+  filter: blur(5px);
+}
+
+.kcs-loader-container span:nth-of-type(2) {
+  filter: blur(10px);
+}
+
+.kcs-loader-container span:nth-of-type(3) {
+  filter: blur(25px);
+}
+
+.kcs-loader-container span:nth-of-type(4) {
+  filter: blur(50px);
+}
+
+.kcs-loader-container::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  background-color: #fff;
+  border: solid 5px #ffffff;
+  border-radius: 50%;
+}
+
+@keyframes rotate_3922 {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+.knowbler-generated-successfully-header {
+  background: #3e7555 0% 0% no-repeat padding-box;
+  border-radius: 0px 0px 10px 10px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: Poppins, sans-serif;
+  color: #ffffff;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  transform: translateY(-34px);
+  margin-bottom: -33px;
+  animation: slide-in 2.5s ease-in-out;
+  left: calc(50% - 95px);
+  position: sticky;
+  z-index: 2;
+  top: 0px;
+}
+
+@keyframes slide-in {
+  0% {
+    transform: translateY(-34px);
+  }
+  25%,
+  75% {
+    transform: translateY(0px);
+  }
+  100% {
+    transform: translateY(-34px);
+  }
+}
+.knowbler__calculate-health-btn {
+  position: relative;
+  margin-right: 5px;
+  cursor: pointer;
+}
+.knowbler__calculate-health-btn-disable{
+  cursor:not-allowed;
+}
+.knowbler__calculate-health-btn-disable svg{
+  pointer-events: none;
+}
+.knowbler__calculate-health-btn-disable svg path{
+  fill: #ebe9e6;
+}
+
+.knowbler__regenerate-icon {
+  float: right;
+  display: flex;
+  justify-content: end;
+  width: 130px;
+  cursor: pointer;
+  font-family: 'Poppins Medium', sans-serif;
+  font-size: 12px;
+  font-weight: 2px;
+  color: #767676;
+}
+
+.knowbler__disable-regenerate-icon {
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+.knowbler__regenerate-icon-img {
+  margin-right: 4px;
+}
+.knowbler__regenerate-icon-img svg {
+  height: 16px;
+  width: fit-content;
+}
+.knowbler__input-label-wrapper {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.knowbler__regenerate-hover
+  .slds-popover.slds-popover_tooltip.slds-nubbin_top-right {
+  width: fit-content;
+  height: 35px;
+  position: absolute;
+  top: 24px;
+  right: 0;
+  background: var(--primary-colour, #546c7e);
+  border-radius: 8px;
+  padding: 0.4rem 0.6rem;
+}
+
+.knowbler__salesforce-alert-popup-overlay{
+  background: rgba(0,0,0,0.5);
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: -56px;
+  z-index: 10;
+}
+.knowbler__salesforce-alert-popup-dialog-duplicate{
+   z-index: 98 !important;
+}
+.knowbler__salesforce-alert-popup-dialog {
+	 max-width: 100% !important;
+	 width: 100% !important;
+	 height: 100% !important;
+	 margin: 0 !important;
+	 overflow: hidden;
+   position: absolute;
+   left: 0;
+   bottom: 0;
+   right: 0;
+   z-index: 999;
+   background-color: white;
+   border-top-left-radius: 10px;
+   border-top-right-radius: 10px;
+   max-height: 600px
+}
+ .knowbler__salesforce-alert-popup-dialog .knowbler__salesforce-alert-popup-content {
+	 border: none;
+	 border-radius: 0;
+	 overflow: hidden;
+	 border-top-left-radius: 10px;
+	 border-top-right-radius: 10px;
+	 height: 100%;
+}
+ .knowbler__salesforce-alert-popup-dialog .knowbler__salesforce-alert-popup-content .knowbler__salesforce-alert-popup-body {
+	 padding: 0;
+}
+ .knowbler__salesforce-alert-popup-dialog .knowbler__salesforce-alert-popup-content .knowbler__salesforce-alert-popup-body .knowbler__salesforce-alert-popup-content-header {
+	 color: #2f3941;
+	 font-weight: 600;
+	 border-top-left-radius: 10px;
+	 border-top-right-radius: 10px;
+	 background: #e6f2ea 0% 0% no-repeat padding-box;
+	 display: grid;
+	 grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+ .knowbler__salesforce-alert-popup-dialog .knowbler__salesforce-alert-popup-content .knowbler__salesforce-alert-popup-body .knowbler__salesforce-alert-popup-content-header .button {
+	 cursor: pointer;
+	 padding: 15px 29px;
+	 justify-content: center;
+	 font-size: 13px;
+	 display: flex;
+	 gap: 9px;
+	 align-items: center;
+}
+ .knowbler__salesforce-alert-popup-dialog .knowbler__salesforce-alert-popup-content .knowbler__salesforce-alert-popup-body .knowbler__salesforce-alert-popup-content-header .button .knowbler__salesforce-icon {
+	 fill: #42526e;
+}
+ .knowbler__salesforce-alert-popup-dialog .knowbler__salesforce-alert-popup-content .knowbler__salesforce-alert-popup-body .knowbler__salesforce-alert-popup-content-header .button:hover .knowbler__salesforce-icon {
+	 fill: white;
+}
+ .knowbler__salesforce-alert-popup-dialog .knowbler__salesforce-alert-popup-content .knowbler__salesforce-alert-popup-body .knowbler__salesforce-alert-popup-content-header .button:first-child {
+	 background: #dcebfe 0% 0% no-repeat padding-box;
+}
+ .knowbler__salesforce-alert-popup-dialog .knowbler__salesforce-alert-popup-content .knowbler__salesforce-alert-popup-body .knowbler__salesforce-alert-popup-content-header .button:first-child:hover {
+	 color: #fff;
+	 background: #536c7e 0% 0% no-repeat padding-box;
+}
+ .knowbler__salesforce-alert-popup-dialog .knowbler__salesforce-alert-popup-content .knowbler__salesforce-alert-popup-body .knowbler__salesforce-alert-popup-content-header .button:nth-child(2):hover {
+	 background: #3e7555 0% 0% no-repeat padding-box;
+	 color: #fff;
+}
+
+/* Medium css */
+.MEDIUM .knowbler__salesforce-alert-popup-dialog .knowbler__salesforce-alert-popup-content .knowbler__salesforce-alert-popup-body .knowbler__salesforce-alert-popup-content-header {
+		 order: 2;
+		 background: none;
+		 display: flex;
+		 gap: 10px;
+		 justify-content: center;
+		 padding: 20px;
+		 height: fit-content;
+		 margin-top: auto;
+	}
+	.MEDIUM .knowbler__salesforce-alert-popup-dialog .knowbler__salesforce-alert-popup-content .knowbler__salesforce-alert-popup-body .knowbler__salesforce-alert-popup-content-header .button .knowbler__salesforce-icon {
+		 display: none;
+	}
+	 .MEDIUM .knowbler__salesforce-alert-popup-dialog .knowbler__salesforce-alert-popup-content .knowbler__salesforce-alert-popup-body .knowbler__salesforce-alert-popup-content-header .button:first-child {
+		 background: none;
+		 border: 1px solid #c0bfd6;
+		 border-radius: 5px;
+		 padding: 13px 25px;
+		 letter-spacing: 0px;
+		 color: #3e7555;
+	}
+	.MEDIUM .knowbler__salesforce-alert-popup-dialog .knowbler__salesforce-alert-popup-content .knowbler__salesforce-alert-popup-body .knowbler__salesforce-alert-popup-content-header .button:first-child:hover {
+		 color: #3e7555;
+		 background: none;
+	}
+	.MEDIUM .knowbler__salesforce-alert-popup-dialog .knowbler__salesforce-alert-popup-content .knowbler__salesforce-alert-popup-body .knowbler__salesforce-alert-popup-content-header .button:nth-child(2) {
+		 background: #3e7555 0% 0% no-repeat padding-box;
+		 padding: 13px 20px;
+		 letter-spacing: 0px;
+		 border-radius: 5px;
+		 color: #fff;
+	}
+  /* Medium css */
+
+/* Large css */
+.LARGE .knowbler__salesforce-alert-popup-dialog .knowbler__salesforce-alert-popup-content .knowbler__salesforce-alert-popup-body .knowbler__salesforce-alert-popup-content-header {
+		 order: 2;
+		 background: none;
+		 display: flex;
+		 gap: 10px;
+		 justify-content: center;
+		 padding: 20px;
+		 height: fit-content;
+		 margin-top: auto;
+	}
+	.LARGE .knowbler__salesforce-alert-popup-dialog .knowbler__salesforce-alert-popup-content .knowbler__salesforce-alert-popup-body .knowbler__salesforce-alert-popup-content-header .button .knowbler__salesforce-icon {
+		 display: none;
+	}
+	 .LARGE .knowbler__salesforce-alert-popup-dialog .knowbler__salesforce-alert-popup-content .knowbler__salesforce-alert-popup-body .knowbler__salesforce-alert-popup-content-header .button:first-child {
+		 background: none;
+		 border: 1px solid #c0bfd6;
+		 border-radius: 5px;
+		 padding: 13px 25px;
+		 letter-spacing: 0px;
+		 color: #3e7555;
+	}
+	.LARGE .knowbler__salesforce-alert-popup-dialog .knowbler__salesforce-alert-popup-content .knowbler__salesforce-alert-popup-body .knowbler__salesforce-alert-popup-content-header .button:first-child:hover {
+		 color: #3e7555;
+		 background: none;
+	}
+	.LARGE .knowbler__salesforce-alert-popup-dialog .knowbler__salesforce-alert-popup-content .knowbler__salesforce-alert-popup-body .knowbler__salesforce-alert-popup-content-header .button:nth-child(2) {
+		 background: #3e7555 0% 0% no-repeat padding-box;
+		 padding: 13px 20px;
+		 letter-spacing: 0px;
+		 border-radius: 5px;
+		 color: #fff;
+	}
+  /* Medium css */
+.maximize.knowbler__salesforce-alert-popup-dialog .knowbler__salesforce-alert-popup-content .knowbler__salesforce-alert-popup-body .knowbler__salesforce-alert-popup-content-header {
+		 order: 2;
+		 background: none;
+		 display: flex;
+		 gap: 10px;
+		 justify-content: center;
+		 padding: 20px;
+		 height: fit-content;
+		 margin-top: auto;
+	}
+	.maximize.knowbler__salesforce-alert-popup-dialog .knowbler__salesforce-alert-popup-content .knowbler__salesforce-alert-popup-body .knowbler__salesforce-alert-popup-content-header .button .knowbler__salesforce-icon {
+		 display: none;
+	}
+	 .maximize.knowbler__salesforce-alert-popup-dialog .knowbler__salesforce-alert-popup-content .knowbler__salesforce-alert-popup-body .knowbler__salesforce-alert-popup-content-header .button:first-child {
+		 background: none;
+		 border: 1px solid #c0bfd6;
+		 border-radius: 5px;
+		 padding: 13px 25px;
+		 letter-spacing: 0px;
+		 color: #3e7555;
+	}
+	.maximize.knowbler__salesforce-alert-popup-dialog .knowbler__salesforce-alert-popup-content .knowbler__salesforce-alert-popup-body .knowbler__salesforce-alert-popup-content-header .button:first-child:hover {
+		 color: #3e7555;
+		 background: none;
+	}
+	.maximize.knowbler__salesforce-alert-popup-dialog .knowbler__salesforce-alert-popup-content .knowbler__salesforce-alert-popup-body .knowbler__salesforce-alert-popup-content-header .button:nth-child(2) {
+		 background: #3e7555 0% 0% no-repeat padding-box;
+		 padding: 13px 20px;
+		 letter-spacing: 0px;
+		 border-radius: 5px;
+		 color: #fff;
+	}
+ .knowbler__salesforce-alert-popup-dialog .knowbler__salesforce-alert-popup-content .knowbler__salesforce-alert-popup-body .knowbler__salesforce-articles-listing {
+	 height: 100%;
+}
+ .knowbler__salesforce-alert-popup-dialog .knowbler__salesforce-alert-popup-content .knowbler__salesforce-alert-popup-body .knowbler__salesforce-articles-listing .knowbler__salesforce-articles-listing-title-div {
+	 display: flex;
+	 gap: 6px;
+	 align-items: center;
+	 padding: 20px 20px 0;
+}
+ .knowbler__salesforce-alert-popup-dialog .knowbler__salesforce-alert-popup-content .knowbler__salesforce-alert-popup-body .knowbler__salesforce-articles-listing .knowbler__salesforce-articles-listing-title-div img {
+	 width: 20px;
+}
+ .knowbler__salesforce-alert-popup-dialog .knowbler__salesforce-alert-popup-content .knowbler__salesforce-alert-popup-body .knowbler__salesforce-articles-listing .knowbler__salesforce-articles-listing-title-div .heading {
+	 color: #2f3941;
+	 font-size: 16px;
+	 font-weight: 600;
+   font-family: 'Poppins Medium', sans-serif;
+}
+ .knowbler__salesforce-alert-popup-dialog .knowbler__salesforce-alert-popup-content .knowbler__salesforce-alert-popup-body .knowbler__salesforce-articles-listing .knowbler__salesforce-articles-listing-description {
+	 padding-inline: 20px;
+	 margin-top: 10px;
+	 font-size: 12px;
+	 letter-spacing: 0px;
+	 color: #2f3941;
+}
+ .knowbler__salesforce-alert-popup-dialog .knowbler__salesforce-alert-popup-content .knowbler__salesforce-alert-popup-body .knowbler__salesforce-articles-listing .knowbler__zendesk-articles-list {
+	 padding: 20px;
+	 display: grid;
+   grid-template-columns: repeat(auto-fill, minmax(342px, 1fr));
+	 gap: 21px;
+	 margin-top: 8.66px;
+	 overflow: auto;
+	 max-height: 353px;
+}
+ .knowbler__salesforce-alert-popup-dialog .knowbler__salesforce-alert-popup-content .knowbler__salesforce-alert-popup-body .knowbler__salesforce-articles-listing .knowbler__zendesk-articles-list.maximize {
+	 max-height: 390px;
+}
+ .knowbler__salesforce-alert-popup-dialog .knowbler__salesforce-alert-popup-content .knowbler__salesforce-alert-popup-body .knowbler__salesforce-articles-listing .knowbler__zendesk-articles-list .knowbler__salesforce-article-card {
+	 max-width: 100%;
+	 margin-bottom: 0 !important;
+}
+ .knowbler__salesforce-alert-popup-dialog .knowbler__salesforce-alert-popup-content .knowbler__salesforce-alert-popup-body .knowbler__salesforce-articles-listing .knowbler__zendesk-articles-list::-webkit-scrollbar {
+	 height: 5px;
+	 width: 5px;
+	/* Width of the scrollbar */
+}
+ .knowbler__salesforce-alert-popup-dialog .knowbler__salesforce-alert-popup-content .knowbler__salesforce-alert-popup-body .knowbler__salesforce-articles-listing .knowbler__zendesk-articles-list::-webkit-scrollbar-track {
+	 border-radius: 5px;
+	 background: #f1f1f1;
+	/* Track color */
+}
+ .knowbler__salesforce-alert-popup-dialog .knowbler__salesforce-alert-popup-content .knowbler__salesforce-alert-popup-body .knowbler__salesforce-articles-listing .knowbler__zendesk-articles-list::-webkit-scrollbar-thumb {
+	 border-radius: 5px;
+	 background: #888;
+	/* Scrollbar handle color */
+}
+ .knowbler__salesforce-alert-popup-dialog .knowbler__salesforce-alert-popup-content .knowbler__salesforce-alert-popup-body .knowbler__salesforce-articles-listing .knowbler__zendesk-articles-list::-webkit-scrollbar-thumb:hover {
+	 background: #555;
+	/* Scrollbar handle color on hover */
+}
+ .knowbler__salesforce-matching-percentage {
+	 background: transparent linear-gradient(267deg, #dcebfe 0%, #fff 100%) 0% 0% no-repeat padding-box;
+	 padding: 6px 6px 6px 40px;
+	 margin-top: auto;
+	 margin-left: auto;
+	 border-top-right-radius: 6px;
+	 border-bottom-right-radius: 6px;
+}
+ .knowbler__salesforce-matching-percentage span {
+	 background: #fff 0% 0% no-repeat padding-box;
+	 border: 1px solid #5a9f73;
+	 border-radius: 3px;
+	 padding: 2px 7px;
+	 font-size: 13px;
+	 color: #2f3941;
+	 white-space: nowrap;
+}
+ @media only screen and (min-width: 1200px) {
+	 .knowbler__salesforce-alert-popup-dialog {
+     max-height:756px;
+		 max-width: 974px !important;
+		 margin-inline: auto !important;
+		 margin-top: auto !important;
+	}
+	 .knowbler__salesforce-alert-popup-dialog .knowbler__salesforce-alert-popup-content .knowbler__salesforce-alert-popup-body {
+		 display: grid;
+	}
+	 .knowbler__salesforce-alert-popup-dialog .knowbler__salesforce-alert-popup-content .knowbler__salesforce-alert-popup-body .knowbler__salesforce-articles-listing {
+		 order: 1;
+	}
+	 .knowbler__salesforce-alert-popup-dialog .knowbler__salesforce-alert-popup-content .knowbler__salesforce-alert-popup-body .knowbler__salesforce-articles-listing .knowbler__salesforce-articles-listing-title-div {
+		 gap: 15px;
+	}
+}
+
+.knowbler__upload-files-list-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px;
+  margin: 5px;
+  border: 1px solid #D8DDE6;
+  border-radius: 4px;
+  background-color: #FAFAFA;
+}
+
+.knowbler__upload-files-list-wrapper .knowbler__upload-file-wrapper{
+  display: flex;
+  align-items: center;
+  width: calc(100% - 30px);
+}
+
+.knowbler__upload-files-list-wrapper .knowbler__upload-file-name{
+  color: #36B8FF;
+  font-size: 13px;
+  font-family: 'Poppins Medium', sans-serif;
+  margin-left: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.knowbler__file-upload-error-msg {
+  font-size: 10px;
+  font-family: 'Poppins Medium', sans-serif;
+  color: #FF0000;
+}
+.knowbler__file-upload-loader-wrapper {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+.knowbler__load-file-text {
+  font-size: 13px;
+  font-family: 'Poppins Medium', sans-serif;
+  color: #5b5b5b;
+  margin-right: 5px;
+}
+.knowbler__custom-loader {
+  border: 3.5px solid #D2D2D2;
+  border-radius: 50%;
+  border-top: 3.5px solid #5B5B5B;
+  width: 20px;
+  height: 20px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.knowbler__upload-file-label-wrapper {
+  display: flex;
+}
+.knowbler__upload-file-section .knowbler__upload-file-label {
+  margin-right: 5px;
+  margin-bottom: 5px;
+  font-size: 13.5px;
+  margin-left: 4px;
+  color: #767676;
+  font-family: 'Poppins Regular', sans-serif;
+}
+.knowbler__upload-file-section .knowbler__upload-file-label-icon {
+  position: relative;
+}
+.knowbler__upload-file-cross-btn {
+  cursor: pointer;
+}
+.knowbler__upload-file-disable {
+  pointer-events: none;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.topBarSave.disabled{
+  pointer-events: none;
+  opacity: 0.6;
+}

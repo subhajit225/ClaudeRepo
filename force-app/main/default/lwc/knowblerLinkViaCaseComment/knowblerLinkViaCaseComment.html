@@ -1,0 +1,17 @@
+<template>
+  <lightning-card title="Link via case comment" icon-name="">
+    <div class="slds-p-around_small">
+      <!--<lightning-input label="ParentID" value={caseId} onchange={handleNameChange}></lightning-input>-->
+      <lightning-input
+        label="Case Comment"
+        value={caseComm}
+        onchange={handleIndChange}
+      ></lightning-input>
+      <!-- <lightning-input class="" type="checkbox" data-id="checkbox" label="Public"  onchange={headerCheckoxChanged}></lightning-input> -->
+
+      <div class="slds-m-top_small">
+        <lightning-button label="Save" onclick={handleClick}></lightning-button>
+      </div>
+    </div>
+  </lightning-card>
+</template>

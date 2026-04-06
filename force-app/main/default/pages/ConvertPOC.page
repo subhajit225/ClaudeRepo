@@ -1,0 +1,18 @@
+<apex:page standardController="POC__c" extensions="POCConverted" action="{!markAsConvertedNonConverted}" lightningStylesheets="true">
+   <apex:stylesheet value="{!URLFOR($Resource.SLDS105, 'assets/styles/salesforce-lightning-design-system-vf.min.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.POCRequestForm, 'css/POCRequestForm.css')}" />
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js" />
+    <apex:stylesheet value="{!URLFOR($Resource.DealReg, 'DealRegCss.css')}" />
+    <apex:slds />
+  <apex:pageMessages > </apex:pageMessages>
+   <apex:form >
+   <div class="slds app" id="slds">
+        <div class="slds-grid slds-grid--align-center slds-m-top--medium">
+            <div class="slds-m-left--x-small">
+                 <apex:commandButton action="{!cancelPOC}" value="Cancel" styleClass="slds-button slds-button--neutral"/>
+            </div>
+        </div>
+   </div>
+   </apex:form>
+  <!---->
+</apex:page>

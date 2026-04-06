@@ -1,0 +1,62 @@
+<template>
+    <template for:each={filters} for:item="filterValue">
+        <div class="filterValues" key={filterValue.Id}>
+            <div class="slds-clearfix">
+                <div class="slds-float_left su__w-sm-100">
+                    <div class="slds-clearfix su__flex-vcenter">
+                        <template if:true={filterValue.childArrayLength}>
+                            <div class={defaultFilterCollapseCheckUp_Arrow}
+                                data-id={filterValue.collapseExampletoggleIconID}>
+                                <lightning-icon icon-name="utility:chevronright" alternative-text="Utility chevronright"
+                                    size="xx-small" onclick={collapseFilters}
+                                    data-id={filterValue.collapseExampleID}>
+                                </lightning-icon>
+                            </div>
+                            <div class={defaultFilterCollapseCheckDown_Arrow}
+                                data-id={filterValue.collapseExampletoggleIconOffID}>
+                                <lightning-icon icon-name="utility:chevrondown" alternative-text="Utility chevrondown"
+                                    size="xx-small"  onclick={collapseFilters}
+                                    data-id={filterValue.collapseExampleID}>
+                                </lightning-icon>
+                            </div>
+                        </template>
+                        <div class="slds-float_left su__loading-view">
+                            <lightning-input type="checkbox" class="su__loading-view su__cursor" onchange={checkCheckbox}
+                                variant="label-hidden" data-order={parentFilter.order} name={filterValue.Contentname}
+                                data-max={filterValue.level} data-step={filterValue.parent}
+                                value={filterValue.selected} checked={filterValue.selected} data-min={filterValue.immediateParent}
+                                data-displayname={filterValue.displayName} data-contentname={filterValue.Contentname}
+                                data-econtentname={filterValue.encodedContentname} data-label={filterValue.label} data-string={filterValue.stringifiedPath}
+                                data-path={filterValue.path}>
+                            </lightning-input>
+                        </div>
+                        <div class="slds-float_right su__loading-view su__updated-filter su__flex-grow-1">
+                            <template if:true={filterValue.displayName}>
+                                <lightning-formatted-rich-text value={filterValue.displayName}>
+                                </lightning-formatted-rich-text>
+                            </template>
+                            <template if:false={filterValue.displayName}>
+                                <lightning-formatted-rich-text value={filterValue.Contentname}>
+                                </lightning-formatted-rich-text>
+                            </template>
+                        </div>
+                        <div class="su__loading-view su__margin-left-auto su__line-height-n su__rtl-mr-auto-facet">
+                            <p class="label-badge su__bg-light-gray">{filterValue.value}</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- added for child -->
+            <div class="su__d-none" data-id={filterValue.collapseExampleEmptyID}>
+                <template if:true={filterValue.childArray}>
+
+                    <c-s-u_-auth-nested-filter_b6b3_13  value={filterValue.childArray}
+                        parent={filterValue}></c-s-u_-auth-nested-filter_b6b3_13 >
+
+                </template>
+            </div>
+            <!-- Ended added for child -->
+        </div>
+    </template>
+</template>

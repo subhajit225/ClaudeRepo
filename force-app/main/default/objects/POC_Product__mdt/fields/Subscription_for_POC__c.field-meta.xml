@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Subscription_for_POC__c</fullName>
+    <fieldManageability>SubscriberControlled</fieldManageability>
+    <label>Subscription for POC</label>
+    <required>false</required>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>None</fullName>
+                <default>true</default>
+                <label>None</label>
+            </value>
+            <value>
+                <fullName>EDGE</fullName>
+                <default>false</default>
+                <label>EDGE</label>
+            </value>
+            <value>
+                <fullName>Cloud On</fullName>
+                <default>false</default>
+                <label>Cloud On</label>
+            </value>
+            <value>
+                <fullName>Cloud Data Management</fullName>
+                <default>false</default>
+                <label>Cloud Data Management</label>
+            </value>
+            <value>
+                <fullName>EDGE and CloudOn</fullName>
+                <default>false</default>
+                <label>EDGE and CloudOn</label>
+            </value>
+            <value>
+                <fullName>Cloud Cluster</fullName>
+                <default>false</default>
+                <label>Cloud Cluster</label>
+            </value>
+            <value>
+                <fullName>Polaris</fullName>
+                <default>false</default>
+                <label>Polaris</label>
+            </value>
+            <value>
+                <fullName>Air</fullName>
+                <default>false</default>
+                <label>Air</label>
+            </value>
+            <value>
+                <fullName>Cloud Out</fullName>
+                <default>false</default>
+                <label>Cloud Out</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

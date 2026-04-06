@@ -1,0 +1,44 @@
+<template>
+    <template if:true={showSpinner}>
+        <lightning-spinner class="slds-align_absolute-center spins" variant="brand" size="medium">
+        </lightning-spinner>
+      </template>
+    <div class="slds-grid" style="gap:25px">
+        <template for:each={batchConfigurationMetadata} for:item ="action">
+            <div key={action.id} class="slds-box slds-size_3-of-12 box"
+                style="text-align:center;background-color:#f3f3f3;cursor: pointer; height: 150px; background-color: rgb(216 227 230); padding-top: 35px;"
+                onclick={handleClick} data-id={action.Id}>
+                <lightning-icon style="cursor:pointer;" 
+                    size="large" icon-name={action.Icon_Name__c}
+                    alternative-text={action.MasterLabel} data-id={action.Id}>
+                </lightning-icon>
+                <p class="slds-p-top_small" data-id={action.Id}
+                    style="font-weight: 600;">{action.MasterLabel}
+                    
+                </p>
+            </div>
+        </template>
+    </div>
+    <template if:true={bShowModal}>
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open slds-modal_small">
+<div class="slds-modal__container">
+<button class="slds-button slds-button_icon slds-modal__close" onclick={handleShowConfirmationModal}>
+ <lightning-icon icon-name="utility:close" size="small" alternative-text="Close"></lightning-icon>
+<span class="slds-assistive-text">Cancel and close</span>
+</button>
+<div class="slds-modal__header">
+<h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate" tabindex="-1">Execute Batch</h1>
+</div>
+<div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+<p>{modalMessage}</p>
+
+</div>
+<div class="slds-modal__footer">
+<button class="slds-button slds-button_neutral" aria-label="Cancel and close" onclick={handleShowConfirmationModal}>Cancel</button>
+<button class="slds-button slds-button_brand" onclick={handleConfirmClick}>Save</button>
+</div>
+</div>
+</section>
+<div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </template>
+</template>

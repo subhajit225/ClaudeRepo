@@ -1,0 +1,117 @@
+:host {
+  --primary-colour: #7e34ec;
+  --secondary-colour: #3e7555;
+}
+
+.layout {
+  background: var(--primary-colour, #7e34ec);
+}
+.details {
+  height: 100%;
+  overflow-y: auto;
+  border-radius: 15px 15px 0 0;
+}
+
+.detailcontainer {
+  background-color: #f1f2f3;
+  width: 100%;
+  position: absolute;
+  height: 100%;
+  z-index: 98;
+  border-radius: 15px;
+}
+
+.largescreen {
+  background-color: #f1f2f3;
+}
+
+.layout-header {
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+.layout-header {
+  background: #fafafa;
+  border-radius: 20px 20px 0 0;
+  padding-top: 1rem;
+}
+
+.layout-body {
+  background: #fafafa;
+  border-radius: 20px 20px 0 0;
+  position: relative;
+}
+
+.kcs_main {
+  position: relative;
+}
+
+.SMALL .layout-body,
+.LARGE .layout-body {
+  padding: 1rem 0;
+}
+
+.SMALL .layout-body {
+  padding: 1rem 0;
+}
+
+.errorbox {
+  background: #ffffff;
+  padding: 1rem 0 !important;
+  border-radius: 20px 20px 0 0;
+  height: 500px;
+}
+
+.errormain {
+  background-color: #7e34ec;
+  height: 500px;
+}
+
+.errormaincontent {
+  background-color: #7e34ec;
+  height: 500px;
+}
+
+.errorimg {
+  height: 6rem;
+  width: 100%;
+}
+
+.errormsg {
+  font-size: 16.5px;
+  width: 90%;
+  margin: auto;
+  text-align: center;
+  font-family: 'Poppins Regular', sans-serif;
+  font-weight: 500;
+  margin-top: 2rem;
+  word-break: break-word;
+}
+
+.errorsub {
+  font-size: 15px;
+  color: #0f0a39;
+  width: 64%;
+  margin: auto;
+  text-align: center;
+  font-family: 'Roboto Regular', 'Helvetica Neue', sans-serif;
+  margin-top: 1rem;
+  opacity: 0.69;
+}
+
+.errormaincontent .errorcontent {
+  margin-top: 5rem;
+}
+.knowbler__inactive-health-screen-btn {
+  margin: 0 auto;
+  display: flex;
+  margin-top: 14px;
+  background: #7e34ec;
+  border-radius: 5px;
+  border: none;
+  width: fit-content;
+  padding: 8px 36px;
+  font-size: 16px;
+  font-family: 'Roboto Regular', 'Helvetica Neue', sans-serif;
+  color: #ffffff;
+}

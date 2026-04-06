@@ -1,0 +1,53 @@
+<!--
+    Name: csCaseTransferRequestDecision
+    JIRA : CS21-482 - Transfer Request Button - Automation
+    Created By : Veera Gandi
+-->
+<template>
+    <div if:true={showSubmittedScreens} class="slds-m-top_medium slds-m-bottom_medium">
+        <h2 if:false={isSuccess} class="submitted slds-m-top_medium slds-m-bottom_medium">
+            Transfer Request for this case is already submitted for approval. Please reach out to
+            #support-case-transfer for further details.
+        </h2>
+
+        <div if:true={isSuccess}>
+            <c-cs-case-transfer-request-success message={successMessage}></c-cs-case-transfer-request-success>
+        </div>
+
+        <div if:true={showManagerForm}>
+            <c-cs-case-transfer-request-form record-id={recordId} decision={value} onsubmitted={returnSuccessScreen}
+                warmflag={warmFlag} is-support-manager={isSupportManager} is-submitted={showSubmittedScreens}
+                customer-communication-frequency-value={customerCommunicationFrequencyValue}>
+            </c-cs-case-transfer-request-form>
+        </div>
+
+        <div if:true={isCaseUpdateScreen}>
+            <c-cs-case-transfer-suggested-queue record-id={recordId} onsubmitted={returnUpdateSuccessScreen}>
+            </c-cs-case-transfer-suggested-queue>
+        </div>
+    </div>
+
+    <div if:true={showTransferScreens}>
+        <!--<lightning-radio-group name="radioGroup" label="Reason to transfer" options={options} value={value} type="radio"
+            onchange={handleOnChange} required></lightning-radio-group>-->
+        <lightning-combobox
+            label="Reason to transfer"
+            value={value}
+            field-level-help = 'To increase scrutiny of transferred cases, a case must fall into one of the following categories and meet the criteria.'
+            placeholder="-None-"
+            options={picklistValues.data.values}
+            onchange={handleReqChange} 
+            required
+    ></lightning-combobox>
+
+        <div class="slds-m-top_large">
+            <lightning-input type="toggle" label="Warm Transfer Required" onchange={handleToggleChange}
+                message-toggle-active="Yes" message-toggle-inactive="No" class="fontStyle"></lightning-input>
+        </div>
+        <br />
+        <c-cs-case-transfer-request-form record-id={recordId} decision={value} onsubmitted={returnSuccessScreen}
+            warmflag={warmTransferFlag} is-support-manager={isSupportManager} is-submitted={showSubmittedScreens}
+            customer-communication-frequency-value={customerCommunicationFrequencyValue}>
+        </c-cs-case-transfer-request-form>
+    </div>
+</template>

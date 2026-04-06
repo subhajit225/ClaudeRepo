@@ -1,0 +1,426 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" controller="CaseApexController"  access="global">
+    <aura:attribute name="priorityOptions" type="List" default="[]"/>
+    <aura:attribute name="typeOptions" type="List" default="[]"/>
+    <aura:attribute name="contactOptions" type="List" default="[]"/>
+    <aura:attribute name="cases" type="Case[]"/>
+    <aura:attribute name="hasAccess" type="Boolean" default="true"/>
+    <aura:attribute name="casesObject" type="case" />
+    <aura:attribute name="isPredibaseCustomer" type="Boolean" default="false"/>
+    <aura:attribute name="accDetail" type="Object"/>
+    <aura:attribute name="toggleSpinner" type="Boolean" default="true"/>
+    <aura:attribute name="NoCaseComment" type="Boolean" default="false"/>
+    <aura:attribute name="FieldChangeCheck" type="Boolean" default="false"/>
+    <aura:attribute name="OnCaseSubmit" type="Boolean" default="false"/>
+    <aura:attribute name="errorMessage" type="String" default="You haven't composed anything yet."/>
+    <aura:attribute name="validity" type="Boolean" default="true"/>
+    <aura:attribute name="isPhone" type="Boolean" default="false" />
+    <aura:attribute name="clusterfilter" type="String" default="" />
+    <aura:attribute name="clusterfieldHelptext" type="String" default="" />
+    <!-- CS21-1324: [FedRAMP] Disable case creation from Support Portal -->
+    <aura:attribute name="isRscOnly" type="Boolean" default="false"/>
+    <!-- CS21-2005: [FedRAMP] Enable case creation on the Rubrik Support Portal for hybrid RSC-G/RSC/CDM customers -->
+    <aura:attribute name="isRscgConnectedCdmCustomer" type="Boolean" default="false"/>
+    <aura:attribute name="adminPanelLink" type="String" default=""  />
+    <aura:attribute name="govSupportEmail" type="String" default=""  />
+    <!-- CS21-2619: End of Support (EOS) Notifications for Clusters Running CDM 8.1 (or earlier) -->
+    <aura:attribute name="isUnSupportedCluster" type="Boolean" default="false"/>
+    <!-- 305 - Public comment in a “NEW CASE”: Add the text as a public comment When a user selects clusters that are running unsupported software versions  -->
+    <aura:attribute name="createCaseComment" type="Boolean" default="false"/>
+    
+    <aura:attribute name="newCase" type="Case"
+                    default="{ 'sobjectType': 'Case',
+                             'Subject': '',
+                             'Type': '',
+                             'Platform__c': '',
+                             'Product_Area__c': '',
+                             'Problem_Type__c': '',
+                             'Priority': '',
+                             'Contact_method__c': '',
+                             'Cluster__c': '',
+                             'Description': '',
+                             'RSCInstance__c': ''
+                             }"/>
+    <!-- doinit -->
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+
+    <!-- SU CODE for component -->
+    <aura:attribute name="sessionId" type="String" default=""/>
+    <aura:attribute name="ttimeout" type="String" default=""/>
+    <c:SUSearchUnifyHeaderDynamic aura:id="SuAnalytics" />
+    <aura:attribute name="conversionString" type="String" default=""/>
+    <aura:attribute name="conversion" type="Boolean" default="false"/>
+    <aura:attribute name="conversionData" type="Object"/>
+    <aura:handler event="su_vf_console:SUComponentEvent" action="{!c.handleComponentEvent}"/>
+
+    <!-- RSC Instance Lookup Attributes-->
+     <aura:attribute name="rscInstanceFilter" type="String" default="" />
+    <!-- // CS21-2005: [FedRAMP] Enable case creation on the Rubrik Support Portal for hybrid RSC-G/RSC/CDM customers -->
+    <aura:if isTrue="{!v.isRscgConnectedCdmCustomer}">
+        <div class="slds-p-around_xx-large">
+            <div class="slds-align_absolute-center slds-p-around_medium" style="font-size:1.8em;">
+                <h1 class="heading">Case submission instructions for Rubrik Security Cloud - Government (RSC-G) technical support</h1>
+            </div>
+            <div class="slds-align_absolute-center slds-p-around_medium" style="font-size: 18px;text-align: justify;">
+                <span>Cases or technical requests cannot be submitted for RSC-G products on the commercial Rubrik Support Portal to comply with U.S. federal, state, and local government regulations and requirements to protect Customer Technical Information (CTI). Therefore, your company profile restricts case submission on the commercial Rubrik Support Portal depending on the product. Please contact Rubrik Support to report any technical issues using the following methods.</span>
+            </div>
+            <div class="mainSection">
+                <div class="section">
+                    <div class="slds-p-around_medium" style="padding-left:0px;">
+                    <h1 class="heading">Rubrik Security Cloud - Government (RSC-G) technical support</h1>
+                </div>
+                <p class="slds-text-align_left fontfamily">Cases cannot be submitted for RSC-G products on the commercial Rubrik Support Portal. Please proceed to create a case in the RSC-G Support Portal.</p>
+                <div class="slds-p-top_medium slds-col">
+                    <lightning:button variant="brand" title="Proceed to RSC-G case submission form"><a style="color:white;text-decoration:none;" href="{!$Label.c.Case_Creation_GovCloud_Support_Portal_Link}" target="_blank">Proceed to RSC-G case submission form</a></lightning:button>
+                </div>
+                <div class="slds-p-around_medium fontfamily" style="padding-left:0px;">
+                    <h1 class="heading">Additional contact methods for RSC-G Support</h1>   
+                    <ul class="unorderedList">
+                        <li><b>Web:</b> <a target="_blank" href="{!$Label.c.Rubrik_GovCloud_Support_Portal_Link}">&nbsp;RSC-G Support Portal</a></li>
+                        <li><b>Phone:</b>&nbsp;{!$Label.c.Rubrik_Gov_Support_Contact_Number}</li>
+                        <li><b>Email:</b><a href="{!v.govSupportEmail}">&nbsp;{!$Label.c.GovCloud_Support_Email}</a></li> 
+                    </ul>
+                </div>
+                <div class="slds-p-around_medium fontfamily" style="padding-left:0px;">
+                    <h1 class="heading">Important:</h1>   
+                    <ul class="unorderedList">
+                        <li>The<a target="_blank" href="{!$Label.c.Rubrik_GovCloud_Support_Portal_Link}"> RSC-G Support Portal </a>and commercial <a target="_blank" href="{!$Label.c.Community_Base_URL}">Rubrik Support Portal</a> use separate login credentials</li>
+                        <li>All RSC-G Support Portal logins are managed by your organization in the <a target="_blank" href="{!v.adminPanelLink}">Admin Panel</a> and your RSC-G account owner must create new RSC-G Support Portal users</li>
+                    </ul>
+                </div>                    
+                </div>
+                <div class="section" >
+                    <div class="slds-p-around_medium" style="padding-left:0px;">
+                    <h1 class="heading">Rubrik Security Cloud (RSC) and CDM technical support</h1>
+                </div>
+                <p class="slds-text-align_left fontfamily">For any questions or technical requests related to commercial Rubrik Security Cloud (RSC) or CDM products, please proceed to create a case on the commercial Rubrik Support Portal.</p>
+                <div class="slds-p-top_medium slds-col">
+                    <lightning:button variant="brand" label="Proceed to commercial case submission form" title="Proceed to commercial case submission form" onclick="{!c.handleCaseSubmission }" />
+                </div>
+                </div>
+                
+            </div>
+        </div>
+        <!-- Else -->
+        <aura:set attribute="else">
+            <!-- SU CODE for component -->
+            <aura:if isTrue="{!v.isRscOnly}">
+                <div class="slds-p-around_xx-large">
+                    <div class="slds-align_absolute-center slds-p-around_medium" style="font-size:1.8em;">
+                        <h1 class="heading">Case submission instructions for Rubrik Security Cloud - Government (RSC-G) technical support</h1>
+                    </div>	
+                    <div class="slds-align_absolute-center slds-p-around_medium" style="font-size: 18px;text-align: justify;">
+                    <span>Cases or technical requests cannot be submitted for RSC-G products on the commercial Rubrik Support Portal to comply with U.S. federal, state, and local government regulations and requirements to protect Customer Technical Information (CTI). Therefore, your company profile restricts case submission on the commercial Rubrik Support Portal depending on the product. Please contact Rubrik Support to report any technical issues using the following methods.</span>
+                	</div>
+                        <div class="slds-p-around_medium" style="font-size: 18px;text-align: justify;">
+                        <p class="slds-text-align_left fontfamily">Cases cannot be submitted for RSC-G products on the commercial Rubrik Support Portal. Please proceed to create a case in the RSC-G Support Portal.</p>
+                        <div class="slds-p-top_medium">
+                            <lightning:button variant="brand" title="Proceed to RSC-G case submission form"><a style="color:white;text-decoration:none;" href="{!$Label.c.Case_Creation_GovCloud_Support_Portal_Link}" target="_blank">Proceed to RSC-G case submission form</a></lightning:button>
+                        </div>
+                        <div class="slds-p-around_medium fontfamily" style="padding-left:0px;">
+                            <h1 class="heading">Additional contact methods for RSC-G Support</h1>   
+                            <ul class="unorderedList">
+                                <li><b>Web:</b> <a target="_blank" href="{!$Label.c.Rubrik_GovCloud_Support_Portal_Link}">&nbsp;RSC-G Support Portal</a></li>
+                                <li><b>Phone:</b>&nbsp;{!$Label.c.Rubrik_Gov_Support_Contact_Number}</li>
+                                <li><b>Email:</b><a href="{!v.govSupportEmail}">&nbsp;{!$Label.c.GovCloud_Support_Email}</a></li>
+                            </ul>
+                        </div>
+                        <div class="slds-p-around_medium fontfamily" style="padding-left:0px;">
+                            <h1 class="heading">Important:</h1> 
+                            <ul class="unorderedList">
+                                <li>The<a target="_blank" href="{!$Label.c.Rubrik_GovCloud_Support_Portal_Link}"> RSC-G Support Portal</a> and commercial <a target="_blank" href="{!$Label.c.Community_Base_URL}">Rubrik Support Portal</a> use separate login credentials</li>
+                                <li>All RSC-G Support Portal logins are managed by your organization in the <a target="_blank" href="{!v.adminPanelLink}">Admin Panel</a> and your RSC-G account owner must create new RSC-G Support Portal users</li>
+                            </ul>
+                        </div>
+                    </div>       
+                </div>
+                
+                <aura:set attribute="else">
+                    <aura:if isTrue="{!v.hasAccess}">
+                        
+                        <!-- CS21-2619: End of Support (EOS) Notifications for Clusters Running CDM 8.1 (or earlier) -->
+                        <aura:if isTrue="{!v.isUnSupportedCluster}">
+                            <div class="demo-only" style="">
+                                <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                                    <div class="slds-modal__container">
+                                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                                            <div class="">
+                                                <div class="">
+                                                    <span>The selected cluster is currently running an unsupported CDM version. The cluster must be upgraded to a supported version of CDM prior to receiving technical support services. To perform a CDM upgrade, follow the <i><a target="_blank" href="https://docs.rubrik.com/en-us/saas/saas/rbk_cdm_software_upgrade.html">Rubrik Security Cloud (RSC) User Guide</a></i>. Please refer to the <i><a target="_blank" href="https://support.rubrik.com/s/announcementdetail?Id=a40VI000000dcVOYAY">Rubrik CDM Software Support Lifecycle</a></i> policy document for additional details.</span> 
+                                                </div>
+                                            </div>  
+                                        </div>
+                                        <footer class="slds-modal__footer">
+                                            <lightning:button variant="brand" label="Acknowledge and proceed with case creation" title="Acknowledge and proceed with case creation" onclick="{!c.closeModal}"></lightning:button>                                        </footer>
+                                    </div>
+                                </section>
+                                <div class="slds-backdrop slds-backdrop_open"></div>
+                            </div>
+                        </aura:if>
+                                
+                        <div class="slds-grid">
+                            <div class="slds-size--1-of-1 ">
+                                <div class="slds-grid slds-wrap bgcolor slds-max-x-small-hide">
+                                    <div class="slds-col slds-large-size_1-of-12 slds-small-size_1-of-12 slds-medium-size_1-of-12">
+                                    </div>
+                                    <div class="slds-col slds-large-size_6-of-12  slds-size--10-of-12 ">
+                                        <div class="slds-grid slds-wrap">
+                                            <div class="slds-large-size_12-of-12 slds-small-size_12-of-12 slds-medium-size_12-of-12">
+                                                <h2 class="header">New Case Details</h2>
+                                            </div><br></br>
+
+                                            <!-- Device: DESKTOP -->
+                                        <div class="{!!v.isPhone ? 'slds-col slds-large-size_11-of-12 slds-small-size_11-of-12 slds-medium-size_11-of-12 padtopbotm' : 'slds-hide'}">
+                                            <lightning:recordEditForm objectApiName="Case" aura:id="caseRecord" recordTypeId="0126f000000WkVB">
+                                                <lightning:messages />
+                                                <lightning:inputField fieldName="Subject" aura:id="sub" variant="label-inline"
+                                                onchange="{!c.generateResults}" required="true" value="{!v.newCase.Subject}"/>
+                                                <lightning:inputField onchange="{!c.handleChange}" fieldName="Type" aura:id="caseType" variant="label-inline"
+                                                required="true" value="{!v.newCase.Type}"/>
+                                                
+                                                <lightning:inputField onchange="{!c.handleChange}" fieldName="Platform__c" aura:id="platform" variant="label-inline" disabled="{!v.isPredibaseCustomer}" value="{!v.newCase.Platform__c}" required="true"/>
+                                                <lightning:inputField onchange="{!c.handleChange}" fieldName="Product_Area__c" aura:id="productArea" variant="label-inline" value="{!v.newCase.Product_Area__c}" required="true"/>
+                                                <lightning:inputField onchange="{!c.handleChange}" fieldName="Problem_Type__c" aura:id="caseComp" variant="label-inline" value="{!v.newCase.Problem_Type__c}" required="true"/>
+                                                <lightning:inputField onchange="{!c.handleChange}" fieldName="Priority" aura:id="priority" variant="label-inline"
+                                                required="true" value="{!v.newCase.Priority}"/>
+
+                                                <p class="fontfamily" style="margin-top: 15px;">For <a class="anchrcolor" href="{!$Label.c.Rubrik_Support_Services_Policy_PDF}" target="_blank">Priority 1 (P1)</a> issues with critical business impact, please <a class="anchrcolor" href="https://www.rubrik.com/support/#contact-numbers" target="_blank">call Rubrik Support</a> after your case is submitted.</p><br></br>
+        <br></br>
+                                                <lightning:inputField onchange="{!c.handleChange}" fieldName="Contact_method__c" aura:id="contactMethod" variant="label-inline" required="true" value="{!v.newCase.Contact_method__c}"/>
+                                                <!-- CS21-3825 -->
+                                                <c:customLookup 
+                                                    aura:id="rscLookupDekstop"
+                                                    sObjectApiName="RSCInstance__c"
+                                                    iconName="custom:custom7"
+                                                    label="RSC Instances"
+                                                    placeholder="Search/Select RSC Instance"
+                                                    isSingleColumn="true"
+                                                    inputcss="width: 30.5vw;"
+                                                    onhandleSelect="{!c.getSelectedRscInstance}"
+                                                    filter="{!v.rscInstanceFilter}" 
+                                                    helptext="Select the specific RSC instance applicable to the case"
+                                                    fields="Id, RSCUrl__c, Name, RSCAccountType__c, RSCRegion__c,RSCAccountRelationship__c,RSCAccountName__c,RSCDeployment__c"
+                                                    emptyrecordmsg="RSC instances not available"
+                                                    meta_entity_label="Type"
+                                                    meta_entity_api="RSCAccountRelationship__c"
+                                                    meta_entity_label2="Region"
+                                                    meta_entity_api2="RSCRegion__c"
+                                                    meta_entity_label3="Account name"
+                                                    meta_entity_api3="RSCAccountName__c"
+                                                    meta_entity_label4="Site"
+                                                    meta_entity_api4="RSCDeployment__c"
+                                                    addonsearchfield="RSCUrl__c;RSCAccountName__c"
+                                                    dropdownstyle="margin-top:-2%; width: 30.5vw; margin-left: 16.5%;">
+                                                </c:customLookup>
+                                                <lightning:inputField onchange="{!c.handleChange}" fieldName="Description" aura:id="desc" variant="label-inline" required="true" value="{!v.newCase.Description}"/>
+                                            </lightning:recordEditForm>
+                                            <!-- Added by Vijay Kumar K R: CS21-1206 -->
+                                            <c:customLookup sObjectApiName="Cluster__c"
+                                                            iconName="custom:custom7"
+                                                            label="Cluster UUID"
+                                                            placeholder="Search/Select Cluster from below list"
+                                                            isSingleColumn="true"
+                                                            inputcss="width: 30.5vw;"
+                                                            onhandleSelect="{!c.getSelectedValue}"
+                                                            filter="{!v.clusterfilter}"
+                                                            helptext="{!v.clusterfieldHelptext}"
+                                                            fields="Id, Name, Tag__c, CDM_End_of_Support_Status__c"
+                                                            emptyrecordmsg="No Clusters found for this Account..."
+                                                            meta_entity_label="Tag"
+                                                            meta_entity_api="tag__c"
+                                                            meta_entity_label2="EndOfSupport"
+                                                            meta_entity_api2="CDM_End_of_Support_Status__c"
+                                                            addonsearchfield="tag__c"
+                                                            onremoveSelected="{!c.handleRemoveSelected}"
+                                                            dropdownstyle="margin-top:-2%; width: 30.5vw; margin-left: 16.5%;"></c:customLookup>
+                                        </div>
+                                    </div>
+
+                                    </div>
+                                    <div class="slds-col slds-large-size_5-of-12 slds-small-size_12-of-12 slds-medium-size_12-of-12" style="padding: 3rem;">
+                                        <c:SUAuthList searchString="{!v.newCase.Subject}" pageHeaderTitle="Suggestions" modalOpen="false" pagesize="5" openNewTab="true" aura:id="listResults" />
+                                    </div>
+                                </div>
+
+                                <!-- Device: PHONE -->
+                                <div class="{!v.isPhone ? 'slds-grid slds-wrap bgcolor leftRightMargins' : 'slds-hide' }">
+                                    <!-- CS21-2619: End of Support (EOS) Notifications for Clusters Running CDM 8.1 (or earlier) -->
+                                    <aura:if isTrue="{!v.isUnSupportedCluster}">
+                                        <div class="demo-only" style="">
+                                            <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                                                <div class="slds-modal__container">
+                                                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                                                        <div class="">
+                                                            <div class="">
+                                                                <span>The selected cluster is currently running an unsupported CDM version. The cluster must be upgraded to a supported version of CDM prior to receiving technical support services. To perform a CDM upgrade, follow the <i><a target="_blank" href="https://docs.rubrik.com/en-us/saas/saas/rbk_cdm_software_upgrade.html">Rubrik Security Cloud (RSC) User Guide</a></i>. Please refer to the <i><a target="_blank" href="https://support.rubrik.com/s/announcementdetail?Id=a40VI000000dcVOYAY">Rubrik CDM Software Support Lifecycle</a></i> policy document for additional details.</span> 
+                                                            </div>
+                                                        </div>  
+                                                    </div>
+                                                    <footer class="slds-modal__footer">
+                                                        <lightning:button variant="brand" label="Acknowledge and proceed with case creation" title="Acknowledge and proceed with case creation" onclick="{!c.closeModal}"></lightning:button>                                                    </footer>
+                                                </div>
+                                            </section>
+                                            <div class="slds-backdrop slds-backdrop_open"></div>
+                                        </div>
+                                    </aura:if>
+                                    
+                                    <div class="slds-large-size_12-of-12 slds-small-size_12-of-12 slds-medium-size_12-of-12">
+                                        <h2 class="header">New Case Details</h2>
+                                    </div>
+                                    <div class="slds-col slds-large-size_12-of-12 slds-small-size_12-of-12 slds-medium-size_12-of-12 padtopbotm">
+                                        <lightning:recordEditForm objectApiName="Case" aura:id="caseRecord" recordTypeId="0126f000000WkVB">
+                                            <lightning:messages />
+                                            <lightning:inputField onchange="{!c.handleChange}" fieldName="Subject" aura:id="sub2" variant="label-inline" required="true" value="{!v.newCase.Subject}"/>
+                                            <lightning:inputField onchange="{!c.handleChange}" fieldName="Type" aura:id="caseType2" variant="label-inline" required="true" value="{!v.newCase.Type}"/>
+                                            <lightning:inputField onchange="{!c.handleChange}" fieldName="Platform__c" aura:id="platform2" variant="label-inline" value="{!v.newCase.Platform__c}" required="true"/>
+                                            <lightning:inputField onchange="{!c.handleChange}" fieldName="Product_Area__c" aura:id="productArea2" variant="label-inline" value="{!v.newCase.Product_Area__c}" required="true"/>
+                                            <lightning:inputField onchange="{!c.handleChange}" fieldName="Problem_Type__c" aura:id="caseComp2" variant="label-inline" value="{!v.newCase.Problem_Type__c}" required="true"/>
+                                            <lightning:inputField onchange="{!c.handleChange}" fieldName="Priority" aura:id="priority2" variant="label-inline" required="true" value="{!v.newCase.Priority}"/>
+
+                                            <p class="fontfamily" style="margin-top: 15px;">For Priority 1 (P1) issues with critical business impact, please call Rubrik</p>
+                                            <p class="fontfamily">Support after your case is submitted using the phone numbers listed on the</p>
+                                            <p class="fontfamily">
+                                                <a class="anchrcolor" href="https://www.rubrik.com/support/#contact-numbers" target="_blank"> Support page.</a> For a list of case priorities and response times, reference the
+                                            </p>
+                                            <p class="fontfamily">
+                                                <a class="anchrcolor" href="{!$Label.c.Rubrik_Support_Services_Policy_PDF}" target="_blank">Support Services Policy</a>. Also, after submitting your case, you may click the
+                                            </p>
+                                            <p class="fontfamily" style="margin-bottom: 15px;"><b>Request Escalation</b> button at the top of the case for additional attention.</p>
+
+                                            <lightning:inputField onchange="{!c.handleChange}" fieldName="Contact_method__c" aura:id="contactMethod2" variant="label-inline" required="true" value="{!v.newCase.Contact_method__c}"/>
+                                            <c:customLookup 
+                                                aura:id="rscLookupPhone"
+                                                sObjectApiName="RSCInstance__c"
+                                                iconName="custom:custom7"
+                                                label="RSC Instances"
+                                                placeholder="Search/Select RSC Instance"
+                                                isSingleColumn="false"
+                                                inputcss="width: 100%;"
+                                                onhandleSelect="{!c.getSelectedRscInstance}"
+                                                filter="{!v.rscInstanceFilter}" 
+                                                helptext="Select the specific RSC instance applicable to the case"
+                                                fields="Id, RSCUrl__c, Name, RSCAccountType__c, RSCRegion__c,RSCAccountRelationship__c,RSCAccountName__c,RSCDeployment__c "
+                                                emptyrecordmsg="RSC instances not available"
+                                                meta_entity_label="Type"
+                                                meta_entity_api="RSCAccountRelationship__c"
+                                                meta_entity_label2="Region"
+                                                meta_entity_api2="RSCRegion__c"
+                                                meta_entity_label3="Account name"
+                                                meta_entity_api3="RSCAccountName__c"
+                                                meta_entity_label4="Site"
+                                                meta_entity_api4="RSCDeployment__c"
+                                                addonsearchfield="RSCUrl__c;RSCAccountName__c"
+                                                dropdownstyle="width: 100%; margin-left: 0;">
+                                            </c:customLookup>
+                                            <lightning:inputField onchange="{!c.handleChange}" fieldName="Description" aura:id="desc2" variant="label-inline" required="true" value="{!v.newCase.Description}"/>
+                                            <lightning:inputField onchange="{!c.handleChange}" fieldName="External_Case_Reference__c" aura:id="externalCaseReference2" variant="label-inline" value="{!v.newCase.External_Case_Reference__c}"/>
+                                        </lightning:recordEditForm>
+                                        <!-- Added by Vijay Kumar K R: CS21-1206 -->
+                                        <c:customLookup sObjectApiName="Cluster__c"
+                                                        iconName="custom:custom7"
+                                                        label="Cluster UUID"
+                                                        placeholder="Search/Select Cluster from below list"
+                                                        isSingleColumn="true"
+                                                        inputcss="width: 67vw;"
+                                                        onhandleSelect="{!c.getSelectedValue}"
+                                                        filter="{!v.clusterfilter}"
+                                                        helptext="{!v.clusterfieldHelptext}"
+                                                        fields="Id, Name, Tag__c"
+                                                        emptyrecordmsg="No Clusters found for this Account..."
+                                                        meta_entity_label="Tag"
+                                                        meta_entity_api="tag__c"
+                                                        addonsearchfield="tag__c"
+                                                        dropdownstyle="margin-top:-2%; width: 30.5vw; margin-left: 16.5%;"></c:customLookup>
+                                    </div>
+                                    </div>
+
+                                <div class="slds-grid slds-align_absolute-center buttonpading">
+                                    <div class="slds-large-size_12-of-12 slds-small-size_12-of-12 slds-medium-size_12-of-12 slds-align_absolute-center">
+                                        <lightning:button  variant="brand" label="SUBMIT CASE" title="Brand action" onclick="{!c.createCase}" />
+                                        <lightning:button variant="brand" label="SAVE &amp; ATTACH FILE" onclick="{! c.createCasewithAtt }" />
+
+                                        <a class="padleft"><lightning:button variant="brand" label="CANCEL" title="Brand action" onclick="{!c.cancel}" />  </a></div>
+                                </div>
+                                <aura:if isTrue="{!v.toggleSpinner}">
+                                    <div class="slds-spinner_container" aura:id="uploadSpinner">
+                                        <div class="slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                            <div class="slds-spinner__dot-a"></div>
+                                            <div class="slds-spinner__dot-b"></div>
+                                        </div>
+                                    </div>
+                                </aura:if>
+                            </div>
+                        </div>
+                        <aura:set attribute="else">
+                            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning" role="alert" style="padding:5rem 5rem;">
+                                <span class="slds-assistive-text">error</span>
+                                <span class="slds-icon_container slds-icon-utility-error slds-m-right_x-small" style="margin-bottom: 20px;" title="Description of icon when needed">
+                                    <lightning:icon iconName="utility:error" alternativeText="Error!" variant="inverse"/>
+                                </span>
+                                <p style="width : 75%; text-align: left; font-weight: 550;">{!$Label.c.NewCaseRASP}</p>
+                            </div>
+                            <center>
+                                <table class="slds-table slds-max-medium-table_stacked banner-table"  style="width: 50%;">
+                                    <tbody>
+                                        <tr class="Paragraph">
+                                            <div class="slds-grid slds-size_12-of-12">
+                                                <div class="slds-size_6-of-12">
+                                                    <th class="slds-cell-shrink" scope="row" data-label="">
+                                                        <div class="slds-truncate" title=""><b>Email</b></div>
+                                                    </th>
+                                                    <td class="slds-cell-wrap" data-label="">
+                                                        <div class="slds-truncate" title="Email">{!v.accDetail.Technical_support_provided_by_Partner__r.RASP_Customer_Email__c}</div>
+                                                    </td>
+                                                </div>
+                                                <div class="slds-size_6-of-12">
+                                                    <th class="slds-cell-shrink" scope="row" data-label="">
+                                                        <div class="slds-truncate" title=""><b>Website</b></div>
+                                                    </th>
+                                                    <td class="slds-cell-wrap" data-label="">
+                                                        <div class="slds-truncate" title="Website">{!v.accDetail.Technical_support_provided_by_Partner__r.RASP_Customer_Portal__c}</div>
+                                                    </td>
+                                                </div>
+                                            </div>
+                                        </tr>
+                                        <tr class="Paragraph">
+                                            <div class="slds-grid slds-size_12-of-12">
+                                                <div class="slds-size_6-of-12">
+                                                    <th class="slds-cell-shrink" scope="row" data-label="">
+                                                        <div class="slds-truncate" title=""><b>Phone</b></div>
+                                                    </th>
+                                                    <td class="slds-cell-wrap" data-label="">
+                                                        <div class="slds-truncate" title="Phone">{!v.accDetail.Technical_support_provided_by_Partner__r.RASP_Customer_Phone__c}</div>
+                                                    </td>
+                                                </div>
+                                            </div>
+                                        </tr>
+                                        <tr class="Paragraph">
+                                            <div class="slds-grid slds-size_12-of-12">
+                                                <div class="slds-size_12-of-12 slds-p-bottom_small">
+                                                    <th class="slds-cell-shrink" scope="row" data-label="">
+                                                        <div class="slds-truncate" title=""><b>Support information</b>
+                                                        </div>
+                                                    </th>
+
+                                                    <td class="slds-cell-wrap" data-label="">
+                                                        <div title="Support information" style="line-height: 150%; text-align: justify">
+                                                            <aura:if isTrue="{!not(empty(v.accDetail.Technical_support_provided_by_Partner__r.RASP_Escalation_Detail__c))}">
+                                                                <aura:unescapedHtml value="{!v.accDetail.Technical_support_provided_by_Partner__r.RASP_Escalation_Detail__c}"/>
+                                                                <aura:set attribute="else">
+                                                                    <ui:outputRichText class="slds-text-longform" value="Use the contact information above to reach out to your Rubrik Authorized Support Partner."/>
+                                                                </aura:set>
+                                                            </aura:if>
+                                                        </div>
+                                                    </td>
+                                                </div>
+                                            </div>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </center>
+                        </aura:set>
+                    </aura:if>
+                </aura:set>
+            </aura:if>
+        </aura:set>
+    </aura:if>
+</aura:component>

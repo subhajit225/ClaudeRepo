@@ -1,0 +1,13 @@
+<template>
+    <div class="slds-p-around_large slds-p-left_none">
+        <span class="heading-36">{imageHeader}</span>
+    </div>
+    <lightning-layout multiple-rows class="slds-p-around_medium imageTextCard">
+        <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12" class="slds-var-p-around_medium">
+            <img alt="image" src={imageUrl} class="textCardImage" />
+            <div class="slds-var-m-top_large cardBodyDescription">
+                <p>{imageText}</p>
+            </div>
+        </lightning-layout-item>
+    </lightning-layout>
+</template>

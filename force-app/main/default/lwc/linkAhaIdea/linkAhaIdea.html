@@ -1,0 +1,67 @@
+<template>
+	<div class="MainDiv">
+		<lightning-card>
+			<lightning-tabset active-tab-value={activeTab}>
+				<lightning-tab label="Link Cases/Opportunities" value="1" onactive={handleActive}>
+						<div class="slds-p-around_medium">
+							<lightning-input label="Search opportunity and case" onchange={handleSearch}
+								placeholder="Search opportunity and case..."></lightning-input>
+						</div>
+						<template if:true={noResultFound}>
+							<div>
+								<lightning-datatable key-field="Id" data={searchResults} columns={columns}
+									onrowselection={handleRowSelection}>
+								</lightning-datatable>
+							</div>
+							<br />
+							<div>
+								<lightning-button variant="brand" label="Link Selected Case and Opportunity"
+									title="Link Selected Case and Opportunity" onclick={getSelectedRec} class="buttoncss"
+								>
+								</lightning-button>
+							</div>
+						</template>
+						<template if:true={doinitCheck}>
+							<template if:false={noResultFound}>
+								<h2 class="NoResult"> <b>No records found... </b></h2>
+							</template>
+						</template>
+						<div if:true={loadspinner}>
+							<div class="exampleHolder">
+								<lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+							</div>
+						</div>
+				</lightning-tab>
+
+				<lightning-tab label="Unlink Cases/Opportunities"  value="2" onactive={handleActive}>
+					<lightning-card>
+						<template lwc:if={showOppOrCaseRecordsForUnlink}>
+							<div>
+								<lightning-datatable
+									key-field="Id"
+									data={searchResults}
+									columns={columns}
+									class="tooltip"
+									onrowaction={getSelectedRowDetail}
+								>
+								</lightning-datatable>
+							</div> <br/> <br/>
+
+							<lightning-button class="buttoncss" variant="brand" label="UnLink Idea" onclick={unlinkedAhaIdeaRecord}></lightning-button>
+						</template>
+
+						<template lwc:else>
+							<h2 class="NoResult"> <b>No records found... </b></h2>
+						</template>
+
+						<div if:true={loadspinner}>
+							<div class="exampleHolder">
+								<lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+							</div>
+						</div>
+					</lightning-card>
+				</lightning-tab>
+			</lightning-tabset>
+		</lightning-card>
+	</div>
+</template>

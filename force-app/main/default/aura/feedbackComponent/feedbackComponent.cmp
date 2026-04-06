@@ -1,0 +1,111 @@
+<aura:component controller="feedbackController"  implements="forceCommunity:availableForAllPageTypes" access="global">
+    <aura:attribute name="IsValid" type="Boolean" default ="true"/>
+     <aura:attribute name="IsDescriptionValid" type="Boolean" default ="false"/>
+    <aura:attribute name="IsSubmitted" type="Boolean" default ="true"/>
+    <aura:attribute name="options" type="List" access="global"/>
+    <aura:attribute name="FieldWrapper" type="feedbackController.FieldsWrapper"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <div>   
+        <center>
+            <aura:if isTrue="{!v.IsSubmitted}">
+                <lightning:layout >
+                    <lightning:layoutItem  padding="around-large" size="12">
+                        <div aria-labelledby="feedbackform">
+                            <!-- BOXED AREA -->
+                            <fieldset class="slds-box slds-theme--default slds-container--small Alignlefttext">
+                                <legend id="feedbackform" class="slds-text-heading--small slds-p-vertical--medium feedbackHeading" >
+                                    Send us your Feedback!
+                                </legend>                           
+                                <form class="slds-form--stacked"> 
+                                    <lightning:select label="Type" value="{!v.FieldWrapper.Type}" required="true" aura:id="Type" name="select"  accesskey="Type" class="slds-p-around_x-small" >
+                                        <aura:iteration items="{!v.options}" var="option">
+                                            <option text="{!option.label}" value="{!option.value}"/>
+                                        </aura:iteration>                        
+                                    </lightning:select> 
+                                    <lightning:input class="slds-p-around_x-small" type="text" aura:id="Subject" accesskey="Subject" label="Subject"  required="true" value="{!v.FieldWrapper.Subject}" /> 
+                                   <label class="desLabel">* Description</label>
+                                    <lightning:inputRichText class="textAreaheigth slds-p-around_x-small" label="Description"   aura:id="Description" accesskey="Description" value="{!v.FieldWrapper.Description}"  onblur="{!c.validateDesc}" />   
+                                    <aura:if isTrue="{!v.IsDescriptionValid}">
+                                    	<span style="color:rgb(194, 57, 52);padding-left:9px;">Complete this field.</span>
+                                    </aura:if>
+                                    <aura:if isTrue="{!!v.IsValid}">
+                                        <span style="color:red;font-family: gotham-light;">Please fill all required fields *</span>
+                                    </aura:if>
+                                    <lightning:button variant="brand" class="supportBtn btnPosition" onclick="{!c.SaveFormData}">Submit</lightning:button>
+                                </form>
+                            </fieldset>            
+                        </div>
+                    </lightning:layoutItem>
+                </lightning:layout> 
+            </aura:if>
+            <aura:if isTrue="{!!v.IsSubmitted}">
+                <center>
+                    <div style="margin-top: 5%;margin-bottom:1%;font-family:Gotham-medium; font-size: 26px !important;">
+                        Thanks for your valuable feedback!                    
+                    </div>
+                    <div style="margin-bottom:40px;">
+                        <a href="#" onclick="{!c.changeForm}" class="hrefClass" style="margin-bottom: 3%;font-family: gotham-light;">Submit additional feedback</a>
+                    </div>
+                </center>
+            </aura:if>
+        </center>
+    </div>
+    
+    
+    <!--<div class="slds-col">
+        <div class="TopContainer">            
+            <div class="slds-grid slds-wrap slds-p-around_x-small">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <label class="slds-form-element__label" >
+                        Type <abbr class="slds-required" title="required">*</abbr>
+                    </label>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-4">
+                   <div class="labelHide inputStyle">
+                       <lightning:select label="" value="{!v.FieldWrapper.Type}" required="true" aura:id="Type" name="select"  accesskey="Type" >
+                           
+                            <option value="Case">Case</option>
+                            <option value="KnowledgeBase">Knowledge Base</option>                          
+                       </lightning:select>     
+                    </div>                  
+                </div>
+            </div>
+            <div class="slds-grid slds-wrap slds-p-around_x-small">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <label class="slds-form-element__label" >
+                        Subject <abbr class="slds-required" title="required">*</abbr>
+                    </label>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-4">
+                    <div class="labelHide">
+                      <lightning:input type="text" aura:id="Subject" accesskey="Subject"  required="true" value="{!v.FieldWrapper.Subject}"/>
+                    </div>                   
+                </div>
+            </div> 
+            <div class="slds-grid slds-wrap slds-p-around_x-small">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <label class="slds-form-element__label" >
+                        Description <abbr class="slds-required" title="required">*</abbr>
+                    </label>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-4">
+                    <div class="labelHide">
+                        <lightning:textarea id="textarea-id-01" maxlength="500" aura:id="Desription" accesskey="Description" value="{!v.FieldWrapper.Description}"  required="true"/>                    
+                    </div>                 
+                </div>
+            </div>  
+            
+            <div class="slds-grid slds-wrap slds-p-around_x-small">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-4">
+                    <lightning:button variant="brand" class="supportBtn" onclick="{!c.SaveFormData}">Submit</lightning:button>
+                </div>
+            </div>
+        </div>
+    </div>-->
+    
+    
+</aura:component>

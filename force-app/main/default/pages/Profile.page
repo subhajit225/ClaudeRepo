@@ -1,0 +1,137 @@
+<apex:page id="portalUserProfilePage" controller="PortalProfileController" cache="false" title="Profile - Rubrik Community" applyBodyTag="false" standardStylesheets="false" showHeader="false" sidebar="false">
+ <link rel="shortcut icon" href="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/favicon.ico')}" type="image/x-icon" />
+    <link rel="icon" href="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/favicon1.png')}" type="image/png" />
+    <c:visualstrapblock >
+    
+        <!--start header-->
+        <c:siteheader ></c:siteheader>
+        <!--end Header-->
+
+     
+     
+     <style>
+     
+     .padbottom {
+     margin-bottom:15px;
+     }
+     
+     label {
+        display: inline-block;
+        color: #4A4A4A;
+        font-family: Gotham-Medium;
+        font-size: 14px;
+        line-height: 14px;
+        }
+     
+      .input[type="file"] {
+        display: none !important;
+        }
+        
+     </style>   
+       
+        
+        <!--start the Container-->
+        <div class="container">
+        <div class="row rowcontainer" >
+         <apex:messages styleClass="alert alert-warning">
+               
+                    </apex:messages>
+                    
+         <apex:pageMessages showDetail="false" rendered="{!errorMessage}" />
+                   <apex:outputPanel layout="block" styleClass="alert alert-success" rendered="{!successMessage}" >
+                    Details saved successfully<br/>
+                    </apex:outputpanel> 
+          
+           <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-2 pull-left" >
+                            <c:pageTitle name="Profile" />
+                        </div>
+                        <div class="col-md-4">
+                        </div>
+                        <div class="col-md-4">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-2 padbottom">
+                             <c:uploadphoto subject="{!User.Id}"/>
+                        </div>
+                        <div class="col-md-5">
+                            <apex:form >
+                                <div class="form-group">
+                                    <label for="fname">
+                                       First Name
+                                    </label>
+                                    <apex:inputfield id="fname" styleClass="form-control block" value="{!User.FirstName}"></apex:inputfield>
+                                </div>
+                                <div class="form-group">
+                                    <label for="lname">
+                                       Last Name
+                                    </label>
+                                    <apex:inputfield id="lname" styleClass="form-control block" value="{!User.LastName}"></apex:inputfield>
+                                </div>
+                                   
+                                <div class="form-group">
+                                    <label for="title">
+                                       Title
+                                    </label>
+                                    <apex:inputfield id="title" styleClass="form-control block" value="{!User.Title}" rendered="{!ISPICKVAL($User.UserType,'PowerPartner')}" html-disabled="disabled"></apex:inputfield>
+                                    <apex:inputfield id="title1" styleClass="form-control block" value="{!User.Title}" rendered="{!NOT(ISPICKVAL($User.UserType,'PowerPartner'))}"></apex:inputfield>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="phone">
+                                       Phone Number
+                                    </label>
+                                    <apex:inputfield id="phone" styleClass="form-control block" value="{!User.Phone}"></apex:inputfield>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="lang">
+                                       Language
+                                    </label>
+                                    <apex:inputfield id="lang" styleClass="form-control block" value="{!User.LanguageLocaleKey}"></apex:inputfield>
+                                </div>                               
+
+                                <div class="form-group">
+                                    <label for="zone">
+                                       Time Zone
+                                    </label>
+                                    <apex:inputfield id="zone" styleClass="form-control block" value="{!User.TimeZoneSidKey}"></apex:inputfield>
+                                </div>  
+                                
+                                
+                                <div class="form-group">
+                                    <label for="notifications">
+                                       Community Notifications
+                                    </label>
+                                    <apex:inputcheckbox id="notifications" styleClass="form-control block" value="{!User.Community_Notifications__c}"/>
+                                </div>
+                                
+                                  <apex:commandButton styleClass="btn rubrik-btn block" action="{!saveRecord}" title="Update" value="Update" style="width:124px;height:42px;"/> &nbsp;&nbsp;
+                                  <apex:commandLink action="/customers" title="Cancel" value="Cancel" style="font-size:12px;color:#B5B5B5;line-height:40px;text-transform:uppercase;"/>
+                      
+                            </apex:form>
+                        </div>
+                        <div class="col-md-3">
+                        </div>
+                    </div>
+                </div>
+
+
+            </div><!--end row row container-->
+        </div>
+        <!--End the Container-->
+        
+
+         
+       <!--start the footer-->
+        <c:sitefooter rendered="{!NOT(ISPICKVAL($User.UserType,'PowerPartner'))}"/>
+        <c:psitefooter rendered="{!ISPICKVAL($User.UserType,'PowerPartner')}"/>
+        
+    </c:visualstrapblock>
+</apex:page>

@@ -1,0 +1,132 @@
+<template>
+    <lightning-modal-header label={labelMap.Refresh_Title} class="slds-text-heading_small">
+        <template if:true={showMessage}>
+              <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                <span class="slds-assistive-text">error</span>
+                <span class="slds-icon_container slds-icon-utility-error slds-m-right_x-small"
+                  title="Description of icon when needed"></span>
+                <h2>
+                  <p>
+                    <span class="bolded">
+                      <label>{message}</label>
+                    </span>
+                  </p>
+                </h2>
+              </div>
+          </template>
+    </lightning-modal-header> 
+
+    <lightning-modal-body>
+        <!-- CPQ22-6309 Starts-->
+        <lightning-layout-item class="slds-size_12-of-12 slds-medium-size_5-of-12 slds-large-size_5-of-12" style="position: relative !important; display: block !important;">
+            <lightning-input label="Search Asset Name" type="search" autocomplete="off" value={entSearchString} 
+                            onchange={handleAssetNameSearch} onfocus={handleInputFocus} onblur={handleInputBlur}>
+            </lightning-input>
+
+            <template if:true={showDropdown}>
+                <div style="position: absolute !important; top: 100% !important; left: 0 !important; width: 100% !important; z-index: 9999 !important; background: white !important; border: 1px solid #dddbda !important; box-shadow: 0 4px 6px rgba(0,0,0,0.1) !important; max-height: 200px; overflow-y: auto;">
+                    <ul class="slds-dropdown__list" role="menu">
+                        <template for:each={suggestedAssets} for:item="asset">
+                            <li key={asset.value} class="slds-dropdown__item" onmousedown={handleSelectSuggestion}>
+                                <a href="javascript:void(0);" role="menuitem">
+                                    <span class="slds-truncate">{asset.label}</span>
+                                </a>
+                            </li>
+                        </template>
+                        <template if:false={hasSuggestions}>
+                            <li class="slds-p-around_x-small">Please search asset here</li>
+                        </template>
+                    </ul>
+                </div>-
+            </template>
+        </lightning-layout-item>
+        <!-- CPQ22-6309 Ends -->
+         
+        <template for:each={refreshWrapper} for:item="group" for:index="groupIndex">
+            <template if:false={group.isHidden}>
+            <div class="slds-text-heading_medium slds-p-around_small" style="width:100%; background-color:rgba(243, 243, 243, 1); font-weight:bold;" key={group.productCode}>{group.productCode}</div>
+            <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table_striped" style="width:100%; table-layout:fixed" key={group.productCode}>
+                <thead>
+                    <tr>
+                        <th style="width:8%"></th>
+                        <!-- <th style="width:5%">Sr.No.</th> -->
+                        <th style="width:30%">Available</th>
+                        <th style="width:12%">Available Quantity</th>
+                        <th style="width:15%">Network Type</th>
+                        <th style="width:20%">Target</th>
+                        <th style="width:10%">Target Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!--Rows-->
+                    <template for:each={group.rows} for:item="row" for:index="rowIndex">
+                        <template if:false={row.isHidden}>
+                            <tr key={row.key}>
+                                <!--buttons-->
+                                <td>
+                                    <lightning-button variant="base" title="Add" icon-name="utility:add" disabled={group.disableAdd}
+                                            class="slds-m-left_x-small" onclick={handleAddRow} data-index={rowIndex} data-group={groupIndex}></lightning-button>
+                                    <lightning-button variant="base" title="Delete" icon-name="utility:delete" disabled={row.disableDelete}
+                                        class="slds-m-left_x-small" onclick={handleDeleteRow} data-index={rowIndex} data-group={groupIndex}></lightning-button>
+                                </td>
+                                <!--checkbox-->
+                                <!-- <td>
+                                    <lightning-input type="checkbox" label={row.displayIndex} checked={row.isSelected} onchange={handleSelectCheckBox}
+                                    data-index={rowIndex} data-group={groupIndex}></lightning-input>
+                                </td> -->
+                                <!--Assets Selection-->
+                                <td>
+                                    <c-multiselect-combobox-lwc options={row.options} selected-values={row.selectedAssetIds} multi-select="true" enable-select-all="true"
+                                        placeholder='Select an Asset' onselectoption={handleSelectAsset} data-index={rowIndex} data-group={groupIndex}>
+                                    </c-multiselect-combobox-lwc>
+                                    <!--error space-->
+                                    <template lwc:if={row.message}>
+                                        <div class="slds-notify slds-notify_alert slds-alert_error slds-m-top_small slds-cell-wrap">{row.message}</div>
+                                    </template>
+                                </td>
+                                <!--Available Quantity-->
+                                <td>
+                                    {row.availableQuantity}
+                                </td>
+                                <!--Network Type-->
+                                <td>
+                                    <c-multiselect-combobox-lwc options={networkTypeOptions} selected-values={row.networkType}
+                                        placeholder='Select' onselectoption={handleNetworkTypeChange} data-index={rowIndex} data-group={groupIndex}>
+                                    </c-multiselect-combobox-lwc>
+                                </td>
+                                <!--Target-->
+                                 <td class="slds-p-around_xx-large">
+                                    <template lwc:if={row.isLikeToLike}>
+                                        <c-multiselect-combobox-lwc options={row.targetSKUs} selected-values={row.selectedTargetIds} multi-add='true' filter-attrs={row.networkTypeFilter}
+                                            placeholder='Select Hardware' onselectoption={handleSelectTarget} data-index={rowIndex} data-group={groupIndex}>
+                                        </c-multiselect-combobox-lwc>
+                                    </template>
+                                    <template lwc:else>
+                                        <c-multiselect-combobox-lwc options={targetSKUs} selected-values={row.selectedTargetIds} multi-add='true' filter-attrs={row.networkTypeFilter}
+                                            placeholder='Select Hardware' onselectoption={handleSelectTarget} data-index={rowIndex} data-group={groupIndex}>
+                                        </c-multiselect-combobox-lwc>
+                                    </template>
+                                </td>
+                                <!--Target Quantity-->
+                                <td>
+                                    {row.targetQuantity}
+                                </td>
+                            </tr>
+                        </template>
+                    </template>
+                </tbody>
+            </table>
+            </template>
+        </template>
+
+        <!--padding for height and dropdown-->
+        <div class="paddingArea">
+        </div>
+    </lightning-modal-body>
+
+    <lightning-modal-footer>
+        <lightning-button label="Cancel" title="Cancel" onclick={closeModal} class="slds-m-left_small"></lightning-button>
+        <lightning-button label="Done" title="Done" onclick={handleDone} class="slds-m-left_small"></lightning-button>
+    </lightning-modal-footer>
+    <c-new-rep-event-wrapper onwrapevent={handleDoneEvent}></c-new-rep-event-wrapper>
+</template>

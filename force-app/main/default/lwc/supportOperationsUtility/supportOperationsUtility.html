@@ -1,0 +1,78 @@
+<template>
+    <lightning-card title="Manage Email Lists" icon-name="utility:settings">
+        <template if:true={isLoading}>
+            <div class="slds-is-relative" style="height: 200px;">
+                <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
+            </div>
+        </template>
+
+        <template if:false={isLoading}>
+            <template if:true={hasAccess}>
+                <div class="slds-p-around_medium">
+                    <lightning-layout multiple-rows="true" pull-to-boundary="small">
+                        <lightning-layout-item size="12" small-device-size="6" medium-device-size="4"
+                            padding="around-small">
+                            <lightning-combobox name="emailListType" label="Email List Type" value={emailListType}
+                                options={emailListTypeOptions} onchange={handleEmailListTypeChange}>
+                            </lightning-combobox>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" small-device-size="6" medium-device-size="8"
+                            padding="around-small">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="domain-input-id">Enter New Email</label>
+                                <div class="slds-form-element__control slds-input-has-fixed-addon">
+                                    <input
+                                    type="email"
+                                    id="domain-input-id"
+                                    class="slds-input"
+                                    placeholder="e.g., user@example.com"
+                                    value={newEmail}
+                                    onchange={handleInputChange}
+                                />
+                                    <div class="slds-p-left_large">
+                                        <button class="slds-button slds-button_brand" onclick={addEmail}>Add</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </lightning-layout-item>
+                    </lightning-layout>
+
+                    <!-- Save Button -->
+                    <div class="slds-m-top_medium slds-text-align_center">
+                        <lightning-button variant="brand" label="Update Email List" onclick={handleSaveEmailList}>
+                        </lightning-button>
+                    </div>
+
+                    <hr class="slds-m-vertical_medium" />
+
+                    <div class="slds-p-top_small">
+                        <template if:true={hasEmail}>
+                            <h2 class="slds-m-bottom_medium">
+                                Displaying <strong>{allEmails.length}</strong> Email(s) for
+                                "<strong>{emailListType}</strong>" list:
+                            </h2>
+                            <div class="pill-container">
+                                <template for:each={allEmails} for:item="emailRec">
+                                    <span key={domain} class="slds-pill custom-slds-pill">
+                                    <span class="slds-pill__label">{emailRec}</span>
+                                    <button class="slds-button slds-button_icon slds-pill__remove"
+                                        data-email={emailRec}
+                                        onclick={handlePillRemove}
+                                        title="Remove">
+                                    <lightning-icon icon-name="utility:close" size="xx-small" alternative-text="Remove"></lightning-icon>
+                                    </button>
+                                    </span>
+                                </template>
+                            </div>
+                        </template>
+                        <template if:false={hasEmail}>
+                            <div class="slds-align_absolute-center slds-text-color_weak slds-p-vertical_medium">
+                                No domains found for this category.
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </template>
+        </template>
+    </lightning-card>
+</template>

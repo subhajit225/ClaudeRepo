@@ -1,0 +1,35 @@
+<apex:component controller="SubscribedArticlesController"  access="global">
+    <apex:attribute name="userId" description="This is the userID  for the component." type="String"  assignTo="{!currentUserId}" access="global"/>
+    <apex:slds />
+    <style>
+    label{font-weight:bold;}
+    </style>
+        <apex:repeat value="{!subscribedMapval}" var="key">
+           <apex:outputPanel rendered="{!key == 'New'}">
+                <h2 class="slds-text-heading_large">
+                    New article(s) created
+               </h2><br/>
+               <apex:repeat value="{!subscribedMapval[key]}" var="val">
+                   <label>Article number: </label> <apex:outputLink target="_blank" value="{!'https://support.rubrik.com/s/article/'+val.urlName}"> {!val.ArticleNumber} </apex:outputLink> <br/>
+                   <label>Category(s):</label> {!kbNameMap[val.Id]}<br/>
+                   <label>Date Created: </label>  <apex:outputText value="{0,date,MMMM dd,yyyy}"> <apex:param value="{!val.CreatedDate}" /></apex:outputText> <br/>
+                   <label>Title:</label> {!val.Title}<br/>
+                   <label>Summary:</label> {!val.Summary}<br/><br/>
+               </apex:repeat>
+            </apex:outputPanel>
+             <apex:outputPanel rendered="{!key == 'Old'}">
+                 <h2 class="slds-text-heading_large">
+                     Article(s) updated
+                 </h2><br/>
+                 <apex:repeat value="{!subscribedMapval[key]}" var="val">
+                    <label>Article number: </label> <apex:outputLink target="_blank" value="{!'https://support.rubrik.com/s/article/'+val.urlName}">{!val.ArticleNumber} </apex:outputLink><br/>
+                     <label>Date Created: </label> <apex:outputText value="{0,date,MMMM dd,yyyy}"> <apex:param value="{!kbDateMap[val.KnowledgeArticleId]}" /></apex:outputText><br/> 
+                     <label>Date Updated: </label>  <apex:outputText value="{0,date,MMMM dd,yyyy}"> <apex:param value="{!val.LastPublishedDate}" /></apex:outputText> <br/>
+                   <label>Category(s):</label> {!kbNameMap[val.Id]}<br/>
+                   <label>Title:</label> {!val.Title}<br/>
+                   <label>Summary:</label> {!val.Summary}<br/><br/>
+                 </apex:repeat>
+            </apex:outputPanel>
+        </apex:repeat>
+    <br/>
+</apex:component>

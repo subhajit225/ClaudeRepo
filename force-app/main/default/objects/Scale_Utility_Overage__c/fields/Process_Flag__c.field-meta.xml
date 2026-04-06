@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Process_Flag__c</fullName>
+    <label>Process Flag</label>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Do not Process</fullName>
+                <default>false</default>
+                <label>Do not Process</label>
+            </value>
+            <value>
+                <fullName>Create Overage Order</fullName>
+                <default>false</default>
+                <label>Create Overage Order</label>
+            </value>
+            <value>
+                <fullName>Reprocess</fullName>
+                <default>false</default>
+                <label>Reprocess</label>
+            </value>
+            <value>
+                <fullName>Order Created</fullName>
+                <default>false</default>
+                <label>Order Created</label>
+            </value>
+            <value>
+                <fullName>Stale</fullName>
+                <default>false</default>
+                <label>Stale</label>
+            </value>
+            <value>
+                <fullName>Late Request</fullName>
+                <default>false</default>
+                <label>Late Request</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

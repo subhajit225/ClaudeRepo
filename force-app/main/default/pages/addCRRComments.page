@@ -1,0 +1,17 @@
+<apex:page standardController="Customer_Registration_Request__c" lightningStylesheets="true" >
+    <apex:includeLightning />
+    <apex:form >
+        
+        
+        <apex:pageBlock >
+            <apex:pageBlockSection >
+                <apex:inputField value="{!Customer_Registration_Request__c.Comments__c}" />
+            </apex:pageBlockSection>
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Save" action="{!Save}" />
+                <apex:commandButton value="Cancel" action="{!Save}" />
+            </apex:pageBlockButtons>   
+        </apex:pageBlock>
+    </apex:form>
+   
+</apex:page>

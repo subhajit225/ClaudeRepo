@@ -1,0 +1,264 @@
+<apex:page standardStylesheets="false" controller="trialVfSearchController" cache="false"  sidebar="false" showheader="false"  title="Knowledge base - Rubrik Community" applyBodyTag="false"  >
+    <link rel="shortcut icon" href="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/favicon.ico')}" type="image/x-icon" />
+    <link rel="icon" href="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/favicon1.png')}" type="image/png" />
+    <c:visualstrapblock >
+        <style>
+            .row{margin:0px!important;}
+            body{margin:0px!important;}
+            .su-p-input-header__link{z-index:0 !important}
+            .ArticleContainerBlock{width:90%;margin:0 auto;padding:0 40px;}
+            .headerbacktop{margin:0px !important;height: 36px !important;}
+            .nopad{padding:0px;}
+            .myMobileCategory{padding: 5px!important;display:block !important;background-color:#009DAC !important;float:left !important;margin:30px 0px!important;position:fixed!important;bottom:20px;right:40px;z-index: 1;}
+            .align-right{text-align:right;}
+            align-left{text-align:left;}
+            .visualstrap .table > thead > tr > th, .visualstrap .table > tbody > tr > th, .visualstrap .table > tfoot > tr > th, .visualstrap .table > thead > tr > td, .visualstrap .table > tbody > tr > td, .visualstrap .table > tfoot > tr > td {border-top: 0px !important;}
+            .top-margin{margin-top:50px;}
+            .categBlock{border:1px solid #eee;padding5px !important;}
+            .categTitle{font-size:11px;text-transform:uppercase;font-family:"Gotham-light";padding-bottom:5px !important;padding-top:20px !important;}
+            .categName{font-size:12px;padding-left:5px !important;display:inline;}
+            .artHeading{font-size:20px;font-family:"Gotham-medium";padding-bottom:20px !important;border-bottom:1px solid #eee;}
+            .eachBlock{padding-bottom:30px !important;padding-top:30px !important;border-bottom:1px solid #eee;}
+            .tileStyle{padding:5px !important;cursor:pointer;padding-left:0px !important;}
+            .artTitle{font-size:20px !important;font-family:"Gotham-light" !important;padding-bottom:10px !important;color:#1d2632 !important;}
+            .artTitle:hover{color:#009DAC !important;}
+            .artDesc{font-size:14px;font-family:"Gotham-light";padding-bottom:10px !important;color:#666;}
+            .artPublishDate{font-size:12px;font-family:"Gotham-light";color:#4a4a4a;}
+            .artPostedBy{text-transform:uppercase;font-size:11px;font-weight:bold;font-family: "Gotham-light";color:#19a7b5;}
+            .pagination{padding:20px 0px !important;}
+            .required{background-color:#009DAC;}
+            .selected{color:#009DAC;background-color:#eee;}
+            .mobileCateg{font-size:20px!important;}
+            .mobileCategName{font-size:18px!important;}
+            @media only screen and (min-width : 320px) and (max-width : 480px) {
+            .artHeading{margin-top:50px}
+            .ArticleContainerBlock{padding:0px;}
+            }
+            @media only screen and (min-width : 480px) and (max-width : 767px){
+            .artHeading{margin-top:50px}
+            .ArticleContainerBlock{padding:0px;}
+            }
+            @media screen and (orientation: landscape) {
+            .tileStyleMobile{padding:5px !important;}
+            }
+            #knowledgeCategory{position: fixed;background-color:white;z-index: 1;right:40px;bottom:20px}  
+            .susearchBoxContainer.su-p-input-header {margin: 15px auto;width: 90%;padding: 0 40px;}  
+        </style>
+        <script>
+        function refreshSearchResult(selectedCateg){
+            window.location.href = "/trialKnowledge?categoryType_Article=" + selectedCateg;
+        }
+        
+        </script>
+        <!--start header-->
+        <c:siteheader />
+        <!--end Header-->
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad">
+            <su_vf_community:SU_Vf_CommunitySearchBox advanceFilterData="_type" advanceFilterValue="How_To__kav" placeHolderContent="Search Knowledge Base"/>    
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad">
+            <div class='ArticleContainerBlock'>
+                <apex:form >
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad top-margin">
+                            <apex:outputPanel id="topSection">
+                                <div class="col-lg-3 col-md-3 hidden-sm hidden-xs">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad categTitle">Categories</div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad categBlock">
+                                        
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad tileStyle {!IF('All' == $CurrentPage.parameters.categoryType_Article,'selected','')}" onclick="refreshSearchResult('All');">
+                                            <span class="{!IF('All' == $CurrentPage.parameters.categoryType_Article,'required','')}">&nbsp;</span>
+                                            <span style="display:inline-block;width:20px;">
+                                                <!-- Grey Icon -->
+                                                <apex:outputPanel rendered="{!IF('All' == $CurrentPage.parameters.categoryType_Article,false,true)}">
+                                                    <apex:image value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/all.png')}" />
+                                                </apex:outputPanel>
+                                                <!-- Blue Icon -->
+                                                <apex:outputPanel rendered="{!IF('All' == $CurrentPage.parameters.categoryType_Article,true,false)}">
+                                                    <apex:image value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/all_hover.png')}" />
+                                                </apex:outputPanel>
+                                            </span>
+                                            <span class="categName">All Articles</span>
+                                        </div>
+                                        <apex:repeat value="{!DataCategoryName}" var="key">
+                                            <apex:outputPanel rendered="{!and(key != 'API' , key != 'Documentation' )}">
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad tileStyle {!IF(key == $CurrentPage.parameters.categoryType_Article,'selected','')}" onclick="refreshSearchResult('{!DataCategoryName[key]}');">
+                                                    <span class="{!IF(key == $CurrentPage.parameters.categoryType_Article,'required','')}">&nbsp;</span>
+                                                    <span style="display:inline-block;width:20px;">
+                                                        <apex:outputPanel rendered="{!IF(key == $CurrentPage.parameters.categoryType_Article,false,true)}">
+                                                            <!-- Grey Icon -->
+                                                            <apex:image rendered="{!key == 'API'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/API.png')}" />
+                                                            <apex:image rendered="{!key == 'Authentication'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/Auth.png')}" />
+                                                            <apex:image rendered="{!key == 'Cloud_Archive'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/Cloud.png')}" />
+                                                            <apex:image rendered="{!key == 'Cluster_Operations'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/Cluster.png')}" />
+                                                            <apex:image rendered="{!key == 'Documentation'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/documentation.png')}" />
+                                                            <apex:image rendered="{!key == 'GUI'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/GUI.png')}" />
+                                                            <apex:image rendered="{!key == 'Other'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/other.png')}" />
+                                                            <apex:image rendered="{!key == 'Physical_Client'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/Physical_CLient.png')}" />
+                                                            <apex:image rendered="{!key == 'PowerShell'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/PowerShell.png')}" />
+                                                            <apex:image rendered="{!key == 'Recovery'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/Recovery.png')}" />
+                                                            <apex:image rendered="{!key == 'Replication'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/Replication.png')}" />
+                                                            <apex:image rendered="{!key == 'Snapshots'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/Snapshot.png')}" />
+                                                            <apex:image rendered="{!key == 'Support_Portal_and_Services'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/support.png')}" />
+                                                            <apex:image rendered="{!key == 'Videos'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/listing_video.png')}" />
+                                                            
+                                                        </apex:outputPanel>
+                                                        
+                                                        <apex:outputPanel rendered="{!IF(key == $CurrentPage.parameters.categoryType_Article,true,false)}">
+                                                            <!-- Blue Icon -->
+                                                            <apex:image rendered="{!$CurrentPage.parameters.categoryType_Article == 'API'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/api_blue.png')}" />
+                                                            <apex:image rendered="{!$CurrentPage.parameters.categoryType_Article == 'Authentication'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/Authentication.png')}" />
+                                                            <apex:image rendered="{!$CurrentPage.parameters.categoryType_Article == 'Cloud_Archive'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/cloud_blue.png')}" />
+                                                            <apex:image rendered="{!$CurrentPage.parameters.categoryType_Article == 'Cluster_Operations'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/cluster_blue.png')}" />
+                                                            <apex:image rendered="{!$CurrentPage.parameters.categoryType_Article == 'Documentation'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/documentation_blue.png')}" />
+                                                            <apex:image rendered="{!$CurrentPage.parameters.categoryType_Article == 'GUI'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/GUI_blue.png')}" />
+                                                            <apex:image rendered="{!$CurrentPage.parameters.categoryType_Article == 'Other'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/other_blue.png')}" />
+                                                            <apex:image rendered="{!$CurrentPage.parameters.categoryType_Article == 'Physical_Client'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/Physical_CLient_blue.png')}" />
+                                                            <apex:image rendered="{!$CurrentPage.parameters.categoryType_Article == 'PowerShell'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/PowerShell_blue.png')}" />
+                                                            <apex:image rendered="{!$CurrentPage.parameters.categoryType_Article == 'Recovery'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/Recovery_blue.png')}" />
+                                                            <apex:image rendered="{!$CurrentPage.parameters.categoryType_Article == 'Replication'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/Replication_blue.png')}" />
+                                                            <apex:image rendered="{!$CurrentPage.parameters.categoryType_Article == 'Snapshots'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/Snapshot_blue.png')}" />
+                                                            <apex:image rendered="{!$CurrentPage.parameters.categoryType_Article == 'Support_Portal_and_Services'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/support_blue.png')}" />
+                                                            <apex:image rendered="{!$CurrentPage.parameters.categoryType_Article == 'Videos'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/listing_video_hover.png')}" />
+                                                        </apex:outputPanel>
+                                                    </span>
+                                                    <span class="categName">{!SUBSTITUTE(key,'_',' ')}</span>
+                                                </div>
+                                            </apex:outputPanel>
+                                        </apex:repeat>
+                                    </div>
+                                </div>
+                            </apex:outputPanel>
+                            <apex:outputPanel id="theSearchResults">
+                                
+                                <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad artHeading">{!SUBSTITUTE($CurrentPage.parameters.categoryType_Article,'_',' ')} Articles</div>
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad">
+                                            <knowledge:articleList articleVar="article" categories="{!categoryKeyword}"  Keyword="{!searchstring}" pageNumber="{!currentPageNumber}" hasMoreVar="false" pageSize="10">
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad eachBlock">
+                                                    <div class="col-lg-1 col-md-1 col-sm-2 col-xs-2 nopad">
+                                                        <apex:image styleClass="img-responsive announcementImg" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/article1.png')}" />
+                                                    </div>
+                                                    <div class="col-lg-11 col-md-11 col-sm-10 col-xs-10">
+                                                        
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad" style="padding-bottom:10px;">
+                                                            <a href="/articles/How_To/{!article.UrlName}" class="artTitle">{!article.title}</a>
+                                                        </div>
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad artDesc">{!article.abstract}</div>
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad">
+                                                            <span class="artPublishDate">Article No: {!article.articlenumber}</span>
+                                                            <span class="artPublishDate">Created: </span>
+                                                            <apex:outputText value="{0,date,MMM' 'dd', 'yyyy}" styleClass="artPublishDate">
+                                                                <apex:param value="{!article.FirstPublishedDate}" /> 
+                                                            </apex:outputText>
+                                                            <span class="artPublishDate"> &#x25cf; Last modified: </span>
+                                                            <apex:outputText value="{0,date,MMM' 'dd', 'yyyy}" styleClass="artPublishDate">
+                                                                <apex:param value="{!article.LastModifiedDate}" /> 
+                                                            </apex:outputText>
+                                                            <!--
+                                                            <apex:outputText value="{0,date,MMM' 'dd', 'yyyy}" styleClass="artPublishDate">
+                                                            <apex:param value="{!article.LastPublishedDate}" /> 
+                                                            </apex:outputText> -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </knowledge:articleList>
+                                        </div>
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad noArticlefound text-center" style="{!IF(maxSize=0,'display:block','display:none')};padding-top: 30px;">
+                                            No Article Found
+                                        </div>
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad pagination">
+                                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 nopad align-right" style="padding-right:10px;">
+                                                <apex:commandLink action="{!previous}" value="Previous" style="{!IF(prevRequired = true,'display:block','display:none')}" reRender="theSearchResults"/>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 nopad align-left">
+                                                <apex:commandLink action="{!next}" value="Next"  style="{!IF(nextRequired = true,'display:block','display:none')}" reRender="theSearchResults"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </apex:outputPanel>
+                            <!-- code for mobile category-->
+                            <div class="hidden-lg hidden-md visible-sm visible-xs col-sm-12 col-xs-12 nopad">
+                                <button type="button" class="navbar-toggle myMobileCategory" data-toggle="collapse" data-target="#knowledgeCategory">
+                                    <apex:image value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/categories_filter.png')}" />
+                                </button>
+                                <div class="collapse col-sm-10 col-xs-10" id="knowledgeCategory">
+                                    <div class="col-sm-10 col-xs-10 categTitle mobileCateg navbar-nav" >Categories</div>
+                                    <div class="col-sm-2 col-xs-2">
+                                        <button type="button" class="navbar-toggle myMobileCategory" data-toggle="collapse" data-target="#knowledgeCategory">
+                                            <apex:image value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/categories_filter.png')}" />
+                                        </button>
+                                    </div>
+                                    <div class="col-sm-12 col-xs-12 navbar-nav categBlock" style="overflow-y:auto;height: 300px;">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 tileStyle tileStyleMobile {!IF('All' == $CurrentPage.parameters.categoryType_Article,'selectedMobile','')}" onclick="refreshSearchResult('All');">
+                                            <span class="{!IF('All' == $CurrentPage.parameters.categoryType_Article,'required','')}">&nbsp;</span>
+                                            <span style="display:inline-block;width:20px;">
+                                                <apex:outputPanel rendered="{!IF('All' == $CurrentPage.parameters.categoryType_Article,false,true)}">
+                                                    <!-- Grey Icon -->
+                                                    <apex:image value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/all.png')}" />
+                                                </apex:outputPanel>
+                                                <apex:outputPanel rendered="{!IF('All' == $CurrentPage.parameters.categoryType_Article,true,false)}">
+                                                    <!-- Blue Icon -->
+                                                    <apex:image value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/all_hover.png')}" />
+                                                </apex:outputPanel>
+                                            </span>
+                                            <span class="categName mobileCategName">All Articles</span>
+                                        </div>
+                                        <apex:repeat value="{!DataCategoryName}" var="key">
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 tileStyle tileStyleMobile {!IF(key == $CurrentPage.parameters.categoryType_Article,'selectedMobile','')}" onclick="refreshSearchResult('{!DataCategoryName[key]}');">
+                                                <span class="{!IF(key == $CurrentPage.parameters.categoryType_Article,'required','')}">&nbsp;</span>
+                                                <span style="display:inline-block;width:20px;">
+                                                    <apex:outputPanel rendered="{!IF(key == $CurrentPage.parameters.categoryType_Article,false,true)}">
+                                                        <!-- Grey Icon -->
+                                                        <apex:image rendered="{!key == 'API'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/API.png')}" />
+                                                        <apex:image rendered="{!key == 'Authentication'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/Auth.png')}" />
+                                                        <apex:image rendered="{!key == 'Cloud_Archive'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/Cloud.png')}" />
+                                                        <apex:image rendered="{!key == 'Cluster_Operations'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/Cluster.png')}" />
+                                                        <apex:image rendered="{!key == 'Documentation'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/documentation.png')}" />
+                                                        <apex:image rendered="{!key == 'GUI'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/GUI.png')}" />
+                                                        <apex:image rendered="{!key == 'Other'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/other.png')}" />
+                                                        <apex:image rendered="{!key == 'Physical_Client'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/Physical_CLient.png')}" />
+                                                        <apex:image rendered="{!key == 'PowerShell'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/PowerShell.png')}" />
+                                                        <apex:image rendered="{!key == 'Recovery'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/Recovery.png')}" />
+                                                        <apex:image rendered="{!key == 'Replication'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/Replication.png')}" />
+                                                        <apex:image rendered="{!key == 'Snapshots'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/Snapshot.png')}" />
+                                                        <apex:image rendered="{!key == 'Support_Portal_and_Services'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/support.png')}" />
+                                                        <apex:image rendered="{!key == 'Videos'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/listing_video.png')}" />
+                                                    </apex:outputPanel>
+                                                    
+                                                    <apex:outputPanel rendered="{!IF(key == $CurrentPage.parameters.categoryType_Article,true,false)}">
+                                                        <!-- Blue Icon -->
+                                                        <apex:image rendered="{!$CurrentPage.parameters.categoryType_Article == 'API'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/api_blue.png')}" />
+                                                        <apex:image rendered="{!$CurrentPage.parameters.categoryType_Article == 'Authentication'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/Authentication.png')}" />
+                                                        <apex:image rendered="{!$CurrentPage.parameters.categoryType_Article == 'Cloud_Archive'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/cloud_blue.png')}" />
+                                                        <apex:image rendered="{!$CurrentPage.parameters.categoryType_Article == 'Cluster_Operations'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/cluster_blue.png')}" />
+                                                        <apex:image rendered="{!$CurrentPage.parameters.categoryType_Article == 'Documentation'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/documentation_blue.png')}" />
+                                                        <apex:image rendered="{!$CurrentPage.parameters.categoryType_Article == 'GUI'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/GUI_blue.png')}" />
+                                                        <apex:image rendered="{!$CurrentPage.parameters.categoryType_Article == 'Other'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/other_blue.png')}" />
+                                                        <apex:image rendered="{!$CurrentPage.parameters.categoryType_Article == 'Physical_Client'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/Physical_CLient_blue.png')}" />
+                                                        <apex:image rendered="{!$CurrentPage.parameters.categoryType_Article == 'PowerShell'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/PowerShell_blue.png')}" />
+                                                        <apex:image rendered="{!$CurrentPage.parameters.categoryType_Article == 'Recovery'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/Recovery_blue.png')}" />
+                                                        <apex:image rendered="{!$CurrentPage.parameters.categoryType_Article == 'Replication'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/Replication_blue.png')}" />
+                                                        <apex:image rendered="{!$CurrentPage.parameters.categoryType_Article == 'Snapshots'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/Snapshot_blue.png')}" />
+                                                        <apex:image rendered="{!$CurrentPage.parameters.categoryType_Article == 'Support_Portal_and_Services'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/support_blue.png')}" />
+                                                        <apex:image rendered="{!$CurrentPage.parameters.categoryType_Article == 'Videos'}" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/listing_video_hover.png')}" />
+                                                    </apex:outputPanel>
+                                                </span>
+                                                <span class="categName mobileCategName">{!SUBSTITUTE(key,'_',' ')}</span>
+                                            </div>
+                                        </apex:repeat>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- code for mobile category-->
+                        </div>
+                    </div>
+                </apex:form>
+            </div>
+            <!--start the footer-->
+            <c:sitefooter />
+        </div>
+    </c:visualstrapblock>
+</apex:page>

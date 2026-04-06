@@ -1,0 +1,92 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:lightningQuickAction,force:hasRecordId,lightning:actionOverride" access="global" controller="PC_FileSharingCmpController">
+ 	<aura:attribute name="newfileSharing" type="Object"/>
+    <aura:attribute name="simplefileSharing" type="Object"/>
+    <aura:attribute name="newfileSharingError" type="String"/>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="selectedAccountRecords" type="sObject[]" default="[]"/>
+    <aura:attribute name="selectedChannelProgramRecords" type="sObject[]" default="[]"/>
+    <aura:attribute name="selectedChannelProgramLevelRecords" type="sObject[]" default="[]"/>
+    <aura:attribute name="selectedProgramNames" type="String"/>
+
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>  
+    <aura:handler name="change" value="{!v.selectedChannelProgramRecords}" action="{!c.channelProgramOnChange}"/>
+    
+    <force:recordData aura:id="FileSharingRecordCreator"
+                      layoutType="FULL"
+                      targetRecord="{!v.newfileSharing}"
+                      targetFields ="{!v.simplefileSharing}"
+                      targetError="{!v.newfileSharingError}"
+                      />
+   <lightning:recordEditForm recordId="{!v.recordId}" objectApiName="File_Sharing__c">
+    <lightning:card>
+         <aura:set attribute="title">
+            <lightning:icon iconName="custom:custom2" size="medium"/>
+             File Sharing {!v.simplefileSharing.Name}
+        </aura:set>
+    <div class="c-container">
+        <lightning:layout multipleRows="true">
+            <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                <lightning:input type="checkbox" aura:id="Active__c" label="Is Active"
+                            class="paddingTop" checked="{!v.simplefileSharing.Active__c}" />
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+             <c:ReusableMultiLookup objectAPIName="Account"
+                               IconName="standard:Account"
+                               lstSelectedRecords="{!v.selectedAccountRecords}"
+                               label="Account Name" selectedRecordType="Partner/Distributor"/>
+            </lightning:layoutItem>    
+            <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                 <lightning:input type="checkbox" aura:id="Exclude_Account_Name__c" label="Exclude Account Name"
+                            class="slds-p-top_medium" checked="{!v.simplefileSharing.Exclude_Account_Name__c}" />
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                <c:ReusableMultiLookup objectAPIName="ChannelProgram"
+                               IconName="standard:ChannelProgram"
+                               lstSelectedRecords="{!v.selectedChannelProgramRecords}"
+                               label="Channel Program"/>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                <lightning:input type="checkbox" aura:id="Exclude_Channel_Program__c" label="Exclude Channel Program"
+                            class="slds-p-top_medium" checked="{!v.simplefileSharing.Exclude_Channel_Program__c}" />
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                 <c:ReusableMultiLookup objectAPIName="ChannelProgramLevel"
+                               IconName="standard:ChannelProgramLevel"
+                               lstSelectedRecords="{!v.selectedChannelProgramLevelRecords}"
+                               label="Channel Program Level"
+                               whereclause="{!v.selectedProgramNames}" />
+            </lightning:layoutItem>
+             <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                <lightning:input type="checkbox" aura:id="Exclude_Channel_Program_Level__c" label="Exclude Channel Program Level"
+                            class="slds-p-top_medium" checked="{!v.simplefileSharing.Exclude_Channel_Program_Level__c}" />
+            </lightning:layoutItem>
+             <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                <lightning:inputField fieldName="Account_Specialization__c" aura:id="Account_Specialization__c" value="{!v.simplefileSharing.Account_Specialization__c}" />
+            </lightning:layoutItem>
+           <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                <lightning:inputField  fieldName="Area__c"  aura:id="Area__c"   value="{!v.simplefileSharing.Area__c}"/>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                <lightning:inputField fieldName="Partner_Type__c"  aura:id="Partner_Type__c" value="{!v.simplefileSharing.Partner_Type__c}"/>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                <lightning:inputField fieldName="Primary_Role__c"  aura:id="Primary_Role__c"  value="{!v.simplefileSharing.Primary_Role__c}"/>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                <lightning:inputField fieldName="Theatre__c"  aura:id="Theatre__c" value="{!v.simplefileSharing.Theatre__c}"/>
+            </lightning:layoutItem>
+        </lightning:layout>
+         
+    </div>
+       <div class="slds-align_absolute-center slds-p-top_large slds-p-bottom_x-large">
+            <lightning:button label="Save" variant="brand" onclick="{!c.handleSaveForm}"/>
+            <lightning:button label="Cancel" variant="neutral" class="slds-p-left_medium" onclick="{!c.handleCancel}"/>
+            <lightning:spinner aura:id="mySpinner" style="position:fixed" alternativeText="Saving.." title="Saving.." variant="brand" size="large" class="slds-hide"/>
+       </div>
+       </lightning:card>
+    </lightning:recordEditForm>
+  
+</aura:component>

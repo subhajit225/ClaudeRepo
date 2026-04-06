@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PIckup_required_mandatory_to_return</fullName>
+    <active>false</active>
+    <errorConditionFormula>Return_to_Rubrik_warehouse__c &amp;&amp; !Pickup_Required__c</errorConditionFormula>
+    <errorMessage>Pickup is required to return to Rubrik warehouse</errorMessage>
+</ValidationRule>

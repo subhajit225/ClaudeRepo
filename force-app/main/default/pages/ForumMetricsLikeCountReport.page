@@ -1,0 +1,52 @@
+<apex:page controller="forumMerticsLikeCountController" lightningStylesheets="true">
+    <apex:slds rendered="{!$User.UITheme != 'Theme3'}"/>
+    <apex:form style="width:100%;">
+        <apex:pageBlock title="{!$Label.Forum_Metrics_Likes_Report}">
+            <apex:pageblockButtons location="top">
+                <apex:commandButton value="Export To Excel" onclick="window.open('/apex/forumMetricsLikeCountExcel'); return false;"/>
+            </apex:pageblockButtons>
+            
+            <div style="float: right;margin-right: 1px !important;"> <font size="2pt">Total Records:&nbsp;<apex:outputLabel value="{!totalsize}"/></font></div>
+            <div style="float: right;">
+                <font size="1pt">Page #:&nbsp;<apex:outputLabel value="{!PageNumber}"/>&nbsp;out of&nbsp;<apex:outputLabel value="{!totalPageNumber}"/>&nbsp;&nbsp;&nbsp;&nbsp;</font>
+            </div>
+            <apex:pageBlockTable value="{!myfeedItemLikeWrapList}" var="wrap">
+                <apex:column headerValue="Topic">
+                    <apex:outputText value="{!wrap.TopicName}"></apex:outputText>
+                </apex:column>
+                <apex:column headerValue="FeedItem Id">
+                    <apex:outputText value="{!wrap.feedItemRecord.Id}"></apex:outputText>
+                </apex:column>
+                <apex:column headerValue="FeedItem Title">
+                    <apex:outputText value="{!wrap.feedItemRecord.Title}"></apex:outputText>
+                </apex:column>
+                <apex:column headerValue="Network Scope">
+                    <apex:outputText value="{!wrap.NetworkName}"></apex:outputText>
+                </apex:column>
+                <apex:column headerValue="Total Likes">
+                    <apex:outputText value="{!wrap.feedItemRecord.LikeCount}"></apex:outputText>
+                </apex:column>
+                <apex:column headerValue="FeedLike CreatedById">
+                    <apex:outputText rendered="{!wrap.feedLikeRecord != NULL}" value="{!wrap.feedLikeRecord.CreatedById}"></apex:outputText>
+                </apex:column>
+                <apex:column headerValue="FeedLike CreatedBy Type">
+                    <apex:outputText rendered="{!wrap.feedLikeRecord != NULL}" value="{!wrap.feedLikeRecord.CreatedBy.UserType}"></apex:outputText>
+                </apex:column>
+                <apex:column headerValue="FeedLike CreatedBy Email">
+                    <apex:outputText rendered="{!wrap.feedLikeRecord != NULL}" value="{!wrap.feedLikeRecord.CreatedBy.Email}"></apex:outputText>
+                </apex:column>
+                <apex:column headerValue="FeedLike CreatedDate">
+                    <apex:outputText rendered="{!wrap.feedLikeRecord != NULL}" value="{0,date,MM/dd/yy}">
+                        <apex:param value="{!wrap.feedLikeRecord.CreatedDate}" />
+                    </apex:outputText>
+                </apex:column>
+            </apex:pageBlockTable>
+        </apex:pageBlock> 
+        <div style = "float: right !important;Padding-right: 2px;">
+            <apex:actionFunction name="Previous" action="{!Previous}"/>     
+            <apex:outputLink value="#" disabled="{!prev}" onclick="Previous();">Previous</apex:outputLink>
+            -&nbsp;<apex:actionFunction name=" Next" action="{!Next}"/>     
+            <apex:outputLink value="#" disabled="{!nxt}" onclick="Next();">Next</apex:outputLink>
+        </div>       
+    </apex:form>
+</apex:page>

@@ -1,0 +1,31 @@
+<apex:page >
+ <apex:includeLightning />
+
+ <div  id="FlipcardContainer" />
+
+ <script>
+ $Lightning.use("c:ArticlesManagementApp", function() {
+ $Lightning.createComponent("c:ArticlesManagement",
+  {},
+ "FlipcardContainer",
+ function(cmp) {
+      $A.eventService.addHandler({ "event": "c:MaxSelectionEvent", "handler": getMessage });
+     //alert(100);
+      console.log('Component created, do something cool here');
+ });
+     
+ });
+  
+    var getMessage  = function(event){
+        
+    let param= event.getParam("myParam");
+        alert(param);
+        /*   sforce.one.showToast({
+                "title": "Success!",
+                "message": "Welcome to salesforce code crack.",
+                "type": "success"
+            });   */
+    
+   };
+ </script>
+</apex:page>

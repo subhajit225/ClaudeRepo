@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Cannot_Insert_a_valid_risk_profile</fullName>
+    <active>true</active>
+    <description>stops insertion of a valid risk profile as risk profile needs to be validated only by the risk governance team</description>
+    <errorConditionFormula>IF(AND(ISPICKVAL(Risk_Validation_Status__c  , &quot;Valid&quot;),  ISNEW()), true, false)</errorConditionFormula>
+    <errorMessage>You can&apos;t insert a valid risk profile. Only RGT can mark risk profile as valid.</errorMessage>
+</ValidationRule>

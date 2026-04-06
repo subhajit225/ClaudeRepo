@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>POC_Asset_Returned__c</fullName>
+    <formula>OR(
+	ISPICKVAL( POC_Stage__c, &apos;Return Sale&apos; ),
+	ISPICKVAL( POC_Stage__c, &apos;Return No Sale&apos; ),
+	ISPICKVAL( POC_Stage__c, &apos;Converted&apos; ),
+	ISPICKVAL( POC_Stage__c, &apos;Extended POC&apos; ),
+	ISPICKVAL( POC_Stage__c, &apos;Completed Test Plan&apos; )
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>(DEPRECATED) POC Asset Returned</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

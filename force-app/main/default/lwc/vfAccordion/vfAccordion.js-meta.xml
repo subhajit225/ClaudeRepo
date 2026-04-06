@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+	<apiVersion>57.0</apiVersion>
+	<isExposed>true</isExposed>
+	<targets>
+		<target>lightning__RecordPage</target>
+	</targets>
+	<targetConfigs>
+        <targetConfig targets="lightning__RecordPage">
+			<property name="visualforcePageName" type="String" label="Visualforce Page Name" description="Enter the name of the Visualforce Page"/>
+			<property name="visualforcePageTitle" type="String" label="Visualforce Page Title" description="Enter the title of the Visualforce Page"/>
+			<property name="visualforcePageHeight" type="String" label="Visualforce Page Height" description="Enter the height of the Visualforce Page, default is 220"/>
+		</targetConfig>
+	</targetConfigs>	
+</LightningComponentBundle>

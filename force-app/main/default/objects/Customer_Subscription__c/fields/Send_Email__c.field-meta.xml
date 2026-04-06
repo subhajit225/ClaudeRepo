@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Send_Email__c</fullName>
+    <formula>IF(Type_of_Comment__c ==&apos;Direct&apos;,  IF(CreatedById== Community_Feed__r.CreatedById, False,True ) ,
+ IF(Type_of_Comment__c ==&apos;Indirect&apos;, 
+ IF(  (CreatedById==Community_Feed__r.Community_Feed_Parent__r.CreatedById ) &amp;&amp; Community_Feed__r.Send_Email__c ==True, False,		
+
+   IF((CreatedById&lt;&gt;Community_Feed__r.Community_Feed_Parent__r.CreatedById ) &amp;&amp; Community_Feed__r.Send_Email__c ==False ,True, 
+   
+       IF( (CreatedById&lt;&gt;Community_Feed__r.Community_Feed_Parent__r.CreatedById ) &amp;&amp; Community_Feed__r.Send_Email__c ==True,True,False
+	   
+	   
+   
+
+ ))),False))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Send  Email</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

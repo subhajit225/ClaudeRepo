@@ -1,0 +1,508 @@
+<aura:component controller="ReplaceSKUControllerLtng" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+	<aura:attribute name="recordId" type="String" />
+    <aura:attribute name="saasToShow" type="Object[]" />
+    <aura:attribute name="goToShow" type="Object[]" />
+    <aura:attribute name="lodToShow" type="Object[]" />
+    <aura:attribute name="rscGToShow" type="Object[]" />
+    <aura:attribute name="ssGToShow" type="Object[]" />
+    <aura:attribute name="lodrsgToShow" type="Object[]" />
+    <aura:attribute name="mapOfBundleIdvsAssetIds" type="Map" 
+                    default="{}"/>  
+    <aura:attribute name="mapTocheckDup" type="Map" 
+               default="{}" />
+    <aura:attribute name="mapTogetOrgVal" type="Map" 
+               default="{}" />  
+    <aura:attribute name="selectedSKU" type="String" />
+    <aura:attribute name="selectedRecordId" type="String" />
+    <aura:attribute name="selectedAsset" type="String" />
+    <aura:attribute name="showmsg" type="Boolean" /> 
+    <aura:attribute name="isModalOpen" type="Boolean" />
+    <aura:attribute name="dsaasValidation" type="String" />
+    <aura:attribute name="dsaasSKUs" type="String" />
+    <aura:attribute name="errorMessage" type="String" default="" />
+    <aura:attribute name="isLoading" type="Boolean" default="false"/>
+    <aura:attribute name="buttonsDisabled" type="Boolean" default="false" />
+    <aura:attribute name="accessGiven" type="Boolean" default="false" />
+    <aura:attribute name="dupflag" type="Boolean" /> 
+    <aura:attribute name="showdup" type="Boolean" /> 
+     
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler event="c:SendDataToVFPage" action="{!c.getValueFromApplicationEvent}"/>
+    <aura:if isTrue="{!v.isModalOpen}"> 
+             
+            <!-- Modal/Popup Box starts here-->
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <!-- Modal/Popup Box Header Starts here-->
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{! c.closeValidationModel }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Warning</h2>
+                    </header>
+                    <!--Modal/Popup Box Body Starts here-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <p>{!v.dsaasValidation}</p>
+                    </div>
+                    <!--Modal/Popup Box Footer Starts here-->
+                    <footer class="slds-modal__footer">
+                        <lightning:button variant="brand"
+                                          label="OK"
+                                          title="OK"
+                                          class="slds-align_absolute-center"
+                                          onclick="{!c.closeValidationModel}"/>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>
+<!--- Madhura Start for duplicate validation -->
+    <aura:if isTrue="{!v.showdup}"> 
+             
+            <!-- Modal/Popup Box starts here-->
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <!-- Modal/Popup Box Header Starts here-->
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{! c.closeDuplicteError }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Warning</h2>
+                    </header>
+                    <!--Modal/Popup Box Body Starts here-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <p>You are trying to replace the same SKU in multiple sections. This is not supported. Please replace the SKU in only one of the Replacement Sections only</p>
+                    </div>
+                    <!--Modal/Popup Box Footer Starts here-->
+                    <footer class="slds-modal__footer">
+                        <lightning:button variant="brand"
+                                          label="OK"
+                                          title="OK"
+                                          class="slds-align_absolute-center"
+                                          onclick="{!c.closeDuplicteError}"/>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>
+    <aura:if isTrue="{!v.showmsg}">
+            <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                <span class="slds-assistive-text">error</span>
+                <span class="slds-icon_container slds-icon-utility-error slds-m-right_x-small" title="Description of icon when needed">
+                </span>
+                <h2>
+                    <p><span class="bolded"><label>"{!v.errorMessage}"</label> </span></p>
+                </h2>
+            </div>
+   		</aura:if>
+    <br/>
+    <aura:if isTrue="{!v.isLoading == false}">
+        <aura:if isTrue="{!and(v.saasToShow.length == 0, v.accessGiven == false)}">
+            <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                <span class="slds-assistive-text">error</span>
+                        <span class="slds-icon_container slds-icon-utility-error slds-m-right_x-small" title="Description of icon when needed">
+                        </span>
+                        <h2>
+                            <p><span class="bolded"><label>There are no SKUs eligible for Replacement.</label> </span></p>
+                        </h2>
+                    </div>
+        </aura:if>
+    </aura:if>
+   <br/>
+    
+    
+    <aura:if isTrue="{!v.isLoading == false}">
+        <aura:if isTrue="{!and(v.saasToShow.length==0, v.ssGToShow.length==0, v.goToShow.length==0, v.rscGToShow.length==0, v.lodToShow.length==0, v.lodrsgToShow.length==0)}">
+            <!--<aura:if isTrue="{!v.accessGiven}">-->
+            <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                <span class="slds-assistive-text">error</span>
+                <span class="slds-icon_container slds-icon-utility-error slds-m-right_x-small" title="Description of icon when needed">
+                </span>
+                <h2>
+                    <p><span class="bolded"><label>There are no SKUs eligible for Replacement.</label> </span></p>
+                </h2>
+            </div>
+            <!--</aura:if>-->
+        </aura:if>
+    </aura:if>
+   <br/>
+        
+        <lightning:card title="{!v.headerTitle}">
+            <aura:if isTrue="{!and(v.saasToShow.length>0, v.ssGToShow.length==0)}" >
+                <p class="slds-p-horizontal_small">
+                    <p class="slds-p-horizontal_small">
+                        <div class="slds-align_absolute-center" title="">
+                            <b>SAAS TO SAAS REPLACEMENT : Please select SKUs from below for replacement.</b>
+                        </div>
+                    </p>
+                    <br/>
+                    <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                        <thead>
+                            <tr class="slds-text-title_caps">
+                                <th scope="col" width="3%">
+                                    <div class="slds-truncate" title="Number">#</div>
+                                </th>
+                                <th scope="col" width="35%">
+                                    <div class="slds-truncate" title="Product Name">Product Name</div>
+                                </th>
+                                <th scope="col" width="10%">
+                                    <div class="slds-truncate" title="StartDate">Start Date</div>
+                                </th>
+                                <th scope="col" width="10%">
+                                    <div class="slds-truncate" title="EndDate">End Date</div>
+                                </th>
+                                <th scope="col" width="25%" height="10%">
+                                    <div class="slds-truncate" title="Lookup">SKU available</div>
+                                </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <aura:iteration items="{!v.saasToShow}" var="a" indexVar = "i">
+                                    <tr> 
+                                        <td data-label="#">
+                                            <div class="slds-truncate" title="">{!i+1}</div>
+                                        </td>      
+                                        <td data-label="Product Name">
+                                            <div class="slds-truncate" title="">{!a.saasInScope}</div>
+                                        </td>
+                                        <td data-label="StartDate">
+                                            <div class="slds-truncate" title="">{!a.startDate}</div>
+                                        </td>
+                                        <td data-label="EndDate">
+                                            <div class="slds-truncate" title="">{!a.endDate}</div>
+                                        </td>
+                                        <td data-label="Quantity">
+                                            <c:MultiSelectComboboxParent recordList="{!a.optionsAvailable}" qlInScope = "{!a.qlId}" sectionName = "saas"/>
+                                        </td>
+                                    </tr> 
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                </p>
+                <br/>
+            </aura:if>
+                
+            <aura:if isTrue="{!v.accessGiven}">
+            <aura:if isTrue="{!and(v.goToShow.length>0, v.rscGToShow.length==0)}" >
+                <p class="slds-p-horizontal_small">
+                    <p class="slds-p-horizontal_small">
+                            <div class="slds-align_absolute-center" title="">
+                                <b>GO TO SCALE REPLACEMENT : Please select SKUs from below for replacement.</b>
+                            </div>
+                        </p>
+                    <br/>
+                        <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                            <thead>
+                                <tr class="slds-text-title_caps">
+                                    <th scope="col" width="3%">
+                                    <div class="slds-truncate" title="Number">#</div>
+                                    </th>
+                                    <th scope="col" width="10%">
+                                        <div class="slds-truncate" title="Product Name">Product Name</div>
+                                    </th>
+                                    <th scope="col" width="25%">
+                                        <div class="slds-truncate" title="AssetList">Asset Names</div>
+                                    </th>
+                                    <th scope="col" width="10%">
+                                    	<div class="slds-truncate" title="StartDate">Start Date</div>
+                                    </th>
+                                    <th scope="col" width="10%">
+                                        <div class="slds-truncate" title="EndDate">End Date</div>
+                                    </th>
+                                    <th scope="col" width="25%">
+                                        <div class="slds-truncate" title="Lookup">SKU available</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <aura:iteration items="{!v.goToShow}" var="a" indexVar = "i">
+                                        <tr> 
+                                            
+                                            <td data-label="#">
+                                            <div class="slds-truncate" title="">{!i+1}</div>
+                                        </td>  
+                                            <td data-label="Product Name">
+                                                <div class="slds-truncate" title="">{!a.entObj}</div>
+                                            </td>
+                                            <td data-label="Product Name">
+                                                <div class="slds-truncate slds-cell-wrap" title="">{!a.assetList}</div>
+                                            </td>
+                                            <td data-label="StartDate">
+                                            	<div class="slds-truncate" title="">{!a.startDate}</div>
+                                            </td>
+                                            <td data-label="EndDate">
+                                                <div class="slds-truncate" title="">{!a.endDate}</div>
+                                            </td>
+                                            <td data-label="Quantity">
+                                                <c:MultiSelectComboboxParent recordList="{!a.optionsAvailable}" qlInScope = "{!a.qlId}" sectionName = "goto"/>
+                                            </td>
+                                        </tr>
+                                </aura:iteration>
+                            </tbody>
+                        </table>
+                    </p>
+                <br/>
+            </aura:if>
+            </aura:if>
+            <aura:if isTrue="{!v.accessGiven}">
+            <aura:if isTrue="{!v.rscGToShow.length>0}" >
+                <p class="slds-p-horizontal_small">
+                    <p class="slds-p-horizontal_small">
+                            <div class="slds-align_absolute-center" title="">
+                                <b>RSC to RSC-G REPLACEMENT : Please select SKUs from below for replacement.</b>
+                            </div>
+                        </p>
+                    <br/>
+                        <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                            <thead>
+                                <tr class="slds-text-title_caps">
+                                    <th scope="col" width="3%">
+                                    <div class="slds-truncate" title="Number2">#</div>
+                                    </th>
+                                    <th scope="col" width="10%">
+                                        <div class="slds-truncate" title="Product Name2">Product Name</div>
+                                    </th>
+                                    <th scope="col" width="25%">
+                                        <div class="slds-truncate" title="AssetList2">Asset Names</div>
+                                    </th>
+                                    <th scope="col" width="10%">
+                                    	<div class="slds-truncate" title="StartDate2">Start Date</div>
+                                    </th>
+                                    <th scope="col" width="10%">
+                                        <div class="slds-truncate" title="EndDate2">End Date</div>
+                                    </th>
+                                    <th scope="col" width="25%">
+                                        <div class="slds-truncate" title="Lookup2">SKU available</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <aura:iteration items="{!v.rscGToShow}" var="a" indexVar = "i">
+                                        <tr>
+                                            
+                                            <td data-label="#">
+                                            <div class="slds-truncate" title="">{!i+1}</div>
+                                            </td>  
+                                            <td data-label="Product Name2">
+                                                <div class="slds-truncate" title="">{!a.entObj}</div>
+                                            </td>
+                                            <td data-label="Product Name2">
+                                                <div class="slds-truncate slds-cell-wrap" title="">{!a.assetList}</div>
+                                            </td>
+                                            <td data-label="StartDate2">
+                                            	<div class="slds-truncate" title="">{!a.startDate}</div>
+                                            </td>
+                                            <td data-label="EndDate2">
+                                                <div class="slds-truncate" title="">{!a.endDate}</div>
+                                            </td>
+                                            <td data-label="Quantity2">
+                                                <c:MultiSelectComboboxParent recordList="{!a.optionsAvailable}" qlInScope = "{!a.qlId}" sectionName = "rscg"/>
+                                            </td>
+                                        </tr>
+                                </aura:iteration>
+                            </tbody>
+                        </table>
+                    </p>
+                <br/>
+            </aura:if>
+            </aura:if>
+            <aura:if isTrue="{!v.accessGiven}">
+            <aura:if isTrue="{!v.ssGToShow.length>0}" >
+                <p class="slds-p-horizontal_small">
+                    <p class="slds-p-horizontal_small">
+                            <div class="slds-align_absolute-center" title="">
+                                <b>SAAS-SAAS-G REPLACEMENT : Please select SKUs from below for replacement.</b>
+                            </div>
+                        </p>
+                    <br/>
+                        <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                            <thead>
+                                <tr class="slds-text-title_caps">
+                                    <th scope="col" width="3%">
+                                    <div class="slds-truncate" title="Number3">#</div>
+                                    </th>
+                                    <th scope="col" width="10%">
+                                        <div class="slds-truncate" title="Product Name3">Product Name</div>
+                                    </th>
+                                    <th scope="col" width="25%">
+                                        <div class="slds-truncate" title="AssetList3">Asset Names</div>
+                                    </th>
+                                    <th scope="col" width="10%">
+                                    	<div class="slds-truncate" title="StartDate3">Start Date</div>
+                                    </th>
+                                    <th scope="col" width="10%">
+                                        <div class="slds-truncate" title="EndDate3">End Date</div>
+                                    </th>
+                                    <th scope="col" width="25%">
+                                        <div class="slds-truncate" title="Lookup3">SKU available</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <aura:iteration items="{!v.ssGToShow}" var="a" indexVar = "i">
+                                        <tr>
+                                            
+                                            <td data-label="#">
+                                            <div class="slds-truncate" title="">{!i+1}</div>
+                                            </td>  
+                                            <td data-label="Product Name3">
+                                                <div class="slds-truncate" title="">{!a.entObj}</div>
+                                            </td>
+                                            <td data-label="Product Name3">
+                                                <div class="slds-truncate slds-cell-wrap" title="">{!a.assetList}</div>
+                                            </td>
+                                            <td data-label="StartDate3">
+                                            	<div class="slds-truncate" title="">{!a.startDate}</div>
+                                            </td>
+                                            <td data-label="EndDate3">
+                                                <div class="slds-truncate" title="">{!a.endDate}</div>
+                                            </td>
+                                            <td data-label="Quantity3">
+                                                <c:MultiSelectComboboxParent recordList="{!a.optionsAvailable}" qlInScope = "{!a.qlId}" sectionName = "ssg"/>
+                                            </td>
+                                        </tr>
+                                </aura:iteration>
+                            </tbody>
+                        </table>
+                    </p>
+                <br/>
+            </aura:if>
+            </aura:if>
+            <aura:if isTrue="{!v.accessGiven}">
+            <aura:if isTrue="{!and(v.lodToShow.length>0, v.lodrsgToShow.length==0)}" >
+                    <p class="slds-p-horizontal_small">
+                        <p class="slds-p-horizontal_small">
+                            <div class="slds-align_absolute-center" title="">
+                                <b>LOD TO SCALE REPLACEMENT : Please select SKUs from below for replacement.</b>
+                            </div>
+                        </p>
+                        <br/>
+                        <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                            <thead>
+                                <tr class="slds-text-title_caps">
+                                    <th scope="col" width="3%">
+                                    <div class="slds-truncate" title="Number">#</div>
+                                </th>
+                                    <th scope="col" width="10%">
+                                        <div class="slds-truncate" title="Product Name">Asset Name</div>
+                                    </th>
+                                    <th scope="col" width="25%">
+                                        <div class="slds-truncate" title="Product Name">Product Name</div>
+                                    </th>
+                                    <th scope="col" width="10%">
+                                    	<div class="slds-truncate" title="StartDate">Support Start Date</div>
+                                    </th>
+                                    <th scope="col" width="10%">
+                                        <div class="slds-truncate" title="EndDate">Support End Date</div>
+                                    </th>
+                                    <th scope="col" width="25%">
+                                        <div class="slds-truncate" title="Lookup">SKU available</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <aura:iteration items="{!v.lodToShow}" var="a" indexVar = "i">
+                                        <tr> 
+                                           <td data-label="#">
+                                            	<div class="slds-truncate" title="">{!i+1}</div>
+                                        	</td>  
+                                            <td data-label="Asset Name">
+                                                <div class="slds-truncate" title="">{!a.assetInScope.Name}</div>
+                                            </td>
+                                            <td data-label="Product Name">
+                                                <div class="slds-truncate" title="">{!a.assetInScope.ProductCode}</div>
+                                            </td>
+                                            <td data-label="StartDate">
+                                            	<div class="slds-truncate" title="">{!a.startDate}</div>
+                                            </td>
+                                            <td data-label="EndDate">
+                                                <div class="slds-truncate" title="">{!a.endDate}</div>
+                                            </td>
+                                            <td data-label="Quantity">
+                                                <c:MultiSelectComboboxParent recordList="{!a.optionsAvailable}" qlInScope = "{!a.assetInScope.Name}" sectionName = "lod"/>
+                                            </td>
+                                        </tr> 
+                                </aura:iteration>
+                            </tbody>
+                        </table>
+                    </p>
+                    <br/>
+            </aura:if>
+            </aura:if>
+            <aura:if isTrue="{!v.accessGiven}">
+            <aura:if isTrue="{!v.lodrsgToShow.length>0}" >
+                    <p class="slds-p-horizontal_small">
+                        <p class="slds-p-horizontal_small">
+                            <div class="slds-align_absolute-center" title="">
+                                <b>LOD TO RSC-G REPLACEMENT : Please select SKUs from below for replacement.</b>
+                            </div>
+                        </p>
+                        <br/>
+                        <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                            <thead>
+                                <tr class="slds-text-title_caps">
+                                    <th scope="col" width="3%">
+                                    <div class="slds-truncate" title="Number4">#</div>
+                                </th>
+                                    <th scope="col" width="10%">
+                                        <div class="slds-truncate" title="Product Name4">Asset Name</div>
+                                    </th>
+                                    <th scope="col" width="25%">
+                                        <div class="slds-truncate" title="Product Name4">Product Name</div>
+                                    </th>
+                                    <th scope="col" width="10%">
+                                    	<div class="slds-truncate" title="StartDate4">Support Start Date</div>
+                                    </th>
+                                    <th scope="col" width="10%">
+                                        <div class="slds-truncate" title="EndDate4">Support End Date</div>
+                                    </th>
+                                    <th scope="col" width="25%">
+                                        <div class="slds-truncate" title="Lookup4">SKU available</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <aura:iteration items="{!v.lodrsgToShow}" var="a" indexVar = "i">
+                                        <tr> 
+                                           <td data-label="#">
+                                            	<div class="slds-truncate" title="">{!i+1}</div>
+                                        	</td>  
+                                            <td data-label="Asset Name4">
+                                                <div class="slds-truncate" title="">{!a.assetInScope.Name}</div>
+                                            </td>
+                                            <td data-label="Product Name4">
+                                                <div class="slds-truncate" title="">{!a.assetInScope.ProductCode}</div>
+                                            </td>
+                                            <td data-label="StartDate4">
+                                            	<div class="slds-truncate" title="">{!a.startDate}</div>
+                                            </td>
+                                            <td data-label="EndDate4">
+                                                <div class="slds-truncate" title="">{!a.endDate}</div>
+                                            </td>
+                                            <td data-label="Quantity4">
+                                                <c:MultiSelectComboboxParent recordList="{!a.optionsAvailable}" qlInScope = "{!a.assetInScope.Name}" sectionName = "lodg"/>
+                                            </td>
+                                        </tr> 
+                                </aura:iteration>
+                            </tbody>
+                        </table>
+                    </p>
+            </aura:if>
+            </aura:if>
+            </lightning:card>
+    
+        
+    	<div class="slds-align_absolute-center" style="height:5rem">
+            <lightning:button label="SAVE" variant="neutral" onclick="{!c.newReplaceSKUs }" disabled="{!v.buttonsDisabled}"  />
+            <lightning:button label="CANCEL" variant="neutral" onclick="{!c.closeEditMode}" />
+    </div>
+    <aura:if isTrue="{!v.isLoading}">
+        <lightning:spinner alternativeText="Loading.." variant="brand"/>
+    </aura:if>
+    	
+</aura:component>

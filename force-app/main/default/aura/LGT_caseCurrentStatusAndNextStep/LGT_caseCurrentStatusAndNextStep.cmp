@@ -1,0 +1,99 @@
+<aura:component controller="CaseDetailController" implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    <!--attributes-->
+    <aura:attribute name="caseRecord" type="Case"/>
+    <aura:attribute name="recordLoadError" type="String"/>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="hideDropdown" type="boolean" default="false"/>
+    <aura:attribute name="isOpen" type="boolean" default="false"/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="userInfo" type="user"/>
+    <!--Handler-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler event="aura:waiting" action="{!c.showSpinner}"/>
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/>
+    <div class="slds-grid slds-wrap slds-size_12-of-12">
+        <div class="slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12">
+            <lightning:card>
+                <div class="CSNS_highlightFields slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12 slds-p-horizontal_x-small" style="font-size: 1rem;">
+                    <aura:if isTrue="{!!v.hideDropdown}">
+                        <lightning:icon iconName="utility:chevrondown" class="slds-icon_container slds-p-left_xx-small slds-float_left" size="xx-small" onclick="{!c.hideSection}" style="padding:3px 3px 0 0;"></lightning:icon>
+                        <aura:set attribute="else">
+                            <lightning:icon iconName="utility:chevronright" class="slds-icon_container slds-p-left_xx-small slds-float_left" size="xx-small" onclick="{!c.showSection}" style="padding:3px 3px 0 0;"></lightning:icon>
+                        </aura:set>
+                    </aura:if>
+                    <span class="slds-truncate" style="font-weight:bold;font-size:1rem;">Current Status And Next Step Section</span>
+                </div>
+                <div>
+                    <aura:if isTrue="{!!v.hideDropdown}">
+                        <!--<div class="slds-grid slds-wrap slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12 CSNS_highlightFields">-->
+                        <lightning:recordEditForm recordId="{!v.recordId}" objectApiName="Case">
+                            <div class="slds-grid slds-wrap slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12 CSNS_highlightFields">
+                                <div class="slds-size_6-of-12 slds-medium-size_6-of-12 slds-large-size_6-of-12 CSNS_fieldsDiv">
+                                    <lightning:outputField  fieldName="Current_Status__c" class="editWindowFields" />
+                                    <aura:if isTrue="{!or(or(or(or(or(v.userInfo.Profile.Name == 'System Administrator',v.userInfo.Profile.Name == 'Rubrik Customer Support Manager'),v.userInfo.Profile.Name == 'Rubrik Customer Support User'),v.userInfo.Profile.Name == 'Rubrik Product Ops IT'),v.userInfo.Profile.Name == 'Rubrik View All'),v.userInfo.Profile.Name == 'Support Lightning')}">
+                                        <button title="Current Status" onclick="{!c.openEditModal}" class="slds-button slds-button_icon slds-m-left_x-small buttonPosition" tabindex="0">
+                                            <lightning:icon title="EditIcon" iconName="utility:edit" size="xx-small" alternativeText="edit"/>
+                                        </button>
+                                    </aura:if>
+                                </div>
+                                <div class="slds-size_6-of-12 slds-medium-size_6-of-12 slds-large-size_6-of-12 CSNS_fieldsDiv">
+                                    <lightning:outputField  fieldName="Next_Step__c" class="editWindowFields"/>
+                                    <aura:if isTrue="{!or(or(or(or(or(v.userInfo.Profile.Name == 'System Administrator',v.userInfo.Profile.Name == 'Rubrik Customer Support Manager'),v.userInfo.Profile.Name == 'Rubrik Customer Support User'),v.userInfo.Profile.Name == 'Rubrik Product Ops IT'),v.userInfo.Profile.Name == 'Rubrik View All'),v.userInfo.Profile.Name == 'Support Lightning')}">
+                                        <button title="Current Status" onclick="{!c.openEditModal}" class="slds-button slds-button_icon slds-m-left_x-small buttonPositionForNextStep" tabindex="0">
+                                            <lightning:icon title="EditIcon" iconName="utility:edit" size="xx-small" alternativeText="edit"/>
+                                        </button>
+                                    </aura:if>
+                                </div>
+                            </div>
+                        </lightning:recordEditForm>
+                        <!--</div>-->
+                    </aura:if>
+                </div>
+            </lightning:card>
+        </div>
+        <div>
+            <aura:if isTrue="{!v.isOpen}">
+                <!--###### MODAL BOX Start######--> 
+                <section id="CD_modal-back" role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open" aura:id="CSNS_BackgroundBlur">
+                    <div class="slds-modal__container">
+                        <aura:if isTrue="{!v.Spinner}">
+                            <div aura:id="spinnerId" class="slds-spinner_container spinnerDiv">
+                                <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                                    <span class="slds-assistive-text">Loading</span>
+                                    <div class="slds-spinner__dot-a"></div>
+                                    <div class="slds-spinner__dot-b"></div>
+                                </div>
+                            </div>
+                        </aura:if>
+                        <!-- ###### MODAL BOX HEADER Start ######-->
+                        <header class="slds-modal__header">
+                            <h2 class="slds-text-heading_medium slds-hyphenate">Current Status And Next Step Section</h2>
+                        </header>
+                        
+                        <!--###### MODAL BOX BODY Part Start######-->
+                        <lightning:recordEditForm recordId="{!v.recordId}" objectApiName="Case" onsuccess="{!c.handleSuccess}">
+                            <lightning:messages />
+                            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id">
+                                <lightning:inputField  fieldName="Current_Status__c" class="editWindowFields" />
+                                <lightning:inputField  fieldName="Next_Step__c" class="editWindowFields"/>
+                            </div>
+                            <!--###### MODAL BOX FOOTER Part Start ######-->
+                            <footer class="slds-modal__footer">
+                                <lightning:button variant="brand"
+                                                  type="submit"
+                                                  label="Update"
+                                                  title="Update"/>
+                                <lightning:button variant="neutral" 
+                                                  label="Cancel"
+                                                  title="Cancel"
+                                                  onclick="{!c.closeModal}"/>
+                                
+                            </footer>
+                        </lightning:recordEditForm>
+                        
+                    </div>
+                </section>
+            </aura:if>
+        </div>
+    </div>
+</aura:component>

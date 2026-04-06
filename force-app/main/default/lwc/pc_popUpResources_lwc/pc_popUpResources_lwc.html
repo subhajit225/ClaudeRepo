@@ -1,0 +1,56 @@
+<template>
+    <template if:true={isShowModal}>
+        <lightning-layout multiple-rows class="slds-text-align_center">
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+                <div class="slds-m-bottom_small heading-58">
+                    {mainCard.Headline__c}
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+                <div class="cardBodyDescription slds-m-bottom_large">
+                    {mainCard.Description__c}
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+                <span>
+                    <lightning-button variant="brand" label={mainCard.Navigate_Text__c} title={mainCard.Navigate_Text__c}
+                        onclick={handleExploreClick}>
+                    </lightning-button>
+                </span>
+            </lightning-layout-item>
+            <template for:each={cardList} for:item="card">
+                <lightning-layout-item size="4" small-device-size="4" medium-device-size="4" large-device-size="4"
+                    class="slds-p-around_xx-small slds-text-align_left" key={card.Id}>
+                    <div class="slds-card custom-popup-card">
+                        <div class="slds-m-vertical_large">
+                            <img class="imgClass" src={card.Image_Url__c}>
+                        </div>
+                        <div class="slds-m-bottom_x-small">
+                            <div class="cardBodyTag">
+                                {card.Tag__c}
+                        </div>
+                        </div>
+                        <div class="slds-m-bottom_x-small">
+                            <div class="cardBodyheading">
+                                {card.Headline__c}
+                        </div>
+                        </div>
+                        <div class="slds-m-bottom_x-small">
+                            <div class="cardBodyDescription">
+                                {card.Description__c}
+                        </div>
+                        </div>
+                        <div class="slds-m-bottom_x-small">
+                            <span class="cardUrl">
+                                <lightning-formatted-url value={card.Navigate_Url__c} tooltip=""
+                                    label={card.Navigate_Text__c} target={card.URLType}></lightning-formatted-url><img
+                                    class="link-arrow-img"
+                                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAtCAYAAADV2ImkAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAD3SURBVHgB7daxDcJADEBR+0BAGZiAESghHRtRAkIiaRAdMzABjEDFGmQClJImOXAqCoKcu+MuEn6tLeUrsqIACCGEEEKIPxZNl+NRvN6CIwq8wMRVtKdg4ibaYzCxj/YcTOyiAwQT8+hAwcQsGjlLw3hzQignYAzH9TOd3K+7FJi6nCWFOtL620NtVG8auNEBT+LdK3q2WnA2WxIMWdnXZ85iG4KzslfM88s+4yyzbhixSEGrIxjQiBFoONSMG8VWLfBj9POjVOf2YdQ4loQ6CaNYEiLYOJb4DraKJT6DrWOJr2AnsYT1WbMyGOQlPJzECiGEEKJ1nnbLYBZlR9+tAAAAAElFTkSuQmCC">
+                            </span>
+                        </div>
+                    </div>
+                </lightning-layout-item>
+            </template>
+        </lightning-layout>
+    </template>
+</template>

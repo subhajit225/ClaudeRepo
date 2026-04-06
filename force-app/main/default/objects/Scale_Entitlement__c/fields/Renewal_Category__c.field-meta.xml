@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Renewal_Category__c</fullName>
+    <description>ARY-838-Populate the Renewal Category based on Renewed on Scale Enitlement</description>
+    <label>Renewal Category</label>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Renewed</fullName>
+                <default>false</default>
+                <label>Renewed</label>
+            </value>
+            <value>
+                <fullName>Refreshed</fullName>
+                <default>false</default>
+                <label>Refreshed</label>
+            </value>
+            <value>
+                <fullName>Converted</fullName>
+                <default>false</default>
+                <label>Converted</label>
+            </value>
+            <value>
+                <fullName>Churn</fullName>
+                <default>false</default>
+                <label>Churn</label>
+            </value>
+            <value>
+                <fullName>Replaced</fullName>
+                <default>false</default>
+                <label>Replaced</label>
+            </value>
+            <value>
+                <fullName>Upgraded</fullName>
+                <default>false</default>
+                <label>Upgraded</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

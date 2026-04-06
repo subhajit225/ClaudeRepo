@@ -1,0 +1,35 @@
+<template>
+    <lightning-layout multiple-rows="true">
+				<lightning-layout-item size="12">
+					<div class="slds-align_absolute-center">
+						<ul class="slds-button-group-row">
+							<li class="slds-button-group-item">
+								<lightning-button label="Prev" onclick={handlePrev}
+									disabled={isFirstPage}></lightning-button>
+							</li>							
+                            <template for:each={pagesToShow} for:item="page">
+                                <template if:true={page.isEllipsis} key={page.label}>
+                                    <li class="slds-button-group-item" key={page.label}>
+                                        <span>...</span>
+                                    </li>
+                                </template>
+                                <template if:false={page.isEllipsis} key={page.label}>
+                                    <li class={page.class} key={page.label}>
+                                        <lightning-button
+                                            label={page.label}
+                                            onclick={handlePageClick}
+                                            data-page={page.label}
+                                            variant={page.variant}>
+                                        </lightning-button>
+                                    </li>
+                                </template>
+                            </template>						
+							<li class="slds-button-group-item">
+								<lightning-button label="Next" onclick={handleNext}
+									disabled={isLastPage}></lightning-button>
+							</li>
+						</ul>
+					</div>
+				</lightning-layout-item>
+			</lightning-layout>
+</template>

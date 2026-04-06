@@ -1,0 +1,143 @@
+<apex:component controller="SearchController">
+<style>
+.center-block {
+    float: none;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.input-group .icon-addon .form-control {
+    border-radius: 0;
+}
+
+.icon-addon {
+    position: relative;
+    color: #555;
+    display: block;
+}
+
+.icon-addon:after,
+.icon-addon:before {
+    display: table;
+    content: " ";
+}
+
+.icon-addon:after {
+    clear: both;
+}
+
+.icon-addon.addon-md .glyphicon,
+.icon-addon .glyphicon, 
+.icon-addon.addon-md .fa,
+.icon-addon .fa {
+    position: absolute;
+    z-index: 2;
+    font-size: 14px;
+    width: 20px;
+    margin-left: -2.5px;
+    text-align: center;
+    padding: 10px 0;
+    top: 1px
+}
+
+.icon-addon.addon-lg .form-control {
+    line-height: 1.33;
+    height: 46px;
+    font-size: 18px;
+    padding: 10px 16px 10px 40px;
+}
+
+.icon-addon.addon-sm .form-control {
+    height: 30px;
+    padding: 5px 10px 5px 28px;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+  button.input-group-addon {
+    position: absolute;
+    z-index: 2;
+    font-size: 14px;
+    width: 20px;
+    margin-left: -2.5px;
+    text-align: center;
+    padding: 10px 0;
+    top: 1px
+}
+
+.icon-addon.addon-lg .fa,
+.icon-addon.addon-lg .glyphicon {
+    font-size: 26px;
+    margin-left: 0;
+    right: -40px;
+    top: 4px;
+}
+
+
+.icon-addon .form-control:focus + .glyphicon,
+.icon-addon:hover .glyphicon,
+.icon-addon .form-control:focus + .fa,
+.icon-addon:hover .fa {
+    color: #2580db;
+}
+
+    .pherogroups {
+    font-family: Gotham-Light;
+    font-weight: bold;
+    font-size: 21px;
+    line-height: 19px;
+    padding-bottom: 4px;
+    }
+
+    a.pherolinks{
+        font-size: 14px;
+        line-height: 24px;
+        color: #009DAC;
+        }
+        
+    a.pherolinks:before{
+        padding: 0;
+        content: "\00BB \0020";
+        color: #009DAC;
+        }
+
+    .resourcegradient {
+        min-height: 156px;
+        background: linear-gradient(136.42deg, #00B388 0%, #00B097 13.16%, #00A9BF 51.16%, #00A6D0 72.37%, #00A6D0 72.37%, #00A5D7 81.43%, #00A3E0 100%);
+        }        
+    
+</style>
+<apex:attribute name="{!rscope}" type="string" assignTo="{!scope}" description="the scope to search"/>
+<div class="row resourcegradient hidden-sm hidden-xs">
+    <div class="container block">
+
+    
+    <!--top row-->
+    <div class="row block ">
+    <div class="col-md-12 block">
+             <form method="GET" action="{!$Page.UnifiedSearch}?scope='+{!$CurrentPage.parameters.scope}" _lpchecked="1" class="col-md-12" style="margin:48px;">
+              <div class="col-sm-offset-2 col-sm-6 block hidden-sm hidden-xs">
+
+                     <div class="icon-addon addon-lg block">
+                        <input type="text" placeholder="Search {!IF($CurrentPage.parameters.scope!=null, $CurrentPage.parameters.scope+' ','')}Resources..." class="form-control" name="search" id="search" style="height:56px; width:590px;"/>
+                        <label for="email" class="glyphicon glyphicon-search" rel="tooltip" title="email"></label>
+                    </div> 
+                 
+
+                </div>   
+             </form>      
+           
+    </div>
+    </div>
+    <!--bottom row-->
+    
+ 
+    
+    
+
+    </div><!--end container-->
+   </div>
+ 
+    
+
+</apex:component>

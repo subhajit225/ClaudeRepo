@@ -1,0 +1,340 @@
+<!-- sldsValidatorIgnore -->
+<template>
+    <lightning-spinner if:true={outerSpinner} alternative-text="Loading" size="medium" variant="brand" class="spinner-background"></lightning-spinner>
+    <lightning-button variant="brand" label="Approve" title="Approve" disabled={disableApprove} onclick={openModal} class="slds-m-left_x-small" id="approve"></lightning-button>
+    <lightning-button variant="brand" label="Pending Meeting" title="Pending Meeting" disabled={disablePending} onclick={openModal} class="slds-m-left_x-small" id="pendingMeeting"></lightning-button>
+    <lightning-button variant="destructive" label="Reject" title="Reject" disabled={disableReject} onclick={openModal} class="slds-m-left_x-small" id="reject"></lightning-button>
+    <lightning-button variant="brand" label="Extend Expiration Date" title="Extend Expiration Date" name ="Extend Expiration Date" disabled={disableExtensionExpiration} onclick={onClickDRConfirmAction} class="slds-m-left_x-small" id="expireExtend"></lightning-button>
+    <c-ps-escalation-button lwc:if={dealRegistration} deal-reg-rec={dealRegistration} record-id={recordId}></c-ps-escalation-button>
+    <!--PRIT26-10-start-->
+    <template lwc:if={isEngagementDR}>  
+        <lightning-spinner if:true={loadSpinner} alternative-text="Loading" size="medium" variant="brand" class="spinner-background"></lightning-spinner>
+        <div class="slds-backdrop slds-backdrop_open" if:true={loadSpinner}></div>
+    </template>
+    <!--PRIT26-10-end-->
+    <!--Use template if:true to display/hide popup based on isModalOpen value-->
+    <template if:true={isModalOpen}>
+        <!-- Modal/Popup Box LWC starts here -->
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_medium">
+            <lightning-spinner if:true={loadSpinner} alternative-text="Loading" size="medium" variant="brand" class="spinner-background"></lightning-spinner>
+            <div class="slds-modal__container">
+                <!-- Modal/Popup Box LWC header here -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse" size="small" ></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{modalHeader}</h2>
+                </header>
+                <!-- Modal/Popup Box LWC body starts here -->
+                <div class="slds-modal__content slds-p-around_medium modal-custom" id="modal-content-id-1">
+                    <div if:true={showApprovalSection}>
+                        <div class="slds-scoped-notification slds-media slds-media_center slds-scoped-notification_light" role="status">
+                            <div class="slds-media__figure">
+                                <lightning-icon class="slds-align_absolute-center" icon-name="utility:warning" alternative-text="Warning!" title="Warning" size="medium"></lightning-icon>
+                                <p class="slds-text-heading_small">Reminder:</p>
+                            </div>
+                            <div class="slds-media__body slds-m-left_small slds-m-vertical_x-small">
+                                <p class="slds-p-vertical_x-small slds-text-heading_small">{label.DR_APPROVAL1}</p>
+                                <p class="slds-p-vertical_x-small slds-text-heading_small">{label.DR_APPROVAL2}</p>
+                                <p class="slds-p-vertical_x-small slds-text-heading_small">{label.DR_Proceed}</p>
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-m-vertical_small">
+                            <div class="slds-size_1-of-2">
+                                <div id="approveYes" class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small slds-text-heading_medium custom-box yes-box" onclick={onDRApprovalYes}>Yes</div>
+                            </div>
+                            <div class="slds-size_1-of-2">
+                                <div id="pendingMeetingNo" class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small slds-text-heading_medium custom-box" onclick={onDRApprovalNo}>No
+                                    <div if:false={isAlreadyPending} class="slds-text-title">{label.DR_PENDING_MEET}</div>
+                                    <div if:true={isAlreadyPending} class="slds-text-heading_small pending-text">{pendingMeetingNoMessage}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-m-bottom_x-small slds-grid slds-wrap" if:true={showAddOpptySection}>
+                        <div class="slds-size_1-of-2">
+                            <div id="attachOpty" data-id="attach-oppty" class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small slds-text-heading_medium oppty-box custom-box" onclick={onClickAttachOpty}>{label.DR_ATTACH_OPPTY}</div>
+                        </div>
+                        <div class="slds-size_1-of-2" if:true={showCreateOppSec}>
+                            <div id="createOpty" data-id="create-oppty" class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small slds-text-heading_medium oppty-box custom-box" onclick={onClickCreateOpty}>{label.DR_CREATE_NEW_OPPTY}</div>
+                        </div>
+                    </div>
+                    <div if:true={showLeadConversionCB}>
+                        <div class="slds-grid slds-wrap" if:false={isAccountAvailable}>
+                            <div id="convertOpty" data-id="convertBlock" class="slds-size_2-of-2 slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small slds-text-heading_medium">{DR_CONV_HEADER}
+                                <div if:true={showLeadConversionCB} class="slds-scoped-notification slds-media slds-media_center slds-theme_warning slds-m-top_small" role="status">
+                                    <div class="slds-media__figure">
+                                        <lightning-icon class="slds-align_absolute-center" icon-name="utility:warning" alternative-text="Warning!" title="Warning" size="x-small"></lightning-icon>
+                                    </div>
+                                    <div class="slds-media__body">
+                                        <p class="slds-text-body_regular">{label.DR_SDR_WARNING}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <template if:true={isModalOpen}>
+                        <lightning-record-edit-form
+                            record-id={recordId}
+                            object-api-name={RECORD_FORM_ATTRIBUTES.objectApiName}
+                            layout-type={RECORD_FORM_ATTRIBUTES.layoutType} onerror={handleErrors}>
+                            <lightning-messages></lightning-messages>
+                            <!-- prit25-17 start-->
+                            <div if:true={showDRCommentSection} class="slds-scoped-notification slds-media slds-media_center slds-theme_warning slds-m-bottom_x-small" role="status">
+                                <div class="slds-media__figure"></div>
+                                <div class="slds-media__body">
+                                    <p class="slds-text-body_small">{modalLabel}</p>
+                                </div>
+                            </div>
+                            <template if:false={isPSEscalated}>
+                                <div if:true={showDRCommentSection}>
+                                    <lightning-output-field field-name={nameField}></lightning-output-field>
+                                    <lightning-output-field field-name={accountName}></lightning-output-field>
+                                    <lightning-output-field field-name={dealRegStatus}></lightning-output-field>
+                                    <!-- PRIT26-10-->
+                                    <template if:true={isReject}>
+                                        <lightning-input-field data-id="rejectionReasonId" field-name={rejectionField} onchange={handleRejectionReason} required></lightning-input-field>
+                                    </template>
+                                    <lightning-input-field data-id="drCommentId" field-name={commentField} ></lightning-input-field>
+                                </div>
+                            </template>
+                            <!-- prit25-17 start-->
+                            <div if:true={showDealInitiatedTypeSection}>
+                                <div class="slds-scoped-notification slds-media slds-media_center slds-scoped-notification_light slds-m-bottom_medium" role="status">
+                                    <div class="slds-media__figure"></div>
+                                    <div class="slds-media__body">
+                                       <p class="slds-text-body_regular">
+                                            <lightning-formatted-rich-text value={label.DEAL_INITIATED_TYPE}></lightning-formatted-rich-text>
+                                        </p>
+                                    </div>
+                                </div>
+                                <lightning-combobox data-id="drTypeId" name="Deal Initiated Type" label="Deal Initiated Type" value={dealTypeSelectedPicklistValue} options={dealTypeOptions} onchange={handleRegistrationTypeSelection} variant='label-inline' required disabled={dealTypeDisabled}></lightning-combobox>
+                            </div>
+                            <div if:true={showRegistrationTypeSection}>
+                                <div class="slds-scoped-notification slds-media slds-media_center slds-scoped-notification_light slds-m-bottom_medium" role="status">
+                                    <div class="slds-media__figure"></div>
+                                    <div class="slds-media__body">
+                                        <p class="slds-text-body_regular">
+                                           <lightning-formatted-rich-text value={label.DEAL_INITIATED_TYPE}></lightning-formatted-rich-text>
+                                        </p>
+                                    </div>
+                                </div>
+                                <lightning-combobox data-id="regTypeId" name="Deal Initiated Type" label="Deal Initiated Type" value={dealTypeSelectedPicklistValue} options={dealInitiatedTypeOptions} onchange={handleRegistrationTypeSelection} variant='label-inline' required disabled={dealTypeDisabled}></lightning-combobox>
+                            </div>
+                            <div if:true={showSearchOpptySection}>
+                                <template if:false={oppPSEscalated}>
+                                    <lightning-input-field data-id="opptyid" field-name={opportunitylookupField} required onchange={handleOpptySelection}></lightning-input-field>
+                                </template>
+                                <div if:true={dealRegExists} class="slds-scoped-notification slds-media slds-media_center slds-theme_warning slds-m-vertical_small" role="status">
+                                    <div class="slds-media__figure">
+                                        <lightning-icon class="slds-align_absolute-center" icon-name="utility:warning" alternative-text="Warning!" title="Warning" size="x-small"></lightning-icon>
+                                    </div>
+                                    <div class="slds-media__body">
+                                        <p class="slds-text-body_small">{oppSelectionErrorMessage}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div if:true={showLeadConversionCB}>
+                                <lightning-output-field field-name={accountName}></lightning-output-field>
+                                <lightning-input-field data-id="accId" field-name={accountIdVar} required={isAccountValueRequired}></lightning-input-field>
+                                <lightning-input if:true={showPendingMeetingCB}  type="checkbox" label={label.DR_PM_ACCOUNT_ADD_MSG} name="input1" onchange={handlePendingMeetCB} class="slds-m-bottom_x-small"></lightning-input>
+                                <div class="slds-button-group-row slds-align_absolute-center slds-m-bottom_x-small">
+                                    <lightning-button variant="brand" title="Add Account" label="Add Account" onclick={handleAddAccount} class=""></lightning-button>
+                                    <lightning-button variant="brand" title="Request Account Creation" label="Request Account Creation" onclick={handleSendToSDR} class="slds-m-left_x-small" id="sendToSDR" disabled={disableSDRButton}></lightning-button> 
+                                </div>
+                            </div>
+                            <div if:true={showLeadConversion}>
+                                <div class="slds-scoped-notification slds-media slds-media_center slds-theme_warning slds-m-vertical_small" role="status">
+                                    <div class="slds-media__figure"></div>
+                                    <div class="slds-media__body">
+                                        <p class="slds-text-body_small">Please reach out to Sales Ops Account Creation Team to convert lead and create opportunity.</p>
+                                    </div> 
+                                </div>
+                                <lightning-input-field class="slds-m-vertical_medium" data-id="leadid" field-name={leadLookupField} disabled></lightning-input-field>
+                                <lightning-output-field field-name={ownerId}></lightning-output-field>
+                                <lightning-button variant="brand" title="Convert Lead" label={label.DR_CONVERT_LEAD_BUTTON} onclick={handleConvertLead} class="slds-align_absolute-center slds-m-bottom_small slds-m-top_small" disabled={leadConvButton}></lightning-button>
+                            </div>
+                        </lightning-record-edit-form>
+                    </template>
+                    <template if:true={isCreateOppty}>
+                        <article class="slds-card">
+                            <div class="slds-card__header slds-grid slds-p-top_none">
+                                <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                                    <div class="slds-media__figure">
+                                    </div>
+                                    <div class="slds-media__body slds-p-bottom_xx-small">
+                                        <p class="slds-text-heading_small">{label.DR_SELECT_CREATE_CONTACT}</p>
+                                    </div>
+                                    <div if:true={showCreateContactButton} class="slds-no-flex">
+                                        <lightning-button variant="brand" title="Create Contact" label="Create New Contact" onclick={createContact} class=""></lightning-button>
+                                    </div>
+                                </header>
+                            </div>
+                            <div class="slds-card__body slds-p-right_x-small data-table">
+                                <lightning-datatable data={contactList}
+                                            columns={columns}
+                                            key-field="Id"
+                                            max-row-selection="1"
+                                            onrowselection={getSelectedRecord}></lightning-datatable>
+                            </div>
+                        </article>
+                        <template if:true={showCreateOppty} >
+                            <div class="slds-align_absolute-center slds-m-bottom_xx-small"><lightning-button variant="brand" title="Create Opportunity" label="Create New Opportunity" onclick={createOpportunity}></lightning-button></div>
+                        </template>
+                    </template>
+                    <template if:true={isCreateContact}>
+                        <lightning-record-edit-form object-api-name="Contact" density="compact" onsuccess={createContactSuccess} onsubmit={createRecordSubmit} onerror={handleErrors}>
+                            <lightning-messages></lightning-messages>
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_6-of-12">
+                                    <lightning-input-field field-name="AccountId" value={dealRegistration.fields.Company_Name__c.value} disabled></lightning-input-field>
+                                </div>
+                                <div class="slds-col slds-size_6-of-12">
+                                    <lightning-input-field field-name="Email" value={contactDetailsOnDR.Email} required></lightning-input-field>
+                                </div>
+                                <div class="slds-col slds-size_6-of-12">
+                                    <lightning-input-field field-name="FirstName" value={contactDetailsOnDR.First_Name} required></lightning-input-field>
+                                </div>
+                                <div class="slds-col slds-size_6-of-12">
+                                    <lightning-input-field field-name="LastName" value={contactDetailsOnDR.Last_Name}></lightning-input-field>
+                                </div>
+                                <div class="slds-col slds-size_6-of-12">
+                                    <lightning-input-field field-name="Title" value={contactDetailsOnDR.Title}></lightning-input-field>
+                                </div>
+                                <div class="slds-col slds-size_6-of-12">
+                                    <lightning-input-field field-name="Phone" value={contactDetailsOnDR.Phone}></lightning-input-field>
+                                </div>
+                            </div>
+                            <lightning-button class="slds-align_absolute-center slds-m-bottom_small slds-m-top_x-small" variant="brand" type="submit" label="Create Contact"></lightning-button>
+                        </lightning-record-edit-form>
+                    </template>
+                    <template if:true={isCreateOpportunity}>
+                        <div class="slds-scoped-notification slds-media slds-media_center slds-scoped-notification_light slds-m-bottom_x-small" role="status">
+                            <div class="slds-media__figure">
+                            </div>
+                            <div class="slds-media__body">
+                                <p class="slds-text-title">{label.DR_OPPTY_HEADER}</p>
+                            </div>
+                        </div>
+                        <lightning-record-edit-form data-id="opptyRecForm" object-api-name="Opportunity" onsuccess={createOpportunitySuccess} onsubmit={createRecordSubmitOppty} onerror={handleErrors}>
+                            <lightning-messages></lightning-messages>
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-input-field field-name="AccountId" value={accountIdforOpty} disabled></lightning-input-field>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-input-field field-name="Initial_Contacts_Name__c" value={contactId} disabled></lightning-input-field>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-input-field field-name="StageName" value="1 Discovery" disabled></lightning-input-field>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-input-field field-name="Deal_Registration_Type__c" value={dealInitiatedTypeValue} disabled></lightning-input-field>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-input-field field-name="Name"></lightning-input-field>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-input-field field-name="Amount" required></lightning-input-field>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-input-field data-id="close-date" field-name="CloseDate" onchange={handleCloseDateSelection}></lightning-input-field>
+                                    <div role="alert" if:true={showDateError} class="custom-error">Close Date can not be a past date.</div>
+                                </div>
+                            </div>
+                            <div class="slds-align_absolute-center slds-m-bottom_xx-small">
+                                <lightning-button variant="brand" type="submit" name="Create Opportunity" label="Create Opportunity"></lightning-button>
+                            </div>
+                        </lightning-record-edit-form>
+                    </template>
+
+                    <!--<template if:true={isAllianceDRSection}>
+                        <div class="slds-scoped-notification slds-media slds-media_center slds-theme_warning" role="status">
+                            <div class="slds-media__figure">
+                                <lightning-icon class="slds-align_absolute-center" icon-name="utility:warning" alternative-text="Warning!" title="Warning" size="x-small"></lightning-icon>
+                            </div>
+                            <div class="slds-media__body">
+                                <p class="slds-text-body_regular">{label.DR_BDM_UPLOAD_MSG}</p>
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-m-vertical_small">
+                            <div class="slds-size_1-of-2 slds-m-top_small">
+                                <p>Click Upload Files button or drag files to upload:</p>
+                            </div>
+                            <div class="slds-size_1-of-2">
+                                <lightning-file-upload label='' name="fileUploader" accept={acceptedFileFormats} record-id={recordId} onuploadfinished={handleFileUploadFinished} multiple = true>
+                                </lightning-file-upload>
+                            </div>
+                        </div>
+                    </template>
+                    <template if:true={showRSMApprovalSection}>
+                        <div class="slds-scoped-notification slds-media slds-media_center slds-theme_warning" role="status">
+                            <div class="slds-media__figure">
+                                <lightning-icon class="slds-align_absolute-center" icon-name="utility:warning" alternative-text="Warning!" title="Warning" size="x-small"></lightning-icon>
+                            </div>
+                            <div class="slds-media__body">
+                                <p class="slds-text-body_regular">{label.DR_ARTFACT_REVIEW}</p>
+                            </div>
+                        </div>
+                        <div>
+                            <lightning-card title="">
+                                <template for:each={filesList} for:item="file">
+                                    <div key={file.value} class="slds-box slds-box_small">
+                                        <div class="slds-grid slds-wrap">
+                                            <div class="slds-col slds-large-size_4-of-12 slds-medium-size_4-of-12 slds-size_12-of-12 slds-m-top_x-small">
+                                                <p><strong>Artifact Name - </strong>{file.label}</p>
+                                            </div>
+                                            <div class="slds-col slds-large-size_4-of-12 slds-medium-size_4-of-12 slds-size_12-of-12 slds-align_absolute-center">
+                                                <a href={file.url} download>Download</a>
+                                            </div>
+                                            <div class="slds-col slds-large-size_4-of-12 slds-medium-size_4-of-12 slds-size_12-of-12 slds-align_absolute-center">
+                                                <lightning-button label="Preview" variant="brand" data-id={file.value} onclick={previewHandler}></lightning-button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+                            </lightning-card>
+                        </div>
+                    </template>-->
+                    <template if:true={showL1ApprovalSection}>
+                        <div class="slds-scoped-notification slds-media slds-media_center slds-theme_warning" role="status">
+                            <div class="slds-media__figure">
+                                <lightning-icon class="slds-align_absolute-center" icon-name="utility:warning" alternative-text="Warning!" title="Warning" size="x-small"></lightning-icon>
+                            </div>
+                            <div class="slds-media__body">
+                                <p class="slds-text-body_regular">{label.DR_OEM_L1_APPROVAL}</p>
+                            </div>
+                        </div>
+                    </template>
+                    <template if:true={showTVPApprovalSection}>
+                        <div class="slds-scoped-notification slds-media slds-media_center slds-theme_warning" role="status">
+                            <div class="slds-media__figure">
+                                <lightning-icon class="slds-align_absolute-center" icon-name="utility:warning" alternative-text="Warning!" title="Warning" size="x-small"></lightning-icon>
+                            </div>
+                            <div class="slds-media__body">
+                                <p class="slds-text-body_regular">{label.DR_OEM_TVP_APPROVAL}</p>
+                            </div>
+                        </div>
+                    </template>
+                    <!-- prit25-18 start-->
+                    <template if:true={showPSEscalationApprovalSection}>
+                        <div class="slds-scoped-notification slds-media slds-media_center slds-theme_warning slds-m-bottom_x-small" role="status">
+                            <div class="slds-media__figure"></div>
+                            <div class="slds-media__body">
+                                <p class="slds-text-body_small">{psEscalateApproveLabel}</p>
+                            </div>
+                        </div>
+                    </template>
+                    <!-- prit25-18 end-->
+                    <!-- Modal/Popup Box LWC footer starts here -->
+                    <footer class="slds-modal__footer">
+                        <lightning-button title="Cancel" label="Cancel" onclick={closeModal} class="slds-m-left_x-small"></lightning-button>
+                        <lightning-button if:true={showPreviousButton} title="Previous Screen" label="Previous Screen" onclick={handlePreviousClick} class="slds-m-left_x-small"></lightning-button>
+                        <lightning-button title="Submit" label={modalButtonLabel} variant={modalButtonVariant} disabled={disableModalSubmit} onclick={onClickDRConfirmAction} class="slds-m-left_x-small"></lightning-button>
+                    </footer>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>

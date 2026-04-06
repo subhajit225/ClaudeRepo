@@ -1,0 +1,7 @@
+<aura:component controller="CaseDetailsControllerLWC" implements="force:hasRecordId,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes" access="global" >
+	<lightning:workspaceAPI aura:id="workspace" />
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="recordTypeName" type="String"/>
+    <aura:registerEvent name="RecTypeEvent" type="c:recordTypeEvent" />
+    <aura:handler name="init" value="{!this}" action="{! c.init }"/>
+</aura:component>

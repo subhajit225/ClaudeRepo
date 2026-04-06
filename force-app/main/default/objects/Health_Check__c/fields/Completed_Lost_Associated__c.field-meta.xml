@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Completed_Lost_Associated__c</fullName>
+    <externalId>false</externalId>
+    <formula>If( AND(TEXT(Status__c)=&quot;Completed&quot;, NOT(ISBLANK(Opportunity_Generated_Influenced__c)), Opportunity_Stage__c = &quot;7 Closed Lost&quot;) ,1,0)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Completed - Opp Lost</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

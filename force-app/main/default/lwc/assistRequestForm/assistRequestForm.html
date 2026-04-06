@@ -1,0 +1,271 @@
+<template>
+    <template if:true={showSpinner}>
+        <lightning-spinner alternative-text="Loading"
+            size="large"></lightning-spinner>
+    </template>
+    <template if:true={message}>
+        <div class="slds-notify slds-notify_alert slds-alert_warning"
+            role="alert">
+            <span class="slds-assistive-text">warning</span>
+            <h2>
+                <div class="slds-size_12-of-12">
+                    <lightning-formatted-rich-text
+                        value={message}>
+                    </lightning-formatted-rich-text><br>
+                    <a style="color:blue;" class="slds-button slds-button_reset"
+                        href="#" onclick={hideMessage}>Yes</a>
+                    <a style="color:blue;" class="slds-button slds-button_reset"
+                        href="#" onclick={handleNoBtn}>No</a>
+                </div>
+            </h2>
+        </div>
+    </template>
+    <lightning-card title="New Assist Request" icon-name="custom:custom18">
+        <lightning-record-edit-form
+            object-api-name="Assist_Request__c"
+            record-type-id={recordTypeId}
+            id="createAssistRequestForm"
+            density="comfy"
+            onload={handleLoad}
+            onsubmit={handleSubmit}
+            onsuccess={handleSuccess}>
+            <lightning-messages>
+            </lightning-messages>
+            <div class="slds-grid slds-wrap slds-size_12-of-12 formDiv">
+                <div class="slds-col slds-size_5-of-12">
+                    <lightning-input-field
+                        field-name="Case__c"
+                        name="Case__c"
+                        value={recordId}
+                        onchange={handleChange}>
+                    </lightning-input-field>
+                    <lightning-input-field
+                        field-name="Account__c"
+                        name="Account__c"
+                        onchange={handleChange}>
+                    </lightning-input-field>
+                    <template if:true={isSupportCase}>
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label outputBorderedContainer">Account Preference</label>
+                            <div class="slds-form-element__control">
+                                <div class="outputBorderedBox">
+                                    <lightning-formatted-rich-text
+                                        value={assistRequestObj.accountPreference}></lightning-formatted-rich-text>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <lightning-output-field
+                        field-name="SlackChannel__c"
+                        name="SlackChannel__c">
+                    </lightning-output-field>
+                    <template if:true={isSupportCase}>
+                        <lightning-input-field field-name="Cluster_UUID__c" name="Cluster_UUID__c" onchange={handleChange}></lightning-input-field>
+                    </template>
+                    <lightning-input-field
+                        field-name="Cluster_Stats_Sentry_AI_URL__c"
+                        name="Cluster_Stats_Sentry_AI_URL__c"
+                        onchange={handleChange}>
+                    </lightning-input-field>
+
+                    <lightning-input-field
+                        field-name="Customer_preferred_time_zone_of_contact__c"
+                        name="Customer_preferred_time_zone_of_contact__c"
+                        onchange={handleChange}>
+                    </lightning-input-field>
+                    <lightning-input-field
+                        field-name="Issue_Summary__c"
+                        name="Issue_Summary__c"
+                        onchange={handleChange}>
+                    </lightning-input-field>
+                    <lightning-input-field
+                        field-name="Customer_impact_and_current_status__c"
+                        name="Customer_impact_and_current_status__c"
+                        onchange={handleChange}>
+                    </lightning-input-field>
+                    <template if:true={isSupportCase}>
+                        <lightning-input-field
+                            field-name="Component__c"
+                            name="Component__c"
+                            onchange={handleChange} required>
+                        </lightning-input-field>
+                    </template>
+                    <template if:false={isSupportCase}>
+                        <lightning-input-field
+                            field-name="Product_Name__c"
+                            name="Product_Name__c"
+                            onchange={handleChange}
+                            required>
+                        </lightning-input-field>
+                    </template>
+                </div>
+                <div class="slds-col slds-size_1-of-12"></div>
+                <div class="slds-col slds-size_5-of-12">
+                    <lightning-input-field
+                        field-name="RecordTypeId"
+                        name="RecordTypeId"
+                        value={recordTypeId} disabled>
+                    </lightning-input-field>
+                    <lightning-input type="text" label="Case Priority"
+                        value={cPriority} disabled></lightning-input>
+                    <lightning-input-field
+                        field-name="Status__c"
+                        name="Status__c"
+                        onchange={handleChange}>
+                    </lightning-input-field>
+                    <template if:true={isSupportCase}>
+                        <lightning-input-field
+                            field-name="Rubrik_version__c"
+                            name="Rubrik_version__c"
+                            onchange={handleChange}>
+                        </lightning-input-field>
+
+                        <lightning-input-field
+                            field-name="Grafana_Link__c"
+                            name="Grafana_Link__c"
+                            onchange={handleChange}>
+                        </lightning-input-field>
+
+                        <lightning-input-field
+                            field-name="Support_tunnel__c"
+                            name="Support_tunnel__c"
+                            onchange={handleChange}>
+                        </lightning-input-field>
+
+                        <lightning-input-field
+                            field-name="Tagged_KB_article__c"
+                            name="Tagged_KB_article__c"
+                            onchange={handleChange}>
+                        </lightning-input-field>
+
+                        <lightning-input-field
+                            field-name="Affected_node__c"
+                            name="Affected_node__c"
+                            onchange={handleChange}>
+                        </lightning-input-field>
+                    </template>
+                    <lightning-output-field
+                        field-name="Jira_Reference__c"
+                        name="Jira_Reference__c">
+                    </lightning-output-field>
+                    <template if:true={isSupportCase}>
+                        <lightning-input-field
+                            field-name="Type__c"
+                            name="Type__c"
+                            onchange={handleChange}
+                            required>
+                        </lightning-input-field>
+                    </template>
+                    <template if:false={isSupportCase}>
+                        <lightning-input-field
+                            field-name="Type__c"
+                            name="Type__c"
+                            onchange={handleChange}
+                            required>
+                        </lightning-input-field>
+                        <lightning-input-field
+                            field-name="Category__c"
+                            name="Category__c">
+                        </lightning-input-field>
+                    </template>
+                    <template if:true={isSupportCase}>
+                        <lightning-input-field
+                            field-name="Critical_Situation_Reason__c"
+                            name="Critical_Situation_Reason__c"
+                            onchange={handleChange}
+                            required>
+                        </lightning-input-field>
+                    </template>
+                    <lightning-input type="text" label="Reported By"
+                        value={currentUserName} disabled></lightning-input>
+                    <template if:false={isSupportCase}>
+                        <lightning-input-field
+                            field-name="OwnerId"
+                            name="OwnerId"
+                            onchange={handleChange}
+                            required>
+                        </lightning-input-field>
+                    </template>
+                </div>
+                <div
+                    class="slds-size_11-of-12 slds-medium-size_11-of-12 slds-large-size_11-of-12">
+                    <lightning-input-field
+                        field-name="What_is_the_Ask__c"
+                        name="What_is_the_Ask__c"
+                        onchange={handleChange}>
+                    </lightning-input-field>
+                    <template if:true={isSupportCase}>
+                        <lightning-input type="checkbox"
+                            label="Is there a relevant Insight for this issue in SentryAI?"
+                            name="insight_checkbox"
+                            onclick={handleChange}></lightning-input>
+                    </template>
+                </div>
+                <div class="slds-col slds-size_5-of-12">
+                    <template if:true={showInsightIdField}>
+                        <lightning-input-field
+                            field-name="InsightId__c"
+                            name="InsightId__c"
+                            data-name="InsightId"
+                            onchange={handleChange}>
+                        </lightning-input-field>
+                    </template>
+                </div>
+            </div>
+            <div class="slds-m-top_small slds-align_absolute-center">
+                <lightning-button
+                    variant="brand" 
+                    type="submit"
+                    name="submit"
+                    label="Submit"
+                    disabled={disableAllBtn}>
+                </lightning-button>
+                <lightning-button label="Cancel"
+                    title="Cancel"
+                    onclick={handleCancel}
+                    class="slds-m-left_small"
+                    disabled={disableAllBtn}>
+                </lightning-button>
+            </div>
+        </lightning-record-edit-form>
+        <div class="slds-m-top_xx-large "></div>
+        <a href onclick={handleclick} class="slds-m-left_x-large">
+            {hyperLinkLabel} </a>
+        <template if:false={hideRecentCases}>
+            <div class="slds-m-top_small slds-align_absolute-center">
+                <lightning-button
+                    variant="brand"
+                    name="OpenCases"
+                    label="Open Cases"
+                    onclick={handleOpenCases}
+                    disabled={disableAllBtn}>
+                </lightning-button>
+                <lightning-button
+                    variant="brand"
+                    name="ClosedCases"
+                    label="Closed Cases"
+                    onclick={handleClosedCases}
+                    class="slds-m-left_small"
+                    disabled={disableAllBtn}>
+                </lightning-button>
+                <lightning-button
+                    variant="brand"
+                    name="RelatedCases"
+                    label="Related Cases"
+                    onclick={handleRelatedCases}
+                    class="slds-m-left_small"
+                    disabled={disableAllBtn}>
+                </lightning-button>
+            </div>
+            <div style="height: 300px;"
+                class="slds-size_11-of-12 slds-medium-size_11-of-12 slds-large-size_11-of-12 formDiv">
+                <lightning-datatable
+                    key-field="id"
+                    data={caseList}
+                    columns={columns}
+                    hide-checkbox-column>
+                </lightning-datatable>
+            </div>
+        </template>
+    </lightning-card>
+</template>

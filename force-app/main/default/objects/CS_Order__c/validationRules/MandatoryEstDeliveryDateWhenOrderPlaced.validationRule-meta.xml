@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MandatoryEstDeliveryDateWhenOrderPlaced</fullName>
+    <active>true</active>
+    <description>Estimated delivery date is required when order status is changed to Placed or shipped</description>
+    <errorConditionFormula>AND(
+ TEXT(PRIORVALUE(Status__c)) = &apos;New&apos;,
+ ISNULL(Estimated_Delivery_Date__c),
+ OR(
+  TEXT(Status__c) = &apos;Placed&apos;,
+  TEXT(Status__c) = &apos;Shipped&apos;
+ )
+)</errorConditionFormula>
+    <errorDisplayField>Estimated_Delivery_Date__c</errorDisplayField>
+    <errorMessage>Estimated Delivery Date is required when order is placed or shipped</errorMessage>
+</ValidationRule>

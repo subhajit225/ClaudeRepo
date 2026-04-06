@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Cancel_Part_Order_Classic</fullName>
+    <availability>online</availability>
+    <displayType>button</displayType>
+    <linkType>javascript</linkType>
+    <masterLabel>Cancel Part Order</masterLabel>
+    <openType>onClickJavaScript</openType>
+    <protected>false</protected>
+    <url>{!REQUIRESCRIPT(&quot;/soap/ajax/52.0/connection.js&quot;)}
+{!REQUIRESCRIPT(&quot;/soap/ajax/52.0/apex.js&quot;)}
+const cancelOrder = (order) =&gt; {
+  order.Cancel_RMA__c = true;
+  const res = sforce.connection.update([order], {
+    onSuccess: handleSuccess,
+    onFailure: handleFailure
+  });
+  console.log(res);
+};
+const handleSuccess = () =&gt; {
+  alert(`Order Cancelled.`);
+};
+const handleFailure = () =&gt; {
+  alert(`Order Not Cancelled for this RMA Order, Please Contact Admin`);
+};
+const handleAlreadyCancelled = (orderSubType) =&gt; {
+  alert(`${orderSubType} already Cancelled for this RMA Order`);
+};
+const handleOrderNotFound = (orderSubType) =&gt; {
+  alert(`${orderSubType} doesn&apos;t exist for this RMA Order`);
+};
+const exec = (id, orderSubType) =&gt; {
+  console.log(id);
+  const order =  sforce.connection.query(
+    `SELECT Id, Cancel_RMA__c
+    FROM Order
+    WHERE
+        RMA_Request__c = &apos;${id}&apos;
+        AND Order_Sub_Type__c = &apos;${orderSubType}&apos;
+        AND Type = &apos;RMA&apos; LIMIT 1`
+  ).records;
+  if (!order) {
+    handleOrderNotFound(orderSubType)
+  } else if (order.Cancel_RMA__c === &quot;true&quot;) {
+    handleAlreadyCancelled(orderSubType);
+  } else {
+    cancelOrder(order);
+  }
+
+  console.log(order);
+  debugger;
+};
+const c = window.confirm(&quot;Do you want to cancel the Part order request?&quot;);
+console.log(&quot;C: &quot;, c);
+if (c) {
+  exec(&quot;{!RMA_Order__c.Id}&quot;, &quot;Part Order&quot;);
+}</url>
+</WebLink>

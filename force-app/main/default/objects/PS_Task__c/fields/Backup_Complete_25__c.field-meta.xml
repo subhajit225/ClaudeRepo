@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Backup_Complete_25__c</fullName>
+    <formula>IF(ISPICKVAL(Task_Type__c,&apos;T&amp;E&apos;),
+
+IF(AND(ISBLANK(Related_PS_Task__r.Actual_End_date__c), NOT(ISPICKVAL(Related_PS_Task__r.Task_Type__c,&apos;Install&apos;)),NOT(ISPICKVAL(Related_PS_Task__r.Task_Type__c,&apos;Consult&apos;)),NOT(ISPICKVAL(Related_PS_Task__r.Task_Type__c,&apos;Consult-Onsite&apos;)),NOT(ISPICKVAL(Related_PS_Task__r.Task_Type__c,&apos;Consult-Remote&apos;)), NOT(ISPICKVAL(Related_PS_Task__r.Task_Type__c,&apos;Migration&apos;))), 0,
+IF(Today() &gt; Related_PS_Task__r.Actual_End_date__c, 1,
+IF(ISPICKVAL(Related_PS_Task__r.Task_Type__c,&apos;Resident Engineer&apos;),
+IF((TODAY() - Related_PS_Task__r.Task_Start_Date__c ) / ((Related_PS_Task__r.Actual_End_date__c - Related_PS_Task__r.Task_Start_Date__c )+1)&lt;0,0,TODAY() - Related_PS_Task__r.Task_Start_Date__c ) / ((Related_PS_Task__r.Actual_End_date__c - Related_PS_Task__r.Task_Start_Date__c )+1),
+IF(
+OR(ISPICKVAL(Related_PS_Task__r.Task_Type__c,&apos;Install&apos;),ISPICKVAL(Related_PS_Task__r.Task_Type__c,&apos;Consult&apos;),ISPICKVAL(Related_PS_Task__r.Task_Type__c,&apos;Consult-Onsite&apos;),ISPICKVAL(Related_PS_Task__r.Task_Type__c,&apos;Consult-Remote&apos;)),
+IF(( Related_PS_Task__r.Billable_Hours_Approved__c / Related_PS_Task__r.Billable_Hours_Expected__c)&gt;1,1,( Related_PS_Task__r.Billable_Hours_Approved__c / Related_PS_Task__r.Billable_Hours_Expected__c)),IF( AND(ISPICKVAL(Task_Type__c,&apos;Migration&apos;),ISPICKVAL(Task_Status__c,&apos;Completed&apos;)),1,0)
+)
+)
+)
+),
+
+IF(AND(ISBLANK(Actual_End_date__c), NOT(ISPICKVAL(Task_Type__c,&apos;Install&apos;)),NOT(ISPICKVAL(Task_Type__c,&apos;Consult&apos;)),NOT(ISPICKVAL(Task_Type__c,&apos;Consult-Onsite&apos;)),NOT(ISPICKVAL(Task_Type__c,&apos;Consult-Remote&apos;)), NOT(ISPICKVAL(Task_Type__c,&apos;Migration&apos;))), 0,
+IF(Today() &gt; Actual_End_date__c, 1,
+IF(OR(ISPICKVAL(Task_Type__c,&apos;Resident Engineer&apos;),ISPICKVAL(Task_Type__c,&apos;Resident Engineer-PD&apos;)),
+IF(( DATE( YEAR( TODAY() ) , MONTH( TODAY() ), IF(DAY(TODAY())&gt;25,25,DAY(TODAY())) ) - Task_Start_Date__c ) / ((Actual_End_date__c - Task_Start_Date__c )+1)&lt;0,0,DATE( YEAR( TODAY() ) , MONTH( TODAY() ), IF(DAY(TODAY())&gt;25,25,DAY(TODAY()))) - Task_Start_Date__c ) / ((Actual_End_date__c - Task_Start_Date__c )+1),
+IF(
+OR(ISPICKVAL(Task_Type__c,&apos;Install&apos;),ISPICKVAL(Task_Type__c,&apos;Consult&apos;),ISPICKVAL(Task_Type__c,&apos;Consult-Onsite&apos;),ISPICKVAL(Task_Type__c,&apos;Consult-Remote&apos;),ISPICKVAL(Task_Type__c,&apos;Consult-Remote-PD&apos;),ISPICKVAL(Task_Type__c,&apos;Consult-Onsite-PD&apos;),ISPICKVAL(Task_Type__c,&apos;Install-PD&apos;),ISPICKVAL(Task_Type__c,&apos;RCDM-Install&apos;)),
+IF(( Billable_Hours_locked__c / Billable_Hours_Expected__c)&gt;1,1,( Billable_Hours_locked__c / Billable_Hours_Expected__c)),IF( AND(ISPICKVAL(Task_Type__c,&apos;Migration&apos;),ISPICKVAL(Task_Status__c,&apos;Completed&apos;)),1,0)
+)
+)
+)
+)
+
+
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Backup % Complete 25</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Percent</type>
+</CustomField>

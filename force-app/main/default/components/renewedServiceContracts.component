@@ -1,0 +1,42 @@
+<!--Starts - [Shaloo Mishra] Arroyo 2.0 ARY-31: Trigger Task created send email when an Oppty has Primary Renewal/Expansion Quote created-->
+
+<apex:component controller="findRenewedServiceContracts" access="global">
+    <apex:attribute name="accountIdValue" type="String" description="This is the Id of the account" assignTo="{!accountId}" access="global" />
+    <!--<apex:dataTable value="{!renewedServiceContracts}" var="contractRec" border="1px" cellpadding="10px" align="center" >
+<apex:column >
+<apex:facet name="header"> Service Contract Name </apex:facet> {!contractRec.Name}
+</apex:column>
+<apex:column >
+<apex:facet name="header"> Renewal Opportunity Name </apex:facet> {!contractRec.SBQQSC__RenewalOpportunity__r.Name}
+</apex:column>
+<apex:column >
+<apex:facet name="header"> Primary Renewal Quote </apex:facet> {!contractRec.SBQQSC__RenewalOpportunity__r.SBQQ__PrimaryQuote__r.Name}
+</apex:column>
+<apex:column >
+<apex:facet name="header"> Renewal ACV </apex:facet> {!contractRec.SBQQSC__RenewalOpportunity__r.Renewal_ACV__c}
+</apex:column>
+<apex:column >
+<apex:facet name="header"> Renewal TCV </apex:facet> {!contractRec.SBQQSC__RenewalOpportunity__r.Renewal_ACV__c}
+</apex:column>
+</apex:dataTable>-->
+    <table class="table" border="1px">
+        <thead>    
+            <tr>
+                <th>Service Contracts Name</th> 
+                <th>Renewal Opportunity Name</th>
+                <th>Primary Renewal Quote</th>
+            </tr>
+        </thead>        
+        <tbody>
+            <apex:repeat value="{!renewedServiceContracts}" var="contractRec">
+                <tr align = "center">
+                    <td>{!contractRec.Name}</td>
+                    <td>{!contractRec.SBQQSC__RenewalOpportunity__r.Name}</td>
+                    <td>{!contractRec.SBQQSC__RenewalOpportunity__r.SBQQ__PrimaryQuote__r.Name}</td>                                               
+                </tr>
+            </apex:repeat>
+        </tbody>   
+    </table>
+</apex:component>
+
+<!--Ends - [Shaloo Mishra] Arroyo 2.0 ARY-31: Trigger Task created send email when an Oppty has Primary Renewal/Expansion Quote created-->

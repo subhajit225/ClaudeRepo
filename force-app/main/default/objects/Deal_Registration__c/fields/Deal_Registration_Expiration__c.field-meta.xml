@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Deal_Registration_Expiration__c</fullName>
+    <formula>NULLVALUE(Deal_Reg_Exp_Date__c , DATEVALUE(Approval_Timestamp__c) +90)</formula>
+    <label>Deal Registration Expiration</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Date</type>
+</CustomField>

@@ -1,0 +1,39 @@
+<template>
+    <lightning-card title="Create Phantom Order" icon-name="action:add_relationship">
+        <div class="slds-is-relative">
+            <!-- Loader -->
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
+                <div class="slds-p-around_medium slds-text-align_center">
+                    <p class="slds-text-heading_small slds-var-m-bottom_x-large">
+                        Checking if order is eligible for Phantom Order Creation...
+                    </p>
+                </div>
+            </template>
+
+            <template if:false={isLoading}>
+                <div class="slds-card__body slds-p-around_medium">
+                    <!-- No Access Message -->
+                    <template if:false={isValidOrder}>
+                        <div class="slds-text-color_error slds-text-align_center">
+                            <p class="slds-text-heading_small slds-var-m-bottom_x-large">
+                                <b>{statusMessage}</b>
+                            </p>
+                        </div>
+                    </template>
+                    <div class="slds-grid slds-wrap slds-p-horizontal_small">
+                        <div class="slds-col slds-size_1-of-1 slds-p-horizontal_small slds-align_absolute-center ">
+                            <template if:true={isValidOrder}>
+                                <p class="slds-p-around_medium">Are you sure you want to create Phantom Order?</p>
+                            </template>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-p-horizontal_small slds-align_absolute-center ">
+                            <lightning-button label="Close" onclick={handleCancel}></lightning-button>
+                            <lightning-button if:true={isValidOrder} variant="brand" label="Confirm" onclick={submitOrder} class="slds-m-left_x-small"></lightning-button>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

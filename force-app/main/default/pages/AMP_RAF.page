@@ -1,0 +1,88 @@
+<apex:page standardController="Order" standardStylesheets="true" applyBodyTag="false" applyHtmlTag="false" showHeader="false" renderAs="pdf">
+<head>
+<style>
+    body { font-family: SansSerif; font-size:12px; font-weight: light; }
+    table.detailList {
+        width: 75% !important;
+        text-align: left;
+        margin: 0 auto;
+    }
+    .col1{width:50%; font-weight: light; text-align:left;}
+    .col2{width:50%; font-weight: light; text-align:right;}
+</style>
+</head>
+  <!-- Begin Default Content REMOVE THIS -->
+<html>
+    <body>
+                  <h2 style="text-align:center">AWS Marketplace Reseller Authorization Form</h2>
+                  <h4 style="text-align:center">(An ISV completes this form to authorize a Consulting Partner to resell their product(s) listed on AWS Marketplace)</h4>
+                  <p>The undersigned, identified as “ISV”, hereby authorizes the reseller(s) listed below (“Authorized Reseller”) as a reseller of subscriptions to the software product(s) 
+                  listed below to AWS subscribers listed (each a “Buyer”). Pursuant to this authorization, ISV will sell to Authorized Reseller subscriptions to such software product(s) 
+                  for resale to AWS subscribers in accordance with the terms set forth herein (the “Reseller Terms”). By submitting this AWS Marketplace Reseller Authorization Form to 
+                  Amazon Web Services, Inc. (“AWS”), ISV hereby authorizes AWS to facilitate the transactions contemplated by these Reseller Terms, including, without limitation, by (i) 
+                  permitting Authorized Reseller, for resale purposes only, to purchase from ISV subscriptions to the software product(s) listed below through AWS Marketplace at the 
+                  price set forth below; (ii) permitting Authorized Reseller to issue offers for, and resell via such offers, subscriptions of such software product(s) to AWS subscribers 
+                  through AWS Marketplace; and (iii) processing all payments and refunds associated with such sales and resales. ISV hereby authorizes AWS to provide notice of such 
+                  authorization and a copy of these Reseller Terms to Authorized Reseller(s).</p>
+                  <p>ISV acknowledges that the Terms and Conditions for AWS Marketplace Sellers governing the listing of software in the AWS Marketplace apply to the sale of software 
+                  subscriptions from ISV to Authorized Reseller pursuant to these Reseller Terms and the resale of the same by Authorized Reseller to AWS subscribers, and each such sale 
+                  or resale constitutes a “Transaction” under such terms.</p>
+    </body>
+</html>
+    <body>
+<apex:panelGrid columns="2" columnClasses="col1,col2" cellpadding="10" width="100%" border="1" style="font-weight:light"><apex:facet name="header">Consulting Partner(s) being authorized to resell by an ISV via AWS Marketplace</apex:facet>
+    <apex:outputText value="Authorized Reseller Name(s)"/>
+    <apex:outputText value="RUBRIK"/>
+    <apex:outputText value="Authorized Reseller AWS Account ID(s)"/>
+    <apex:outputText value="123456789" />
+</apex:panelGrid>  
+<apex:panelGrid columns="2" columnClasses="col1,col2" cellpadding="10" width="100%" style="font-weight:light"><apex:facet name="header">Customer purchasing from Authorized Reseller</apex:facet>
+    <apex:outputText value="Customer Name (Buyer)"/>
+    <apex:outputText value="{!Order.Account.Name}"/>
+    <apex:outputText value="Customer (Buyer) AWS Account Number"/>
+    <apex:outputText value="{!Order.Account.Account_Status__c}" />
+</apex:panelGrid>  
+
+<apex:panelGrid columns="2" columnClasses="col1,col2" cellpadding="10" width="100%" style="font-weight:light"><apex:facet name="header">Product Pricing</apex:facet>
+    <apex:outputText value="Percent (%) discount off the AWS Marketplace List Price extended to the Authorized Reseller"/>
+    <apex:outputText value=""/>
+    <apex:outputText value="This is the % discount the ISV is extending to the Authorized Reseller. This is not the customer discount."/>
+    <apex:outputText value="RUBRIK %%%" />
+    <apex:outputText value="Price ($USD) extended to the Authorized Reseller (optional)"/>
+    <apex:outputText value=""/>
+    <apex:outputText value="This is the price the ISV is extending to the Authorized Reseller."/>
+    <apex:outputText value="RUBRIK $$$"/>
+    <apex:outputText value="Customer Price (Optional)"/>
+    <apex:outputText value=""/>
+    <apex:outputText value="If this is a one-time custom negotiated Consulting Partner Private Offer resale transaction and the ISV and 
+    Authorized Reseller have jointly agreed on price to the customer, it may be listed here."/>
+    <apex:outputText value="RUBRIK $$$"/>
+    <apex:outputText value="Payment Schedule (Optional)"/>
+    <apex:outputText value=""/>
+    <apex:outputText value="Non-recurring negotiated authorizations only"/>
+    <apex:outputText value="Something here"/>
+</apex:panelGrid>    
+    <apex:pageBlock title="Order Items">
+        <apex:pageBlockTable value="{!Order.OrderItems}" var="item" width="100%">
+            <apex:column value="{!item.Product2.Name}"/>
+            <apex:column value="{!item.Quantity}"/>
+            <apex:column value="{!item.UnitPrice}"/>
+        </apex:pageBlockTable>
+    </apex:pageBlock>
+<apex:panelGrid columns="2" columnClasses="col1,col2" cellpadding="5" width="100%" style="font-weight:light"><apex:facet name="header">Additional Information</apex:facet>
+    <apex:outputText value="Custom Terms" />
+    <apex:outputText value="" />
+    <apex:outputText value="Specify if this authorization will leverage the 
+            Public EULA on AWS Marketplace for the product being sold. 
+            If custom terms are required, please e-mail the terms (in PDF format)
+            to mpcustdesk@amazon.com, referencing this transaction requestion form."/>
+    <apex:outputText value="RUBRIK EULA"/>
+    <apex:outputText value="Renewal (Optional)"/>
+    <apex:outputText value="" />
+    <apex:outputText value="(Non-recurring ONLY) Is this a customer renewal or new sale?"/>
+    <apex:outputText value="{!Order.Opportunity.Opportunity_Sub_Type__c}"/>
+    <apex:outputText value="Additional Information"/>
+    <apex:outputText value="Nothing here"/>
+</apex:panelGrid>
+    </body>
+</apex:page>

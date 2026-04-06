@@ -1,0 +1,233 @@
+/***********************************************************************************************************
+ * Class Name           : ReplacementConstants
+ * Date Created/Modified: 17/07/2025
+ * Author               : Ankita
+ * @description         : This holds all the constant variables used in the Summer Release 25                      
+ * Test Class           : All Tests
+/**********************************************************************************************************/
+public class ReplacementConstants {
+    /* SKUNewReplacementController varlables */
+    /*Object Names*/
+    public static final String QUOTE_OBJ_API = 'SBQQ__Quote__c';
+    public static final String QUOTELINE_OBJ_API = 'SBQQ__QuoteLine__c';
+    public static final String CONTRACTLINEITEM_OBJ_API = 'ContractLineItem';
+    public static final String ASSET_OBJ_API = 'Asset';
+    public static final String PRODUCT2_OBJ_API = 'Product2';
+    public static final String REPLACEMENT_SUPPORT_OBJ = 'Replacement_Support__c';
+    public static final String MH50_VALUE = 'MH50';
+    public static final String FEGB50_VALUE = '50 FEGB';
+    /**FIELD Names*/
+    public static final String RWD_DEAL_OPS_EXCEPTION_FIELD_API = 'RWD_Deal_Ops_Exception__c';
+    public static final String RWD_SALES_REP_EXCEPTION_FIELD_API = 'RWD_Sales_Rep_Exception__c';
+    public static final String LINE_TYPE_ORDER_FIELD_API = 'Line_Type_Order__c';
+    public static final String PRODUCT_CODE_TYPE_FIELD_API = 'Product_Code_Type__c';
+    public static final String STORAGE_TIER_FIELD_API = 'Storage_Tier__c';
+    public static final String STORAGE_BUNDLE_FIELD_API = 'Storage_Region_Bundle_FrontEnd__c';
+    public static final String SUPPORT_TYPE_FIELD_API = 'Support_Type__c';
+    public static final String PRODUCT_TYPE_FIELD_API = 'Product_Type__c';
+    public static final String QUOTE_LINE_TYPE_FIELD_API = 'Quote_Line_Type__c';
+    public static final String SPECIAL_PROGRAM_FIELD_API = 'Special_Program__c';
+    public static final String DISPOSITION_REASON_FIELD_API = 'Disposition_Reason__c';
+    public static final String REPLACEMENT_DETAILS_FIELD_API = 'Replacement_Details__c';
+    public static final String PRODUCT_REPLACEMENT_CATEGORY_FIELD_API = 'SBQQ__Product__r.Replacement_Category__c';
+    public static final String PREPAYMENT_CREDIT_FIELD_API = 'Prepayment_Credit__c';
+    public static final String ENDDATE_FIELD_API = 'SBQQ__EndDate__c';
+    /**SYSTEM INFO*/
+    public static final String PROFILE_SYSTEM_ADMINISTRATOR = 'System Administrator';
+    public static final String QUOTE_TYPE_RENEWAL = 'Renewal';
+    public static final String QUOTE_TYPE_RENEWAL_EXPANSION = 'Renewal+Expansion';
+    public static final String QUOTE_TYPE_NEW = 'New';
+    public static final String PARTNER_DISTRIBUTOR = 'Partner/Distributor';
+    public static final String ATTRIBUTE_ISDEALOPS = 'isDealOps';
+    public static final String ATTRIBUTE_EXCEPTIONCOMMENTS = 'exceptionComments';
+    public static final String ATTRIBUTE_EXCEPTIONMESSAGES = 'exceptionMessages';
+    
+    public static final String ACCESSORIES = 'Accessories';//CPQ22-6240
+    /**Other Values*/
+    public static final String CLOUD_VALUE_ARCHIVE = 'Cloud Vault Archive';
+    public static final String CLOUD_VALUE_BACKUP = 'Cloud Vault Backup';
+    public static final String MDX_VALUE = '-MDX-';
+    public static final String FEGB_VALUE = 'FEGB';
+    public static final String MH_VALUE = 'MH';
+    public static final String DOWNGRADE_VALUE = 'Downgrade';
+    public static final String NOTALLOWED_VALUE = 'Not Allowed';
+    public static final String ANY_TO_ANY = 'Replace Any to Any';
+    public static final String DONOTCONSOLIDATE = 'DoNotConsolidate';
+    public static final String ENTERPRISE_DATA_PROTECTION = 'Enterprise Data Protection';
+    public static final String ENTERPRISE_DATA_PROTECTION_TPH = 'Enterprise Data Protection - TPH';	
+    public static final String ENTERPRISE_DATA_PROTECTION_SCALE = 'Enterprise Data Protection - Scale';
+    public static final String FIFTY_GB  = '50GB';
+    public static final String MD_VALUE = '-MD-';
+    public static final String MDG_VALUE = '-MDG-';
+    public static final String MD_VALUE_ONE = '-MD';
+    public static final String HARDWARE = 'Hardware';
+    public static final string SKU_TYPE_NON_HARDWARE = 'Non-Hardware';
+    public static final String HW_SUPPORT = 'HW Support';
+    public static final String PRODUCT_LEVEL_HYBRID_SOFTWARE = 'Hybrid Software';
+    public static final String PRODUCT_FAMILY_THIRD_PARTY_LICENSE = 'Third Party License';
+    public static final String PRODUCT_SUBTYPE_VIRTUAL = 'Virtual';
+    public static final String PRODUCT_SUBTYPE_SAAS_CLOUD = 'Saas Cloud';
+    public static final String SUBSCRIPTION_FIXED_PRICE = 'Fixed Price'; 
+    public static final String CLOUD_VAULT = 'Cloud Vault';
+    public static final String SAAS_DATA_PROTECTION = 'SaaS Data Protection';
+    public static final String FOUNDATION_EDITION = 'Foundation Edition';
+    public static final String ENTERPRISE_EDITION = 'Enterprise Edition';
+    public static final String BUSINESS_EDITION = 'Business Edition';
+    public static final String EDITION_UPGRADE = 'Edition Upgrade';
+    public static final String SUBSCRIPTIONS = 'Subscriptions';
+    public static final String SUBSCRIPTION = 'Subscription';
+    public static final String COULD_DATA_PROTECTION = 'Cloud Data Protection';
+    public static final String SUPPORT_TYPE_L3 = 'L3';
+    public static final String SUPPORT_TYPE_PE = 'PE';
+    public static final String SUPPORT_TYPE_S3 = 'S3';
+    public static final String SUPPORT_TYPE_S2 = 'S2';
+    public static final String GC_OFFER = 'GC Offer'; 
+    public static final String GC_ONDEMAND = 'GC OnDemand'; 
+    public static final String GC_RENEWAL = 'GC Renewal'; 
+    public static final String  OUT_OF_REGION_DR_US ='Out of Region DR-US';
+    public static final String  OUT_OF_REGION ='Out Of Region';
+    public static final String  IN_REGION ='In Region';
+    public static final String REMOVE_AUTO_ADDED_CAPACITY_SKU ='Remove Auto Added Capacity SKU';
+    //Product 
+    public static final String M365H = 'M365H';
+    public static final String GPS = 'GPS';
+    public static final String CV_SAAS_COMMERCIAL = 'CV - SaaS - Commercial';
+    public static final String NAS_CLOUD_DIRECT = 'NAS Cloud Direct';
+    public static final String M365_DATA_PROTECTION = 'M365 Data Protection';
+    public static final String M365_DATA_PROTECTION_USERS = 'M365 Data Protection Users';
+    public static final String M365_DATA_PROTECTION_CAPACITY = 'M365 Data Protection Capacity';
+    public static final String PRODUCTCODE_R7000 = 'R7000';
+    public static final String PRODUCTCODE_R6000 = 'R6000';
+    public static final String PRODUCTCODE_TPH = 'TPH';
+    public static final String PRODUCT_CODE_TYPE_CVB = 'CVB';
+    public static final String SAAS = 'SaaS';
+    public static final String PRODUCT_SCALE_MSP = 'Scale MSP';
+    public static final String EDITION_STANDALONE = 'Standalone';
+    public static final String JIRA_DATA_PROTECTION = 'JIRA Data Protection';
+    public static final String RENEWAL_CATEGORY_MIXEDPARTIAL = 'MIXEDPARTIAL';
+    public static final String RUBRIK_LICENSE = 'Rubrik Licence';
+    public static final String SCALE_MSP = 'Scale MSP';
+    public static final String EDP_SCALE_COMMERCIAL = 'EDP - Scale - Commercial';
+    public static final String PREPAY = 'Prepay';
+    public static final String PREPETUAL = 'Perpetual';
+    public static final String ON_PREM = 'On Prem';
+    public static final String PROACTIVE_EDITION = 'Proactive Edition';
+    public static final String SFDC_DATA_PROTECTION = 'SFDC Data Protection';
+    public static final String SUPPORT = 'Support';
+    public static final String NON_REPLACEABLE = 'Not Replaceable';
+    public static final String UNIVERSAL_SAAS_APPS = 'Universal SaaS Apps';
+    public static final String SAAS_SAAS_COMMERCIAL = 'SaaS - SaaS - Commercial';
+    public static final String SAAS_APPLICATIONS = 'SaaS Applications';
+    public static final String NOFEDRAMP = 'NOFEDRAMP';
+    public static final String DISCRIPTION_DONOTDELETE_LINES_RENEWAL_GRP = 'DO NOT DELETE LINES FROM RENEWAL GROUP';
+    public static final String MANUAL_TYPE = 'Manual';
+    public static final String AUTO_TYPE = 'Auto';
+    public static final String REPLACEMENT_CATEGORY_SCALE_UTILITY = 'Scale Utility' ;
+    public static final String LICENSE_TYPE_CONSUMPTION = 'Consumption';
+    public static final String LICENSE_SUB_CATEGORY_RSC_GOV_CLOUD = 'RSC Gov Cloud' ;
+    public static final String PRODUCT_SUBTYPE_LOD = 'LOD';
+    public static final String PRODUCT_CATEGORY_RENEWED = 'Renewed';
+    public static final String PRODUCT_TYPE_EDITION = 'Edition';
+    public static final String PRODUCT_TYPE_RCDOM_SUPPORT = 'RCDM Support';
+    public static final String PRODUCT_TYPE_RADAR = 'RADAR';
+    public static final String PRODUCT_TYPE_SONAR = 'Sonar';
+    public static final String PRODUCT_TYPE_APP_FLOWS = 'App Flows';
+    public static final String PRODUCT_TYPE_COMPLETE = 'Complete';
+    public static final String PRODUCT_ADD_ON_LEVEL_RCDOM_ADDON = 'RCDM Add-On';
+    public static final String PRODUCT_QTY_MAPPING_TYPE = 'Ratio Based';
+    public static final String PRODUCT_OPTION_TYPE_RELATED_PRODUCT = 'Related Product';
+    public static final String PRODUCT_LEVEL_ONPREM = 'OnPrem';
+    public static final String PRODUCT_LEVEL_LOD_ADDON = 'LOD Addon';
+    public static final String PRODUCT_FAMILY_RUBRIK_SCALE = 'Rubrik Scale';
+    public static final String STANDALONE_SOFTWARE_ADDON = 'Standalone Software Addon';
+    public static final String SAAS_SOFTWARE_ADDON = 'SaaS Software Addon';
+    public static final String SUPPORT_TYPE_L3_BASIC = 'L3 Basic';
+    public static final String SUPPORT_TYPE_BASIC = 'Basic';
+    public static final String SUPPORT_TYPE_PRIMIUM = 'Premium';
+    public static final String ENTITLEMENT_CONVERSION_ONE_PER_QL = 'One per quote line';
+    public static final String ACCOUNT_TYPE_DISTRIBUTOR = 'Distributor';
+    public static final String ORDER_TYPE_REVENUE = 'Revenue';
+    public static final String STAGENAME_PROSPECTING = 'Prospecting';
+    public static final String TPHCHECK = 'TPHCheck';
+    public static final String SKUPRODNAME ='skuProdName';
+    public static final String RCDM_DATES = 'RCDM_Dates';
+    public static final String SUBSCRIPTION_TYPE_ONE_TIME = 'One-time';
+    public static final String REFRESHED_BASE_LICENSE = 'Refreshed Base License';
+    public static final String REFRESHED_DELTA_LICENSE = 'Refreshed Delta License';
+    public static final String PAYMENT_OPTION_ANNUAL = 'Annual';
+    //Statuses
+    public static final String COMPLETED = 'Completed';
+    public static final String STATUS_EXPIRED = 'Expired';
+    public static final String STATUS_ACTIVE = 'Active';
+    public static final String STATUS_INACTIVE = 'Inactive';
+    public static final String STATUS_APPROVED = 'Approved';
+    public static final String STATUS_DRAFT = 'Draft';
+    public static final String STATUS_IN_REVIEW = 'In Review';
+    public static final String TO_PROCESS = 'To Process';
+    //Page values
+    public static final String NON_ASSET = 'Non Asset';
+    public static final String DISPOSELINE = 'DisposeLine';
+    public static final String MANY_TO_1 = 'ManyTo1';
+    public static final String ONE_TO_MANY = '1ToMany';
+    public static final String ONE_TO_ONE ='1to1';
+    public static final String FULL_SELECTION = 'Full';
+    public static final String DISPOSITION = 'Disposition';
+    public static final String DISPOSE = 'Dispose';
+    public static final String DISPOSE_RENEW_LATER = 'Renew Later';
+    public static final String UPGRADED = 'Upgraded';
+    public static final String CONVERTED = 'Converted';
+    public static final String REFRESHED = 'Refreshed';
+    public static final String UPGRADE_VALUE = 'Upgrade';
+    public static final String CONVERT_VALUE = 'Conversion';
+    public static final String DISPOSE_REFRESH = 'Refresh';
+    public static final String DISPOSE_AT_RISK = 'At Risk';
+    public static final String DISPOSE_CHURN ='Churn';
+    public static final String DISPOSE_NONE = 'None';
+    public static final String DISPOSTION_RENEWING = 'Renewing';
+    public static final String DISPOSITION_REASON_REPLACED = 'Replaced';
+    public static final String DISPOSITION_REASON_R_E_TRANSACTED = 'R_E Transacted';
+    public static final String RESYNC_LINE_REQUIRED = 'Required';
+    public static final String RESYNC_LINE_MANUAL_REVIEW_REQUIRED = 'Manual Review Required';
+    //FY25SR-1207
+    public static final String FEDRAMP = 'FEDRAMP';
+    public static final String FIPS_ASSET_REFRESHED = 'FipsAssetRefreshed';
+    public static final String FIPS = 'FIPS';
+    public static final String ENTITLEMENT_CONVERSION_ONE_PER_UNIT = 'One per unit';
+    public static final String CONTENT_NAME_LINES_NEW = 'Line Items New Custom';
+    public static final String EXCEPTION_MISMATCH_QTY ='Mismatch Quantity';
+    
+    /**Metadata Values*/
+    public static final String CUSTOM_REPLACEMENT_LABEL = 'Custom_Replacement_Label';
+    public static final String CUSTOM_LABEL_OTST =  'One_Time_Special_Terms';
+    public static final String CUSTOM_LABEL_REPLACEMENT_TNC = 'Replacement_TNC';
+    public static final String CUSTOM_LABEL_FUTURE_UNBILLED = 'Future_Unbilled';
+    public static final String CUSTOM_LABEL_OUTSTANDING_INVOICE = 'Outstanding_Invoice';
+    public static final String CUSTOM_LABEL_RENEWAL_GUIDANCE = 'Renewal_Guidance';
+    public static final String MATRIX_RECORDTYPE = 'Replacement_Category_Matrix';
+    public static final String REPLACEMENT_R7_PRODUCT_MDT = 'r7kProducts_query';
+    public static final String REPLACEMENT_PAGINATION_SIZE_MDT = 'SMS_Pagination_Page_Size';
+    public static final String REPLACEMENT_FILTER_CRITERIA_MDT = 'Arry_Filter_Criteria';
+    public static final String REPLACEMENT_QUOTELINE_MDT = 'SBQQ_QuoteLine_c';
+    public static final String REPLACEMENT_PRICEBOOKENTRY_MDT = 'PriceBookEntry';
+    public static final String REPLACEMENT_QUOTELINE_DELETION_MDT = 'SBQQ_QuoteLine_c_Deletion';
+    public static final String REPLACEMENT_MULTI_MAPPING_V2_CONVERSION_MDT = 'Multi_Mapping_V2_Conversion_c';
+    public static final String REPLACEMENT_CCORDERLITEMEXTENSTION_MDT = 'CreditCalculation_OrderItemExtension';
+    public static final String REPLACEMENT_ENTITLEMENT_MDT = 'Entitlement';
+    public static final String REPLACEMENT_PRODUCTOPTION_MDT = 'SBQQ_ProductOption_c';
+    public static final String REPLACEMENT_V1TOV2CONSOLIDATIONKEY_MDT = 'V1ToV2ConsolidationKey';
+    public static final String REPLACEMENT_REFRESJ_DELTA_DELETABLE_MDT = 'Refresh_Delta_Deletable';
+    public static final String REPLACEMENT_UNIVERSAL_SAAS_ATTRIBUTES_MDT = 'Universal_SaaS_Attributes';
+    public static final String REPLACEMENT_UNIVERSAL_STORAGE_REGION_BUNDLE_ATT1_MDT = 'Storage_Region_Bundle_Attribute_1';
+    public static final String REPLACEMENT_UNIVERSAL_STORAGE_REGION_BUNDLE_ATT2_MDT = 'Storage_Region_Bundle_Attribute_2';
+    public static final String REPLACEMENT_STORAGE_TIER_ATT_MDT = 'Storage_Tier_Attribute';
+    public static final String REPLACEMENT_REFRESH_ELIGIBLE_SKU_QUERY_MDT = 'Refresh_Eligible_SKU_Query';
+    public static final String REPLACEMENT_QLI_CLOSED_ADMIN_FILTER = 'QLI_Closed_Admin_Filter';
+    public static final String REPLACEMENT_CPQDISPOSE_CLOSED_ADMIN = 'cpqDispose_Closed_Admin_Filter';
+    public static final String REPLACEMENT_CPQDISPOSE_QUOTEQUERY = 'CPQ_Disposition_Query_Fields';
+    public static final String RENEWAL_OPP_CREATION_CHURN = 'RenewalOppCreationChurn';
+    public static final String RENEWAL_V1_QUERY = 'RenewalV1Query'; //FY25SR-2232
+    public static final String SKU_PRODUCT_QUERY = 'SkuProduct_Query'; //FY25SR-2232
+    public static final String REPLACEMENT_MISMATCH_EXCLUDE = 'Mismatch_Quantity_Exclude_RenLater'; //CPQ22-6039
+//FY26WL-435
+    public static final String PRODUCT_TYPE_RRW = 'RRW';
+}

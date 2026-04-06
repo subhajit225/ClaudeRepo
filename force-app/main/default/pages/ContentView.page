@@ -1,0 +1,100 @@
+<apex:page standardStylesheets="false"  sidebar="false" showheader="false" standardController="ContentVersion" title="Resources - Rubrik Partner Community" applyBodyTag="false"  
+                           >
+ <c:visualstrapblock >
+    
+    
+    <!--hide the action column from Community users-->
+    <style>
+    .actionColumn{
+    display:none;
+    }
+    
+    .pbBody{
+    padding: 5px;
+    }
+    
+    .visualstrap td, th {
+    padding: 5px !important;
+    }
+    
+    .rolodex {
+      padding: 4px !important;  
+   }
+   
+   .btnpad{
+    padding: 15px;
+    }
+    
+    .filePreviewHeading{
+    display: block;
+    }
+    
+    .minwidth {
+    min-width:500px;
+    margin-right:30px;
+    }
+    
+    </style>
+    
+        <!--start header-->
+        <c:siteheader ></c:siteheader>
+        <!--end Header-->
+
+
+      <!--start the Container-->
+        <div class="container">
+        <!--action status overlay-->
+        <c:processing />
+            <div class="row rowcontainer" >
+                <div class="col-md-12">
+              
+                <!--start colmd4-->
+                <div class="col-md-4 minwidth">
+
+                      <!--start preview-->
+                       <div id="dpvPreviewWrapper" align="center">
+                        <h2 class="filePreviewHeading">Preview</h2>
+                         <div class="chatterFileViewerPanel" id="chatterFileViewerPanel">
+                          <embed src="/DocViewer.swf"  id="renditionLarge" quality="high" bgcolor="#f3f3f3" name="renditionLarge"  allowfullscreen="true" wmode="opaque" type="application/x-shockwave-flash" align="middle" height="700px" width="500px" /><noembed><p>Flash file preview</p></noembed>
+                         </div>
+                        <script>insertFlexComponent('/_swf/121310/sfc/flex/DocViewer', 'shepherd_prefix=/sfc/servlet.shepherd&v={!ContentVersion.Id}&mode=chatterfilepreview&in_tests=false', '500px', '400px', '#f3f3f3', 'chatterFileViewerPanel', 'renditionLarge', false, { adobeFlashVersionLbl : 'You must enable or download Adobe Flash Player version 9.0.115 or later to use this feature.', downloadAdobeLbl : 'Download Adobe Flash Player', downloadAdobeLinkLbl : 'Click the link below to download the Adobe Flash Player:', closeDialogLbl : 'Cancel'}); Ninja.Flex.ContentStaticResourcesBase = '/_swf/121310/sfc';Ninja.Flex.ShepherdController = '/sfc/servlet.shepherd';</script>
+                      </div>
+                      <!--end preview-->
+                                        
+                                        
+<!--overlay-->
+<!--end overlay-->                                       
+                </div>
+                <!--end colmd4-->
+ 
+  <!--start 6-->
+              <div class="col-md-6">
+                       
+                     
+                       <apex:pageBlock >
+                        <apex:pageBlockSection title="{!ContentVersion.Title}" columns="1" >
+                            <apex:outputField value="{!ContentVersion.Title}"/>
+                            <apex:outputField value="{!ContentVersion.TagCSV}"/>
+                            <apex:outputField value="{!ContentVersion.CreatedDate}"/>
+                            <apex:outputField value="{!ContentVersion.Description}"/>
+                            <apex:outputField value="{!ContentVersion.FileType}"/> 
+                            <apex:outputPanel rendered="{!ContentVersion.FileType!='LINK'}"><a href="/sfc/servlet.shepherd/version/download/{!ContentVersion.Id}?asPdf=false "><button type="button" style=" width:124px;height:42px;" class="btn rubrik-btn" >{!IF(ContentVersion.FileType=='LINK', 'Open Link', 'Download')}</button></a></apex:outputPanel>
+                            <apex:outputPanel rendered="{!ContentVersion.FileType=='LINK'}"><a href="{!ContentVersion.ContentUrl}" target="_blank"><button type="button" style=" width:124px;height:42px;" class="btn rubrik-btn" >{!IF(ContentVersion.FileType=='LINK', 'Open Link', 'Download')}</button></a></apex:outputPanel>
+         
+                        </apex:pageBlockSection>
+                    </apex:pageBlock>
+                    </div>
+                 <!--end6-->
+                                  
+                <!--end row--> 
+                  
+                </div>
+            </div>
+            </div>
+        <!--End the Container-->
+
+       <!--start the footer-->
+        <c:psitefooter ></c:psitefooter>
+        
+    </c:visualstrapblock>
+</apex:page>

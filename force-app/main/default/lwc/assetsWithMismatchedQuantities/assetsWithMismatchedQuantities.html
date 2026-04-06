@@ -1,0 +1,106 @@
+<template>
+    <div class="slds-grid slds-gutters">
+        <div class="slds-col slds-p-around_x-small">
+            <lightning-input type="date" label="Start Date 1" value={startDate} name="StartDate"
+                onchange={validateDates}></lightning-input>
+        </div>
+        <div class="slds-col slds-p-around_x-small">
+            <lightning-input type="date" label="End Date" value={endDate} name="EndDate" onchange={validateDates}></lightning-input>
+            <p class="error" style="color: red; display: inline-block">{endDateError}</p>
+        </div>
+        <div class="slds-col slds-align-middle slds-p-around_x-small"
+            style="display: flex; align-items: center; margin-top: 4px">
+            <lightning-button label="Filter" variant="brand" onclick={handleFilterClick}
+                disabled={disableFilterBTN}></lightning-button>
+        </div>
+    </div>
+    <div class="slds-col slds-size_1-of-5 ">
+        <lightning-input label="Filter" value={filterText} onchange={handleFilterChange}  field-level-help=""> </lightning-helptext></lightning-input>
+    </div>
+    <div class = "slds-p-around_small">
+        <p><b>Total Record Count</b> : {consData.length}</p>
+    </div>
+    <template if:false={showTable}>
+        <div class="slds-align_absolute-center slds-theme--shade" style="margin: 10px;height:3rem;border: 2px solid rgb(20, 95, 133);border-radius: 10px;">
+            No Records Found
+        </div>
+    </template>
+    <template if:true={showTable}>
+        <div style="width: 100%; overflow:auto;">
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered" aria-label="Example table of Opportunities with vertical borders">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th class="clickable-header" scope="col" onclick={handleSort} data-field="name">
+                            <div class="slds-truncate" > Asset Name</div>
+                        </th>
+                        <th class="clickable-header" scope="col" onclick={handleSort} data-field="usableCapacity">
+                            <div class="slds-truncate" > Total usable capacity of the asset</div>
+                        </th>
+                        <th class="clickable-header" scope="col" onclick={handleSort} data-field="usableCapacity">
+                            <div class="slds-truncate" > Total entitlement quantity linked to the asset</div>
+                        </th>
+                        <th class="clickable-header" scope="col" onclick={handleSort} data-field="diffInQuantity">
+                            <div class="slds-truncate" > Difference b/w Quantities </div>
+                        </th>
+                        <th class="clickable-header"  scope="col" onclick={handleSort} data-field="orderNumber">
+                            <div class="slds-truncate" >Order Number</div>
+                        </th>
+                        <th class="clickable-header"  scope="col" onclick={handleSort} data-field="billToName">
+                            <div class="slds-truncate" >Bill To Name</div>
+                        </th>
+                        <th class="clickable-header"  scope="col" onclick={handleSort} data-field="orderProductNumber">
+                            <div class="slds-truncate" >Order Product Number</div>
+                        </th>
+                        <th class="clickable-header" scope="col" onclick={handleSort} data-field="productName">
+                            <div class="slds-truncate" > Product </div>
+                        </th>
+                        <th class="clickable-header" scope="col" onclick={handleSort} data-field="orderProcessType">
+                            <div class="slds-truncate" >Order Process Type</div>
+                        </th>
+                        <th class="" scope="col" data-field="scaleEntitlements">
+                            <div class="slds-truncate" >Entitlement | Order Quantity</div>
+                        </th>
+                        <th class="clickable-header"  scope="col" onclick={handleSort} data-field="orderShipmentType">
+                            <div class="slds-truncate" >Shipment Status</div>
+                        </th>
+                        <th class="clickable-header" scope="col" onclick={handleSort} data-field="entLevelIdentifier">
+                            <div class="slds-truncate" > Asset-Level Identifier</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={consData} for:item="rec">
+                        <tr key={rec.Id}>
+                            <td> <lightning-formatted-url value={rec.assetUrl} label={rec.name} target="_blank"></lightning-formatted-url></td>
+                            <td>{rec.usableCapacity}</td>
+                            <td>{rec.sumOfEntQuantity}</td>
+                            <td>{rec.diffInQuantity}</td>
+                            <td><lightning-formatted-url value={rec.orderUrl} label={rec.orderNumber} target="_blank"></lightning-formatted-url></td>
+                            <td><lightning-formatted-url value={rec.billToNameURL} label={rec.billToName} target="_blank"></lightning-formatted-url></td>
+                            <td><lightning-formatted-url value={rec.orderItemUrl} label={rec.orderProductNumber} target="_blank"></lightning-formatted-url></td>
+                            <td><lightning-formatted-url value={rec.productUrl} label={rec.productName} target="_blank"></lightning-formatted-url></td>
+                            <td>{rec.orderProcessType}</td>
+                            <td>
+                                <template for:each={rec.scaleEntitlements} for:item="linkedRec">
+                                    <tr key={rec.Id}> 
+                                        
+                                        <td>{linkedRec.Entitlement__r.Name}</td>
+                                        <td>{linkedRec.Entitlement__r.Order_Quantity__c}</td>
+                                        
+                                    </tr>
+                                </template>
+                            </td>
+                            <td>{rec.orderShipmentType}</td>
+                            <td>{rec.entLevelIdentifier}</td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
+    </template>
+    <template if:true={showSpinner}>
+        <div class="spinner-wrapper">
+            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+        </div>
+    </template>
+</template>

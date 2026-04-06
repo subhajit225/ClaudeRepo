@@ -1,0 +1,15 @@
+<apex:component >
+<style>
+    .pagetitle {
+        width: 176px;
+        height: 35px;
+        font-size: 32px;
+        line-height: 38px;
+        color: #17232E;
+        padding: 5px;
+    }
+</style>
+<apex:attribute name="Name" type="String" description="add the text you want"/>
+<apex:outputText value="{!name}" styleClass="pagetitle"></apex:outputText>
+<br/><br/>
+</apex:component>

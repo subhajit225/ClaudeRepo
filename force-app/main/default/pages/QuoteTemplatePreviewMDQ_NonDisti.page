@@ -1,0 +1,119 @@
+<apex:page showHeader="false" sidebar="false" cache="false" contentType="text/xml" controller="QuoteTemplatePreviewMDQFinal">
+    <block>
+            <table table-layout="fixed" width="100%" border-color="#000000" border-width="1px" border-style="solid">
+                <table-column column-width="10%"/>
+                <table-column column-width="25%"/>
+                <table-column column-width="40%"/>
+                <table-column column-width="10%"/>
+                <table-column column-width="15%"/>
+
+                    <table-header>
+                        <table-row font-weight="bold" font-size="0.7em" text-align="left" background-color="#47baef" color="#ffffff" >
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="2pt" text-align="center"><block>Min TB Usage</block></table-cell>
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="2pt" text-align="Left"><block>Product Code</block></table-cell>
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="2pt" text-align="Left"><block>Product Description</block></table-cell>
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="2pt" text-align="center"><block>Term (Mos)</block></table-cell>
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="2pt" text-align="center"><block>Total</block></table-cell>
+                        </table-row>
+                    </table-header>
+                    {!lstQuoteLinesToDisplay}
+                
+                    <table-body>
+                        <apex:repeat var="varWrap" value="{!lstQuoteLinesToDisplay}">
+                            <table-row font-size="0.7em">
+                                <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left" >
+                                    <block>{!varWrap.strProdQty}</block>
+                                </table-cell>
+                                <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left" >
+                                    <block>{!varWrap.prodCode}</block>
+                                </table-cell>
+                                <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left" >
+                                    <block>{!varWrap.prodDescription}</block>
+                                </table-cell>
+                                <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="right" >
+                                    <block>{!varWrap.prodTerm}</block>
+                                </table-cell>
+                                <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="right" >
+                                    <block>{!varWrap.netTotal}</block>
+                                </table-cell>
+                            </table-row>
+                             </apex:repeat>
+                    </table-body>
+               
+            </table>
+            
+            <table table-layout="fixed" width="100%">
+                <table-column column-width="100%"/>
+                <table-header>
+                    <table-row font-weight="bold" font-style="italic" font-size="0.7em" text-align="left" color="#000000" >
+                        <table-cell margin="0pt" padding="2pt" padding-top="2pt" text-align="left"><block></block></table-cell>
+                    </table-row>
+                </table-header>
+                <table-body>
+                    <table-row font-size="0.6em">
+                        <table-cell margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left" ><block></block></table-cell>
+                    </table-row>
+                    <table-row font-size="0.6em">
+                        <table-cell margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left" ><block></block></table-cell>
+                    </table-row>
+                </table-body>
+            </table>                    
+                    
+            <table table-layout="fixed" width="100%">
+                    <table-column column-width="100%"/>
+                    <table-header>
+                        <table-row font-weight="bold" font-style="italic" font-size="0.7em" text-align="left" color="#000000" >
+                            <table-cell margin="0pt" padding="2pt" padding-top="2pt" text-align="left"><block>Payment Schedule / Minimum Commitment</block></table-cell>
+                        </table-row>
+                    </table-header>
+                    
+                    <apex:repeat var="varText" value="{!lstPaymentScheduleToDisplay}">
+                        <table-body>
+                            <table-row font-size="0.6em">
+                                <table-cell margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left" >
+                                    <block>{!varText}</block>
+                                </table-cell>
+                            </table-row>
+                        </table-body>
+                    </apex:repeat>
+            </table>
+            
+            <table table-layout="fixed" width="100%">
+                    <table-column column-width="100%"/>
+                    <table-header>
+                        <table-row font-style="italic" font-size="0.6em" text-align="left" color="#000000" >
+                            <table-cell margin="0pt" padding="2pt" padding-top="2pt" text-align="left"><block>Minimum monthly consumption commitment is listed above and will be billed at the end of each Rubrik month (Rubrik’s fiscal quarters are the
+quarters starting on February 1, May 1, August 1 and November 1). Q1 commences at the beginning of Rubrik’s first full fiscal quarter following the earlier of (i) activation of the product, or (ii) thirty (30) days folloing shipment of the product to customer. In addition to the amounts below, prior to Q1 commencement, actual usage will be billed per GB at rates above. Usage above minimum monthly consumption commitment (overages) will be billed per GB used at rates above at the end of each month and is in addition to the minimum consumption commitment billing noted above.</block></table-cell>
+                        </table-row>
+                    </table-header>
+                    
+                    <table-body>
+                        <table-row font-size="0.6em">
+                            <table-cell><block></block></table-cell>
+                        </table-row>
+                    </table-body>
+            </table>
+            
+            <table table-layout="fixed" width="70%">
+                <table-column column-width="45%"/>
+                <table-column column-width="25%"/>
+                <table-header>
+                    <table-row font-style="italic" font-size="0.6em" text-align="left" color="#000000" >
+                        <table-cell margin="0pt" padding="2pt" padding-top="2pt" text-align="left"><block></block></table-cell>
+                        <table-cell margin="0pt" padding="2pt" padding-top="2pt" text-align="left"><block></block></table-cell>
+                    </table-row>
+                </table-header>
+                <table-body>
+                    <table-row font-size="0.8em">
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left" >
+                            <block>Minimum Consumption Total</block>
+                        </table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left" >
+                            <block>{!strNetTotalMDQ}</block>
+                        </table-cell>
+                    </table-row>
+                </table-body>
+            </table>
+                            
+    </block>
+</apex:page>

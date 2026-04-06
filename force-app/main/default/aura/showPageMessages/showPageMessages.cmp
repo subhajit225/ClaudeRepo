@@ -1,0 +1,20 @@
+<aura:component access="global">
+    <aura:attribute name="messageString" type="String"/>
+    <aura:attribute name="isSuccess" type="Boolean"/>
+	<div class="slds-notify_container slds-is-relative">
+        <aura:if isTrue="{!!v.isSuccess}">
+                <div aura:id="divId" class="slds-notify slds-notify_toast slds-theme_error" role="alert">
+                    <div class="slds-notify__content slds-align_absolute-center">
+                        <h2 class="slds-text-heading_small">{!v.messageString}</h2>
+                    </div>
+                </div>
+         </aura:if>   
+        <aura:if isTrue="{!v.isSuccess}">
+                <div aura:id="divId" class="slds-notify slds-notify_toast slds-theme_success" role="alert">
+                    <div class="slds-notify__content slds-align_absolute-center">
+                        <h2 class="slds-text-heading_small">{!v.messageString}</h2>
+                    </div>
+                </div>
+         </aura:if>   
+     </div>
+</aura:component>

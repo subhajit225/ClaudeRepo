@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CCR_Type_Late_Non_Payment</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    ISPICKVAL(CCR_Type__c ,&apos;Late / Non Payment&apos;), 
+    OR( NOT(Amount__c &gt; 0),
+        ISPICKVAL( Reason_for_late_payment__c,&apos;&apos; ),
+        ISBLANK( Opportunity__c ),
+        Booking__r.Opportunity__r.Id &lt;&gt; Opportunity__r.Id,
+        Booking__r.RecordType.Name &lt;&gt; &apos;Booking&apos;,
+        Account_Name__c &lt;&gt; Booking__r.Account_Name__c,
+        Impacts_Commission__c &lt;&gt; TRUE
+      )
+   )</errorConditionFormula>
+    <errorMessage>1)Amount,ReasonForLatePayment,Opportunity and it&apos;s related Original Booking are required 
+2)ImpactsCommission should be checked 
+3)AccountName should be Account of Booking for CCR type &quot;Late / Non Payment&quot;</errorMessage>
+</ValidationRule>

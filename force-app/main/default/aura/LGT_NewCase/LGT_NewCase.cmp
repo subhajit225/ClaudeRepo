@@ -1,0 +1,363 @@
+<aura:component controller="CaseDetailController" implements="force:lightningQuickAction,force:hasRecordId,force:appHostable,flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName,lightning:isUrlAddressable,forceCommunity:availableForAllPageTypes,lightning:actionOverride">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="accountId" type="String"/>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="caseId" type="String"/>
+    <aura:attribute name="caseOwnerId" type="String"/>
+    <aura:attribute name="hasCaseOwner" type="Boolean" default="true"/>
+    <aura:attribute name="isOveride" type="Boolean" default="false"/>
+    <aura:attribute name="isSupportUser" type="Boolean" default="false"/>
+    <aura:attribute name="isClassic" type="Boolean" default="false"/>
+    <aura:attribute name="Priority" type="String"/>
+    <aura:attribute name="entitelementId" type="String"/>
+    <aura:attribute name="currentUserId" type="String" default="{!$SObjectType.CurrentUser.Id}"/>
+    <aura:attribute name="UITheme" type="String"/>
+    <!-- CS21-2428 -->
+    <aura:attribute name="isGTCDenied" type="Boolean" default="false"/>
+<!-- CS21-3897  -->
+    <aura:attribute name="vfpUITheme" type="String"/>
+    <aura:attribute name="selectedRscId" type="String" />
+    <aura:attribute name="rscInstanceFilter" type="String" default="" />    
+    <aura:attribute name="userRecord" type="User" />
+	<aura:attribute name="caseRecord" type="Case" default="{ 'sobjectType': 'Case',
+                                'Status': 'New',
+                                'Subject': '',
+                                'Type': '',
+                                'Priority': '',
+                                'Contact_method__c': '',
+                                'Support_Tunnel__c': '',
+                                'Description': '',
+                                'AccountId':'',
+                                'ContactId':''}"/>
+	<aura:attribute name="caserec" type="Case" default="{ 'sobjectType': 'Case',
+                                                        'OwnerId': '00G40000001yD6b'}"/>
+    <force:recordData aura:id="forceRecord"
+                      recordId="{!v.recordId}"
+                      fields="AccountId, OwnerId, Status, ContactId, Priority, Origin, Contact_method__c,
+                                Subject, Description, Platform__c, Software_Version__c, Product_Area__c,
+                                Problem_Type__c, Sub_Component__c, Support_Tunnel__c, Cluster__c, Additional_Cluster__c,
+                                RecordTypeId, If_Other__c,RSCInstance__c"
+                      targetFields="{!v.caseRecord}"
+                      mode="EDIT"
+                       /> 
+    <force:recordData aura:id="forceRecord"
+                      recordId="{!v.currentUserId}"
+                      fields="Profile.Name,Id,Name,Division,is_Customer_Success_User__c"
+                      targetFields="{!v.userRecord}"
+                       /> 
+    <aura:handler name="change" value="{!v.caseRecord.AccountId}" action="{!c.updateCaseFields}"/>
+    <aura:handler name="change" value="{!v.userRecord.Profile.Name}" action="{!c.updateOwner}"/>
+    <aura:handler name="change" value="{!v.caserec.OwnerId}" action="{!c.ownerChange}"/>
+    
+    <!-- Updated based on CS21-1325: [FedRAMP] Disable case creation from Salesforce (New Case Form) -->
+    <aura:attribute name="accountHeadsUpText" type="String"/>
+    <aura:attribute name="accountName" type="String" default="" />
+    <aura:attribute name="contAccName" type="String" default="" />
+    <aura:attribute name="contactId" type="String" default="" />
+    <aura:attribute name="isFedRamp" type="Boolean" default="false"/>
+    <aura:attribute name="isCommercialCustomer" type="Boolean" default="false"/>
+    <aura:attribute name="hideSection" type="Boolean" default="false"/>
+    <aura:attribute name="fedRampCustomerName" type="String" default="" />
+    <!-- Error Message -->
+    <aura:attribute name="errorHeader" type="String" default="" />
+    <aura:attribute name="error" type="String" default="" />
+    <!-- Queues Map -->
+    <aura:attribute name="queueMap" type="Map" default="" />
+
+    <aura:attribute name="recordTypeId" type="String"/>
+    <aura:attribute name="activeSections" type="List" default="['A','B','C','D','E','F','Z']" />
+    <aura:attribute name="activeSectionsMessage" type="String" default="" />
+    <lightning:workspaceAPI aura:id="workspace"/>
+    
+    <lightning:card iconName="action:new_case" title="New Case">
+
+        <aura:if isTrue="{!v.error}">
+            <div class="slds-notify_container slds-is-relative">
+                <div class="slds-notify slds-notify_toast slds-theme_error" role="alert">
+                    <div class="">
+                        <h2 class="slds-text-heading_small">{!v.errorHeader} Please Contact System Administrator.</h2>
+                        <p>{!v.error}</p>
+                    </div>
+                </div>
+            </div>
+        </aura:if>
+        <lightning:recordEditForm aura:id="recordEditForm" onsuccess="{!c.handleSuccess}" onerror="{!c.onException}" onsubmit="{!c.saveCase}" objectApiName="Case">     
+            <lightning:messages />
+            <!-- rsc insatnce hidden field -->
+            <lightning:inputField fieldName="RSCInstance__c" value="{!v.caseRecord.RSCInstance__c}" class="slds-hide" />
+            <lightning:accordion allowMultipleSectionsOpen="true" activeSectionName="{! v.activeSections }" class="slds-section">
+                <lightning:accordionSection name="A" label="Account Details">
+                    <aura:set attribute="actions">
+                        <div><b style="    color: red;"> |  </b> Required Information </div>
+                    </aura:set>
+                    <aura:set attribute="body">
+                        <div class="c-container">
+                            <lightning:layout pullToBoundary="medium">
+                                <lightning:layoutItem size="6" padding="horizontal-medium">
+                                    <lightning:inputField fieldName="AccountId" aura:id="accIds" variant="label-stacked" value="{!v.accountId}" onchange="{!c.updateAccount}"/>
+                                    
+                                </lightning:layoutItem>
+                                <lightning:layoutItem size="6" padding="horizontal-medium">
+                                    <div style="visibility:hidden;">
+                                        <lightning:inputField fieldName="ParentId" aura:id="parentIds" variant="label-stacked" value="{!v.caseId}"/>
+                                    </div>
+                                </lightning:layoutItem>
+                            </lightning:layout>
+                        </div>
+                    </aura:set>
+                </lightning:accordionSection>
+                <lightning:accordionSection name="Z" label="RSC Instances">
+                    <aura:set attribute="body">
+                        <div class="c-container">
+                            <lightning:layout pullToBoundary="medium">
+                                <lightning:layoutItem size="6" padding="horizontal-medium">
+                                    
+<!-- CS21-3897 -->
+                                        <c:customLookup
+                                            aura:id="customRscLookup"
+                                            label="RSC Instances"
+                                            sObjectApiName="RSCInstance__c"
+                                            iconName="custom:custom7"
+                                            filter="{!v.rscInstanceFilter}"
+                                            onhandleSelect="{!c.handleRscSelect}"
+                                            fields="Id, RSCUrl__c, Name, RSCAccountType__c, RSCRegion__c,RSCAccountRelationship__c,RSCAccountName__c,RSCDeployment__c "
+                                            placeholder="Search/Select RSC Instance"
+                                            helptext="RSC instances not available"
+                                            isSingleColumn="false"
+                                            meta_entity_label="Type"
+                                            meta_entity_api="RSCAccountRelationship__c"
+                                            meta_entity_label2="Region"
+                                            meta_entity_api2="RSCRegion__c"
+                                            meta_entity_label3="Account name"
+                                            meta_entity_api3="RSCAccountName__c"
+                                            meta_entity_label4="Site"
+                                            meta_entity_api4="RSCDeployment__c"
+                                            addonsearchfield="RSCUrl__c;RSCAccountName__c"                                            
+                                        />
+                                    <!-- CS21-3897 -->
+                                </lightning:layoutItem>
+                            </lightning:layout>
+                        </div>
+                    </aura:set>
+                </lightning:accordionSection>
+                
+                <!-- CS21-1325: fedRAMP Condition -->
+                <aura:if isTrue="{!!OR(v.hideSection, v.isGTCDenied)}">
+                    <lightning:accordionSection name="E" label="Heads-Up To Support Team">
+                        <aura:set attribute="body">
+                            <div class="c-container">
+                                <lightning:layout pullToBoundary="medium">
+                                    <lightning:layoutItem size="12" padding="horizontal-medium">
+                                        <p style="font-family:gotham-medium; font-size:1.5rem;color:red;" size = "2" color="red" >{!v.accountHeadsUpText}</p>
+                                    </lightning:layoutItem>
+                                </lightning:layout>
+                            </div>
+                        </aura:set>
+                    </lightning:accordionSection>
+                </aura:if>
+                <!-- CS21-1325: fedRAMP Condition -->
+                <lightning:accordionSection name="B" label="Case Edit">
+                    <aura:set attribute="actions">
+                        <div><b style="color: red;"> |  </b> Required Information </div>
+                    </aura:set>
+                    <aura:set attribute="body">
+                        <div class="c-container">
+                            <lightning:layout pullToBoundary="medium">
+                                <lightning:layoutItem flexibility="auto" padding="horizontal-medium" class="slds-size_6-of-12">
+                                    <!--<lightning:inputField fieldName="OwnerId"  variant="label-stacked" aura:id="OwnerId"/>-->
+                                    <!-- added for CS21-780-->
+                                    <aura:if isTrue="{!v.isSupportUser}">
+                                        <div class="slds-form-element">
+                                            <label class="slds-form-element__label" for="combobox-unique-id">Case Owner</label>
+                                            <div class="slds-form-element__control">
+                                                <div class="slds-combobox_container slds-has-inline-listbox">
+                                                    <div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click" aria-expanded="false" aria-haspopup="listbox" role="combobox">
+                                                        <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_left-right" role="none">
+                                                            <span class="slds-icon_container slds-icon-standard-account slds-combobox__input-entity-icon" title="Queue/User">
+                                                                <aura:if isTrue="{!v.userRecord.is_Customer_Success_User__c}">
+                                                                    <span class="slds-assistive-text">Customer-Success</span>
+                                                                    <aura:set attribute="else">
+                                                                        <span class="slds-assistive-text">{!v.userRecord.Name}</span>
+                                                                    </aura:set>
+                                                                </aura:if>
+                                                            </span>
+                                                            <input type="text" class="slds-input slds-combobox__input" id="combobox-unique-id" aria-autocomplete="list" aria-controls="listbox-unique-id" autocomplete="off" role="textbox" placeholder="Search Salesforce" readonly="" 
+                                                                value="{!IF(v.userRecord.is_Customer_Success_User__c,'Customer-Success',v.userRecord.Name)}"/>
+                                                            <button class="slds-button slds-button_icon slds-input__icon slds-input__icon_right" title="Remove selected option" onclick="{!c.removeUser}">
+                                                                X
+                                                                <span class="slds-assistive-text">Remove selected option</span>
+                                                            </button>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </aura:if>
+                                    <div style="{!if(!v.isSupportUser,'display:block','display:none')}">
+                                        <label lightning-combobox_combobox="" class="slds-form-element__label">
+                                            <abbr lightning-combobox_combobox="" title="required" class="slds-required">*</abbr>
+                                            Case Owner
+                                        </label>
+                                        <force:inputField aura:id="OwnerId" value="{!v.caserec.OwnerId}" />
+                                    </div>
+                                    <aura:if isTrue="{!!v.hasCaseOwner}">
+                                        Please select the owner for the case.
+                                    </aura:if>
+                                    <!-- End - CS21-780-->
+                                    <aura:if isTrue="{!!OR(v.hideSection, v.isGTCDenied)}">
+                                        <lightning:inputField fieldName="Status"  variant="label-stacked" aura:id="Status" required="true" onchange="{!c.handleOnChange}"/>
+                                        <lightning:inputField fieldName="ContactId"  variant="label-stacked" aura:id="ContactId" onchange="{!c.handleContactChange}"/>
+                                    </aura:if>
+                                </lightning:layoutItem>
+                                <aura:if isTrue="{!!OR(v.hideSection, v.isGTCDenied)}">
+                                    <lightning:layoutItem flexibility="auto" padding="horizontal-medium" class="slds-size_6-of-12">
+                                        <lightning:inputField fieldName="Priority"  variant="label-stacked" required="true"  aura:id="Priority" value="{!v.Priority}" onchange="{!c.handleOnChange}"/>
+                                        <lightning:inputField fieldName="Origin"  variant="label-stacked" required="true"  aura:id="Origin" onchange="{!c.handleOnChange}"/>
+                                        <lightning:inputField fieldName="Sub_Origin__c"  variant="label-stacked" required="true"  aura:id="Sub_Origin__c" onchange="{!c.handleOnChange}"/>
+                                        <lightning:inputField fieldName="Contact_method__c"  variant="label-stacked"  aura:id="Contact_method__c" onchange="{!c.handleOnChange}"/>
+                                    </lightning:layoutItem>
+                                </aura:if>
+                            </lightning:layout>
+                        </div>
+                    </aura:set>
+                </lightning:accordionSection>
+                <!-- CS21-1325: fedRAMP Condition (Account RSC-G Support = 'RSC-G') -->
+                <aura:if isTrue="{!v.isFedRamp}">
+                    <div class="slds-align_absolute-center slds-p-around_medium">
+                        <div class="slds-large-size_8-of-12 slds-p-around_large" >
+                            <p class="slds-text-align_left fontfamily">{!v.fedRampCustomerName} is a Rubrik Security Cloud - Government (RSC-G) only customer with no commercial RSC or CDM products. Rubrik Customer Success must comply with regulations and data security requirements to protect Customer Technical Information (CTI). Therefore, case submission is disabled in commercial Salesforce and a case must be submitted in RSC-G Salesforce.</p>
+                            <div class="slds-p-top_medium slds-p-bottom_medium fontfamily">
+                                <b><h1>Rubrik Security Cloud - Government (RSC-G) technical support</h1></b>
+                            </div>
+                            <p class="slds-text-align_left fontfamily">Cases cannot be submitted in commercial Salesforce for any product requests specific to RSC-G. Cases must be opened in RSC-G Salesforce.</p>
+                            <div class="slds-p-top_medium slds-col">
+                               <lightning:button variant="brand" title="Proceed to RSC-G case submission form"><a style="color:white;text-decoration:none;" href="{!$Label.c.RSC_G_case_submission_form_link}" target="_blank">Proceed to RSC-G case submission form</a></lightning:button>
+                            </div>
+                            <p class="slds-p-top_medium slds-text-align_left fontfamily">For additional information, reference the <a target="_blank" href="{!$Label.c.Atlassian_RSC_G_Link}">Rubrik Security Cloud - Government (RSC-G) for the Customer Success organization (Version 2.0)</a> page.</p>
+                        </div>
+                    </div>
+                </aura:if>
+
+                <!-- CS21-2428 -->
+                <aura:if isTrue="{!v.isGTCDenied}">
+                    <aura:if isTrue="{!!v.hideSection}">
+                        <div class="slds-align_absolute-center slds-p-around_medium">
+                            <div class="slds-large-size_8-of-12 slds-p-around_large" >
+                                <div class="slds-p-top_medium slds-p-bottom_medium fontfamily">
+                                    <b><h1>Case Creation Denied.</h1></b>
+                                </div>
+                                <p class="slds-text-align_left fontfamily">
+                                    <a onclick="{!c.handleAccRedirect}" >{!v.fedRampCustomerName}</a> has been identified on the denied party list for GTC. Therefore, Rubrik Support must not provide any technical support services to the customer or partner and new cases must not be created.
+                                    For additional information, reference the <a href="https://rubrik.atlassian.net/wiki/spaces/TSE/pages/edit-v2/3387326736?draftShareId=bfe3842d-9b98-4e28-9012-d226f1b0a3d7" target="_blank">Global Trade Compliance Automation for Rubrik support portal and case management</a> page.</p>
+                            </div>
+                        </div>
+                    </aura:if>
+                </aura:if>
+                <!-- CS21-2010: Commercial Customer (Account RSC-G Support != 'RSC-G') -->
+                <aura:if isTrue="{!and(v.isCommercialCustomer, !v.isGTCDenied)}">
+                    <div class="slds-align_absolute-center slds-p-around_medium">
+                        <div class="slds-large-size_8-of-12 slds-p-around_large" >
+                            <p class="slds-text-align_left fontfamily">{!v.fedRampCustomerName} is a Rubrik Security Cloud - Government (RSC-G) customer with commercial RSC or CDM products. Rubrik Customer Success must comply with regulations and data security requirements to protect Customer Technical Information (CTI). Therefore, case submission is restricted in Salesforce depending on the product. Please review the following guidance prior to creating a case in commercial Salesforce.</p>
+                            <div class="slds-p-top_medium slds-p-bottom_medium fontfamily">
+                                <b><h1>Rubrik Security Cloud - Government (RSC-G) technical support</h1></b>
+                            </div>
+                            <p class="slds-text-align_left fontfamily">Cases cannot be submitted in commercial Salesforce for any product requests specific to RSC-G. Cases for RSC-G products must be opened in RSC-G Salesforce.</p>
+                            <div class="slds-p-top_medium slds-col">
+                               <lightning:button variant="brand" title="Proceed to RSC-G case submission form"><a style="color:white;text-decoration:none;" href="{!$Label.c.RSC_G_case_submission_form_link}" target="_blank">Proceed to RSC-G case submission form</a></lightning:button>
+                            </div>
+                            <div class="slds-p-top_medium slds-p-bottom_medium fontfamily">
+                                <b><h1>Rubrik Security Cloud (RSC) and CDM technical support</h1></b>
+                            </div>
+                            <p class="slds-text-align_left fontfamily">For any questions or issues related to commercial Rubrik Security Cloud (RSC) or CDM products, please proceed to create a commercial Salesforce case.</p>
+                            <!-- <div class="slds-p-top_medium slds-p-bottom_medium">
+                                <i>[Legal disclaimer]</i>
+                            </div> -->
+                            <div class="slds-p-top_medium slds-col">
+                                <lightning:button variant="brand" label="Proceed to commercial case submission form" title="Proceed to commercial case submission form" onclick="{!c.handleCaseSubmission}" />
+                            </div>
+                            <p class="slds-p-top_medium slds-text-align_left fontfamily">For additional information, reference the <a target="_blank" href="{!$Label.c.Atlassian_RSC_G_Link}">Rubrik Security Cloud - Government (RSC-G) for the Customer Success organization (Version 2.0)</a> page.</p>
+                        </div>
+                    </div>
+                </aura:if>
+                <!-- CS21-1325: fedRAMP Condition -->
+                <aura:if isTrue="{!!OR(v.hideSection, v.isGTCDenied)}">
+                    <aura:if isTrue="{!v.userRecord.is_Customer_Success_User__c}">
+                        <lightning:accordionSection name="F" label="Customer Success">
+                            <aura:set attribute="actions">
+                                <div><b style="    color: red;"> |  </b> Required Information </div>
+                            </aura:set>
+                            <aura:set attribute="body">
+                                 <div class="c-container">
+                                    <lightning:layout pullToBoundary="medium">
+                                        <lightning:layoutItem size="6" padding="horizontal-medium">
+                                            <lightning:inputField fieldName="CSM_Owner__c" aura:id="CSM_Owner__c" variant="label-stacked" required="false" onchange="{!c.handleOnChange}"/>
+                                            <lightning:inputField fieldName="Product_Name__c" aura:id="Product_Name__c"   variant="label-stacked" required="false" onchange="{!c.handleOnChange}"/>
+                                            <lightning:inputField fieldName="Phase__c" aura:id="Phase__c"  variant="label-stacked" required="false" onchange="{!c.handleOnChange}"/>
+                                            <lightning:inputField fieldName="Sub_Phase__c" aura:id="Sub_Phase__c"  variant="label-stacked" required="false" onchange="{!c.handleOnChange}"/>
+                                            <lightning:inputField fieldName="Churn_Reason__c" aura:id="Churn_Reason__c"  variant="label-stacked" required="false" onchange="{!c.handleOnChange}"/>
+                                       <div>
+                                                <c:EntitlementLookupComponent filterId="{!v.accountId}" selectRecordId="{!v.entitelementId}" Label="Entitlement"/>
+                                            </div>
+                                        </lightning:layoutItem>
+                                        <lightning:layoutItem size="6" padding="horizontal-medium">
+                                            
+                                            <lightning:inputField fieldName="Customer_First_Contact__c" aura:id="Customer_First_Contact__c"  variant="label-stacked" required="false" onchange="{!c.handleOnChange}"/>
+                                            <lightning:inputField fieldName="Customer_s_First_Response__c" aura:id="Customer_s_First_Response__c"  variant="label-stacked" required="false" onchange="{!c.handleOnChange}"/>
+                                            <lightning:inputField fieldName="Customer_Onboarding_Adoption_Completion__c" aura:id="Customer_Onboarding_Adoption_Completion__c"  variant="label-stacked" required="false" onchange="{!c.handleOnChange}"/>
+
+                                        </lightning:layoutItem>
+                                    </lightning:layout>
+                                </div>
+                            </aura:set>
+                        </lightning:accordionSection>
+                    </aura:if>
+                    <lightning:accordionSection name="C" label="Case Specifics">
+                        <aura:set attribute="actions">
+                            <div><b style="    color: red;"> |  </b> Required Information </div>
+                        </aura:set>
+                        <aura:set attribute="body">
+                            <div class="c-container">
+                                <lightning:layout pullToBoundary="medium">
+                                    <lightning:layoutItem flexibility="auto" padding="horizontal-medium" class="slds-size_6-of-12">
+                                        <lightning:inputField fieldName="Platform__c"  variant="label-stacked" required="true" aura:id="Platform__c" onchange="{!c.handleOnChange}"/>
+                                        <lightning:inputField fieldName="Software_Version__c"  variant="label-stacked" required="true" aura:id="Software_Version__c" onchange="{!c.handleOnChange}"/>
+                                        <lightning:inputField fieldName="Product_Area__c"  variant="label-stacked" required="true" aura:id="Product_Area__c" onchange="{!c.handleOnChange}"/>
+                                        <lightning:inputField fieldName="Problem_Type__c"  variant="label-stacked" required="true" aura:id="Problem_Type__c" onchange="{!c.handleOnChange}"/>
+                                        <lightning:inputField fieldName="Sub_Component__c"  variant="label-stacked" aura:id="Sub_Component__c" onchange="{!c.handleOnChange}"/>
+                                    </lightning:layoutItem>
+                                    <lightning:layoutItem flexibility="auto" padding="horizontal-medium" alignmentBump="top">
+                                        <lightning:inputField fieldName="If_Other__c"  variant="label-stacked" aura:id="If_Other__c" onchange="{!c.handleOnChange}"/>
+                                    </lightning:layoutItem>
+                                </lightning:layout>
+                            </div>
+                        </aura:set>
+                    </lightning:accordionSection>
+                    <lightning:accordionSection name="D" label="Case Description">
+                        <aura:set attribute="actions">
+                            <div><b style="    color: red;"> |  </b> Required Information </div>
+                        </aura:set>
+                        <aura:set attribute="body">
+                            <div class="c-container">
+                                <lightning:layout pullToBoundary="medium">
+                                    <lightning:layoutItem flexibility="auto" padding="horizontal-medium" size="12">
+                                        <lightning:inputField fieldName="Subject"  variant="label-stacked" required="true" aura:id="Subject" onchange="{!c.handleOnChange}"/>
+                                    <!-- <lightning:inputField fieldName="Description" aura:id="Description"  class="{!v.caseRecord.Description.trim.length > 575 ? 'slds-textarea' : 'temp' }" required="true"/>-->
+                                        <lightning:inputField fieldName="Description"  variant="label-stacked" required="true" aura:id="Description" onchange="{!c.handleOnChange}"/>
+                                    </lightning:layoutItem>
+                                </lightning:layout>
+                            </div>
+                        </aura:set>
+                    </lightning:accordionSection>
+                </aura:if>
+            </lightning:accordion>
+            <div class="slds-m-top_medium">
+                <center>
+                    <lightning:button variant="brand" type="submit" name="save" label="Save" onclick="{!c.openAllSection}" disabled="{!OR(v.hideSection, v.isGTCDenied)}"/>
+                    <lightning:button variant="neutral"  name="Cancel" label="Cancel" onclick="{!c.cancel}"/>
+                </center>
+            </div>
+        </lightning:recordEditForm><br/><br/>
+    </lightning:card>
+    <lightning:spinner aura:id="caseSpinner" class="slds-hide spinnerFix" alternativeText="Loading..."/>
+</aura:component>

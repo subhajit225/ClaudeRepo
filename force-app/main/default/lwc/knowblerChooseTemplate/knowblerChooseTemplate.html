@@ -1,0 +1,69 @@
+<template>
+  <div class={flexipageregionwidth}>
+    <div class="RTDiv bgImage">
+      <div class="topNav">
+        <div class="chooseHead">Choose a Template</div>
+        <lightning-icon
+          class="closeIcon"
+          icon-name="utility:close"
+          onclick={CloseNewArticle}
+        ></lightning-icon>
+      </div>
+      <div class="dataDiv">
+        <lightning-layout class="dataDivContainer" multiple-rows>
+          <template if:true={getSmallLayout}>
+            <template for:each={kcsSupport} for:item="item">
+              <template if:true={item.active}>
+                <lightning-layout-item
+                  key={item.Label}
+                  class="layoutItem"
+                  size={getLayoutSize}
+                >
+                  <div
+                    onclick={handleRTSelect}
+                    data-id={item.RecordType}
+                    class="rtypes"
+                  >
+                    <span class="rectype" title={item.Label}>{item.Label}</span>
+                    <lightning-icon
+                      class="icon"
+                      icon-name="utility:chevronright"
+                      size="small"
+                    ></lightning-icon>
+                  </div>
+                </lightning-layout-item>
+              </template>
+            </template>
+          </template>
+          <template if:false={getSmallLayout}>
+            <template for:each={kcsSupport} for:item="item">
+              <template if:true={item.active}>
+                <lightning-layout-item
+                  key={item.Label}
+                  class="layoutItem"
+                  size="12"
+                  small-device-size="12"
+                  medium-device-size="4"
+                  large-device-size="3"
+                >
+                  <div
+                    onclick={handleRTSelect}
+                    data-id={item.RecordType}
+                    class="rtypes"
+                  >
+                    <span class="rectype" title={item.Label}>{item.Label}</span>
+                    <lightning-icon
+                      class="icon"
+                      icon-name="utility:chevronright"
+                      size="small"
+                    ></lightning-icon>
+                  </div>
+                </lightning-layout-item>
+              </template>
+            </template>
+          </template>
+        </lightning-layout>
+      </div>
+    </div>
+  </div>
+</template>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Deal_Desk_Case_Approver__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF( ETM_Area__c==&apos;MAJORS&apos; , &apos;0051W000003pwpQQAQ&apos;,  
+IF( (ETM_Theatre__c == &apos;EMEA&apos;|| ETM_Theatre__c == &apos;CDM-EMEA&apos;), $User.Id,  
+IF((ETM_Theatre__c == &apos;APAC&apos;||ETM_Theatre__c == &apos;CDM-APAC&apos;), $User.Id,  
+IF((ETM_Area__c==&apos;AMER-FED&apos;||ETM_Area__c==&apos;MM-AMER&apos;||ETM_Area__c==&apos;AMER-SLED&apos;), &apos;0056f000009zqlvAAA&apos;,  
+IF((ETM_Area__c==&apos;CDM-NAM&apos;|| ETM_Area__c==&apos;ENT-EAST&apos;|| ETM_Area__c==&apos;ENT-EAST-1&apos;|| ETM_Area__c==&apos;ENT-EAST-2&apos;|| ETM_Area__c==&apos;ENT-EAST-CAN&apos;|| ETM_Area__c==&apos;ENT-EAST-NE&apos;|| ETM_Area__c==&apos;ENT-EAST-NECAN&apos;|| ETM_Area__c==&apos;ENT-EAST-SE&apos;|| ETM_Area__c==&apos;ENT-EAST-TRISTATE&apos;), &apos;0056f00000An4XIAAZ&apos;,  
+IF((ETM_Area__c==&apos;AMER-WS-AREA&apos; ||ETM_Area__c==&apos;ENT-CENTRAL&apos; ||ETM_Area__c==&apos;ENT-CENTRAL-2&apos; ||ETM_Area__c==&apos;ENT-NORTHWEST&apos; ||ETM_Area__c==&apos;ENT-SOUTHCENTRAL&apos; ||ETM_Area__c==&apos;ENT-TOLA&apos; ||ETM_Area__c==&apos;ENT-WEST&apos;), &apos;0056f00000AcBEBAA3&apos;,  
+IF( (ETM_Area__c==&apos;AMER-FED&apos; ||ETM_Area__c==&apos;AMER-SLED&apos; || ETM_Area__c==&apos;MM-AMER&apos;|| ETM_Area__c==&apos;MAJORS&apos;||ETM_Area__c==&apos;MAJORS&apos;) ,&apos;0056f00000An55eAAB&apos;,
+IF((ETM_Area__c==&apos;CDM-NAM&apos;|| ETM_Area__c==&apos;ENT-EAST&apos;|| ETM_Area__c==&apos;ENT-EAST-1&apos;|| ETM_Area__c==&apos;ENT-EAST-2&apos;|| ETM_Area__c==&apos;ENT-EAST-CAN&apos;|| ETM_Area__c==&apos;ENT-EAST-NE&apos;|| ETM_Area__c==&apos;ENT-EAST-NECAN&apos;|| ETM_Area__c==&apos;ENT-EAST-SE&apos;|| ETM_Area__c==&apos;ENT-EAST-TRISTATE&apos;), &apos;0056f00000An4WyAAJ&apos;,    
+IF((ETM_Area__c==&apos;AMER-WS-AREA&apos; ||ETM_Area__c==&apos;ENT-CENTRAL&apos; ||ETM_Area__c==&apos;ENT-CENTRAL-2&apos; ||ETM_Area__c==&apos;ENT-NORTHWEST&apos; ||ETM_Area__c==&apos;ENT-SOUTHCENTRAL&apos; ||ETM_Area__c==&apos;ENT-TOLA&apos; ||ETM_Area__c==&apos;ENT-WEST&apos;), &apos;0058Y00000C7h67QAB&apos;,&apos;0051W000003qIUGQA2&apos;) 
+       )
+      )
+     )
+    )
+   )
+  )
+ )
+)</formula>
+    <label>Deal Desk Case Approver</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

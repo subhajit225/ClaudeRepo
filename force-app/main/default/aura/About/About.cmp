@@ -1,0 +1,43 @@
+<aura:component controller="AboutController" implements="forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:handler name="init" value="this" action="{!c.init}"/>
+    
+    <aura:attribute name="today" type="Date"/>
+    <aura:attribute name="responseTillDate" type="String"/>
+    <aura:attribute name="goldStar" type="String"/>
+    <aura:attribute name="greenLight" type="String"/>
+    <aura:attribute name="redLight" type="String"/>
+    <aura:attribute name="yellowLight" type="String"/>
+    <aura:attribute name="hapiness" type="String"/>
+    <aura:attribute name="temprature" type="String"/>
+    <aura:attribute name="ChartData" description="This will contain Case Subject." type="Map"/>
+    
+       <div class ="conatinerDiv">
+        <div class="slds-wrap slds-grid slds-size_12-of-12 conatainer">
+            <div class=" slds-large-size--1-of-12 "></div>
+                  <div class="slds-wrap slds-grid slds-large-size--10-of-12 slds-size_12-of-12 conatainer">
+            <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12   slds-size_12-of-12 slds-text-align_center ideaTitle slds-wrap">Our Customer Advocates Ensure Your Success</div>
+            <div class="slds-grid slds-wrap slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-size_12-of-12 slds-wrap bottom-border">
+                <div class="slds-large-size--4-of-12 slds-Medium-size--4-of-12 slds-size_12-of-12" style="padding:0 15px;padding-right:25px;">
+                    <center>
+                        <img src="{!$Resource.RubrikCustomerCommunity +  '/RubrikCommunity/Images/CEMPRO_Logo.jpg'}"/>    
+                    </center>
+                </div>
+                <div class="slds-large-size--8-of-12 slds-Medium-size--8-of-12 slds-size_12-of-12">
+                    <p class="paragraphHeading">CEMPRO Certified</p>
+                    <p class="Paragraph" style="padding-bottom:34px;">
+                        Rubrik has completely changed the cloud data management landscape. In addition to implementing new and disruptive approaches with our products, we’re innovating and changing the customer support experience. 
+                    </p>
+                    <p class="Paragraph" style="padding-bottom:34px;">
+                        Delighting customers is our highest priority. This starts by hiring the most experienced and brightest team members to own the success of our customers. Our trusted customer advocates come from storage and backup verticals, including advanced areas such as snapshots, replication, data recovery, networking, and VMware administration. 
+                    </p>
+                    <p class="Paragraph">
+                        All of our customer advocates have been trained and certified through the Customer Experience Management Professional (CEMPRO) certification. Certification for this first-of-its-kind training program demonstrates mastery of best practices and uniform standards of excellence that apply to implementing and managing customer satisfaction/loyalty and engagement.  
+                    </p>
+                </div>
+            </div>
+
+            </div>
+                <div class="slds-large-size--1-of-12 "></div>      
+        </div>
+    </div>
+</aura:component>

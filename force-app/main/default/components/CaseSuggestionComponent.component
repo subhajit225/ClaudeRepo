@@ -1,0 +1,82 @@
+<!--
+* Visualforce Component Name :- CaseSuggestionComponent
+* Controller :- CaseSuggestionController
+* Use :- <c:CaseSuggestionComponent subject="Test" count="6"/>
+* Author :- Shiva Sharma
+* Created Date :- 27-04-2018
+* Description : This Page is being used in Case AutoResponse Visualforce email template. This Component will fetch all the suggested 
+                Information from SearchUnify based on Case Subject. Default it will bring 5 records
+* 
+*************Change Logs***************************************************************************
+* 
+* Modified By          Date        Description 
+* 
+
+*************Change Logs Ends**********************************************************************
+-->
+<apex:component controller="CaseSuggestionController" access="global">
+    <apex:attribute name="subject" description="This will contain Case Id." type="String" assignTo="{!caseId}" access="global"/>
+    <apex:attribute name="count" description="This will contain Row Count." type="Integer" assignTo="{!rowCount}" access="global"/>
+    <style>
+        p{
+            margin-bottom: 4px;
+        }
+    </style>
+    <!--div class="container-fluid" style="height:auto;">
+        <apex:repeat value="{!CaseRelatedSuggestion.result.hits}" var="i">
+            <apex:repeat value="{!i.highlight}" var="j">
+                <div class=""  style="width:100%;height:auto;display: flex;">
+                    <div  style="width:4%;">
+                        <img src="{!i.icon}" style="margin-left:5%;float:left;height:25px;width:25px;"/>
+                    </div>
+                    <div style="margin-bottom: 0;width: 96%;float: right;    margin-top: 5px;">
+                        <a href="{!i.href}" style="text-decoration: none;color:#009DAC;">
+                            <apex:repeat value="{!j.TitleToDisplay}" var="k">
+                                <apex:outputText escape="false" value="{!k}"/>
+                            </apex:repeat>
+                        </a>
+                    </div>
+                </div>
+            </apex:repeat><br/>
+        </apex:repeat>
+    </div-->
+    <div class="container-fluid" style="height:auto;">
+        <table class="m_7201129186906164528MsoTableGrid" border="0" cellspacing="0" cellpadding="0" style="border-collapse:collapse;border:none">
+            <tbody>
+                <apex:variable var="count" value="{!0}"/>  <!-- Initialise-->
+                <apex:repeat value="{!CaseRelatedSuggestion.result.hits}" var="i">
+                    <apex:repeat value="{!i.highlight}" var="j">    
+                        <apex:variable var="count" value="{!count+1}"/>
+                        <tr>
+                            <!--td width="53" style="width:40.1pt;padding:0in 5.4pt 0in 5.4pt">
+                                <img src="{!i.icon}" width="40px"/>
+                            </td-->
+                            <td width="648" style="width:6.75in;padding:0in 5.4pt 0in 5.4pt">
+                                <a href="{!i.href}" style="text-decoration: none;color:#009DAC;">
+                                    <apex:repeat value="{!j.TitleToDisplay}" var="k">
+                                        <p><apex:outputText escape="false" value="{!k}"/></p>
+                                    </apex:repeat>
+                                </a>
+                            </td>
+                        </tr>
+                    </apex:repeat>
+                </apex:repeat>
+                <apex:repeat value="{!CaseWrapper}" var="i">
+                    <apex:outputPanel rendered="{!count < 10}">
+                        <tr>
+                            <!--td width="53" style="width:40.1pt;padding:0in 5.4pt 0in 5.4pt">
+                                <img src="{!i.icon}" width="40px"/>
+                            </td-->
+                            <td width="648" style="width:6.75in;padding:0in 5.4pt 0in 5.4pt">
+                                <a href="{!i.href}" style="text-decoration: none;color:#009DAC;">
+                                    <p><apex:outputText escape="false" value="{!i.caseNumber}"/></p>
+                                </a>
+                            </td>
+                        </tr>
+                        <apex:variable var="count" value="{!count+1}"/>
+                    </apex:outputPanel>
+                </apex:repeat>
+            </tbody>
+        </table>
+    </div>    
+</apex:component>

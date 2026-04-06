@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Final_Workload_Value__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(
+  ISPICKVAL(HeatMap_Column__r.Column_Filter__c, &apos;Product Editions&apos;),
+  Product_Edition__c, /* Prioritize Product Edition */
+  /* Existing logic excluding Product Edition */
+  IF(
+    ISPICKVAL(Automated_Value__c, &apos;Protected&apos;),
+    IF(
+      Automated_LCD__c &gt; (NOW() - 90),
+      &apos;Protected&apos;, /* Automated is present and recent */
+      IF(
+        TEXT(Manual_Workload_Value__c) != null,
+        TEXT(Manual_Workload_Value__c), /* Automated is present but stale, manual overrides */
+        &apos;Not Protected&apos; /* Automated is present but stale and manual is null */
+      )
+    ),
+    IF(
+      TEXT(Manual_Workload_Value__c) != null,
+      TEXT(Manual_Workload_Value__c), /* If Automated is not present and manual is */
+      null /* Default null when no conditions are met */
+    )
+  )
+)</formula>
+    <label>Final Workload Value</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

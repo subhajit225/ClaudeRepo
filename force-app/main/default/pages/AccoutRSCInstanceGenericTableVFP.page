@@ -1,0 +1,28 @@
+<apex:page standardController="Account" sidebar="false" showHeader="false" standardStylesheets="false">
+
+    <style>
+        body.sfdcBody{ 
+            margin: 0; 
+            padding: 0; 
+            background: transparent !important; 
+        }
+    </style>
+   
+    <apex:includeLightning />
+
+    <div id="tableContainer" ></div>
+
+    <script>
+        $Lightning.use("c:RSCInsatanceGenericTableApp", function() {
+            $Lightning.createComponent(
+                "c:RSCInsatanceGenericTable",
+                { 
+                    recordId: "{!Account.Id}" 
+                },
+                "tableContainer"
+            );
+        });
+    </script>
+
+
+</apex:page>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>POC_Request_cannot_be_created_if_the_Opp</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+ISNEW(),
+Opportunity__r.IsClosed = True
+)</errorConditionFormula>
+    <errorMessage>POC Request cannot be created if the Opportunity is Closed</errorMessage>
+</ValidationRule>

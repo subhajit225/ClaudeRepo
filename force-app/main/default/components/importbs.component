@@ -1,0 +1,35 @@
+<apex:component selfClosing="true" access="global">
+    
+     <apex:attribute name="theme" type="String" description="Theme to be used, possible values 'paper','cosmo','simplex','slate','superhero','lumen','default','flatly','pdf'" access="global" required="false"/>
+    
+    <apex:variable var="themeName" value="{!
+        IF(theme == 'flatly','-flatly',
+            IF(theme == 'superhero','-superhero',
+                IF(theme == 'lumen','-lumen',
+                    IF(theme == 'pdf','-pdf',
+                        IF(theme == 'paper','-paper',
+                            IF(theme == 'cosmo','-cosmo',
+                                IF(theme == 'simplex','-simplex',
+                                    IF(theme == 'slate','-slate','')
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        )
+    }"/>    
+    
+    <!-- Latest compiled and minified CSS
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+
+      
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>  Latest compiled and minified JavaScript -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1, user-scalable=no" />
+    <apex:includeScript value="{!URLFOR($Resource.bootstrap_resources, 'js/jquery.min.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.bootstrap_resources, 'js/bootstrap.min.js')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.bootstrap_resources, 'css/visualstrap'+themeName+'.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.bootstrap_resources, 'css/visualstrap-common.css')}" />
+
+
+</apex:component>

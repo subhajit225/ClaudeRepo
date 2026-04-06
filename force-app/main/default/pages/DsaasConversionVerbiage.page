@@ -1,0 +1,14 @@
+<apex:page controller="DsaasConversionController" showHeader="false" sidebar="false" cache="false" contentType="text/xml"  action="{!init}">
+  <!-- Begin Default Content REMOVE THIS -->
+  <apex:outputPanel layout="none" rendered="{!showSplitVerbaige}" >
+    <block padding-top="5pt" padding-bottom="5pt">
+            {!Verbaige1}
+    </block>
+  </apex:outputPanel>
+  <apex:outputPanel layout="none" rendered="{!showNoSplitVerbaige}" >
+    <block padding-top="5pt" padding-bottom="5pt">
+            {!Verbaige2}
+    </block>
+  </apex:outputPanel>
+  <!-- End Default Content REMOVE THIS -->
+</apex:page>

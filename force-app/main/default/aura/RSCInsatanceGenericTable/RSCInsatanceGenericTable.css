@@ -1,0 +1,202 @@
+/* --- Header and Intro Text --- */
+.THIS .ideaTitle {
+    font-size: 32px;
+    color: #4A4A4A;
+    padding-bottom: 10px;
+    font-family: Gotham-light!important;
+}
+
+.THIS .topSection .msg {
+    font-size: 18px;
+    line-height: 1.5;
+    color: #4A4A4A;
+    margin-bottom: 20px;
+    font-family: Gotham-light!important;
+}
+
+.THIS .rsc-table-title {
+    font-weight: bold;
+    color: #009dac;
+    font-size: 24px;
+    padding: 20px 0;
+    font-family: Gotham-light!important;
+}
+
+/* --- The Scrollable Container --- */
+.THIS .portal-horizontal-scroll {
+    width: 100%;
+    background: transparent !important;
+}
+
+/* --- The Table Wrapper (Unbreakable Logic) --- */
+.THIS .portal-table-logic {
+    display: table;
+    width: auto; 
+    table-layout: fixed; 
+    border-collapse: collapse;
+    background-color: transparent !important;
+}
+
+/* --- Row Logic --- */
+.THIS .portal-row {
+    display: table-row;
+    transition: background-color 0.2s ease;
+}
+.THIS .cell_width_180 {
+    width: 180px;
+    min-width: 180px;
+}
+
+.THIS .cell_width_350 {
+    width: 350px;
+    min-width: 350px;
+}
+
+.THIS .cell_width_250 {
+    width: 250px;
+    min-width: 250px;
+}
+.THIS .cell_width_150 {
+    width: 150px;
+    min-width: 150px;
+}
+.THIS .cell_width_120 {
+    width: 120px;
+    min-width: 120px;
+}
+.THIS .min_width_1500 {
+    min-width: 1500px;
+}
+.THIS .font_pointer {
+    font-size:1rem; 
+    cursor: pointer;
+}
+.THIS .bold_margin {
+    font-weight:bold; 
+    margin-right:18px;
+}
+.THIS .portal-row.header {
+    border-bottom: 1px solid #d8dde6;
+    font-weight: 600;
+    font-size: 16px;
+    font-family: Gotham-light!important;
+    color: #696969;
+    padding: 0.75rem 0.5rem;
+    align-items: start;
+}
+
+.THIS .portal-row:hover {
+    background-color: #f3faff;
+}
+
+/* --- Cell Logic (Alignment & Font Control) --- */
+.THIS .portal-cell {
+    display: table-cell;
+    padding: 0.8rem 0.5rem;
+     border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.2s ease;
+    vertical-align: middle;
+    background-color: transparent !important;
+    font-family: Gotham-light!important;
+    font-size: 16px; 
+    color: #696969;
+    white-space: nowrap;      
+    overflow: hidden;         
+    text-overflow: ellipsis;  
+}
+
+.THIS .portal-cell:hover {
+    background: #f8fbff;
+}
+
+/* --- Link Styling --- */
+.THIS .portal-cell a {
+    color: #0057B8;
+}
+
+.THIS .portal-cell a:hover {
+    text-decoration: underline;
+}
+
+/* Ensure the outer box never grows wider than its parent */
+.THIS.fixed-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+    display: block;
+    border: none;
+}
+
+/* The wrapper that contains the scrollbar */
+.THIS .table-scroll-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; 
+}
+
+/* Optional: Subtle padding adjustment for the scrollbar appearance */
+.THIS .scroller-content {
+    display: inline-block;
+    min-width: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px; 
+}
+
+/* Custom scrollbar styling to make it look cleaner in the Portal */
+.THIS .table-scroll-wrapper::-webkit-scrollbar {
+    height: 10px;
+}
+.THIS .table-scroll-wrapper::-webkit-scrollbar-track {
+    /* background: #f1f1f1; */
+    background: transparent;
+    border-radius: 10px;
+    border-left: 12px solid transparent; 
+    border-right: 12px solid transparent;
+    background-clip: content-box; 
+}
+.THIS .table-scroll-wrapper::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+    cursor: pointer !important;
+}
+.THIS .table-scroll-wrapper::-webkit-scrollbar-thumb:hover {
+    background-color: #acacac;
+}
+
+.THIS .portal-table-scroll {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* scrollbar size */
+.THIS .portal-table-scroll::-webkit-scrollbar {
+    height: 8px;
+}
+
+/* track */
+.THIS .portal-table-scroll::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 10px;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    background-clip: content-box;
+}
+
+/* thumb */
+.THIS .portal-table-scroll::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.THIS .portal-table-scroll::-webkit-scrollbar-thumb:hover {
+    background-color: #acacac;
+}
+
+/* --- Mobile / Tablet logic --- */
+@media (max-width: 768px) {
+    .THIS .portal-horizontal-scroll {
+        -webkit-overflow-scrolling: touch;
+    }
+}

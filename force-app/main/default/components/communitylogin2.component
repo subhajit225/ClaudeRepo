@@ -1,0 +1,135 @@
+<apex:component id="loginComponent" controller="SiteLoginController">
+   <c:importbs />
+   <c:communitystyle />
+   <style>
+      label {
+      display: inline-block;
+      color: #4A4A4A;
+      font-family: Gotham-Light;
+      font-size: 14px;
+      line-height: 14px;
+      }
+      .inputrubrik {
+      box-shadow: inset 0 1px 3px 0 rgba(0,0,0,0.06);
+      border: 1px solid #E6E6E6;
+      border-radius: 2px;
+      }
+      .t1 {
+      font-size: 21px;
+      line-height: 25px;
+      color: #17232E;
+      } 
+      }
+   </style>
+   <apex:outputPanel id="LoginBlock">
+      <apex:outputPanel rendered="{!showLogin}" >
+         <apex:pageBlock >
+            <c:visualstrapblock >
+               <apex:form id="loginForm" forceSSL="true">
+                  <div class="container-fluid center">
+                     <div class="row text-left">
+                        <apex:pageMessages />
+                        <c:pageTitle Name="Log in"/>
+                        <div class="form-group">
+                           <label for="username">
+                           Username
+                           </label>
+                           <apex:inputtext id="username" value="{!username}" styleClass="form-control block inputrubrik"/>
+                        </div>
+                        <div class="form-group">
+                           <label for="pword">
+                           Password
+                           </label>
+                           <apex:inputSecret id="pword" value="{!password}"  styleClass="form-control block inputrubrik"/>
+                        </div>
+                        <apex:commandlink action="{!login}" target="_top" rerender="LoginBlock,TermsBlock">
+                           <apex:commandButton value="{!$Label.site.login_button}" style="width:124px;height:42px;" styleClass="btn rubrik-btn" id="loginButton"/>
+                           &nbsp;&nbsp;&nbsp;
+                        </apex:commandLink>
+                        <apex:outputlink title="Cancel" value="{!$Page.ForgotPassword}" style="font-size:12px;line-height:40px;">Forgot Password?</apex:outputlink>
+                        <div class="form-group">
+                           <hr style="noshade"/>
+                        </div>
+                        <div class="form-group">
+                           <apex:outputtext value="Need an Account?" styleclass="t1"/>
+                           &nbsp;&nbsp;&nbsp;
+                           <apex:commandButton action="{!IF(CONTAINS($CurrentPage.URL, 'support.rubrik.com'), 'mailto:'&$Label.requestaccessemail,'https://rubrikpartnerregistration.secure.force.com/PartnerRegistrationForm')} " value="Request Access" style="width:143px; height:43px;" styleClass="btn rubrik-btn--transparent" id="request"/>
+                        </div>
+                     </div>
+                  </div>
+               </apex:form>
+            </c:visualstrapblock>
+         </apex:pageBlock>
+      </apex:outputPanel>
+   </apex:outputPanel>
+   <apex:pageBlock >
+      <apex:outputPanel id="TermsBlock">
+         <apex:outputPanel rendered="{!!showLogin}">
+            <c:visualstrapblock >
+               <apex:form id="termsForm" forceSSL="true">
+                  <style>
+                     .Absolute-Center.is-Responsive {
+                     width: 100% !important; 
+                     height: 100% !important;
+                     min-width: 200px;
+                     max-width: 100% !important;
+                     padding: 20px;
+                     }
+                     .visualstrap .text-center {
+                     text-align: left; 
+                     }
+                  </style>
+                  <script>
+                     console.log('in terms');
+                  </script>
+                  <div class="container">
+                     <div class="row">
+                        <apex:pageMessages />
+                        <c:pageTitle Name="Terms and conditions"/>
+                        <b>
+                           <p>IMPORTANT: THIS IS A LEGAL DOCUMENT.  PLEASE READ IT CAREFULLY.</p>
+                        </b>
+                        <b>
+                           <p>THIS ADDENDUM TO YOUR CHANNEL PARTNER AGREEMENT (THIS “ADDENDUM”) FORMS A BINDING CONTRACT ADDING ADDITIONAL TERMS TO THE CHANNEL PARTNER AGREEMENT (THE “AGREEMENT”) BETWEEN RUBRIK, INC. (“RUBRIK”) AND YOU (“RESELLER”).  IF YOU DO NOT WISH TO ACCEPT THIS ADDENDUM, THEN DO NOT CLICK ACCEPT, IN WHICH CASE THE AGREEMENT WILL BE TERMINATED IN ACCORDANCE WITH ITS TERMS AND CONDITIONS.</p>
+                        </b>
+                        <p>NOW, THEREFORE, FOR VALUABLE CONSIDERATION, THE RECEIPT AND SUFFICIENCY OF WHICH ARE HEREBY ACKNOWLEDGED, THE PARTIES HERETO HEREBY AGREE TO ADD THE FOLLOWING NEW PROVISION TO THE AGREEMENT AS FOLLOWS:</p>
+                        <h5>
+                           <p style="margin-left:10px;">
+                              <b>End User Data.</b> If Reseller provides Rubrik with personal information concerning its customers, prospects or employees, Rubrik will only use the information in connection with the purposes outlined in the Agreement, or as otherwise indicated at the time Rubrik receives such information (the 
+                              <b>“Intended Purposes”</b>).  Reseller will not deliver, disclose or otherwise make such personal information available to Rubrik, except as required for the Intended Purposes.  The information may be maintained by Rubrik in data centers in the United States or in other parts of the world and the information may be accessed by Rubrik’s global personnel and authorized third parties as required for its business purposes.  Reseller agrees to comply with all applicable laws, including but not limited to privacy and data protection laws, provide all relevant notices, and obtain any consents required to share the information with Rubrik and its authorized third parties for the Intended Purposes.
+                              In the event Reseller is authorized to and provides a proof-of-concept unit  (<b>“POC unit”</b>) to an End User or prospective customer for evaluation or other temporary purposes (an 
+                              <b>“Evaluation Period”</b>), Reseller agrees to enable encryption of the POC unit where technically possible and to ensure that such encryption remains enabled during the Evaluation Period.  Reseller shall require each recipient of a POC unit to comply with the following: 
+                              <br/>
+                           <p style="margin-left:5%;"> (1)   The POC unit is not for production use and may not be used with production data;</p>
+                           <p style="margin-left:5%;">(2) Personal data and other data regulated by GDPR or other data privacy laws may not be entered into or stored on the POC unit and shall not be shared with Reseller or Rubrik other than as required for its evaluation of the POC unit and then only in compliance with all applicable privacy laws and regulations; and
+                           </p>
+                           <p style="margin-left:5%;">(3)  All data entered into or stored on the POC unit during the Evaluation Period must be removed prior to the return of any POC unit.</p>
+                           </p>
+                           <p>Reseller represents and warrants that it shall verify the above three requirements prior to any subsequent use of any POC unit. </p>
+                        </h5>
+                        <p>In the event of any inconsistency or conflict between the Agreement and this Addendum, the terms and conditions of this Addendum shall control. Capitalized terms used but not defined herein shall have the meanings ascribed them in the Agreement.
+                        </p>
+                        <p>
+                           <b>RESELLER ACCEPTS THIS ADDENDUM BY: (1) INDICATING ACCEPTANCE OF THESE TERMS; OR (2) ACCESSING ANY PROGRAM BENEFIT (INCLUDING EXERCISING OR PURPORTING TO EXERCISE ANY OF THE RIGHTS GRANTED TO RESELLER UNDER THE AGREEMENT).  THE INDIVIDUAL ACCEPTING THIS ADDENDUM ON BEHALF OF RESELLER REPRESENTS THAT HE OR SHE: (1) HAS THE AUTHORITY TO REPRESENT RESELLER; AND (2) HAS READ AND UNDERSTANDS ALL THE PROVISIONS OF THIS ADDENDUM.  
+                           </b>
+                        </p>
+                        <div class="form-group">
+                            <apex:inputCheckbox id="optInCheck" value="{!optIn}" />
+                           I Agree
+                        </div>
+                        <br/>
+                        <br/>
+                        <apex:commandlink action="{!continueAfterOptInCheck}" target="_top" rerender="TermsBlock,LoginBlock" >
+                           <apex:commandButton value="Continue" style="width:124px;height:42px;" styleClass="btn rubrik-btn" id="loginButton"/>
+                           &nbsp;&nbsp;&nbsp;
+                        </apex:commandLink>
+                        
+                     </div>
+                  </div>
+                  
+               </apex:form>
+            </c:visualstrapblock>
+         </apex:outputPanel>
+      </apex:outputPanel>
+   </apex:pageBlock>
+</apex:component>

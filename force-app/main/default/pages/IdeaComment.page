@@ -1,0 +1,57 @@
+<apex:page standardController="Idea" extensions="IdeaCommentExtension" standardStylesheets="false" cache="false" sidebar="false" showheader="false" title="Idea Comments: {!Idea.Title} - Rubrik Community" applyBodyTag="false">
+    <c:visualstrapblock >
+
+        <!--start header-->
+        <c:siteheader ></c:siteheader>
+        <!--end Header-->
+        
+         <apex:form >
+        <!--start the Container-->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                 <h3>Add an Idea Comment</h3> 
+                    <div class="col-md-6">
+               
+                        <apex:inputField value="{!comment.IdeaID}"  rendered="false"/>
+                        <apex:inputfield value="{!comment.commentbody}" label="Body" style="height:200px;" styleclass="form-control input-sm"/>
+                        </div>
+                        <div class="col-md-6">
+                        <apex:commandButton action="{!saveComment}" title="Add Comment" value="Add Comment" styleClass="btn rubrik-btn"/>&nbsp;
+                        <apex:commandButton action="{!cancel}" title="Add Comment" value="Cancel" styleClass="btn rubrik-btn"/>
+
+                    </div>
+                </div>
+        
+        <div class="col-md-12">
+        <h3>Idea Comment History</h3>  
+            <!--start the Idea comments-->
+            <!--<apex:datatable var="c" value="{!Idea.Comments}" id="comments" styleClass="table" >
+                    <apex:column headervalue="Comment">
+                     <apex:outputtext value="{!c.commentbody}" escape="false"/>
+                    </apex:column>                    
+                    <apex:column headervalue="Date">
+                     <apex:outputfield value="{!c.createdDate}"/>
+                    </apex:column> 
+                    <apex:column headervalue="Commentor">
+                     <apex:outputfield value="{!c.createdBy.Name}"/>
+                    </apex:column> 
+             </apex:datatable>-->
+             <c:ideaportalcomments theideaId="{!Idea.id}"/>
+
+       
+        
+              
+                </div>
+
+
+            </div>
+        </div>
+        <!--End the Container-->
+         </apex:form>
+        <!--start the footer-->
+        <c:sitefooter ></c:sitefooter>
+        
+    </c:visualstrapblock>           
+                
+</apex:page>

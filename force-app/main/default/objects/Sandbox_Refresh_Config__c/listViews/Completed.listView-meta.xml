@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Completed</fullName>
+    <columns>Execution_Order__c</columns>
+    <columns>NAME</columns>
+    <columns>Object__c</columns>
+    <columns>isInitiatedManually__c</columns>
+    <columns>LastBatchExecutedOn__c</columns>
+    <columns>BatchSize__c</columns>
+    <columns>NoOfRecords__c</columns>
+    <columns>LastFailedRecordCount__c</columns>
+    <columns>ErrorDetails__c</columns>
+    <columns>UPDATEDBY_USER</columns>
+    <columns>Status__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Type__c</field>
+        <operation>notEqual</operation>
+        <value>Configuration</value>
+    </filters>
+    <filters>
+        <field>Status__c</field>
+        <operation>equals</operation>
+        <value>Processing,Completed</value>
+    </filters>
+    <label>Email Masking Completed</label>
+</ListView>

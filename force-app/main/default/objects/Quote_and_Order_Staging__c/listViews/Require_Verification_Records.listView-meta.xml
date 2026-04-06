@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Require_Verification_Records</fullName>
+    <columns>NAME</columns>
+    <columns>Account_OM__c</columns>
+    <columns>Order__c</columns>
+    <columns>Line_Item_Start_Date__c</columns>
+    <columns>Line_Item_End_Date__c</columns>
+    <columns>Entitlement__c</columns>
+    <columns>RSC_OrderItem__c</columns>
+    <columns>Contract_Line_Item__c</columns>
+    <columns>Subsumed_Old_Contract_Line_Items__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Process_Status_OM__c</field>
+        <operation>equals</operation>
+        <value>Require Verification</value>
+    </filters>
+    <filters>
+        <field>Process_Type__c</field>
+        <operation>notEqual</operation>
+        <value>Initial RCDM-T Processing</value>
+    </filters>
+    <label>Require Verification Records</label>
+</ListView>

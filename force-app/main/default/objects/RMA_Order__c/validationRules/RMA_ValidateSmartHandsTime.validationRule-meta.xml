@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RMA_ValidateSmartHandsTime</fullName>
+    <active>true</active>
+    <description>This checks if Send Dmart HAnds Service is TRUE the Smart Hands Time(Time_of_Smart_Hands_Arrival__c) is Required</description>
+    <errorConditionFormula>NOT ( $Setup.ShGl_DisableBusinessLogic__c.Disable_Opportunity_Validation_Rules__c ) &amp;&amp; 
+OR(( 
+Send_Smart_Hands_Service__c &amp;&amp; ISBLANK( TEXT( Time_of_Smart_Hands_Tech_Arrival__c) )), 
+Send_Smart_Hands_Service__c = false &amp;&amp; NOT(ISBLANK(TEXT( Time_of_Smart_Hands_Tech_Arrival__c) )))</errorConditionFormula>
+    <errorDisplayField>Time_of_Smart_Hands_Tech_Arrival__c</errorDisplayField>
+    <errorMessage>Time of Smart Hands Tech Arrival is required only when Send Smart Hands Service is checked</errorMessage>
+</ValidationRule>

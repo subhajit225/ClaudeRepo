@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Previous_Entitlement__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>References the source entitlement that was renewed, replaced (converted or upgraded), or refreshed to create the linked renewed entitlement. Used to track entitlement lineage through business transaction cycles</description>
+    <inlineHelpText>The original entitlement that was renewed, replaced (converted or upgraded), or refreshed. This field establishes the relationship between the an entitlement and its successor</inlineHelpText>
+    <label>Previous Entitlement</label>
+    <referenceTo>Entitlement</referenceTo>
+    <relationshipLabel>New Entitlements</relationshipLabel>
+    <relationshipName>Entitlement_Links</relationshipName>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

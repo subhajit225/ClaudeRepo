@@ -1,0 +1,39 @@
+<aura:component implements="forceCommunity:themeLayout" access="global" description="Customer Community Theme Layout" controller="CommunityTemplateController">
+    <aura:attribute name="communityHeader" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="communityfooter" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="profileMenu" type="Aura.Component[]" required="false"/>
+    <!-- true when user have multiple support portal access -->
+    <aura:attribute name="isMultipleUsersExists" type="Boolean" default="false"/>
+    <aura:attribute name="displayMultipleUserDropDown" type="Boolean" default="false"/>
+    <aura:attribute name="userNameList" type="List"/>
+    <!-- CS21-2428 -->
+    <aura:attribute name="isGtcAccount" type="Boolean" default="false"/>
+
+    <aura:handler name="init" action="{!c.doinit}" value="{!this}"/>
+    
+    <aura:if isTrue="{!v.isGtcAccount}">
+        <c:GtcAutomation portalAccess="true" enableHeader="true"/>
+        <aura:set attribute="else">
+            <aura:if isTrue="{!and(v.isMultipleUsersExists, v.displayMultipleUserDropDown)}">
+                <!-- CS21-1582: CIAM: Support Users with Same EmailId Login to Support portal with different UserNames. -->
+                <c:MultipleSupportUserLoginScreen userNameList="{!v.userNameList}"/>
+                <aura:set attribute="else">
+                    <div class="slds-size_1-of-1 communityheader">
+                        <div class="profileMenuRegion">
+                            {!v.profileMenu}
+                        </div>
+                            {!v.communityHeader}	
+                            
+                        </div>
+                        <div class="slds-size_1-of-1 communityBody">
+                            {!v.body}
+                        </div>
+                        
+                        <div class="slds-size_1-of-1 communityfooter" style="position: relative;bottom: 0;">
+                            {!v.communityfooter}
+                        </div>
+                </aura:set>
+            </aura:if>
+        </aura:set>
+    </aura:if>
+</aura:component>

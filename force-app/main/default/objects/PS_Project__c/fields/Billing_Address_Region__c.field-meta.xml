@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Billing_Address_Region__c</fullName>
+    <externalId>false</externalId>
+    <formula>CASE( Account__r.BillingCountry, 
+&quot;United States&quot;, &quot;US&quot;,
+&quot;Belize&quot;, &quot;LATAM&quot;,
+&quot;Costa Rica&quot;, &quot;LATAM&quot;,
+&quot;El Salvador&quot;, &quot;LATAM&quot;,
+&quot;Guatemala&quot;, &quot;LATAM&quot;,
+&quot;Honduras&quot;, &quot;LATAM&quot;,
+&quot;Mexico&quot;, &quot;LATAM&quot;,
+&quot;Nicaragua&quot;, &quot;LATAM&quot;,
+&quot;Panama&quot;, &quot;LATAM&quot;,
+&quot;Argentina&quot;, &quot;LATAM&quot;,
+&quot;Bolivia&quot;, &quot;LATAM&quot;,
+&quot;Brazil&quot;, &quot;LATAM&quot;,
+&quot;Chile&quot;, &quot;LATAM&quot;,
+&quot;Colombia&quot;, &quot;LATAM&quot;,
+&quot;Ecuador&quot;, &quot;LATAM&quot;,
+&quot;French Guiana&quot;, &quot;LATAM&quot;,
+&quot;Guyana&quot;, &quot;LATAM&quot;,
+&quot;Paraguay&quot;, &quot;LATAM&quot;,
+&quot;Peru&quot;, &quot;LATAM&quot;,
+&quot;Suriname&quot;, &quot;LATAM&quot;,
+&quot;Uruguay&quot;, &quot;LATAM&quot;,
+&quot;Venezuela&quot;, &quot;LATAM&quot;,
+&quot;Cuba&quot;, &quot;LATAM&quot;,
+&quot;Dominican Republic&quot;, &quot;LATAM&quot;,
+&quot;Haiti&quot;, &quot;LATAM&quot;,
+&quot;Guadeloupe&quot;, &quot;LATAM&quot;,
+&quot;Martinique&quot;, &quot;LATAM&quot;,
+&quot;Puerto Rico&quot;, &quot;LATAM&quot;,
+&quot;Saint-Barthélemy&quot;, &quot;LATAM&quot;,
+&quot;Saint-Martin&quot;, &quot;LATAM&quot;,
+&quot;Canada&quot;, &quot;Canada&quot;,
+&quot;International&quot;)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Billing Address Region</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

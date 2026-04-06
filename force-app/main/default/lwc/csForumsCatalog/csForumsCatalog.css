@@ -1,0 +1,126 @@
+.alignment {
+    display: inline-block;
+    height: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+lightning-button.buttonStyle {
+    --sds-c-button-text-color: white;
+    --sds-c-button-brand-color-background: #009dac;
+    font-family: Gotham-Light;
+    font-size: 16px;
+    min-width: 60px;
+    --sds-c-button-brand-color-border: #009dac;
+}
+
+.itemImage{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 200px;
+    height: 200px;
+    border-radius: 5px;
+}
+
+.itemContent{
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    padding: 20px 0 0 0;
+}
+
+.itemViewImage{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 200px;
+    height: 200px;
+    border-radius: 5px;
+}
+
+.itemViewContent{
+    max-height: -webkit-fill-available;
+    background: rgb(255, 255, 255);
+    padding: 0.75rem;
+    border-bottom-left-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+    text-align: center;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.buttons{
+    color:white;
+    background:#009DAC;
+    font-family: Gotham-Light;
+    font-size: 16px;
+    display: block;
+    padding: 5px 24px;
+    min-width: 60px;
+    border-color: #009DAC;
+}
+
+.redeemButton{
+    position:absolute;
+    display: none;
+}
+
+.tileBoxForDisabled{
+    margin: 25px;
+    box-shadow: 0 5px 15px 0 rgb(0 0 0 / 10%);
+    border-radius:10px;
+    position: relative;
+}
+
+.tileBox{
+    margin: 25px;
+    box-shadow: 0 5px 15px 0 rgb(0 0 0 / 10%);
+    border-radius:10px;
+    position: relative;
+}
+
+.tileBox:hover{
+    box-shadow: 0 10px 25px 0 rgb(0 0 0 / 20%);
+}
+
+div.tileBox:hover div{
+    opacity:0.3;
+}
+
+div.tileBox:hover lightning-button.redeemButton {
+    display: block;
+    top: 42%;
+    left: 36%;
+    z-index: 5;
+}
+
+.tooltip1 {
+    position: relative;
+}
+
+.tooltip1 .tooltiptextBottom {
+    visibility: hidden;
+    width: 209px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 10px;
+    position: absolute;
+    font-family: Gotham-Light !important;
+    z-index: 999;
+    top: 43%;
+    left: 15%;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip1:hover .tooltiptextBottom {
+    visibility: visible;
+    opacity: 1;
+    line-height: 16px;
+}

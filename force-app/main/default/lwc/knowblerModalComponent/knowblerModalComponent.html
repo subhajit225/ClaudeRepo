@@ -1,0 +1,967 @@
+<template>
+  <!-- To show publish now/schedule publish modal -->
+  <template if:true={ispublish}>
+    <div id="articlePublishModal" class="displayModal">
+      <section class="modal slds-fade-in-open modalpublish publishsuccess">
+        <div class="slds-modal__content model-content">
+          <c-knowbler-publish-article-options
+            client-settings={clientSettings}
+            onclosemodal={closePublishModal}
+            onpublishnow={publishnow}
+            onschedulepublish={schedulepublish}
+            ispublishattach={ispublishattach}
+            onreferencenow={referencenow}
+            onresolutionnow={resolutionnow}
+            onreferenceschedule={referenceschedule}
+            onresolutionschedule={resolutionschedule}
+            caseid={caseid}
+            casenumber={casenumber}
+            jwttoken={jwttoken}
+            endpoint={endpoint}
+          >
+          </c-knowbler-publish-article-options>
+        </div>
+      </section>
+    </div>
+  </template>
+  <!-- Reference/Resoltuion options for Attach to case -->
+  <template if:true={isattach}>
+    <div id="articleattach" class="displayModal">
+      <section class="modal slds-fade-in-open modalpublish publishsuccess">
+        <div class="slds-modal__content model-content">
+          <c-knowbler-publish-article-options
+            client-settings={clientSettings}
+            oncloseattach={closeattach}
+            isattach={isattach}
+            onattachreference={attachreference}
+            onattachresolution={attachresolution}
+            caseid={caseid}
+            emailclicked={emailclicked}
+            commentclicked={commentclicked}
+            onclickedcommentreference={clickedcommentreference}
+            onclickedemailreference={clickedemailreference}
+            onclickedcommentresolution={clickedcommentresolution}
+            onclickedemailresolution={clickedemailresolution}
+            casenumber={casenumber}
+            jwttoken={jwttoken}
+            endpoint={endpoint}
+            kcslabel={kcslabel}
+          >
+          </c-knowbler-publish-article-options>
+        </div>
+      </section>
+    </div>
+  </template>
+
+  <!-- Article publish successfully -->
+  <template if:true={ispublishnowsuccess}>
+    <div id="publishnow" class="displayModal">
+      <section class="modal modalSuccess slds-fade-in-open modalpublish">
+        <div class="slds-modal__content model-content">
+          <c-knowbler-article-publish-success
+            ispublishnow={ispublishnowsuccess}
+          >
+          </c-knowbler-article-publish-success>
+        </div>
+      </section>
+    </div>
+  </template>
+  <!-- Article publish and attach successfully -->
+  <template if:true={articleattach}>
+    <div id="schedulepublish" class="displayModal">
+      <section class="modal modalSuccess slds-fade-in-open modalpublish">
+        <div class="slds-modal__content model-content">
+          <c-knowbler-article-publish-success articleattach={articleattach}>
+          </c-knowbler-article-publish-success>
+        </div>
+      </section>
+    </div>
+  </template>
+  <!-- link copied -->
+  <template if:true={linkcopied}>
+    <div id="linkcopied" class="displayModal">
+      <section class="modal modalSuccess slds-fade-in-open modalpublish">
+        <div class="slds-modal__content model-content">
+          <c-knowbler-article-publish-success publish linkcopied>
+          </c-knowbler-article-publish-success>
+        </div>
+      </section>
+    </div>
+  </template>
+  <!-- Article attach to case successfully  -->
+  <template if:true={attachsuccesfull}>
+    <div id="attachsuccessfull" class="displayModal">
+      <section class="modal modalSuccess slds-fade-in-open modalpublish">
+        <div class="slds-modal__content model-content">
+          <c-knowbler-article-publish-success
+            publish
+            attacharticle
+            articleattachpublished
+          >
+          </c-knowbler-article-publish-success>
+        </div>
+      </section>
+    </div>
+  </template>
+  <!-- Article deatched from  case successfully  -->
+  <template if:true={detachsuccesfull}>
+    <div id="deatchsuccessfull" class="displayModal">
+      <section class="modal modalSuccess slds-fade-in-open modalpublish">
+        <div class="slds-modal__content model-content">
+          <c-knowbler-article-publish-success
+            publish
+            attacharticle
+            articledetach
+          >
+          </c-knowbler-article-publish-success>
+        </div>
+      </section>
+    </div>
+  </template>
+
+  <template if:true={stayleave}>
+    <div data-id="alertModal" class={classKey}>
+      <section class="modal leave">
+        <header class="modal-header">
+          <img class="imgCenter" src={stayLeave} alt="Close"/>
+        </header>
+        <div class="modal-content">
+          <div class="contentMsg">
+            <p class="message">You'll need to start again.</p>
+            <p class="message submessage">Are you sure you want to leave?</p>
+            <div class="modalButton">
+              <a onclick={changeCSSStay} class="btn btnStay"> No,Stay </a>
+              <a onclick={handleLeave} class="btn btnLeave"> Yes, Leave </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </template>
+
+  <template if:true={showvideo}>
+    <div data-id="alertModal" class="displayModal">
+      <section class="modal">
+        <div class="modal-content">
+          <div class="slds-m-top_small embeddVideoDiv">
+            <div class="customTextEditorContent">
+              <div class="header">
+                <div class="mediaHeading">Embed Video</div>
+                <div
+                  class="closeModal"
+                  onclick={errorModal}
+                  data-id="errorModal"
+                >
+                  <img src={close} alt="Close" />
+                </div>
+              </div>
+              <div class="inputDiv">
+                <label class="inputVideoLabel"
+                  >Paste &lt;iframe&gt; code here to embed video</label
+                >
+                <lightning-textarea
+                  class="textAreaBody slds-p-top_x-small"
+                  data-id="videoLink"
+                  value={videolink}
+                  variant="label-hidden"
+                ></lightning-textarea>
+              </div>
+              <div class="exampleSection slds-p-top_medium">
+                <div class="exampleText">
+                  Example:&lt;iframe width="560" height="315"
+                  src="https://www.youtube.com/embed/KcOm0TNvKBA"
+                  frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;
+                </div>
+              </div>
+              <div class="footerContent slds-p-top_large">
+                <lightning-button
+                  variant="bare"
+                  label="Embed Video"
+                  value={videolink}
+                  onclick={handleSave}
+                >
+                </lightning-button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </template>
+
+  <template if:true={createsuccess}>
+    <div id="articleSuccessModal" class="displayModal">
+      <section class="modalSuccess">
+        <header class="modal-header">
+          <template if:true={successData.iscreate}>
+            <img class="imgCenter" src={articleSuccessful} alt="Article Successful"/>
+          </template>
+          <template if:true={successData.isupdate}>
+            <img class="imgCenter" src={articleUpdate} alt="Article Update"/>
+          </template>
+
+          <template if:true={successData.isvideo}>
+            <img class="imgCenter" src={videoEmbed} alt="Video"/>
+          </template>
+          <template if:true={successData.isimage}>
+            <img class="imgCenter" src={imageInserted} alt="Image"/>
+          </template>
+          <template if:true={successData.issmartLink}>
+            <img class="imgCenter" src={smartLink} alt="Smart Link"/>
+          </template>
+        </header>
+        <div class="modal-content">
+          <div class="contentMsg">
+            <p class="messageSuccess">{successMessage}</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </template>
+  <template if:true={saveprog}>
+    <div id="articleSaveProgress" class="displayModal">
+      <section class="modalProgress">
+        <header class="modal-header">
+          <img class="imgCenterProgress" src={saveProgress} alt="Progress"/>
+        </header>
+        <div class="modal-content">
+          <div class="contentMsg">
+            <p class="message">Saving in progress</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </template>
+  <template if:true={errorsuccess}>
+    <div id="articleErrorModal" data-id="errorModal" class={classKey}>
+      <section class="modalError">
+        <header class="modal-header">
+          <h1 class="message">Error</h1>
+        </header>
+        <div class="modal-content">
+          <div class="contentMsg">
+            <template if:false={showArticleNotExistsPopup}>
+              <img class="imgCenterError" src={errorImg} alt="Error"/>
+            </template>
+            <template if:true={showArticleNotExistsPopup}>
+              <img
+                class="imgCenterError"
+                style="width: auto"
+                alt="Article Unavailable"
+                src={articleNotExists}
+              />
+            </template>
+            <p class="message">{errorMessage}</p>
+          </div>
+        </div>
+        <footer class="modalFooter">
+          <a onclick={errorModal} class="btnTwo"> OK </a>
+        </footer>
+      </section>
+    </div>
+  </template>
+  <!-- All regenerate popups section -->
+  <template if:true={openRegenerateModal}>
+    <div id="regenrateModal" data-id="errorModal" class={classKey}>
+      <section class="modal leave">
+        <template if:true={openWarningRegenerationPopup}>
+          <div
+            class="closeModal knowbler__regenerate-modal-close-btn"
+            onclick={hideRegenerateModal}
+            data-id="errorModal"
+          >
+            <img src={close} alt="close" />
+          </div>
+        </template>
+        <div class="modal-content">
+          <div class="contentMsg">
+            <template if:true={openRegenerateTemplateErrorPopup}>
+              <div
+                class="knowbler-api-error-img knowbler__regenerate-popup-img"
+              >
+                <div class="knowbler__popup-img-container">
+                  <svg
+                    data-name="Group 19902"
+                    width="43.698"
+                    height="54.816"
+                    viewBox="0 0 43.698 54.816"
+                  >
+                    <defs>
+                      <clipPath>
+                        <rect
+                          data-name="Rectangle 10890"
+                          width="43.698"
+                          height="54.816"
+                          fill="none"
+                        />
+                      </clipPath>
+                    </defs>
+                    <g
+                      data-name="Group 19902"
+                      transform="translate(0 0)"
+                      clip-path="url(#clip-path)"
+                    >
+                      <path
+                        data-name="Path 18754"
+                        d="M3.879,29.794l4.76-2.544,7.06,1.294,3.53-3.766,8.355,2.236,4.648-6.354,8.3,5.088L37.709,7.805,26.756.137,1.584,4.1A1.728,1.728,0,0,0,.146,6.074Z"
+                        transform="translate(-0.061 -0.067)"
+                        fill="#536c7e"
+                      />
+                      <path
+                        data-name="Path 18755"
+                        d="M54.578,9.127l8.394-1.321L52.02.137l1.267,8.05a1.13,1.13,0,0,0,1.292.94"
+                        transform="translate(-25.324 -0.067)"
+                        fill="#d6d6d6"
+                      />
+                      <path
+                        data-name="Path 18757"
+                        d="M10.833,74.72a1.727,1.727,0,0,0,1.975,1.438l32.976-5.19a1.728,1.728,0,0,0,1.438-1.975L44.093,49.116l-8.3-5.088-4.648,6.354L22.79,48.146l-3.53,3.766L12.2,50.618,7.44,53.162Z"
+                        transform="translate(-3.622 -21.434)"
+                        fill="#536c7e"
+                      />
+                    </g>
+                  </svg>
+                </div>
+              </div>
+              <p class="message">
+                Template which was initially used for creating this article no
+                longer exists, Hence re-generation can not be supported
+              </p>
+            </template>
+            <template if:true={openNoRegenerationPopup}>
+              <div
+                class="knowbler-api-error-img knowbler__regenerate-popup-img"
+              >
+                <svg width="84" height="84" viewBox="0 0 84 84">
+                  <g data-name="Group 19899" transform="translate(-154 -306)">
+                    <circle
+                      data-name="Ellipse 5"
+                      cx="42"
+                      cy="42"
+                      r="42"
+                      transform="translate(154 306)"
+                      fill="#3e7555"
+                      opacity="0.08"
+                    />
+                    <g transform="translate(165.8 316.65)">
+                      <path
+                        data-name="Path 18750"
+                        d="M58.7,0H0V58.7H58.7Z"
+                        fill="none"
+                      />
+                      <path
+                        data-name="Path 18751"
+                        d="M18.675,2H38.242a4.885,4.885,0,0,1,4.867,4.892l.024,39.133a4.885,4.885,0,0,1-4.867,4.892H8.892A4.906,4.906,0,0,1,4,46.025V16.675ZM8.892,46.025h29.35V6.892H20.705L8.892,18.705ZM32.249,22.961,35.111,20.1V28.9H26.306l3.522-3.522a7.69,7.69,0,1,0-.514,7.925h3.791a11.039,11.039,0,1,1-.856-10.346Z"
+                        transform="translate(5.783 2.892)"
+                        fill="#3e7555"
+                      />
+                    </g>
+                    <g transform="translate(224 376)">
+                      <g
+                        data-name="close-circle"
+                        transform="translate(-12 -12)"
+                      >
+                        <g data-name="close-circle">
+                          <rect
+                            data-name="Rectangle 10888"
+                            width="25"
+                            height="25"
+                            fill="#e91c2b"
+                            opacity="0"
+                          />
+                          <path
+                            data-name="Path 18752"
+                            d="M12.417,2A10.417,10.417,0,1,0,22.833,12.417,10.417,10.417,0,0,0,12.417,2ZM15.24,13.76A1.046,1.046,0,1,1,13.76,15.24l-1.344-1.354L11.073,15.24A1.046,1.046,0,1,1,9.594,13.76l1.354-1.344L9.594,11.073a1.046,1.046,0,0,1,1.479-1.479l1.344,1.354L13.76,9.594a1.046,1.046,0,0,1,1.479,1.479l-1.354,1.344Z"
+                            transform="translate(0.083 0.083)"
+                            fill="#e91c2b"
+                          />
+                        </g>
+                      </g>
+                    </g>
+                  </g>
+                </svg>
+              </div>
+              <p class="message">
+                The article cannot be re-generated as there have been no changes
+                in case details
+              </p>
+            </template>
+            <template if:true={openDifferentCaseRegenerationPopup}>
+              <div
+                class="knowbler-api-error-img knowbler__regenerate-popup-img"
+              >
+                <svg width="74.461" height="88.621" viewBox="0 0 74.461 88.621">
+                  <defs>
+                    <clipPath>
+                      <rect
+                        data-name="Rectangle 10881"
+                        width="65.66"
+                        height="84.327"
+                        fill="#546c7e"
+                      />
+                    </clipPath>
+                  </defs>
+                  <g
+                    data-name="Group 19896"
+                    transform="translate(-159.82 -306.379)"
+                  >
+                    <g
+                      data-name="Group 19880"
+                      transform="translate(385.3 697.085) rotate(180)"
+                    >
+                      <g data-name="Group 19879">
+                        <g
+                          data-name="Group 19876"
+                          transform="translate(-6.18 -5.706)"
+                        >
+                          <g
+                            data-name="Group 19874"
+                            transform="translate(166 289.569)"
+                          >
+                            <g
+                              data-name="Group 19873"
+                              transform="translate(0 22.516)"
+                            >
+                              <path
+                                data-name="Path 18745"
+                                d="M7,0H56a7,7,0,0,1,7,7V50c0,13.807-17.859,25-17.859,25H7a7,7,0,0,1-7-7V7A7,7,0,0,1,7,0Z"
+                                transform="translate(1.18 6.621)"
+                                fill="rgba(84,108,126,0.3)"
+                              />
+                              <g data-name="Group 19872">
+                                <g
+                                  data-name="Group 19872"
+                                  clip-path="url(#clip-path)"
+                                >
+                                  <path
+                                    data-name="Path 18743"
+                                    d="M58.766,5.651H6.893A6.9,6.9,0,0,0,0,12.545V77.434a6.9,6.9,0,0,0,6.893,6.893H45.048a1.72,1.72,0,0,0,1.218-.5L65.155,64.933a1.722,1.722,0,0,0,.505-1.218V12.545a6.9,6.9,0,0,0-6.894-6.894m1.01,59.787-13,13V68.885a3.451,3.451,0,0,1,3.447-3.446Zm2.437-3.447H50.218a6.9,6.9,0,0,0-6.893,6.893v12H6.893a3.451,3.451,0,0,1-3.446-3.447V12.545A3.451,3.451,0,0,1,6.893,9.1H58.766a3.451,3.451,0,0,1,3.447,3.447Z"
+                                    transform="translate(0)"
+                                    fill="#546c7e"
+                                  />
+                                </g>
+                              </g>
+                            </g>
+                          </g>
+                        </g>
+                      </g>
+                    </g>
+                    <g transform="translate(200 365)">
+                      <rect
+                        data-name="Rectangle 10829"
+                        width="30"
+                        height="30"
+                        fill="#e91c2b"
+                        opacity="0"
+                      />
+                      <g
+                        data-name="Path 18305"
+                        transform="translate(3.016 -2.74)"
+                        fill="#e91c2b"
+                        stroke-linecap="round"
+                      >
+                        <path
+                          d="M 15.13272094726562 29.76544189453125 C 11.22418117523193 29.76544189453125 7.549581050872803 28.24337005615234 4.785820960998535 25.47962188720703 C 2.02207088470459 22.71586036682129 0.5000009536743164 19.04126167297363 0.5000009536743164 15.13272094726562 C 0.5000009536743164 11.22418117523193 2.02207088470459 7.549581050872803 4.785820960998535 4.785820960998535 C 7.549581050872803 2.02207088470459 11.22418117523193 0.5000009536743164 15.13272094726562 0.5000009536743164 C 19.04126167297363 0.5000009536743164 22.71586036682129 2.02207088470459 25.47962188720703 4.785820960998535 C 28.24337005615234 7.549581050872803 29.76544189453125 11.22418117523193 29.76544189453125 15.13272094726562 C 29.76544189453125 19.04126167297363 28.24337005615234 22.71586036682129 25.47962188720703 25.47962188720703 C 22.71586036682129 28.24337005615234 19.04126167297363 29.76544189453125 15.13272094726562 29.76544189453125 Z M 15.13272094726562 20.19908142089844 C 15.02976131439209 20.19908142089844 14.94599056243896 20.28285026550293 14.94599056243896 20.38581085205078 C 14.94599056243896 20.48877143859863 15.02976131439209 20.57254028320312 15.13272094726562 20.57254028320312 C 15.23568058013916 20.57254028320312 15.31945133209229 20.48877143859863 15.31945133209229 20.38581085205078 C 15.31945133209229 20.28285026550293 15.23568058013916 20.19908142089844 15.13272094726562 20.19908142089844 Z"
+                          stroke="none"
+                        />
+                        <path
+                          d="M 15.13272094726562 2 C 7.879720687866211 2 2 7.879720687866211 2 15.13272094726562 C 2 22.38572120666504 7.879720687866211 28.26544189453125 15.13272094726562 28.26544189453125 C 22.38572120666504 28.26544189453125 28.26544189453125 22.38572120666504 28.26544189453125 15.13272094726562 C 28.26544189453125 7.879720687866211 22.38572120666504 2 15.13272094726562 2 M 15.13272094726562 17.75926208496094 C 14.40742111206055 17.75926208496094 13.81945037841797 17.17129135131836 13.81945037841797 16.44599151611328 L 13.81945037841797 9.879631042480469 C 13.81945037841797 9.154331207275391 14.40742111206055 8.566360473632812 15.13272094726562 8.566360473632812 C 15.8580207824707 8.566360473632812 16.44599151611328 9.154331207275391 16.44599151611328 9.879631042480469 L 16.44599151611328 16.44599151611328 C 16.44599151611328 17.17129135131836 15.8580207824707 17.75926208496094 15.13272094726562 17.75926208496094 M 15.13272094726562 21.69908142089844 C 14.40742111206055 21.69908142089844 13.81945037841797 21.11111068725586 13.81945037841797 20.38581085205078 C 13.81945037841797 19.66049957275391 14.40742111206055 19.07254028320312 15.13272094726562 19.07254028320312 C 15.8580207824707 19.07254028320312 16.44599151611328 19.6605110168457 16.44599151611328 20.38581085205078 C 16.44599151611328 21.11111068725586 15.8580207824707 21.69908142089844 15.13272094726562 21.69908142089844 M 15.13272094726562 -1 C 17.30930137634277 -1 19.42237091064453 -0.5730381011962891 21.41322135925293 0.2690200805664062 C 23.33465194702148 1.081720352172852 25.05964088439941 2.244531631469727 26.54028129577637 3.725160598754883 C 28.02091026306152 5.205801010131836 29.1837215423584 6.930791854858398 29.99642181396484 8.85222053527832 C 30.83848190307617 10.84307098388672 31.26544189453125 12.95614051818848 31.26544189453125 15.13272094726562 C 31.26544189453125 17.30930137634277 30.83848190307617 19.42237091064453 29.99642181396484 21.41322135925293 C 29.1837215423584 23.33465194702148 28.02091026306152 25.05964088439941 26.54028129577637 26.54028129577637 C 25.05964088439941 28.02091026306152 23.33465194702148 29.1837215423584 21.41322135925293 29.99642181396484 C 19.42237091064453 30.83848190307617 17.30930137634277 31.26544189453125 15.13272094726562 31.26544189453125 C 12.95614051818848 31.26544189453125 10.84307098388672 30.83848190307617 8.85222053527832 29.99642181396484 C 6.930791854858398 29.1837215423584 5.205801010131836 28.02091026306152 3.725160598754883 26.54028129577637 C 2.244531631469727 25.05964088439941 1.081720352172852 23.33465194702148 0.2690200805664062 21.41322135925293 C -0.5730381011962891 19.42237091064453 -1 17.30930137634277 -1 15.13272094726562 C -1 12.95614051818848 -0.5730381011962891 10.84307098388672 0.2690200805664062 8.85222053527832 C 1.081720352172852 6.930791854858398 2.244531631469727 5.205801010131836 3.725160598754883 3.725160598754883 C 5.205801010131836 2.244531631469727 6.930791854858398 1.081720352172852 8.85222053527832 0.2690200805664062 C 10.84307098388672 -0.5730381011962891 12.95614051818848 -1 15.13272094726562 -1 Z"
+                          stroke="none"
+                          fill="#fff"
+                        />
+                      </g>
+                    </g>
+                    <rect
+                      data-name="Rectangle 10882"
+                      width="49"
+                      height="6"
+                      rx="3"
+                      transform="translate(168 335)"
+                      fill="#fff"
+                    />
+                    <rect
+                      data-name="Rectangle 10883"
+                      width="33"
+                      height="6"
+                      rx="3"
+                      transform="translate(168 346)"
+                      fill="#fff"
+                    />
+                    <rect
+                      data-name="Rectangle 10884"
+                      width="24.65"
+                      height="6"
+                      rx="3"
+                      transform="translate(168 357)"
+                      fill="#fff"
+                    />
+                  </g>
+                </svg>
+              </div>
+              <p class="message">
+                This article was generated for a different case and regenerating
+                will change it based on the case currently open in the
+                background. Do you still want to proceed?
+              </p>
+              <div class="modalButton">
+                <a
+                  onclick={continueRegeneration}
+                  class="btn btnStay btnStayBorder"
+                >
+                  Yes
+                </a>
+                <a
+                  onclick={hideRegenerateModal}
+                  class="btn btnLeave btnLeaveBorder"
+                >
+                  Cancel
+                </a>
+              </div>
+            </template>
+            <template if:true={openWarningRegenerationPopup}>
+              <div
+                class="knowbler-api-error-img knowbler__regenerate-popup-img"
+              >
+                <svg width="84" height="84" viewBox="0 0 84 84">
+                  <g data-name="Group 19899" transform="translate(-154 -306)">
+                    <circle
+                      data-name="Ellipse 5"
+                      cx="42"
+                      cy="42"
+                      r="42"
+                      transform="translate(154 306)"
+                      fill="#3e7555"
+                      opacity="0.08"
+                    />
+                    <g transform="translate(165.8 316.65)">
+                      <path
+                        data-name="Path 18750"
+                        d="M58.7,0H0V58.7H58.7Z"
+                        fill="none"
+                      />
+                      <path
+                        data-name="Path 18751"
+                        d="M18.675,2H38.242a4.885,4.885,0,0,1,4.867,4.892l.024,39.133a4.885,4.885,0,0,1-4.867,4.892H8.892A4.906,4.906,0,0,1,4,46.025V16.675ZM8.892,46.025h29.35V6.892H20.705L8.892,18.705ZM32.249,22.961,35.111,20.1V28.9H26.306l3.522-3.522a7.69,7.69,0,1,0-.514,7.925h3.791a11.039,11.039,0,1,1-.856-10.346Z"
+                        transform="translate(5.783 2.892)"
+                        fill="#3e7555"
+                      />
+                    </g>
+                  </g>
+                </svg>
+              </div>
+              <p class="message">
+                Are you sure you want to Re-generate? Re-generating will
+                override the existing content.
+              </p>
+              <div class="modalButton">
+                <a
+                  onclick={regenerateArticleField}
+                  class="btn btnStay btnStayBorder"
+                >
+                  Re-generate
+                </a>
+                <a
+                  onclick={hideRegenerateModal}
+                  class="btn btnLeave btnLeaveBorder"
+                >
+                  Cancel
+                </a>
+              </div>
+            </template>
+          </div>
+        </div>
+        <template if:true={getRegenerationOkBtn}>
+          <footer class="modalFooter">
+            <a
+              onclick={hideRegenerateModal}
+              class="btnTwo knowbler-api-alert-btn"
+            >
+              OK
+            </a>
+          </footer>
+        </template>
+      </section>
+    </div>
+  </template>
+  <template if:true={openApiError}>
+    <div id="articleApiErrorModal" data-id="errorModal" class={classKey}>
+      <section class="modal leave">
+        <div class="modal-content">
+          <div class="contentMsg">
+            <div class="knowbler-api-error-img">
+              <svg width="74.461" height="88.621" viewBox="0 0 74.461 88.621">
+                <defs>
+                  <clipPath id="clip-path">
+                    <rect
+                      id="Rectangle_10881"
+                      data-name="Rectangle 10881"
+                      width="65.66"
+                      height="84.327"
+                      fill="#546c7e"
+                    />
+                  </clipPath>
+                </defs>
+                <g
+                  id="Group_19881"
+                  data-name="Group 19881"
+                  transform="translate(-159.82 -306.379)"
+                >
+                  <g
+                    id="Group_19880"
+                    data-name="Group 19880"
+                    transform="translate(385.3 697.085) rotate(180)"
+                  >
+                    <g id="Group_19879" data-name="Group 19879">
+                      <g
+                        id="Group_19876"
+                        data-name="Group 19876"
+                        transform="translate(-6.18 -5.706)"
+                      >
+                        <g
+                          id="Group_19874"
+                          data-name="Group 19874"
+                          transform="translate(166 289.569)"
+                        >
+                          <g
+                            id="Group_19873"
+                            data-name="Group 19873"
+                            transform="translate(0 22.516)"
+                          >
+                            <path
+                              id="Path_18745"
+                              data-name="Path 18745"
+                              d="M7,0H56a7,7,0,0,1,7,7V50c0,13.807-17.859,25-17.859,25H7a7,7,0,0,1-7-7V7A7,7,0,0,1,7,0Z"
+                              transform="translate(1.18 6.621)"
+                              fill="rgba(84,108,126,0.3)"
+                            />
+                            <g id="Group_19872" data-name="Group 19872">
+                              <g
+                                id="Group_19872-2"
+                                data-name="Group 19872"
+                                clip-path="url(#clip-path)"
+                              >
+                                <path
+                                  id="Path_18743"
+                                  data-name="Path 18743"
+                                  d="M58.766,5.651H6.893A6.9,6.9,0,0,0,0,12.545V77.434a6.9,6.9,0,0,0,6.893,6.893H45.048a1.72,1.72,0,0,0,1.218-.5L65.155,64.933a1.722,1.722,0,0,0,.505-1.218V12.545a6.9,6.9,0,0,0-6.894-6.894m1.01,59.787-13,13V68.885a3.451,3.451,0,0,1,3.447-3.446Zm2.437-3.447H50.218a6.9,6.9,0,0,0-6.893,6.893v12H6.893a3.451,3.451,0,0,1-3.446-3.447V12.545A3.451,3.451,0,0,1,6.893,9.1H58.766a3.451,3.451,0,0,1,3.447,3.447Z"
+                                  transform="translate(0)"
+                                  fill="#546c7e"
+                                />
+                              </g>
+                            </g>
+                          </g>
+                        </g>
+                      </g>
+                    </g>
+                  </g>
+                  <g id="alert-circle" transform="translate(200 365)">
+                    <rect
+                      id="Rectangle_10829"
+                      data-name="Rectangle 10829"
+                      width="30"
+                      height="30"
+                      fill="#e91c2b"
+                      opacity="0"
+                    />
+                    <g
+                      id="Path_18305"
+                      data-name="Path 18305"
+                      transform="translate(3.016 -2.74)"
+                      fill="#e91c2b"
+                      stroke-linecap="round"
+                    >
+                      <path
+                        d="M 15.13272094726562 29.76544189453125 C 11.22418117523193 29.76544189453125 7.549581050872803 28.24337005615234 4.785820960998535 25.47962188720703 C 2.02207088470459 22.71586036682129 0.5000009536743164 19.04126167297363 0.5000009536743164 15.13272094726562 C 0.5000009536743164 11.22418117523193 2.02207088470459 7.549581050872803 4.785820960998535 4.785820960998535 C 7.549581050872803 2.02207088470459 11.22418117523193 0.5000009536743164 15.13272094726562 0.5000009536743164 C 19.04126167297363 0.5000009536743164 22.71586036682129 2.02207088470459 25.47962188720703 4.785820960998535 C 28.24337005615234 7.549581050872803 29.76544189453125 11.22418117523193 29.76544189453125 15.13272094726562 C 29.76544189453125 19.04126167297363 28.24337005615234 22.71586036682129 25.47962188720703 25.47962188720703 C 22.71586036682129 28.24337005615234 19.04126167297363 29.76544189453125 15.13272094726562 29.76544189453125 Z M 15.13272094726562 20.19908142089844 C 15.02976131439209 20.19908142089844 14.94599056243896 20.28285026550293 14.94599056243896 20.38581085205078 C 14.94599056243896 20.48877143859863 15.02976131439209 20.57254028320312 15.13272094726562 20.57254028320312 C 15.23568058013916 20.57254028320312 15.31945133209229 20.48877143859863 15.31945133209229 20.38581085205078 C 15.31945133209229 20.28285026550293 15.23568058013916 20.19908142089844 15.13272094726562 20.19908142089844 Z"
+                        stroke="none"
+                      />
+                      <path
+                        d="M 15.13272094726562 2 C 7.879720687866211 2 2 7.879720687866211 2 15.13272094726562 C 2 22.38572120666504 7.879720687866211 28.26544189453125 15.13272094726562 28.26544189453125 C 22.38572120666504 28.26544189453125 28.26544189453125 22.38572120666504 28.26544189453125 15.13272094726562 C 28.26544189453125 7.879720687866211 22.38572120666504 2 15.13272094726562 2 M 15.13272094726562 17.75926208496094 C 14.40742111206055 17.75926208496094 13.81945037841797 17.17129135131836 13.81945037841797 16.44599151611328 L 13.81945037841797 9.879631042480469 C 13.81945037841797 9.154331207275391 14.40742111206055 8.566360473632812 15.13272094726562 8.566360473632812 C 15.8580207824707 8.566360473632812 16.44599151611328 9.154331207275391 16.44599151611328 9.879631042480469 L 16.44599151611328 16.44599151611328 C 16.44599151611328 17.17129135131836 15.8580207824707 17.75926208496094 15.13272094726562 17.75926208496094 M 15.13272094726562 21.69908142089844 C 14.40742111206055 21.69908142089844 13.81945037841797 21.11111068725586 13.81945037841797 20.38581085205078 C 13.81945037841797 19.66049957275391 14.40742111206055 19.07254028320312 15.13272094726562 19.07254028320312 C 15.8580207824707 19.07254028320312 16.44599151611328 19.6605110168457 16.44599151611328 20.38581085205078 C 16.44599151611328 21.11111068725586 15.8580207824707 21.69908142089844 15.13272094726562 21.69908142089844 M 15.13272094726562 -1 C 17.30930137634277 -1 19.42237091064453 -0.5730381011962891 21.41322135925293 0.2690200805664062 C 23.33465194702148 1.081720352172852 25.05964088439941 2.244531631469727 26.54028129577637 3.725160598754883 C 28.02091026306152 5.205801010131836 29.1837215423584 6.930791854858398 29.99642181396484 8.85222053527832 C 30.83848190307617 10.84307098388672 31.26544189453125 12.95614051818848 31.26544189453125 15.13272094726562 C 31.26544189453125 17.30930137634277 30.83848190307617 19.42237091064453 29.99642181396484 21.41322135925293 C 29.1837215423584 23.33465194702148 28.02091026306152 25.05964088439941 26.54028129577637 26.54028129577637 C 25.05964088439941 28.02091026306152 23.33465194702148 29.1837215423584 21.41322135925293 29.99642181396484 C 19.42237091064453 30.83848190307617 17.30930137634277 31.26544189453125 15.13272094726562 31.26544189453125 C 12.95614051818848 31.26544189453125 10.84307098388672 30.83848190307617 8.85222053527832 29.99642181396484 C 6.930791854858398 29.1837215423584 5.205801010131836 28.02091026306152 3.725160598754883 26.54028129577637 C 2.244531631469727 25.05964088439941 1.081720352172852 23.33465194702148 0.2690200805664062 21.41322135925293 C -0.5730381011962891 19.42237091064453 -1 17.30930137634277 -1 15.13272094726562 C -1 12.95614051818848 -0.5730381011962891 10.84307098388672 0.2690200805664062 8.85222053527832 C 1.081720352172852 6.930791854858398 2.244531631469727 5.205801010131836 3.725160598754883 3.725160598754883 C 5.205801010131836 2.244531631469727 6.930791854858398 1.081720352172852 8.85222053527832 0.2690200805664062 C 10.84307098388672 -0.5730381011962891 12.95614051818848 -1 15.13272094726562 -1 Z"
+                        stroke="none"
+                        fill="#fff"
+                      />
+                    </g>
+                  </g>
+                  <rect
+                    id="Rectangle_10882"
+                    data-name="Rectangle 10882"
+                    width="49"
+                    height="6"
+                    rx="3"
+                    transform="translate(168 335)"
+                    fill="#fff"
+                  />
+                  <rect
+                    id="Rectangle_10883"
+                    data-name="Rectangle 10883"
+                    width="33"
+                    height="6"
+                    rx="3"
+                    transform="translate(168 346)"
+                    fill="#fff"
+                  />
+                  <rect
+                    id="Rectangle_10884"
+                    data-name="Rectangle 10884"
+                    width="24.65"
+                    height="6"
+                    rx="3"
+                    transform="translate(168 357)"
+                    fill="#fff"
+                  />
+                </g>
+              </svg>
+            </div>
+            <template if:false={tpmErrorDisplay}>
+              <p class="message">Unable to auto-generate <br />content<br /><template if:true={contextLimitDisplay}>Context Limit Reached: The request exceeds the allowable input size.</template></p>
+            </template>
+            <template if:true={tpmErrorDisplay}>
+              <p class="message">Token Per Minute limit reached due to multiple consecutive calls, impacting content generation for some fields.</p>
+            </template>
+          </div>
+        </div>
+        <footer class="modalFooter">
+          <a onclick={hideOpenApiError} class="btnTwo knowbler-api-alert-btn">
+            OK
+          </a>
+        </footer>
+      </section>
+    </div>
+  </template>
+  <template if:true={openAIRetryError}>
+    <div data-id="alertModal" class={classKey}>
+      <section class="modal leave">
+        <header class="modal-header">
+          <img class="imgCenter" src={aiError} alt="Error"/>
+        </header>
+        <div class="modal-content">
+          <div class="contentMsg">
+            <p class="message">Unable to auto-generate<br />content</p>
+            <div class="modalButton">
+              <a
+                onclick={retryAutoGenerationTitle}
+                class="btn btnStay btnStayBorder"
+              >
+                Retry
+              </a>
+              <a onclick={cancelRetry} class="btn btnLeave btnLeaveBorder">
+                Cancel
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </template>
+
+  <template if:true={modeSwitchCaseError}>
+    <div data-id="alertModal" class={classKey}>
+      <section class="modal leave">
+        <header class="modal-header">
+          <img
+            class="imgCenter Knowbler__mode-switch-error-popup-img"
+            src={modeSwitchErrorPopupImg}
+            alt="error image"
+          />
+        </header>
+        <div class="modal-content">
+          <div class="contentMsg">
+            <p class="message submessage">
+              Unsaved changes will be lost. Are you sure you want to switch to
+              reviewer mode?
+            </p>
+            <div class="modalButton">
+              <a
+                class="btn btnStay Knowbler__switch-popup-cancel-btn"
+                onclick={hideSwitchModeConfirmationPopup}
+              >
+                Cancel
+              </a>
+              <a
+                class="btn btnLeave Knowbler__switch-popup-switch-btn"
+                onclick={switchKnowblerMode}
+              >
+                Switch
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </template>
+  <template if:true={showHealthCalculationModal}>
+    <div data-id="alertModal" class={classKey}>
+      <section class="modal leave">
+        <template if:true={showHealthCalculationLoader}>
+          <header class="modal-header knowbler__calculate-health-loader-wrapper">
+            <img class="content-loader-gif" src={calculateHealthLoader} alt="loader"/>
+            <div class="knowbler__calculate-health-loader-content">
+              <span>Please wait...</span><br />
+              Predicting content health
+            </div>
+          </header>
+        </template>
+        <template if:true={showHealthCalculationError}>
+          <div class="modal-content">
+            <div class="contentMsg">
+              <div class="knowbler-api-error-img">
+                <svg width="84" height="84" viewBox="0 0 84 84"> <g id="Group_19907" data-name="Group 19907" transform="translate(-150 -266)"> <g id="Group_19899" data-name="Group 19899" transform="translate(-4 -40)"> <circle id="Ellipse_5" data-name="Ellipse 5" cx="42" cy="42" r="42" transform="translate(154 306)" fill="#fd9466" opacity="0.08"/> <g id="close-circle" transform="translate(224 376)"> <g id="close-circle-2" data-name="close-circle" transform="translate(-12 -12)"> <g id="close-circle-3" data-name="close-circle"> <rect id="Rectangle_10888" data-name="Rectangle 10888" width="25" height="25" fill="#e91c2b" opacity="0"/> <path id="Path_18752" data-name="Path 18752" d="M12.417,2A10.417,10.417,0,1,0,22.833,12.417,10.417,10.417,0,0,0,12.417,2ZM15.24,13.76A1.046,1.046,0,1,1,13.76,15.24l-1.344-1.354L11.073,15.24A1.046,1.046,0,1,1,9.594,13.76l1.354-1.344L9.594,11.073a1.046,1.046,0,0,1,1.479-1.479l1.344,1.354L13.76,9.594a1.046,1.046,0,0,1,1.479,1.479l-1.354,1.344Z" transform="translate(0.083 0.083)" fill="#e91c2b"/> </g> </g> </g> </g> <path id="Path_18318" data-name="Path 18318" d="M5.869,14.776l2.914,4.383A18.954,18.954,0,0,0,9.3,37.118H42.143A18.954,18.954,0,0,0,17.241,10.7L12.858,7.786a23.693,23.693,0,0,1,33.36,31.7,4.739,4.739,0,0,1-4.075,2.369H9.328a4.739,4.739,0,0,1-4.123-2.369,23.693,23.693,0,0,1,.64-24.735Zm23.2,16.206a4.739,4.739,0,0,1-6.705,0L8.949,10.867l20.115,13.41a4.739,4.739,0,0,1,0,6.705Z" transform="translate(165.968 282.21)" fill="#fd9466"/> </g> </svg>
+              </div>
+              <p class="message">Unable to Generate Content Health Please Try Again</p>
+            </div>
+          </div>
+          <footer class="modalFooter">
+            <a onclick={hideContentHealthModal} class="btnTwo knowbler-api-alert-btn">
+              OK
+            </a>
+          </footer>
+        </template>
+        <template if:true={showHealthCalculationScore}>
+          <div class="cardBody">
+            <div class="contentHealthSection">
+              <div class="contentSection">
+                Score: {finalScore}%
+                <lightning-icon size="small" class="knowbler__close-icon" icon-name="utility:close" alternative-text="Engage"
+                  title="Engage" onclick={hideContentHealthModal}></lightning-icon>
+              </div>
+            </div>
+            <div class="knowbler_score-main-div">
+              <div class="commonDiv1 slds-border_bottom">
+                <div class="commonDiv2">
+                  <h3>Parameters</h3>
+                </div>
+                <div class="commonDiv2 prediction">
+                  <h3>Prediction</h3>
+                </div>
+              </div>
+              <div class="knowbler__small-screen">
+                <template if:true={unique}>
+                  <div class="commonDiv1 slds-border_bottom">
+                    <div class="commonDiv2">
+                      <div class="headingClass tooltip-wrapper">
+                        <div class="slds-popover slds-popover_tooltip slds-nubbin_top-left" role="tooltip">
+                          <div class=" tooltip-font-styling">The article is not duplicate, there is no other article with the
+                            same content.</div>
+                        </div>
+                        <span>Unique</span>
+                      </div>
+                    </div>
+                    <div class="commonDiv2">
+                      <template if:true={uniquePrediction}>
+                        <progress class="progressBarClass" id="file7" value={calculatedContentHealth.uniqueness_score}
+                          max="100"></progress>
+                        <label class="knowbler__progress-bar-label">{calculatedContentHealth.uniqueness_score}%</label>
+                      </template>
+                      <template if:false={uniquePrediction}>
+                        <strong>N.A.</strong>
+                      </template>
+                    </div>
+                  </div>
+                </template>
+                <template if:true={complete}>
+                  <div class="commonDiv1 slds-border_bottom">
+                    <div class="commonDiv2">
+                      <div class="headingClass tooltip-wrapper">
+                        <div class="slds-popover slds-popover_tooltip slds-nubbin_top-left" role="tooltip">
+                          <div class=" tooltip-font-styling">The article includes the problem, environment, cause and
+                            resolution.</div>
+                        </div>
+                        <span>Complete</span>
+                      </div>
+                    </div>
+                    <div class="commonDiv2">
+                      <strong>--</strong>
+                    </div>
+                  </div>
+                </template>
+                <template if:true={contentClear}>
+                  <div class="commonDiv1 slds-border_bottom">
+                    <div class="commonDiv2">
+                      <div class="headingClass tooltip-wrapper">
+                        <div class="slds-popover slds-popover_tooltip slds-nubbin_top-left" role="tooltip">
+                          <div class=" tooltip-font-styling">Content is comprehensible to the intended user.</div>
+                        </div>
+                        <span>Content Clear</span>
+                      </div>
+                    </div>
+                    <div class="commonDiv2">
+                      <strong>--</strong>
+                    </div>
+                  </div>
+                </template>
+                <template if:true={accurateTitle}>
+                  <div class="commonDiv1 slds-border_bottom">
+                    <div class="commonDiv2">
+                      <div class="headingClass tooltip-wrapper">
+                        <div class="slds-popover slds-popover_tooltip slds-nubbin_top-left" role="tooltip">
+                          <div class=" tooltip-font-styling">The title contains the main issue and environment.</div>
+                        </div>
+                        <span>Accurate Title</span>
+                      </div>
+                    </div>
+                    <div class="commonDiv2">
+                      <template if:true={accurateTitlePrediction}>
+                        <progress class="progressBarClass" id="file10" value={calculatedContentHealth.title_accuracy_score}
+                          max="100"></progress>
+                        <label class="knowbler__progress-bar-label">{calculatedContentHealth.title_accuracy_score}%</label>
+                      </template>
+                      <template if:false={accurateTitlePrediction}>
+                        <strong>N.A.</strong>
+                      </template>
+                    </div>
+                  </div>
+                </template>
+                <template if:true={linksValid}>
+                  <div class="commonDiv1 slds-border_bottom">
+                    <div class="commonDiv2">
+                      <div class="headingClass tooltip-wrapper">
+                        <div class="slds-popover slds-popover_tooltip slds-nubbin_top-left" role="tooltip">
+                          <div class=" tooltip-font-styling">The hyperlinks and attachments added to the article are appropriate
+                            and functional.</div>
+                        </div>
+                        <span>Links Valid?</span>
+                      </div>
+                    </div>
+                    <div class="commonDiv2">
+                      <template if:true={linksPrediction}>
+                        <progress class="progressBarClass" id="file11" value={calculatedContentHealth.link_accuracy_score}
+                          max="100"></progress>
+                        <label class="knowbler__progress-bar-label">{calculatedContentHealth.link_accuracy_score}%</label>
+                      </template>
+                      <template if:false={linksPrediction}>
+                        <strong>N.A.</strong>
+                      </template>
+                    </div>
+                  </div>
+                </template>
+                <template if:true={metadataCorrect}>
+                  <div class="commonDiv1 slds-border_bottom">
+                    <div class="commonDiv2">
+                      <div class="headingClass tooltip-wrapper">
+                        <div class="slds-popover slds-popover_tooltip slds-nubbin_top-left" role="tooltip">
+                          <div class=" tooltip-font-styling">If the tags, audience and other metadata is appropriate.</div>
+                        </div>
+                        <span>Metadata Correct</span>
+                      </div>
+                    </div>
+                    <template if:false={languagechanged}>
+                      <div class="commonDiv2">
+                        <template if:true={metaDataPrediction}>
+                          <progress class="progressBarClass" id="file12" value={calculatedContentHealth.metadata_accuracy_score}
+                            max="100"></progress>
+                          <label class="knowbler__progress-bar-label">{calculatedContentHealth.metadata_accuracy_score}%</label>
+                        </template>
+                        <template if:false={metaDataPrediction}>
+                          <strong>N.A.</strong>
+                        </template>
+                      </div>
+                    </template>
+                  </div>
+                </template>
+              </div>
+            </div>
+          </div>
+        </template>
+      </section>
+    </div>
+  </template>
+</template>

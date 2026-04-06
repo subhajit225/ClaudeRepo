@@ -1,0 +1,1392 @@
+<apex:page
+    controller="RubrikQuoteLookupController"
+    showHeader="false"
+    sidebar="false"
+    standardStylesheets="false"
+    applyHtmlTag="false"
+    applyBodyTag="false"
+    docType="html-5.0"
+    title="Rubrik Quote Portal"
+    cache="false">
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Rubrik Quote Portal</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+
+        /* ── Split layout ─────────────────────────────── */
+        .split {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ── Left panel ───────────────────────────────── */
+        .left-panel {
+            position: relative;
+            width: 50%;
+            background: #000000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            flex-shrink: 0;
+            transition: width 0.6s ease;
+        }
+        #particleSphere {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            transition: opacity 0.3s ease;
+            opacity: 1;
+        }
+        .brand-logo-wrap {
+            position: absolute;
+            top: 28px;
+            left: 28px;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .brand-logo {
+            width: 44px;
+            height: 44px;
+            filter: drop-shadow(0 0 18px rgba(0,220,200,0.25));
+            flex-shrink: 0;
+        }
+        .brand-wordmark {
+            font-size: 38px;
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: 1.2px;
+            text-transform: lowercase;
+            filter: drop-shadow(0 0 12px rgba(0,220,200,0.2));
+        }
+        .brand-overlay {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+            padding: 40px;
+            text-align: center;
+            transition: opacity 0.3s ease;
+        }
+        .brand-headline {
+            font-size: 32px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #ffffff;
+            line-height: 1.2;
+            max-width: 320px;
+            text-align: center;
+        }
+        .brand-headline .highlight { color: #009dac; }
+        .brand-tagline {
+            font-size: 19px;
+            color: rgba(255,255,255,0.55);
+            letter-spacing: 0.5px;
+            line-height: 1.6;
+            max-width: 280px;
+        }
+
+        /* ── Right panel ──────────────────────────────── */
+        .right-panel {
+            width: 50%;
+            background: #F4FAFB;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 48px 40px;
+            overflow-y: auto;
+            transition: width 0.6s ease;
+        }
+        .form-wrap {
+            width: 100%;
+            max-width: 400px;
+            margin: auto 0;
+        }
+
+        /* Form header */
+        .form-title {
+            font-size: 26px;
+            font-weight: 700;
+            color: #1A2B36;
+            margin-bottom: 8px;
+            letter-spacing: -0.4px;
+            line-height: 1.2;
+        }
+        .form-title span { color: #009dac; }
+        .form-subtitle {
+            font-size: 14px;
+            color: #607080;
+            margin-bottom: 32px;
+            line-height: 1.65;
+        }
+
+        /* Divider */
+        .divider {
+            height: 3px;
+            width: 40px;
+            background: linear-gradient(90deg, #009dac, #00c4b3);
+            border-radius: 2px;
+            margin-bottom: 28px;
+        }
+
+        /* Field */
+        .field-group { margin-bottom: 20px; }
+        .field-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #2D3E4A;
+            margin-bottom: 8px;
+            letter-spacing: 0.1px;
+        }
+        .label-icon { width: 14px; height: 14px; color: #009dac; flex-shrink: 0; }
+        .field-input {
+            display: block;
+            width: 100%;
+            height: 48px;
+            padding: 0 16px;
+            font-size: 14px;
+            color: #1A2B36;
+            background: #fff;
+            border: 1.5px solid #C8E6EA;
+            border-radius: 10px;
+            outline: none;
+            transition: border-color .18s, box-shadow .18s;
+            -webkit-appearance: none;
+        }
+        .field-input::placeholder { color: #9BBEC4; }
+        .field-input:hover  { border-color: #009dac; }
+        .field-input:focus  { border-color: #009dac; box-shadow: 0 0 0 3.5px rgba(0,157,172,.15); }
+        .field-input.has-error { border-color: #E53E3E; background: #FFF5F5; }
+        .field-input.has-error:focus { box-shadow: 0 0 0 3.5px rgba(229,62,62,.13); }
+        .field-error { display: block; margin-top: 5px; font-size: 12px; font-weight: 500; color: #C53030; }
+
+        /* Button */
+        .btn-submit {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            height: 50px;
+            margin-top: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(135deg, #009dac 0%, #00b5a5 100%);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            letter-spacing: 0.2px;
+            transition: transform .15s, box-shadow .15s, background .15s;
+        }
+        .btn-submit:hover:not(:disabled) {
+            background: linear-gradient(135deg, #008898 0%, #009e90 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(0,157,172,.38);
+        }
+        .btn-submit:active:not(:disabled) { transform: translateY(0); box-shadow: none; }
+        .btn-submit:disabled { opacity: .6; cursor: not-allowed; }
+        .btn-arrow { width: 16px; height: 16px; flex-shrink: 0; transition: transform .15s; }
+        .btn-submit:hover:not(:disabled) .btn-arrow { transform: translateX(3px); }
+
+        /* Spinner */
+        .spinner { display: inline-block; width: 17px; height: 17px; border: 2px solid rgba(255,255,255,.4); border-top-color: #fff; border-radius: 50%; animation: spin .65s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Alert */
+        .alert-error {
+            display: flex; align-items: flex-start; gap: 10px;
+            margin-top: 16px; padding: 12px 14px;
+            background: #FFF5F5; border: 1px solid #FED7D7;
+            border-radius: 10px; font-size: 13px; font-weight: 500;
+            color: #C53030; line-height: 1.5;
+        }
+        .alert-error svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 1px; }
+
+        /* Success */
+        .success-state { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 20px 0; animation: fadeUp .4s ease both; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        .success-icon { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #009dac, #00c4b3); display: flex; align-items: center; justify-content: center; margin-bottom: 18px; box-shadow: 0 8px 24px rgba(0,157,172,.35); }
+        .success-title { font-size: 22px; font-weight: 700; color: #1A2B36; margin-bottom: 8px; }
+        .success-msg { font-size: 14px; color: #607080; }
+
+        /* Footer */
+        .form-footer { margin-top: 28px; font-size: 13px; color: #8DA8B0; text-align: center; }
+        .form-footer a { color: #009dac; font-weight: 500; text-decoration: none; }
+        .form-footer a:hover { text-decoration: underline; }
+
+        .hidden { display: none !important; }
+
+        /* ── Form crossfade transitions ────────────────── */
+        #form-section, #ovf-section {
+            transition: opacity 0.35s ease;
+        }
+        .fading-out {
+            opacity: 0 !important;
+            pointer-events: none;
+        }
+        .fading-in {
+            opacity: 0;
+        }
+        .faded-in {
+            opacity: 1;
+        }
+
+        /* ── OVF full-width mode ───────────────────────── */
+        .split.ovf-mode {
+            height: 100vh;
+            overflow: hidden;
+        }
+        .split.ovf-mode .left-panel {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            width: 25%;
+            height: 100vh;
+            position: relative;
+            background-color: #071a1a;
+            background-image: url("{!URLFOR($Resource.OVF_StarsSidebar)}");
+            background-size: cover;
+            background-position: center top;
+        }
+        .split.ovf-mode .left-panel::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,10,10,0.25) 50%, rgba(0,0,0,0.55) 100%);
+            z-index: 1;
+        }
+        .split.ovf-mode .right-panel { width: 75%; padding: 0; overflow: hidden; height: 100%; display: flex; flex-direction: column; }
+        .split.ovf-mode .form-wrap { flex: 1; overflow: hidden; padding: 0; max-width: none; display: flex; flex-direction: column; }
+        .split.ovf-mode #ovf-section.faded-in { display: flex !important; flex-direction: column; flex: 1; overflow: hidden; }
+        #ovf-form-body { flex: 1; overflow-y: auto; padding: 12px 40px 8px 40px; }
+        .ovf-submit-bar { flex-shrink: 0; padding: 12px 40px 16px 40px; background: #ffffff; border-top: 1px solid #e8eaf0; box-shadow: 0 -4px 12px rgba(0,0,0,0.06); }
+        .split.ovf-mode #particleSphere {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .split.ovf-mode .brand-overlay {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .split.ovf-mode .brand-logo-wrap { display: flex; }
+        .split.ovf-mode .ovf-logo-header { display: none; }
+        .split.ovf-mode .section-card { padding: 14px 16px; margin-bottom: 12px; }
+        .split.ovf-mode .section-header { margin-bottom: 8px; padding-bottom: 6px; font-size: 12px; }
+        .split.ovf-mode .field-group { margin-bottom: 12px; }
+        .split.ovf-mode .field-group label { font-size: 12px; margin-bottom: 4px; }
+        .split.ovf-mode .field-group input,
+        .split.ovf-mode .field-group select,
+        .split.ovf-mode .field-group textarea { padding: 8px 10px; font-size: 13px; }
+        .split.ovf-mode .progress-steps { flex-shrink: 0; padding: 16px 40px 8px 40px; margin-bottom: 0; }
+        .split.ovf-mode .ovf-title { font-size: 18px; margin-bottom: 6px; }
+        .split.ovf-mode .ovf-subtitle { font-size: 13px; margin-bottom: 12px; }
+        .split.ovf-mode #ovfSubmitBtn { padding: 12px 32px; font-size: 14px; width: 100%; }
+
+        /* OVF sidebar content */
+        .ovf-sidebar-content {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+            padding: 40px 32px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.4s ease 0.3s;
+        }
+        .split.ovf-mode .ovf-sidebar-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            opacity: 1;
+            width: 100%;
+            height: 100vh;
+        }
+        #ovf-quote-card {
+            display: none;
+            text-align: center;
+            width: 100%;
+            padding: 0 20px;
+            box-sizing: border-box;
+            z-index: 3;
+        }
+        .ovf-quote-label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #009dac;
+            margin-bottom: 10px;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+        }
+        #ovf-quote-number {
+            font-size: clamp(14px, 3.5vw, 28px);
+            font-weight: 700;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+            letter-spacing: 0.03em;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.7);
+        }
+        .split.ovf-mode .ovf-sb-logo-row { display: none; }
+        .ovf-sb-logo-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .ovf-sb-icon {
+            width: 40px;
+            height: 40px;
+            flex-shrink: 0;
+        }
+        .ovf-sb-wordmark {
+            font-size: 32px;
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: 1.2px;
+            text-transform: lowercase;
+        }
+
+        /* OVF mode logo header */
+        .ovf-logo-header {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #C8E6EA;
+        }
+        .ovf-logo-header .ovf-brand-logo {
+            width: 36px;
+            height: 36px;
+            flex-shrink: 0;
+        }
+        .ovf-logo-header .ovf-brand-wordmark {
+            font-size: 32px;
+            font-weight: 600;
+            color: #009dac;
+            letter-spacing: 1.2px;
+            text-transform: lowercase;
+        }
+
+        /* Thank you section logo */
+        .thankyou-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 28px;
+            justify-content: center;
+        }
+        .thankyou-logo .ty-brand-logo {
+            width: 36px;
+            height: 36px;
+            flex-shrink: 0;
+        }
+        .thankyou-logo .ty-brand-wordmark {
+            font-size: 32px;
+            font-weight: 600;
+            color: #009dac;
+            letter-spacing: 1.2px;
+            text-transform: lowercase;
+        }
+
+        /* 3-column OVF grid */
+        .ovf-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0 24px;
+        }
+        .ovf-grid-full { grid-column: 1 / -1; }
+
+        @media (max-width: 1024px) {
+            .ovf-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* ── Progress steps ────────────────────────────── */
+        .progress-steps {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            margin-bottom: 28px;
+            padding: 0 4px;
+        }
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+        .step-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #e2f0f1;
+            color: #8DA8B0;
+            font-size: 14px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .step-circle.done, .step-circle.active {
+            background: #009dac;
+            color: #ffffff;
+        }
+        .step-circle.done svg { width: 16px; height: 16px; }
+        .step-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #8DA8B0;
+            white-space: nowrap;
+        }
+        .step.active .step-label { color: #009dac; }
+        .step.done .step-label { color: #009dac; }
+        .step-connector {
+            flex: 1;
+            height: 2px;
+            background: #e2f0f1;
+            margin: 0 8px;
+            margin-bottom: 18px;
+        }
+        .step-connector.done { background: #009dac; }
+
+        /* ── Section cards ─────────────────────────────── */
+        .section-card {
+            background: #ffffff;
+            border: 1px solid #C8E6EA;
+            border-radius: 10px;
+            padding: 20px 24px 24px;
+            margin-bottom: 16px;
+            grid-column: 1 / -1;
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #EEF7F8;
+        }
+        .section-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #2D3E4A;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+        }
+        .section-fields {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0 24px;
+        }
+        @media (max-width: 1024px) {
+            .section-fields { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 600px) {
+            .section-fields { grid-template-columns: 1fr; }
+        }
+
+        /* ── Responsive ───────────────────────────────── */
+        @media (max-width: 768px) {
+            .split { flex-direction: column; }
+            .left-panel { width: 100%; height: 64px; min-height: 0; flex-shrink: 0; justify-content: flex-start; padding: 0 20px; }
+            #particleSphere { display: none; }
+            .brand-overlay { display: none; }
+            .brand-logo-wrap { position: static; }
+            .brand-logo { width: 32px; height: 32px; }
+            .brand-wordmark { font-size: 17px; }
+            .right-panel { width: 100%; padding: 28px 20px; }
+            .split.ovf-mode .right-panel { width: 100%; padding: 28px 20px; }
+            .split.ovf-mode .left-panel { display: none; }
+            .field-input { font-size: 16px; }
+            .left-panel, .right-panel,
+            #particleSphere, .brand-overlay, .ovf-sidebar-content,
+            #form-section, #ovf-section {
+                transition: none !important;
+            }
+        }
+        @media (max-width: 600px) {
+            .ovf-grid { grid-template-columns: 1fr; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .left-panel, .right-panel,
+            #particleSphere, .brand-overlay, .ovf-sidebar-content,
+            #form-section, #ovf-section {
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="split">
+
+    <!-- ── Left panel: Rubrik brand ── -->
+    <div class="left-panel">
+        <canvas id="particleSphere"></canvas>
+
+        <!-- OVF sidebar content (visible only in OVF mode) -->
+        <div class="ovf-sidebar-content">
+            <div class="ovf-sb-logo-row">
+                <svg class="ovf-sb-icon" id="ovf-sb-Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 39 38.77" aria-label="Rubrik icon">
+                    <defs>
+                        <style>.ovf-sb-wh{fill:#009dac;fill-rule:evenodd}</style>
+                        <mask id="ovf-sb-wm1"  x="13.3"  y="0"      width="12.35" height="12.27" maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="ovf-sb-wh" d="M19.51.22a.83.83 0 0 0-.32.2l-5.34 5.32a.84.84 0 0 0 0 1.19l5.34 5.32a.84.84 0 0 0 1.19 0l5.33-5.32a.84.84 0 0 0 0-1.19L20.38.42a.83.83 0 0 0-.32-.2h-.55z"/></g></mask>
+                        <mask id="ovf-sb-wm2"  x="13.3"  y="26.53"  width="12.35" height="12.25" maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="ovf-sb-wh" d="M19.19 27l-5.34 5.32a.83.83 0 0 0 0 1.18l5.34 5.33a.85.85 0 0 0 .25.17h.69a.85.85 0 0 0 .25-.17l5.33-5.33a.83.83 0 0 0 0-1.18L20.38 27a.82.82 0 0 0-.6-.25.81.81 0 0 0-.59.25"/></g></mask>
+                        <mask id="ovf-sb-wm3"  x="26.6"  y="13.22"  width="12.35" height="12.32" maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="ovf-sb-wh" d="M32.49 13.69L27.15 19a.86.86 0 0 0 0 1.19l5.34 5.32a.84.84 0 0 0 1.19 0L39 20.2a.84.84 0 0 0 0-1.2l-5.33-5.32a.84.84 0 0 0-.59-.24.85.85 0 0 0-.6.24"/></g></mask>
+                        <mask id="ovf-sb-wm16" x="0"     y="13.22"  width="12.35" height="12.32" maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="ovf-sb-wh" d="M5.89 13.69L.55 19a.84.84 0 0 0 0 1.19l5.34 5.32a.84.84 0 0 0 1.19 0l5.33-5.32a.84.84 0 0 0 0-1.19l-5.33-5.31a.85.85 0 0 0-.6-.24.84.84 0 0 0-.59.24"/></g></mask>
+                    </defs>
+                    <g>
+                        <g mask="url(#ovf-sb-wm1)"><path  class="ovf-sb-wh" d="M19.51.22a.83.83 0 0 0-.32.2l-5.34 5.32a.84.84 0 0 0 0 1.19l5.34 5.32a.84.84 0 0 0 1.19 0l5.33-5.32a.84.84 0 0 0 0-1.19L20.38.42a.83.83 0 0 0-.32-.2h-.55z" transform="translate(-.31 -.22)"/></g>
+                        <g mask="url(#ovf-sb-wm2)"><path  class="ovf-sb-wh" d="M19.19 27l-5.34 5.32a.83.83 0 0 0 0 1.18l5.34 5.33a.85.85 0 0 0 .25.17h.69a.85.85 0 0 0 .25-.17l5.33-5.33a.83.83 0 0 0 0-1.18L20.38 27a.82.82 0 0 0-.6-.25.81.81 0 0 0-.59.25" transform="translate(-.31 -.22)"/></g>
+                        <g mask="url(#ovf-sb-wm3)"><path  class="ovf-sb-wh" d="M32.49 13.69L27.15 19a.86.86 0 0 0 0 1.19l5.34 5.32a.84.84 0 0 0 1.19 0L39 20.2a.84.84 0 0 0 0-1.2l-5.33-5.32a.84.84 0 0 0-.59-.24.85.85 0 0 0-.6.24" transform="translate(-.31 -.22)"/></g>
+                        <g mask="url(#ovf-sb-wm16)"><path class="ovf-sb-wh" d="M5.89 13.69L.55 19a.84.84 0 0 0 0 1.19l5.34 5.32a.84.84 0 0 0 1.19 0l5.33-5.32a.84.84 0 0 0 0-1.19l-5.33-5.31a.85.85 0 0 0-.6-.24.84.84 0 0 0-.59.24" transform="translate(-.31 -.22)"/></g>
+                    </g>
+                </svg>
+                <span class="ovf-sb-wordmark">rubrik</span>
+            </div>
+            <div id="ovf-quote-card">
+                <div class="ovf-quote-label">Quote</div>
+                <div id="ovf-quote-number"></div>
+            </div>
+        </div>
+
+        <!-- Logo in top-left corner -->
+        <div class="brand-logo-wrap">
+            <svg class="brand-logo" id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 39 38.77" aria-label="Rubrik icon">
+                <defs>
+                    <style>.brand-logo-wh{fill:#009dac;fill-rule:evenodd}</style>
+                    <mask id="wm1"  x="13.3"  y="0"      width="12.35" height="12.27" maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="brand-logo-wh" d="M19.51.22a.83.83 0 0 0-.32.2l-5.34 5.32a.84.84 0 0 0 0 1.19l5.34 5.32a.84.84 0 0 0 1.19 0l5.33-5.32a.84.84 0 0 0 0-1.19L20.38.42a.83.83 0 0 0-.32-.2h-.55z"/></g></mask>
+                    <mask id="wm2"  x="13.3"  y="26.53"  width="12.35" height="12.25" maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="brand-logo-wh" d="M19.19 27l-5.34 5.32a.83.83 0 0 0 0 1.18l5.34 5.33a.85.85 0 0 0 .25.17h.69a.85.85 0 0 0 .25-.17l5.33-5.33a.83.83 0 0 0 0-1.18L20.38 27a.82.82 0 0 0-.6-.25.81.81 0 0 0-.59.25"/></g></mask>
+                    <mask id="wm3"  x="26.6"  y="13.22"  width="12.35" height="12.32" maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="brand-logo-wh" d="M32.49 13.69L27.15 19a.86.86 0 0 0 0 1.19l5.34 5.32a.84.84 0 0 0 1.19 0L39 20.2a.84.84 0 0 0 0-1.2l-5.33-5.32a.84.84 0 0 0-.59-.24.85.85 0 0 0-.6.24"/></g></mask>
+                    <mask id="wm4"  x="9.63"  y="33.2"   width="3.17"  height="4.57"  maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="brand-logo-wh" d="M12.51 33.61L10.14 36a.59.59 0 0 0 .15 1l2 1a.52.52 0 0 0 .78-.52v-3.63c0-.28-.1-.43-.25-.43a.53.53 0 0 0-.35.19"/></g></mask>
+                    <mask id="wm5"  x="26.15" y="33.2"   width="3.17"  height="4.57"  maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="brand-logo-wh" d="M26.46 33.85v3.56a.52.52 0 0 0 .77.52l2.05-1a.59.59 0 0 0 .14-1l-2.37-2.36a.52.52 0 0 0-.34-.19c-.15 0-.25.15-.25.43"/></g></mask>
+                    <mask id="wm6"  x="26.15" y="26.04"  width="6.49"  height="6.48"  maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="brand-logo-wh" d="M27.3 26.27a.84.84 0 0 0-.84.83v4.8a.85.85 0 0 0 .84.84h4.81a.85.85 0 0 0 .89-.84v-4.8a.84.84 0 0 0-.84-.83H27.3z"/></g></mask>
+                    <mask id="wm7"  x="33.32" y="9.56"   width="4.58"  height="3.17"  maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="brand-logo-wh" d="M36.19 10l-2.38 2.37c-.32.32-.21.59.25.59h3.57a.53.53 0 0 0 .52-.78l-1-2a.62.62 0 0 0-.54-.36.65.65 0 0 0-.45.21"/></g></mask>
+                    <mask id="wm8"  x="26.15" y="1"      width="3.17"  height="4.57"  maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="brand-logo-wh" d="M26.46 1.8v3.56c0 .46.26.57.59.25l2.37-2.37a.59.59 0 0 0-.14-1l-2.05-1a.55.55 0 0 0-.23-.01.5.5 0 0 0-.5.57"/></g></mask>
+                    <mask id="wm9"  x="1.05"  y="9.56"   width="4.58"  height="3.17"  maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="brand-logo-wh" d="M2.39 10.14l-1 2a.52.52 0 0 0 .52.78H5.5c.47 0 .58-.27.25-.59L3.38 10a.65.65 0 0 0-.46-.21.59.59 0 0 0-.53.36"/></g></mask>
+                    <mask id="wm10" x="6.31"  y="6.25"   width="6.49"  height="6.48"  maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="brand-logo-wh" d="M7.46 6.47a.85.85 0 0 0-.84.84v4.8a.85.85 0 0 0 .84.84h4.81a.85.85 0 0 0 .84-.84v-4.8a.85.85 0 0 0-.84-.84H7.46z"/></g></mask>
+                    <mask id="wm11" x="9.63"  y="1"      width="3.17"  height="4.57"  maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="brand-logo-wh" d="M12.33 1.29l-2 1a.59.59 0 0 0-.15 1l2.37 2.37c.33.32.6.21.6-.25V1.8a.51.51 0 0 0-.5-.57.74.74 0 0 0-.28.06"/></g></mask>
+                    <mask id="wm12" x="33.32" y="26.04"  width="4.58"  height="3.17"  maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="brand-logo-wh" d="M34.06 26.27c-.46 0-.57.26-.25.59l2.38 2.37a.6.6 0 0 0 1-.15l1-2a.52.52 0 0 0-.52-.77h-3.61z"/></g></mask>
+                    <mask id="wm13" x="6.31"  y="26.04"  width="6.49"  height="6.48"  maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="brand-logo-wh" d="M7.46 26.27a.84.84 0 0 0-.84.83v4.8a.85.85 0 0 0 .84.84h4.81a.85.85 0 0 0 .84-.84v-4.8a.84.84 0 0 0-.84-.83H7.46z"/></g></mask>
+                    <mask id="wm14" x="1.05"  y="26.04"  width="4.58"  height="3.17"  maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="brand-logo-wh" d="M1.94 26.27a.52.52 0 0 0-.52.77l1 2a.59.59 0 0 0 1 .15l2.37-2.37c.33-.33.22-.59-.25-.59h-3.6z"/></g></mask>
+                    <mask id="wm15" x="26.15" y="6.25"   width="6.49"  height="6.48"  maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="brand-logo-wh" d="M27.3 6.47a.85.85 0 0 0-.84.84v4.8a.85.85 0 0 0 .84.84h4.81a.85.85 0 0 0 .84-.84v-4.8a.85.85 0 0 0-.84-.84H27.3z"/></g></mask>
+                    <mask id="wm16" x="0"     y="13.22"  width="12.35" height="12.32" maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="brand-logo-wh" d="M5.89 13.69L.55 19a.84.84 0 0 0 0 1.19l5.34 5.32a.84.84 0 0 0 1.19 0l5.33-5.32a.84.84 0 0 0 0-1.19l-5.33-5.31a.85.85 0 0 0-.6-.24.84.84 0 0 0-.59.24"/></g></mask>
+                </defs>
+                <g>
+                    <g mask="url(#wm1)"><path  class="brand-logo-wh" d="M19.51.22a.83.83 0 0 0-.32.2l-5.34 5.32a.84.84 0 0 0 0 1.19l5.34 5.32a.84.84 0 0 0 1.19 0l5.33-5.32a.84.84 0 0 0 0-1.19L20.38.42a.83.83 0 0 0-.32-.2h-.55z" transform="translate(-.31 -.22)"/></g>
+                    <g mask="url(#wm2)"><path  class="brand-logo-wh" d="M19.19 27l-5.34 5.32a.83.83 0 0 0 0 1.18l5.34 5.33a.85.85 0 0 0 .25.17h.69a.85.85 0 0 0 .25-.17l5.33-5.33a.83.83 0 0 0 0-1.18L20.38 27a.82.82 0 0 0-.6-.25.81.81 0 0 0-.59.25" transform="translate(-.31 -.22)"/></g>
+                    <g mask="url(#wm3)"><path  class="brand-logo-wh" d="M32.49 13.69L27.15 19a.86.86 0 0 0 0 1.19l5.34 5.32a.84.84 0 0 0 1.19 0L39 20.2a.84.84 0 0 0 0-1.2l-5.33-5.32a.84.84 0 0 0-.59-.24.85.85 0 0 0-.6.24" transform="translate(-.31 -.22)"/></g>
+                    <g mask="url(#wm4)"><path  class="brand-logo-wh" d="M12.51 33.61L10.14 36a.59.59 0 0 0 .15 1l2 1a.52.52 0 0 0 .78-.52v-3.63c0-.28-.1-.43-.25-.43a.53.53 0 0 0-.35.19" transform="translate(-.31 -.22)"/></g>
+                    <g mask="url(#wm5)"><path  class="brand-logo-wh" d="M26.46 33.85v3.56a.52.52 0 0 0 .77.52l2.05-1a.59.59 0 0 0 .14-1l-2.37-2.36a.52.52 0 0 0-.34-.19c-.15 0-.25.15-.25.43" transform="translate(-.31 -.22)"/></g>
+                    <g mask="url(#wm6)"><path  class="brand-logo-wh" d="M27.3 26.27a.84.84 0 0 0-.84.83v4.8a.85.85 0 0 0 .84.84h4.81a.85.85 0 0 0 .89-.84v-4.8a.84.84 0 0 0-.84-.83H27.3z" transform="translate(-.31 -.22)"/></g>
+                    <g mask="url(#wm7)"><path  class="brand-logo-wh" d="M36.19 10l-2.38 2.37c-.32.32-.21.59.25.59h3.57a.53.53 0 0 0 .52-.78l-1-2a.62.62 0 0 0-.54-.36.65.65 0 0 0-.45.21" transform="translate(-.31 -.22)"/></g>
+                    <g mask="url(#wm8)"><path  class="brand-logo-wh" d="M26.46 1.8v3.56c0 .46.26.57.59.25l2.37-2.37a.59.59 0 0 0-.14-1l-2.05-1a.55.55 0 0 0-.23-.01.5.5 0 0 0-.5.57" transform="translate(-.31 -.22)"/></g>
+                    <g mask="url(#wm9)"><path  class="brand-logo-wh" d="M2.39 10.14l-1 2a.52.52 0 0 0 .52.78H5.5c.47 0 .58-.27.25-.59L3.38 10a.65.65 0 0 0-.46-.21.59.59 0 0 0-.53.36" transform="translate(-.31 -.22)"/></g>
+                    <g mask="url(#wm10)"><path class="brand-logo-wh" d="M7.46 6.47a.85.85 0 0 0-.84.84v4.8a.85.85 0 0 0 .84.84h4.81a.85.85 0 0 0 .84-.84v-4.8a.85.85 0 0 0-.84-.84H7.46z" transform="translate(-.31 -.22)"/></g>
+                    <g mask="url(#wm11)"><path class="brand-logo-wh" d="M12.33 1.29l-2 1a.59.59 0 0 0-.15 1l2.37 2.37c.33.32.6.21.6-.25V1.8a.51.51 0 0 0-.5-.57.74.74 0 0 0-.28.06" transform="translate(-.31 -.22)"/></g>
+                    <g mask="url(#wm12)"><path class="brand-logo-wh" d="M34.06 26.27c-.46 0-.57.26-.25.59l2.38 2.37a.6.6 0 0 0 1-.15l1-2a.52.52 0 0 0-.52-.77h-3.61z" transform="translate(-.31 -.22)"/></g>
+                    <g mask="url(#wm13)"><path class="brand-logo-wh" d="M7.46 26.27a.84.84 0 0 0-.84.83v4.8a.85.85 0 0 0 .84.84h4.81a.85.85 0 0 0 .84-.84v-4.8a.84.84 0 0 0-.84-.83H7.46z" transform="translate(-.31 -.22)"/></g>
+                    <g mask="url(#wm14)"><path class="brand-logo-wh" d="M1.94 26.27a.52.52 0 0 0-.52.77l1 2a.59.59 0 0 0 1 .15l2.37-2.37c.33-.33.22-.59-.25-.59h-3.6z" transform="translate(-.31 -.22)"/></g>
+                    <g mask="url(#wm15)"><path class="brand-logo-wh" d="M27.3 6.47a.85.85 0 0 0-.84.84v4.8a.85.85 0 0 0 .84.84h4.81a.85.85 0 0 0 .84-.84v-4.8a.85.85 0 0 0-.84-.84H27.3z" transform="translate(-.31 -.22)"/></g>
+                    <g mask="url(#wm16)"><path class="brand-logo-wh" d="M5.89 13.69L.55 19a.84.84 0 0 0 0 1.19l5.34 5.32a.84.84 0 0 0 1.19 0l5.33-5.32a.84.84 0 0 0 0-1.19l-5.33-5.31a.85.85 0 0 0-.6-.24.84.84 0 0 0-.59.24" transform="translate(-.31 -.22)"/></g>
+                </g>
+            </svg>
+            <span class="brand-wordmark">rubrik</span>
+        </div>
+        <!-- Tagline centered -->
+        <div class="brand-overlay">
+            <h2 class="brand-headline">SECURE YOUR DATA.<br/><span class="highlight">EVERYWHERE.</span></h2>
+            
+        </div>
+    </div>
+
+    <!-- ── Right panel: Form ── -->
+    <div class="right-panel">
+        <div class="form-wrap">
+
+            <div id="form-section">
+                <h1 class="form-title">Access Your <span>OVF</span></h1>
+                <div class="divider"></div>
+                <p class="form-subtitle">Enter your quote number and registered email address to view your OVF</p>
+
+                <!-- Quote Number -->
+                <div class="field-group">
+                    <label class="field-label" for="quoteNum">
+                        <svg class="label-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                            <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                            <path d="M5 5.5h6M5 8h6M5 10.5h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                        Quote Number
+                    </label>
+                    <input type="text" id="quoteNum" class="field-input" placeholder="e.g. Q-00001234" maxlength="30" autocomplete="off"/>
+                    <span id="quoteErr" class="field-error hidden"></span>
+                </div>
+
+                <!-- Email -->
+                <div class="field-group">
+                    <label class="field-label" for="emailAddr">
+                        <svg class="label-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                            <rect x="2" y="3.5" width="12" height="9" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+                            <path d="M2 6l6 3.5L14 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                        Email Address
+                    </label>
+                    <input type="email" id="emailAddr" class="field-input" placeholder="you@company.com" autocomplete="email"/>
+                    <span id="emailErr" class="field-error hidden"></span>
+                </div>
+
+                <!-- Submit -->
+                <button id="submitBtn" class="btn-submit" onclick="handleSubmit()">
+                    <span id="btnLabel">View OVF</span>
+                    <svg id="btnArrow" class="btn-arrow" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                        <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span id="btnSpinner" class="spinner hidden" aria-hidden="true"></span>
+                </button>
+
+                <div id="serverErr" class="alert-error hidden" role="alert">
+                    <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                        <circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M8 5v3.5M8 11h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                    <span id="serverErrMsg"></span>
+                </div>
+            </div>
+
+            <!-- OVF Form section (shown after successful email validation) -->
+            <div id="ovf-section" class="hidden">
+                <!-- Progress step indicator -->
+                <div class="progress-steps">
+                    <div class="step done" id="step1-indicator">
+                        <div class="step-circle done">
+                            <svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </div>
+                        <span class="step-label">Verify Identity</span>
+                    </div>
+                    <div class="step-connector" id="step-connector"></div>
+                    <div class="step" id="step2-indicator">
+                        <div class="step-circle" id="step2-circle">2</div>
+                        <span class="step-label">Complete OVF</span>
+                    </div>
+                </div>
+
+                <div id="ovf-form-body">
+                <div class="ovf-logo-header">
+                    <svg class="ovf-brand-logo" id="ovf-logo-Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 39 38.77" aria-label="Rubrik icon">
+                        <defs>
+                            <style>.ovf-header-wh{fill:#009dac;fill-rule:evenodd}</style>
+                            <mask id="ovf-wm1"  x="13.3"  y="0"      width="12.35" height="12.27" maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="ovf-header-wh" d="M19.51.22a.83.83 0 0 0-.32.2l-5.34 5.32a.84.84 0 0 0 0 1.19l5.34 5.32a.84.84 0 0 0 1.19 0l5.33-5.32a.84.84 0 0 0 0-1.19L20.38.42a.83.83 0 0 0-.32-.2h-.55z"/></g></mask>
+                            <mask id="ovf-wm2"  x="13.3"  y="26.53"  width="12.35" height="12.25" maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="ovf-header-wh" d="M19.19 27l-5.34 5.32a.83.83 0 0 0 0 1.18l5.34 5.33a.85.85 0 0 0 .25.17h.69a.85.85 0 0 0 .25-.17l5.33-5.33a.83.83 0 0 0 0-1.18L20.38 27a.82.82 0 0 0-.6-.25.81.81 0 0 0-.59.25"/></g></mask>
+                            <mask id="ovf-wm3"  x="26.6"  y="13.22"  width="12.35" height="12.32" maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="ovf-header-wh" d="M32.49 13.69L27.15 19a.86.86 0 0 0 0 1.19l5.34 5.32a.84.84 0 0 0 1.19 0L39 20.2a.84.84 0 0 0 0-1.2l-5.33-5.32a.84.84 0 0 0-.59-.24.85.85 0 0 0-.6.24"/></g></mask>
+                            <mask id="ovf-wm4"  x="9.63"  y="33.2"   width="3.17"  height="4.57"  maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="ovf-header-wh" d="M12.51 33.61L10.14 36a.59.59 0 0 0 .15 1l2 1a.52.52 0 0 0 .78-.52v-3.63c0-.28-.1-.43-.25-.43a.53.53 0 0 0-.35.19"/></g></mask>
+                            <mask id="ovf-wm5"  x="26.15" y="33.2"   width="3.17"  height="4.57"  maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="ovf-header-wh" d="M26.46 33.85v3.56a.52.52 0 0 0 .77.52l2.05-1a.59.59 0 0 0 .14-1l-2.37-2.36a.52.52 0 0 0-.34-.19c-.15 0-.25.15-.25.43"/></g></mask>
+                            <mask id="ovf-wm6"  x="26.15" y="26.04"  width="6.49"  height="6.48"  maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="ovf-header-wh" d="M27.3 26.27a.84.84 0 0 0-.84.83v4.8a.85.85 0 0 0 .84.84h4.81a.85.85 0 0 0 .89-.84v-4.8a.84.84 0 0 0-.84-.83H27.3z"/></g></mask>
+                            <mask id="ovf-wm7"  x="33.32" y="9.56"   width="4.58"  height="3.17"  maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="ovf-header-wh" d="M36.19 10l-2.38 2.37c-.32.32-.21.59.25.59h3.57a.53.53 0 0 0 .52-.78l-1-2a.62.62 0 0 0-.54-.36.65.65 0 0 0-.45.21"/></g></mask>
+                            <mask id="ovf-wm8"  x="26.15" y="1"      width="3.17"  height="4.57"  maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="ovf-header-wh" d="M26.46 1.8v3.56c0 .46.26.57.59.25l2.37-2.37a.59.59 0 0 0-.14-1l-2.05-1a.55.55 0 0 0-.23-.01.5.5 0 0 0-.5.57"/></g></mask>
+                            <mask id="ovf-wm9"  x="1.05"  y="9.56"   width="4.58"  height="3.17"  maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="ovf-header-wh" d="M2.39 10.14l-1 2a.52.52 0 0 0 .52.78H5.5c.47 0 .58-.27.25-.59L3.38 10a.65.65 0 0 0-.46-.21.59.59 0 0 0-.53.36"/></g></mask>
+                            <mask id="ovf-wm10" x="6.31"  y="6.25"   width="6.49"  height="6.48"  maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="ovf-header-wh" d="M7.46 6.47a.85.85 0 0 0-.84.84v4.8a.85.85 0 0 0 .84.84h4.81a.85.85 0 0 0 .84-.84v-4.8a.85.85 0 0 0-.84-.84H7.46z"/></g></mask>
+                            <mask id="ovf-wm11" x="9.63"  y="1"      width="3.17"  height="4.57"  maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="ovf-header-wh" d="M12.33 1.29l-2 1a.59.59 0 0 0-.15 1l2.37 2.37c.33.32.6.21.6-.25V1.8a.51.51 0 0 0-.5-.57.74.74 0 0 0-.28.06"/></g></mask>
+                            <mask id="ovf-wm12" x="33.32" y="26.04"  width="4.58"  height="3.17"  maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="ovf-header-wh" d="M34.06 26.27c-.46 0-.57.26-.25.59l2.38 2.37a.6.6 0 0 0 1-.15l1-2a.52.52 0 0 0-.52-.77h-3.61z"/></g></mask>
+                            <mask id="ovf-wm13" x="6.31"  y="26.04"  width="6.49"  height="6.48"  maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="ovf-header-wh" d="M7.46 26.27a.84.84 0 0 0-.84.83v4.8a.85.85 0 0 0 .84.84h4.81a.85.85 0 0 0 .84-.84v-4.8a.84.84 0 0 0-.84-.83H7.46z"/></g></mask>
+                            <mask id="ovf-wm14" x="1.05"  y="26.04"  width="4.58"  height="3.17"  maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="ovf-header-wh" d="M1.94 26.27a.52.52 0 0 0-.52.77l1 2a.59.59 0 0 0 1 .15l2.37-2.37c.33-.33.22-.59-.25-.59h-3.6z"/></g></mask>
+                            <mask id="ovf-wm15" x="26.15" y="6.25"   width="6.49"  height="6.48"  maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="ovf-header-wh" d="M27.3 6.47a.85.85 0 0 0-.84.84v4.8a.85.85 0 0 0 .84.84h4.81a.85.85 0 0 0 .84-.84v-4.8a.85.85 0 0 0-.84-.84H27.3z"/></g></mask>
+                            <mask id="ovf-wm16" x="0"     y="13.22"  width="12.35" height="12.32" maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="ovf-header-wh" d="M5.89 13.69L.55 19a.84.84 0 0 0 0 1.19l5.34 5.32a.84.84 0 0 0 1.19 0l5.33-5.32a.84.84 0 0 0 0-1.19l-5.33-5.31a.85.85 0 0 0-.6-.24.84.84 0 0 0-.59.24"/></g></mask>
+                        </defs>
+                        <g>
+                            <g mask="url(#ovf-wm1)"><path  class="ovf-header-wh" d="M19.51.22a.83.83 0 0 0-.32.2l-5.34 5.32a.84.84 0 0 0 0 1.19l5.34 5.32a.84.84 0 0 0 1.19 0l5.33-5.32a.84.84 0 0 0 0-1.19L20.38.42a.83.83 0 0 0-.32-.2h-.55z" transform="translate(-.31 -.22)"/></g>
+                            <g mask="url(#ovf-wm2)"><path  class="ovf-header-wh" d="M19.19 27l-5.34 5.32a.83.83 0 0 0 0 1.18l5.34 5.33a.85.85 0 0 0 .25.17h.69a.85.85 0 0 0 .25-.17l5.33-5.33a.83.83 0 0 0 0-1.18L20.38 27a.82.82 0 0 0-.6-.25.81.81 0 0 0-.59.25" transform="translate(-.31 -.22)"/></g>
+                            <g mask="url(#ovf-wm3)"><path  class="ovf-header-wh" d="M32.49 13.69L27.15 19a.86.86 0 0 0 0 1.19l5.34 5.32a.84.84 0 0 0 1.19 0L39 20.2a.84.84 0 0 0 0-1.2l-5.33-5.32a.84.84 0 0 0-.59-.24.85.85 0 0 0-.6.24" transform="translate(-.31 -.22)"/></g>
+                            <g mask="url(#ovf-wm4)"><path  class="ovf-header-wh" d="M12.51 33.61L10.14 36a.59.59 0 0 0 .15 1l2 1a.52.52 0 0 0 .78-.52v-3.63c0-.28-.1-.43-.25-.43a.53.53 0 0 0-.35.19" transform="translate(-.31 -.22)"/></g>
+                            <g mask="url(#ovf-wm5)"><path  class="ovf-header-wh" d="M26.46 33.85v3.56a.52.52 0 0 0 .77.52l2.05-1a.59.59 0 0 0 .14-1l-2.37-2.36a.52.52 0 0 0-.34-.19c-.15 0-.25.15-.25.43" transform="translate(-.31 -.22)"/></g>
+                            <g mask="url(#ovf-wm6)"><path  class="ovf-header-wh" d="M27.3 26.27a.84.84 0 0 0-.84.83v4.8a.85.85 0 0 0 .84.84h4.81a.85.85 0 0 0 .89-.84v-4.8a.84.84 0 0 0-.84-.83H27.3z" transform="translate(-.31 -.22)"/></g>
+                            <g mask="url(#ovf-wm7)"><path  class="ovf-header-wh" d="M36.19 10l-2.38 2.37c-.32.32-.21.59.25.59h3.57a.53.53 0 0 0 .52-.78l-1-2a.62.62 0 0 0-.54-.36.65.65 0 0 0-.45.21" transform="translate(-.31 -.22)"/></g>
+                            <g mask="url(#ovf-wm8)"><path  class="ovf-header-wh" d="M26.46 1.8v3.56c0 .46.26.57.59.25l2.37-2.37a.59.59 0 0 0-.14-1l-2.05-1a.55.55 0 0 0-.23-.01.5.5 0 0 0-.5.57" transform="translate(-.31 -.22)"/></g>
+                            <g mask="url(#ovf-wm9)"><path  class="ovf-header-wh" d="M2.39 10.14l-1 2a.52.52 0 0 0 .52.78H5.5c.47 0 .58-.27.25-.59L3.38 10a.65.65 0 0 0-.46-.21.59.59 0 0 0-.53.36" transform="translate(-.31 -.22)"/></g>
+                            <g mask="url(#ovf-wm10)"><path class="ovf-header-wh" d="M7.46 6.47a.85.85 0 0 0-.84.84v4.8a.85.85 0 0 0 .84.84h4.81a.85.85 0 0 0 .84-.84v-4.8a.85.85 0 0 0-.84-.84H7.46z" transform="translate(-.31 -.22)"/></g>
+                            <g mask="url(#ovf-wm11)"><path class="ovf-header-wh" d="M12.33 1.29l-2 1a.59.59 0 0 0-.15 1l2.37 2.37c.33.32.6.21.6-.25V1.8a.51.51 0 0 0-.5-.57.74.74 0 0 0-.28.06" transform="translate(-.31 -.22)"/></g>
+                            <g mask="url(#ovf-wm12)"><path class="ovf-header-wh" d="M34.06 26.27c-.46 0-.57.26-.25.59l2.38 2.37a.6.6 0 0 0 1-.15l1-2a.52.52 0 0 0-.52-.77h-3.61z" transform="translate(-.31 -.22)"/></g>
+                            <g mask="url(#ovf-wm13)"><path class="ovf-header-wh" d="M7.46 26.27a.84.84 0 0 0-.84.83v4.8a.85.85 0 0 0 .84.84h4.81a.85.85 0 0 0 .84-.84v-4.8a.84.84 0 0 0-.84-.83H7.46z" transform="translate(-.31 -.22)"/></g>
+                            <g mask="url(#ovf-wm14)"><path class="ovf-header-wh" d="M1.94 26.27a.52.52 0 0 0-.52.77l1 2a.59.59 0 0 0 1 .15l2.37-2.37c.33-.33.22-.59-.25-.59h-3.6z" transform="translate(-.31 -.22)"/></g>
+                            <g mask="url(#ovf-wm15)"><path class="ovf-header-wh" d="M27.3 6.47a.85.85 0 0 0-.84.84v4.8a.85.85 0 0 0 .84.84h4.81a.85.85 0 0 0 .84-.84v-4.8a.85.85 0 0 0-.84-.84H27.3z" transform="translate(-.31 -.22)"/></g>
+                            <g mask="url(#ovf-wm16)"><path class="ovf-header-wh" d="M5.89 13.69L.55 19a.84.84 0 0 0 0 1.19l5.34 5.32a.84.84 0 0 0 1.19 0l5.33-5.32a.84.84 0 0 0 0-1.19l-5.33-5.31a.85.85 0 0 0-.6-.24.84.84 0 0 0-.59.24" transform="translate(-.31 -.22)"/></g>
+                        </g>
+                    </svg>
+                    <span class="ovf-brand-wordmark">rubrik</span>
+                </div>
+                <h2 class="form-title">Complete Your <span>OVF</span></h2>
+                <div class="divider"></div>
+
+                <div class="ovf-grid" id="ovf-fields-container">
+                    <!-- Fields rendered dynamically from fieldset -->
+                </div>
+                <script>
+                var OVF_FIELDS = [
+                    <apex:repeat value="{!ovfFieldSetMembers}" var="f">
+                    {
+                        apiName: "{!JSENCODE(f.fieldApiName)}",
+                        label: "{!JSENCODE(f.label)}",
+                        fieldType: "{!JSENCODE(f.fieldType)}",
+                        isRequired: {!IF(f.isRequired, 'true', 'false')},
+                        maxLength: {!f.maxLength}
+                    },
+                    </apex:repeat>
+                ];
+                </script>
+
+                </div><!-- end ovf-form-body -->
+                <div class="ovf-submit-bar">
+                <button id="ovfSubmitBtn" class="btn-submit ovf-grid-full" onclick="handleOVFSubmit()">
+                    <span id="ovfBtnLabel">Submit OVF</span>
+                    <svg id="ovfBtnArrow" class="btn-arrow" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                        <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span id="ovfBtnSpinner" class="spinner hidden" aria-hidden="true"></span>
+                </button>
+
+                <div id="ovfServerErr" class="alert-error hidden ovf-grid-full" role="alert">
+                    <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                        <circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M8 5v3.5M8 11h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                    <span id="ovfServerErrMsg"></span>
+                </div>
+                </div><!-- end ovf-submit-bar -->
+            </div>
+
+            <!-- Thank You section (shown after successful OVF submission) -->
+            <div id="thankyou-section" class="success-state hidden">
+                <div class="thankyou-logo">
+                    <svg class="ty-brand-logo" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 39 38.77" aria-label="Rubrik icon">
+                        <defs>
+                            <style>.wh{fill:#009dac;fill-rule:evenodd}</style>
+                            <mask id="ty-wm1"  x="13.3"  y="0"      width="12.35" height="12.27" maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="wh" d="M19.51.22a.83.83 0 0 0-.32.2l-5.34 5.32a.84.84 0 0 0 0 1.19l5.34 5.32a.84.84 0 0 0 1.19 0l5.33-5.32a.84.84 0 0 0 0-1.19L20.38.42a.83.83 0 0 0-.32-.2h-.55z"/></g></mask>
+                            <mask id="ty-wm2"  x="13.3"  y="26.53"  width="12.35" height="12.25" maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="wh" d="M19.19 27l-5.34 5.32a.83.83 0 0 0 0 1.18l5.34 5.33a.85.85 0 0 0 .25.17h.69a.85.85 0 0 0 .25-.17l5.33-5.33a.83.83 0 0 0 0-1.18L20.38 27a.82.82 0 0 0-.6-.25.81.81 0 0 0-.59.25"/></g></mask>
+                            <mask id="ty-wm3"  x="26.6"  y="13.22"  width="12.35" height="12.32" maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="wh" d="M32.49 13.69L27.15 19a.86.86 0 0 0 0 1.19l5.34 5.32a.84.84 0 0 0 1.19 0L39 20.2a.84.84 0 0 0 0-1.2l-5.33-5.32a.84.84 0 0 0-.59-.24.85.85 0 0 0-.6.24"/></g></mask>
+                            <mask id="ty-wm4"  x="9.63"  y="33.2"   width="3.17"  height="4.57"  maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="wh" d="M12.51 33.61L10.14 36a.59.59 0 0 0 .15 1l2 1a.52.52 0 0 0 .78-.52v-3.63c0-.28-.1-.43-.25-.43a.53.53 0 0 0-.35.19"/></g></mask>
+                            <mask id="ty-wm5"  x="26.15" y="33.2"   width="3.17"  height="4.57"  maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="wh" d="M26.46 33.85v3.56a.52.52 0 0 0 .77.52l2.05-1a.59.59 0 0 0 .14-1l-2.37-2.36a.52.52 0 0 0-.34-.19c-.15 0-.25.15-.25.43"/></g></mask>
+                            <mask id="ty-wm6"  x="26.15" y="26.04"  width="6.49"  height="6.48"  maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="wh" d="M27.3 26.27a.84.84 0 0 0-.84.83v4.8a.85.85 0 0 0 .84.84h4.81a.85.85 0 0 0 .89-.84v-4.8a.84.84 0 0 0-.84-.83H27.3z"/></g></mask>
+                            <mask id="ty-wm7"  x="33.32" y="9.56"   width="4.58"  height="3.17"  maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="wh" d="M36.19 10l-2.38 2.37c-.32.32-.21.59.25.59h3.57a.53.53 0 0 0 .52-.78l-1-2a.62.62 0 0 0-.54-.36.65.65 0 0 0-.45.21"/></g></mask>
+                            <mask id="ty-wm8"  x="26.15" y="1"      width="3.17"  height="4.57"  maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="wh" d="M26.46 1.8v3.56c0 .46.26.57.59.25l2.37-2.37a.59.59 0 0 0-.14-1l-2.05-1a.55.55 0 0 0-.23-.01.5.5 0 0 0-.5.57"/></g></mask>
+                            <mask id="ty-wm9"  x="1.05"  y="9.56"   width="4.58"  height="3.17"  maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="wh" d="M2.39 10.14l-1 2a.52.52 0 0 0 .52.78H5.5c.47 0 .58-.27.25-.59L3.38 10a.65.65 0 0 0-.46-.21.59.59 0 0 0-.53.36"/></g></mask>
+                            <mask id="ty-wm10" x="6.31"  y="6.25"   width="6.49"  height="6.48"  maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="wh" d="M7.46 6.47a.85.85 0 0 0-.84.84v4.8a.85.85 0 0 0 .84.84h4.81a.85.85 0 0 0 .84-.84v-4.8a.85.85 0 0 0-.84-.84H7.46z"/></g></mask>
+                            <mask id="ty-wm11" x="9.63"  y="1"      width="3.17"  height="4.57"  maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="wh" d="M12.33 1.29l-2 1a.59.59 0 0 0-.15 1l2.37 2.37c.33.32.6.21.6-.25V1.8a.51.51 0 0 0-.5-.57.74.74 0 0 0-.28.06"/></g></mask>
+                            <mask id="ty-wm12" x="33.32" y="26.04"  width="4.58"  height="3.17"  maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="wh" d="M34.06 26.27c-.46 0-.57.26-.25.59l2.38 2.37a.6.6 0 0 0 1-.15l1-2a.52.52 0 0 0-.52-.77h-3.61z"/></g></mask>
+                            <mask id="ty-wm13" x="6.31"  y="26.04"  width="6.49"  height="6.48"  maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="wh" d="M7.46 26.27a.84.84 0 0 0-.84.83v4.8a.85.85 0 0 0 .84.84h4.81a.85.85 0 0 0 .84-.84v-4.8a.84.84 0 0 0-.84-.83H7.46z"/></g></mask>
+                            <mask id="ty-wm14" x="1.05"  y="26.04"  width="4.58"  height="3.17"  maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="wh" d="M1.94 26.27a.52.52 0 0 0-.52.77l1 2a.59.59 0 0 0 1 .15l2.37-2.37c.33-.33.22-.59-.25-.59h-3.6z"/></g></mask>
+                            <mask id="ty-wm15" x="26.15" y="6.25"   width="6.49"  height="6.48"  maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="wh" d="M27.3 6.47a.85.85 0 0 0-.84.84v4.8a.85.85 0 0 0 .84.84h4.81a.85.85 0 0 0 .84-.84v-4.8a.85.85 0 0 0-.84-.84H27.3z"/></g></mask>
+                            <mask id="ty-wm16" x="0"     y="13.22"  width="12.35" height="12.32" maskUnits="userSpaceOnUse"><g transform="translate(-.31 -.22)"><path class="wh" d="M5.89 13.69L.55 19a.84.84 0 0 0 0 1.19l5.34 5.32a.84.84 0 0 0 1.19 0l5.33-5.32a.84.84 0 0 0 0-1.19l-5.33-5.31a.85.85 0 0 0-.6-.24.84.84 0 0 0-.59.24"/></g></mask>
+                        </defs>
+                        <g>
+                            <g mask="url(#ty-wm1)"><path  class="wh" d="M19.51.22a.83.83 0 0 0-.32.2l-5.34 5.32a.84.84 0 0 0 0 1.19l5.34 5.32a.84.84 0 0 0 1.19 0l5.33-5.32a.84.84 0 0 0 0-1.19L20.38.42a.83.83 0 0 0-.32-.2h-.55z" transform="translate(-.31 -.22)"/></g>
+                            <g mask="url(#ty-wm2)"><path  class="wh" d="M19.19 27l-5.34 5.32a.83.83 0 0 0 0 1.18l5.34 5.33a.85.85 0 0 0 .25.17h.69a.85.85 0 0 0 .25-.17l5.33-5.33a.83.83 0 0 0 0-1.18L20.38 27a.82.82 0 0 0-.6-.25.81.81 0 0 0-.59.25" transform="translate(-.31 -.22)"/></g>
+                            <g mask="url(#ty-wm3)"><path  class="wh" d="M32.49 13.69L27.15 19a.86.86 0 0 0 0 1.19l5.34 5.32a.84.84 0 0 0 1.19 0L39 20.2a.84.84 0 0 0 0-1.2l-5.33-5.32a.84.84 0 0 0-.59-.24.85.85 0 0 0-.6.24" transform="translate(-.31 -.22)"/></g>
+                            <g mask="url(#ty-wm4)"><path  class="wh" d="M12.51 33.61L10.14 36a.59.59 0 0 0 .15 1l2 1a.52.52 0 0 0 .78-.52v-3.63c0-.28-.1-.43-.25-.43a.53.53 0 0 0-.35.19" transform="translate(-.31 -.22)"/></g>
+                            <g mask="url(#ty-wm5)"><path  class="wh" d="M26.46 33.85v3.56a.52.52 0 0 0 .77.52l2.05-1a.59.59 0 0 0 .14-1l-2.37-2.36a.52.52 0 0 0-.34-.19c-.15 0-.25.15-.25.43" transform="translate(-.31 -.22)"/></g>
+                            <g mask="url(#ty-wm6)"><path  class="wh" d="M27.3 26.27a.84.84 0 0 0-.84.83v4.8a.85.85 0 0 0 .84.84h4.81a.85.85 0 0 0 .89-.84v-4.8a.84.84 0 0 0-.84-.83H27.3z" transform="translate(-.31 -.22)"/></g>
+                            <g mask="url(#ty-wm7)"><path  class="wh" d="M36.19 10l-2.38 2.37c-.32.32-.21.59.25.59h3.57a.53.53 0 0 0 .52-.78l-1-2a.62.62 0 0 0-.54-.36.65.65 0 0 0-.45.21" transform="translate(-.31 -.22)"/></g>
+                            <g mask="url(#ty-wm8)"><path  class="wh" d="M26.46 1.8v3.56c0 .46.26.57.59.25l2.37-2.37a.59.59 0 0 0-.14-1l-2.05-1a.55.55 0 0 0-.23-.01.5.5 0 0 0-.5.57" transform="translate(-.31 -.22)"/></g>
+                            <g mask="url(#ty-wm9)"><path  class="wh" d="M2.39 10.14l-1 2a.52.52 0 0 0 .52.78H5.5c.47 0 .58-.27.25-.59L3.38 10a.65.65 0 0 0-.46-.21.59.59 0 0 0-.53.36" transform="translate(-.31 -.22)"/></g>
+                            <g mask="url(#ty-wm10)"><path class="wh" d="M7.46 6.47a.85.85 0 0 0-.84.84v4.8a.85.85 0 0 0 .84.84h4.81a.85.85 0 0 0 .84-.84v-4.8a.85.85 0 0 0-.84-.84H7.46z" transform="translate(-.31 -.22)"/></g>
+                            <g mask="url(#ty-wm11)"><path class="wh" d="M12.33 1.29l-2 1a.59.59 0 0 0-.15 1l2.37 2.37c.33.32.6.21.6-.25V1.8a.51.51 0 0 0-.5-.57.74.74 0 0 0-.28.06" transform="translate(-.31 -.22)"/></g>
+                            <g mask="url(#ty-wm12)"><path class="wh" d="M34.06 26.27c-.46 0-.57.26-.25.59l2.38 2.37a.6.6 0 0 0 1-.15l1-2a.52.52 0 0 0-.52-.77h-3.61z" transform="translate(-.31 -.22)"/></g>
+                            <g mask="url(#ty-wm13)"><path class="wh" d="M7.46 26.27a.84.84 0 0 0-.84.83v4.8a.85.85 0 0 0 .84.84h4.81a.85.85 0 0 0 .84-.84v-4.8a.84.84 0 0 0-.84-.83H7.46z" transform="translate(-.31 -.22)"/></g>
+                            <g mask="url(#ty-wm14)"><path class="wh" d="M1.94 26.27a.52.52 0 0 0-.52.77l1 2a.59.59 0 0 0 1 .15l2.37-2.37c.33-.33.22-.59-.25-.59h-3.6z" transform="translate(-.31 -.22)"/></g>
+                            <g mask="url(#ty-wm15)"><path class="wh" d="M27.3 6.47a.85.85 0 0 0-.84.84v4.8a.85.85 0 0 0 .84.84h4.81a.85.85 0 0 0 .84-.84v-4.8a.85.85 0 0 0-.84-.84H27.3z" transform="translate(-.31 -.22)"/></g>
+                            <g mask="url(#ty-wm16)"><path class="wh" d="M5.89 13.69L.55 19a.84.84 0 0 0 0 1.19l5.34 5.32a.84.84 0 0 0 1.19 0l5.33-5.32a.84.84 0 0 0 0-1.19l-5.33-5.31a.85.85 0 0 0-.6-.24.84.84 0 0 0-.59.24" transform="translate(-.31 -.22)"/></g>
+                        </g>
+                    </svg>
+                    <span class="ty-brand-wordmark">rubrik</span>
+                </div>
+                <div class="success-icon">
+                    <svg viewBox="0 0 24 24" fill="none" width="28" height="28">
+                        <path d="M5 13l4 4L19 7" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h2 class="success-title">Thank You!</h2>
+                <p class="success-msg">Your OVF has been submitted successfully. You may now close this browser window.</p>
+            </div>
+
+            <div class="form-footer">
+                Need help? <a href="https://support.rubrik.com" target="_blank" rel="noopener noreferrer">Contact Support</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    /* ── Rotating 3D particle sphere ── */
+    (function() {
+        var canvas = document.getElementById('particleSphere');
+        if (!canvas) return;
+        var ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
+        var PARTICLE_COUNT = 2500;
+        var particles = [];
+        var glowParticles = [];
+        var angleX = 0;
+        var angleY = 0;
+        var animId = null;
+
+        /* Build sphere points using spherical coordinates */
+        function initParticles() {
+            particles = [];
+            for (var i = 0; i < PARTICLE_COUNT; i++) {
+                var theta = Math.acos(2 * Math.random() - 1);  /* polar angle */
+                var phi = 2 * Math.PI * Math.random();          /* azimuthal angle */
+                particles.push({ theta: theta, phi: phi });
+            }
+        }
+
+        function resize() {
+            canvas.width  = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+        }
+
+        function draw() {
+            if (!ctx) return;
+            var w = canvas.width;
+            var h = canvas.height;
+            var cx = w / 2;
+            var cy = h / 2;
+            var radius = 0.48 * Math.min(canvas.width, canvas.height) / 2;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            var bgGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(canvas.width, canvas.height) * 0.8);
+            bgGrad.addColorStop(0, '#050d1a');
+            bgGrad.addColorStop(1, '#000000');
+            ctx.fillStyle = bgGrad;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            var coreGlow = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius * 0.7);
+            coreGlow.addColorStop(0, 'rgba(255,120,40,0.22)');
+            coreGlow.addColorStop(1, 'rgba(255,120,40,0)');
+            ctx.fillStyle = coreGlow;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            var halo = ctx.createRadialGradient(cx, cy, radius * 0.75, cx, cy, radius * 1.15);
+            halo.addColorStop(0, 'rgba(30,80,180,0)');
+            halo.addColorStop(0.5, 'rgba(30,80,180,0.12)');
+            halo.addColorStop(1, 'rgba(30,80,180,0)');
+            ctx.fillStyle = halo;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            var cosAX = Math.cos(angleX);
+            var sinAX = Math.sin(angleX);
+            var cosAY = Math.cos(angleY);
+            var sinAY = Math.sin(angleY);
+
+            /* Disable shadow for main particle pass */
+            ctx.shadowBlur = 0;
+            glowParticles.length = 0;
+
+            for (var i = 0; i < particles.length; i++) {
+                var p = particles[i];
+
+                /* Convert spherical to 3D cartesian */
+                var x = radius * Math.sin(p.theta) * Math.cos(p.phi);
+                var y = radius * Math.sin(p.theta) * Math.sin(p.phi);
+                var z = radius * Math.cos(p.theta);
+
+                /* Wave distortion in world-space (before rotation) */
+                var waveY = y + Math.sin(p.theta * 6) * (radius * 0.015);
+
+                /* Rotate around X axis */
+                var y1 = waveY * cosAX - z * sinAX;
+                var z1 = waveY * sinAX + z * cosAX;
+
+                /* Rotate around Y axis */
+                var x2 = x * cosAY + z1 * sinAY;
+                var z2 = -x * sinAY + z1 * cosAY;
+
+                /* Depth factor: map z from [-radius, radius] to [0, 1] */
+                var depth = (z2 + radius) / (2 * radius);
+
+                /* Size and opacity based on depth (closer = bigger/brighter) */
+                var size = 0.5 + depth * 2.0;
+                var alpha = 0.08 + depth * 0.72;
+
+                /* Project 3D to 2D (simple orthographic) */
+                var sx = cx + x2;
+                var sy = cy + y1;
+
+                /* Dual-color particles: amber for front, teal for back */
+                var zNorm = depth;
+                var particleColor;
+                if (zNorm > 0.3) {
+                    var warmBlend = (zNorm - 0.3) / 0.7;
+                    var r = Math.round(0 + warmBlend * 200);
+                    var g = Math.round(157 - warmBlend * 80);
+                    var b = Math.round(172 - warmBlend * 140);
+                    particleColor = 'rgba(' + r + ',' + g + ',' + b + ',' + alpha.toFixed(2) + ')';
+                } else {
+                    particleColor = 'rgba(0,157,172,' + alpha.toFixed(2) + ')';
+                }
+
+                ctx.beginPath();
+                ctx.arc(sx, sy, size, 0, 2 * Math.PI);
+                ctx.fillStyle = particleColor;
+                ctx.fill();
+
+                /* Collect front-facing particles for ambient glow pass */
+                if (zNorm > 0.5) {
+                    glowParticles.push({ sx: sx, sy: sy, size: size });
+                }
+            }
+
+            /* Single ambient glow pass: sub-samples to ~80 draws when glowParticles.length > 80; otherwise all collected particles are drawn */
+            ctx.shadowBlur = 8;
+            ctx.shadowColor = 'rgba(0,200,190,0.5)';
+            var glowStep = Math.max(1, Math.floor(glowParticles.length / 80));
+            for (var g = 0; g < glowParticles.length; g += glowStep) {
+                var gp = glowParticles[g];
+                ctx.beginPath();
+                ctx.arc(gp.sx, gp.sy, gp.size * 3.5, 0, 2 * Math.PI);
+                ctx.fillStyle = 'rgba(0,200,190,0.06)';
+                ctx.fill();
+            }
+            ctx.shadowBlur = 0;
+
+            /* Slow continuous rotation */
+            angleX += 0.003;
+            angleY += 0.005;
+
+            animId = requestAnimationFrame(draw);
+        }
+
+        function startAnimation() {
+            if (animId) return;
+            resize();
+            initParticles();
+            animId = requestAnimationFrame(draw);
+        }
+
+        function stopAnimation() {
+            if (animId) {
+                cancelAnimationFrame(animId);
+                animId = null;
+            }
+        }
+
+        /* Expose stop function to window for OVF mode */
+        window.stopParticleAnimation = stopAnimation;
+
+        /* Only start on desktop */
+        if (window.innerWidth > 768) {
+            startAnimation();
+        }
+
+        var resizeTimer;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function() {
+                if (window.innerWidth > 768) {
+                    startAnimation();
+                } else {
+                    stopAnimation();
+                }
+            }, 120);
+        });
+    })();
+
+    /* ── Dynamic OVF field rendering ── */
+    function getInputType(sfType) {
+        if (sfType === 'email') return 'email';
+        if (sfType === 'phone') return 'tel';
+        if (sfType === 'textarea') return 'textarea';
+        return 'text';
+    }
+
+    function getAutocomplete(apiName) {
+        var map = {
+            'Company_Name__c': 'organization',
+            'Address_1__c': 'address-line1',
+            'Address_2__c': 'address-line2',
+            'City__c': 'address-level2',
+            'State__c': 'address-level1',
+            'Zip_Code__c': 'postal-code',
+            'Country__c': 'country-name',
+            'Contact_Name__c': 'name',
+            'Contact_Email__c': 'email',
+            'Contact_Phone__c': 'tel'
+        };
+        return map[apiName] || 'off';
+    }
+
+    var REQUIRED_FIELDS = {
+        'buyer_name__c': true,
+        'buyer_billing_id__c': true,
+        'contact_name__c': true,
+        'contact_email__c': true,
+        'company_name__c': true
+    };
+
+    var FIELD_SECTIONS = [
+        {
+            title: 'Order Details',
+            icon: '',
+            fields: ['buyer_name__c','buyer_billing_id__c','buyer_tenant_id__c','reseller_name__c','marketplace_seller_id__c']
+        },
+        {
+            title: 'Company Information',
+            icon: '',
+            fields: ['company_name__c','address_1__c','address_2__c','city__c','state__c','zip_code__c','country__c']
+        },
+        {
+            title: 'Contact Details',
+            icon: '',
+            fields: ['contact_name__c','contact_email__c','contact_phone__c']
+        }
+    ];
+
+    function createFieldElement(f) {
+        var inputType = getInputType(f.fieldType);
+        var autocomplete = getAutocomplete(f.apiName);
+        var div = document.createElement('div');
+        div.className = 'field-group';
+
+        var label = document.createElement('label');
+        label.className = 'field-label';
+        label.setAttribute('for', 'ovf_' + f.apiName);
+        label.textContent = f.label;
+        div.appendChild(label);
+
+        var input;
+        if (inputType === 'textarea') {
+            input = document.createElement('textarea');
+            input.rows = 3;
+            input.style.height = 'auto';
+            input.style.padding = '10px 16px';
+        } else {
+            input = document.createElement('input');
+            input.type = inputType;
+        }
+        input.id = 'ovf_' + f.apiName;
+        input.className = 'field-input';
+        input.setAttribute('maxlength', f.maxLength);
+        input.setAttribute('autocomplete', autocomplete);
+        input.placeholder = f.label;
+        if (f.isRequired || REQUIRED_FIELDS[f.apiName.toLowerCase()]) {
+            input.setAttribute('required', 'required');
+            label.textContent = f.label + ' *';
+        }
+        div.appendChild(input);
+        return div;
+    }
+
+    function renderOVFFields() {
+        var container = document.getElementById('ovf-fields-container');
+        if (!container || !window.OVF_FIELDS) return;
+        container.innerHTML = '';
+
+        /* Build a lookup: lowercase apiName -> field object */
+        var fieldMap = {};
+        var assigned = {};
+        for (var i = 0; i < OVF_FIELDS.length; i++) {
+            fieldMap[OVF_FIELDS[i].apiName.toLowerCase()] = OVF_FIELDS[i];
+        }
+
+        /* Render each defined section */
+        for (var s = 0; s < FIELD_SECTIONS.length; s++) {
+            var section = FIELD_SECTIONS[s];
+            var sectionFields = [];
+            for (var j = 0; j < section.fields.length; j++) {
+                var key = section.fields[j].toLowerCase();
+                if (fieldMap[key]) {
+                    sectionFields.push(fieldMap[key]);
+                    assigned[key] = true;
+                }
+            }
+            if (sectionFields.length === 0) continue;
+
+            var card = document.createElement('div');
+            card.className = 'section-card';
+
+            var header = document.createElement('div');
+            header.className = 'section-header';
+
+            var title = document.createElement('span');
+            title.className = 'section-title';
+            title.textContent = section.title;
+            header.appendChild(title);
+            card.appendChild(header);
+
+            var fieldsGrid = document.createElement('div');
+            fieldsGrid.className = 'section-fields ovf-grid';
+            for (var k = 0; k < sectionFields.length; k++) {
+                fieldsGrid.appendChild(createFieldElement(sectionFields[k]));
+            }
+            card.appendChild(fieldsGrid);
+            container.appendChild(card);
+        }
+
+        /* Catch-all section for unmatched fields */
+        var otherFields = [];
+        for (var m = 0; m < OVF_FIELDS.length; m++) {
+            if (!assigned[OVF_FIELDS[m].apiName.toLowerCase()]) {
+                otherFields.push(OVF_FIELDS[m]);
+            }
+        }
+        if (otherFields.length > 0) {
+            var otherCard = document.createElement('div');
+            otherCard.className = 'section-card';
+
+            var otherHeader = document.createElement('div');
+            otherHeader.className = 'section-header';
+
+            var otherTitle = document.createElement('span');
+            otherTitle.className = 'section-title';
+            otherTitle.textContent = 'Additional Information';
+            otherHeader.appendChild(otherTitle);
+            otherCard.appendChild(otherHeader);
+
+            var otherGrid = document.createElement('div');
+            otherGrid.className = 'section-fields ovf-grid';
+            for (var n = 0; n < otherFields.length; n++) {
+                otherGrid.appendChild(createFieldElement(otherFields[n]));
+            }
+            otherCard.appendChild(otherGrid);
+            container.appendChild(otherCard);
+        }
+    }
+
+    /* ── Form logic ── */
+    var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    var currentQuoteId = null;
+    var currentContactName  = null;
+    var currentContactEmail = null;
+    var currentContactPhone = null;
+    var currentCompanyName  = null;
+    var currentShippingAddress1 = null;
+    var currentShippingAddress2 = null;
+    var currentShippingCity     = null;
+    var currentShippingState    = null;
+    var currentShippingZipCode  = null;
+    var currentShippingCountry  = null;
+
+    function $el(id) { return document.getElementById(id); }
+    function show(id) { $el(id).classList.remove('hidden'); }
+    function hide(id) { $el(id).classList.add('hidden'); }
+    function setErr(inp, err, msg) { $el(inp).classList.add('has-error'); $el(err).textContent = msg; show(err); }
+    function clrErr(inp, err)      { $el(inp).classList.remove('has-error'); hide(err); }
+
+    function handleSubmit() {
+        var q = $el('quoteNum').value.trim();
+        var e = $el('emailAddr').value.trim();
+        var ok = true;
+        clrErr('quoteNum','quoteErr'); clrErr('emailAddr','emailErr'); hide('serverErr');
+
+        if (!q) { setErr('quoteNum','quoteErr','Quote number is required.'); ok = false; }
+        if (!e) { setErr('emailAddr','emailErr','Email address is required.'); ok = false; }
+        else if (!EMAIL_RE.test(e)) { setErr('emailAddr','emailErr','Please enter a valid email address.'); ok = false; }
+        if (!ok) return;
+
+        $el('submitBtn').disabled = true;
+        $el('btnLabel').textContent = 'Verifying\u2026';
+        hide('btnArrow'); show('btnSpinner');
+
+        Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.RubrikQuoteLookupController.lookupQuoteVF}',
+            q, e,
+            function(result, event) {
+                $el('submitBtn').disabled = false;
+                $el('btnLabel').textContent = 'View OVF';
+                hide('btnSpinner'); show('btnArrow');
+
+                if (event.status && result !== null) {
+                    currentQuoteId = result.quoteId;
+                    currentContactName  = result.contactName  || '';
+                    currentContactEmail = result.contactEmail || '';
+                    currentContactPhone = result.contactPhone || '';
+                    currentCompanyName  = result.companyName  || '';
+                    currentShippingAddress1 = result.shippingAddress1 || '';
+                    currentShippingAddress2 = result.shippingAddress2 || '';
+                    currentShippingCity     = result.shippingCity     || '';
+                    currentShippingState    = result.shippingState    || '';
+                    currentShippingZipCode  = result.shippingZipCode  || '';
+                    currentShippingCountry  = result.shippingCountry  || '';
+
+                    /* ── Staged animation: email-verification -> OVF form ── */
+                    if (window._ovfAnimating) return;
+                    window._ovfAnimating = true;
+
+                    var formSection = document.getElementById('form-section');
+                    var ovfSection = document.getElementById('ovf-section');
+                    var splitEl = document.querySelector('.split');
+
+                    /* Stage 1 (0ms): Stop particles, start fading out form-section */
+                    if (window.stopParticleAnimation) { window.stopParticleAnimation(); }
+                    formSection.classList.add('fading-out');
+                    formSection.setAttribute('aria-hidden', 'true');
+                    formSection.setAttribute('inert', '');
+
+                    /* Stage 2 (300ms): Add ovf-mode (triggers panel width + particle/overlay fade) */
+                    setTimeout(function() {
+                        splitEl.classList.add('ovf-mode');
+                        // Populate and show the quote card in the sidebar
+                        var quoteCard = document.getElementById('ovf-quote-card');
+                        var quoteNumEl = document.getElementById('ovf-quote-number');
+                        if (quoteCard && quoteNumEl) {
+                            var quoteInput = document.getElementById('quoteNum');
+                            quoteNumEl.textContent = quoteInput ? quoteInput.value.trim() : '';
+                            quoteCard.style.display = 'block';
+                        }
+                        /* Hide form section fully after its fade */
+                        setTimeout(function() {
+                            formSection.classList.add('hidden');
+                            formSection.classList.remove('fading-out');
+                            formSection.removeAttribute('aria-hidden');
+                            formSection.removeAttribute('inert');
+                        }, 370);
+
+                        /* Stage 3 (300ms after Stage 2 = 600ms total): Show OVF section with fade-in */
+                        setTimeout(function() {
+                            ovfSection.classList.remove('hidden');
+                            requestAnimationFrame(function() {
+                                requestAnimationFrame(function() {
+                                    ovfSection.classList.add('faded-in');
+                                    window._ovfAnimating = false;
+                                });
+                            });
+
+                            /* Render OVF fields and activate step indicator */
+                            renderOVFFields();
+                            /* Auto-fill contact fields from OCR */
+                            var cnEl = document.getElementById('ovf_Contact_Name__c');
+                            var ceEl = document.getElementById('ovf_Contact_Email__c');
+                            var cpEl = document.getElementById('ovf_Contact_Phone__c');
+                            if (cnEl && currentContactName)  { cnEl.value = currentContactName; }
+                            if (ceEl && currentContactEmail) { ceEl.value = currentContactEmail; }
+                            if (cpEl) { cpEl.value = currentContactPhone || ''; }
+                            var cnameEl = document.getElementById('ovf_Company_Name__c');
+                            var bnameEl = document.getElementById('ovf_Buyer_Name__c');
+                            if (cnameEl) { cnameEl.value = currentCompanyName || ''; }
+                            if (bnameEl) { bnameEl.value = currentContactName || ''; }
+                            var addr1El    = document.getElementById('ovf_Address_1__c');
+                            var addr2El    = document.getElementById('ovf_Address_2__c');
+                            var cityEl     = document.getElementById('ovf_City__c');
+                            var stateEl    = document.getElementById('ovf_State__c');
+                            var zipEl      = document.getElementById('ovf_Zip_Code__c');
+                            var countryEl  = document.getElementById('ovf_Country__c');
+                            if (addr1El)   { addr1El.value   = currentShippingAddress1; }
+                            if (addr2El)   { addr2El.value   = currentShippingAddress2; }
+                            if (cityEl)    { cityEl.value    = currentShippingCity; }
+                            if (stateEl)   { stateEl.value   = currentShippingState; }
+                            if (zipEl)     { zipEl.value     = currentShippingZipCode; }
+                            if (countryEl) { countryEl.value = currentShippingCountry; }
+                            document.getElementById('step2-circle').classList.add('active');
+                            document.getElementById('step2-indicator').classList.add('active');
+                            document.getElementById('step-connector').classList.add('done');
+                        }, 300);
+                    }, 300);
+                } else if (event.status) {
+                    $el('serverErrMsg').textContent = 'No quote found matching those details. Please check and try again.';
+                    show('serverErr');
+                } else {
+                    $el('serverErrMsg').textContent = event.message || 'Something went wrong. Please try again.';
+                    show('serverErr');
+                }
+            },
+            { escape: true }
+        );
+    }
+
+    function handleOVFSubmit() {
+        hide('ovfServerErr');
+
+        // Client-side required field validation
+        if (window.OVF_FIELDS) {
+            var missingRequired = false;
+            for (var i = 0; i < OVF_FIELDS.length; i++) {
+                var apiName = OVF_FIELDS[i].apiName.toLowerCase();
+                if (OVF_FIELDS[i].isRequired || REQUIRED_FIELDS[apiName]) {
+                    var inputEl = document.getElementById('ovf_' + OVF_FIELDS[i].apiName);
+                    if (inputEl && !inputEl.value.trim()) {
+                        inputEl.classList.add('has-error');
+                        missingRequired = true;
+                    } else if (inputEl) {
+                        inputEl.classList.remove('has-error');
+                    }
+                }
+            }
+            if (missingRequired) {
+                $el('ovfServerErrMsg').textContent = 'Please fill in all required fields.';
+                show('ovfServerErr');
+                return;
+            }
+        }
+
+        $el('ovfSubmitBtn').disabled = true;
+        $el('ovfBtnLabel').textContent = 'Submitting\u2026';
+        hide('ovfBtnArrow'); show('ovfBtnSpinner');
+
+        var fieldValues = {};
+        if (window.OVF_FIELDS) {
+            for (var i = 0; i < OVF_FIELDS.length; i++) {
+                var apiName = OVF_FIELDS[i].apiName;
+                var inputEl = document.getElementById('ovf_' + apiName);
+                fieldValues[apiName] = inputEl ? inputEl.value.trim() : '';
+            }
+        }
+
+        Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.RubrikQuoteLookupController.submitOVFDynamic}',
+            currentQuoteId,
+            JSON.stringify(fieldValues),
+            function(result, event) {
+                $el('ovfSubmitBtn').disabled = false;
+                $el('ovfBtnLabel').textContent = 'Submit OVF';
+                hide('ovfBtnSpinner'); show('ovfBtnArrow');
+
+                if (event.status && result !== null) {
+                    hide('ovf-section');
+                    show('thankyou-section');
+                } else {
+                    var msg = (event.status)
+                        ? 'Failed to submit OVF. Please try again.'
+                        : (event.message || 'Something went wrong. Please try again.');
+                    $el('ovfServerErrMsg').textContent = msg;
+                    show('ovfServerErr');
+                }
+            },
+            { escape: true }
+        );
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            if (!$el('form-section').classList.contains('hidden')) {
+                handleSubmit();
+            } else if (!$el('ovf-section').classList.contains('hidden')) {
+                handleOVFSubmit();
+            }
+        }
+    });
+</script>
+</body>
+</html>
+</apex:page>

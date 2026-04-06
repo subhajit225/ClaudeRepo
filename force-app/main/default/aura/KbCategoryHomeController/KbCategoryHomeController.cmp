@@ -1,0 +1,95 @@
+<aura:component controller="LtngKnowledgeCategoryHome" implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="dataCategList" type="List" />
+    <aura:attribute name="subscribedCateg" type="List" default="[]" />
+    <aura:attribute name="subscribedInfoList" type="LtngKnowledgeCategoryHome.SubscribedCustomer[]" />
+    
+    <aura:attribute name="ModalOpen" type="boolean" default="false"/>
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+    <div class ="containerDiv">
+        <div>
+            <div class ="slds-large-size--12-of-12 slds-Medium-size--9-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 HeadingDiv2"><p class="HeadingDiv">Knowledge Base</p>
+                 <a href="../s/kblistpage?categoryType_Article=All&amp;sortBy=viewCount" class="link">VIEW ALL POPULAR ARTICLES</a> | <a href="../s/kblistpage?categoryType_Article=All" class="link">VIEW ALL NEW ARTICLES</a>
+            </div>
+            <div class ="slds-large-size--12-of-12 slds-Medium-size--9-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12">
+                <div class="container slds-grid slds-wrap">
+                    <div class ="slds-large-size--9-of-12 slds-Medium-size--9-of-12 slds-small-size--8-of-12 slds-max-small-size--6-of-12 categHeading">
+                        <span class ="categ">CATEGORIES</span>
+                    </div>
+                    <div class ="slds-large-size--3-of-12 slds-Medium-size--3-of-12 slds-small-size--4-of-12 slds-max-small-size--6-of-12 ManageSubscriptionButton">
+                        <lightning:button label=" Manage Subscription" class="manageBtn btn uiButton--brand "  onclick="{!c.manageSubscription}"/>
+                        
+                        <div class="tooltip1"> 
+                            <img style="width: 20px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAANOSURBVGhD7dlJyE1xHMbx15wMKcPCwspQosRCiR0bhOxQWIgdkQVhgQUZVpRiYSjTwsJYEtmQZAoRC0IiMhTKzPdZ3Hq7Pe85/+Hce6X3qc+C/r9z733vPf/hd9o6859nOOZjMw7jJC7gLI5jO5ZgArrhn8pE7MIL/InwHscwAz3QknTFXNyAe5Ox9EdYjt5oWsbhKtwbyvUMs9HQ6FtYjx9wb6JKur/6o/L0xTm4F22Ux9DkUVkG4TrcizXaa4xHdvRNXIN7kWZ5g6xvRvfEebiLx/qNl0i9vzQJDERS1sFdNNY+1N5EL6zGN7ixRc6gC6KiKfYn3AVjnIDLWrjxZZYhOPrUVa0TWrVdhsCNL/MOgxEUrdjuIimmwmUA3PgQOxGUqrYdshcuS+HGh/gELQmF0QbQFefYgJ6oZR4+w40NtQqF2Q1XmOsjtKi+avd/OW6jMLFb8VYaBhutnq7gX7UYNgvgCmL8gk6EOltMwhhMx0bo5+VqUu2BzSa4glA7MBQdZSS0DrjaFJdgcwiuIIR2AaMwB5qVtOC56Dzj6lM8gc0puIIQ+iD6WdX+fQcu09C+LscH2FyEK0ihRctlJtz4FPrj2Wh36QpSPISLJgE3PoUmD5ujcAUpDsIl5z6spzXPZhtcQYqFqI921TpcufEptEO3UQfQFcTSTe9mLZ1x3PhUB2CjNqYriHUTLmvgxqfS/WajXqzamK4ohvq+Lpfhxqcaiw6jXqwrijEZ9VE35jvc+BTPUXh+z53nv8I1pKtcCGULCtMd+rSuOMRduFS5fmgyGYHSrIC7QIiONnI60bnxKfScJShq7ash5i5S5h5ctCvWzuE+TiN1X6f7bDSCo12su1CIKSjLfrjaMlq0o3ME7mJl3mIW6mcVtYDUPUntmT1AH0SnHx7BXTSEPtAV6PnhLeQ8V/kCnTaTo3O8uuHu4s2i7bq+4ezo+USrPoy+xUWoLDrGPoV7sUZRE08LdOXRo4EqD19FdDDLuifKoplIrf0quyHt6aekKTZpdkqJmsjqiuf2cGu07dCGNWqxqzL6ua2EuibuDZbRDmIrgvZOzYp6sZph1AFUR0Z9J51v9NdWo0BnbD1Y1aqu/ZzOE4Vb8c50puVpa/sLVe+J6OGq49MAAAAASUVORK5CYII="/>
+                            <span class="tooltiptext">{!$Label.c.S_R_Manage_Subscription}</span>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+            <div class="maincontainer slds-grid slds-wrap tilemainDiv ">
+                <aura:iteration items="{!v.dataCategList}" var="dc" indexVar="key">
+                    <a class= "slds-large-size--3-of-12 slds-Medium-size--6-of-12 slds-small-size--6-of-12 slds-max-small-size--12-of-12 mainDiv"  href="{!'../s/kblistpage?categoryType_Article='+dc.value}">
+                        <div class ="iconsDiv"> <img src="{!$Resource.RubrikCommunityAssets +'/images/'+dc.value+'.png'}"/></div>
+                        <div class ="iconsDivHover"> <img src="{!$Resource.RubrikCommunityAssets +'/images/hoverimages/'+dc.value+'.png'}"/></div>
+                        <div class ="minHeightDiv">{!dc.key}</div>
+                    </a>
+                </aura:iteration>
+            </div>
+            <lightning:icon iconName="check" size="xx-small" />
+            <!-- Modal Code for subscription-->
+            
+            <aura:if isTrue="{!v.ModalOpen}">
+                <!--###### MODAL BOX Start From Here ######-->
+                <div id="contactSupportModal" role="dialog" tabindex="-1" aria-labelledby="header99" class="slds-modal slds-fade-in-open ">
+                    <div class="slds-modal__container ">
+                        <!-- ###### MODAL BOX HEADER Part Start From Here ######-->
+                        <div class="slds-modal__header">
+                            
+                            <a class="modalHeading" href="../s/mysubscriptionpage">Manage all of my knowledge subscriptions</a>
+                        </div>
+                        <!--###### MODAL BOX BODY Part Start From Here ######-->
+                        <div class="slds-modal__content slds-p-around--medium">
+                            <div>
+                                <div class="maincontainer slds-grid slds-wrap tilemainDiv ">
+                                    <!-- <a class =""  id ="test" onclick="{!c.getAll}"  >All</a>-->
+                                    <aura:iteration items="{!v.subscribedInfoList}" var="dc" indexVar="key">
+                                        <div class= "slds-large-size--3-of-12 slds-Medium-size--3-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 modalDiv">
+                                            <div>
+                                                <div class="checkbox">
+                                                    <lightning:input value="{!dc.api}" type="checkbox-button " label="Input Two" name="input2" checked="{!dc.isSubscribed}" onchange="{!c.updateCheckbox}"/>
+                                                </div> 
+                                                <div class ="modalIcon">
+                                                    <a class ="modalImg"><img class="ddd" src="{!$Resource.RubrikCommunityAssets +'/images/'+dc.api+'.png'}"  id ="{!dc.api}"/>
+                                                        <lightning:icon class="{!if(dc.isSubscribed , 'slds-show','slds-hide')}" iconName="utility:check"/>
+                                                    </a>
+                                                </div>
+                                                <div class ="dataCategValue" >{!dc.categoryName}</div>
+                                            </div>
+                                        </div>
+                                    </aura:iteration>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <!--###### MODAL BOX FOOTER Part Start From Here ######-->
+                        <div class="slds-modal__footer">
+                            <div class="resolveIssueBttns">
+                                
+                                <span class ="SaveBtnDiv">
+                                    <button class="slds-button slds-button--neutral"  onclick="{!c.saveBtn}">Save</button>
+                                </span>
+                                <span class ="cancelBtnDiv">
+                                    <button class="slds-button slds-button--brand canclbtn" onclick="{!c.closeBttn}">Cancel</button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-backdrop slds-backdrop--open"></div>
+                <!--###### MODAL BOX Part END Here ######-->
+            </aura:if>
+            
+            <!--MObile View Modal-->
+            
+        </div>
+    </div>
+</aura:component>

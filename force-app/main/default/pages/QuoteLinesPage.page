@@ -1,0 +1,58 @@
+<!--FY25SR-1090 Used in Quote Doc Templates to display quotelines-->
+
+<apex:page showHeader="false" sidebar="false" cache="false" contentType="text/xml" controller="QuoteLinesController">
+    <block margin-top="1em" font-size="{!template.SBQQ__FontSize__c}" font-family="{!template.SBQQ__FontFamily__c}">
+        <apex:repeat value="{!groupList}" var="group">
+            <block padding-bottom="3em">
+                <table width="100%" border-style="solid" border-width="1px">
+                    <apex:repeat value="{!lineColumns}" var="lineColumn">
+                        <apex:outputPanel layout="none" rendered="{!quote[lineColumn.SBQQ__ConditionalPrintField__c]}">   
+                            <table-column column-width="{!lineColumn.SBQQ__Width__c}%"></table-column>
+                        </apex:outputPanel>
+                    </apex:repeat>
+                    <table-header>
+                        <table-row font-size="0.7em" background-color="#{!template.SBQQ__ShadingColor__c}" color="white">
+                            <apex:repeat value="{!lineColumns}" var="lineColumn">
+                                <apex:outputPanel layout="none" rendered="{!quote[lineColumn.SBQQ__ConditionalPrintField__c]}">   
+                                    <table-cell padding-top="0.7em" padding-left="0.7em" border-style="solid" border-width="1px"><block font-weight="bold">{!lineColumn.Name}</block></table-cell>
+                                </apex:outputPanel>
+                            </apex:repeat>
+                        </table-row>
+                    </table-header>
+                    <table-body>
+                        <apex:repeat value="{!group.quoteLines}" var="quoteline">
+                            <table-row font-size="0.7em">
+                                <apex:repeat value="{!lineColumns}" var="lineColumn">
+                                    <apex:outputPanel layout="none" rendered="{!quote[lineColumn.SBQQ__ConditionalPrintField__c]}">
+                                        <table-cell padding-top="0.7em" padding-left="0.7em" border-style="solid" border-width="1px">
+                                            <apex:outputText >
+                                                <block>
+                                                    <apex:outputText rendered="{!CONTAINS(currencyFields, lineColumn.SBQQ__FieldName__c)}" value="{0,number,currency}">
+                                                        <apex:param value="{!quoteline[lineColumn.SBQQ__FieldName__c]}"/>
+                                                    </apex:outputText>
+                                                    <apex:outputText rendered="{!!CONTAINS(currencyFields, lineColumn.SBQQ__FieldName__c)}">
+                                                        {!quoteline[lineColumn.SBQQ__FieldName__c]}
+                                                    </apex:outputText>
+                                                </block>
+                                            </apex:outputText>
+                                        </table-cell>
+                                    </apex:outputPanel>
+                                </apex:repeat>
+                            </table-row>
+                        </apex:repeat>
+                        <table-row font-size="0.7em">
+                            <table-cell padding-top="0.7em" padding-left="0.7em" font-weight="bold" border-style="none" number-columns-spanned="{!columnCount - 1}" text-align="right"><block><apex:outputText value="{!HTMLENCODE(group.Name)}"></apex:outputText> TOTAL:  </block></table-cell>
+                            <table-cell padding-top="0.7em" padding-left="0.7em" border-style="solid" border-width="1px">
+                                <block>
+                                    <apex:outputText value="{0,number,currency}">
+                                        <apex:param value="{!group.total}"/>
+                                    </apex:outputText>
+                                </block>
+                            </table-cell>
+                        </table-row>
+                    </table-body>
+                </table>
+            </block>
+        </apex:repeat>
+    </block>
+</apex:page>

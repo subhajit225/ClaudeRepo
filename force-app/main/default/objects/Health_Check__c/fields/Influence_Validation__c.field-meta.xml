@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Influence_Validation__c</fullName>
+    <label>Influence Validation</label>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Needs To Be Reviewed</fullName>
+                <default>true</default>
+                <label>Needs To Be Reviewed</label>
+            </value>
+            <value>
+                <fullName>Opportunity Influenced</fullName>
+                <default>false</default>
+                <label>Opportunity Influenced</label>
+            </value>
+            <value>
+                <fullName>Opportunity Not Influenced</fullName>
+                <default>false</default>
+                <label>Opportunity Not Influenced</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

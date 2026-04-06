@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Renewal_Target_Amount_RTA__c</fullName>
+    <description>SAL26-1343- Replaced Subscription_Term__c with SBQQ__ProrateMultiplier__c of  Contract line object</description>
+    <externalId>false</externalId>
+    <formula>IF(RenewedContractLine__c &lt;&gt; null,((IF(OR(TEXT(Product__r.SBQQSC__EntitlementConversion__c) = &apos;One per unit&apos; , TEXT(Product__r.SBQQSC__EntitlementConversion__c) = &apos;One per quote line&apos;), ((RenewedContractLine__r.Total_Price_Without_Promo__c/RenewedContractLine__r.SBQQSC__Quantity__c)* Quantity__c),RenewedContractLine__r.Total_Price_Without_Promo__c) /
+(RenewedContractLine__r.SBQQSC__ProrateMultiplier__c/
+Product__r.SBQQ__SubscriptionTerm__c) /
+Product__r.SBQQ__SubscriptionTerm__c) *
+12),null)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Renewal Target Amount (RTA)</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

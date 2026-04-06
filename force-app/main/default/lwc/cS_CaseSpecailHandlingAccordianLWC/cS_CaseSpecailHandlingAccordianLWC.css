@@ -1,0 +1,123 @@
+:host {
+	--slds-c-card-color-background :  rgb(255, 255, 204);
+}
+.cardContainer {
+	background-color: white;
+}
+
+.cardContent {
+	padding: 10px;
+}
+
+.slds-card {
+	background-color: rgb(255, 255, 204);
+}
+
+.iconSection {
+	padding: 10px;
+	display: flex;
+	cursor: pointer;
+	flex-wrap: wrap;
+	cursor: pointer;
+}
+
+.iconName {
+	max-width: 85px;
+	/* margin: 0px 5px 5px 0px; */
+	text-align: center;
+
+}
+
+.cardHeading {
+	font-size: large;
+	font-weight: bold;
+}
+
+.horizontalLine {
+	border-top: 2px solid #ccc;
+	margin: 10px 0px 10px 0px;
+
+}
+
+.tooltip-container {
+	position: relative;
+}
+
+.tooltip {
+	visibility: hidden;
+	min-width: 250%;
+    max-width: 500%;
+    min-height: 25px;
+    max-height: 500%;
+    /* overflow: auto;
+    overflow-y: hidden; */
+	background-color:grey;
+	color: #fff;
+	text-align: left;
+	line-height: 1.6;
+	border-radius: 5px;
+	padding: 10px;
+	position: absolute;
+	z-index: 1;
+	bottom: 110%;
+	left: 80%;
+	margin-left: -50px;
+	opacity: 0;
+	transition: opacity 0.9s;
+}
+
+.tooltip-container:hover .tooltip {
+	visibility: visible;
+	opacity: 1;
+}
+
+.message-list {
+	list-style-type: disc;
+	margin-left: 30px;
+}
+
+.message-list-items {
+	margin-bottom: 5px;
+}
+
+img {
+	width: 75px;
+	height: 75px;
+	margin: 7.5px;
+}
+
+.dropMenu {
+	bottom: 2px;
+}
+
+.rich-text{
+	overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+.headerfont {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-left: 10px;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.borderalign{
+    max-width: 850px;
+    margin: 6.52% auto;
+}
+.topSection{
+    font-size: 32px;
+    color: #4a4a4a;
+    padding-bottom: 5px;
+    font-family: Gotham-Light!important;
+}
+.detailsInfo{
+    font-size: 18px;
+}

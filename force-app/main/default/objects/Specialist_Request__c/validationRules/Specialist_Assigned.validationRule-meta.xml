@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Specialist_Assigned</fullName>
+    <active>true</active>
+    <description>A specialist cannot be assigned until the request is approved</description>
+    <errorConditionFormula>AND(
+OR(
+TEXT(Status__c) = &quot;Draft&quot;, 
+TEXT(Status__c) = &quot;Submitted&quot;,
+TEXT(Status__c) = &quot;SEM Approved&quot;
+), NOT(ISBLANK(Specialist_Assigned__c)))</errorConditionFormula>
+    <errorDisplayField>Specialist_Assigned__c</errorDisplayField>
+    <errorMessage>A specialist cannot be assigned until the request is approved.</errorMessage>
+</ValidationRule>

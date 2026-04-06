@@ -1,0 +1,707 @@
+<aura:component controller="MyProductsController" implements="forceCommunity:availableForAllPageTypes" access="global">
+    <aura:handler  name="change" value="{!v.UserRecord.Account.Tabs_Visibility__c}" action="{!c.init}"/>
+    <aura:attribute name="searchString" type="String"/>
+    <aura:attribute name="clout" type="List"/>
+    <aura:attribute name="clon" type="List"/>
+    <aura:attribute name="clcl" type="List"/>
+    <aura:attribute name="clusters" type="List"/>
+    <aura:attribute name="mosaicClusters" type="List"/>
+    <aura:attribute name="selectedTab" type="String" default="rbkdataprotection"/> <!--updated default tab for CS21-759-->
+    <aura:attribute name="edgeAssets" type="List"/>
+    <aura:attribute name="darkNodes" type="List"/>
+    <aura:attribute name="showClusters" type="boolean" default="false"/>
+    <aura:attribute name="UserRecord" type="Object"/>
+    <aura:attribute name="showModal" type="Boolean" default="false"/>
+    <!-- // CS21-45 -->
+    <aura:attribute name="selectedProactiveContact" type="String"/> 
+    <aura:attribute name="toggleSpinner" type="Boolean" default="false"/>
+    <aura:attribute name="selectedClusterIdList" type="List"/>
+    <aura:attribute name="unCheckedClusterIdList" type="List"/>
+    <aura:attribute name="isUpdateAllCluster" type="Boolean" default="false"/>
+
+    <!-- Rsc Instance Attributes -->
+    <aura:attribute name="rscInstances" type="Object" />
+
+    <!-- Added for CS21-759 - Veera-->
+    <aura:attribute name="polarisContactDetails" type="String" default=""/>
+    <!-- end - CS21-759 -->
+    
+    <force:recordData aura:id="recordLoader"
+                      recordId="{!$SObjectType.CurrentUser.Id}"
+                      fields="AccountId, Account.RSC_G_Support__c,Account.Tabs_Visibility__c,isAuthorizedUser__c, Account.Customer_URL__c, ProfileId"
+                      targetFields="{!v.UserRecord}"
+                      />
+                      
+    <div class ="conatinerDiv">
+        <div class="slds-wrap slds-grid slds-size_12-of-12 conatainer">
+            <div class="slds-large-size--5-of-12 slds-Medium-size--5-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12">
+                <!-- CS21-679 : Moved the register links from right to under the My Products title. Also changed the link titles -->
+                <a class="ideaTitle">My Products</a>
+                <br/><br/>
+                <a class="hovercolorblue topLinks" onclick="{!c.downloadInstallBase}" href="javascript:void()" alt="Download Product List">Download install base and support maintenance report</a><br/>
+                <!-- CS21-1071: Support Portal: Read only user profile -->
+                <aura:if isTrue="{!v.UserRecord.ProfileId != $Label.c.Support_Portal_Read_only_user_profileId}">
+                <a class="hovercolorblue topLinks" href="registerproduct" alt="Register Product">Register Rubrik CDM</a><br/>
+                <a class="hovercolorblue topLinks" href="registerthirdpartyhardware" alt="Register Third Party Hardware">Register third party hardware (HP, Cisco and Dell)</a><br/>
+                <a class="hovercolorblue topLinks" href="registermosaicproduct" alt="Register Product">Register Rubrik Mosaic</a>
+                <br/><br/>
+                </aura:if>
+                <!-- CS21-679 ends -->
+            </div>
+            <div class="slds-large-size--7-of-12 slds-Medium-size--7-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 topSection searchSection">
+                <div>
+                    <ui:inputText aura:Id="searchBox" class="slds-input" value='{!v.searchString}' placeholder="Search by UUID or Serial Number or Asset" keyup="{!c.redirect}"/>
+                </div>
+                <div>
+                    <!--added for CS21-468 - Veera-->
+                    <lightning:button class="my-brand" onclick="{!c.search}" variant="brand" label="Search" iconName="utility:search"/>
+                    <!--CS21-468 - End-->
+                </div>
+            </div>
+            <!--<div class="slds-large-size- -4-of-12 slds-Medium-size- -4-of-12 slds-small-size- -12-of-12 slds-max-small-size- -12-of-12 topLinks">
+                <a class="hovercolorblue" href="../InstallBaseDownloadList" alt="Download Product List">Download Entire Product List</a><br/>
+                <a  class="hovercolorblue" href="registerproduct" alt="Register Product">Register your Rubrik CDM Product</a><br/>
+                <a  class="hovercolorblue" href="registermosaicproduct" alt="Register Product">Register your Rubrik Mosaic Product</a>
+            </div>-->
+
+            <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12">
+                <lightning:tabset selectedTabId="{!v.selectedTab}">
+                    <!-- Added for CS21-759 - Veera--> 
+                    <!-- Ashish: commenting code as per the requirement CS21-1373-->
+                    <lightning:tab label="Rubrik Security Cloud (RSC)" id="rbkdataprotection">
+                        <div
+                            class="slds-large--size-12-of-12 slds-Medium-size--12-of-12 slds-small--size-12-of-12 slds-max-small-size--12-of-12 ideaTitle">
+                            RSC Instances</div>
+                        <div
+                            class="slds-large--size-12-of-12 slds-Medium-size--12-of-12 slds-small--size-12-of-12 slds-max-small-size--12-of-12 topSection">
+                            <!-- CS21-1324: [FedRAMP] Disable case creation from Support Portal-->
+                            <aura:if isTrue="{!v.UserRecord.Account.RSC_G_Support__c=='RSC-G'}">
+                                    <div class="msg">
+                                        <p>Protect and manage data on-premises with Rubrik Security Cloud (RSC), which is a unified SaaS platform that securely delivers backup, 
+                                        recovery, analytics, and compliance across data centers and clouds.</p><br/>
+                                        <p>We've provisioned your secure <i>Rubrik Security Cloud - Government</i> instance and a separate welcome email was sent with access instructions. 
+                                            Please contact your Rubrik Sales Account team for more details or questions.</p>
+                                	</div>
+                                <aura:set attribute="else">
+                                    <aura:if isTrue="{!(empty(v.rscInstances.dataList))}">
+                                        <div class="msg">
+                                            <p>Protect and manage data on-premises and in the cloud with Rubrik Security Cloud, which is a unified SaaS platform that
+                                                securely delivers backup, recovery, analytics, and compliance across data centers and clouds.</p><br/>
+                                            
+                                            <p>Rubrik Security Cloud has not been enabled for your environment. To enable your access to Rubrik Security Cloud, 
+                                                please <a href="https://www.rubrik.com/contact-sales">contact Rubrik Sales</a>.</p><br/>
+                                        </div>
+                                        <!-- When Account Customer Polaris URL is Not blank -->
+                                        <aura:set attribute="else">
+                                            <div class="msg">
+                                                <!-- CS21-3824 -->
+                                                <p>Rubrik Security Cloud is a comprehensive data security platform that delivers 
+                                                    complete cyber resilience with both cyber posture and cyber recovery. 
+                                                    RSC is built on a modern, zero trust architecture powered by machine 
+                                                    learning and was designed to keep data secure, monitor data risks, 
+                                                    and quickly recover data, wherever it lives. 
+                                                    Access RSC using the following information.</p>
+                                                <br />
+                                                <c:RSCInsatanceGenericTable
+                                                    columns="{!v.rscInstances.columns}"
+                                                    data="{!v.rscInstances.dataList}"
+                                                    isVisible="{!v.rscInstances.isVisible}"
+                                                    isPortal="{!v.rscInstances.isPortalView}"
+                                                    isPartenerDistributorAcc="{!v.rscInstances.isPartenerDistributorAccRecType}"
+                                                />
+                                                <br />  
+                                                <!-- CS21-3824 -->                                    
+                                                    <!--<div class="slds-size_2-of-7">
+                                                        <div class="slds-m-left_x-large fontBold">
+                                                            <li>Rubrik Security Cloud URL :</li>
+                                                        </div>
+                                                    </div>
+                                                    <div class="slds-size_5-of-7">
+                                                        <a href="{!v.UserRecord.Account.Customer_URL__c}" target="_blank">{!v.UserRecord.Account.Customer_URL__c}</a>
+                                                    </div> -->
+                                                    <!-- CS21-2651: Temporarily remove Rubrik Security Cloud Owner -->
+                                                    <!--div class="slds-size_2-of-7">
+                                                        <div class="slds-m-left_x-large fontBold">
+                                                            // Updated Primary Admin Contact to Rubrik Security Cloud owner for CS21-1758 - Sushant
+                                                            <li>Rubrik Security Cloud owner :</li>
+                                                            // CS21-1758 - End
+                                                        </div>
+                                                    </div>
+                                                    <div class="slds-size_5-of-7">
+                                                        {!v.polarisContactDetails}
+                                                    </div-->
+                                                <!-- </div>
+                                                <br /> -->
+                                                <!-- Updated Primary Contact to Rubrik Security Cloud owner for CS21-1758 -Sushant-->
+                                                 <!-- CS21-3824 -->
+                                                <p>Use the <span class="fontBold"><i>Forgot Password </i></span>
+                                                        link to configure your login for the first time. Additional users must be created by an RSC owner.</p>
+                                                <br />
+                                                <!-- CS21-3824 -->
+                                                <!--// CS21-1758 - End-->
+                                            </div>
+                                        </aura:set>
+                                    </aura:if>
+                                </aura:set>
+                            </aura:if>
+                        </div>
+                    </lightning:tab>
+                     <!--// End - CS21-759 - Veera--> 
+                    
+                    <lightning:tab label="Cloud Assets" id="cloudAssets" onactive="{!c.getAssets}">
+                        <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 ideaTitle">Cloud Assets</div>
+                        <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 cloudOut">Cloud Out</div>
+                        <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 assetsDrpdwn">
+                            <lightning:accordion aura:id="accordion" allowMultipleSectionsOpen="true" >
+                                <lightning:accordionSection name="ClOut" label="{!if(v.clout.length == null , '0 Assets',v.clout.length + ' Assets')}">
+                                    <aura:if isTrue="{!v.clout.length > 0}">
+                                        <table class="slds-table slds-table_cell-buffer slds-table_bordered bordertopnone">
+                                            <thead>
+                                                <tr class="slds-line-height_reset">
+                                                    <th class="slds-cell-wrap" scope="col">
+                                                        <div  class ="Comment" title="Subscription">Subscription</div>
+                                                    </th>
+                                                    <th class="slds-cell-wrap" scope="col">
+                                                        <div  class ="Commentor" title="Name">Name</div>
+                                                    </th>
+                                                    <th class="slds-cell-wrap" scope="col">
+                                                        <div class ="Commentor" title="Start">Start Date</div>
+                                                    </th>
+                                                    <th class="slds-cell-wrap" scope="col">
+                                                        <div class ="Commentor" title="End">End Date</div>
+                                                    </th>
+                                                    <!--<th class="slds-cell-wrap" scope="col">
+                                                        <div class ="Commentor" title=""></div>
+                                                    </th>-->
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                <aura:iteration items="{!v.clout}" var="out">
+                                                    <tr class="slds-hint-parent ">
+                                                        <td data-label="Comment" class="slds-cell-wrap">
+                                                            <div class ="Comment"  title="{!out.Product__r.ProductCode}">
+                                                                <aura:unescapedHtml value="{!out.Product__r.ProductCode}"/>
+                                                            </div>
+                                                        </td>
+                                                        <td data-label="Date" class="slds-cell-wrap">
+                                                            <div  class ="Comment"  title="{!out.Asset.Name}">{!out.Asset.Name}</div>
+                                                        </td>
+                                                        <td data-label="Commentor" class="slds-cell-wrap">
+                                                            <div  class ="Comment"  title="{!out.StartDate}">
+                                                                <!--lightning:formattedDateTime value="{!out.StartDate}" year="numeric" month="2-digit" day="2-digit"/-->
+                                                                <ui:outputDate value="{!out.StartDate}" format="MM/dd/yyyy"/>
+                                                            </div>
+                                                        </td>
+                                                        <td data-label="Commentor" class="slds-cell-wrap">
+                                                            <div  class ="Comment"  title="{!out.EndDate}">
+                                                                <!--lightning:formattedDateTime value="{!out.EndDate}" year="numeric" month="2-digit" day="2-digit"/-->
+                                                                <aura:if isTrue="{!empty(out.Terminated_Date__c)}">
+                                                                    <ui:outputDate value="{!out.EndDate}" format="MM/dd/yyyy"/>
+                                                                    <aura:set attribute="else">
+                                                                        <ui:outputDate value="{!out.Terminated_Date__c}" format="MM/dd/yyyy"/>
+                                                                    </aura:set>
+                                                                </aura:if>
+                                                                <!--<ui:outputDate value="{!out.EndDate}" format="MM/dd/yyyy"/>-->
+                                                            </div>
+                                                        </td>
+                                                        <!--<td data-label="Commentor" class="slds-cell-wrap">
+                                                            <div  class ="Comment"  title="">
+                                                                <a href="/s/registerproduct?uuid=&amp;nn=" alt=""><img alt="Register" src="/resource/1518010139000/registerIcon"/></a>
+                                                            </div>
+                                                        </td>-->
+                                                    </tr>
+                                                </aura:iteration>
+                                            </tbody>
+                                        </table>
+                                        <aura:set attribute="else">
+                                            <p>You have no products in this category. Please contact Sales if you wish to purchase one.</p>
+                                        </aura:set>
+                                    </aura:if>
+                                </lightning:accordionSection>
+                            </lightning:accordion>
+                        </div>
+                        <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 cloudOut">Cloud On</div>
+                        <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 assetsDrpdwn">
+                            <lightning:accordion aura:id="accordion" allowMultipleSectionsOpen="true" >
+                                <lightning:accordionSection name="ClOn" label="{!if(v.clon.length == null , '0 Assets',v.clon.length + ' Assets')}">
+                                    <aura:if isTrue="{!v.clon.length > 0}">
+                                        <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                            <thead>
+                                                <tr class="slds-line-height_reset">
+                                                    <th class="slds-cell-wrap" scope="col">
+                                                        <div  class ="Comment" title="Subscription">Subscription</div>
+                                                    </th>
+                                                    <th class="slds-cell-wrap" scope="col">
+                                                        <div  class ="Commentor" title="Name">Name</div>
+                                                    </th>
+                                                    <th class="slds-cell-wrap" scope="col">
+                                                        <div class ="Commentor" title="Start">Start Date</div>
+                                                    </th>
+                                                    <th class="slds-cell-wrap" scope="col">
+                                                        <div class ="Commentor" title="End">End Date</div>
+                                                    </th>
+                                                    <!--<th class="slds-cell-wrap" scope="col">
+                                                        <div class ="Commentor" title=""></div>
+                                                    </th>-->
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                <aura:iteration items="{!v.clon}" var="on">
+                                                    <tr class="slds-hint-parent ">
+                                                        <td data-label="Comment" class="slds-cell-wrap">
+                                                            <div class ="Comment"  title="{!on.Product__r.ProductCode}">
+                                                                <aura:unescapedHtml value="{!on.Product__r.ProductCode}"/>
+                                                            </div>
+                                                        </td>
+                                                        <td data-label="Date" class="slds-cell-wrap">
+                                                            <div  class ="Comment"  title="{!on.Asset.Name}">{!on.Asset.Name}</div>
+                                                        </td>
+                                                        <td data-label="Commentor" class="slds-cell-wrap">
+                                                            <div  class ="Comment"  title="{!on.StartDate}">
+                                                                <!--lightning:formattedDateTime value="{!on.StartDate}" year="numeric" month="2-digit" day="2-digit"/-->
+                                                                <ui:outputDate value="{!on.StartDate}" format="MM/dd/yyyy"/>
+                                                            </div>
+                                                        </td>
+                                                        <td data-label="Commentor" class="slds-cell-wrap">
+                                                            <div  class ="Comment"  title="{!on.EndDate}">
+                                                                <!--lightning:formattedDateTime value="{!on.EndDate}" year="numeric" month="2-digit" day="2-digit"/-->
+                                                                <aura:if isTrue="{!empty(on.Terminated_Date__c)}">
+                                                                    <ui:outputDate value="{!on.EndDate}" format="MM/dd/yyyy"/>
+                                                                    <aura:set attribute="else">
+                                                                        <ui:outputDate value="{!on.Terminated_Date__c}" format="MM/dd/yyyy"/>
+                                                                    </aura:set>
+                                                                </aura:if>
+                                                                <!--<ui:outputDate value="{!on.EndDate}" format="MM/dd/yyyy"/>-->
+                                                            </div>
+                                                        </td>
+                                                        <!--<td data-label="Commentor" class="slds-cell-wrap">
+                                                            <div  class ="Comment"  title="">
+                                                                <a href="/s/registerproduct?uuid=&amp;nn=" alt=""><img alt="Register" src="/resource/1518010139000/registerIcon"/></a>
+                                                            </div>
+                                                        </td>-->
+                                                    </tr>
+                                                </aura:iteration>
+
+                                            </tbody>
+                                        </table>
+                                        <aura:set attribute="else">
+                                            <p>You have no products in this category. Please contact Sales if you wish to purchase one.</p>
+                                        </aura:set>
+                                    </aura:if>
+                                </lightning:accordionSection>
+                            </lightning:accordion>
+                        </div>
+
+                        <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 cloudOut">Cloud Clusters</div>
+                        <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 assetsDrpdwn">
+                            <lightning:accordion aura:id="accordion" allowMultipleSectionsOpen="true" >
+                                <lightning:accordionSection name="clcl" label="{!if(v.clcl.length == null , '0 Assets',v.clcl.length + ' Assets')}">
+                                    <aura:if isTrue="{!v.clcl.length > 0}">
+                                        <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                            <thead>
+                                                <tr class="slds-line-height_reset">
+                                                    <th class="slds-cell-wrap" scope="col">
+                                                        <div  class ="Comment" title="Subscription">Subscription</div>
+                                                    </th>
+                                                    <th class="slds-cell-wrap" scope="col">
+                                                        <div class="Comment" title="Description">Description</div>
+                                                    </th>
+                                                    <th class="slds-cell-wrap" scope="col">
+                                                        <div class="Comment" title="Quantity">Quantity</div>
+                                                    </th>
+                                                    <!--<th class="slds-cell-wrap" scope="col">
+                                                        <div class="Commentor" title="Name">Name</div>
+                                                    </th>-->
+                                                    <th class="slds-cell-wrap" scope="col">
+                                                        <div class ="Commentor" title="Start">Start Date</div>
+                                                    </th>
+                                                    <th class="slds-cell-wrap" scope="col">
+                                                        <div class ="Commentor" title="End">End Date</div>
+                                                    </th>
+                                                    <!--<th class="slds-cell-wrap" scope="col">
+                                                        <div class ="Commentor" title=""></div>
+                                                    </th>-->
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                <aura:iteration items="{!v.clcl}" var="cl">
+                                                    <tr class="slds-hint-parent ">
+                                                        <td data-label="Comment" class="slds-cell-wrap">
+                                                            <div class ="Comment"  title="{!cl.Product__r.ProductCode}">
+                                                                <aura:unescapedHtml value="{!cl.Product__r.ProductCode}"/>
+                                                            </div>
+                                                        </td>
+                                                        <td data-label="Comment" class="slds-cell-wrap">
+                                                            <div class="Comment" title="{!cl.Product__r.Description}">
+                                                                <aura:unescapedHtml
+                                                                    value="{!cl.Product__r.Description}" />
+                                                            </div>
+                                                        </td>
+                                                        <td data-label="Comment" class="slds-cell-wrap">
+                                                            <div class="Comment" title="{!cl.Order_Quantity__c}">
+                                                                <aura:unescapedHtml
+                                                                    value="{!cl.Order_Quantity__c}" />
+                                                            </div>
+                                                        </td>
+                                                        <!--<td data-label="Date" class="slds-cell-wrap">
+                                                            <div  class ="Comment"  title="{!cl.Asset.Name}">{!cl.Asset.Name}</div>
+                                                        </td>-->
+                                                        <td data-label="Commentor" class="slds-cell-wrap">
+                                                            <div  class ="Comment"  title="{!cl.StartDate}">
+                                                                <!--lightning:formattedDateTime value="{!cl.StartDate}" year="numeric" month="2-digit" day="2-digit"/-->
+                                                                <ui:outputDate value="{!cl.StartDate}" format="MM/dd/yyyy"/>
+                                                            </div>
+                                                        </td>
+                                                        <td data-label="Commentor" class="slds-cell-wrap">
+                                                            <div  class ="Comment"  title="{!cl.EndDate}">
+                                                                <!--lightning:formattedDateTime value="{!cl.EndDate}" year="numeric" month="2-digit" day="2-digit"/-->
+                                                                <aura:if isTrue="{!empty(cl.Terminated_Date__c)}">
+                                                                    <ui:outputDate value="{!cl.EndDate}" format="MM/dd/yyyy"/>
+                                                                    <aura:set attribute="else">
+                                                                        <ui:outputDate value="{!cl.Terminated_Date__c}" format="MM/dd/yyyy"/>
+                                                                    </aura:set>
+                                                                </aura:if>
+                                                            </div>
+                                                        </td>
+                                                        <!--<td data-label="Commentor" class="slds-cell-wrap">
+                                                            <div  class ="Comment"  title="">
+                                                                <a href="/s/registerproduct?uuid=&amp;nn=" alt=""><img alt="Register" src="/resource/1518010139000/registerIcon"/></a>
+                                                            </div>
+                                                        </td>-->
+                                                    </tr>
+                                                </aura:iteration>
+
+                                            </tbody>
+                                        </table>
+                                        <aura:set attribute="else">
+                                            <p>You have no products in this category. Please contact Sales if you wish to purchase one.</p>
+                                        </aura:set>
+                                    </aura:if>
+                                </lightning:accordionSection>
+                            </lightning:accordion>
+                        </div>
+                    </lightning:tab>
+                    <lightning:tab label="Clusters" id="clusters" onactive="{!c.getClusters}">
+                        <div class="slds-grid" style="padding: 1rem;">
+                            <div style="width: 3%;" class="slds-large-size--4-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12">
+                                <lightning:input type="Checkbox" name="clusterId11" aura:id="clusterIdall" onchange="{!c.onCheckAllCluster}"/>
+                            </div>
+                            <div class="slds-large-size--8-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12">
+                                <lightning:button onclick="{! c.updateProactiveContactModal }" label="Bulk Update Clusters Proactive Contact" class="slds-button slds-button_neutral"/>
+                            </div>
+                        </div> 
+                        <div class="slds-large-size--7-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 ideaTitle">Clusters</div>
+                        <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 topSection">
+                            <aura:iteration items="{!v.clusters}" var="cl">
+                                <div class="slds-grid slds-wrap slds-large-size--12-of-12 blockStyle">
+                                    <div style="width: 3%;" class="slds-large-size--1-of-12">
+                                        <lightning:input type="Checkbox" name="clusterId" aura:id="clusterId" value="{!cl.clustr.Id}" onchange="{!c.onCheckCluster}"/>
+                                    </div>
+                                    <div class="slds-large-size--6-of-12 uuid-title">UUID: {!cl.clustr.uuid__c}</div>
+                                    <div class="slds-large-size--5-of-12 coloronhover ">
+                                        <aura:if isTrue="{!v.showClusters}">
+                                            <aura:if isTrue="{!cl.clustr.is_callhome_on__c}">
+                                                <a  href="{!'/s/cluster/'+cl.clustr.Id}" class="" style="">
+                                                    <lightning:button label="Show Cluster info" class="slds-button slds-button_neutral buttoncolorcls"/>
+                                                </a>
+                                                <aura:set attribute="else">
+                                                    <button class="slds-button slds-button_neutral buttoncolorcls" disabled="true">
+                                                        NO STATS AVAILABLE
+                                                    </button>
+                                                    <lightning:helptext content="The Rubrik data collectors are not receiving phone home logs and stats from your cluster, so we’re not able to display your cluster metrics, health, and trending information. To enable cluster metrics reporting, please open port 443 for both proxy.rubrik.com and logs.rubrik.com."/>
+                                                </aura:set>
+                                            </aura:if>&nbsp;
+                                            <a  href="{!'/s/proactivedetails?id='+cl.clustr.Id}" class="" style="">
+                                                <lightning:button label="Proactive Contact" class="slds-button slds-button_neutral buttoncolorcls"/>
+                                            </a>
+                                            <aura:if isTrue="{!!v.UserRecord.isAuthorizedUser__c}">
+                                                <lightning:helptext content="The following configuration allows users to define default contacts for automated cases or alerts at the cluster-level. Only authorized Admin Panel users have access to configure cluster-level contact defaults. To elevate your privileges to configure cluster-level contact defaults, please request access in the Admin Panel page."/>
+                                            </aura:if>
+                                        </aura:if>
+                                    </div>
+                                    
+                                    <div class="slds-large-size--12-of-12">Name: {!if(cl.clustr.tag__c==null, 'Not Available', cl.clustr.tag__c)}, {!cl.clustr.CDM_End_of_Support_Status__c}</div>
+                                    <aura:if isTrue="{!cl.clustr.is_callhome_on__c}">
+                                        <div class="slds-large-size--12-of-12">CDM version: {!if(cl.clustr.software_version__c==null, 'Not Available', cl.clustr.software_version__c)}</div>
+                                        <div class="slds-large-size--12-of-12">Storage use: {!if(cl.clustr.storage_usage__c==null, 'Not Available', cl.clustr.storage_usage__c)}</div>
+                                        <div class="slds-large-size--12-of-12">Objects protected: {!if(cl.clustr.objects_protected__c==null, 'Not Available', cl.clustr.objects_protected__c)}</div>
+                                        <div class="slds-large-size--12-of-12">Snapshot count: {!if(cl.clustr.snapshot_count__c==null, 'Not Available', cl.clustr.snapshot_count__c)}</div>
+                                    </aura:if>
+                                    <div class="slds-large-size--12-of-12 ">
+                                        <lightning:accordion class="coloronhover" aura:id="accordion" allowMultipleSectionsOpen="true">
+                                            <lightning:accordionSection  class="coloronhover" name="nodes" label="{!cl.nodes.length + ' Nodes'}">
+                                                <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                                    <thead>
+                                                        <tr class="slds-line-height_reset">
+                                                            <th class="slds-cell-wrap" scope="col">
+                                                                <div class ="Comment" title="Serial Number">Serial Number</div>
+                                                            </th>
+                                                            <th class="slds-cell-wrap" scope="col">
+                                                                <div class ="Comment" title="Asset">Asset</div>
+                                                            </th>
+                                                            <th class="slds-cell-wrap" scope="col">
+                                                                <div class ="Comment" title="Product Code">Product Code</div>
+                                                            </th>
+                                                            <th class="slds-cell-wrap" scope="col">
+                                                                <div class ="Comment" title="Chassis">Chassis</div>
+                                                            </th>
+                                                            <th class="slds-cell-wrap" scope="col">
+                                                                <div class ="Comment" title="Maintenance Start">Maintenance Start</div>
+                                                            </th>
+                                                            <th class="slds-cell-wrap" scope="col">
+                                                                <div class ="Comment" title="Maintenance End">Maintenance End</div>
+                                                            </th>
+                                                            <th class="slds-cell-wrap" scope="col">
+                                                                <div class ="Comment" title=""></div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+
+                                                        <aura:iteration items="{!cl.nodes}" var="node">
+                                                            <tr class=" slds-hint-parent ">
+                                                                <td data-label="Commentor" class="slds-cell-wrap">
+                                                                    <div  class ="Comment"  title="{!node.serial_number__c}">{!node.serial_number__c}</div>
+                                                                </td>
+                                                                <td data-label="Commentor" class="slds-cell-wrap">
+                                                                    <div  class ="Comment"  title="{!node.asset__r.Name}">{!node.asset__r.Name}</div>
+                                                                </td>
+                                                                <td data-label="Commentor" class="slds-cell-wrap">
+                                                                    <div  class ="Comment"  title="{!node.asset__r.Product2.ProductCode}">{!node.asset__r.Product2.ProductCode}</div>
+                                                                </td>
+                                                                <td data-label="Commentor" class="slds-cell-wrap">
+                                                                    <div  class ="Comment"  title="{!node.chassis__r.Name}">{!node.chassis__r.Name}</div>
+                                                                </td>
+                                                                <td data-label="Commentor" class="slds-cell-wrap">
+                                                                    <div  class ="Comment"  title="{!node.asset__r.Support_Start_Date__c}">
+                                                                        <!--lightning:formattedDateTime value="{!node.asset__r.Support_Start_Date__c}" year="numeric" month="2-digit" day="2-digit"/-->
+                                                                        <ui:outputDate value="{!node.asset__r.Support_Start_Date__c}" format="MM/dd/yyyy"/>
+                                                                    </div>
+                                                                </td>
+                                                                <td data-label="Commentor" class="slds-cell-wrap">
+                                                                    <div  class ="Comment"  title="{!node.asset__r.Premium_Support_End_Date__c}">
+                                                                        <!--lightning:formattedDateTime value="{!node.asset__r.Premium_Support_End_Date__c}" year="numeric" month="2-digit" day="2-digit"/-->
+                                                                            <ui:outputDate value="{!node.asset__r.Premium_Support_End_Date__c}" format="MM/dd/yyyy"/>
+                                                                    </div>
+                                                                </td>
+                                                                <td data-label="Commentor" class="slds-cell-wrap">
+                                                                    <div  class ="Comment"  title="">
+                                                                        <a href="registerproduct" alt=""><img alt="Register" src="/resource/1518010139000/registerIcon"/></a>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </aura:iteration>
+                                                    </tbody>
+                                                </table>
+                                            </lightning:accordionSection>
+                                        </lightning:accordion>
+                                    </div>
+                                </div>
+                            </aura:iteration>
+                            <aura:if isTrue="{!v.clusters.length == 0}">
+                                <p class="msg">You don't have any Cluster . Please contact Sales if you wish to purchase one or Register a Products.</p>
+                            </aura:if>
+                        </div>
+                    </lightning:tab>
+                    <!-- Tab 4 -->
+
+                    <lightning:tab label="Rubrik Mosaic Clusters" id="mosaicclusters" onactive="{!c.getMosaicClusters}">
+                        <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 ideaTitle">Rubrik Mosaic Clusters</div>
+                        <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 topSection">
+                            <aura:iteration items="{!v.mosaicClusters}" var="cl">
+                                <div class="slds-grid slds-wrap slds-large-size--12-of-12 blockStyle">
+                                    <div class="slds-large-size--8-of-12 uuid-title">UUID: {!cl.clustr.uuid__c}</div>
+                                    <div class="slds-large-size--4-of-12 coloronhover ">
+                                    </div>
+                                    <div class="slds-large-size--12-of-12">Registeration date: <ui:outputDate value="{!cl.clustr.CreatedDate}" /></div>
+                                </div>
+                            </aura:iteration>
+                            <aura:if isTrue="{!v.mosaicClusters.length == 0}">
+                                <p class="msg">You don't have any Rubrik Mosaic Cluster . Please contact Sales if you wish to purchase one or Register Rubrik Mosaic Product.</p>
+                            </aura:if>
+                        </div>
+                    </lightning:tab>
+                    <!-- Tab 3 -->
+                    <lightning:tab label="Edge Assets" id="edgeAssets" onactive="{!c.getEdges}">
+                        <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 ideaTitle">Edge Assets</div>
+                        <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12">
+                            <aura:if isTrue="{!v.edgeAssets.length > 0}">
+                                <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                    <thead>
+                                        <tr class="slds-line-height_reset">
+                                            <th class="slds-cell-wrap" scope="col">
+                                                <div  class ="Comment" title="Subscription">Subscription</div>
+                                            </th>
+                                            <th class="slds-cell-wrap" scope="col">
+                                                <div class ="Commentor" title="Start">Start Date</div>
+                                            </th>
+                                            <th class="slds-cell-wrap" scope="col">
+                                                <div class ="Commentor" title="End">End Date</div>
+                                            </th>
+                                            <th class="slds-cell-wrap" scope="col">
+                                                <div class ="Commentor" title=""></div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <aura:iteration items="{!v.edgeAssets}" var="edge">
+                                            <tr class="slds-hint-parent ">
+                                                <td data-label="Comment" class="slds-cell-wrap">
+                                                    <div class ="Comment"  title="{!edge.Product__r.ProductCode}">
+                                                        <aura:unescapedHtml value="{!edge.Product__r.ProductCode}"/>
+                                                    </div>
+                                                </td>
+                                                <td data-label="Date" class="slds-cell-wrap">
+                                                    <div  class ="Comment"  title="{!edge.StartDate}">
+                                                        <!--lightning:formattedDateTime value="{!edge.StartDate}" year="numeric" month="2-digit" day="2-digit"/-->
+                                                        <ui:outputDate value="{!edge.StartDate}" format="MM/dd/yyyy"/>
+                                                    </div>
+                                                </td>
+                                                <td data-label="Commentor" class="slds-cell-wrap">
+                                                    <div  class ="Comment"  title="{!edge.EndDate}">
+                                                        <!--lightning:formattedDateTime value="{!edge.EndDate}" year="numeric" month="2-digit" day="2-digit"/-->
+                                                        <aura:if isTrue="{!empty(edge.Terminated_Date__c)}">
+                                                            <ui:outputDate value="{!edge.EndDate}" format="MM/dd/yyyy"/>
+                                                            <aura:set attribute="else">
+                                                                <ui:outputDate value="{!edge.Terminated_Date__c}" format="MM/dd/yyyy"/>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </div>
+                                                </td>
+                                                <td data-label="Commentor" class="slds-cell-wrap">
+                                                    <div  class ="Comment"  title="">
+                                                        <a href="registerproduct" alt=""><img alt="Register" src="/resource/1518010139000/registerIcon"/></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </aura:iteration>
+                                    </tbody>
+                                </table>
+                                <aura:set attribute="else">
+                                    <p class="msg">You have no products in this category. Please contact Sales if you wish to purchase one.</p>
+                                </aura:set>
+                            </aura:if>
+                        </div>
+                    </lightning:tab>
+                    <!-- Tab 4 -->
+                    <lightning:tab label="Unassigned Nodes" id="unassignedNodes" onactive="{!c.getDarkNodes}">
+                        <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 ideaTitle">Unassigned Nodes</div>
+                        <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12">
+                            <aura:if isTrue="{!v.darkNodes.length > 0}">
+                                <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                    <thead>
+                                        <tr class="slds-line-height_reset">
+                                            <th class="slds-cell-wrap" scope="col">
+                                                <div class ="Comment" title="Serial Number">Serial Number</div>
+                                            </th>
+                                            <th class="slds-cell-wrap" scope="col">
+                                                <div class ="Comment" title="Asset">Asset</div>
+                                            </th>
+                                            <th class="slds-cell-wrap" scope="col">
+                                                <div class ="Comment" title="Product Code">Product Code</div>
+                                            </th>
+                                            <th class="slds-cell-wrap" scope="col">
+                                                <div class ="Comment" title="Chassis">Chassis</div>
+                                            </th>
+                                            <th class="slds-cell-wrap" scope="col">
+                                                <div class ="Comment" title="Maintenance Start">Maintenance Start</div>
+                                            </th>
+                                            <th class="slds-cell-wrap" scope="col">
+                                                <div class ="Comment" title="Maintenance End">Maintenance End</div>
+                                            </th>
+                                            <th class="slds-cell-wrap" scope="col">
+                                                <div class ="Comment" title=""></div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <aura:iteration items="{!v.darkNodes}" var="node">
+                                            <tr class="slds-hint-parent ">
+                                                <td data-label="Commentor" class="slds-cell-wrap">
+                                                    <div  class ="Comment"  title="{!node.serial_number__c}">{!node.serial_number__c}</div>
+                                                </td>
+                                                <td data-label="Commentor" class="slds-cell-wrap">
+                                                    <div  class ="Comment"  title="{!node.asset__r.Name}">{!node.asset__r.Name}</div>
+                                                </td>
+                                                <td data-label="Commentor" class="slds-cell-wrap">
+                                                    <div  class ="Comment"  title="{!node.asset__r.Product2.ProductCode}">{!node.asset__r.Product2.ProductCode}</div>
+                                                </td>
+                                                <td data-label="Commentor" class="slds-cell-wrap">
+                                                    <div  class ="Comment"  title="{!node.chassis__r.Name}">{!node.chassis__r.Name}</div>
+                                                </td>
+                                                <td data-label="Commentor" class="slds-cell-wrap">
+                                                    <div  class ="Comment"  title="{!node.asset__r.Support_Start_Date__c}">
+                                                        <!--lightning:formattedDateTime value="{!node.asset__r.Support_Start_Date__c}" year="numeric" month="2-digit" day="2-digit"/-->
+                                                        <ui:outputDate value="{!node.asset__r.Support_Start_Date__c}" format="MM/dd/yyyy"/>
+                                                    </div>
+                                                </td>
+                                                <td data-label="Commentor" class="slds-cell-wrap">
+                                                    <div  class ="Comment"  title="{!node.asset__r.Premium_Support_End_Date__c}">
+                                                        <!--lightning:formattedDateTime value="{!node.asset__r.Premium_Support_End_Date__c}" year="numeric" month="2-digit" day="2-digit"/-->
+                                                            <ui:outputDate value="{!node.asset__r.Premium_Support_End_Date__c}" format="MM/dd/yyyy"/>
+                                                    </div>
+                                                </td>
+                                                <td data-label="Commentor" class="slds-cell-wrap">
+                                                    <div  class ="Comment"  title="">
+                                                        <a href="registerproduct" alt=""><img alt="Register" src="/resource/1518010139000/registerIcon"/></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </aura:iteration>
+                                    </tbody>
+                                </table>
+
+                                <aura:set attribute="else">
+                                    <p class="fontsize">You have no unassigned nodes.</p>
+                                </aura:set>
+                            </aura:if>
+                        </div>
+                    </lightning:tab>
+                </lightning:tabset>
+            </div>
+        </div>
+    </div>
+    <!-- CS21-45 -->
+    <aura:if isTrue="{!v.showModal}" >
+        <aura:if isTrue="{!v.toggleSpinner}">
+            <div class="slds-spinner_container" aura:id="uploadSpinner">
+                <div class="slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </aura:if>
+        <div class="demo-only">
+            <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header slds-modal__header_empty">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.closeModal}">
+                            <lightning:icon style="background-color: white;" iconName="action:remove" alternativeText="Approved" size="xx-small"/>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                    </header>
+                    <div style="background: white;" class="slds-form-element__control slds-p-around_medium" >
+                        <c:customLookup sObjectApiName="Contact" 
+                                        iconName="standard:contact"
+                                        label="Select Proactive Contact"
+                                        filter="{!'AccountId = \'' + v.UserRecord.AccountId + '\''}"
+                                        placeholder="Search/Select Proactive Contact" 
+                                        onhandleSelect="{!c.getSelectedValue}"
+                                        inputcss="width: 30.5vw;">
+                        </c:customLookup>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <button class="slds-button slds-button_neutral"  onclick="{!c.handleSaveProactiveContact}">Save</button>
+                        <button class="slds-button slds-button_neutral"  onclick="{!c.closeModal}">Close</button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </aura:if>
+    <lightning:spinner alternativeText="Loading" size="medium" aura:id="ProductSpinner" class="slds-show" />
+</aura:component>

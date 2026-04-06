@@ -1,0 +1,658 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Non_AMER_ReadOnly</fullName>
+    <active>true</active>
+    <label>Non-AMER-ReadOnly</label>
+    <picklistValues>
+        <picklist>AAR_Channel_Partner_Relationship_with_Cu__c</picklist>
+        <values>
+            <fullName>Negative</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Neutral</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Positive</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>AAR_Channel_Partner_Relationship_with_Ru__c</picklist>
+        <values>
+            <fullName>Negative</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Neutral</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Positive</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>AAR_Customer_s_Incumbent__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>AAR_Incumbent__c</picklist>
+        <values>
+            <fullName>Actifio</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Arcserve</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Clumio</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cohesity</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cohesity - FlashRecover</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CommVault</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DellEMC Avamar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DellEMC DPS %28Data Protection Suite%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DellEMC DataDomain</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DellEMC IDPA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DellEMC Networker</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DellEMC PowerProtect</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Druva</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Greenfield</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HPE Data Protector %28MicroFocus%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>IBM Spectrum Protect %28TSM%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Igneous</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Microsoft DPM %2F Azure Backup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NetApp</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No Incumbent</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not Sure</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rubrik</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Semperis</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unitrends</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Veeam</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Veritas BackupExec</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Veritas NetBackup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Zerto</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>AAR_Loss_Reason__c</picklist>
+        <values>
+            <fullName>Duplicate Opp</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lost Budget</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Missing Feature</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No AE Activity</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No Champion</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Refreshed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sales Play Not Valid</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Timing%2FNot Ready</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Too Expensive</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Transacted through MSP</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unsuccessful POC</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Went Dark</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>AAR_Lost_to_Won_Against__c</picklist>
+        <values>
+            <fullName>AWS Native Backup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Actifio</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Arcserve</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Avepoint</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Azure Native Backup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Barracuda</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Clumio</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cohesity</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cohesity - FlashRecover</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cohesity - IBM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CommVault</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cyera</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DellEMC Avamar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DellEMC DPS %28Data Protection Suite%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DellEMC IDPA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DellEMC Networker</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DellEMC PowerProtect</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Druva</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GCP Native Backup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HPE Data Protector %28MicroFocus%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>IBM Spectrum Protect %28TSM%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Igneous</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kasten</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>KeepIT</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>M365 backup storage</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Microsoft DPM %2F Azure Backup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NetApp</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No Competitor</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not Sure</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Quest</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Semperis</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unitrends</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Veeam</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Veritas BackupExec</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Veritas NetBackup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Zerto</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>AAR_Missing_Features__c</picklist>
+        <values>
+            <fullName>API %2F SDK %2F Plug-in</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Active Directory Support</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Application Recovery %28AppFlows%29 Snappable Support</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Azure SQL</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AzureStack</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cloud Native %28AWS%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cloud Native %28Azure%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cloud Native %28GCP%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cloud ON</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cloud Out %2FArchival</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cloud Storage %28EFS%2FFSx%2FS3%2FAzure Blob%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DB2 capabilities</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Data Classification Snappable Support</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>EPIC %28virtualized%29 - Support for Physical EPIC setup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>EPIC %28virtualized%29 - Support for Virtual EPIC setup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HP UX</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hyper-V</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>IBM SmartCloud</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kubernetes capabilities</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Legacy OS Support %28AIX%2C Solaris%2C HPUX%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Linux Backup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Linux Power PC</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>M365</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MSSQL</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Managed Kubernetes %28AKS%2FEKS%2FGKE%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mongo DB Support</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MySQL Support</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NAS Backup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NASCD</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Native Exchange Support</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Native Sharepoint Support</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>None</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nutanix AFS</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nutanix AHV</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Office 365</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>OpenSource Virtualization %28oVirt%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Oracle</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Postgress DB Support</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RCV</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RDS Support</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ransomware Snappable Support</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RedHat Enterprise Virtualization %28RHEV%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RedShift Support</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Reporting Capabilities</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SAP Support</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SaaS Support %28G Suite%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SaaS Support %28Microsoft Dynamics 365%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SaaS Support %28Other%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SaaS Support %28SFDC%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SaaS Support %28SnowFlake%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Storage Array Integration</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>UI</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>VMware</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Windows Backup</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>AAR_Pricing__c</picklist>
+        <values>
+            <fullName>Negative</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Neutral</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Positive</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>AAR_Product_Features__c</picklist>
+        <values>
+            <fullName>Negative</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Neutral</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Positive</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>AAR_Rubrik_Relation_with_Customer__c</picklist>
+        <values>
+            <fullName>Negative</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Neutral</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Positive</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Is_there_a_Winning_Channel_Partner__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Status__c</picklist>
+        <values>
+            <fullName>Closed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Submitted</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>

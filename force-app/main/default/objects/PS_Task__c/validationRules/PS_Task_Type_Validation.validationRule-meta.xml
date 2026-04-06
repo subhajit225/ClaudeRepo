@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PS_Task_Type_Validation</fullName>
+    <active>true</active>
+    <description>Member of PS OPS and PMO not be able to create or save any PS Task without a Task Type</description>
+    <errorConditionFormula>AND(
+    ISPICKVAL(Task_Type__c, &quot;&quot;),
+    OR(
+        $Permission.Rubrik_Professional_Services_Operations,
+        $Permission.Rubrik_Professional_Services_PMO
+    )
+)</errorConditionFormula>
+    <errorDisplayField>Task_Type__c</errorDisplayField>
+    <errorMessage>Please select the Task Type</errorMessage>
+</ValidationRule>

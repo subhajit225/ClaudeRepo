@@ -1,0 +1,44 @@
+<apex:page showHeader="true" sidebar="true" controller="AssetsWithMissingDatesController" lightningStylesheets="true">
+	<apex:form >
+		<apex:pageBlock title="Assets with missing Support Dates">
+			<apex:pageBlockButtons >
+				<apex:commandButton action="{!previous}" value="Previous" rendered="{!hasPrevious}" />
+				<apex:commandButton action="{!next}" value="Next" rendered="{!hasNext}" />
+			</apex:pageBlockButtons>
+			<apex:outputText value="Showing Page {!currentPage} of {!pages}" style="float: right;"/>
+			<apex:pageBlockTable value="{!assets}" var="ast">
+				<apex:column value="{!ast.Id}" />
+				<apex:column headerValue="Asset Serial Number">
+					<apex:outputLink value="/{!ast.Id}" target="_blank">{!ast.SerialNumber}</apex:outputLink>
+				</apex:column>
+				<apex:column headerValue="Account">
+					<apex:outputLink value="/{!ast.AccountId}" target="_blank">{!ast.Account.Name}</apex:outputLink>
+				</apex:column>
+				<apex:column headerValue="Product">
+					<apex:outputLink value="/{!ast.Product2Id}" target="_blank">{!ast.Product2.Name}</apex:outputLink>
+				</apex:column>
+				<apex:column headerValue="Status">
+					<apex:outputText value="{!ast.Status}">
+		    		</apex:outputText>
+				</apex:column>
+				<apex:column headerValue="Order Line">
+					<apex:outputLink value="/{!ast.Order_Service_Item__c}" target="_blank">{!ast.Order_Service_Item__r.OrderItemNumber}</apex:outputLink>
+				</apex:column>
+				<apex:column headerValue="Order">
+					<apex:outputLink value="/{!ast.Order_Service_Item__r.OrderId}" target="_blank">{!ast.Order_Service_Item__r.Order.OrderNumber}</apex:outputLink>
+				</apex:column>
+				<apex:column headerValue="Support Start Date">
+					<apex:outputText value="{0,date,MM/dd/yyyy}">
+		        		<apex:param value="{!ast.Support_Start_Date__c}"/>
+		    		</apex:outputText>
+				</apex:column>
+				<apex:column headerValue="Support End Date">
+					<apex:outputText value="{0,date,MM/dd/yyyy}">
+		        		<apex:param value="{!ast.Premium_Support_End_Date__c}"/>
+		    		</apex:outputText>
+				</apex:column>
+				<apex:column value="{!ast.Description}" />
+			</apex:pageBlockTable>
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>

@@ -1,0 +1,15 @@
+<template>
+    <div>
+        <template if:true={DataLoaded}>
+            <div class="su__sortBy su__loading-view">
+                <lightning-combobox
+                class="select-sort"
+                name="progress"
+                value={sortByCheck}
+                placeholder="Select Progress"
+                options={options}
+                onchange={handleChange}></lightning-combobox>
+            </div>
+        </template>
+    </div>
+</template>

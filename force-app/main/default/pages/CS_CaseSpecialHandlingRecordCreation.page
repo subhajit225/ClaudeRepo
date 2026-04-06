@@ -1,0 +1,17 @@
+<apex:page standardController="Case_Special_Handling__c">
+<apex:includeLightning />
+    <div id="lightningContainer"></div>
+    <script>
+        $Lightning.use("c:CS_caseSpecialHandlingRecordCreation", function() {
+            $Lightning.createComponent(
+                "c:cS_NewCaseSpecialHandlingLWC",
+                {recordId : "{!$CurrentPage.parameters.id}",
+                 parentId : "{!$CurrentPage.parameters.retURL}"},
+                "lightningContainer",
+                function(cmp) {
+                    // Component is created and ready for use
+                }
+            );
+        });
+    </script>
+</apex:page>

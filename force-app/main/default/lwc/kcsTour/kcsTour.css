@@ -1,0 +1,73 @@
+.tour {
+  height: 610px;
+  background: #fafafa;
+  padding: 0px 1.5rem 1.5rem 1.5rem;
+}
+.skip-button {
+  font-size: 14px;
+  font-family: 'Roboto Bold', Arial, Helvetica, sans-serif;
+}
+.next_btn {
+  border-radius: 4px;
+  background: var(--secondary-colour, #546c7e);
+  width: 240px;
+  height: 44px;
+  text-align: center;
+  display: block;
+  font-family: 'Roboto Regular', 'Helvetica Neue', sans-serif;
+  cursor: pointer;
+}
+.btn_view {
+  display: inline-block;
+}
+.mainTour {
+  height: 100%;
+  width: 60%;
+  margin: 0 auto;
+  text-align: center;
+}
+.step_content_main {
+  width: 100%;
+}
+
+.SMALL .mainTour {
+  width: 100%;
+  text-align: unset;
+}
+
+.SMALL .next_btn {
+  border-radius: 4px;
+  background: var(--secondary-colour, 'blue');
+  width: 200px;
+  height: 44px;
+}
+
+@media screen and (min-width: 767px) {
+  .slds-modal .mobile_view {
+    display: none;
+  }
+}
+@media screen and (max-width: 576px) {
+  .mainTour {
+    width: 100%;
+    margin: 0 auto;
+  }
+  .next_btn {
+    border-radius: 4px;
+    background: var(--secondary-colour, 'blue');
+    width: 180px;
+    height: 44px;
+  }
+}
+
+@keyframes slideRightToLeft {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+.mainTour {
+  animation: 0.8s ease-in-out 0s 1 slideRightToLeft;
+}

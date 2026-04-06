@@ -1,0 +1,624 @@
+<aura:component  implements="forceCommunity:availableForAllPageTypes,force:hasRecordId" controller="ProactiveClusterController" access="global">
+    <aura:handler name="init" value="{!this}" action="{!c.doinit}"/>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="fromTime" type="String" default="09:30:00.000Z"/>
+    <aura:attribute name="toTime" type="String" default="18:30:00.000Z"/>
+    <aura:attribute name="showmodal" type="boolean" default="false"/>
+    <aura:attribute name="showAddressModal" type="boolean" default="false"/>
+    <aura:attribute name="isBusinessHours" type="boolean" default="false"/>
+    <aura:attribute name="showBHmodal" type="boolean" default="false"/>
+    <aura:attribute name="MainLabel" type="String"/>
+    <aura:attribute name="clusterLabel" type="String"/>
+    <aura:attribute name="RMAMainLabel" type="String"/>
+    <aura:attribute name="receiverName" type="String"/>
+    <aura:attribute name="ContactEmail" type="String"/>
+    <aura:attribute name="ContactMobile" type="String"/>
+    <aura:attribute name="Street" type="String"/>
+    <aura:attribute name="City" type="String"/>
+    <aura:attribute name="Province" type="String"/>
+    <aura:attribute name="PostalCode" type="String"/>
+    <aura:attribute name="Country" type="String"/>    
+    <aura:attribute name="CountryCode" type="String" default="+1"/> 
+    <aura:attribute name="PhoneCodes" type="Object"/>  
+    <aura:attribute name="CountryError" type="boolean" default="false"/>  
+    <aura:attribute name="StateError" type="boolean" default="false"/>	
+    <aura:attribute name="countryStateMap" type="Map"/>	
+    <aura:attribute name="countryList" type="Object"/>	
+    <aura:attribute name="stateList" type="Object"/>	
+    <aura:attribute name="spclDelInst" type="String"/>	
+    <aura:attribute name="addressCountry" type="String" default="Aland Islands"/>	
+    <aura:attribute name="addressProvince" type="String" default="Abra"/>
+    <aura:attribute name="shippingAddress" type="Object"/>	
+    <aura:attribute name="parentShippingAddress" type="Object"/>
+    <aura:attribute name="stateInput" type="boolean" default="false"/>
+    <!--<aura:attribute name="Spinner" type="boolean" default="false"/>	
+    <aura:handler event="aura:waiting" action="{!c.showSpinner}"/>	
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/>-->
+    
+    <aura:attribute name="options" type="List" default="[
+                                                        {'label': 'Sunday', 'value': 'Sunday'},
+                                                        {'label': 'Monday', 'value': 'Monday'},
+                                                        {'label': 'Tuesday', 'value': 'Tuesday'},
+                                                        {'label': 'Wednesday', 'value': 'Wednesday'},
+                                                        {'label': 'Thursday', 'value': 'Thursday'},
+                                                        {'label': 'Friday', 'value': 'Friday'},
+                                                        {'label': 'Saturday', 'value': 'Saturday'}
+                                                        ]"/>
+    <aura:attribute name="values" type="List" default=""/>
+    <aura:attribute name="parentValues" type="List" default=""/>
+    <aura:attribute name="Caseinfo" type="ProactiveClusterController.proactiveContactClass" access="global"/>
+    <aura:attribute name="UserRecord" type="Object"/>
+    
+    <force:recordData aura:id="recordLoader"
+                      recordId="{!$SObjectType.CurrentUser.Id}"
+                      fields="Account.Tabs_Visibility__c,isAuthorizedUser__c,Profile.Name"
+                      targetFields="{!v.UserRecord}"
+                      />
+    
+    <aura:if isTrue="{!!v.Caseinfo.isParent}">
+        <div class="slds-size--1-of-1 " style="display:inline-flex;margin:3rem 0 0 16%;width: 70%;">
+            <a class="navCLass" href="{!'myproducts?selectedtab=clusters'}">Return to cluster list&nbsp;</a>
+            <a class="navCLass"  href="{!'proactivedetails?id='+$SObjectType.CurrentUser.Id}">|&nbsp;Configure global-level defaults</a>
+            
+        </div>
+        <aura:set attribute="else">
+            <div class="slds-size--1-of-1 " style="display:inline-flex;margin:3rem 0 0 16%;">
+                <a class="navCLass" href="{!'myproducts?selectedtab=clusters'}">Configure cluster-level defaults&nbsp;</a>
+            </div>
+        </aura:set>
+    </aura:if>
+    <aura:if isTrue="{!!v.UserRecord.isAuthorizedUser__c}">
+        <div class="slds-size--1-of-1 " style="display:inline-flex;margin:3rem 0 0 16%;width: 70%;">
+            <div class="slds-notify slds-notify_alert slds-theme_error" role="alert" style="text-align: left;background-color: #fcf8e3;border: 1px solid black;color: #8a6d3b;width: 100%;padding: .5rem;font-size: 1.0rem;font-family:Gotham-Light!important;border-radius:10px;">
+                <p class="" title="The following configuration allows users to define default contacts for a...">
+                    The following configuration allows users to define default contacts for automated cases or alerts at the cluster-level. Only authorized Admin Panel users have access to configure cluster-level contact defaults. To elevate your privileges to configure cluster-level contact defaults, please request access in the <a style="color:black;" href="{!'/CustomerSupport/s/settings/'+$SObjectType.CurrentUser.Id}">Admin Panel</a> page.
+                </p>
+            </div>
+        </div>
+    </aura:if>
+    <div class="slds-box mainContainer">
+        
+        <p style="font-family:gotham-medium;font-size:18px;">
+            <lightning:formattedRichText value="{!if(v.Caseinfo.isParent,v.MainLabel,v.clusterLabel)}"/>
+        </p><br/><br/>
+        <ol class="slds-setup-assistant ">
+            <li class="slds-setup-assistant__item">
+                <article class="slds-setup-assistant__step">
+                    <div class="slds-setup-assistant__step-summary">
+                        <div class="slds-media">
+                            <div class="slds-media__figure">
+                                
+                            </div>
+                            <div class="slds-media__body slds-m-top_x-small">
+                                <div class="slds-media">
+                                    <div class="slds-setup-assistant__step-summary-content slds-media__body">
+                                        <aura:if isTrue="{!!v.Caseinfo.isParent}">
+                                            <h3 class="slds-setup-assistant__step-summary-title slds-text-heading_small" style="color: grey;">Global business hours</h3>
+                                            <p style="color: grey;">
+                                                <aura:if isTrue="{!!empty(v.Caseinfo.parent.Business_Hours__c)}">
+                                                    <b>Timezone</b>: {!v.Caseinfo.parent.Business_Hours__c}
+                                                </aura:if>
+                                                <br/><br/>
+                                                <aura:if isTrue="{!!empty(v.Caseinfo.parent.Preferred_Time__c)}">
+                                                    <b>Time</b>: {!v.Caseinfo.parent.Preferred_Time__c}
+                                                </aura:if>
+                                                <br/><br/>
+                                                <aura:if isTrue="{!!empty(v.Caseinfo.parent.Working_Day__c)}">
+                                                    <b>Working days</b>: <aura:iteration items="{!v.parentValues}" var="item" indexVar="index">
+                                                    <lightning:badge label="{!item}"/>
+                                                    </aura:iteration>
+                                                </aura:if>
+                                                <br/><br/>
+                                                
+                                                
+                                            </p>
+                                        </aura:if>
+                                        <h3 class="slds-setup-assistant__step-summary-title slds-text-heading_small">{!if(v.Caseinfo.isParent,'Business hours','Cluster-level business hours')}</h3>
+                                        <p>
+                                            <aura:if isTrue="{!!empty(v.Caseinfo.account.Business_Hours__c)}">
+                                                <b>Timezone</b>: {!v.Caseinfo.account.Business_Hours__c}
+                                            </aura:if>
+                                            <br/><br/>
+                                            <aura:if isTrue="{!!empty(v.Caseinfo.account.Preferred_Time__c)}">
+                                                <b>Time</b>: {!v.Caseinfo.account.Preferred_Time__c}
+                                            </aura:if>
+                                            <br/><br/>
+                                            <aura:if isTrue="{!!empty(v.Caseinfo.account.Working_Day__c)}">
+                                                <b>Working days</b>:  <aura:iteration items="{!v.values}" var="item" indexVar="index">
+                                                <lightning:badge label="{!item}"/>
+                                                </aura:iteration>
+                                            </aura:if>
+                                            <br/><br/>
+                                            
+                                            
+                                        </p>
+                                    </div>
+                                    
+                                </div>
+                                <div class="slds-media__figure slds-media__figure_reverse btnAlign1">
+                                    <button class="slds-button slds-button_outline-brand"  onclick="{!c.showBHModal}" disabled="{!!v.UserRecord.isAuthorizedUser__c}">{!if(v.Caseinfo.isParent,'Configure business hours','Override business hours')}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                
+            </li>
+            <li class="slds-setup-assistant__item">
+                <article class="slds-setup-assistant__step">
+                    <div class="slds-setup-assistant__step-summary">
+                        <div class="slds-media">
+                            <div class="slds-media__figure">
+                            </div>
+                            <div class="slds-media__body slds-m-top_x-small">
+                                <div class="slds-media">
+                                    <div class="slds-setup-assistant__step-summary-content slds-media__body">
+                                        <aura:if isTrue="{!!v.Caseinfo.isParent}">
+                                            <h3 class="slds-setup-assistant__step-summary-title slds-text-heading_small" style="color: grey;">Global contact for proactive cases during business hours</h3>
+                                            <p style="color: grey;">
+                                                <aura:if isTrue="{!!empty(v.Caseinfo.parent.Proactive_Case_Contact__c)}">
+                                                    <ul class="slds-grid slds-wrap slds-grid_pull-padded">
+                                                        <li class="slds-p-horizontal_small slds-size_1-of-1 slds-medium-size_1-of-1">
+                                                            <article class="slds-tile slds-media slds-card__tile slds-hint-parent">
+                                                                <div class="slds-media__figure">
+                                                                    <span class="slds-icon_container slds-icon-standard-contact" title="Description of icon when needed">
+                                                                        <lightning:icon iconName="standard:contact_list" alternativeText="Approved" />
+                                                                        <span class="slds-assistive-text">Contact</span>
+                                                                    </span>
+                                                                </div>
+                                                                <div class="slds-media__body">
+                                                                    <div class="slds-grid slds-grid_align-spread slds-has-flexi-truncate">
+                                                                        <h3 class="slds-tile__title slds-truncate" title="{!v.Caseinfo.parent.Proactive_Case_Contact__r.Name}">
+                                                                            <b>{!v.Caseinfo.parent.Proactive_Case_Contact__r.Name}</b>
+                                                                        </h3>
+                                                                        <div class="slds-shrink-none">
+                                                                            
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="slds-tile__detail">
+                                                                        <dl class="slds-list_horizontal slds-wrap">
+                                                                            <dt class="slds-item_label mainD slds-text-color_weak slds-truncate" title="First Label">Email:</dt>
+                                                                            <dd class="slds-item_detail slds-truncate" title="Description for first label">{!v.Caseinfo.parent.Proactive_Case_Contact__r.Email}</dd>
+                                                                        </dl>
+                                                                        <dl class="slds-list_horizontal slds-wrap">
+                                                                            <dt class="slds-item_label mainD slds-text-color_weak slds-truncate" title="Second Label">Phone:</dt>
+                                                                            <dd class="slds-item_detail slds-truncate" title="Description for second label">{!v.Caseinfo.parent.Proactive_Case_Contact__r.Phone}</dd>
+                                                                        </dl>
+                                                                    </div>
+                                                                </div>
+                                                            </article>
+                                                        </li>
+                                                        
+                                                    </ul><br/><br/>
+                                                    <aura:set attribute="else">
+                                                        <p style="font-style: italic;">No contact selected</p>
+                                                    </aura:set>
+                                                </aura:if>
+                                            </p>
+                                        </aura:if>
+                                        <h3 class="slds-setup-assistant__step-summary-title slds-text-heading_small">
+                                            {!if(v.Caseinfo.isParent,'Contact for proactive cases during business hours','Cluster-level contact for proactive cases during business hours')}
+                                        </h3>
+                                        <p>
+                                            <aura:if isTrue="{!!empty(v.Caseinfo.account.Proactive_Case_Contact__c)}">
+                                                <ul class="slds-grid slds-wrap slds-grid_pull-padded">
+                                                    <li class="slds-p-horizontal_small slds-size_1-of-1 slds-medium-size_1-of-1">
+                                                        <article class="slds-tile slds-media slds-card__tile slds-hint-parent">
+                                                            <div class="slds-media__figure">
+                                                                <span class="slds-icon_container slds-icon-standard-contact" title="Description of icon when needed">
+                                                                    <lightning:icon iconName="standard:contact_list" alternativeText="Approved" />
+                                                                    <span class="slds-assistive-text">Contact</span>
+                                                                </span>
+                                                            </div>
+                                                            <div class="slds-media__body">
+                                                                <div class="slds-grid slds-grid_align-spread slds-has-flexi-truncate">
+                                                                    <h3 class="slds-tile__title slds-truncate" title="{!v.Caseinfo.account.Proactive_Case_Contact__r.Name}">
+                                                                        <b>{!v.Caseinfo.account.Proactive_Case_Contact__r.Name}</b>
+                                                                    </h3>
+                                                                    <div class="slds-shrink-none">
+                                                                        
+                                                                    </div>
+                                                                </div>
+                                                                <div class="slds-tile__detail">
+                                                                    <dl class="slds-list_horizontal slds-wrap">
+                                                                        <dt class="slds-item_label mainD slds-text-color_weak slds-truncate" title="First Label">Email:</dt>
+                                                                        <dd class="slds-item_detail slds-truncate" title="Description for first label">{!v.Caseinfo.account.Proactive_Case_Contact__r.Email}</dd>
+                                                                    </dl>
+                                                                    <dl class="slds-list_horizontal slds-wrap">
+                                                                        <dt class="slds-item_label mainD slds-text-color_weak slds-truncate" title="Second Label">Phone:</dt>
+                                                                        <dd class="slds-item_detail slds-truncate" title="Description for second label">{!v.Caseinfo.account.Proactive_Case_Contact__r.Phone}</dd>
+                                                                    </dl>
+                                                                </div>
+                                                            </div>
+                                                        </article>
+                                                    </li>
+                                                </ul>
+                                                <aura:set attribute="else">
+                                                    <p style="font-style: italic;">No contact selected</p>
+                                                </aura:set>
+                                            </aura:if>
+                                        </p>
+                                    </div>
+                                    
+                                </div>
+                                <div class="slds-media__figure slds-media__figure_reverse btnAlign3">
+                                    <button class="slds-button slds-button_outline-brand" onclick="{!c.showBOHModal}" disabled="{!!v.UserRecord.isAuthorizedUser__c}">{!if(v.Caseinfo.isParent,'Configure contact','Override contact')}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </li>
+            <li class="slds-setup-assistant__item">
+                <article class="slds-setup-assistant__step">
+                    <div class="slds-setup-assistant__step-summary">
+                        <div class="slds-media">
+                            <div class="slds-media__figure">
+                                
+                            </div>
+                            <div class="slds-media__body slds-m-top_x-small">
+                                <div class="slds-media">
+                                    <div class="slds-setup-assistant__step-summary-content slds-media__body">
+                                        <aura:if isTrue="{!!v.Caseinfo.isParent}">
+                                            <h3 class="slds-setup-assistant__step-summary-title slds-text-heading_small" style="color: grey;">Global contact for proactive cases during non-business hours</h3>
+                                            <p style="color: grey;">
+                                                <aura:if isTrue="{!!empty(v.Caseinfo.parent.Proactive_Case_Contact_OBH__r)}">
+                                                    <ul class="slds-grid slds-wrap slds-grid_pull-padded">
+                                                        <li class="slds-p-horizontal_small slds-size_1-of-1 slds-medium-size_1-of-1">
+                                                            <article class="slds-tile slds-media slds-card__tile slds-hint-parent">
+                                                                <div class="slds-media__figure">
+                                                                    <span class="slds-icon_container slds-icon-standard-contact" title="Description of icon when needed">
+                                                                        <lightning:icon iconName="standard:contact_list" alternativeText="Approved" />
+                                                                        <span class="slds-assistive-text">Contact</span>
+                                                                    </span>
+                                                                </div>
+                                                                <div class="slds-media__body">
+                                                                    <div class="slds-grid slds-grid_align-spread slds-has-flexi-truncate">
+                                                                        <h3 class="slds-tile__title slds-truncate" title="{!v.Caseinfo.parent.Proactive_Case_Contact_OBH__r.Name}">
+                                                                            <b>{!v.Caseinfo.parent.Proactive_Case_Contact_OBH__r.Name}</b>
+                                                                        </h3>
+                                                                        <div class="slds-shrink-none">
+                                                                            
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="slds-tile__detail">
+                                                                        <dl class="slds-list_horizontal slds-wrap">
+                                                                            <dt class="slds-item_label slds-text-color_weak slds-truncate mainD" title="First Label"><b>Email:</b></dt>
+                                                                            <dd class="slds-item_detail slds-truncate" title="Description for first label">{!v.Caseinfo.parent.Proactive_Case_Contact_OBH__r.Email}</dd>
+                                                                        </dl>
+                                                                        <dl class="slds-list_horizontal slds-wrap">
+                                                                            <dt class="slds-item_label slds-text-color_weak slds-truncate mainD" title="Second Label"><b>Phone:</b></dt>
+                                                                            <dd class="slds-item_detail slds-truncate" title="Description for second label">{!v.Caseinfo.parent.Proactive_Case_Contact_OBH__r.Phone}</dd>
+                                                                            
+                                                                        </dl>
+                                                                    </div>
+                                                                </div>
+                                                            </article>
+                                                        </li>
+                                                    </ul><br/><br/>
+                                                    <aura:set attribute="else">
+                                                        <p style="font-style: italic;">No contact selected</p>
+                                                    </aura:set>
+                                                </aura:if>
+                                            </p>
+                                        </aura:if>
+                                        <h3 class="slds-setup-assistant__step-summary-title slds-text-heading_small">
+                                            {!if(v.Caseinfo.isParent,'Contact for proactive cases during non-business hours','Cluster-level contact for proactive cases during non-business hours')}
+                                        </h3>
+                                        <p>
+                                            <aura:if isTrue="{!!empty(v.Caseinfo.account.Proactive_Case_Contact_OBH__r)}">
+                                                <ul class="slds-grid slds-wrap slds-grid_pull-padded">
+                                                    <li class="slds-p-horizontal_small slds-size_1-of-1 slds-medium-size_1-of-1">
+                                                        <article class="slds-tile slds-media slds-card__tile slds-hint-parent">
+                                                            <div class="slds-media__figure">
+                                                                <span class="slds-icon_container slds-icon-standard-contact" title="Description of icon when needed">
+                                                                    <lightning:icon iconName="standard:contact_list" alternativeText="Approved" />
+                                                                    <span class="slds-assistive-text">Contact</span>
+                                                                </span>
+                                                            </div>
+                                                            <div class="slds-media__body">
+                                                                <div class="slds-grid slds-grid_align-spread slds-has-flexi-truncate">
+                                                                    <h3 class="slds-tile__title slds-truncate" title="{!v.Caseinfo.account.Proactive_Case_Contact_OBH__r.Name}">
+                                                                        <b>{!v.Caseinfo.account.Proactive_Case_Contact_OBH__r.Name}</b>
+                                                                    </h3>
+                                                                    <div class="slds-shrink-none">
+                                                                        
+                                                                    </div>
+                                                                </div>
+                                                                <div class="slds-tile__detail">
+                                                                    <dl class="slds-list_horizontal slds-wrap">
+                                                                        <dt class="slds-item_label slds-text-color_weak slds-truncate mainD" title="First Label"><b>Email:</b></dt>
+                                                                        <dd class="slds-item_detail slds-truncate" title="Description for first label">{!v.Caseinfo.account.Proactive_Case_Contact_OBH__r.Email}</dd>
+                                                                    </dl>
+                                                                    <dl class="slds-list_horizontal slds-wrap">
+                                                                        <dt class="slds-item_label slds-text-color_weak slds-truncate mainD" title="Second Label"><b>Phone:</b></dt>
+                                                                        <dd class="slds-item_detail slds-truncate" title="Description for second label">{!v.Caseinfo.account.Proactive_Case_Contact_OBH__r.Phone}</dd>
+                                                                    </dl>
+                                                                </div>
+                                                            </div>
+                                                        </article>
+                                                    </li>
+                                                </ul>
+                                                <aura:set attribute="else">
+                                                    <p style="font-style: italic;">No contact selected</p>
+                                                </aura:set>
+                                            </aura:if>
+                                        </p>
+                                    </div>
+                                    
+                                </div>
+                                <div class="slds-media__figure slds-media__figure_reverse btnAlign3">
+                                    <button class="slds-button slds-button_outline-brand"  onclick="{!c.shownonBOHModal}" disabled="{!!v.UserRecord.isAuthorizedUser__c}">{!if(v.Caseinfo.isParent,'Configure contact','Override contact')}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                
+            </li>
+            <li class="slds-setup-assistant__item">
+                <p style="font-family:gotham-medium;font-size:18px;">
+                    <lightning:formattedRichText value="{!if(v.Caseinfo.isParent,v.RMAMainLabel,$Label.c.RMA_Address_labelChild)}"/>
+                </p><br/><br/>
+                <article class="slds-setup-assistant__step">
+                    <div class="slds-setup-assistant__step-summary">
+                        <div class="slds-media">
+                            <div class="slds-media__figure">
+                                
+                            </div>
+                            <div class="slds-media__body slds-m-top_x-small">
+                                <div class="slds-media">
+                                    <div class="slds-setup-assistant__step-summary-content slds-media__body">
+                                        <h3 class="slds-setup-assistant__step-summary-title slds-text-heading_small">Address</h3>
+                                        <aura:if isTrue="{!!v.Caseinfo.isParent}">
+                                            <p style="color: grey;">
+                                                <aura:if isTrue="{!!empty(v.Caseinfo.parent.Shipping_Address_Contact_for_RMA_handlin__c)}">
+                                                    <b>Global shipping details</b> <br/>
+                                                    <div><label class="boldLabel">Receiver's Name: </label>
+                                                        <lightning:formattedText value="{!v.parentShippingAddress.rName}"/></div>
+                                                    <div><label class="boldLabel">Contact Email: </label>
+                                                        <lightning:formattedText value="{!v.parentShippingAddress.conEmail}"/></div>
+                                                    <div><label class="boldLabel">Contact Mobile: </label>
+                                                        <lightning:formattedText value="{!v.parentShippingAddress.conMob}"/></div>
+                                                    <div><label class="boldLabel">Street: </label>
+                                                        <lightning:formattedText value="{!v.parentShippingAddress.street}"/></div>
+                                                    <div><label class="boldLabel">City: </label>
+                                                        <lightning:formattedText value="{!v.parentShippingAddress.city}"/></div>
+                                                    <div><label class="boldLabel">State/Province: </label>
+                                                        <lightning:formattedText value="{!v.parentShippingAddress.province}"/></div>
+                                                    <div><label class="boldLabel">Postal Code: </label>
+                                                        <lightning:formattedText value="{!v.parentShippingAddress.postalCode}"/></div>
+                                                    <div><label class="boldLabel">Country: </label>
+                                                        <lightning:formattedText value="{!v.parentShippingAddress.country}"/></div>
+                                                    <label class="boldLabel">Special delivery instructions: </label>
+                                                    <lightning:formattedText value="{!v.Caseinfo.parent.Special_Delivery_Instruction__c}"/>
+                                                </aura:if>
+                                            </p><br/><br/>
+                                        </aura:if>
+                                        <p>
+                                            <aura:if isTrue="{!!empty(v.Caseinfo.account.Shipping_Address_Contact_for_RMA_handlin__c)}">
+                                                <b>{!if(v.Caseinfo.isParent,'Shipping details','Cluster-level shipping details')}</b> <br/>
+                                                <div><label class="boldLabel">Receiver's Name: </label>
+                                                    <lightning:formattedText value="{!v.shippingAddress.rName}"/></div>
+                                                <div><label class="boldLabel">Contact Email: </label>
+                                                    <lightning:formattedText value="{!v.shippingAddress.conEmail}"/></div>
+                                                <div><label class="boldLabel">Contact Mobile: </label>
+                                                    <lightning:formattedText value="{!v.shippingAddress.conMob}"/></div>
+                                                <div><label class="boldLabel">Street: </label>
+                                                    <lightning:formattedText value="{!v.shippingAddress.street}"/></div>
+                                                <div><label class="boldLabel">City: </label>
+                                                    <lightning:formattedText value="{!v.shippingAddress.city}"/></div>
+                                                <div><label class="boldLabel">State/Province: </label>
+                                                    <lightning:formattedText value="{!v.shippingAddress.province}"/></div>
+                                                <div><label class="boldLabel">Postal Code: </label>
+                                                    <lightning:formattedText value="{!v.shippingAddress.postalCode}"/></div>
+                                                <div><label class="boldLabel">Country: </label>
+                                                    <lightning:formattedText value="{!v.shippingAddress.country}"/></div>
+                                                <label class="boldLabel">Special delivery instructions: </label>
+                                                <lightning:formattedText value="{!v.Caseinfo.account.Special_Delivery_Instruction__c}"/>
+                                            </aura:if>
+                                        </p>
+                                    </div>
+                                    
+                                </div>
+                                <div class="slds-media__figure slds-media__figure_reverse btnAlign">
+                                    <button class="slds-button slds-button_outline-brand"  onclick="{!c.showAddressModal}" disabled="{!!v.UserRecord.isAuthorizedUser__c}">{!if(v.Caseinfo.isParent,'Configure address','Override address')}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                
+            </li>
+        </ol>
+        <center><button class="slds-button slds-button_neutral rubrikbtn" onclick="{!c.sendBack}">Done</button></center><br/>
+        <div><center class="Note"><b>Note: </b>Please refresh this page if changes made are not reflected above</center></div>
+    </div>
+    <aura:if isTrue="{!v.UserRecord.isAuthorizedUser__c}">
+        <aura:if isTrue="{!v.showmodal}">
+            <div style="height:840px">
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal_medium slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <header class="slds-modal__header">
+                            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close"  onclick="{!c.cancel}">
+                                X
+                                <span class="slds-assistive-text">Close</span>
+                            </button>
+                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Select proactive case contact {!if(v.isBusinessHours,'during business hours','during non-business hours')}</h2>
+                            <br/><h3 id="modal-heading-01" class="slds-text-heading_small slds-hyphenate">Add new contacts from the <a target="_blank" href="{!'settings/'+$SObjectType.CurrentUser.Id+'?id=true'}">Admin Panel.</a> Once added, please refresh this page.</h3>
+                        </header>
+                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                            <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered slds-table_fixed-layout" role="grid">
+                                <thead>
+                                    <tr class="slds-line-height_reset">
+                                        <th class="" scope="col">
+                                            <div class="slds-truncate" title="Name">Name</div>
+                                        </th>
+                                        
+                                        
+                                        <th class="" scope="col">
+                                            <div class="slds-truncate" title="Email">Email</div>
+                                        </th>
+                                        <th class="gridAction" scope="col">
+                                            <div class="slds-truncate" title="Action">Action</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <aura:iteration items="{!v.Caseinfo.contactList}" var="item">
+                                        <tr class="slds-hint-parent">
+                                            <th scope="row">
+                                                <div class="slds-truncate" title="Amy Choi">
+                                                    {!item.Name}&nbsp;
+                                                    <aura:if isTrue="{!v.Caseinfo.account.Proactive_Case_Contact__c == item.Id}">
+                                                        <lightning:badge label="Business hours"/>     
+                                                    </aura:if>
+                                                    <aura:if isTrue="{!v.Caseinfo.account.Proactive_Case_Contact_OBH__c == item.Id}">
+                                                        <lightning:badge label="Non-business hours"/>     
+                                                    </aura:if>
+                                                </div>
+                                            </th>
+                                            <td role="gridcell">
+                                                <div class="slds-truncate" title="{!item.Email}">{!item.Email}</div>
+                                            </td>
+                                            <td role="gridAction">
+                                                <lightning:button variant="base" label="Select" value="{!item.Id}" title="Base action" onclick="{! c.UpdateContact }"/>
+                                            </td>
+                                            
+                                        </tr>
+                                    </aura:iteration>
+                                </tbody>
+                            </table>
+                        </div>
+                        <footer class="slds-modal__footer">
+                            <button class="slds-button slds-button_neutral" onclick="{!c.cancel}">Cancel</button>
+                        </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </div>
+        </aura:if>
+        
+        <aura:if isTrue="{!v.showBHmodal}">
+            <div style="height:840px">
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <header class="slds-modal__header">
+                            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close"  onclick="{!c.cancel}">
+                                X
+                                <span class="slds-assistive-text">Close</span>
+                            </button>
+                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Update your business hours.</h2>
+                        </header>
+                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1" style="min-height:440px">
+                            <lightning:select name="colorId" label="Timezone :" aura:id="colorId" value="{!v.Caseinfo.account.Business_Hours__c}"  required="true">
+                                <aura:iteration items="{!v.Caseinfo.zoneList}" var="option">
+                                    <option text="{!option.label}" value="{!option.value}" selected="{!if(v.Caseinfo.account.Business_Hours__c == null,v.Caseinfo.defaultTimeZone,v.Caseinfo.account.Business_Hours__c) == option.value}"/>
+                                </aura:iteration>
+                            </lightning:select>
+                            <lightning:dualListbox name="languages"  
+                                                   label= "Select Working Days" 
+                                                   sourceLabel="Available" 
+                                                   selectedLabel="Selected" 
+                                                   fieldLevelHelp="This is a dual listbox" 
+                                                   options="{!v.options}" 
+                                                   value="{!v.values}" required="true" aura:id="wdays"/>
+                            <lightning:input type="time" aura:id="from" name="input2" label="FROM :" value="{!v.fromTime}" required="true"/>
+                            <lightning:input type="time" aura:id="to" name="input2" label="TO :" value="{!v.toTime}" required="true"/>
+                            
+                        </div>
+                        <footer class="slds-modal__footer">
+                            <button class="slds-button slds-button_neutral" onclick="{!c.updateBuisnessHour}">Update</button>
+                            <button class="slds-button slds-button_neutral" onclick="{!c.cancel}">Cancel</button>
+                        </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </div>
+        </aura:if>
+        
+        <aura:if isTrue="{!v.showAddressModal}">
+            <div style="height:840px">
+                <!--loading spinner start... style=Brand Medium (blue dots)-->
+                <aura:if isTrue="{!v.Spinner}">	
+                    <div aura:id="spinnerId" class="slds-spinner_container">	
+                        <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">	
+                            <span class="slds-assistive-text">Loading</span>	
+                            <div class="slds-spinner__dot-a"></div>	
+                            <div class="slds-spinner__dot-b"></div>	
+                        </div>	
+                    </div>	
+                </aura:if>
+                <!-- Loading spinner end-->
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <header class="slds-modal__header">
+                            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close"  onclick="{!c.cancel}">
+                                X
+                                <span class="slds-assistive-text">Close</span>
+                            </button>
+                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Shipping address/contact for RMA handling.</h2>
+                        </header>
+                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1" style="min-height:440px">
+                            <lightning:input aura:id="receiverName" type="Text" name="receiverName1" required="true"  label="Receiver's Name:" placeholder="Receiver's Name" value="{!v.receiverName}"/>
+                            <lightning:input aura:id="ContactEmail" type="email" messageWhenPatternMismatch="Enter a valid email address" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{1,5})+$" name="email1" required="true"  label="Contact Email:" placeholder="Contact Email" value="{!v.ContactEmail}"/>
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_5-of-12">
+                                    <span>
+                                        <lightning:select name="PhoneCodes" messageWhenValueMissing="Complete this field" onchange="{!c.updateCountryCode}" aura:id="CountryCode" value="{!v.CountryCode}" label="Country Code" required="true">	
+                                            <option value="">-- None --</option>	
+                                            <aura:iteration items="{!v.PhoneCodes}" var="pCodes">	
+                                                <option value="{!pCodes.dial_code}">{!pCodes.name +' ('+pCodes.dial_code+')'}</option>	
+                                            </aura:iteration>	
+                                        </lightning:select>
+                                    </span>
+                                </div>
+                                <div class="slds-col slds-size_7-of-12">
+                                    <!--<span  onkeyup="{! c.updatePhone }">     -->
+                                    <lightning:input aura:id="ContactMobile" pattern="^\(?([0-9]{2,3})\)?[-. ]{1}?([0-9]{2,4})[-. ]{1}?([0-9]{4})[-. ]?([0-9]){0,4}$" type="tel" name="tel1" required="true"  messageWhenPatternMismatch="Enter a valid Mobile number XXX-XXX-XXXX OR XXX.XX.XXXX.XXXX OR XX XXXX-XXXX or XX XXXX.XXXX"  label="Contact Mobile:" placeholder="Contact Mobile"  value="{!v.ContactMobile}"/>
+                                    <!-- </span>-->
+                                </div>
+                            </div>
+                            
+                            <lightning:select name="Country" label="Country" required="true" messageWhenValueMissing="Complete this field" onchange="{!c.fetchStates}" aura:id="selectedCountry" value="{!v.Country}">	
+                                <option value="">-- None --</option>	
+                                <aura:iteration items="{!v.countryList}" var="CList">	
+                                    <option value="{!CList}" text="{!CList}"></option>	
+                                </aura:iteration>	
+                            </lightning:select>	
+                            <aura:if isTrue="{!v.CountryError}"><p style="color:red;">Please select Country</p></aura:if>	
+                            <!--<aura:if isTrue="{!!v.stateInput}">-->
+                            <lightning:select name="State" label="State" required="{!if(!v.stateInput,true,false)}" messageWhenValueMissing="Complete this field" value="{!v.Province}" aura:id="selectedState">	
+                                <option value="">-- None --</option>	
+                                <aura:iteration items="{!v.stateList}" var="SList">	
+                                    <option value="{!SList}" text="{!SList}"></option>	
+                                </aura:iteration>	
+                            </lightning:select>
+                            <aura:if isTrue="{!v.StateError}"><p style="color:red;">Please select State</p></aura:if>	
+                            <lightning:inputAddress streetLabel="Street"	
+                                                    postalCodeLabel="PostalCode"	
+                                                    cityLabel="City"	
+                                                    city="{!v.City}"	
+                                                    postalCode="{!v.PostalCode}"	
+                                                    street="{!v.Street}"	
+                                                    country="{!v.addressCountry}"	
+                                                    province="{!v.addressProvince}"	
+                                                    aura:id="address"	
+                                                    required="true"	
+                                                    />	
+                            
+                            <lightning:textarea aura:id="speclDeliveryInst" label="Special delivery instructions" placeholder="Provide details such as nearby landmark, or other navigation instructions" value="{!v.spclDelInst}"/>
+                        </div>
+                        <footer class="slds-modal__footer">
+                            <button class="slds-button slds-button_neutral" onclick="{!c.updateAddress}">Update</button>
+                            <button class="slds-button slds-button_neutral" onclick="{!c.cancel}">Cancel</button>
+                        </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+                
+            </div>
+        </aura:if>
+    </aura:if>
+    <lightning:spinner alternativeText="Loading" aura:id="clusSpinner" class="slds-show"/>
+</aura:component>

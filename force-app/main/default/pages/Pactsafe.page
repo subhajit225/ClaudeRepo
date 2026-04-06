@@ -1,0 +1,178 @@
+<apex:page showHeader="false" sidebar="false">
+    <div id="pactSafetest">
+        <style>
+            .btn_agree {
+            display: inline-block;
+            margin-bottom: 0;
+            font-weight: normal;
+            text-align: center;
+            vertical-align: middle;
+            touch-action: manipulation;
+            cursor: pointer;
+            background-image: none;
+            border: 1px solid transparent;
+            white-space: nowrap;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            border-radius: 4px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            }
+            .ps-checkbox-container {
+            display: none !important;
+            }
+
+            div.ps-contract-body {
+            border: 0 !important;
+            border-top: 1px solid #ccc !important;
+            padding: 0px !important;
+            }
+
+            .ps-contract-title {
+            display: none !important;
+            }
+        </style>
+
+        <script>
+        var url = window.location.href;
+        var partnertype;
+        var groupType;
+        var accid;
+        console.log(url);
+        var paramMap = new Object();
+        if(url.search('Pactsafe?') > 0){
+            var temp = url.split('Pactsafe?');
+
+            if(temp[1].search('&') > 0){
+                var arr = temp[1].split('&');
+                for(var i=0;i<arr.length;i++){
+                    var mapvalue = arr[i].split('=');
+                    paramMap[mapvalue[0]] = decodeURIComponent(mapvalue[1]);
+                }
+            }else{
+                var mapvalue = temp[1].split('=');
+                paramMap[mapvalue[0]] = decodeURIComponent(mapvalue[1]);
+            }
+            console.log(paramMap);
+            groupType =  paramMap['groupType'];
+            partnertype = paramMap['partnerType'];
+            accid = paramMap['accid'];
+            console.log(groupType);
+            console.log(partnertype );
+            var temp1;
+            var lexOrigin;  //"https://devsb-rubrik.cs67.force.com";
+            if(url.search('.com') >= 0){
+                 temp1 = url.split('.com');
+                 lexOrigin = temp1[0]+'.com';
+            }
+
+        var email= paramMap['email']; //{!$User.Email}
+        var partnertype;
+        var groupType;
+        var accessId = '{!$Label.Pactsafe_Site_Access_Id}'; // sandbox Access Id - https://app.pactsafe.com/settings/account
+        var groupKey;
+        var secondaryGroupId;
+        if(groupType == 'Master-Reseller'){
+            groupKey = '{!$Label.Master_Reseller_Agreement_group_key}';
+        }
+        if(groupType == 'RUBRIK_PROFESSIONAL_SERVICES_PARTNER'){
+            groupKey = '{!$Label.RUBRIK_PROFESSIONAL_SERVICES_PARTNER_group_key}';
+        }
+        if(groupType == 'Master'){
+            groupKey = '{!$Label.Master_pactsafe_group_key}';
+        }
+        if((partnertype == 'Reseller' || partnertype == 'MSP-Reseller') && groupType == 'Secondary'){
+             groupKey = '{!$Label.Reseller_pactsafe_group_key}';
+        }
+        if((partnertype == 'MSP' || partnertype == 'MSP-Reseller') && groupType == 'Tertiary'){
+             groupKey = '{!$Label.MSP_pactsafe_group_key}';
+        }
+        if(groupType == 'TermsOfUse' && partnertype == 'All'){
+            groupKey = '{!$Label.Partner_Terms_of_Use}';
+        }
+        if(groupType == 'RubrikAmplifyTerms' && partnertype == 'All'){
+            groupKey = '{!$Label.Rubrik_Amplify_Terms}';
+        }
+        /*if((partnertype == 'Reseller' || partnertype == 'MSP-Reseller') && groupType == 'Secondary'){
+             groupKey = '{!$Label.Reseller_pactsafe_group_key}';
+        }*/
+        console.log(email);
+        console.log('groupKey '+groupKey);
+        (function(w,d,s,c,n,a,b){
+            w['PactSafeObject']=n;
+            w[n]=w[n]||function(){(w[n].q=w[n].q||[]).push(arguments)},
+                w[n].on=function(){(w[n].e=w[n].e||[]).push(arguments)},
+                    w[n].once=function(){(w[n].eo=w[n].eo||[]).push(arguments)},
+                        w[n].off=function(){(w[n].o=w[n].o||[]).push(arguments)},
+                            w[n].t=1*new Date();a=d.createElement(s),b=d.getElementsByTagName(s)[0];
+            a.async=1;
+            a.src=c;
+            b.parentNode.insertBefore(a,b)})(window,document,'script','//vault.pactsafe.io/ps.min.js','_ps');
+        _ps('create', accessId);
+        _ps('set', 'signer_id', email);
+        _ps('set','disable_sending', true);
+        _ps('load', groupKey, { container_selector: "TestContract"}); //Group key, html DivId
+
+        }
+
+        function sendAgree(){
+           var groupval = groupKey+':send';
+            // Sends an "agreed" action for the "register-clickwrap" Group
+            _ps(groupval, 'agreed', {
+                disable_sending: false,
+                event_callback: function() {
+                    console.log('callback of agree');
+                     sendToLC('agreed');
+                }
+            });
+        }
+
+        function sendDisAgree(){
+             var groupval = groupKey+':send';
+            // Sends an "disagreed" action for the "register-clickwrap" Group
+            _ps(groupval, 'disagreed', {
+                disable_sending: false,
+                event_callback: function() {
+                     console.log('callback of disagree');
+                     sendToLC('disagreed');
+                }
+            });
+        }
+        function sendToLC(response){
+            var payload = response;
+            var message = {
+                name: groupType,
+                payload: payload
+            };
+            parent.postMessage(message, lexOrigin);
+        }
+        
+        window.addEventListener("DOMContentLoaded",
+        function() {
+            setTimeout(function(){
+                				  console.log('-159->',document.querySelector('.ps-contract-options'));
+                                  if(accid != null && document.querySelector('.ps-contract-options') != null){
+                                      document.querySelector('.ps-contract-options').style.display = 'none';
+                                  }         
+                document.getElementById('TestContract').style.display = 'unset !important';
+                document.getElementById('showContract').style.display = 'unset !important';
+                                 }, 1000);
+            
+        });
+
+    </script>
+    </div>
+    <div id="TestContract" style="display : none;" >
+
+    </div>
+    <div id="showContract" style="display : none;">
+    <center>
+        <a href="#"><button type="button" onclick="sendAgree();" class="btn_agree rubrik-btn" >I ACCEPT</button></a>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="#"><button type="button" onclick="sendDisAgree()" class="btn_agree rubrik-btn">I DO NOT ACCEPT</button></a>
+    </center>
+    </div>
+</apex:page>

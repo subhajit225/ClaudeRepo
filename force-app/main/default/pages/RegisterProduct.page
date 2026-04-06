@@ -1,0 +1,140 @@
+<apex:page controller="ProductRegistrationController"  cache="false" applyBodyTag="false" standardStylesheets="false" showHeader="false" sidebar="false"  action="{!init}">
+      <link rel="shortcut icon" href="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/favicon.ico')}" type="image/x-icon" />
+    <link rel="icon" href="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/favicon1.png')}" type="image/png" />
+    <style>
+<apex:outputText escape="false"/>    
+    .pbSubsection, pbBody {
+    padding: 25px;
+    }
+    table {
+    padding: 5px;
+    }
+    td.labelCol {
+    font-size: 16px;
+    font-family: Gotham-Medium;
+    padding-left: 10px
+    }
+    td.dataCol {
+    padding: 5px;
+    padding-right: 15px;
+    }
+
+    td.data2Col {
+    padding: 5px;
+    padding-left: 15px;
+    }
+    td {
+    padding: 15px;
+    }
+    wrapper{
+    padding-bottom: 5px;
+    }
+    
+    .btnpad{
+    padding: 15px;
+    }
+    .section__title {
+        font-size: 34px;
+        line-height: 40px;
+        letter-spacing: -1.2px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 20px;
+        }
+    
+        .control-label:after {
+      content:"*";
+      color:red;
+    }
+    
+    </style>
+    
+    
+     <c:visualstrapblock >
+     
+    
+        <!--start header-->
+        <c:siteheader ></c:siteheader>
+        <!--end Header-->
+        
+        <apex:outputPanel id="main"> 
+       <!--start the Container-->
+       <div class="container">
+         <div class="row rowcontainer" >
+                <div class="col-md-12">
+                       <apex:form >
+                        <center><div class="section__title">Register your Rubrik Cluster</div></center>
+                        
+If your Rubrik cluster is not attached to the Internet, you can complete the registration by requesting a Registration Token. If your Rubrik cluster is attached to the Internet, register the Rubrik Cluster through the Rubrik web UI.<br /><br />
+                    
+                    <apex:outputPanel layout="block" styleClass="alert alert-success" id="messages" rendered="{!error==false&&success}"> 
+                    Success! Your Registration key is below.<br/><br/>
+                     <apex:outputtext value="{!regString}" style="font-size:10px; word-wrap: break-word;" escape="false"/><br/><br/>
+                    <!--{!regMessage}-->
+                    <apex:outputLink value="data:text/plain;charset=utf-8;base64,{!regdownload}" html-download="{!uuid}_regcode.txt">Download Key</apex:outputLink>
+                    </apex:outputpanel> 
+                    
+
+                    <apex:outputPanel layout="block" styleClass="alert alert-warning" id="errors" rendered="{!error}"> 
+                    <b>We cannot process your request because of the following errors:</b><br/>
+                    <apex:outputtext rendered="{!regMessage!=null}"><li>{!regMessage}</li></apex:outputtext>
+                    <apex:outputtext rendered="{!nodename==null||uuid==null}"><li>Please ensure both Node Name and UUID are not blank.</li></apex:outputtext>
+                    <apex:outputtext rendered="{!nameResult}"><li>The node name can only contain alphanumeric characters.</li></apex:outputtext> 
+                    <apex:outputtext rendered="{!!alphastart}"><li>The node name must start with an Alphabet character.</li></apex:outputtext> 
+                    <apex:outputtext rendered="{!!result}"><li>The UUID must match the following pattern 8-4-4-4-12.</li></apex:outputtext>
+                    </apex:outputpanel> 
+                    
+                    
+                   <div class="col-md-12">
+                   <div class="row">
+                      <div class="col-md-4">
+                        <apex:outputLabel value="Node Name or Serial Number" for="nodename"/>
+                        <apex:inputtext id="nodename" value="{!nodename}" styleClass="form-control" />                  
+                      </div>
+                      <div class="col-md-4">
+                        <apex:outputLabel value="UUID" for="uuid"/>
+                        <apex:inputText id="uuid" value="{!uuid}" styleClass="form-control required"  />                  
+                      </div>
+                  </div>
+                 </div>
+<div class="row"/>
+             <div class="container">
+                <div class="row text-center btnpad">
+                    <div>
+                      
+                       </div>
+                </div>
+            </div>
+<p><b>Note:</b></p>
+<ul>
+<li>For Edge, specify the Node Name or serial number of the Edge device in the <b>Node Name or Serial Number</b> field. The node name or serial number can be obtained from a console session for the Edge (e.g., VRVW4222C1234). Use the '<b>hostname</b>' (Node Name) and the '<b>cluster_uuid</b>' (UUID) commands at the console.</li>
+<li>For a Cluster (e.g. Cloud Cluster for AWS or Azure), perform the registration for each node on this Product Registration page. Then, use one Registration ID to complete the registration in the web UI for the cluster. In a future release, the Rubrik Support Portal will allow mass registration with a comma-delimited list of node serial numbers.</li>
+</ul>
+For more product registration details, please reference <a href="https://support.rubrik.com/articles/How_To/000001158">KB 1158</a>.<br></br>
+                  <div class="row"/>
+             <div class="container">
+                <div class="row text-center btnpad">
+                    <div>
+                      <apex:commandButton value="Register Product" action="{!submit}" styleclass="btn rubrik-btn"  reRender="messages,errors,main" />&nbsp;
+                       </div>
+                </div>
+            </div>
+              
+              </apex:form>
+               
+            </div>
+        </div>
+        </div>
+        <!--End the Container-->
+
+
+  </apex:outputPanel>
+
+        <!--start the footer-->
+        <c:sitefooter rendered="{!NOT(ISPICKVAL($User.UserType,'PowerPartner'))}"/>
+        <c:psitefooter rendered="{!ISPICKVAL($User.UserType,'PowerPartner')}"/>
+        
+    </c:visualstrapblock>
+
+ 
+</apex:page>

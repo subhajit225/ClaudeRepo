@@ -1,0 +1,20 @@
+<apex:page standardcontroller="SBQQ__Quote__c" showHeader="false" sidebar="false">
+    <apex:includeLightning />
+    <div id="lightning"/>
+    <script type="text/javascript">
+    var recordId = "{!$CurrentPage.parameters.newid}";
+    var callingSource = "{!$CurrentPage.parameters.callingSource}";
+    $Lightning.use("c:DesposeLines", function() {
+        $Lightning.createComponent("c:DisposeLines",
+                                   {
+                                       "recordId" : recordId,
+                                       "callingSource" : callingSource
+                                   },
+                                   "lightning",
+                                   function(cmp) {
+                                       console.log('Component Loaded');
+                                   });
+        
+    });
+    </script>
+</apex:page>

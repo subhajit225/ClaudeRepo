@@ -1,0 +1,35 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global">
+    <div class="slds-grid slds-wrap">
+        <div class="slds-size_8-of-8">
+            <div class="slds-text-align_center slds-m-around_x-small header">Differentiate yourself
+                in Forums by getting RCSA trained and certified! </div>
+        </div>
+        <div class="slds-size_2-of-8">
+            <div class="slds-text-align_center slds-p-top_xx-large slds-m-around_x-small pointer images"><img src="{!$Resource.ForumGettingStarted1}"
+                    onclick="{!c.redirectToTraning}"/></div>
+        </div>
+        <div class="slds-size_6-of-8">
+            <div class="slds-m-around_x-small paragraph">
+                The <a class="redirect" onclick="{!c.redirectToTraning}">4-Day Introduction
+                to Rubrik CDM virtual bootcamp</a> is great preparation for the RCSA exam. With 60% hands-on labs,
+                participants begin to develop true Rubrik CDM expertise enabling them to minimize time-to-value and
+                maximize return on investment in Rubrik technology. Participants receive a learning materials eBook,
+                a certificate of completion, and a free attempt at the Rubrik Certified Systems Administrator (RCSA)
+                exam and practice exams.
+            </div>
+        </div>
+        <div class="slds-size_2-of-8">
+            <div class="slds-text-align_center slds-p-top_medium slds-m-around_x-small pointer rcsaimg images"><img src="{!$Resource.ForumGettingStarted2}"
+                    onclick="{!c.redirectToExam}"/></div>
+        </div>
+        <div class="slds-size_6-of-8">
+            <div class="slds-m-around_x-small paragraph">
+                Validate your skills by
+                becoming a <a class="redirect" onclick="{!c.redirectToExam}">Rubrik Certified Systems Administrator (RCSA).</a> Taking the exam will help you master
+                your
+                Rubrik CDM fundamentals and enhance your value in the technical workplace. Once certified, users
+                will receive their Forums RCSA badge.
+            </div>
+        </div>
+    </div>
+</aura:component>

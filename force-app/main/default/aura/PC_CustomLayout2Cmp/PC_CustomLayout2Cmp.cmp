@@ -1,0 +1,23 @@
+<aura:component implements="forceCommunity:layout" description="2 columns, 3:1 ratio" access="global">
+    <aura:attribute name="ContentHeader" type="Aura.Component[]" required="false"></aura:attribute>
+    <aura:attribute name="ContentFooter" type="Aura.Component[]" required="false"></aura:attribute>
+    <aura:attribute name="Content" type="Aura.Component[]" required="false"></aura:attribute>
+    <aura:attribute name="Sidebar" type="Aura.Component[]" required="false"></aura:attribute>
+    
+    <div class="container">
+            <lightning:layout multipleRows="true" horizontalAlign="spread"><!--pullToBoundary="small"-->
+                <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" padding="around-small">
+                    {!v.ContentHeader}
+                </lightning:layoutItem>                
+                <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="4" padding="around-small">        
+                    {!v.Sidebar}
+                </lightning:layoutItem>
+                <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="8" padding="around-small">
+                    {!v.Content}
+                </lightning:layoutItem>
+                <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" padding="around-small">
+                    {!v.ContentFooter}
+                </lightning:layoutItem>                
+            </lightning:layout>
+    </div>
+</aura:component>

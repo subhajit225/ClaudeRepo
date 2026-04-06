@@ -1,0 +1,281 @@
+<!--
+* Visualforce Page Name :- SelfRegisterPage
+* Controller :- SelfRegisterController
+* Author :- Shiva Sharma
+* Created Date :- 24-04-2018
+* Description : This Page is being used in Self Registeration for the Communtiy User 
+* 
+*************Change Logs***************************************************************************
+* 
+* Modified By          Date        Description 
+* 
+
+*************Change Logs Ends**********************************************************************
+-->
+<apex:page controller="SelfRegisterController" cache="false" standardStylesheets="false" sidebar="false" showheader="false" docType="HTML-5.0" title="Rubrik Community" applyBodyTag="false">
+    <link rel="shortcut icon" href="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/favicon.ico')}" type="image/x-icon" />
+    <link rel="icon" href="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/favicon1.png')}" type="image/png" />
+    <style>
+        html body{display:none;}
+        .row{margin:0px!important;}
+        .marginContainer{margin-top:25px;}
+        .marginText{margin-top:9%;}
+        body{margin:0px!important;}
+        .loginBlock{margin:70px 0px 50px;}
+        .login-form-group{padding-bottom:31px !important;margin-bottom:0px !important;}
+        .rubrik-btn{margin: 28px 0 0 3px;background-color: #009dac !important;color: #fff;padding: 13px 20px !important;box-shadow: 0 2px 2px 0 hsla(0,9%,4%,.2);border-radius: 2px;font-size: 12px;font-weight: 500;text-transform: uppercase;-webkit-transition: background-color .2s ease-in-out;transition: background-color .2s ease-in-out;cursor: pointer;letter-spacing: -.5px;}
+        .rubrik-btn:hover{background-color: #3fb5c0!important;}
+        .rubrikcheckbox{padding-bottom: 10px;display: block;}
+        label {display: inline-block;color: #4A4A4A;font-family: Gotham-Light;font-size: 15px !important;line-height: 14px;margin-bottom:0px !important;}
+        .inputrubrik {box-shadow: inset 0 1px 3px 0 rgba(0,0,0,0.06);border: 1px solid #E6E6E6;border-radius: 2px;}   
+        .t1 {font-size: 21px;line-height: 25px;color: #17232E;}   
+        .paragraphHeading{font-size: 44px;line-height: 60px;letter-spacing: -1.2px;font-weight: 200;color:white;}
+        .Paragraph{font-size: 16px;line-height: 30px;letter-spacing: -.42px;margin-top: 8px;font-weight: 200;color:white}        
+        .formLabel{display: block;text-align: left;font-size: 15px;font-weight: 300 !important;letter-spacing: -.5px;word-spacing: .5px;}
+        .inputrubrik{margin-top: 12px !important;height: 40px !important;padding: 10px 14px !important;border-radius:2px !important;}
+        .loginHeading{font-size:26px !important;padding-bottom:28px;line-height: 34px;margin:0px !important;}
+        .nopad{padding:0px}
+        .rubrikFirstGradientButton{position:relative;bottom:-40px;}
+        .leftBlockLogin{padding-top:90px;}
+        .rightBlockLogin{background-color:#fafafa;padding:46px 29px 0px 29px;width:37% !important;float:right}
+        .containerCustomerService{background-color: #283d50;padding:90px 0px;}
+        .customerServiceHeading{color:#ffffff !important;font-size:44px !important;line-height:60px !important;}
+        .customerServiceParagraph{font-size: 16px;line-height: 30px;letter-spacing: -.42px;color:#fff;width:60%;}
+        .imageHeading{padding-bottom: 5px;font-size: 15px !important;font-weight: 400;line-height: 1.4;letter-spacing: -.4px;word-spacing: .4px;padding-top: 4px;text-align:left;margin:0px !important;}
+        .imagePara{padding-bottom: 0;text-align: left;line-height: 19px;font-size: 13px;font-weight: 200;letter-spacing: -.4px;word-spacing: .4px;color: #4a4a4a;}
+        .imageBox{padding: 24px 10px 20px 16px;border-radius: 4px;background-color: #fff;width: 31% !important;margin-top:32px}
+        .globalSupportBlock{padding-top: 86px;padding-bottom: 100px;background-color: #fafafa;}
+        .imageWrapper{margin-bottom:30px;height: 122px;}
+        .imageWrapperHeading{font-size:26px !important;margin-top:30px !important;line-height:26px !important;}
+        .imageWrapperDescription{width:82%;margin-top: 11px !important;word-spacing: .4px;margin-bottom: 0 !important;font-size: 16px;font-weight: 200;letter-spacing: -.5px;line-height: 30px;}
+        .serviceBlock{padding: 82px 0 100px;background-color: #f7f7f7}
+        .plan-card{position:absolute}
+        .serviceBlockImage{position:relative;top: 4px;z-index: 12;left: 47px;}
+        .serviceBlockHeading{font-size: 44px !important;font-weight: 300 !important;line-height: 60px !important;text-align:center;color:#4a4a4a}
+        .gradientBox{height: 332px;width:30.58% !important;padding: 0 20px 32px;margin-top: 16px;text-align: center;border-radius: 8px;box-shadow: 0 6px 16px 4px rgba(0,0,0,.1);}
+        .gradientHeading{padding-top: 21px;margin:0px !important;font-size: 15px !important;font-weight: 500 !important;line-height: 22px !important;color: #fff !important;text-align: center;}
+        .gradientPara{padding-top: 8px;max-width: 240px;font-size: 14px;font-weight: 300;line-height: 20px;color: #fff;text-align: center;opacity: .9;}
+        .rubrikbtn{position: relative;z-index: 10;margin-top: 30px;background: #fff;color: #009dac;}
+        .getInTouchBlock{background-coloe:#fff;padding-top:82px}
+        .getInTouchHeading{line-height: 60px !Important;letter-spacing: -1.2px;margin-left: auto;margin-right: auto;font-size: 40px !Important;}
+        .getInTouchPara{margin: 7px auto 96px !important;color:#4a4a4a !important}
+        .countryBlockHeading{margin-top: 10px !important;font-size: 26px !important;color: #4a4a4a;font-weight: 300 !important;letter-spacing: -.75px;word-spacing: .75px;}
+        .countryPH,.countryPH:hover{font-family:gotham-light;color:#009DAC !important;}
+        .countryFlag{width: 28px;height: 20px}
+        .countryBlock{margin-bottom: 56px;}
+        .lastBlock{padding-top: 100px;padding-bottom: 100px;}
+        .lastBlockHeading{max-width: none;font-size: 44px !important;line-height: 44px !important;letter-spacing: -1.5px;margin:0 auto !important;}
+        .lastBlockPara{max-width: none;margin-top: 15px !important;font-size: 16px;letter-spacing: -.6px;}
+        .rubrik-btn:active,.rubrik-btn:focus,.countryPH:focus,.countryPH:active{text-decoration:none!important;}
+        .gradientBox>center>.rubrik-btn{background-color:#fff !important;color: #009dac !important;font-weight:500!important}
+        .gradientBox>center> #middleButton:hover{color: #fff !important;background-color: #009dac !important;}
+        .gradientBox>center>.rubrik-btn:hover{color: #fff !important;background-color: #283d50 !important;}
+        .topToGradient{position:relative;top:-16px;left:-47px;}
+        @media only screen and (min-device-width : 768px) and (max-device-width : 1024px) {
+        .rightBlockLogin{width:100% !important}
+        .imageBox{width: 29% !important;height:150px}
+        .globalSupportBlock>.container>div{margin-top:50px;}
+        .container>.gradientBox{width:29%!important;}
+        .rubrikFirstGradientButton{position:relative;bottom:-10px;}
+        .gradientPara+a{padding: 8px!important;margin-top:0px!important;}
+        .rightBlockLogin{margin-top:50px}
+        }
+        @media only screen and (min-device-width : 480px) and (max-device-width : 767px) {
+        .rightBlockLogin{width:100% !important}
+        .imageBox{width: 100% !important;}
+        .globalSupportBlock>.container>div{margin-top:50px;}
+        .container>.gradientBox{width:100%!important;}
+        .rubrikFirstGradientButton{position:relative;bottom:-10px;}
+        .gradientPara+a{padding: 8px!important;margin-top:0px!important;}
+        .customerServiceHeading+center+.imageBox{margin-left:19px !important;}
+        .rightBlockLogin{margin-top:50px}
+        }
+        @media only screen and (min-device-width : 320px) and (max-device-width : 479px) {
+        .gradientBox{margin-top:30px;}
+        .rightBlockLogin{width:100% !important}
+        .imageBox{width: 100% !important;}
+        .globalSupportBlock>.container>div{margin-top:50px;}
+        .container>.gradientBox{width:29%!important;}
+        .rubrikFirstGradientButton{position:relative;bottom:-10px;}
+        .gradientPara+a{padding: 8px!important;margin-top:0px!important;}
+        .customerServiceHeading+center+.imageBox{margin-left:19px !important;}
+        .rightBlockLogin{margin-top:50px}
+        }
+        @media only screen and (min-device-width : 480px) and (max-device-width : 767px) and (orientation : landscape){
+        .gradientBox{margin-top:60px;}
+        .rightBlockLogin{margin-top:50px}
+        }
+    </style>
+    <script>
+        window.onload = function() {
+            
+            var url =location.pathname.toLowerCase();
+            if(url.includes('/selfregisterpage')){
+                url = url.replace('/selfregisterpage','/s/login/SelfRegister');
+                 console.log(url );
+                window.location.href = url;
+            }else{
+                document.getElementById("showBlock").style.display="block";
+            }
+        };
+    </script>
+    <script>
+        var j$ = jQuery.noConflict();
+        j$(document).ready(function(){
+            
+        });
+        function checkValidation(){
+            var lastName = j$("[id$='lastName']");
+            var firstName = j$("[id$='firstName']");
+            var email = j$("[id$='email']");
+            var title = j$("[id$='title']");
+            var phone = j$("[id$='phone']"); 
+            var count = 0; 
+            if(firstName.val() == '' || firstName.val() == null){
+                firstName.next().show(); 
+                count++;
+            }else{
+                firstName.next().hide();
+            }
+            if(lastName.val() == '' || lastName.val() == null){
+                lastName.next().show();
+                count++;
+            }else{
+                lastName.next().hide();
+            }
+            var Email = email.val();
+            var pattern = /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,6}|[0-9]{1,3})(\]?)$/;
+            console.log(pattern.test(Email));
+            if((email.val() == '' || email.val() == null) || !pattern.test(Email)){
+                email.next().show();
+                count++;
+            }else{
+                email.next().hide();
+            }
+            if(title.val() == '' || title.val() == null){
+                title.next().show();
+                count++;
+            }else{
+                title.next().hide();
+            }
+            var intRegex = /^[+]?([0-9]*[\.\s\-\(\)]|[0-9]+){3,24}$/;
+            if(phone.val() == '' || phone.val() == null || !intRegex.test(phone.val())){
+                phone.next().show();
+                count++;
+            }else{
+                phone.next().hide();
+            }
+            if(count == 0){
+                j$("[id$='loginButton']").attr('disabled','disabled');
+                submitFormData();
+                return false;
+            }
+        }
+      </script>
+    <c:importbs />
+    <c:communitystyle />
+    <c:visualstrapblock >
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad" style="background-color: #2E4E52">
+            <div class="container">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="Padding:20px 15px;">
+                        <span class="block"><a href="{!URLFOR($Page.CommunityHome)}"><apex:image url="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/logo.png')}" styleClass="headerlogo text-left" /></a></span>           
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad" style="background-image: url('{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/banner.png')}');background-repeat: no-repeat;background-size: cover;">
+            <div class="container">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 loginBlock">
+                        <div class="col-lg-7 col-md-12 col-sm-12 col-xs-12 nopad leftBlockLogin marginText">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad">
+                                <p class="paragraphHeading">World-Class 24/7 Support Committed to Your Success</p>
+                                <p class="Paragraph">
+                                    Rubrik provides around-the-clock support and customized support to deliver the best customer experience. Our highly experienced Support Engineers deliver proactive, real-time professional services 24/7 to increase your stability, efficiency, and effectiveness. If you have a question, we have an answer.                                
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-lg-5 col-md-12 col-sm-12 col-xs-12 nopad rightBlockLogin" style="">  
+                            <div class="Absolute-Center is-Responsive text-center">
+                                <apex:form id="loginForm" forceSSL="true">
+                                    <apex:actionFunction name="submitFormData" action="{!validateLoginInfo}" reRender="finalBlock" oncomplete="document.getElementById('modalPress').click();"/>
+                                    <apex:pageMessages ></apex:pageMessages>
+                                    <div class="container-fluid center marginContainer">
+                                        <div class="row text-left">
+                                            <h2 Class="loginHeading" style="font-size:23px !important;">
+                                                Register to Support Portal
+                                            </h2>
+                                            <div class="form-group login-form-group">
+                                                <label class="formLabel" for="firstName">
+                                                    First Name
+                                                </label>
+                                                <apex:inputtext id="firstName" value="{!usrInformation.firstName}" styleClass="form-control block inputrubrik"/>
+                                                <p style="color:red;display:none;">Please Enter FirstName.</p>
+                                            </div>
+                                            <div class="form-group login-form-group">
+                                                <label Class="formLabel" style="width:100%" for="lastName">
+                                                    Last Name
+                                                </label>
+                                                <apex:inputtext id="lastName" required="true" value="{!usrInformation.lastName}" styleClass="form-control block inputrubrik"/>
+                                                <p style="color:red;display:none;">Please Enter LastName.</p>
+                                            </div>
+                                            <div class="form-group login-form-group">
+                                                <label Class="formLabel" style="width:100%" for="email">
+                                                    Email
+                                                </label>
+                                                <apex:input type="email" id="email" required="true" value="{!usrInformation.email}" styleClass="form-control block inputrubrik"/>
+                                                <p style="color:red;display:none;">Please Enter valid Email.</p>
+                                            </div>
+                                            <div class="form-group login-form-group">
+                                                <label Class="formLabel" style="width:100%" for="title">
+                                                    Title
+                                                </label>
+                                                <apex:inputtext id="title" required="true" value="{!usrInformation.title}" styleClass="form-control block inputrubrik"/>
+                                                <p style="color:red;display:none;">Please Enter title.</p>
+                                            </div>
+                                            <div class="form-group login-form-group">
+                                                <label Class="formLabel" style="width:100%" for="phone">
+                                                    Phone Number
+                                                </label>
+                                                <apex:input type="tel" id="phone"  required="true"  value="{!usrInformation.phone}" styleClass="form-control block inputrubrik"/>
+                                                <p style="color:red;display:none;">Please Enter Valid Phone Number.</p>
+                                            </div>
+                                            <apex:commandButton value="Register" onclick="checkValidation(); return false;" style="width:100%;margin-top: 20px;" styleClass="btn rubrik-btn" id="loginButton"/><!--/-->
+                                            <div class="form-group" style="padding:10px 0px;text-align:center;margin-bottom:0px">
+                                            </div>
+                                            <div class="form-group text-right">
+                                                <a href="/" class="loginreturn">Return to Log in</a><br />
+                                                <!--a href="{!$Page.SiteLogin}" class="loginreturn">Return to Log in</a><br /-->
+                                            </div>
+                                        </div>
+                                    </div>   
+                                </apex:form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>        
+        <!-- Modal -->
+        <apex:outputPanel id="finalBlock">
+            <button type="button" id="modalPress" class="btn btn-primary"  data-backdrop="static" data-keyboard="false" data-toggle="modal" style="display:none;" data-target="#exampleModalCenter">
+            </button>
+            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        
+                        <div class="modal-body">
+                            {!msgInfo}<br/>
+                            <br />
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="window.location.href ='/';">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </apex:outputPanel>
+        <c:sitefooter />
+    </c:visualstrapblock>
+</apex:page>

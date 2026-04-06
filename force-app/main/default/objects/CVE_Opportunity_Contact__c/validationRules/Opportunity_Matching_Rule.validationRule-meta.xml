@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Opportunity_Matching_Rule</fullName>
+    <active>true</active>
+    <description>SAL26-640: Opportunity should be Open, sales record type and Account should match with CVE Engagement&apos;s Account.</description>
+    <errorConditionFormula>AND(
+NOT($Setup.ShGl_DisableBusinessLogic__c.Disable_CVE_Enagement_Validation_Rules__c),
+Opportunity__c != null,
+OR(
+   Opportunity__r.IsClosed, 
+   Opportunity__r.RecordType.Name != &apos;Sales Opportunity&apos;, 
+   AND(Opportunity__r.AccountId != null,
+   Opportunity__r.AccountId != CVE_Engagement__r.Account__c),
+   ISPICKVAL(Opportunity__r.Opportunity_Type__c, &apos;Debooking&apos;),
+   Opportunity__r.Opportunity_Split_ParentID__c != null
+  )
+)</errorConditionFormula>
+    <errorMessage>Please select Sales Open opportunity and Opportunity&apos;s Account should match with CVE Engagement&apos;s Account</errorMessage>
+</ValidationRule>

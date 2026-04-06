@@ -1,0 +1,58 @@
+<aura:component  controller="IdeaListController"  implements="forceCommunity:availableForAllPageTypes" access="global">
+    <aura:attribute name="idea" type="Idea" access="global"/>
+     <aura:attribute name="commId" type="String"/>
+    <div class="slds-wrap slds-grid slds-size_12-of-12 ideaDiv">
+        <div class="slds-large-size--1-of-12 slds-Medium-size--1-of-12 slds-small-size--1-of-12 slds-max-small-size--12-of-12">
+            <div class ="slds-max-x-small-hide destopView" style="padding : 20px 0px;">
+                <div class= "slds-size_12-of-12 slds-text-align_center">
+                    <lightning:buttonIconStateful aura:id="Up" iconName="utility:like" selected="{! v.idea.liked }" onclick="{! c.handleLike }" alternativeText="Like" disabled="{! v.idea.iscurrentlyvotedbyuser }"/>
+
+                </div>
+                <div class="slds-size_12-of-12 slds-text-align_center">
+                    <lightning:buttonIconStateful aura:id="Down" iconName="utility:dislike" selected="{! if(and(!v.idea.liked, v.idea.iscurrentlyvotedbyuser),true,false) }" onclick="{! c.handleLike }" alternativeText="Dislike" disabled="{! v.idea.iscurrentlyvotedbyuser }"/>
+
+                </div>
+                <div class="slds-size_12-of-12 slds-text-align_center">
+                    {!v.idea.oneidea.VoteTotal} 
+                </div>
+            </div>
+        </div>
+        <div class="slds-grid slds-wrap slds-large-size--11-of-12 slds-Medium-size--11-of-12 slds-small-size--11-of-12 slds-max-small-size--12-of-12 eachIdeaBlock">
+            <div class="slds-size_12-of-12">
+                <span class ="ideaTile">
+                    <a href="{!'/s/ideadetail?id=' + v.idea.oneidea.Id}" class="title">{!v.idea.oneidea.Title}</a>
+                </span>
+                <span class ="status"> | <b>Status: </b> {!if(v.idea.oneidea.Status == null,'Submited',v.idea.oneidea.Status)}</span>
+                <span class ="status" style="word-break: break-word;">| <b>Category: </b> {!v.idea.oneidea.Categories}</span>
+            </div>
+            <div class="slds-size_12-of-12 description">
+                <aura:unescapedHtml value="{!v.idea.oneidea.Body}" />
+            </div>
+            <div class="slds-size_12-of-12">
+                <span class="descriptionComment">{!v.idea.oneidea.NumComments} Comments</span>
+                <span class ="descriptionPostedDate"> |<b> Posted by </b> {!v.idea.oneidea.CreatedBy.Name} on <ui:outputDateTime value="{!v.idea.oneidea.CreatedDate}" format="MM/dd/yyyy hh:mm a"/></span>
+            </div>
+        </div>
+        
+        <!-- mobileVew-->
+        <div class ="slds-x-small-show-only mobView">
+            <div class= "slds-size_12-of-12 slds-text-align_center">
+                <div class= "slds-size_12-of-12 slds-text-align_center">
+                    <lightning:buttonIconStateful aura:id="Up" iconName="utility:like" selected="{! v.idea.liked }" onclick="{! c.handleLike }" alternativeText="Like" disabled="{! v.idea.iscurrentlyvotedbyuser }"/>
+                    
+                </div>
+                <div class="slds-size_12-of-12 slds-text-align_center">
+                    <lightning:buttonIconStateful aura:id="Down" iconName="utility:dislike" selected="{! if(and(!v.idea.liked, v.idea.iscurrentlyvotedbyuser),true,false) }" onclick="{! c.handleLike }" alternativeText="Dislike" disabled="{! v.idea.iscurrentlyvotedbyuser }"/>
+                    
+                </div>
+                
+                <div class="slds-size_12-of-12 slds-text-align_center voteNum">
+                    {!v.idea.oneidea.VoteTotal}
+                </div>
+            </div>
+        </div>
+        
+        <!--- end here-->
+    </div>
+    
+</aura:component>

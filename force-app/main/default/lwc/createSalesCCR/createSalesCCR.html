@@ -1,0 +1,236 @@
+<template>
+    <template if:true={recordId}>
+        <lightning-modal-header label={editHeader}>
+        </lightning-modal-header>
+        <lightning-modal-body>
+            <lightning-spinner if:true={showSpinner} alternative-text="Loading..." size="medium">
+            </lightning-spinner>
+
+            <!-- Error Message Display -->
+            <template if:true={errormsg}>
+                <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                    <span class="slds-assistive-text">error</span>
+                    <h2>{errormsg}</h2>
+                </div>
+            </template>
+
+            <lightning-layout>
+                <lightning-layout-item alignment-bump="left">
+                    <div class="form-legend"><abbr class="slds-required">*</abbr> = Required
+                        Information</div>
+                </lightning-layout-item>
+            </lightning-layout>
+            <lightning-layout>
+                <lightning-layout-item size="12" padding="around-small">
+                    <div class="slds-theme_shade slds-p-around_small">
+                        <p class="slds-text-heading_small slds-m-bottom_medium">Information</p>
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>
+            <lightning-record-edit-form record-id={recordId} object-api-name="CCR__c"
+                oncancel={handleCancel} record-type-id={recordTypeId}>
+                <lightning-layout multiple-rows>
+                    <lightning-layout-item size="6" padding="around-small">
+                        <lightning-output-field field-name="OwnerId" value={userId}>
+                        </lightning-output-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="6" padding="around-small">
+                        <lightning-input-field field-name="RecordTypeId" disabled read-only>
+                        </lightning-input-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="6" padding="around-small">
+                        <lightning-input-field field-name="Opportunity__c">
+                        </lightning-input-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="6" padding="around-small">
+                        <lightning-input-field required field-name="CCR_Type__c"></lightning-input-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="6" padding="around-small">
+                        <div class="slds-form-element slds-form-element_horizontal">
+                            <label class="slds-form-element__label">
+                                    ACV Amount
+                            </label>
+                            <lightning-helptext content="Please indicate the ACV Amount in question, if applicable.">
+                            </lightning-helptext>
+                            <div class="slds-form-element__control">
+                                <lightning-input-field variant="label-hidden" field-name="Amount__c">
+                                </lightning-input-field>
+                            </div>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="6" padding="around-small">
+                        <lightning-input-field required field-name="CCR_Subtype__c"></lightning-input-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="6" padding="around-small">
+                        <div class="slds-form-element slds-form-element_horizontal">
+                            <label class="slds-form-element__label">
+                                    Does the CCR affect people or territory?
+                            </label>
+                            <div class="slds-form-element__control">
+                                <lightning-input-field variant="label-hidden" onchange={handleAffectsChange}
+                                    field-name="Does_CCR_affect_People_or_Territory__c"></lightning-input-field>
+                            </div>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="6" padding="around-small"></lightning-layout-item>
+                    <template for:each={affectedFields} for:item="field">
+                        <lightning-layout-item key={field.label} size="6" padding="around-small">
+                            <lightning-input-field field-name={field.label} required={field.required}>
+                            </lightning-input-field>
+                        </lightning-layout-item>
+                    </template>
+                    <lightning-layout-item size="6" padding="around-small">
+                        <div class="slds-form-element slds-form-element_horizontal">
+                            <label class="slds-form-element__label">
+                                <abbr class="slds-required" part="required" title="required">*</abbr>
+                                    Background/Justification
+                            </label>
+                            <lightning-helptext
+                                content="Be thorough and specific. Include as much detail and background information as possible. The more clear the request, the faster the resolution.">
+                            </lightning-helptext>
+                            <div class="slds-form-element__control">
+                                <lightning-input-field required variant="label-hidden" field-name="Comment__c">
+                                </lightning-input-field>
+                            </div>
+                        </div>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </lightning-record-edit-form>
+        </lightning-modal-body>
+        <lightning-modal-footer>
+            <div class="slds-col slds-size_1-of-1 slds-align_absolute-center slds-m-top_medium">
+                <lightning-button variant="neutral" label="Cancel" onclick={handleCancel} class="slds-m-right_small">
+                </lightning-button>
+                <lightning-button variant="brand" onclick={handleSave} label="Save">
+                </lightning-button>
+            </div>
+        </lightning-modal-footer>
+    </template>
+    <section if:false={recordId} role="dialog" tabindex="-1" class="slds-modal slds-modal_large slds-fade-in-open">
+        <div class="slds-modal__container">
+            <header class="slds-modal__header">
+                <button class="slds-button slds-button_icon slds-modal__close" title="Close" onclick={handleCancel}>
+                    <lightning-icon icon-name="utility:close"
+                   alternative-text="close"
+                   variant="inverse"
+                   size="small" ></lightning-icon>
+                <span class="slds-assistive-text">Close</span>
+                </button>
+                <h2 class="slds-modal__title">New CCR: Sales CCR</h2>
+            </header>
+            <div class="slds-modal__content slds-p-around_medium">
+                <lightning-spinner if:true={showSpinner} alternative-text="Loading..." size="medium">
+                </lightning-spinner>
+
+                <!-- Success Message Display -->
+                <template if:true={successmsg}>
+                    <div class="slds-notify slds-notify_toast slds-theme_success" role="status">
+                        <span class="slds-assistive-text">success</span>
+                        <h2 class="slds-text-heading_small">{successmsg}</h2>
+                    </div>
+                </template>
+
+                <!-- Error Message Display -->
+                <template if:true={errormsg}>
+                    <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                        <span class="slds-assistive-text">error</span>
+                        <h2>{errormsg}</h2>
+                    </div>
+                </template>
+
+                <lightning-layout>
+                    <lightning-layout-item alignment-bump="left">
+                        <div class="form-legend"><abbr class="slds-required">*</abbr> = Required
+                            Information</div>
+                    </lightning-layout-item>
+                </lightning-layout>
+                <lightning-layout>
+                    <lightning-layout-item size="12" padding="around-small">
+                        <div class="slds-theme_shade slds-p-around_small">
+                            <p class="slds-text-heading_small slds-m-bottom_medium">Information</p>
+                        </div>
+                    </lightning-layout-item>
+                </lightning-layout>
+                <lightning-record-edit-form object-api-name="CCR__c" onerror={handleError}
+                    oncancel={handleCancel} record-type-id={recordTypeId}>
+                    <lightning-layout multiple-rows>
+                        <lightning-layout-item size="6" padding="around-small">
+                            <lightning-output-field field-name="OwnerId" value={userId}>
+                            </lightning-output-field>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="6" padding="around-small">
+                             <lightning-input-field field-name="RecordTypeId" disabled read-only>
+                             </lightning-input-field>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="6" padding="around-small">
+                            <lightning-input-field field-name="Opportunity__c" value={parentId}>
+                            </lightning-input-field>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="6" padding="around-small">
+                            <lightning-input-field required field-name="CCR_Type__c"></lightning-input-field>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="6" padding="around-small">
+                            <div class="slds-form-element slds-form-element_horizontal">
+                                <label class="slds-form-element__label">
+                                        ACV Amount
+                                </label>
+                                <lightning-helptext
+                                    content="Please indicate the ACV Amount in question, if applicable.">
+                                </lightning-helptext>
+                                <div class="slds-form-element__control">
+                                    <lightning-input-field variant="label-hidden" field-name="Amount__c">
+                                    </lightning-input-field>
+                                </div>
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="6" padding="around-small">
+                            <lightning-input-field required field-name="CCR_Subtype__c"></lightning-input-field>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="6" padding="around-small">
+                            <div class="slds-form-element slds-form-element_horizontal">
+                                <label class="slds-form-element__label">
+                                    Does the CCR affect people or territory?
+                            </label>
+                                <div class="slds-form-element__control">
+                                    <lightning-input-field variant="label-hidden" onchange={handleAffectsChange}
+                                        field-name="Does_CCR_affect_People_or_Territory__c"></lightning-input-field>
+                                </div>
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="6" padding="around-small"></lightning-layout-item>
+                        <template for:each={affectedFields} for:item="field">
+                            <lightning-layout-item key={field.label} size="6" padding="around-small">
+                                <lightning-input-field field-name={field.label} required={field.required}>
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                        </template>
+                        <lightning-layout-item size="6" padding="around-small">
+                            <div class="slds-form-element slds-form-element_horizontal">
+                                <label class="slds-form-element__label">
+                                    <abbr class="slds-required" part="required" title="required">*</abbr>
+                                        Background/Justification
+                                </label>
+                                <lightning-helptext
+                                    content="Be thorough and specific. Include as much detail and background information as possible. The more clear the request, the faster the resolution.">
+                                </lightning-helptext>
+                                <div class="slds-form-element__control">
+                                    <lightning-input-field required variant="label-hidden" field-name="Comment__c">
+                                    </lightning-input-field>
+                                </div>
+                            </div>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </lightning-record-edit-form>
+            </div>
+            <footer class="slds-modal__footer">
+                <div class="slds-col slds-size_1-of-1 slds-align_absolute-center slds-m-top_medium">
+                    <lightning-button variant="neutral" label="Cancel" onclick={handleCancel}
+                        class="slds-m-right_small"></lightning-button>
+                    <lightning-button variant="brand" onclick={handleSave} label="Save">
+                    </lightning-button>
+                </div>
+            </footer>
+        </div>
+    </section>
+    <div if:false={recordId} class="slds-backdrop slds-backdrop_open"></div>
+</template>

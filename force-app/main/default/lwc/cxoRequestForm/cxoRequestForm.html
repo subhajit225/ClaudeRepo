@@ -1,0 +1,82 @@
+<template>
+
+    <template if:false={isLoading}>
+        <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+    </template>
+
+    <div style="background-color: white;">
+        <div class="form-title">{formTitle}</div>
+        <div class="form-text">{formText}</div>
+        <div class="slds-m-bottom_medium">
+
+            <div class="field-section">
+                <lightning-input type="text" name="Brief_Outline__c" label="Provide a brief outline of your expectations and how we can best assist you" 
+                onchange={handleInputChange}></lightning-input>
+            </div>
+
+            <div class="field-section">
+                <lightning-dual-listbox name="Value_Economics_Scope__c"
+                    label="Value Economics Scope"
+                    source-label=""
+                    selected-label=""
+                    options={valueEconomicsScope}
+                    onchange={handleInputChange}>
+                </lightning-dual-listbox>
+            </div>
+
+            <div class="slds-grid">
+                <div class="field-section slds-col slds-size_6-of-12">
+                    <lightning-combobox label="3 Why's Presented" name="X3_Why_s_Presented__c"
+                                        options={whysPresented} onchange={handleInputChange} required="true">
+                    </lightning-combobox>
+                </div>
+                <div class="field-section slds-col slds-size_6-of-12">
+                    <lightning-combobox label="Exec Buyer / Champion sponsoring?" name="Will_the_EB_sponsor_this__c"
+                                        options={willTheEbSponsorThis} onchange={handleInputChange} required="true">
+                    </lightning-combobox>
+                </div>
+            </div>
+
+            <div class="slds-grid">
+                <div class="field-section slds-col slds-size_6-of-12">
+                    <lightning-combobox label="Discovery and Define Tech Win Complete" name="Architectural_Workshop_Executed__c"
+                                        options={archWorkshopExecuted} onchange={handleInputChange} required="true">
+                    </lightning-combobox>
+                </div>
+                <div class="field-section slds-col slds-size_6-of-12">
+                    <lightning-input type="URL" label="Discovery / Exec Presentations URL(s)" 
+                    name="Architectural_Workshop_URL__c" onchange={handleInputChange}></lightning-input>
+                </div>
+            </div>
+
+            <div class="slds-grid">
+                <div class="field-section slds-col slds-size_6-of-12">
+                    <lightning-combobox label="Org Chart/Account Planning Document with Org Chart" name="Org_Chart_or_Account_Planning_Document__c"
+                                        options={orgChartOrAccPlanningDoc} onchange={handleInputChange}>
+                    </lightning-combobox>
+                </div>
+                <div class="field-section slds-col slds-size_6-of-12">
+                    <lightning-input type="URL" label="Org Chart/Account Planning Document URL" 
+                    name="Org_Chart_Account_Planning_Document_URL__c" onchange={handleInputChange}></lightning-input>
+                </div>
+            </div>
+            
+            <div class="field-section search-element"> 
+                <c-multi-select-lookup-cmp objectname="opportunity" fieldnames=" Id, Name " currentrecordid={recordId}
+                onselected={handleselectedOppRecords} icon-name="standard:opportunity" placeholder="Search Opportunities" label="Opportunity">
+                </c-multi-select-lookup-cmp>
+            </div>
+            
+            <div class="field-section">
+                <lightning-input-rich-text class="rich-text" label="Additional notes, URL links, requests" name="Notes_additional_detail_for_the_CVE_te__c"
+                                           label-visible="true" onchange={handleInputChange}>
+                </lightning-input-rich-text>
+            </div>
+        </div>
+
+        <div class="slds-text-align_center submit-cancel-button slds-p-top_large">
+            <lightning-button variant="neutral" type="submit" label="Cancel" onclick={handleCancel}></lightning-button>
+            <lightning-button variant="brand" type="submit" label="Submit" onclick={handleSubmit}></lightning-button>
+        </div>   
+    </div>
+</template>

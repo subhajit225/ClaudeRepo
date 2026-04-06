@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>X6_8_Weeks_hid__c</fullName>
+    <description>Used to Generate Estimated Decision Date</description>
+    <formula>IF( ISPICKVAL( POC_Duration__c , &apos;90 Days&apos;) || ISPICKVAL (POC_Duration__c, &apos;Undetermined/High Value Target&apos;) , TRUE , NULL )</formula>
+    <label>(DEPRECATED) 90 Days_hid</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

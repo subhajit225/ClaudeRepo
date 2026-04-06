@@ -1,0 +1,219 @@
+<apex:page tabStyle="Opportunity" standardController="Opportunity" extensions="ShowJiraOnOpportunityController"  lightningStylesheets="true" docType="html-5.0" sidebar="false" showHeader="false" showChat="false">
+<apex:includeScript value="/soap/ajax/42.0/connection.js"/>
+<apex:includeScript value="/soap/ajax/42.0/apex.js"/> 
+<apex:slds rendered="{!$User.UITheme != 'Theme3'}"/>
+    <head>
+        
+    </head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!--<apex:form >JIRAFetchIssuesController
+        <apex:pageBlock title="Continuation Demo">
+            Country ISO :
+            <apex:input label="Country ISO" value="{!countryISO}"/><apex:commandButton action="{!requestService}" value="Request Service" reRender="responseBlock"/></apex:pageBlock><apex:pageBlock title="Response from Webservice" id="responseBlock"><pre> {!response} </pre></apex:pageBlock></apex:form><style type="text/css">
+        pre{
+            font-size : 1.7em;
+        }
+    </style></apex:page><apex:page standardController="Case" extensions="JIRAFetchIssuesController" >-->
+    <!-- Uncomment next line if you want to render the returned JSON object -->
+    <!-- {!IssuesJSON}-->
+    <script>
+/*    function closePopup(){
+        opener.location.reload(true);
+        self.close();
+    }*/
+function formcheck() {
+    //alert('inn');
+  var fields = $(".ss-item-required")
+        .find("select, textarea, input").serializeArray();
+  var counter=0;
+  $.each(fields, function(i, field) {
+    console.log(field.value);
+    if (!field.value){
+      counter++;
+    }
+   }); 
+   console.log(counter);
+   if (counter == 2){
+      $("#errorMsg").show();
+      return false;
+   }
+   else{
+       $("#errorMsg").hide();
+       Search();
+   }
+  
+  
+}
+function formUpdateCheck() {
+    //alert('inn');
+  var fields = $(".ss-check-required")
+        .find("select, textarea, input").serializeArray();
+  
+  var counter=0;
+  $.each(fields, function(i, field) {
+    console.log(field.value);
+    if (field.value != true){
+    console.log('in');
+      counter++;
+    }
+   }); 
+   console.log('check counter--'+counter);
+   /*if (counter > 1){
+      $("#errorMsgCheckbox").show();
+      return false;
+   }
+   else */
+   if (counter = 0 ){
+   $("#errorMsgCheckbox").html('Please select atleast one Jira issue to link');
+       $("#errorMsgCheckbox").show();
+       return false;
+   }
+   else{
+       $("#errorMsgCheckbox").hide();
+       update();
+   }
+  
+ 
+}
+ $(document).ready(function(){
+    $('.check').click(function() {
+        $('.check').not(this).prop('checked', false);
+    });
+});
+
+window.onunload = refreshParent;
+    function refreshParent() {
+    if("{!$User.UITheme}" != 'Theme3'){
+            sforce.one.navigateToSObject("{!OppId}","detail");
+        }else{
+        window.opener.location.reload();
+    }
+        
+    }
+$(document).ready(function () {
+        $('#btn').click(function () {
+         alert('in btn');
+            //window.opener.location.reload(true);
+            if("{!$User.UITheme}" != 'Theme3'){
+                sforce.one.navigateToSObject("{!OppId}","detail");
+            }else{
+            window.opener.location.href ="/{!OppId}";
+            }
+            window.close();
+        });
+    });
+/*function myPopup(){
+    alert('{!errorString}');
+    if('{!errorString}' != ''){
+    //window.opener.location.href ="/{!OppId}";
+    window.opener.location.href ="/{!$CurrentPage.parameters.id}";
+    window.top.close();
+    }
+    //window.opener.parent.location.reload()
+    //you could also use self.close();    
+}*/
+    </script>
+    
+    <apex:form >
+        
+        <apex:pageBlock title="Search JIRA Issue" >
+          <apex:pageMessages ></apex:pageMessages>
+            <div id="errorMsg" style="display:none;">
+                <h1 style="color:red">Please enter atleast one keyword for search</h1>
+            </div>
+            <div id="inputdiv" class="ss-item-required">
+            Enter Text:
+                <apex:input label="Text" value="{!jiraSearchText}" />
+            OR  Jira Issue # :
+            
+                <apex:input label="Jira #" value="{!jiraSearchKey}"/>
+                <t/>
+                <t/>
+                <apex:actionFunction name="Search" action="{!Execute}" reRender="responseBlock,updateResponseBlock" status="actStatusId"/>
+                <apex:commandButton onclick="formcheck();return false;" value="Search" /><t/>
+                <t/>
+                <apex:commandButton value="Close" onclick="myPopup();" action="{!closePopup}"/>
+               <!-- <input type='button' id='btn' value='Close' />-->
+            </div>
+        </apex:pageBlock>
+        <apex:outputPanel id="updateResponseBlock">
+        <script>
+            function myPopup(){
+                 debugger;
+                //alert('ttt'+document.referrer);
+                //alert('{!errorString}');
+                if('{!errorString}' == ''){
+                //window.opener.NavigateTo("/{!$CurrentPage.parameters.id}");
+                if("{!$User.UITheme}" != "Theme3"){
+                    sforce.one.navigateToSObject("{!OppId}","detail");
+                }else{
+                    // window.opener.location.href ="/{!$CurrentPage.parameters.id}";
+                }
+                debugger;
+                window.top.close();
+                }
+                //window.opener.parent.location.reload()
+                //you could also use self.close();    
+            }
+        </script>
+            <apex:outputPanel id="success" rendered="{!isSuccess && errorString == ''}">
+                <apex:pageBlock title="Success" >
+                    <pre style="color:green;font-size:16px">  Jira # has been updated </pre>
+                </apex:pageBlock>
+            </apex:outputPanel>
+        </apex:outputPanel>
+        <style type="text/css">
+        pre{
+            font-size : 2.7em;
+            font-color: green
+        }
+    </style>
+        <apex:actionStatus id="actStatusId" >
+            <apex:facet name="start" >
+                <apex:image id="theImage" value="{!$Resource.LoadingImage}" width="50" height="50" style="text-align:center" alt="Description of image here"/>
+            </apex:facet>
+        </apex:actionStatus>
+        <apex:outputPanel id="responseBlock">
+            <apex:outputPanel id="responsetable" rendered="{!jiraIssues.size > 0 && isSuccess!= true}">
+                <apex:pageblock title="JIRA Issues"  >
+                    <!-- Create table for JIRA issues. With  oncomplete="myPopup();"-->
+                    <apex:actionFunction name="update" action="{!UpdateOpportunity}" reRender="updateResponseBlock,responseBlock" status="actStatusId" />
+                    <apex:commandButton onclick="formUpdateCheck();return false;" value="Link Jira"  />
+                    <div id="errorMsgCheckbox" style="display:none;">
+                        <h1 style="color:red">Please select only one Jira issue to be linked</h1>
+                    </div>
+                    <apex:outputPanel rendered="{!errorString != ''}"><h1 style="color:red">{!errorString} issue(s) already linked. Please select other issue(s).</h1></apex:outputPanel>
+                    <apex:pageBlockTable value="{!jiraIssues}" var="issue" styleClass="ss-check-required">
+                        <apex:column headerValue="Select" >
+                            <!-- Make it link to JIRA Issue -->
+                            <apex:inputCheckbox value="{!issue.selected}"  styleClass="check" ></apex:inputCheckbox>
+                            <!--<apex:inputCheckbox ></apex:inputcheckbox>-->
+                        </apex:column>
+                        <!-- Issue Key column -->
+                        <apex:column headerValue="Issue Key">
+                            <!-- Make it link to JIRA Issue -->
+                            <apex:outputLink value="https://rubrik.atlassian.net/browse/{!issue.key}" target="_blank">{!issue.key}</apex:outputLink>
+                        </apex:column>
+                        <!-- Issue Summary column -->
+                        <apex:column headerValue="Summary" value="{!issue.summary}"/>
+                        <!-- Issue Resolution column 
+            <apex:column headerValue="Resolution" value="{!issue.resolution}"/>-->
+                        <!-- Issue Status column -->
+                        <apex:column headerValue="Status" value="{!issue.status}" />
+                        <!-- Issue Assignee column 
+            <apex:column headerValue="Assignee" value="{!issue.assignee}" />-->
+                    </apex:pageBlockTable>
+                </apex:pageblock>
+                
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!(jiraIssues.size == 0 && isSuccess != true)}">
+                    <script>
+      console.log('rendered');
+  </script>
+                    <apex:pageblock title="JIRA Issues" >
+                        <apex:outputLabel rendered="{!isKeyFound==false || isTextFound == false}">No JIRA Issue associated with this keyword</apex:outputLabel>
+                    </apex:pageblock>
+                </apex:outputPanel>
+        </apex:outputPanel>
+    </apex:form>
+</apex:page>

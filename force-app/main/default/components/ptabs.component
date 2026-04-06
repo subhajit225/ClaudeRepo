@@ -1,0 +1,135 @@
+<apex:component >
+<style>
+
+
+        .navbar
+        .navbar-nav > li > a:hover, .navbar .navbar-nav > li > a:focus {
+            background-color: #2E4E52;
+            color: #009DAC;
+        }
+
+       .navbar .navbar-nav > li > a {
+            background-color: #2E4E52 !important;
+            color: #FFFFFF;
+            box-sizing: border-box;
+            font-family: Gotham-Light;
+            font-size: 13px;
+            line-height: 66px;
+            color: #FFFFFF;
+            text-transform: uppercase;
+
+        }
+
+        .navbar-default
+        .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+            background-color: #2E4E52 !important;
+            color: #009DAC !important;
+        }
+
+        .navbar-default {
+            background-color: #2E4E52 !important;
+            border-color: none !important;
+            position: absolute;
+        }
+
+       .navbar-default .navbar-nav > li > a {
+            background-color: #2E4E52 !important;
+            color: #FFFFFF !important;
+            box-sizing: border-box !important;
+            font-family: Gotham-Light !important;
+            font-size: 13px !important;
+            line-height: 66px !important;
+            color: #FFFFFF !important;
+            text-transform: uppercase !important;
+
+        }
+
+        .navbar-brand {
+
+            min-height: 76px !important;
+        }
+
+        .headerlogo {
+        line-height: 76px;
+        width: 165px;
+        }
+
+        input.navsearch, navsearch:focus {
+        line-height: 76px !important;
+        background:transparent;
+        border:none;
+        font-size: 16px;
+        outline: none;
+        color: #ffffff !important;
+        opacity: 0.8 !important;
+        width:107px;
+        margin-left: 120px;
+        }
+
+        .bottomsearch {
+        border-bottom:1 px;
+        color: #ffffff !important;
+        opacity: 0.2 !important;
+        }
+
+</style>
+
+    <div class="row">
+    <div class="tabs">
+    <!--start nav-->
+     <!-- Fixed navbar -->
+      <div class="navbar navbar-default navbar-static-top">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
+      <span class="navbar-brand block"><a href="{!URLFOR($Page.PCommunityHome)}"><apex:image url="{!$Resource.pcommunitylogo}" styleClass="headerlogo text-left" /></a></span>
+       </div>
+
+      <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar inline block">
+            <apex:outputPanel layout="none" rendered="{!NOT($Setup.Customer_Community_Tab_Settings__c.Hide_Standard_Tabs__c)}">
+                <li><a href="{!URLFOR($Page.PResources)}">Resources</a></li>
+                <li><a href="{!URLFOR($Page.DealRegHome)}">Deal Registration</a></li>
+                <li><a href="{!URLFOR($Page.Incentives)}">Incentives</a></li>
+                <!--<li><a href="{!URLFOR($Page.PTraining)}">Training</a></li>-->
+                <li><a href="{!URLFOR($Page.PTrainingDoce)}">Training</a></li>
+                <li><a href="https://partner.rubrik.com/idp/login?app=0sp1W000000Gmmt">Campaigns</a></li>
+                <li><div style="width:50px;" class="hidden-md hidden-lg hidden-sm"/> </li>
+               <li><a href="{!URLFOR($Page.UnifiedSearch)}" class="hidden-md hidden-lg hidden-sm">Search</a></li>
+            </apex:outputPanel>
+            <apex:outputPanel layout="none" rendered="{!$Setup.Customer_Community_Tab_Settings__c.Show_Order_Info_Tab__c}">
+                <li class="active"><a href="{!URLFOR($Page.OrderInfoLookup)}">Order Info Lookup</a></li>
+            </apex:outputPanel>
+        </ul>
+
+        <apex:outputPanel layout="none" rendered="{!NOT($Setup.Customer_Community_Tab_Settings__c.Hide_Standard_Tabs__c)}">
+        <!--search-->
+          <div class="col-sm-2 block hidden-xs hidden-md hidden-sm">
+            <form class="navbar-form" role="search" action="{!$Page.UnifiedSearch}">
+            <div class="input-group navsearch">
+                <input type="text" class="navsearch bottomsearch" placeholder="Search" name="search" id="search" autocomplete="off"/>
+                <div class="input-group-btn">
+                    <input type="image" src="{!$REsource.whitesearchicon}" alt="Submit Me" height="20px" />
+                </div>
+            </div>
+            </form>
+            </div>
+            <!--end search-->
+        </apex:outputPanel>
+
+      </div><!--/.nav-collapse -->
+    </div>
+  </div>
+    <!--end nav-->
+
+
+
+
+    </div>
+   </div><!--row end-->
+</apex:component>

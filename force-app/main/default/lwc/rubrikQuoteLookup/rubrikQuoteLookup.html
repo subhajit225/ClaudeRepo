@@ -1,0 +1,126 @@
+<template>
+    <div class="page-wrapper">
+
+        <div class="bg-teal-blob" aria-hidden="true"></div>
+
+        <div class="card" role="main">
+
+            <!-- Logo header -->
+            <div class="card-header">
+                <div class="logo-wrap">
+                    <c-rubrik-s-v-g-icon></c-rubrik-s-v-g-icon>
+                </div>
+            </div>
+
+            <!-- Teal accent bar -->
+            <div class="accent-bar" aria-hidden="true"></div>
+
+            <!-- Form body -->
+            <div class="card-body">
+                <template lwc:if={showForm}>
+
+                    <h1 class="card-title">Access Your OVF</h1>
+                    <p class="card-subtitle">
+                        Enter your quote number and registered email address to see the OVF.
+                    </p>
+
+                    <div class="form">
+
+                        <!-- Quote Number -->
+                        <div class="field-group">
+                            <label class="field-label" for="quoteNum">
+                                <svg class="label-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                                    <path d="M5 5.5h6M5 8h6M5 10.5h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                </svg>
+                                Quote Number
+                            </label>
+                            <input
+                                type="text"
+                                id="quoteNum"
+                                class={quoteFieldClass}
+                                placeholder="e.g. Q-00001234"
+                                value={quoteNumber}
+                                onchange={handleQuoteChange}
+                                maxlength="30"
+                                autocomplete="off"
+                            />
+                            <template lwc:if={quoteError}>
+                                <span class="field-error" role="alert">{quoteError}</span>
+                            </template>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="field-group">
+                            <label class="field-label" for="emailAddr">
+                                <svg class="label-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <rect x="2" y="3.5" width="12" height="9" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+                                    <path d="M2 6l6 3.5L14 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                </svg>
+                                Email Address
+                            </label>
+                            <input
+                                type="email"
+                                id="emailAddr"
+                                class={emailFieldClass}
+                                placeholder="you@company.com"
+                                value={emailAddress}
+                                onchange={handleEmailChange}
+                                autocomplete="email"
+                            />
+                            <template lwc:if={emailError}>
+                                <span class="field-error" role="alert">{emailError}</span>
+                            </template>
+                        </div>
+
+                        <!-- Submit -->
+                        <button class="btn-submit" onclick={handleSubmit} disabled={isLoading} aria-label="View OVF">
+                            <template lwc:if={isLoading}>
+                                <span class="spinner" aria-hidden="true"></span>
+                                <span>Verifying&hellip;</span>
+                            </template>
+                            <template lwc:else>
+                                <span>View OVF</span>
+                                <svg class="btn-arrow" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </template>
+                        </button>
+
+                        <!-- Server error -->
+                        <template lwc:if={serverError}>
+                            <div class="alert-error" role="alert">
+                                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.5"/>
+                                    <path d="M8 5v3.5M8 11h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                </svg>
+                                <span>{serverError}</span>
+                            </div>
+                        </template>
+
+                    </div>
+                </template>
+
+                <!-- Success state -->
+                <template lwc:if={showSuccess}>
+                    <div class="success-state">
+                        <div class="success-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5 13l4 4L19 7" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h2 class="success-title">Quote Found</h2>
+                        <p class="success-msg">Redirecting you to your quote details&hellip;</p>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Footer -->
+            <div class="card-footer">
+                Need help?&nbsp;
+                <a href="https://support.rubrik.com" target="_blank" rel="noopener noreferrer">Contact Support</a>
+            </div>
+
+        </div>
+    </div>
+</template>

@@ -1,0 +1,299 @@
+<template>
+    <lightning-card>
+        <!-- Show Spinner while loading -->
+        <!-- <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading"></lightning-spinner>
+                <div class="spinner-text"><i>Please wait, case closing is in progress.</i></div>
+        </template> -->
+        <template lwc:if={isCaseClosed}>
+            <div class="slds-box slds-theme_alert-texture slds-theme_shade slds-m-around_medium slds-align_absolute-center" style="height: 40vh;">
+                    <p class="slds-text-heading_medium slds-m-bottom_x-small">
+                        Case {caseNumber} has already been closed
+                    </p>
+            </div>
+        </template>
+        <template lwc:else>
+        <lightning-record-edit-form object-api-name="Case" onload={handleLoad} record-id={recordId} onsubmit={handleSave} onsuccess={handleFormSuccess} onerror={handleFormError}>
+            <div class="main-heading slds-m-top_medium">
+                Case Close Page - {caseNumber} 
+            </div>
+            <div class="slds-is-relative" style="z-index: 10;">
+                <template if:true={isLoading}>
+                    <lightning-spinner class="spinner-with-text" alternative-text="Loading"></lightning-spinner>
+                </template>
+                <lightning-messages></lightning-messages>
+                <lightning-accordion allow-multiple-sections-open active-section-name={activeSections}>
+                    <!-- Case Information Section -->
+                    <lightning-accordion-section name="caseInfo" label="Case Information" class="slds-p-around_medium">
+                        <lightning-layout class="slds-p-top_medium" multiple-rows="true">
+                            <lightning-layout-item class="slds-size_1-of-2">
+                                <div class="field-container">
+                                    <span class="field-label">Owner:</span>
+                                    <lightning-formatted-text value={ownerName}></lightning-formatted-text>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item class="slds-size_1-of-2">
+                                <div class="field-container">
+                                    <span class="field-label">Case Number:</span>
+                                    <lightning-formatted-text value={caseNumber}></lightning-formatted-text>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item class="slds-size_1-of-2">
+                                <div class="field-container">
+                                    <span class="field-label">Account Name:</span>
+                                    <lightning-formatted-text value={accountName}></lightning-formatted-text>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item class="slds-size_1-of-2">
+                                <div class="field-container">
+                                    <span class="field-label">Current Status and Next steps</span>
+                                    <lightning-formatted-text value={currentStatusAndNextSteps}></lightning-formatted-text>
+                                </div>
+                            </lightning-layout-item>
+                            
+                            <lightning-layout-item class="slds-size_1-of-2">
+                                <div class="field-container">
+                                    <span class="field-label">Date/Time Opened:</span>
+                                    <lightning-formatted-text value={createdDate}></lightning-formatted-text>
+                                </div>
+                            </lightning-layout-item>
+                          <!--  <lightning-layout-item class="slds-size_1-of-2">
+                                <div class="field-container">
+                                    <span class="field-label">Contact Name:</span>
+                                    <lightning-formatted-text value={contactName}></lightning-formatted-text>
+                                </div>
+                            </lightning-layout-item> -->
+                            <!--
+                            <lightning-layout-item class="slds-size_1-of-2">
+                                <div class="field-container">
+                                    <span class="field-label">Workaround Provided:</span>
+                                    <lightning-formatted-text value={workaroundProvided}></lightning-formatted-text>
+                                </div>
+                            </lightning-layout-item>
+                            -->
+                        </lightning-layout>
+                    
+                    </lightning-accordion-section>
+
+                    <!-- Case Description Section -->
+                    <lightning-accordion-section name="caseDescription" label="Case Description"
+                        class="slds-p-around_medium">
+                        <lightning-layout class="slds-p-top_medium">
+                            <lightning-layout-item class="slds-size_1-of-2">
+                                <div class="field-container">
+                                    <span class="field-label">Subject:</span>
+                                    <lightning-formatted-text value={subject}></lightning-formatted-text>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item class="slds-size_1-of-2">
+                                <div class="field-container">
+                                    <span class="field-label">Description:</span>
+                                    <lightning-formatted-text value={description}></lightning-formatted-text>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </lightning-accordion-section>
+
+                    <!-- Resolution Information Section -->
+                     <!-- 
+                    <lightning-accordion-section name="resolutionInfo" label="Resolution Information"
+                        class="slds-p-around_medium">
+                        <lightning-layout class="slds-p-top_medium" multiple-rows="true">
+                            <lightning-layout-item class="slds-size_1-of-2">
+                                <div class="field-container">
+                                    <span class="field-label">Status :</span>
+                                    <lightning-combobox class="w-60" name="progress" label="Status" value={riskStatus} placeholder="Select risk Status"
+                                    options={options} onchange={handleRiskStatusChange} variant="label-hidden" ></lightning-combobox>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item class="slds-size_1-of-2">
+                                <div class="field-container">
+                                    <span class="field-label">Resolution:</span>
+                                    <lightning-formatted-text value={riskResource}></lightning-formatted-text>
+                                </div>
+                            </lightning-layout-item>
+
+                            <lightning-layout-item class="slds-size-1-of-1">
+                                <div class="field-container">
+                                    <span class="field-label-resolution">Resolution Details:</span>
+                                    <lightning-input-rich-text label="Resolution Details" value={resolutionDetails}
+                                        onchange={handleResolutionChange}></lightning-input-rich-text>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </lightning-accordion-section>
+                    -->
+                    
+                    <lightning-accordion-section name="resolutionInfo" label="Resolution Information" class="slds-p-around_medium">
+                        
+                            <lightning-layout class="slds-p-top_medium" multiple-rows="true">
+                                
+                                <lightning-layout-item class="slds-size_1-of-2">
+                                    <div class="field-container">
+                                        <abbr class="slds-required" title="required">* </abbr><span class="field-label">Risk Status:</span></label>
+                                        <lightning-input-field variant="label-hidden" field-name="Risk_Status__c" class="w-60" required></lightning-input-field>
+                                    </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item class="slds-size_1-of-2">                                    
+                                </lightning-layout-item>       
+                                <!--
+                                <lightning-layout-item class="slds-size_1-of-2">
+                                    <div class="field-container">
+                                        <span class="field-label">Resolution:</span>
+                                        <lightning-input-field variant="label-hidden" field-name="Resolution__c"></lightning-input-field>
+                                    </div>
+                                </lightning-layout-item>
+                            -->  
+                                <lightning-layout-item class="slds-size_1-of-2">
+                                    <div class="field-container">
+                                        <span class="field-label">Resolution Details:</span>
+                                        <lightning-input-field variant="label-hidden" field-name="Resolution_Details__c" class="w-60 no-help-text"></lightning-input-field>
+                                    </div>
+                                </lightning-layout-item>                         
+                            </lightning-layout>
+                        
+                    </lightning-accordion-section>
+                    
+                     <!-- Risk Governance Section -->
+                    <lightning-accordion-section name="riskGovernance" label="Risk Governance"
+                        class="slds-p-around_medium">
+                        <lightning-layout class="slds-p-top_medium" multiple-rows="true">
+                            <lightning-layout-item class="slds-size_1-of-2">
+                                <div class="field-container">
+                                    <span class="field-label">Risk Governance Owner:</span>
+                                    <lightning-formatted-text value={riskGovernanceOwner}></lightning-formatted-text>
+                                </div>
+                            </lightning-layout-item>
+                            <!--
+                            <lightning-layout-item class="slds-size_1-of-2">
+                                <div class="field-container">
+                                    <span class="field-label">Phase:</span>
+                                    <lightning-formatted-text value={phase}></lightning-formatted-text>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item class="slds-size_1-of-2">
+                                <div class="field-container">
+                                    <span class="field-label">Subphase:</span>
+                                    <lightning-formatted-text value={subPhase}></lightning-formatted-text>
+                                </div>
+                            </lightning-layout-item>
+                        -->
+                            <lightning-layout-item class="slds-size_1-of-2">
+                                <div class="field-container">
+                                    <span class="field-label">Risk Profile Record Number:</span>
+                                    <lightning-formatted-text value={riskProfileRecordNumber}>
+                                    </lightning-formatted-text>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item class="slds-size_1-of-2">
+                                <div class="field-container">
+                                    <span class="field-label">Risk Type:</span>
+                                    <lightning-formatted-text value={riskType}></lightning-formatted-text>
+                                </div>
+                            </lightning-layout-item>
+                            <!-- 
+                            <lightning-layout-item class="slds-size_1-of-2">
+                                <div class="field-container">
+                                    <span class="field-label">Entitlement Name:</span>
+                                    <lightning-formatted-text value={entitlementName}></lightning-formatted-text>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item class="slds-size_1-of-2">
+                                <div class="field-container">
+                                    <span class="field-label">Entitlement ACV:</span>
+                                    <lightning-formatted-text value={entitlementACV}></lightning-formatted-text>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item class="slds-size_1-of-2">
+                                <div class="field-container">
+                                    <span class="field-label">Entitlement Expiry Date:</span>
+                                    <lightning-formatted-text value={entitlementExpiryDate}></lightning-formatted-text>
+                                </div>
+                            </lightning-layout-item>-->
+                            <lightning-layout-item class="slds-size_1-of-2">
+                                <div class="field-container">
+                                    <span class="field-label">ACV at Risk:</span>
+                                    <lightning-formatted-text value={acvAtRisk}></lightning-formatted-text>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item class="slds-size_1-of-2">
+                                <div class="field-container">
+                                    <span class="field-label">ACV mitigated?:</span>
+                                    <lightning-formatted-text value={acvMitigated}></lightning-formatted-text>
+                                </div>
+                            </lightning-layout-item>                          
+
+                            <lightning-layout-item class="slds-size_1-of-2">
+                                <div class="field-container">
+                                    <span class="field-label">Risk Opportunity:</span>
+                                    <lightning-formatted-text value={riskOpportunity}></lightning-formatted-text>
+                                </div>
+                            </lightning-layout-item>
+
+                            <lightning-layout-item class="slds-size_1-of-1">
+                                <div class="field-container-pdm slds-p-top_medium">
+                                    <span class="field-label pdm-feature">PDM Features:</span>
+                                    <template if:true={pdmFeatures}>
+                                        <lightning-datatable key-field="Id" data={pdmFeatures} columns={columns}
+                                            hide-checkbox-column="true">
+                                        </lightning-datatable>
+
+                                        <div class="pagination-info">
+                                            <span>{currentPage} OF TOTAL {totalPages} PAGES </span>
+                                            <span><lightning-button label="Previous" onclick={previousPage}
+                                                disabled={disablePrevious}>
+                                            </lightning-button></span>
+                                            <span><lightning-button label="Next" onclick={nextPage} disabled={disableNext}>
+                                            </lightning-button></span>
+
+                                        </div>
+                                    </template>
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item class="slds-size_1-of-1">
+                                <div class="field-container-pdm slds-p-top_medium">
+                                    <span class="field-label pdm-feature">Entitlements:</span>
+                                    <template if:true={entitlements}>
+                                        <lightning-datatable key-field="Id" data={entitlements} columns={columnsEntitlement}
+                                            hide-checkbox-column="true">
+                                        </lightning-datatable>
+
+                                        <div class="pagination-info">
+                                            <span>{currentPageEntitlement} OF TOTAL {totalPagesEntitlements} PAGES </span>
+                                            <span><lightning-button label="Previous" onclick={previousPageEntitlement}
+                                                disabled={disablePreviousEntitlement}>
+                                            </lightning-button></span>
+                                            <span><lightning-button label="Next" onclick={nextPageEntitlement} disabled={disableNextEntitlement}>
+                                            </lightning-button></span>
+
+                                        </div>
+                                    </template>
+                                </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+
+                    </lightning-accordion-section>
+                    <lightning-accordion-section name="comment" label="Comments" class="slds-p-around_medium">
+                        <lightning-layout class="slds-p-top_medium">
+                            <iframe src={vfPageUrl} width="100%" height="200px" frameborder="0"></iframe>
+                        </lightning-layout>
+                    </lightning-accordion-section>
+
+                </lightning-accordion>
+            
+            </div>
+
+            <lightning-layout style="margin: 0px 45%; width:100%" class="slds-m-top_medium">
+                <lightning-layout-item>
+                    <lightning-button class="slds-p-right_x-small" label="Cancel" onclick={handleCancel}
+                        variant="neutral" ></lightning-button>
+                    <lightning-button label="Save" type="submit" variant="brand"></lightning-button>
+                </lightning-layout-item>
+            </lightning-layout>
+
+            <!-- <lightning-input-field variant="label-hidden" field-name="Status"  value='Closed' class="slds-hide"></lightning-input-field> -->
+        </lightning-record-edit-form>
+    </template>
+    
+    </lightning-card>
+</template>

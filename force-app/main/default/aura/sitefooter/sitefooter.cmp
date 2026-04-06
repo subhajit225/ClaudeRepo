@@ -1,0 +1,162 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes"  controller="Util" access="global">
+    <aura:attribute name="record" type="Object"/>
+    <force:recordData recordId="{!$SObjectType.CurrentUser.Id}"
+                      fields="Name,ProfileId "
+                      targetFields="{!v.record}" />
+    <aura:attribute name="isModalOpen" type="boolean" default="false"/>  <!--CS-21-1268-->
+    <!-- Added for CS21-827 - Veera-->
+    <c:csCommunityTermsAndConditions></c:csCommunityTermsAndConditions>
+    <!-- CS21-827 - End-->
+    <div class ="containerDiv">
+        <div class="footerContent ">
+            <div class="slds-grid block slds-wrap standardwidth">
+                <div class="slds-large-size--5-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 block paddingleftcls">
+                    <div class="slds-grid block">
+                        <div class="slds-medium-size_11-of-12 nopad">
+                            <a href="{!$Label.c.Community_Base_URL}">
+                                <img src="{!$Resource.RubrikCustomerCommunity +  '/RubrikCommunity/Images/favicon.ico'}" class="imgcls"/>
+                            </a>
+                            <br/>
+                            <p class="para">Rubrik builds beautifully simple products for businesses to meet their most challenging data management needs.</p>
+                            <!--<ui:outputText value="{!v.footerText}" /-->
+                        </div>
+                        <div class="slds-medium-size_1-of-12 nopad"></div>
+                    </div>
+                    <div class="slds-grid block">
+                        <div class="slds-medium-size_12-of-12 slds-large-size_12-of-12">
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-large-size--7-of-12 slds-Medium-size--9-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 paddingleftfooter slds-grid slds-wrap block" >
+                    <aura:if isTrue="{!v.record.ProfileId != $Label.c.Trial_Edge_Profile}">
+
+                        <!--<apex:outputPanel layout="none" rendered="{!NOT($Setup.Customer_Community_Tab_Settings__c.Hide_Standard_Tabs__c)}"-->
+                        <div class="slds-medium-size_12-of-12 slds-large-size_4-of-12 slds-size_12-of-12 nopad">
+                            <div class="footerListHead block"> My Cases<br/></div>
+                            <a href="{!$Label.c.Community_Base_URL+'newcases'}" class="footerLink block">Create case</a><br/>
+                            <a href="{!$Label.c.Community_Base_URL+'my-cases'}" class="footerLink block">View cases</a><br/>
+                        </div>
+                        <!--</apex:outputPanel>
+                            <apex:outputPanel layout="none" rendered="{!NOT($Setup.Customer_Community_Tab_Settings__c.Hide_Standard_Tabs__c)}"-->
+                        <div class="slds-medium-size_12-of-12  slds-large-size_4-of-12 slds-size_12-of-12 slds-small-size_12-of-12 nopad">
+                            <div class="footerListHead block">Ideas<br/></div>
+                            <a href="{!$Label.c.Community_Base_URL+'idealist?newIdea=true'}" class="footerLink block">Submit idea</a><br/>
+                            <a href="{!$Label.c.Community_Base_URL+'idealist'}" class="footerLink">Search ideas</a><br/>
+                        </div>
+                    </aura:if>
+                    <!--</apex:outputPanel>
+                            <apex:outputPanel layout="none" rendered="{!NOT($Setup.Customer_Community_Tab_Settings__c.Hide_Standard_Tabs__c)}"-->
+                    <div class="slds-medium-size_12-of-12 slds-large-size_4-of-12 slds-size_12-of-12 slds-small-size_12-of-12 nopad">
+                        <div class="footerListHead block">DOCUMENTATION and DOWNLOADS<br/></div>
+                        <a href="{!$Label.c.Community_Base_URL+'documentation'}" class="footerLink block">View documentation</a><br/>
+                        <a href="{!$Label.c.Community_Base_URL+'documentation'}" class="footerLink block">View downloads</a><br/>
+                    </div>
+                    <!--</apex:outputPanel-->
+                    <!-- <apex:outputPanel layout="none" rendered="{!NOT($Setup.Customer_Community_Tab_Settings__c.Hide_Standard_Tabs__c)}"-->
+                    <div class="slds-medium-size_12-of-12 slds-large-size_4-of-12 slds-size_12-of-12 slds-small-size_12-of-12 nopad">
+                        <div class="footerListHead block">Knowledge base<br/></div>
+                        <a href="{!$Label.c.Community_Base_URL+'kblistpage?categoryType_Article=All'}" class="footerLink block">View knowledge base</a><br/>
+                    </div>
+                    <aura:if isTrue="{!v.record.ProfileId != $Label.c.Trial_Edge_Profile}">
+
+                        <!--</apex:outputPanel>
+                            <apex:outputPanel layout="none" rendered="{!NOT($Setup.Customer_Community_Tab_Settings__c.Hide_Standard_Tabs__c)}"-->
+                        <div class="slds-medium-size_12-of-12 slds-large-size_4-of-12 slds-size_12-of-12 slds-small-size_12-of-12 nopad">
+                            <div class="footerListHead block">My Products<br/></div>
+                            <a href="{!$Label.c.Community_Base_URL+'myproducts'}" class="footerLink block">View products</a><br/>
+                        </div>
+                    </aura:if>
+                    <!-- </apex:outputPanel-->
+                    <div class="slds-medium-size_12-of-12  slds-large-size_4-of-12 slds-size_12-of-12 slds-small-size_12-of-12 nopad">
+                        <div class="footerListHead block">About<br/></div>
+                        <a href="{!$Label.c.Community_Base_URL+'about'}" class="footerLink block">About Rubrik</a><br/>
+                        <a href="https://www.rubrik.com/support/#contact-numbers" class="footerLink">Contact Rubrik Support</a><br/>
+                    </div>
+                </div>
+                <div class ="socialIcons">
+                    <a href="https://twitter.com/rubrikInc" target="_blank" class="socialcolor"><img  src="{!$Resource.RubrikCustomerCommunity + '/RubrikCommunity/Images/twiter.png'}" Class="" /></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="https://www.linkedin.com/company/rubrik-inc" target="_blank" class="socialcolor"><img  src="{!$Resource.RubrikCustomerCommunity + '/RubrikCommunity/Images/linkedin.png'}" Class="" /></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="https://www.facebook.com/rubrikinc/" target="_blank" class="socialcolor"><img  src="{!$Resource.RubrikCustomerCommunity + '/RubrikCommunity/Images/facebok.png'}" Class="" /></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="https://www.youtube.com/channel/UCDoKLwlfdfH61rkzD3pu_ZQ" target="_blank" class="socialcolor"><img  src="{!$Resource.RubrikCustomerCommunity + '/RubrikCommunity/Images/youtube.png'}" Class="" /></a>
+                </div>
+            </div>
+            <div class ="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 bottomFooterSection">
+                <div class="slds-grid slds-wrap  ">
+                    <div class="slds-large-size--5-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12  nopad">
+                        <div class=" footerbottomleft"> Built in Palo Alto, CA <span class="bullet">&bull;</span>
+                            <!-- Updated Links - CS21-904 -->
+                            <a href="https://www.rubrik.com/legal" class="footerLink block">Legal</a>
+                            <span class="bullet">&bull;</span>
+                            <a href="https://www.rubrik.com/legal/privacy-policy" class="footerLink block" target="_blank">Privacy Policy</a> 
+                            <span class="bullet">&bull;</span>
+                            <a href="https://www.rubrik.com/legal/terms-of-use" class="footerLink block">Terms of Use</a>
+                            <span class="bullet">&bull;</span>
+                            <a href="https://www.rubrik.com/legal/cookie-policy" class="footerLink block">Cookie Policy</a>
+                            <span class="bullet">&bull;</span>
+                            <a href="https://www.rubrik.com/trust" class="footerLink block">Trust</a>
+                            <span class="bullet">&bull;</span>
+                            <a href="https://www.rubrik.com/en/legal/ccpa-compliance" class="footerLink block" target="_blank">CA Residents only: Do not sell my personal information</a> 
+                            <span class="bullet">&bull;</span> 
+                            <a href="https://www.rubrik.com/contact-us/" class="footerLink block" target="_blank">Contact Us</a>
+                            <!-- CS21-904 -->
+                        </div>
+                    </div>
+                    <div class="slds-large-size--7-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12  nopad">
+                        <div class=" footerbottomright"> © 2022 Rubrik - Multi-Cloud Data Control™ Company </div>
+                        <div class="slds-grid_align-end textAlignEnd">
+                            <img class="sentryAiImageBottom" src="{!$Resource.RubrikCustomerCommunity +  '/RubrikCommunity/Images/RubrikAndSentryAiRegisteredTM.png'}" title="Powered by SentryAI® technology" onclick="{!c.showModal}"/>
+                            <!--Use aura:if tag to display/hide popup based on isModalOpen value-->  
+                              <!--Use aura:if tag to display/hide popup based on isModalOpen value-->  
+                            <!--Ticket : CS21-1268 : Added a modal on click on sentryAiImage
+                            isModalOpen :Boolean attribute to indicate if modal is open or not 
+                            default value is false as modal is closed when page is loaded 
+                            -->
+                            <aura:if isTrue="{!v.isModalOpen}">
+                                <!-- Modal/Popup Box starts here-->
+                                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                                    <div class="slds-modal__container">
+                                        <!-- Modal/Popup Box Header Starts here-->
+                                        <header class="slds-modal__header">
+                                            <lightning:buttonIcon   iconName="utility:close"
+                                                                    onclick="{! c.closeModel }"
+                                                                    alternativeText="Close"
+                                                                    variant="bare-inverse"
+                                                                    class="slds-modal__close"/>
+                                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">SentryAI® Support Portal Description</h2>
+                                        </header>
+                                        <!--Modal/Popup Box Body Starts here-->
+                                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1" style="text-align:left">
+                                          
+                                            <p>
+                    							{!$Label.c.SentryAI_Label1}
+                                            </p>                                            
+                                                <br/>
+                                               {!$Label.c.SentryAI_L2}
+                                                <br/>
+                                            <p>
+                                                <ul style="list-style-type: disc; padding-left:3em;">
+                                                    <li>{!$Label.c.SentryAI_L3}</li>
+                                                    <li>{!$Label.c.SentryAI_L4}</li>
+                                                    <li>{!$Label.c.SentryAI_L5}</li>
+                                                    <li>{!$Label.c.SentryAI_L6}</li>
+                                                    <li>{!$Label.c.SentryAI_L7}</li>
+                                                    <li>{!$Label.c.SentryAI_L8}</li>
+                                                </ul> 
+                                            </p>
+                                            <br/>
+                                            <p>
+                                                {!$Label.c.SentryAI_L9}
+                                            </p> 
+                                                
+                                        </div>
+                                    </div>
+                                </section>
+                                <div class="slds-backdrop slds-backdrop_open"></div>
+                            </aura:if>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

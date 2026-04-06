@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Resend_Email</fullName>
+    <availability>online</availability>
+    <displayType>button</displayType>
+    <linkType>javascript</linkType>
+    <masterLabel>Resend Email</masterLabel>
+    <openType>onClickJavaScript</openType>
+    <protected>false</protected>
+    <url>{!REQUIRESCRIPT(&quot;/soap/ajax/57.0/connection.js&quot;)}
+var o = new sforce.SObject(&quot;RMA_Order__c&quot;);
+o.id =&quot;{!RMA_Order__c.Id}&quot;;
+
+function checkError(result)
+{
+if (!result[0].getBoolean(&apos;success&apos;)) {
+throw(result[0].errors.message);
+}
+}
+try
+{
+o.Resend_Flash_Email__c = true;
+result = sforce.connection.update([o]);
+checkError(result);
+}
+catch (err)
+{
+alert(err);
+//alert(&apos;Please fill Opportunity or any other required field and then cancel the order&apos;);
+}
+
+window.location.reload();</url>
+</WebLink>

@@ -1,0 +1,72 @@
+/****Support Layout Changes for Lightning. Show only in Classic****/
+.THIS .Support records-record-layout-section:nth-child(1){/*headsup*/	
+   display:none !important;
+}
+.THIS .Support records-record-layout-section:nth-child(2){/*Case Information*/	
+   display:none !important;
+}
+.THIS .Support records-record-layout-section:nth-child(13){/*CaseComments*/	
+   display:none !important;
+}
+.THIS .Support records-record-layout-section:nth-child(14){/*RecentCases*/	
+   display:none !important;
+}
+.THIS .Support records-record-layout-section:nth-child(15){/*StatusTracker*/	
+   display:none !important;
+}
+.THIS .Support records-record-layout-section:nth-child(16){/*Information*/	
+   display:none !important;
+}
+
+/****Renewal Layout Changes for Lightning. Show only in Classic****/
+.THIS .Renewal records-record-layout-section:nth-child(9){/*Jira*/	
+    display:none;	
+}	
+.THIS .Renewal [force-recordLayoutSection_recordLayoutSection-host]:nth-child(9){/*Jira*/		
+   display:none !important;	
+}
+.THIS .Renewal records-record-layout-section:nth-child(8){/*e2cp*/	
+    display:none;	
+}	
+.THIS .Renewal [force-recordLayoutSection_recordLayoutSection-host]:nth-child(8){/*e2cp*/	
+   display:none !important;	
+}
+.THIS .Renewal records-record-layout-section:nth-child(10){/*recent cases*/	
+    display:none;	
+}	
+.THIS .Renewal [force-recordLayoutSection_recordLayoutSection-host]:nth-child(10){/*recent cases*/	
+   display:none !important;	
+}
+.THIS .Renewal records-record-layout-section:nth-child(11){/*status tracker*/	
+    display:none;	
+}
+.THIS .Renewal [force-recordLayoutSection_recordLayoutSection-host]:nth-child(11){/*status tracker*/
+   display:none !important;	
+}
+
+.THIS .thinBar{
+    height: 100%;
+    width: 1px;
+}
+
+.THIS .slds-form-element__label{
+    font-size: 0.75rem !important;
+}
+.THIS .slds-form-element__static{
+    font-size: 0.75rem !important;
+}
+.THIS body{
+    font-size: 0.75rem !important;
+}
+.THIS .uiTabset--task .tabs__item a{
+    overflow: unset !important;
+    width: 106% !important;
+    max-width: 106% !important;
+}
+.THIS .uiTabset--task .tabs__item a:last-child{
+    margin-left: 10px !important;
+    padding-left: 4px !important;
+}
+.THIS .slds-rich-text-editor__output pre{	
+    white-space: break-spaces;	
+}

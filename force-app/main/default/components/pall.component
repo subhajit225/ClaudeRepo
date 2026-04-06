@@ -1,0 +1,12 @@
+<apex:component controller="ResourceSearchController">
+
+<apex:attribute assignTo="{!pagescope}" name="thescope" type="string" description="workspace string to query"/> 
+         <!--render if follow on page-->
+                 <apex:datatable var="r" value="{!all}" id="featuredresults" styleClass="table" rendered="{!all!=null}">
+                    <apex:column headervalue="Title">
+                     <a href="{!$Page.ContentView}?id={!r.id}">{!r.title}</a>
+                    </apex:column>                   
+                    <apex:column headervalue="Author" value="{!r.CreatedBy.Name}"/>
+                    <apex:column headervalue="Date" value="{!r.CreatedDate}"/>
+            </apex:datatable>
+</apex:component>

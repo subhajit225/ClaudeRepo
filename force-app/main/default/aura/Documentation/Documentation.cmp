@@ -1,0 +1,76 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" controller="DocumentationController" access="global">
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    <aura:attribute name="alldocuments" type="Release_Version__c[]"/>
+    <aura:attribute name="Attachmentlist" type="Release_Version__c[]"/>
+    <aura:attribute name="sortedBy" type="String" default="Name"/>
+    <aura:attribute name="sortedDirection" type="String" default="asc"/>
+    <aura:attribute name="mydocument" type="Release_Version__c[]"/>
+    <aura:attribute name="pageNum" type="Integer" default="1"/>
+    <aura:attribute name="recordsPerPage" type="Integer" default="20"/>
+    <aura:attribute name="totalPages" type="Integer" default="0"/>
+    <aura:attribute name="startNum" type="Integer"/>
+    <aura:attribute name="endNum" type="Integer"/>
+    <aura:attribute name="mycolumns" type="List"/>
+    <aura:attribute name="showChart" type="Boolean" default="false"/>
+    <div class="containerDiv">
+        <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 ">
+            <div class="slds-grid">
+                
+                <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 topbotmpad"> 
+                    <div class="slds-grid">
+                        
+                        <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12">
+                            <p class="pagetitle">Documentation and Downloads</p>
+                        </div>
+                    </div>
+                    <br/>
+                    <a href="https://support.rubrik.com/s/ossn" target="_blank">Open Source Software Notice</a>
+                    <aura:if isTrue="{!or(v.showChart,$SObjectType.CurrentUser.Id == '00540000003iWapAAE')}">
+                        <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12">
+                            <c:ClusterChartComponent/>
+                        </div>
+                    </aura:if>
+                    <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 slds-size_12-of-12 mainDiv slds-grid  slds-wrap">
+                      <div class="slds-col slds-size_12-of-12">
+                        <lightning:datatable  class="datatest" data="{!v.mydocument}" 
+                                             columns="{!v.mycolumns}" 
+                                             keyField="id"
+                                             hideCheckboxColumn="true"
+                                             onsort="{!c.updateColumnSorting}"
+                                             sortedBy="{!v.sortedBy}"  
+                                             sortedDirection="{!v.sortedDirection}"/>
+                        </div>
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered bordertopnone">
+                            <tbody>
+                                <aura:iteration items="{!v.mydocument}" var="doc" >
+                                    <tr class="  slds-hint-parent nohover">
+                                        <td data-label="Comment" class="slds-cell-wrap fontsize">
+                                            <div class ="fontcolor" title="{!doc.Name}" id="{!doc.Id}" onclick="{!c.redirect}">» {!doc.Name} </div>
+                                        </td>
+                                        <td data-label="Date" class="slds-cell-wrap fontsize1">
+                                            <div  class ="Comment"  title="{!doc.Release_Date__c}">
+                                                <ui:outputDateTime value="{!doc.Release_Date__c}" format="MM/dd/yyyy"/>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </aura:iteration>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="slds-grid padtop">
+                        <div class="slds-col slds-large-size_6-of-12 showingTotalResults ">
+                            <p> Showing {!v.startNum}-{!v.endNum} of {!v.alldocuments.length} entries</p>
+                        </div>
+                        <div class="slds-col slds-large-size_6-of-12 floatright">
+                            <lightning:button class="buttonspace" label="Previous" title="Previous Page" onclick="{!c.previous}" disabled="{!if(or(v.alldocuments.length == 0 ,v.pageNum == 1),true,false)}"/>
+                            <span class="changeonclick">{!v.pageNum}</span>
+                            <lightning:button class="" label="Next" title="Next Page" onclick="{!c.next}" disabled="{!if(or(v.alldocuments.length == 0,v.pageNum == v.totalPages),true,false)}"/>
+                        </div>
+                    </div>
+                </div>
+                <!--<div class="slds-large-size_1-of-12"></div>-->
+                
+            </div>
+        </div>
+    </div>
+</aura:component>

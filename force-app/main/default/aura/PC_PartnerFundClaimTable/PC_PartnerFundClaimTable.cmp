@@ -1,0 +1,63 @@
+<aura:component  extends="c:PC_UtilityCmp" implements="forceCommunity:availableForAllPageTypes" access="global" controller="PC_PartnerFundClaimTableController"> 
+	<!-- Lightning Datatable Attributes -->
+    <aura:attribute name="recordId" type="string"/>
+    <aura:attribute name="pfcList" type="List" default ="[]" description="contains list of Partner Fund Request records" />
+    <aura:attribute name="col" type="List" description="contains List of Column names and its type" />
+    <aura:attribute name="loadTable" type="Boolean" default ="false" description="flag variable used to show Table on page only after getting records from backend. Used only at page load." />
+    <aura:attribute name="returnFieldsinQuery" type="string" default="Id,createddate,Title,FORMAT(Amount) Amount,Status,Description,Claim_Number__c " description="field api names separated by comma" />
+    <aura:attribute name="objTypeinQuery" type="string" default="PartnerFundClaim" description="Object name" />
+    <!-- Lightning Datatable Attributes -->
+    <!-- Load more Attributes -->
+    <aura:attribute name="flag" type="Boolean" default ="true"  description="to aviod multiple calls to backend which scrolling table"/>
+    <aura:attribute name="IdSet" type="List" default ="[]"  description="contains Id of records which are queried"/>
+    <aura:attribute name="totalSize" type="string" description="total size of records" />
+    <aura:attribute name="pageSize" type="Integer" default ="20" description="page size of records to be shown"/>
+    <aura:attribute name="loadMoreStatus" type="string" description="tells whether if any data is present at back side to load"/>
+    <!-- Load more Attributes -->
+    <!-- Sort Attributes -->
+    <aura:attribute name="sortedBy" type="String" default="createddate" description="Field api name of field used in sorting"/>
+    <aura:attribute name="sortedDirection" type="String" default="desc" description="sorting direction"/>
+    <aura:attribute name="defaultSortDirection" type="String" description="default sort direction"/>
+    <aura:attribute name="sortedByValue" type="String" description="value of sorted field which is used to fetch next set of records"/>
+    <!-- Sort Attributes -->
+    <!-- Search Attributes -->
+    <aura:attribute name="searchText" type="string" default="" description="contains search value"/>
+    <!-- Search Attributes -->
+    <!--  Attribues section -->
+    <aura:attribute name="screenHeightCss" type="String" />
+    <aura:unescapedHtml value="{!v.screenHeightCss}" />
+    <aura:handler name="destroy" value="{!this}" action="{!c.handleDestroy}"/>
+    <aura:handler name="init" value="this" action="{!c.doInitpfc}"/>
+    <aura:handler event="c:searchEvent" name="searchEventName" action="{!c.handlesearchEvent}"/>
+    
+     <lightning:card>
+        <div class="heading-58">MDF Claim</div>
+        <aura:set attribute="actions">
+            
+        </aura:set>        
+        <p class="slds-p-horizontal_small">
+            
+            <div id="myDIV" class="slds-p-top_large">
+                <aura:If isTrue="{!v.loadTable}">
+                    <div class="custom-table-wrapper">
+                    <lightning:datatable data="{!v.pfcList}" 
+                                         columns="{!v.col}" 
+                                         keyField="Id"
+                                         onrowselection="{!c.handleSelectedRow}"
+                                         sortedBy="{!v.sortedBy}"
+                                         sortedDirection="{!v.sortedDirection}"
+                                         defaultSortDirection="{!v.defaultSortDirection }"
+                                         onsort="{!c.handleColumnSortingpfc}" 
+                                         hideCheckboxColumn="true"
+                                         minColumnWidth = "100px"/> 
+                    <div class="slds-align_absolute-center">
+                        {! v.loadMoreStatus }
+                    </div>
+                </div>
+                </aura:If>   
+            </div>       
+            <br/>
+            <br/>
+        </p>
+    </lightning:card>
+</aura:component>

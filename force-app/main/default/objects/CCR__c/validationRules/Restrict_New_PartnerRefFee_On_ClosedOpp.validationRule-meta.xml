@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Restrict_New_PartnerRefFee_On_ClosedOpp</fullName>
+    <active>true</active>
+    <description>SAL25-247 - Partner Referral Fee CCRs should not be able to submitted for opportunities that have already closed.</description>
+    <errorConditionFormula>AND(
+    NOT($Setup.ShGl_DisableBusinessLogic__c.Disable_CCR_Validation_Rules__c),
+    $Profile.Name &lt;&gt; &quot;System Administrator&quot;,
+    ISNEW(),
+    ISPICKVAL(CCR_Type__c ,&apos;Partner Referral Fee&apos;),
+    Opportunity__r.IsClosed
+)</errorConditionFormula>
+    <errorMessage>Partner Referral Fee CCR can not be submitted for opportunities that have already closed.</errorMessage>
+</ValidationRule>

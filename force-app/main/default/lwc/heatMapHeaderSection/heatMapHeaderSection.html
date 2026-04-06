@@ -1,0 +1,21 @@
+<template>
+    <div class="utilityButtonIcon">
+        <!-- <lightning-button-icon class="slds-m-left_xx-small buttonIcon btn" icon-name={accordianIcon} size="medium"
+            alternative-text="accordianIcon" name="accordinaIcon" title="accordian" variant="bare"
+            onclick={handleAccordian}></lightning-button-icon> -->
+            <button class="collapse-button" onclick={handleAccordian}>
+                <lightning-icon icon-name={accordianIcon} size="x-small" class="cheveronRightClass"></lightning-icon>
+            </button>
+    </div>
+    <template if:true={showAccordianSection}>
+        <div class="calculation_Area_Items">
+            <template for:each={calculationAreaItems} for:item="item">
+                <div key={item.id} class={item.containerClass}>
+                    <p class={item.elementClass}>{item.value}</p>
+                    <p if:true={item.isAccount} style="margin-left: 15px;text-transform: uppercase;margin-bottom: 5px; color: #eeeeee;">{item.label}</p>
+                    <p if:false={item.isAccount} style="text-transform: uppercase;color: #eeeeee;">{item.label}</p>
+                </div>
+            </template>
+        </div>
+    </template>
+</template>

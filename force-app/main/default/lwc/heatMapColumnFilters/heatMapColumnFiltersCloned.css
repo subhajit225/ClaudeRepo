@@ -1,0 +1,37 @@
+.sidebar-container {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+	/* background-color: #463A93; */
+}
+
+.collapse-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    color: white;
+}
+
+.sidebar {
+    /* background-color: #463A93; Replace with your desired color */
+    width: 200px;
+    transition: width 0.3s ease;
+    overflow-x: hidden;
+}
+
+.sidebar.collapsed {
+    width: 0px;
+}
+
+.sidebar-item {
+    padding-left: 25px;
+	padding-bottom: 15px;
+    color: white;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar-item input[type="checkbox"] {
+    margin-right: 2px;
+}

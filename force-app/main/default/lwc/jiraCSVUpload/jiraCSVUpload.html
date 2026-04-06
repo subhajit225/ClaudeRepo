@@ -1,0 +1,46 @@
+<template>
+    <div class ="fileUploadDiv">
+        <div class ="headerdiv">
+            <h1 class ="uploadingHeading">
+                Please Click 'Upload Files' to Upload the CSV File and Click 'Migrate Zissue to Aha Idea' Button After You Finish.
+            </h1>
+        </div>
+
+        <div class="slds-grid slds-wrap slds-align_absolute-center wrapDiv">
+            <div class ="slds-large-size--12-of-12 slds-Medium-size--9-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 ">
+                <div class ="uploadingSection">
+                    <!--<div class= "fileDescp"><i>Import Csv File to Migrate Zissue</i></div>-->
+                    <div class= "fileDescp"><i>Please upload a UTF-8 encoded, comma separated .csv file</i></div>
+                    <lightning-input
+                        type="file"
+                        label=""
+                        accept=".csv"
+                        onchange={handleFileUpload}>
+                    </lightning-input>
+                </div>
+                <div class="submitButtonDiv slds-align_absolute-center">
+                    <lightning-button variant="brand" label="Migrate Zissue to Aha Idea" title="Primary action" onclick={sendDataToApex} disabled={disablebutton} class="buttonCSS slds-m-right_x-small slds-float_right">
+                    </lightning-button>
+                </div>
+                <br/><br/>
+                <template lwc:if={showfilename}>
+                <div class="slds-grid slds-wrap files">
+                    <div class="slds-col slds-large-size--8-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12" style="   padding-top: 20px;text-align : center;">
+                            <h2 class="fileUpload"> <b>File Uploded:- {filename} </b></h2>
+                    </div>
+
+                     <div class="slds-col slds-large-size--8-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12" style="   padding-top: 20px;text-align : center;">
+                            <h2 class="warningmessage"> <b>You can upload only one file at a time.</b></h2>
+                    </div>
+                </div>
+                </template>
+            </div>
+        </div>
+
+        <div if:true={loadspinner}>
+            <div class="exampleHolder">
+                <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+            </div>
+        </div>
+         </div>
+</template>

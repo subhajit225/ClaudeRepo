@@ -1,0 +1,39 @@
+<apex:page standardController="Case" extensions="CaseDetailController" action="{!callJS}">
+    <apex:includeScript value="/support/console/47.0/integration.js"/>
+    
+    <script type="text/javascript">
+    function RefreshPrimaryTab() 
+    {
+        //To Refresh the Primary Tab (Case Detail Page)
+        sforce.console.getFocusedPrimaryTabId(showTabId);
+        //To Close the Current Tab OR Enclosing Tab
+        sforce.console.getEnclosingTabId(closeSubtab);
+    }
+    
+    var showTabId = function showTabId(result) 
+    {
+        var tabId = result.id;
+        sforce.console.refreshPrimaryTabById(tabId , true, refreshSuccess);
+    };
+    
+    var refreshSuccess = function refreshSuccess(result) 
+    {
+        //Report whether refreshing the primary tab was successful
+        if (result.success == true) 
+        {
+            alert('Primary tab refreshed successfully');
+        } 
+        else 
+        {
+            alert('Primary did not refresh');
+        }
+    };
+    var closeSubtab = function closeSubtab(result) {
+        //Now that we have the tab ID, we can close it
+        var tabId = result.id;
+        sforce.console.closeTab(tabId);
+    }
+    </script>
+    <!-- To Call JS From Apex -->
+    <apex:outputText value="{!callfunc}" escape="false"></apex:outputText>
+</apex:page>

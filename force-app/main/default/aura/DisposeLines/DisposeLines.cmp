@@ -1,0 +1,259 @@
+<aura:component controller="despositonLines2" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="profileName" type="String" />
+    <!-- Added by Shaloo-->
+    <aura:attribute name="showOptionsA" type="Boolean" default="false"/>
+    <!-- Added by Shaloo-->
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="callingSource" type="String" />
+    <aura:attribute name="data" type="List" />
+    <aura:attribute name="columns" type="List" />
+    <aura:attribute name="originList" type="List" />
+    <aura:attribute name="reasonList" type="List" />
+    <aura:attribute name="isLoading" type="Boolean" default="false" />
+    <aura:attribute name="viewAll" type="Boolean" default="true" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="dataTableSaveEvent" event="c:dataTableSaveEvent" action="{!c.saveTableRecords}" />
+    <aura:attribute name="showRowNumberColumn" type="Boolean" default="true" />
+    <aura:attribute name="showmsg" type="Boolean" />
+    <aura:attribute name="dataCache" type="Object" />
+    <aura:attribute name="tableData" type="List" />
+    <aura:attribute name="tableDataOriginal" type="Object" />
+    <aura:attribute name="updatedTableData" type="Object" />
+    <aura:attribute name="modifiedRecords" type="List" />
+    <aura:attribute name="isEditModeOn" type="Boolean" default="false" />
+    <aura:attribute name="error" type="String" default="" />
+    <aura:attribute name="errorMessage" type="String" default="" />
+    <aura:attribute name="startOffset" type="String" />
+    <aura:attribute name="buttonClicked" type="String" />
+    <aura:attribute name="buttonsDisabled" type="Boolean" />
+    <aura:attribute name="dropDownDisabled" type="Boolean" default="false"/>
+    <aura:attribute name="options" type="List" default="[
+                                                        {'label': 'None', 'value': 'None'},
+                                                        {'label': 'Not Renewing - Converted', 'value': 'Not Renewing - Converted'},
+                                                        {'label': 'Not Renewing - Refreshed', 'value': 'Not Renewing - Refreshed'},
+                                                        {'label': 'Renewing Now - Renewing', 'value': 'Renewing Now - Renewing'},
+                                                        {'label': 'Not Renewing - Renew Later', 'value': 'Not Renewing - Renew Later'},
+                                                        {'label': 'Not Renewing - AT RISK', 'value': 'Not Renewing - AT RISK'}
+                                                        ]"/>
+    <!-- {'label': 'Not Renewing - Churn', 'value': 'Not Renewing - Churn'}, 
+    {'label': 'Do Not Renew - Replaced', 'value': 'Do Not Renew - Replaced'},-->
+    <!-- START: Added by Shaloo-->
+    <aura:attribute name="optionsA" type="List" default="[
+                                                         {'label': 'None', 'value': 'None'},
+                                                         {'label': 'Renewing Now - Renewing', 'value': 'Renewing Now - Renewing'},
+                                                         {'label': 'Not Renewing - Renew Later', 'value': 'Not Renewing - Renew Later'},
+                                                         {'label': 'Not Renewing - AT RISK', 'value': 'Not Renewing - AT RISK'}
+                                                         ]"/>
+    <!-- {'label': 'Not Renewing - Churn', 'value': 'Not Renewing - Churn'}, 
+    {'label': 'Do Not Renew - Replaced', 'value': 'Do Not Renew - Replaced'},-->
+    <!-- END: Added by Shaloo-->
+    <aura:registerEvent name="dataTableSaveEvent" type="c:dataTableSaveEvent" />
+    <aura:attribute name="ReplaceBy" type="List"/>
+    <aura:registerEvent name="dataTableRowActionEvent" type="c:dataTableRowActionEvent" />
+    <!--ROW ACTION COMP EVENT-->
+    <aura:method 
+                 name="finishSaving"
+                 action="{!c.finishSaving}"
+                 description="Update table and clode
+                              edit mode"
+                 >
+        <aura:attribute name="result" type="String" />
+        <aura:attribute name="data" type="Object" />
+        <aura:attribute name="message" type="String" default="" />
+    </aura:method>
+    <div class="slds-page-header">
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container slds-icon-standard-case" title="QuoteLines">
+                            <lightning:icon iconName="standard:QuoteLines" alternativeText="Case" title="QuoteLines" />
+                            <span class="slds-assistive-text">QuoteLines</span>
+                        </span>
+                    </div>
+                    <div class="slds-media__body">
+                        <div class="slds-card__header-link baseCard__header-title-container">
+                            <h5>
+                                <span
+                                      class="slds-page-header__title slds-truncate"
+                                      title="Optimisation
+                                             Requests"
+                                      >
+                                    QuoteLine Details
+                                </span>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <aura:if isTrue="{!v.showmsg}">
+        <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+            <span class="slds-assistive-text">error</span>
+            <span class="slds-icon_container slds-icon-utility-error slds-m-right_x-small" title="Description of icon when needed">
+            </span>
+            <h2>
+                <p><span class="bolded"><label>"{!v.errorMessage}"</label> </span></p>
+            </h2>
+        </div>
+    </aura:if>
+    <div class="slds-align--absolute-center" style="width:350px;">
+        <aura:if isTrue="{!v.showOptionsA}">
+            <lightning:combobox name="DispositionReason" width="150px" label="Disposition reason" value="None" placeholder="Select Reason" options="{! v.optionsA }" onchange="{! c.handleChange }" disabled = "{!!v.dropDownDisabled}" class="priorityAlign" />
+        </aura:if>
+        <aura:if isTrue="{!NOT(v.showOptionsA)}">
+            <lightning:combobox name="DispositionReason" width="150px" label="Disposition reason" value="None" placeholder="Select Reason" options="{! v.options }" onchange="{! c.handleChange }" disabled = "{!!v.dropDownDisabled}" class="priorityAlign" />
+        </aura:if>
+    </div>
+    <br/>
+    <aura:if isTrue="{!v.tableData.length > 0}">
+        <div class="slds-table_edit_container slds-is-relative table-container" style="width: 100%; overflow: auto;">
+            <table aria-multiselectable="true" class="cTable slds-table slds-no-cell-focus slds-table_bordered slds-table_edit  slds-table_resizable-cols table-freeze-style" role="grid">
+                <thead>
+                    <tr class="slds-line-height_reset header-style">
+                        <aura:if isTrue="{!v.showRowNumberColumn}">
+                            <th scope="col" style="width: 80px; text-align: center;"></th>
+                        </aura:if>
+                        <td>
+                            <ui:inputCheckbox name="selectAllOptions" aura:id="selectAllOptions" change="{!c.selectAllOptions}" />
+                        </td>
+                        <aura:iteration items="{!v.columns}" var="col">
+                            <td name="{!col.sortBy}" aria-label="{!col.label}" aria-sort="none" class="{!col.thClassName}" scope="col" style="{!col.style}">
+                                <span class="{!!col.sortable ? 'slds-truncate slds-p-horizontal_x-small' : 'slds-hide'}" title="{!col.label}">{!col.label}</span>
+                                <a class="{!col.sortable ? 'slds-th__action slds-text-link_reset' : 'slds-hide'}" href="javascript:void(0);" role="button" tabindex="0" >
+                                    <span class="slds-assistive-text">Sort by: {!col.label}</span>
+                                    <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate" title="{!'Sorty by: '+col.label}">
+                                        <span class="slds-truncate" title="{!col.label}">{!col.label}</span>
+                                        <span class="slds-icon_container slds-icon-utility-arrowdown">
+                                        </span>
+                                    </div>
+                                </a>
+                                <div class="{!col.resizable ? 'slds-resizable' : 'slds-hide' }" >
+                                    <input type="range" min="50" max="1000" class="slds-resizable__input slds-assistive-text" tabindex="-1" />
+                                    <span class="slds-resizable__handle" ondrag="{!c.setNewWidth}" style="will-change: transform;">
+                                        <span class=""></span>
+                                    </span>
+                                </div>
+                            </td>
+                        </aura:iteration>
+                    </tr>
+                </thead>
+                <tbody>
+                    <aura:iteration items="{!v.tableData}" var="row" indexVar="rowIndex">
+                        <tr aria-selected="false" class="slds-hint-parent">
+                            <aura:if isTrue="{!v.showRowNumberColumn}">
+                                <td scope="col" style="width: 50px; max-width: 60px; text-align: center;">{!rowIndex+1}</td>
+                            </aura:if>
+                            <td>
+                                <ui:inputCheckbox name="{!row.Id}" aura:id="optionCheckbox" change="{!c.selectOptionCheckbox}"/>
+                            </td>
+                            <aura:iteration items="{!row.fields}" var="field" indexVar="fieldIndex">
+                                <td class="{!field.tdClassName}" role="gridcell">
+                                    <div class="slds-cell-wrap">
+                                        <span class="slds-grid slds-grid_align-spread">
+                                            <aura:if isTrue="{!field.mode == 'view'}">
+                                                <aura:if isTrue="{!field.type == 'currency'}">
+                                                    <lightning:formattedNumber value="{!field.value}" style="currency" id="testId" />
+                                                </aura:if>
+                                                <aura:if isTrue="{!field.type != 'currency'}">
+                                                    <aura:if isTrue="{!field.value}">{!field.value} </aura:if>
+                                                </aura:if>
+                                                <aura:if isTrue="{!field.editable}">
+                                                    <lightning:buttonIcon
+                                                                          iconName="utility:edit"
+                                                                          variant="bare"
+                                                                          name="{!rowIndex+'-'+fieldIndex}"
+                                                                          onclick="{!c.editField}"
+                                                                          alternativeText="{! 'Edit: '+field.label}"
+                                                                          class="slds-cell-edit__button slds-m-left_x-small"
+                                                                          iconClass="slds-button__icon_hint
+                                                                                     slds-button__icon_edit"
+                                                                          />
+                                                </aura:if>
+                                                <aura:set attribute="else">
+                                                    <!--EDIT MODE-->
+                                                    <aura:if isTrue="{!field.isEditSpecialType}">
+                                                        <aura:if isTrue="{!field.type == 'picklist'}">
+                                                            <lightning:select label="Hidden" variant="label-hidden" class="select-auto-width" name="{!rowIndex+'-'+fieldIndex}" value="{!field.value}" onchange="{!c.onInputChange}" disabled="{!field.isDisabled}">
+                                                                <aura:iteration items="{!field.selectOptions}" var="pl">
+                                                                    <option value="{!pl.value}">{!pl.value}</option>
+                                                                </aura:iteration>
+                                                            </lightning:select>
+                                                        </aura:if>
+                                                        <aura:set attribute="else">
+                                                            <lightning:input
+                                                                             name="{!rowIndex+'-'+fieldIndex}"
+                                                                             type="{!field.type}"
+                                                                             value="{!field.value}"
+                                                                             variant="label-hidden"
+                                                                             onchange="{!c.onInputChange}"
+                                                                             class="ctInput"
+                                                                             formatter="{!field.formatter}"
+                                                                             />
+                                                        </aura:set>
+                                                    </aura:if>
+                                                </aura:set>
+                                            </aura:if>
+                                        </span>
+                                    </div>
+                                </td>
+                            </aura:iteration>
+                        </tr>
+                    </aura:iteration>
+                </tbody>
+            </table>
+            <aura:if isTrue="{!v.tableData.length == 0}">
+                <div class="slds-p-left_x-small slds-p-vertical_xx-small slds-border_bottom">
+                    No records found to display!
+                </div>
+            </aura:if>
+        </div>
+        <!--<aura:if isTrue="{!v.isEditModeOn}">-->
+        <div class="ctFooter slds-modal__footer">
+            <div class="slds-grid_align-center">
+                <div
+                     class="slds-text-color_error slds-p-bottom_small"
+                     style="
+                            {
+                            !v.error?'display:block': 'display:none';
+                            }
+                            "
+                     >
+                    {!v.error}
+                </div>
+                <div class="slds-grid slds-grid_align-center">
+                    <lightning:button label="Dispose" variant="brand" onclick="{!c.saveRecords}" disabled="{! OR(NOT(v.isEditModeOn), v.buttonsDisabled)}"/>
+                    <lightning:button label="Cancel" onclick="{!c.closeEditMode}" />
+                </div>
+            </div>
+        </div>
+        <!--</aura:if> -->
+        <!-- <lightning:card>
+         <c:dataTable aura:id="datatableId" auraId="datatableId" columns="{!v.columns}" data="{!v.data}" showRowNumberColumn="true" />
+         </lightning:card> -->  
+        <!-- <lightning:card title="">
+         <lightning:datatable draftValues="{! v.draftValues }"
+                              aura:id="accountDataTable"
+                              columns="{!v.columns}"
+                              data="{!v.data}"
+                              keyField="Id"
+                              onsave ="{!c.handleSave}"
+                              oncancel ="{!c.handleCancel}"
+                              hideCheckboxColumn="true"
+                              onrowaction="{!c.handleRowAction }" />
+         </lightning:card> -->
+    </aura:if>
+    <aura:if isTrue="{!v.tableData.length == 0}">
+        <div class="ctFooter slds-modal__footer">
+            <div class="slds-grid_align-center">
+                <div class="slds-grid slds-grid_align-center">
+                    <lightning:button label="Cancel" onclick="{!c.closeEditMode}" />
+                </div>
+            </div>
+        </div>
+    </aura:if>
+    <aura:if isTrue="{!v.isLoading}">
+        <lightning:spinner alternativeText="Loading.." variant="brand" />
+    </aura:if>
+</aura:component>

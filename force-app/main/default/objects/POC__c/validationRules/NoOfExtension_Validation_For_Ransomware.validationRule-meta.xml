@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>NoOfExtension_Validation_For_Ransomware</fullName>
+    <active>true</active>
+    <errorConditionFormula>ISPICKVAL(Approval_Status__c ,&apos;Extension Requested&apos;) &amp;&amp; ISPICKVAL(POC_Type__c ,&apos;Ransomware Recovery Software&apos;) &amp;&amp; Number_of_Extensions__c &gt;=2</errorConditionFormula>
+    <errorMessage>You Cannot Create More than Two Extensions for Ransomware Recovery Software</errorMessage>
+</ValidationRule>

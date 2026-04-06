@@ -1,0 +1,227 @@
+<aura:component
+  implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+  controller="su_vf_console.SUAuthentication" access="global">
+ <aura:handler name="init" value="{!this}" action="{!c.doInit}" access="global" />
+  <aura:attribute name="feedbacktext" type="String" default="Was this article helpful?" />
+  <aura:attribute name="buttonYes" type="String" default="Yes" />
+  <aura:attribute name="buttonNo" type="String" default="No" />
+  <aura:attribute name="endPoint" type="String" />
+  <aura:attribute name="Bearer" type="String" />
+  <aura:attribute name="uid" type="String" />
+  <aura:attribute name="scConfigObj" type="Object" />
+  <aura:attribute name="feedbackratingVal" type="String" />
+  <aura:attribute name="pageRateFeed" type="String" default="0"/>
+  <aura:attribute name="articlesFeedbackArray" type="String"  />
+  <aura:attribute name="feedback_type" type="String"  />
+  <aura:attribute name="feedback" type="String" />
+  <aura:attribute name="ThankYouFlag"  type="Boolean" default="false" />
+  <aura:attribute name="isThankYou"  type="Boolean" default="false" />
+  <aura:attribute name="feedbackActiveYes"  type="Boolean" default="false" />
+  <aura:attribute name="feedbackActiveNo"  type="Boolean" default="false" />
+  <aura:attribute name="suResponseValues" type="Boolean" access="global" default="false" />
+  <aura:attribute name="pageRatingResponseRecorded" type="Boolean" access="global" default="false" />
+  <aura:attribute name="pageRatingCustomization" type="object" />
+  <aura:attribute name="searchFeedback" type="object" />
+  <aura:attribute name="displayModal" type="Boolean" default="false" />
+  <aura:attribute name="TextdisplayModal" type="Boolean" default="false" />
+  <aura:attribute name="emailTrackYes" type="Boolean" default="true" />
+  <aura:attribute name="emailShowhide" type="Boolean" default="true" />   
+  <aura:attribute name="feedbackRatingV" type="Integer" default="0" /> 
+  <aura:attribute name="feedbackTxtInVal" type="String" />
+  <aura:attribute name="feedbackTxtAreaInVal" type="String" />
+  <aura:attribute name="feedbackTxtEmailVal" type="String" /> 
+
+  <aura:attribute name="currentCommunityURL" type="String" default="" />
+  <aura:attribute name="currentUserEmail" type="String" default="" />
+  <aura:attribute name="currentCommunityEmail" type="String" default="" />
+    <aura:attribute name="CommunityUserType" type="String" default="" />
+  <aura:attribute name="setCurrentEmail" type="String" default="" />
+  <aura:attribute name="emailShowYes" type="String" default="" />
+  <aura:attribute name="searchString" type="String" access="global" default="" />
+  <aura:attribute name="searchPageRegex" type="Boolean" default="false" />
+  <aura:attribute name="isButtonActive" type="Boolean" default="true" /> 
+  <aura:attribute name="getFeedbackResData" type="Object" default="" />
+  <aura:attribute name="getSearchRegexData" type="Object" default="" />
+  <aura:attribute name="isInputDisabled" type="Boolean" default="false" />
+    
+    
+  
+     <c:SUAuthHeaderDynamic aura:id="SuAnalytics" endPoint="{!v.endPoint}" uid="{!v.uid}" currentUserEmail="{!v.currentUserEmail}" customSettingErrorMessage="{!v.customSettingErrorMessage}" />
+    <div>
+        <aura:if isTrue="{!if(v.suResponseValues &amp;&amp; v.ThankYouFlag == false, true, false)}">
+      <div id="su-rating-cmp" class="su_page_rating_box">
+        <div class="su_page_box">
+          <div class="su_feedback_form">
+            <div class="su_feedback_inner">
+                <label class="feedtxt">{!v.pageRatingCustomization.selectedHeader}</label>
+              <aura:if isTrue="{!if(v.pageRatingCustomization.selectedPageTemplete == 'Yes/No', true, false)}">
+                <span class="{!if(v.feedbackActiveYes, 'su__feedback-active su_helpful','su_helpful')}" data-value="true" data-feedback="1" onclick="{!c.checkFeedback}">Yes</span>
+                <span class="{!if(v.feedbackActiveNo, 'su__feedback-active su_unhelpful', 'su_unhelpful')}" data-value="true" data-feedback="0" onclick="{!c.checkFeedback}">No</span>
+              </aura:if>
+              <aura:if isTrue="{!if(v.pageRatingCustomization.selectedPageTemplete == 'Thumbs up/Down', true, false)}">
+                <span class="{!if(v.feedbackActiveYes, 'su__feedback-active')}">
+                	 <img src="{!v.scConfigObj.client_url+v.uid+'/Assets/thumb_up.svg'}" data-value="true" data-feedback="1" onclick="{!c.checkFeedback}"/>  
+                </span>
+                <span class="{!if(v.feedbackActiveNo, 'su__feedback-active')}">
+                	<img src="{!v.scConfigObj.client_url+v.uid+'/Assets/thumb_down.svg'}" data-value="true" data-feedback="0" onclick="{!c.checkFeedback}" />    
+                </span>
+              </aura:if>
+              <aura:if isTrue="{!if(v.pageRatingCustomization.selectedPageTemplete == 'Stars'&amp;&amp; v.pageRatingResponseRecorded == false,true,false)}">
+                <div class="su__star-rating su__flex-vcenter su__mb-2">                 
+                    <span class="{!if(v.feedbackActiveYes, 'su__feedback-active')}">
+                       <aura:iteration items="[1,2,3,4,5]" var="index" indexVar="indexVar">
+                        <div data-feedback="1" onclick="{!c.checkFeedback}" data-value="true"  onmouseover="{!c.starhoverButton}" onmouseleave="{!c.starremoveHoverButton}"
+                            class="{!'su__star-gray su__ratingicon_star  su__star su__mr-2 su__cursor su__star'+index}"
+                            data-new-index="{!indexVar+1}"></div>
+                    </aura:iteration>
+                    </span>
+                </div>
+            </aura:if>
+            <aura:if isTrue="{!if(v.pageRatingCustomization.selectedPageTemplete == 'Emoticons', true, false)}">
+                <div class="su__star-rating su__flex-vcenter su__mb-2">
+                    <aura:iteration items="[1,2,3,4,5]" var="index" indexVar="indexVar">
+                        <div data-feedback="1" data-value="true"  onclick="{!c.checkFeedback}" onmouseover="{!c.starhoverButton}" onmouseleave="{!c.starremoveHoverButton}"
+                            class="{!'su__emoji su__ratingicon_star su__mr-1 su__cursor su__emoji-icon'+index}"
+                            data-new-index="{!indexVar+1}"></div>
+                    </aura:iteration>
+                </div>
+            </aura:if>
+            </div>
+          </div>
+        </div>
+      </div>
+      <aura:set attribute="else">
+        <aura:if isTrue="{!if(v.isThankYou, true, false)}">
+          <div class="su__pagefeedback-popup">
+            <div class="su__d-block su__text-center">
+              <div class="su__my-2 su__px-1">
+                <img src="{!v.scConfigObj.client_url+v.uid+'/Assets/ok-icon.svg'}" class="ft-green-tick" alt="Success icon" />
+              </div>
+              <div class="su__pagefeedback-label">
+                {!v.pageRatingCustomization.selectedAck}
+              </div>
+            </div>
+          </div>
+        </aura:if>
+        
+    </aura:set>
+  </aura:if>
+      <!-- Feedback modal here -->
+      <aura:if isTrue="{!v.TextdisplayModal == true &amp;&amp; v.pageRatingResponseRecorded == false &amp;&amp; v.pageRatingCustomization.pageFeedbackToggle == true}">
+        <div class="{!if(v.pageRatingCustomization.selectedPostion == 'Center', 'su__feedback-modal su__zindex-2')}">  
+          <div class="su__pageFeedbackToggle">
+            <div class="su__pagefeedback-close su__cursor">
+              <img src="{!v.scConfigObj.client_url+v.uid+'/Assets/close.svg'}" style="height:12px;" data-value="false" role="button" onclick="{!c.closeBtn}"/>
+            </div>
+            <div class="su__pagefeedback-label su__my-2">
+              {!v.pageRatingCustomization.selectedPageTextFeedback}
+            </div>
+            <lightning:input onchange="{!c.feedbackTxtChange}" name="su__feedbacktxt-input" id="su__feedbacktxtinput" aura:id="feedbacktextInput" type="text" class="su__input-feedack su__w-100 su__su__font-14 su__text-black su__mb-3"/>
+            <button onclick="{!c.submitTextFeedback}" data-value="false" role="button" class="su__pagefeedback-btn su__cursor">
+              {!v.pageRatingCustomization.submitButton}
+            </button>
+          </div>
+          <div class="{!if(v.pageRatingCustomization.selectedPostion == 'Center', 'su__bg-overlay tyuuuu')}" onclick="{!c.closeBtn}"></div>
+        </div>
+        
+      </aura:if>
+      <aura:if isTrue="{!v.displayModal == true &amp;&amp; v.pageRatingResponseRecorded == false &amp;&amp; v.pageRatingCustomization.searchToggle == true ? true : false}">
+        <div class="{!if(v.pageRatingCustomization.selectedPostion == 'Center', 'su__feedback-modal su__zindex-2')}">
+          <div class="su__pagefeedback-popup">
+            <div class="su__pagefeedback-close su__cursor">
+              <img src="{!v.scConfigObj.client_url+v.uid+'/Assets/close.svg'}" style="height:12px;" data-value="false" role="button" onclick="{!c.checkFeedback}"/>
+            </div>
+            <div class="su__feedback-row">
+              <aura:if isTrue="{!v.pageRatingCustomization.pageFeedbackToggle == true &amp;&amp; v.pageRatingCustomization.searchToggle == true ? true : false}">
+                <div>
+                  <div class="su__pagefeedback-label su__my-2">
+                    {!v.pageRatingCustomization.selectedPageTextFeedback}
+                  </div>
+                    <lightning:input onchange="{!c.feedbackTxtChange}" name="su__feedbacktxt-input" id="su__feedbacktxtinput" aura:id="feedbacktextInput" type="text" class="su__input-feedack su__w-100 su__su__font-14 su__text-black"/>
+				</div>
+              </aura:if>
+                 <aura:if isTrue="{!v.searchPageRegex}"> 
+                <div class="su__searchConversion">
+              <div class="su__pagefeedback-label su__my-2">
+                {!v.searchFeedback.selectedSearchSubHeader}
+              </div>
+              <aura:if isTrue="{!if(v.searchFeedback.selectedSearchTemplate == 'Stars',true,false)}">
+                <div class="su__feed-rating su__flex-vcenter su__mb-2">
+                  <aura:iteration items="[1,2,3,4,5]" var="index" indexVar="indexVar">
+                    <div onclick="{!c.buttonClick}" onmouseover="{!c.hoverButton}" onmouseleave="{!c.removeHoverButton}" class="{!'su__star-gray su__ratingicon  su__star su__mr-2 su__cursor su__star'+index}" data-index="{!indexVar+1}"></div>
+                  </aura:iteration>
+                </div>
+              </aura:if>
+              <aura:if isTrue="{!if(v.searchFeedback.selectedSearchTemplate == 'Emoticons',true,false)}">
+                <div class="su__feed-rating su__flex-vcenter su__mb-2">
+                  <aura:iteration items="[1,2,3,4,5]" var="index" indexVar="indexVar">
+                    <div onclick="{!c.buttonClick}" onmouseover="{!c.hoverButton}" onmouseleave="{!c.removeHoverButton}" class="{!'su__emoji su__ratingicon su__mr-1 su__cursor su__emoji-icon'+index}" data-index="{!indexVar+1}"></div>
+                  </aura:iteration>
+                </div>
+              </aura:if>
+              <aura:if isTrue="{!v.searchFeedback.searchFeedbackToggle}">
+              <div class="su_textarea-boxs">
+                <div class="su__pagefeedback-label su__my-2">
+                  {!v.searchFeedback.selectedTextFeedback}
+                </div>
+                  <lightning:textarea aura:id="feedbacktxArea" onchange="{!c.feedbackAreaChange}" name="feeback-txtarea" class="su__feedtext-area su__w-100" id="su__feedtext-area" rows="4"/>
+              </div>
+            </aura:if>
+              <aura:if isTrue="{!v.searchFeedback.followUpToggle}">
+                <div class="su__mt-2">
+                  <div class="su__pagefeedback-label su__my-2">
+                    {!v.searchFeedback.selectedSearchFollowUp}
+                  </div>
+                    <div class="su__feedradio-group">
+                       <lightning:input type="radio" value="Yes" label="Yes"
+                                        onchange="{!c.emailChanged }" name="place" aura:id="place"  checked="true" />
+                       <lightning:input type="radio" value="No" label="No"
+                                        onchange="{!c.emailChanged }" name="place" aura:id="place" />
+                    </div>
+                    <aura:if isTrue="{!v.emailShowhide}">
+                        <div aura:id="ShowEmailOption" class="su__feed-email-boxs">
+                            <lightning:input disabled="{!v.isInputDisabled}" name="su__feedback-email" id="su__feedback-email" aura:id="feedbackEmail" type="email"  value="{!v.setCurrentEmail || !v.responseSearchFeedbackData.searchEmailId }" placeholder="Enter Email Address" class="su__input-feedack su__w-100 su__su__font-14 su__text-black"/>
+                        </div>
+                    </aura:if>
+                    
+                </div>
+              </aura:if>
+               </div>
+                 </aura:if>    
+              <button onclick="{!c.submitFeedback}" data-value="false" role="button" class="su__pagefeedback-btn su__cursor">
+                {!v.searchFeedback.submitButton}
+              </button>
+            </div>
+          </div>
+        
+        <div class="{!if(v.pageRatingCustomization.selectedPostion == 'Center', 'su__bg-overlay')}" onclick="{!c.closeBtn}"></div>
+      </div>
+          </aura:if>
+      <!-- end here -->
+
+      <!-- Thank you feedback start-->
+      <aura:if isTrue="{!v.pageRatingResponseRecorded}">
+        <div class="{!if(v.pageRatingCustomization.selectedPostion == 'Center', 'su__feedback-modal su__zindex-2')}">
+          <div class="su__pagefeedback-popup">
+            <div class="{!if(v.pageRatingCustomization.selectedPostion == 'Bottom', 'su__hide_close')}">
+              <div class="su__pagefeedback-close su__cursor">
+                <img src="{!v.scConfigObj.client_url+v.uid+'/Assets/close.svg'}" style="height:12px;" data-value="close" role="button" onclick="{!c.closeBtn}"/>
+              </div>
+            </div>
+            <div class="su__d-block su__text-center">
+              <div class="su__my-2 su__px-1">
+                <img src="{!v.scConfigObj.client_url+v.uid+'/Assets/ok-icon.svg'}" class="ft-green-tick" alt="Success icon" />
+              </div>
+              <div class="su__pagefeedback-label">
+                {!v.searchFeedback.selectedSearchAcknowledgement}
+              </div>
+            </div>
+          </div>
+          
+        <div class="{!if(v.pageRatingCustomization.selectedPostion == 'Center', 'su__bg-overlay')}" onclick="{!c.closeBtn}"></div>
+      </div>
+          </aura:if>
+      <!-- Thank you feedback end-->
+    </div>
+ 
+</aura:component>

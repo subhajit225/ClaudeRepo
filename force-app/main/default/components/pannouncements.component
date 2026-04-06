@@ -1,0 +1,18 @@
+<apex:component controller="CommunityHomeController">
+ <h2 class="sectionHeaders">Announcements<br/></h2>
+
+<apex:repeat value="{!PortalNews}" var="w">
+   <h3 class="announcementTitle"><apex:outputText escape="false" rendered="{!w.Alert__c}"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>&nbsp;</apex:outputText><apex:outputtext value="{!w.Name}" rendered="{!w.Name!=null}" escape="false"/><br/></h3>
+    
+            <apex:outputText value="{0, date, MMMM d','  yyyy}">
+            <apex:param value="{!w.Publish_Date__c}" /> 
+            </apex:outputText><br/>
+            <br/>
+            <apex:outputText value="{!IF(w.Summary__c!=null,TRIM(LEFT(w.Summary__c , 255)),TRIM(LEFT(w.Content__c , 255)))}..." escape="false"></apex:outputText>
+            <br/>
+            <br/>
+            <a href="{!urlFor($Action.Portal_News__c.View, w.Id)}" class="speciallinks">Read More</a>
+        <hr/>
+     </apex:repeat>
+     
+</apex:component>

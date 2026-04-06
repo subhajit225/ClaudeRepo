@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Read_Only</fullName>
+    <active>true</active>
+    <description>Issue converted to a Case or an Opportunity i.e. Status changed to Closed</description>
+    <label>Read Only</label>
+    <picklistValues>
+        <picklist>Close_Reason__c</picklist>
+        <values>
+            <fullName>Case created</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Customer Resolved</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Existing Opportunity</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Incorrect Forecast data</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Opportunity created</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Priority__c</picklist>
+        <values>
+            <fullName>P1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>P2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>P3</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Status__c</picklist>
+        <values>
+            <fullName>Closed</fullName>
+            <default>true</default>
+        </values>
+    </picklistValues>
+</RecordType>

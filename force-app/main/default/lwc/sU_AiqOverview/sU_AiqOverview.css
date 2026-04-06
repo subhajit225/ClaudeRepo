@@ -1,0 +1,95 @@
+.overview-header-590px{
+    display: flex;
+    flex-direction: column;
+    gap:10px;
+    padding: 7px 0;
+    height: 75%;
+}
+
+.overview-header-590px > div{
+    min-height: 100%;
+}
+
+.overview-header-590px > button{
+    background-color: white;
+    border-radius: 8px;
+    border: 1px solid #D0D0D5;
+    font-size: 14px;
+    text-align: left;
+    padding: 10px 10px 8px 16px;
+    margin: 0 13px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.overview-header-590px .summary-holder-overview-responsive{
+    flex: 1 1;
+}
+
+.overview-header-590px > button:hover > svg > g > path {
+   stroke:#F48B00;
+}
+
+.overview-header-590px > button > svg:hover > g > path{
+    stroke:#F48B00;
+} 
+.caseTimelineButton{
+    display:none;
+}
+
+.noDisplayDemoClassSU{
+    display: none ;
+}
+
+.showDisplayDemoClassSU{
+    display: block !important;
+}
+
+.overview-header-590px .caseTimelineButton{
+    display: flex !important;
+}
+
+
+.aiq-overview .caseTimeline{
+    display: block;
+}
+
+.overview-header-590px .caseTimeline{
+    display:none ;
+}
+
+
+.backdrop-530px{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(122, 116, 116, 0.87);
+    z-index: 910;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.backdrop-530px::before{
+    content:" ";
+    background-color: rgba(122, 116, 116, 0.87);
+    color: rgba(122, 116, 116, 0.87);
+    width: 17px;
+    height: 100vh;
+    position: fixed;
+    bottom: 0;
+    left: -17px;
+    right: 0;
+}
+
+.tab-modal-container-530px{
+    border-radius: 12px;
+    border: 1px solid #D0D0D5;
+    background-color: white;
+    width: 80%;
+    padding: 15px 20px;
+}

@@ -1,0 +1,185 @@
+<apex:component id="footerComponent">
+<style>
+
+    html {
+      position: relative !important;
+      min-height: 99%;
+    }
+    body {
+      /* Margin bottom by footer height */
+      //margin-bottom: 297px !important;
+    }
+
+   .footer{
+      position: static !important;
+      bottom: 0;
+      width: 100%;
+      /* Set the fixed height of the footer here */
+      min-height: 297px;
+      background-color: #001F2B;
+      border:0px;
+      padding:39px;
+
+      }
+
+   .footerline {
+        height: 1px !important;
+        margin-top: 5px !important;
+        margin-bottom: 20px !important;
+        border: 0 !important;
+        border-top: none !important;
+        background-color: rgba(255,255,255,0.2) !important;
+        }
+
+    .footerListHead {
+        box-sizing: border-box;
+        font-family: Gotham-Light;
+        font-size: 14px;
+        line-height: 24px;
+        text-transform: uppercase;
+        color: #FFFFFF;
+        padding-top:14px;
+        padding-bottom:1px
+    }
+
+    a.footerLink {
+    font-family: Gotham-Light;
+    color: #FFFFFF;
+    font-weight: 300 !important;
+    font-size: 14px !important;
+    line-height: 28px !important;
+    color: hsla(0,0%,100%,.8) !important;
+    -webkit-transition: all .2s ease-in-out !important;
+    transition: all .2s ease-in-out !important;
+    opacity: .9 !important;
+    text-decoration: none;
+    }
+
+    a.footerListHead {
+        box-sizing: border-box;
+        font-family: Gotham-Light;
+        font-size: 14px;
+        line-height: 24px;
+        text-transform: uppercase;
+        color: #FFFFFF;
+        padding-top:14px;
+        padding-bottom:1px
+    }
+
+    a.socialcolor {
+    color: #FFFFFF !important;
+    }
+
+    a.footerlink:hover {
+    font-family: Gotham-Light;
+    color: #FFFFFF;
+    font-weight: 300 !important;
+    font-size: 14x !important;
+    line-height: 28px !important;
+    color: hsla(0,0%,100%,.8) !important;
+    -webkit-transition: all .2s ease-in-out !important;
+    transition: all .2s ease-in-out !important;
+    opacity: 1 !important;
+    text-decoration: none;
+    }
+
+    .footertext {
+        font-family: Gotham-Light;
+        color: hsla(0,0%,100%,.8) !important;
+        font-weight: 300 !important;
+        font-size: 14px !important;
+
+        line-height: 24px !important;
+        }
+
+        .footerbottomleft{
+        margin-left:-15px;
+        opacity: 0.8 !important;
+        }
+
+        .footerbottomright{
+        margin-right:-15px;
+        opacity: 0.8 !important;
+
+        }
+
+     .bullet{
+     padding:10px;
+     }
+
+
+</style>
+
+  <footer class="footer footertext" id="last-footer">
+
+                   <!--/.container-->
+                    <div class="container block">
+                        <div class="row block">
+                            <div class="col-md-6 block">
+                                <div class="row block">
+                                    <div class="col-md-6">
+                                         <apex:image value="{!$Resource.communityfooterlogonotext}" width="54px;padding:5px;margin-top:5px;"/>
+                                         <br/>
+                                         <apex:outputtext value="{!$Label.pfootertext}" style="opacity: 0.8 !important; color: hsla(0,0%,100%,.8) !important;"/>
+                                    </div>
+                                </div>
+                                <div class="row block">
+                                    <div class="col-md-12">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <apex:outputPanel layout="none" rendered="{!NOT($Setup.Customer_Community_Tab_Settings__c.Hide_Standard_Tabs__c)}">
+                                    <div class="row block">
+                                        <div class="col-md-4">
+                                             <div class="footerListHead block">Resources<br/></div>
+                                             <a href="{!URLFOR($Page.PResources, null, [scope='Technical'])}" class="footerLink block">Technical</a><br/>
+                                             <a href="{!URLFOR($Page.PResources, null, [scope='Sales'])}" class="footerLink block">Sales</a><br/>
+                                             <a href="{!URLFOR($Page.PResources, null, [scope='Marketing'])}" class="footerLink block">Marketing</a><br/>
+                                        </div>
+                                        <div class="col-md-4">
+                                             <div class="footerListHead block"><a href="{!URLFOR($Page.DealRegHome)}" class="footerListHead">Deal Registration</a><br/></div>
+                                        </div>
+                                        <div class="col-md-4">
+                                             <div class="footerListHead block"><a href="{!URLFOR($Page.Incentives)}" class="footerListHead">Incentives</a><br/></div>
+                                        </div>
+                                    </div>
+                                    <div class="row block">
+                                        <div class="col-md-4">
+                                            <div class="footerListHead block"><a href="{!URLFOR($Page.PTrainingDoce)}" class="footerListHead">Training</a><br/></div>
+                                        </div>
+                                    </div>
+                                </apex:outputPanel>
+                                <apex:outputPanel layout="none" rendered="{!$Setup.Customer_Community_Tab_Settings__c.Show_Order_Info_Tab__c}">
+                                    <div class="row block">
+                                        <div class="col-md-4">
+                                               <div class="footerListHead block">About<br/></div>
+                                             <a href="{!URLFOR($Page.About, null, null)}" class="footerLink block">About Rubrik</a><br/>
+                                        </div>
+                                    </div>
+                                </apex:outputPanel>
+                            </div>
+                        </div>
+                        <div class="row block">
+                            <div class="col-md-12">
+                            <a href="https://twitter.com/rubrikInc" target="_blank" class="socialcolor"><i class="fa fa-twitter fa-2x" aria-hidden="true"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <a href="https://www.linkedin.com/company/rubrik-inc" target="_blank" class="socialcolor"><i class="fa fa-linkedin fa-2x" aria-hidden="true"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <a href="https://www.facebook.com/rubrikinc/" target="_blank" class="socialcolor"><i class="fa fa-facebook-square fa-2x" aria-hidden="true"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <a href="https://www.youtube.com/channel/UCDoKLwlfdfH61rkzD3pu_ZQ" target="_blank" class="socialcolor"><i class="fa fa-youtube-play fa-2x" aria-hidden="true"></i></a>
+                                <!--this is the bottom row-->
+                              <hr class="footerline"/>
+                               <div class="col-md-6">
+                                <div class="text-left inline-block footerbottomleft"> Built in Palo Alto, CA <span class="bullet">&bull;</span> <a href="https://www.rubrik.com/privacy-policy/" class="footerLink block" target="_blank">Privacy Policy</a> <span class="bullet">&bull;</span> <a href="https://www.rubrik.com/contact-us/" class="footerLink block" target="_blank">Contact Us</a> </div>
+                                </div>
+                                 <div class="col-md-6">
+                                <div class="text-right inline-block footerbottomright"> © {!year(today())} Rubrik - The Cloud Data Management Company </div>
+                                 </div>
+                            </div>
+                        </div>
+                    </div>
+    </footer>
+
+
+
+
+</apex:component>

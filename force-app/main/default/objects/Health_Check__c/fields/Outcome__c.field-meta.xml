@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Outcome__c</fullName>
+    <description>IF( ISBLANK(Opportunity_Generated_Influenced__c), &quot;No Opportunity Created&quot;, IF( Opportunity_Generated_Influenced__r.IsWon = TRUE, &quot;Opportunity Won&quot;, IF( AND(Opportunity_Generated_Influenced__r.IsWon = FALSE, Opportunity_Generated_Influenced__r.IsClosed = TRUE), &quot;Opportunity Lost&quot;, IF( Opportunity_Generated_Influenced__r.IsClosed = FALSE, &quot;Opportunity Open&quot;, null))))</description>
+    <externalId>false</externalId>
+    <formula>IF( AND( TEXT(Status__c) = &quot;Not Applicable&quot;),&quot;Not Applicable&quot;, IF(AND(System_Generated__c = TRUE,  TEXT(Status__c) = &quot;Scheduled&quot;),&quot;Scheduled&quot;, IF(AND(System_Generated__c = TRUE,  TEXT(Status__c) = &quot;Target&quot;),&quot;Target&quot;, if(  AND(ISBLANK(Opportunity_Generated_Influenced__c), TEXT(Status__c) = &quot;Completed&quot;), &quot;No Opportunity Created&quot;, IF( Opportunity_Generated_Influenced__r.IsWon = TRUE, &quot;Opportunity Won&quot;, IF( AND(Opportunity_Generated_Influenced__r.IsWon = FALSE, Opportunity_Generated_Influenced__r.IsClosed = TRUE), &quot;Opportunity Lost&quot;, IF( Opportunity_Generated_Influenced__r.IsClosed = FALSE, &quot;Opportunity Open&quot;, null)))))))</formula>
+    <label>Outcome</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

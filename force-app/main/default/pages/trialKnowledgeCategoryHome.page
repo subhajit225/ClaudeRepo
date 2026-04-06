@@ -1,0 +1,122 @@
+<apex:page controller="trialKnowledgeCategoryHome" readOnly="true" cache="false" standardStylesheets="false" sidebar="false" showheader="false"  title="Rubrik Community Knowledge Category Home" applyBodyTag="false">
+    <link rel="shortcut icon" href="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/favicon.ico')}" type="image/x-icon" />
+    <link rel="icon" href="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/favicon1.png')}" type="image/png" />
+    <c:visualstrapblock >
+        <style>
+            .CategContainerBlock{width:90%;margin:0 auto;padding:0 40px}
+            .top-margin{margin-top:50px;}
+            .normalImage{display:inline-block;}
+            .hoverImage{display:none;}
+            .categName{white-space: nowrap;overflow: hidden;text-overflow: ellipsis;max-width: 75ch;}
+            .artHeading{font-size:30px;font-family:"Gotham-medium";padding-bottom:20px !important;border-bottom:1px solid #eee;color:#333;}
+            .fullcontainer{padding:0px 30px 30px 0px !important;}
+            .categHead{font-size:20px;text-transform:uppercase;font-family:"Gotham-light";padding-bottom:20px !important;color:#1d2632;padding-top:30px !important;}
+            .categBlock{cursor:pointer;padding:35px !important;border:1px solid #eee;text-align:center;}
+            .categBlock:hover{background-color:#009DAC;color:#fff;background:linear-gradient(136.42deg, #00B388 0%, #00B097 13.16%, #00A9BF 51.16%, #00A6D0 72.37%, #00A6D0 72.37%, #00A5D7 81.43%, #00A3E0 100%)}
+            .categBlock:hover  .normalImage{display:none;}
+            .categBlock:hover  .hoverImage{display:inline-block;}
+        </style>
+        <!--start header-->
+        <c:siteheader />
+        <!--end Header-->
+        <script>
+        function redirect(categName){
+            window.location.href = "/trialKnowledge?categoryType_Article=" + categName;
+        }
+        </script>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad">
+            <div class='CategContainerBlock'>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad top-margin">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad artHeading">Knowledge Base</div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad categHead">Categories</div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad">
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 nopad fullcontainer">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad categBlock" onclick="redirect('All');">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad" style="padding-bottom:10px;">
+                                    <apex:image styleclass="normalImage" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/KnowledgeCategoryIcon/all_cat.png')}" />
+                                    <apex:image styleclass="hoverImage" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/KnowledgeCategoryIcon/all_cat_hover.png')}" />
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad">
+                                    <!-- Categ name -->
+                                    All Articles
+                                </div>
+                            </div>
+                        </div>
+                        <apex:repeat value="{!DataCategoryName}" var="key">
+                            <apex:outputPanel rendered="{!and(key != 'API' , key != 'Documentation' )}">
+                                <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 nopad fullcontainer">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad categBlock" onclick="redirect('{!DataCategoryName[key]}');">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad" style="padding-bottom:10px;">
+                                            <!-- Categ Logo -->
+                                            <apex:outputPanel rendered="{!key == 'Edge Trial'}">
+                                                <apex:image styleclass="normalImage" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/KnowledgeCategoryIcon/API.png')}" />
+                                                <apex:image styleclass="hoverImage" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/KnowledgeCategoryIcon/API_hover.png')}" />
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!key == 'Authentication'}">
+                                                <apex:image styleclass="normalImage" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/KnowledgeCategoryIcon/auth.png')}" />
+                                                <apex:image styleclass="hoverImage" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/KnowledgeCategoryIcon/auth_hover.png')}" />
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!key == 'Cloud Archive'}">
+                                                <apex:image styleclass="normalImage" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/KnowledgeCategoryIcon/cloud.png')}" />
+                                                <apex:image styleclass="hoverImage" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/KnowledgeCategoryIcon/cloud_hover.png')}" />
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!key == 'Cluster Operations'}">
+                                                <apex:image styleclass="normalImage" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/KnowledgeCategoryIcon/cluster.png')}" />
+                                                <apex:image styleclass="hoverImage" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/KnowledgeCategoryIcon/cluster_hover.png')}" />
+                                            </apex:outputPanel>
+                                            <!--apex:outputPanel rendered="{!key == 'Documentation'}">
+<apex:image styleclass="normalImage" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/KnowledgeCategoryIcon/documentation.png')}" />
+<apex:image styleclass="hoverImage" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/KnowledgeCategoryIcon/documentation_hover.png')}" />
+</apex:outputPanel-->
+                                            <apex:outputPanel rendered="{!key == 'GUI'}">
+                                                <apex:image styleclass="normalImage" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/KnowledgeCategoryIcon/GUI.png')}" />
+                                                <apex:image styleclass="hoverImage" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/KnowledgeCategoryIcon/GUI_hover.png')}" />
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!key == 'Other'}">
+                                                <apex:image styleclass="normalImage" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/KnowledgeCategoryIcon/other.png')}" />
+                                                <apex:image styleclass="hoverImage" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/KnowledgeCategoryIcon/other_hover.png')}" />
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!key == 'Physical Client'}">
+                                                <apex:image styleclass="normalImage" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/KnowledgeCategoryIcon/client.png')}" />
+                                                <apex:image styleclass="hoverImage" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/KnowledgeCategoryIcon/client_hover.png')}" />
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!key == 'PowerShell'}">
+                                                <apex:image styleclass="normalImage" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/KnowledgeCategoryIcon/powershell.png')}" />
+                                                <apex:image styleclass="hoverImage" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/KnowledgeCategoryIcon/powershell_hover.png')}" />
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!key == 'Recovery'}">
+                                                <apex:image styleclass="normalImage" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/KnowledgeCategoryIcon/recovery.png')}" />
+                                                <apex:image styleclass="hoverImage" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/KnowledgeCategoryIcon/recovery_hover.png')}" />
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!key == 'Replication'}">
+                                                <apex:image styleclass="normalImage" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/KnowledgeCategoryIcon/replication.png')}" />
+                                                <apex:image styleclass="hoverImage" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/KnowledgeCategoryIcon/replication_hover.png')}" />
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!key == 'Snapshots'}">
+                                                <apex:image styleclass="normalImage" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/KnowledgeCategoryIcon/snapshot.png')}" />
+                                                <apex:image styleclass="hoverImage" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/KnowledgeCategoryIcon/snapshot_hover.png')}" />
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!key == 'Support Portal and Services'}">
+                                                <apex:image styleclass="normalImage" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/KnowledgeCategoryIcon/support.png')}" />
+                                                <apex:image styleclass="hoverImage" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/KnowledgeCategoryIcon/support_hover.png')}" />
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!key == 'Videos'}">
+                                                <apex:image styleclass="normalImage" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/KnowledgeCategoryIcon/cat_video.png')}" />
+                                                <apex:image styleclass="hoverImage" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/KnowledgeCategoryIcon/cat_video_hover.png')}" />
+                                            </apex:outputPanel>
+                                        </div>
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad categName">
+                                            <!-- Categ name -->
+                                            {!key}
+                                        </div>
+                                    </div>
+                                </div>
+                            </apex:outputPanel>
+                        </apex:repeat>
+                    </div>
+                </div>
+            </div>
+            <c:sitefooter />
+        </div>
+    </c:visualstrapblock>
+</apex:page>

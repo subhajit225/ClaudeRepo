@@ -1,0 +1,36 @@
+<apex:component controller="SubscribedTopicController"  access="global" >
+    <apex:attribute name="userId" description="This is the userID  for the component." type="String"  assignTo="{!currentUserId}" access="global"/>
+    <apex:slds />
+    <style>
+    label{font-weight:bold;}
+    </style>
+     
+        <apex:repeat value="{!subscribedTopicVsSusbscribedPosts}" var="key">
+           <apex:outputPanel >
+                <h3 class="slds-text-heading_medium">
+                    {!key}  
+                </h3>
+               <apex:repeat value="{!subscribedTopicVsSusbscribedPosts[key]}" var="val">
+                   <label  style="font-weight:bold">Question:</label> <apex:outputlink value="{!baseURL +'/'+val.feedItem.Id}" style=" text-decoration: none"> {!val.feedItem.Title}</apex:outputlink> <br/>
+                   <label  style="font-weight:bold">Date Created: </label>  <apex:outputText value="{0,date,MMMM dd, yyyy}"> <apex:param value="{!val.feedItem.CreatedDate}" /></apex:outputText> <br/>
+                   <apex:outputText style="font-weight:bold" value="{!IF(val.latestResponse = 'Unanswered Post','Unanswered Post','Most Recent Response: ')}" />  <apex:outputText value="{!val.latestResponse}"  rendered="{!val.latestResponse!='Unanswered Post'}"/> <br/> <br/>
+               </apex:repeat>
+            </apex:outputPanel> 
+        </apex:repeat> 
+    <br/>
+    Thank you, 
+    <br/><br/>
+    Rubrik Support 
+    <br/>
+    <a href="http://support.rubrik.com" target="_blank">http://support.rubrik.com</a>
+    <br/>
+    <br/>
+    Privileged/Confidential Information may be contained in this message. If you are not the addressee indicated in this message (or responsible for delivery of the message to such person), you may not copy or deliver this message to anyone. In such case, you should destroy this message, and notify us immediately. If you or your employer does not consent to messages of this kind, please advise us immediately. Opinions, conclusions and other information expressed in this message are not given or endorsed by my firm or employer unless otherwise indicated by an authorized representative independent of this message.
+    <br/>
+    <br/>
+    You are receiving this email because you subscribed to a weekly summary for Forums category subscriptions. To update your settings, click <i>Subscriptions</i> on the <a href="{!topicUrl + 'topiccatalog'}" target="_blank">Forums homepage.</a>
+    <br/>
+    <br/>
+    <span style='color:gray'><b>Please do not reply back to this email.</b></span>
+
+</apex:component>

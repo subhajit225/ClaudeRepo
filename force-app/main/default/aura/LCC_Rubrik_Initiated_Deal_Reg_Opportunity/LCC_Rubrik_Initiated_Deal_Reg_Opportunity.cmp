@@ -1,0 +1,14 @@
+<aura:component extends="c:LCC_GenericLightningComponent" >
+    	<aura:attribute name="content" type="string"/>
+    	<aura:attribute name="showok" type="boolean" default ="false"/>
+        <aura:handler event="c:LCC_GenericApplicationEvent" action="{!c.execute}"/>
+        <aura:set attribute="partially" value="false"></aura:set>
+        <div class="slds-p-top_large slds-align_absolute-center">
+            {!v.content}
+    	</div>
+        <aura:if isTrue="{!v.showok}">
+            <div class="slds-p-top_large slds-align_absolute-center">
+                <lightning:button variant="brand" label="Ok"  onclick="{! c.handleClick }"/>
+            </div>  
+         </aura:if>   
+</aura:component>

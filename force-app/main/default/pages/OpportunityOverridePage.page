@@ -1,0 +1,164 @@
+<apex:page standardController="Opportunity" extensions="OpportunityOverrideClass" lightningStylesheets="true">
+    <apex:slds rendered="{!$User.UITheme != 'Theme3'}"/>
+   <apex:outputPanel rendered="{!$User.UITheme != 'Theme3'}"> 
+        <style>
+            .slds-scope img{
+              height: 10% !important;
+            }
+            .bPageBlock .detailList .labelCol, .slds-vf-scope .bPageBlock .detailList .labelCol{
+                width: 10% !important;
+            }
+            .multiSelectPicklistRow select[multiple], .slds-vf-scope .multiSelectPicklistRow select[multiple]{
+                width: 12rem !important;
+                height: 12rem !important;
+            }
+            .detailList .dataCol input[type="text"], body .detailList .dataCol input[type="date"], body .detailList .dataCol input[type="password"], body .detailList .dataCol textarea, body .detailList .dataCol select, .slds-vf-scope .detailList .dataCol input[type="text"], .slds-vf-scope .detailList .dataCol input[type="date"], .slds-vf-scope .detailList .dataCol input[type="password"], .slds-vf-scope .detailList .dataCol textarea, .slds-vf-scope .detailList .dataCol select{
+                min-width: 16rem !important;
+            }
+            
+            .bPageBlock .dataCol .multiSelectPicklistRow select[multiple], .slds-vf-scope .bPageBlock .dataCol .multiSelectPicklistRow select[multiple]{
+            min-width: 25% !important;
+            }
+        </style>
+    </apex:outputPanel>
+    <apex:sectionHeader title="Opportunity Edit" subtitle="{!Opportunity.name}"/>
+    <apex:form >
+        <apex:pageMessages id="showmsg"></apex:pageMessages>
+        <apex:pageBlock title="Opportunity Edit" mode="edit">
+            <apex:pageBlockButtons location="top">
+                <apex:commandButton value="Save" action="{!save}"/>
+                <apex:commandButton value="Save & New" action="{!save}" />
+                <apex:commandButton value="Cancel" action="{!cancel}"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockButtons location="bottom">
+                <apex:commandButton value="Save" action="{!save}"/>
+                <apex:commandButton value="Save & New" action="{!save}" />
+                <apex:commandButton value="Cancel" action="{!cancel}"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection title="Opportunity Information" columns="2">
+                <apex:inputField value="{!Opportunity.OwnerId}" required="false"/>
+                <apex:inputField value="{!Opportunity.StageName}" required="true"/>
+                <apex:inputField value="{!Opportunity.Name}" required="true"/>
+                <apex:inputField value="{!Opportunity.Advanced_Past_Stage_1__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.AccountId}" required="true"/>
+                <apex:inputField value="{!Opportunity.Advanced_Past_Stage_2__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Type}" required="false"/>
+                <apex:inputField value="{!Opportunity.POC_Stage__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Lost_Reason__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Opportunity_Type__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Win_Loss_Comments__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Current_Interest_Level__c}" required="true"/>
+                <apex:inputField value="{!Opportunity.SDR_Led__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.LeadSource}" required="false"/>
+                <apex:inputField value="{!Opportunity.OriginalLeadOwner__c}" required="false"/>
+                <!--<apex:inputField value="{!Opportunity.Initial_Contacts_Name__c}" required="true"/>-->
+                <apex:pageBlockSectionItem ></apex:pageBlockSectionItem>
+                <apex:inputField value="{!Opportunity.Original_Lead_Owner__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Distributor_Lookup__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.ForecastCategoryName}" required="true"/>
+                <apex:inputField value="{!Opportunity.Projected_Product_Mix__c}" required="false"/> <!-- SAL24-305 -->
+                <apex:inputField value="{!Opportunity.Partner__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Rubrik_Sales_Engineer__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Partner_Lookup__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Outlier__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Partner_Representative__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Contingency__c}" required="false"/>
+                <!--<apex:inputField value="{!Opportunity.Partner_Rep_Title__c}" required="false"/>-->
+                <apex:inputField value="{!Opportunity.Incumbent__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.CloseDate}" required="true"/>
+                <apex:inputField value="{!Opportunity.Other_Incumbent__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Probability}" required="false"/>
+                <apex:inputField value="{!Opportunity.Primary_Competitor__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Amount}" required="false"/>
+                <apex:inputField value="{!Opportunity.Other_Primary_Competitor__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Valooto_Quote__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Compelling_Bus_Driver__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Valooto_Quote_Stage__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Key_Feature_Needs__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Other_Key_Feature_Need__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Deal_Impact__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Advanced_Past_Stage_1_Date_Time__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Advanced_Past_Stage_2_Date_Time__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Stage_1_Age_Violation_Date_Time__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Stage_Lost_From__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Distributor_Lookup__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Win_Alert_Sent__c}" required="false"/>
+        		<apex:inputField value="{!Opportunity.Projected_Product_Edition__c}" id="projected" /> <!-- added as part of SAL26-457 -->
+                <!--<apex:inputField value="{!Opportunity.Win_Alert_Sent_Time_Stamp__c}" required="false"/>-->
+            </apex:pageBlockSection>
+            <!--VM_Count__c is  deprecated  SAL24-157-->
+            <!-- <apex:pageBlockSection title="ISR/SDR Opportunity" columns="1">
+                <apex:inputField value="{!Opportunity.VM_Count__c}" required="false"/>
+            </apex:pageBlockSection> -->
+            <apex:pageBlockSection title="Additional Information" columns="1">
+                <apex:inputField value="{!Opportunity.Next_Step__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Manager_s_Note__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Win_Notes__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Contingency_Notes__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Current_State__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Negative_Consequences__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Future_State__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Positive_Business_Outcomes__c}" required="false"/>
+            </apex:pageBlockSection>
+                
+            <apex:pageBlockSection title="MEDDIC" columns="2">
+                <apex:inputField value="{!Opportunity.Metric__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Decision_Process__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Economic_Buyer__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Identified_Pain__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Decision_Criteria__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Champion__c}" required="false"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Description Information" columns="2">
+                <apex:inputField value="{!Opportunity.CampaignId}" required="false"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Deal Registration Information" columns="2">
+                <apex:inputField value="{!Opportunity.Deal_Registration__c}" required="false"/>
+                <apex:pageBlockSectionItem ></apex:pageBlockSectionItem>
+                <apex:inputField value="{!Opportunity.Deal_Registration_Type__c}" required="true"/>
+                <apex:inputField value="{!Opportunity.Deal_Registration_Number__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Deal_Reg_Approval_Status__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Partner_Rep_Phone_Number__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Deal_Reg_Submitted_Date__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Partner_Rep_Email_Address__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Deal_Reg_Approval_Timestamp__c}" required="false"/>
+                <apex:pageBlockSectionItem ></apex:pageBlockSectionItem>
+                <apex:inputField value="{!Opportunity.Deal_Reg_Expiration_Date__c}" required="false"/>
+                <!--<apex:inputField value="{!Opportunity.Distributor_Rep_Name__c}" required="false"/>-->
+                <apex:inputField value="{!Opportunity.Deal_Registration_Extension_Request__c}" required="false"/>
+                <!--<apex:inputField value="{!Opportunity.Distributor_Rep_Email__c}" required="false"/>-->
+                <apex:pageBlockSectionItem ></apex:pageBlockSectionItem>
+                <!--<apex:inputField value="{!Opportunity.Distributor_Rep_Phone_Number__c}" required="false"/>-->
+                <apex:pageBlockSectionItem ></apex:pageBlockSectionItem>
+                <!--<apex:inputField value="{!Opportunity.Distributor_Secondary_Email_Address__c}" required="false"/>-->
+                <!--<apex:inputField value="{!Opportunity.Alliance_Partner_Program__c}" required="false"/>-->
+                <apex:pageBlockSectionItem ></apex:pageBlockSectionItem>
+                <!--<apex:inputField value="{!Opportunity.Partner_SE_Name__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Partner_SE_Email__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Partner_SE_Phone__c}" required="false"/>-->
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Qualification Information" columns="2">
+                <apex:inputField value="{!Opportunity.Budget__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Hypervisor__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Decision_Maker__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.of_VMs__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Needs__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Purchase_Timeframe__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Pain_Points__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Backup_Software__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Description}" required="false"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Technical Information" columns="2">
+                <apex:inputField value="{!Opportunity.of_Physical_Servers__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Primary_Storage__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Primary_Storage_Capacity__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Secondary_Storage__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Secondary_Storage_Capacity__c}" required="false"/>
+                <apex:inputField value="{!Opportunity.Cloud_Type__c}" required="false"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="System Information" columns="2">
+                <apex:inputField value="{!Opportunity.SDR_Led_Checked_Date__c}" required="false"/>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,612 @@
+<aura:component controller="ContactLeadConsole">
+    <aura:attribute name="allLeadRecords" type="Object[]" />
+    <aura:attribute name="visibleLeads" type="Object[]" />
+    <aura:attribute name="leadRecords" type="Object[]" />
+    <aura:attribute name="visibleLeadRecords" type="Object[]" />
+    <aura:attribute name="responseData" type="Object" />
+    <aura:attribute type="Boolean" name="sortAsc" default="true"/>
+      <aura:attribute name="showChangeOwnerModal" type="boolean" default="false" />
+    <aura:attribute type="Boolean" name="donotrenderpicklist" default="false"/>
+    <aura:attribute name="selectedAccounts" type="String[]" />
+    <aura:attribute name="selectedCampaigns" type="String[]" />
+    <aura:attribute name="selectedGTM" type="String[]" />
+    <aura:attribute name="selectedStatuses" type="String[]" /> 
+    <aura:attribute name="selectedAccountStatus" type="string" default='None'/>
+    <aura:attribute name="accountTier" type="String[]" /> 
+     <aura:attribute name="leadowner" type="String[]" /> 
+    <aura:attribute name="selectedAccountOwners" type="String[]" />
+    <aura:attribute name="statusPicklistOptions" type="Object[]" />
+    <aura:attribute name="accountOwnerOptions" type="Object[]" /> 
+     <aura:attribute name="accountTierPicklistOption" type="Object[]" />
+    <aura:attribute name="leadownerPicklistOption" type="Object[]" />
+    <aura:attribute name="sdrUsersArray" type="Object[]" />
+    <aura:attribute name="pageOptions" type="integer[]" />
+    <aura:attribute name="rejectreasonOptions" type="List" default="[---None---]" />
+    <aura:attribute name="displayrecord" type="List" default="[---None---]" />
+    <aura:attribute name="accountStatus" type="List" default="[select..]" />
+    <aura:attribute name="LeadScoreMap" type="Map" default="{}"/>
+    <aura:attribute name="selectedLookUpRecord" type="sObject" default="{}"/>
+    <aura:attribute name="selectedLookUpRecordLeadOwner" type="sObject" default="{}"/>
+    <aura:attribute name="objectName" type="string" default="user" />
+    
+    <aura:attribute name="errorType" type="string"  />
+    <aura:attribute name="clickedMatrix" type="string"  />
+    <aura:attribute name="defaultFilter" type="string"  default ="MQL"/>
+    <aura:attribute name="selectedUser" type="string"  /> 
+    <aura:attribute name="selectedStatusToUpdate" type="string" default="Nurture" /> 
+    <aura:attribute name="selectedLeadOwnerType" type="string" default="User" />
+     <aura:attribute name="leadrejectreason" type="string" default="Select" />
+    <aura:attribute name="errorMessage" type="string"  />
+    <aura:attribute name="selectedPage" type="integer" />
+    <aura:attribute name="accountPicklistOptions" type="Object[]" />
+    <aura:attribute name="campaignPicklistOptions" type="Object[]" />
+    <aura:attribute name="showStatusUpdateModal" type="boolean" default="false" />
+    <aura:attribute name="showValidationMessageSelectUserQueue" type="boolean" default="false" />
+     <aura:attribute name="showMessagedefaultqueue" type="boolean" default="false" />
+    
+    
+    <aura:attribute name="showValidationMessageRejectReason" type="boolean" default="false" />
+   <aura:attribute name="showhideaccounttoConvert" type="boolean" default="false" />
+    <aura:attribute name="showValidationMessageConvertAccount" type="boolean" default="false" />
+    <aura:attribute name="noOfLeads" type="Integer" />
+    <aura:attribute name="showSpinner" type="boolean" default="true" />
+    <aura:attribute name="selectedIdWithNames" type="Object[]" />
+    <aura:attribute name="activeLeads" type="Integer" />
+    <aura:attribute name="openLeads" type="Integer" />
+    <aura:attribute name="workingLeads" type="Integer" />
+    <aura:attribute name="meetingsetLeads" type="Integer" />
+    <aura:attribute name="staleLeads" type="Integer" />
+    <aura:attribute name="unTouchedLeads" type="Integer" />
+    <aura:attribute name="uniqueAccounts" type="Integer" />
+    <aura:attribute name="showContent" type="Boolean" default="false" />
+    <aura:attribute name="isDataLoading" type="Boolean" default="false" />
+    <aura:attribute name="applyFilters" type="boolean" default="true" />
+    <aura:attribute name="gtmPlayPicklistOptions" type="Object[]" />
+    <aura:attribute name="filterLowScoredRecordsFromView" type="Boolean" default="true"/>
+    
+    
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="change" value="{!v.selectedCampaigns}" action="{!c.applyCampaignFilters}"/>
+    <aura:handler name="change" value="{!v.selectedGTM}" action="{!c.applyThemeFilters}"/>
+    <aura:handler name="change" value="{!v.selectedAccounts}" action="{!c.applyAccountFilters}"/> 
+    <aura:handler name="change" value="{!v.selectedStatuses}" action="{!c.applyAccountFilters}"/>
+     <aura:handler name="change" value="{!v.accountTier}" action="{!c.applyTierFilters}"/>
+     <aura:handler name="change" value="{!v.leadowner}" action="{!c.applyLeadOnwerFilters}"/>
+    <aura:handler name="change" value="{!v.filterLowScoredRecordsFromView}" action="{!c.leadScoreFilter}"/>
+    <aura:handler name="change" value="{!v.selectedAccountOwners}" action="{!c.applyAccountFilters}"/>
+    <aura:handler name="change" value="{!v.selectedLookUpRecordLeadOwner}" action="{!c.whatIdChanged}"/> 
+    <div class="c-container">
+        <div class="{!!empty(v.errorType)? '':'slds-hide'}" style="height:4rem;position:fixed;width:100vw;z-index:9;top: 0;">
+            <div class="slds-notify_container slds-is-relative">
+                <div class="{!'slds-notify slds-notify_toast slds-theme_'+v.errorType}" role="status">
+                    <span class="slds-assistive-text">{!v.errorType}</span>
+                    
+                    <div class="slds-notify__content">
+                        <h2 class="slds-text-heading_small ">{!v.errorMessage}
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <lightning:layout multipleRows="true">
+            <lightning:layoutItem class="{!equals(v.sdrUsersArray.length,0)? 'slds-hide':''}" size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="3" padding="horizontal-small">
+                <lightning:select name="select1" class="" label="Select User" value="{!v.selectedUser}" onchange="{!c.doInit}">
+                    <aura:iteration items="{!v.sdrUsersArray}" var="option">
+                    	<option value="{!option.value}" selected="{!equals(option.value, v.selectedUser)}">{!option.label}</option>
+                    </aura:iteration>
+                </lightning:select>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="3" padding="horizontal-small">
+                <c:PC_reUsableMultiSelectLookupClone aura:id="Partner_Selling_Countries__c"
+                                                        lstSelectedRecords="{!v.selectedGTM}"
+                                                        listOfSearchRecords = "{!v.gtmPlayPicklistOptions}"                      
+                                                        label="GTM Play"/>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="3" padding="horizontal-small">
+                <c:PC_reUsableMultiSelectLookupClone aura:id="Partner_Selling_Countries__c"
+                                                        lstSelectedRecords="{!v.selectedCampaigns}"
+                                                        listOfSearchRecords = "{!v.campaignPicklistOptions}"                      
+                                                        label="Campaigns"/>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="3" padding="horizontal-small">
+                <c:PC_reUsableMultiSelectLookupClone aura:id="Partner_Selling_Countries__c"
+                                                        lstSelectedRecords="{!v.selectedAccounts}"
+                                                        listOfSearchRecords = "{!v.accountPicklistOptions}"                      
+                                                        label="Company"/>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="3" padding="horizontal-small">
+                <c:PC_reUsableMultiSelectLookupClone aura:id="Partner_Selling_Countries__c"
+                                                        lstSelectedRecords="{!v.selectedStatuses}"
+                                                        listOfSearchRecords = "{!v.statusPicklistOptions}"                      
+                                                        label="Status"/>
+              
+                
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="3" padding="horizontal-small">
+                <c:PC_reUsableMultiSelectLookupClone aura:id="accountOwnerOptions"
+                                                        lstSelectedRecords="{!v.selectedAccountOwners}"
+                                                        listOfSearchRecords = "{!v.accountOwnerOptions}"                      
+                                                        label="Account Owner"/>
+            </lightning:layoutItem>
+            
+            
+              <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="3" padding="horizontal-small">
+              <c:PC_reUsableMultiSelectLookupClone aura:id="L2AAccountTier__c"
+                                                        lstSelectedRecords="{!v.accountTier}"
+                                                        listOfSearchRecords = "{!v.accountTierPicklistOption}"                      
+                                                        label="Account Tier"/>
+              </lightning:layoutItem>
+            
+            <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="3" padding="horizontal-small">
+                <c:PC_reUsableMultiSelectLookupClone aura:id="leadownerPicklistOption"
+                                                     lstSelectedRecords="{!v.leadowner}"
+                                                     listOfSearchRecords = "{!v.leadownerPicklistOption}"                      
+                                                     label="Lead Owner"/>
+            </lightning:layoutItem>   
+           <!-- <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="3" padding="horizontal-small">
+                <lightning:select name="select1" class="" label="Dispostion" value="{!v.clickedMatrix}" onchange="{!c.applyAccountFilters}">
+                    <option value="">All</option>
+                    <option value="Active">Active</option>
+                    <option value="stale">Neglected</option>
+                    <option value="untouched">Untouched</option>
+                </lightning:select>
+            </lightning:layoutItem>-->
+			
+            <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="3" padding="horizontal-small">
+                <lightning:select name="select1" class="" label="Display Records" value="{!v.defaultFilter}" onchange="{!c.displayRecordByFilter}">  
+                    <aura:iteration items="{!v.displayrecord}" var="item">
+                        <option text="{!item.label}" value="{!item.value}" />
+                    </aura:iteration>
+                </lightning:select>
+            </lightning:layoutItem>
+            
+            <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="3" padding="horizontal-small">
+                 <lightning:select aura:id="StatusSelect" name="StatusSelect" class="" label="Account Status" value="{!v.selectedAccountStatus}" onchange="{!c.displayRecordByFilter}">  
+                    <option value="">select..</option>
+                     <aura:iteration items="{!v.accountStatus}" var="item">
+                        <option text="{!item.label}" value="{!item.value}" />
+                    </aura:iteration>
+                </lightning:select>
+            </lightning:layoutItem>
+           <!-- <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="3" padding="horizontal-small">
+                <div class="slds-form-element slds-form-element_stacked">
+                    <label class="slds-form-element__label" for="">Filter low scored records from view</label>
+                    <div class="slds-form-element__control">
+                        <lightning:input type="checkbox" variant="label-hidden" name="input1" checked="{!v.filterLowScoredRecordsFromView}"/>
+                    </div>
+					
+                </div>
+            </lightning:layoutItem>-->
+        </lightning:layout>
+    </div>
+    <div class="slds-text-align_center">
+        <lightning:button variant="brand" class="m-btn" label="Filter" title="Brand action" onclick="{!c.leadScoreFilter}"/>
+    </div>
+    <div style="display: flex;justify-content: flex-start;">
+        <span class="box box-grey slds-m-left_small"># Leads: {!v.noOfLeads}</span>
+       <span class="box box-grey slds-m-left_small"> #of Open Leads: {!v.activeLeads}</span>
+       <span class="box box-grey slds-m-left_small"># Working Leads: {!v.staleLeads} </span>
+      <span class="box box-grey slds-m-left_small"> # Meeting Set Leads: {!v.unTouchedLeads} </span>
+        <span class="box box-grey slds-m-left_small"> # Unique Accounts: {!v.uniqueAccounts} </span> 
+    </div>
+    <br/> <br/>
+    <!-- https://rubrik.atlassian.net/browse/MKT25-599
+     <aura:renderIf isTrue="{!v.responseData.EnableImporttoSalesloftButton}">
+    <lightning:button variant="brand" class="" label="Import to Salesloft" title="Brand action" onclick="{!c.importToSalesloft}" />
+    </aura:renderIf>-->
+         <lightning:button variant="brand" class="" label="Change Status" title="Brand action" onclick="{!c.showStatusUpdateModal}" /> 
+     <lightning:button variant="brand" class="" label="Change Owner" title="Brand action" onclick="{!c.showChangeOwnerModal}" /> 
+    <lightning:select name="colorId" class="floatRight" label="Select Page" aura:id="colorId" value="{!v.selectedPage}" onchange="{! c.onPageChange }">
+            <aura:iteration items="{!v.pageOptions}" var="option">
+                <option text="{!option}" value="{!option}" />
+            </aura:iteration>
+        </lightning:select>
+    <div class="slds-text-heading_small slds-m-top_small">Leads
+        
+    </div>
+    <table class="slds-table slds-table--bordered slds-table--cell-buffer">
+        <thead>
+            <tr class="slds-text-title--caps">
+                <th scope="col">
+                    <lightning:icon size="x-small" onclick="{!c.showContent}" iconName="{!v.showContent? 'utility:chevrondown':'utility:chevronright'}" alternativeText="Event" title="Event" />
+                </th>
+                <th scope="col">
+                    <lightning:input aura:id="allCheckBox" type="checkbox" onchange="{!c.selectAll}"/>
+                </th>
+                <th aria-label="Name" aria-sort="none" class="slds-is-sortable" id="Name" scope="col" onclick="{!c.sort}">
+                    <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="0">
+                        <span class="slds-assistive-text">Sort by: </span>
+                        <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                            <div class="overflow_wrap" title="Name">Name</div>
+                            <span class="slds-icon_container slds-icon-utility-arrowdown">
+                                <lightning:icon iconName="{!v.sortAsc!=true ? 'utility:arrowdown' : 'utility:arrowup'}" 
+                                                class="slds-icon slds-icon-text-default slds-is-sortable__icon" size="xx-small" alternativeText="Warning!" title="Warning" />
+                            </span>
+                        </div>
+                    </a>
+                    
+                </th>
+                <th aria-label="Name" aria-sort="none" class="slds-is-sortable" id="Title" scope="col" onclick="{!c.sort}">
+                    <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="0">
+                        <span class="slds-assistive-text">Sort by: </span>
+                        <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                            <div class="overflow_wrap" title="Name">Title</div>
+                            <span class="slds-icon_container slds-icon-utility-arrowdown">
+                                <lightning:icon iconName="{!v.sortAsc!=true ? 'utility:arrowdown' : 'utility:arrowup'}" 
+                                                class="slds-icon slds-icon-text-default slds-is-sortable__icon" size="xx-small" alternativeText="Warning!" title="Warning" />
+                            </span>
+                        </div>
+                    </a>
+                    
+                </th>
+                  
+               
+                <!--
+                <th aria-label="Name" aria-sort="none" class="slds-is-sortable" id="Lead_FIT_Score1__c" scope="col" onclick="{!c.sort}">
+                    <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="0">
+                        <span class="slds-assistive-text">Sort by: </span>
+                        <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                            <div class="overflow_wrap" title="Number">Lead Fit Score</div>
+                            <span class="slds-icon_container slds-icon-utility-arrowdown">
+                                <lightning:icon iconName="{!v.sortAsc!=true ? 'utility:arrowdown' : 'utility:arrowup'}" 
+                                                class="slds-icon slds-icon-text-default slds-is-sortable__icon" size="xx-small" alternativeText="Warning!" title="Warning" />
+                            </span>
+                        </div> 
+                    </a> 
+                </th>
+				-->
+               <!-- <th aria-label="Name" aria-sort="none" class="slds-is-sortable" id="LeadOwner" scope="col" onclick="{!c.sort}">
+                    <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="0">
+                        <span class="slds-assistive-text">Sort by: </span>
+                        <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                            <div class="overflow_wrap" title="Name">Lead Owner </div>
+                            <span class="slds-icon_container slds-icon-utility-arrowdown">
+                                <lightning:icon iconName="{!v.sortAsc!=true ? 'utility:arrowdown' : 'utility:arrowup'}" 
+                                                class="slds-icon slds-icon-text-default slds-is-sortable__icon" size="xx-small" alternativeText="Warning!" title="Warning" />
+                            </span>
+                        </div>
+                    </a>
+                    
+                </th>-->
+				
+				<th aria-label="Name" aria-sort="none" class="slds-is-sortable" id="Company" scope="col" onclick="{!c.sort}">
+                    <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="0">
+                        <span class="slds-assistive-text">Sort by: </span>
+                        <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                            <div class="overflow_wrap" title="Name">Company</div>
+                            <span class="slds-icon_container slds-icon-utility-arrowdown">
+                                <lightning:icon iconName="{!v.sortAsc!=true ? 'utility:arrowdown' : 'utility:arrowup'}" 
+                                                class="slds-icon slds-icon-text-default slds-is-sortable__icon" size="xx-small" alternativeText="Warning!" title="Warning" />
+                            </span>
+                        </div>
+                    </a>
+                    
+                </th>   
+                
+                
+                <th aria-label="Name" aria-sort="none" class="slds-is-sortable" id="AccountOwner" scope="col" onclick="{!c.sort}">
+                    <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="0">
+                        <span class="slds-assistive-text">Sort by: </span>
+                        <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                            <div class="overflow_wrap" title="Name">Account Owner</div>
+                            <span class="slds-icon_container slds-icon-utility-arrowdown">
+                                <lightning:icon iconName="{!v.sortAsc!=true ? 'utility:arrowdown' : 'utility:arrowup'}" 
+                                                class="slds-icon slds-icon-text-default slds-is-sortable__icon" size="xx-small" alternativeText="Warning!" title="Warning" />
+                            </span>
+                        </div>
+                    </a>
+                    
+                </th>
+				<th aria-label="Name" aria-sort="none" class="slds-is-sortable" id="AccountStatus" scope="col" onclick="{!c.sort}">
+                    <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="0">
+                        <span class="slds-assistive-text">Sort by: </span>
+                        <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                            <div class="overflow_wrap" title="Name">L2A Account Status</div>
+                            <span class="slds-icon_container slds-icon-utility-arrowdown">
+                                <lightning:icon iconName="{!v.sortAsc!=true ? 'utility:arrowdown' : 'utility:arrowup'}" 
+                                                class="slds-icon slds-icon-text-default slds-is-sortable__icon" size="xx-small" alternativeText="Warning!" title="Warning" />
+                            </span>
+                        </div>
+                    </a>
+                    
+                </th>
+				 <th aria-label="Name" aria-sort="none" class="slds-is-sortable" id="L2AAccountTier__c" scope="col" onclick="{!c.sort}">
+                    <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="0">
+                        <span class="slds-assistive-text">Sort by: </span>
+                        <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                            <div class="overflow_wrap" title="Name">Account Tier</div>
+                            <span class="slds-icon_container slds-icon-utility-arrowdown">
+                                <lightning:icon iconName="{!v.sortAsc!=true ? 'utility:arrowdown' : 'utility:arrowup'}" 
+                                                class="slds-icon slds-icon-text-default slds-is-sortable__icon" size="xx-small" alternativeText="Warning!" title="Warning" />
+                            </span>
+                        </div> 
+                    </a> 
+                    
+                </th>
+				<th aria-label="Name" aria-sort="none" class="slds-is-sortable" id="Status" scope="col" onclick="{!c.sort}">
+                    <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="0">
+                        <span class="slds-assistive-text">Sort by: </span>
+                        <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                            <div class="overflow_wrap" title="Name">Status</div>
+                            <span class="slds-icon_container slds-icon-utility-arrowdown">
+                                <lightning:icon iconName="{!v.sortAsc!=true ? 'utility:arrowdown' : 'utility:arrowup'}" 
+                                                class="slds-icon slds-icon-text-default slds-is-sortable__icon" size="xx-small" alternativeText="Warning!" title="Warning" />
+                            </span>
+                        </div>
+                    </a>
+                    
+                </th>
+				
+                <th aria-label="Name" aria-sort="none" class="slds-is-sortable" id="Last_MQL_Date__c" scope="col" onclick="{!c.sort}">
+                    <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="0">
+                        <span class="slds-assistive-text">Sort by: </span>
+                        <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                            <div class="overflow_wrap" title="Name">Last MQL Date</div>
+                            <span class="slds-icon_container slds-icon-utility-arrowdown">
+                                <lightning:icon iconName="{!v.sortAsc!=true ? 'utility:arrowdown' : 'utility:arrowup'}" 
+                                                class="slds-icon slds-icon-text-default slds-is-sortable__icon" size="xx-small" alternativeText="Warning!" title="Warning" />
+                            </span>
+                        </div>
+                    </a>
+                    
+                </th>
+				
+				
+                <th aria-label="Name" aria-sort="none" class="slds-is-sortable" id="Priority_Date__c" scope="col" onclick="{!c.sort}">
+                    <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="0">
+                        <span class="slds-assistive-text">Sort by: </span>
+                        <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                            <div class="overflow_wrap" title="Name">Priority Date</div>
+                            <span class="slds-icon_container slds-icon-utility-arrowdown">
+                                <lightning:icon iconName="{!v.sortAsc!=true ? 'utility:arrowdown' : 'utility:arrowup'}" 
+                                                class="slds-icon slds-icon-text-default slds-is-sortable__icon" size="xx-small" alternativeText="Warning!" title="Warning" />
+                            </span>
+                        </div>
+                    </a>
+                    
+                </th>
+                
+                
+               
+                <!--<th scope="col">
+                        <div class="overflow_wrap" >Lattice Grade</div>
+                    </th>-->
+                <th aria-label="Name" aria-sort="none" class="slds-is-sortable" id="LastActivityDate" scope="col" onclick="{!c.sort}">
+                    <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="0">
+                        <span class="slds-assistive-text">Sort by: </span>
+                        <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                            <div class="overflow_wrap" style="width:4rem;" title="Name">Last Touch</div>
+                            <span class="slds-icon_container slds-icon-utility-arrowdown">
+                                <lightning:icon iconName="{!v.sortAsc!=true ? 'utility:arrowdown' : 'utility:arrowup'}" 
+                                                class="slds-icon slds-icon-text-default slds-is-sortable__icon" size="xx-small" alternativeText="Warning!" title="Warning" />
+                            </span>
+                        </div>
+                    </a>
+                    
+                </th> 
+                <th aria-label="Name" aria-sort="none" class="slds-is-sortable" id="MQLCampaignType" scope="col" onclick="{!c.sort}">
+                    <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="0">
+                        <span class="slds-assistive-text">Sort by: </span>
+                        <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                            <div class="overflow_wrap" style="width:4rem;" title="Name">MQL Campaign Type</div>
+                            <span class="slds-icon_container slds-icon-utility-arrowdown">
+                                <lightning:icon iconName="{!v.sortAsc!=true ? 'utility:arrowdown' : 'utility:arrowup'}" 
+                                                class="slds-icon slds-icon-text-default slds-is-sortable__icon" size="xx-small" alternativeText="Warning!" title="Warning" />
+                            </span>
+                        </div>
+                    </a>
+                    
+                </th> 
+                
+                <!--<th scope="col">
+                        <div class="overflow_wrap" >Last Activity Date</div>
+                    </th>-->
+                <!--<th scope="col">
+                        <div class="overflow_wrap" >L2A Account Name</div>
+                    </th>
+                     <th scope="col">
+                        <div class="overflow_wrap" >L2A Account Status</div>
+                    </th>-->
+               <!-- <th aria-label="Name" aria-sort="none" class="slds-is-sortable" id="allActivities" scope="col" onclick="{!c.sort}">
+                    <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="0">
+                        <span class="slds-assistive-text">Sort by: </span>
+                        <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                            <div class="overflow_wrap" title="Name">Touches</div>
+                            <span class="slds-icon_container slds-icon-utility-arrowdown">
+                                <lightning:icon iconName="{!v.sortAsc!=true ? 'utility:arrowdown' : 'utility:arrowup'}" 
+                                                class="slds-icon slds-icon-text-default slds-is-sortable__icon" size="xx-small" alternativeText="Warning!" title="Warning" />
+                            </span>
+                        </div>
+                    </a>
+                    
+                </th>-->
+                <!--<th aria-label="Name" aria-sort="none" class="slds-is-sortable" id="activitiesIn30Days" scope="col" onclick="{!c.sort}">
+                    <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="0">
+                        <span class="slds-assistive-text">Sort by: </span>
+                        <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                            <div class="overflow_wrap" style="width: 6rem;" title="Name">Touches Last 4 days</div>
+                            <span class="slds-icon_container slds-icon-utility-arrowdown">
+                                <lightning:icon iconName="{!v.sortAsc!=true ? 'utility:arrowdown' : 'utility:arrowup'}" 
+                                                class="slds-icon slds-icon-text-default slds-is-sortable__icon" size="xx-small" alternativeText="Warning!" title="Warning" />
+                            </span>
+                        </div>
+                    </a>
+                    
+                </th>-->
+                
+               <!-- <th aria-label="Name" aria-sort="none" class="slds-is-sortable" id="campaignResponse" scope="col" onclick="{!c.sort}">
+                    <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="0">
+                        <span class="slds-assistive-text">Sort by: </span>
+                        <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                            <div class="overflow_wrap" title="Name">Responses</div>
+                            <span class="slds-icon_container slds-icon-utility-arrowdown">
+                                <lightning:icon iconName="{!v.sortAsc!=true ? 'utility:arrowdown' : 'utility:arrowup'}" 
+                                                class="slds-icon slds-icon-text-default slds-is-sortable__icon" size="xx-small" alternativeText="Warning!" title="Warning" />
+                            </span>
+                        </div>
+                    </a>
+                    
+                </th>-->
+                
+                
+                
+            </tr>
+        </thead>
+        <tbody>
+        
+            <aura:iteration items="{!v.visibleLeadRecords}" var="leadRec" indexVar="i">
+                <c:ContactLeadConsoleAccordion recordObj="{! leadRec}" isContactConsole="false" expendAll="{!v.showContent}" />
+            </aura:iteration>
+        </tbody>
+    </table>
+    <aura:if isTrue="{!v.showStatusUpdateModal}">
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+            <div class="slds-modal__container" style="max-width: 55.0625rem;">
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Update {!v.selectedIdWithNames.length} lead(s)                     
+                    </h2>
+                </header>
+                
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <label class="slds-form-element__label" for="4315:0" data-aura-rendered-by="4320:0"><!--render facet: 4321:0-->
+                        <span class="" data-aura-rendered-by="4322:0">Selected Leads</span>
+                    </label>
+                    <div class="slds-pill_container">
+                        <ul class="slds-listbox slds-listbox_horizontal" style="width:100%" role="listbox" aria-label="Selected Options:" aria-orientation="horizontal">
+                            <aura:iteration items="{! v.selectedIdWithNames}" var="rec" indexVar="i">
+                                <li class="slds-listbox-item" role="presentation" style="width:25%">
+                                    <span class="slds-pill" style="width:100%" role="option" tabindex="0" aria-selected="true">
+                                        <span class="slds-avatar slds-avatar_x-small slds-pill__icon_container">
+                                            <lightning:icon iconName="standard:people" alternativeText="Connected" size="xx-small"
+                                                            title="xx-small size" />
+                                            
+                                        </span>
+                                        <span class="slds-pill__label" title="Full pill label verbiage mirrored here">{!rec.Name}</span>
+                                        <span class="slds-icon_container slds-pill__remove" title="Remove">
+                                            <lightning:buttonIcon iconName="utility:close"  size="small" name="{!rec.Id}"
+                                                                  variant="bare" onclick="{!c.removeLead}" />
+                                        </span>
+                                    </span>
+                                </li>
+                            </aura:iteration>
+                        </ul>
+                    </div> 
+                <lightning:select name="colorId" label="Status" aura:id="selectUser" value="{!v.selectedStatusToUpdate}" onchange="{!c.loadStatusOptions}" >
+                    
+                        <option text="Nurture" value="Nurture" />
+                   		<!--<option text="Sales Nurture" value="Sales Nurture" />-->
+                    <option text="Non-Qualified" value="Non-Qualified" />
+                   
+
+                </lightning:select>  
+                    
+                 <lightning:select name="rejectreason" label="Lead Reject Reason" aura:id="rejectreason" value="{!v.leadrejectreason}" onchange="{!c.loadStatusOptionsRejectReason}">
+                    <option text="Select" value="Select" selected="selected"/>
+                     <aura:iteration items="{!v.rejectreasonOptions}" var="item">
+                         <option text="{!item.label}" value="{!item.value}" />
+                     </aura:iteration>
+                </lightning:select>
+                    <aura:if isTrue="{!v.showValidationMessageRejectReason}">
+                        <div class="slds-notify slds-notify_alert slds-alert_error" role="alert" style="justify-content: left;">
+                            Please select Reject Reason
+                        </div>
+                        
+                    </aura:if>
+                    <aura:if isTrue="{!v.showhideaccounttoConvert}"> 
+                    <c:SingleCustomLookup objectAPIName="account" 
+                                  IconName="standard:account" 
+                                  selectedRecord="{!v.selectedLookUpRecord}" 
+                                  label="Account Name" RecordTypes ="Customer/Prospect"/>
+                      </aura:if>
+                    <aura:if isTrue="{!v.showValidationMessageConvertAccount}">
+                        <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                            Please select Account
+                        </div>
+                        
+                    </aura:if>
+                    <br/>
+                    <br/>
+                </div>
+                <footer class="slds-modal__footer"> 
+                    <lightning:button variant="brand" label="Cancel" title="Brand action" onclick="{!c.hideStatusUpdateModal}" />
+                    <button class="slds-button slds-button_brand" onclick="{!c.updateStatus}">Save</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+    
+     <aura:if isTrue="{!v.showChangeOwnerModal}">
+       
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+            <div class="slds-modal__container" style="max-width: 55.0625rem;">
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Update {!v.selectedIdWithNames.length} lead(s)                     
+                    </h2>
+                </header>
+                
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <label class="slds-form-element__label" for="4315:0" data-aura-rendered-by="4320:0"><!--render facet: 4321:0-->
+                        <span class="" data-aura-rendered-by="4322:0">Selected Leads</span>
+                    </label>
+                    <div class="slds-pill_container">
+                        <ul class="slds-listbox slds-listbox_horizontal" style="width:100%" role="listbox" aria-label="Selected Options:" aria-orientation="horizontal">
+                            <aura:iteration items="{! v.selectedIdWithNames}" var="rec" indexVar="i">
+                                <li class="slds-listbox-item" role="presentation" style="width:25%">
+                                    <span class="slds-pill" style="width:100%" role="option" tabindex="0" aria-selected="true">
+                                        <span class="slds-avatar slds-avatar_x-small slds-pill__icon_container">
+                                            <lightning:icon iconName="standard:people" alternativeText="Connected" size="xx-small"
+                                                            title="xx-small size" />
+                                            
+                                        </span>
+                                        <span class="slds-pill__label" title="Full pill label verbiage mirrored here">{!rec.Name}</span>
+                                        <span class="slds-icon_container slds-pill__remove" title="Remove">
+                                            <lightning:buttonIcon iconName="utility:close"  size="small" name="{!rec.Id}"
+                                                                  variant="bare" onclick="{!c.removeLead}" />
+                                        </span>
+                                    </span>
+                                </li>
+                            </aura:iteration>
+                        </ul>
+                    </div> 
+                    <lightning:select name="colorId" label="User/Queue" aura:id="selectUserId" value="{!v.selectedLeadOwnerType}" onchange="{!c.setuserqueueOptions}" >                    
+                        <option text="User" value="User" />
+                   		<option text="Queue" value="Queue" />                  
+                </lightning:select>  
+                    <aura:if isTrue="{!v.showValidationMessageSelectUserQueueType}">
+                        <div class="slds-notify slds-notify_alert slds-alert_error" role="alert" style="justify-content: left;">
+                            Please select owner type
+                        </div>                        
+                    </aura:if>                   
+                    <c:SingleCustomLookup objectAPIName="{!v.objectName}" 
+                                          IconName="standard:user"
+                                          selectedRecord="{!v.selectedLookUpRecordLeadOwner}" 
+                                          label="Assign To" />
+                    <aura:if isTrue="{!v.showValidationMessageSelectUserQueue}">
+                        <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                            Please select Owner
+                        </div>
+                    </aura:if>
+                    
+                     <aura:if isTrue="{!v.showMessagedefaultqueue}">
+                        <div class="slds-notify slds-notify_alert slds-alert_success" role="alert">
+                            By default "Inbound" Queue is set as lead owner if nothing selected.
+                        </div>
+                        
+                    </aura:if>
+                        
+                    <br/>
+                    <br/>
+                     <br/>
+                    <br/>
+                </div>
+                <footer class="slds-modal__footer"> 
+                    <lightning:button variant="brand" label="Cancel" title="Brand action" onclick="{!c.hideChangeLeadOwnereModal}" />
+                    <button class="slds-button slds-button_brand" onclick="{!c.updateLeadOwner}">Save</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+    <lightning:spinner alternativeText="Loading" class="{!v.showSpinner? '':'slds-hide'}" />
+</aura:component>

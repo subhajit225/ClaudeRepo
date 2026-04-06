@@ -1,0 +1,305 @@
+<template>
+  <div class="knowbler_main" onclick={changeData}>
+    <div class={flexipageRegionWidth}>
+      <template if:false={showModal}>
+        <div class="displayHeader">
+          <template if:false={tourScreen}>
+            <c-knowbler-common-header
+              onmodalclick={modalClick}
+              onswitchknowblermodeclick={checkArticleCreationFormIsOpen}
+              newnumber={newnumber}
+              unique-number={uniqueNumber}
+              kcsheight={kcsHeight}
+              is-content-health-active={isContentHealthActive}
+              flexipageregionwidth={flexipageRegionWidth}
+            >
+            </c-knowbler-common-header>
+          </template>
+          <template if:true={tourScreen}>
+            <c-knowbler-common-header
+              onmodalclick={modalClick}
+              onswitchknowblermodeclick={checkArticleCreationFormIsOpen}
+              newnumber={newnumber}
+              unique-number={uniqueNumber}
+              display-tour-screen={tourScreen}
+              kcsheight={kcsHeight}
+              is-content-health-active={isContentHealthActive}
+              flexipageregionwidth={flexipageRegionWidth}
+            >
+            </c-knowbler-common-header>
+          </template>
+        </div>
+        <template if:false={apierror}>
+          <div class="layout">
+            <template if:true={tourScreen}>
+              <div class="layout-header">
+                <c-kcs-Tour
+                  showmodal={showModal}
+                  onsetstep={stepChange}
+                  step={step}
+                  ontourcompleted={tourCompleted}
+                  flexipageregionwidth={flexipageRegionWidth}
+                  userlanguage={userLanguage}
+                ></c-kcs-Tour>
+              </div>
+            </template>
+            <template if:true={isEnableNext}>
+              <div class="layout-body">
+                <template if:true={showList}>
+                  <template if:true={noLoading}>
+                    <c-knowbler-loader
+                      fromarticle
+                      kcsheight={kcsHeight}
+                      loadingcard={loadingcard}
+                      flexipageregionwidth={flexipageRegionWidth}
+                    ></c-knowbler-loader>
+                  </template>
+                  <template if:false={noLoading}>
+                    <c-knowbler-article-list
+                      author={author}
+                      llm-status={llmStatus}
+                      kcssupport={knoblerSupport}
+                      client-settings={clientSettings}
+                      alldatacategories={dataCategories}
+                      destobj={destobj}
+                      language={language}
+                      articlescreendata={articleScreenData}
+                      userlanguage={userLanguage}
+                      tabcontentcreate={tabcontent}
+                      createdarticle={createdArticle}
+                      kcsheight={kcsHeight}
+                      tabs-content={tabsContent}
+                      showdropdown={showDropdown}
+                      loadingcard={loadingCard}
+                      flexipageregionwidth={flexipageRegionWidth}
+                      oncreatearticlehome={createArticleHome}
+                      caseid={caseid}
+                      casedata={caseData}
+                      casenumber={casenumber}
+                      ongotohome={gotohome}
+                      jwttoken={jwttoken}
+                      activevalue={activevalue}
+                      endpoint={endpoint}
+                      draftarticlemode={draftarticlemode}
+                      newnumber={newnumber}
+                      onmaxutility={maxUtility}
+                      newid={newid}
+                      unique-number={uniqueNumber}
+                      is-case-present={isCasePresent}
+                      oncreatearticle={handleAutoGenTitle}
+                      content-health-settings={contentHealthSettings}
+                    ></c-knowbler-article-list>
+                  </template>
+                </template>
+                <template if:true={rtflag}>
+                  <c-knowbler-choose-template
+                    kcssupport={knoblerSupport}
+                    kcsheight={kcsHeight}
+                    onrecclick={handleRecTypeClick}
+                    casenumber={casenumber}
+                    endpoint={endpoint}
+                    jwttoken={jwttoken}
+                    clientsettings={clientSettings}
+                    uid={uid}
+                    flexipageregionwidth={flexipageRegionWidth}
+                  ></c-knowbler-choose-template>
+                </template>
+                <template if:true={isTrueCreateArticle}>
+                  <!-- <div class="layout-body-two"> -->
+                  <c-knowbler-article-creation
+                    llm-status={llmStatus}
+                    author={author}
+                    oncreatearticle={handleAutoGenTitle}
+                    destobj={destobj}
+                    client-settings={clientSettings}
+                    alldatacategories={dataCategories}
+                    createartclemapping={createArtcleMapping}
+                    language={language}
+                    casedata={caseData}
+                    loadingcard={loadingCard}
+                    kcssupport={knoblerSupport}
+                    kcsheight={kcsHeight}
+                    draftarticlemode={draftarticlemode}
+                    onback={handleBackCreateArticle}
+                    onleave={handleCreateArticleLeave}
+                    onactiveevent={activeevent}
+                    newnumber={newnumber}
+                    flexipageregionwidth={flexipageRegionWidth}
+                    recordtype={recordtype}
+                    onfromcreatearticle={getArticleData}
+                    casenumber={casenumber}
+                    jwttoken={jwttoken}
+                    endpoint={endpoint}
+                    display-title-loader={displayTitleLoader}
+                    display-summary-loader={displaySummaryLoader}
+                    generate-summary-fields={generateSummaryFields}
+                    unique-number={uniqueNumber}
+                    content-health-settings={contentHealthSettings}
+                  ></c-knowbler-article-creation>
+                  <!-- </div> -->
+                </template>
+              </div>
+            </template>
+          </div>
+        </template>
+      </template>
+    </div>
+    <template if:true={showModal}>
+      <section aria-modal="true" class="su_modal slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+          <div class="displayHeader">
+            <template if:false={tourScreen}>
+              <c-knowbler-common-header
+                onmodalclick={modalClick}
+                maxview
+                onswitchknowblermodeclick={checkArticleCreationFormIsOpen}
+                newnumber={newnumber}
+                unique-number={uniqueNumber}
+                kcsheight={kcsHeight}
+                is-content-health-active={isContentHealthActive}
+              ></c-knowbler-common-header>
+            </template>
+            <template if:true={tourScreen}>
+              <c-knowbler-common-header
+                onmodalclick={modalClick}
+                maxview
+                onswitchknowblermodeclick={checkArticleCreationFormIsOpen}
+                newnumber={newnumber}
+                unique-number={uniqueNumber}
+                display-tour-screen={tourScreen}
+                kcsheight={kcsHeight}
+                is-content-health-active={isContentHealthActive}
+              ></c-knowbler-common-header>
+            </template>
+          </div>
+          <div class="layout">
+            <template if:true={tourScreen}>
+              <div class="layout-header">
+                <c-kcs-Tour
+                  onsetstep={stepChange}
+                  step={step}
+                  ontourcompleted={tourCompleted}
+                  userlanguage={userLanguage}
+                ></c-kcs-Tour>
+              </div>
+            </template>
+            <template if:true={isEnableNext}>
+              <div class="layout-body">
+                <template if:true={showList}>
+                  <template if:true={noLoading}>
+                    <c-knowbler-loader
+                      fromarticle
+                      kcsheight={kcsHeight}
+                      loadingcard={loadingcard}
+                      flexipageregionwidth={flexipageRegionWidth}
+                    ></c-knowbler-loader>
+                  </template>
+                  <template if:false={noLoading}>
+                    <c-knowbler-article-list
+                      author={author}
+                      llm-status={llmStatus}
+                      kcssupport={knoblerSupport}
+                      client-settings={clientSettings}
+                      alldatacategories={dataCategories}
+                      destobj={destobj}
+                      language={language}
+                      articlescreendata={articleScreenData}
+                      userlanguage={userLanguage}
+                      tabcontentcreate={tabcontent}
+                      createdarticle={createdArticle}
+                      kcsheight={kcsHeight}
+                      newnumber={newnumber}
+                      showdropdown={showDropdown}
+                      loadingcard={loadingCard}
+                      tabs-content={tabsContent}
+                      oncreatearticlehome={createArticleHome}
+                      caseid={caseid}
+                      casedata={caseData}
+                      activevalue={activevalue}
+                      draftarticlemode={draftarticlemode}
+                      casenumber={casenumber}
+                      jwttoken={jwttoken}
+                      endpoint={endpoint}
+                      onmaxutility={maxUtility}
+                      newid={newid}
+                      ongotohome={gotohome}
+                      unique-number={uniqueNumber}
+                      is-case-present={isCasePresent}
+                      oncreatearticle={handleAutoGenTitle}
+                      content-health-settings={contentHealthSettings}
+                    >
+                    </c-knowbler-article-list>
+                  </template>
+                </template>
+                <template if:true={rtflag}>
+                  <c-knowbler-choose-template
+                    kcssupport={knoblerSupport}
+                    onrecclick={handleRecTypeClick}
+                  ></c-knowbler-choose-template>
+                </template>
+                <template if:true={isTrueCreateArticle}>
+                  <!-- <div class="layout-body-two"> -->
+                  <c-knowbler-article-creation
+                    author={author}
+                    llm-status={llmStatus}
+                    oncreatearticle={handleAutoGenTitle}
+                    alldatacategories={dataCategories}
+                    client-settings={clientSettings}
+                    destobj={destobj}
+                    createartclemapping={createArtcleMapping}
+                    language={language}
+                    casedata={caseData}
+                    loadingcard={loadingCard}
+                    kcssupport={knoblerSupport}
+                    onback={handleBackCreateArticle}
+                    onleave={handleCreateArticleLeave}
+                    casenumber={casenumber}
+                    recordtype={recordtype}
+                    newnumber={newnumber}
+                    onfromcreatearticle={getArticleData}
+                    jwttoken={jwttoken}
+                    endpoint={endpoint}
+                    onactiveevent={activeevent}
+                    draftarticlemode={draftarticlemode}
+                    display-title-loader={displayTitleLoader}
+                    display-summary-loader={displaySummaryLoader}
+                    unique-number={uniqueNumber}
+                    content-health-settings={contentHealthSettings}
+                    generate-summary-fields={generateSummaryFields}
+                  >
+                  </c-knowbler-article-creation>
+                  <!-- </div> -->
+                </template>
+              </div>
+            </template>
+          </div>
+        </div>
+      </section>
+    </template>
+  </div>
+  <template if:true={apierror}>
+    <div class="errormain">
+      <div class="errorbox">
+        <div class="errorcontent">
+          <div class="slds-m-around_medium">
+            <img class="errorimg" src={errorimage} />
+          </div>
+          <div class="errormsg">{errormsg}</div>
+          <div class="errorsub">{errorsubmsg}</div>
+        </div>
+      </div>
+    </div>
+  </template>
+  <c-knowbler-modal-component
+    client-settings={clientSettings}
+    unique-number={uniqueNumber}
+  ></c-knowbler-modal-component>
+  <iframe
+    src="/apex/SU_Knowbler__getSessionForCat"
+    height="10px"
+    width="10px"
+    style="border: none !important; visibility: hidden"
+    id="home"
+    title="Knowbler"
+  ></iframe>
+</template>

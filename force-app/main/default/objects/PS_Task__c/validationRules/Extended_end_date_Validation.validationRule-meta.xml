@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Extended_end_date_Validation</fullName>
+    <active>true</active>
+    <description>Extended end date should be =&gt; task end date</description>
+    <errorConditionFormula>AND(NOT(ISNULL(Extended_End_date__c)),Extended_End_date__c &lt;   Task_End_date__c)</errorConditionFormula>
+    <errorDisplayField>Extended_End_date__c</errorDisplayField>
+    <errorMessage>Extended end date should not be less than Task end date</errorMessage>
+</ValidationRule>

@@ -1,0 +1,100 @@
+<template>
+  <div class={flexipageregionwidth}>
+    <div class="tour">
+      <div class="mainTour">
+        <div
+          class="slds-grid slds-wrap slds-grid_align-spread slds-m-bottom-medium tourheight"
+        >
+          <template if:true={showOnSmallScreen}>
+            <div class="slds-col mobile_view">
+              <div class="su_custom">
+                <template if:false={showmodal}>
+                  <lightning-radio-group
+                    label=""
+                    options={options}
+                    value={value}
+                    onchange={handleOnStepClick}
+                    type="radio"
+                  ></lightning-radio-group>
+                </template>
+              </div>
+            </div>
+            <div class="slds-col skip_button mobile_view">
+              <lightning-button
+                variant="base"
+                class="skip-button text"
+                label="Skip"
+                onclick={handleOnSkip}
+              >
+              </lightning-button>
+            </div>
+          </template>
+
+          <template if:true={isStepOne}>
+            <c-knowbler-step-content
+              class="step_content_main"
+              title={tourTitle1}
+              summary={tourSummary1}
+              imagesrc={inTheMomentImage}
+              flexipageregionwidth={flexipageregionwidth}
+            ></c-knowbler-step-content>
+          </template>
+          <template if:true={isStepTwo}>
+            <c-knowbler-step-content
+              class="step_content_main"
+              title={tourTitle2}
+              summary={tourSummary2}
+              imagesrc={efficientReuseImage}
+              flexipageregionwidth={flexipageregionwidth}
+            ></c-knowbler-step-content>
+          </template>
+
+          <template if:true={isStepThree}>
+            <c-knowbler-step-content
+              class="step_content_main"
+              title={tourTitle3}
+              summary={tourSummary3}
+              imagesrc={optimizationOfContentImage}
+              flexipageregionwidth={flexipageregionwidth}
+            ></c-knowbler-step-content>
+          </template>
+          <div class="slds-grid slds-wrap slds-align_absolute-center btn_view">
+            <template if:false={showOnSmallScreen}>
+              <div class="slds-col">
+                <div class="su_custom desktop_view">
+                  <template if:false={showmodal}>
+                    <lightning-radio-group
+                      label=""
+                      options={options}
+                      value={value}
+                      onchange={handleOnStepClick}
+                      type="radio"
+                    ></lightning-radio-group>
+                  </template>
+                </div>
+              </div>
+            </template>
+            <lightning-button
+              label={nextLabel}
+              variant="base"
+              class="slds-col next_btn slds-m-top_medium slds-m-bottom_medium"
+              onclick={handleNext}
+            >
+            </lightning-button>
+            <template if:false={showOnSmallScreen}>
+              <div class="slds-col skip_button desktop_view">
+                <lightning-button
+                  variant="base"
+                  class="skip-button text"
+                  label="Skip"
+                  onclick={handleOnSkip}
+                >
+                </lightning-button>
+              </div>
+            </template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

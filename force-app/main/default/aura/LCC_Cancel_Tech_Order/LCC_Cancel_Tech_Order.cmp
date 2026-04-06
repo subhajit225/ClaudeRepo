@@ -1,0 +1,42 @@
+<aura:component
+  controller="LCC_ButtonsController"
+  implements="force:hasRecordId,force:lightningQuickActionWithoutHeader"
+>
+  <aura:attribute name="order" type="Order" />
+  <aura:attribute name="showOk" type="Boolean" default="true" />
+  <aura:attribute name="showCancel" type="Boolean" default="true" />
+  <aura:attribute
+    name="content"
+    default="Do you want to cancel the Tech order request?"
+    type="String"
+  />
+  <aura:attribute name="cancelButtonName" default="No" type="String" />
+  <aura:html tag="style">
+    .modal-body{
+      position:relative;
+    }
+  </aura:html> 
+
+  <div class="slds-p-top_large slds-align_absolute-center">{!v.content}</div>
+    <aura:if isTrue="{!v.showCancel}">
+      <div class="slds-p-top_large slds-align_absolute-center">
+        <aura:if isTrue="{!v.showOk}">
+          <lightning:button
+            variant="brand"
+            label="Yes"
+            onclick="{! c.handleYes }"
+          />
+        </aura:if>
+        <lightning:button
+          variant="brand"
+          aura:id="cancelButton"
+          label="{! v.cancelButtonName }"
+          onclick="{! c.handleCancel }"
+        />
+      </div>
+
+        <aura:set  attribute="else" >
+            <lightning:spinner size="medium" variant="brand" alternativeText="Loading" />
+        </aura:set>
+    </aura:if>
+</aura:component>

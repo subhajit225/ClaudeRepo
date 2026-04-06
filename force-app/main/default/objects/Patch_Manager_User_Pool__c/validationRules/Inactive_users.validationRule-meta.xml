@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Inactive_users</fullName>
+    <active>true</active>
+    <description>System should not allow Users to be added if they are inactive</description>
+    <errorConditionFormula>User_Active__c = false</errorConditionFormula>
+    <errorMessage>Inactive users can&apos;t be added</errorMessage>
+</ValidationRule>

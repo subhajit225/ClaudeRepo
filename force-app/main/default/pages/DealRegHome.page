@@ -1,0 +1,191 @@
+<apex:page standardStylesheets="false" StandardController="Deal_Registration__c" sidebar="false" showheader="false"  title="My Deal Registrations - Rubrik Partner Community" applyBodyTag="false"  
+           recordSetvar="regs" extensions="DealREgHomeExtnClass">
+    <c:visualstrapblock >
+       
+        <!--hide the action column from Community users-->
+        <style>
+            
+            .actionColumn{
+            display:none;
+            }
+            
+            .pbBody{
+            padding: 5px;
+            }
+            
+            .visualstrap td, th {
+            padding: 5px !important;
+            }
+            
+            .rolodex {
+            padding: 4px !important;  
+            }
+            
+            .btnpad{
+            padding: 15px;
+            }
+            .buttonclass{
+            position: absolute;
+            margin-top: -5%;
+            margin-left: 50%;
+            }
+            .alert-warning {
+                
+            }
+            
+        </style>
+      
+    
+        <!--start header-->
+        <c:siteheader ></c:siteheader>
+        <!--end Header-->
+        <!--this is the gradient header-->
+        <c:pdealheroheader />
+        <!--end the gradient header-->
+        <!--start the Container-->
+        <div class="container">
+            <!--action status overlay-->
+            <c:processing />
+            <apex:form >
+            <div class="row rowcontainer" >
+                <div class="col-md-12">
+                    <c:pageTitle name="My Deals"></c:pageTitle>
+                    <div align="right">
+                        
+                            <div class="alert alert-warning text-left" id="columnDiv" style="display:none">
+                                Please select a column to search by.
+                            </div>
+                            <div class="col-md-10 form-inline" style="float:right">
+                                <apex:inputText value="{!searchText}" html-placeholder="Search Text" styleClass="form-control" id="searchText">
+                                 <!--   <apex:selectList size="1" value="{!searchBy}" styleClass="form-control" id="searchList">
+                                        <apex:selectOptions Value="{!searchByList}"/>
+                                    </apex:selectList>&nbsp;
+                                -->
+                                </apex:inputText>
+                                &nbsp;
+                                <apex:commandButton value="Submit" action="{!searchManagers}" styleclass="btn btn-primary" onclick="return showColumnDiv()"/>
+                            </div>
+                        
+                    </div>
+                    <apex:pageBlock >
+                       
+                        <apex:pageBlockSection title="All Deal Regsitrations" collapsible="false">
+                            <apex:outputPanel id="myPanel">
+                                <apex:pageMessages id="theMessages" />
+                                <apex:pageBlockTable value="{!dealRegs}" var="vDeal" align="center" styleClass="table" id="dealRegTable" columnsWidth="13%,13%,13%,13%,13%,13%,13%">
+                                   <apex:column value="{!vDeal.Company__c}">
+                                        <apex:facet name="header"> 
+                                            <apex:commandLink reRender="dealRegTable">
+                                                <apex:param assignTo="{!sortOrder}" value="Company__c"/>
+                                                <apex:param name="ascDesc" value="{!IF(ascDesc == 'DESC', 'ASC','DESC')}" assignTo="{!ascDesc}" />
+                                                <apex:outputPanel styleClass="{!IF(sortOrder == 'Company__c' && ascDesc == 'ASC','glyphicon glyphicon-triangle-top',IF(sortOrder != 'Company__c','','glyphicon glyphicon-triangle-bottom'))}"></apex:outputPanel>
+                                                Company
+                                            </apex:commandLink>
+                                          </apex:facet>
+                                    </apex:column>
+                                    
+                                    <apex:column >
+                                        <!--<a href="{!URLFOR($Action.Deal_Registration__c.View, vDeal.Id)}">{!vDeal.Name}</a>-->
+                                        <apex:facet name="header"> 
+                                            <apex:commandLink reRender="dealRegTable" value="Name">
+                                                <apex:param assignTo="{!sortOrder}" value="fName"/>
+                                                <apex:param name="ascDesc" value="{!IF(ascDesc == 'DESC', 'ASC','DESC')}" assignTo="{!ascDesc}" />
+                                                <apex:outputPanel rendered="{!sortOrder=='FirstName__c' && ascDesc=='ASC'}" styleClass="glyphicon glyphicon-triangle-top"></apex:outputPanel>
+                                                <apex:outputPanel rendered="{!sortOrder=='LastName__c' && ascDesc=='DESC'}" styleClass="glyphicon glyphicon-triangle-bottom"></apex:outputPanel>
+                                            </apex:commandLink>
+                                          
+                                          </apex:facet>
+                                        <span>{!vDeal.FirstName__c} {!vDeal.LastName__c}</span>
+                                    </apex:column>
+                                    <!--<apex:column headerValue="Name" rendered="{!vDeal.isconverted}">
+<a href="/DealRegConverted?id={!vDeal.Id}">{!vDeal.Name}</a>
+</apex:column>-->
+                                    <apex:column >
+                                        <a href="/DealRegDetail?id={!vDeal.Id}">{!vDeal.Name}</a>
+                                        <apex:facet name="header">
+                                           <apex:commandLink reRender="dealRegTable">
+                                                <apex:param assignTo="{!sortOrder}" value="Name"/>
+                                                <apex:param name="ascDesc" value="{!IF(ascDesc == 'DESC', 'ASC','DESC')}" assignTo="{!ascDesc}" />
+                                                <apex:outputPanel styleClass="{!IF(sortOrder == 'Name' && ascDesc == 'ASC','glyphicon glyphicon-triangle-top',IF(sortOrder != 'Name','','glyphicon glyphicon-triangle-bottom'))}"></apex:outputPanel>
+                                                Deal Registration Number
+                                            </apex:commandLink>
+                                        </apex:facet>
+                                    </apex:column>
+                                    <apex:column value="{!vDeal.Deal_Registration_Status__c}">
+                                        <apex:facet name="header">
+                                            <apex:commandLink reRender="dealRegTable">
+                                                <apex:param assignTo="{!sortOrder}" value="Deal_Registration_Status__c"/>
+                                                <apex:param name="ascDesc" value="{!IF(ascDesc == 'DESC', 'ASC','DESC')}" assignTo="{!ascDesc}" />
+                                                <apex:outputPanel styleClass="{!IF(sortOrder == 'Deal_Registration_Status__c' && ascDesc == 'ASC','glyphicon glyphicon-triangle-top',IF(sortOrder != 'Deal_Registration_Status__c','','glyphicon glyphicon-triangle-bottom'))}"></apex:outputPanel>
+                                                Deal Registration Status
+                                            </apex:commandLink>
+                                        </apex:facet>
+                                    </apex:column>
+                                    <apex:column value="{!vDeal.Owner.Name}">
+                                            <apex:facet name="header">
+                                                <apex:commandLink reRender="dealRegTable">
+                                                <apex:param assignTo="{!sortOrder}" value="Owner.Name"/>
+                                                <apex:param name="ascDesc" value="{!IF(ascDesc == 'DESC', 'ASC','DESC')}" assignTo="{!ascDesc}" />
+                                                <apex:outputPanel styleClass="{!IF(sortOrder == 'Owner.Name' && ascDesc == 'ASC','glyphicon glyphicon-triangle-top',IF(sortOrder != 'Owner.Name','','glyphicon glyphicon-triangle-bottom'))}"></apex:outputPanel>
+                                                AE Name
+                                            </apex:commandLink> 
+                                        </apex:facet>
+                                    </apex:column>
+    
+                                    <apex:column value="{!vDeal.Owner.Email}">
+                                           <apex:facet name="header">
+                                                <apex:commandLink reRender="dealRegTable">
+                                                <apex:param assignTo="{!sortOrder}" value="Owner.Email"/>
+                                                <apex:param name="ascDesc" value="{!IF(ascDesc == 'DESC', 'ASC','DESC')}" assignTo="{!ascDesc}" />
+                                                <apex:outputPanel styleClass="{!IF(sortOrder == 'Owner.Email' && ascDesc == 'ASC','glyphicon glyphicon-triangle-top',IF(sortOrder != 'Owner.Email','','glyphicon glyphicon-triangle-bottom'))}"></apex:outputPanel>
+                                                AE Email
+                                            </apex:commandLink>
+                                        </apex:facet>
+                                    </apex:column>
+                                     <apex:column value="{!vDeal.CreatedBy.LastName}">
+                                           <apex:facet name="header">
+                                                <apex:commandLink reRender="dealRegTable">
+                                                <apex:param assignTo="{!sortOrder}" value="CreatedBy.LastName"/>
+                                                <apex:param name="ascDesc" value="{!IF(ascDesc == 'DESC', 'ASC','DESC')}" assignTo="{!ascDesc}" />
+                                                <apex:outputPanel styleClass="{!IF(sortOrder == 'CreatedBy.LastName' && ascDesc == 'ASC','glyphicon glyphicon-triangle-top',IF(sortOrder != 'CreatedBy.LastName','','glyphicon glyphicon-triangle-bottom'))}"></apex:outputPanel>
+                                                Created By
+                                            </apex:commandLink>
+                                        </apex:facet>
+                                    </apex:column>
+                                     <apex:column value="{!vDeal.CreatedDate}">
+                                           <apex:facet name="header">
+                                                <apex:commandLink reRender="dealRegTable">
+                                                <apex:param assignTo="{!sortOrder}" value="CreatedDate"/>
+                                                <apex:param name="ascDesc" value="{!IF(ascDesc == 'DESC', 'ASC','DESC')}" assignTo="{!ascDesc}" />
+                                                <apex:outputPanel styleClass="{!IF(sortOrder == 'CreatedDate' && ascDesc == 'ASC','glyphicon glyphicon-triangle-top',IF(sortOrder != 'CreatedDate','','glyphicon glyphicon-triangle-bottom'))}"></apex:outputPanel>
+                                                Submitted Date
+                                            </apex:commandLink>
+                                        </apex:facet>
+                                    </apex:column>
+                                   
+                                  
+                                    <!--<apex:column value="{!vDeal.isConverted}" headerValue="Converted"/>-->
+                                    <apex:facet name="footer">Showing Page # {!pageNumber} of {!totalPages} </apex:facet>
+                                </apex:pageBlockTable>
+                            </apex:outputPanel>
+                        </apex:pageBlockSection>
+                        <apex:pageBlockButtons location="bottom" styleClass="buttonclass" >
+                            <apex:outputPanel id="myButtons">
+                                
+                                    <apex:commandButton action="{!Beginning}" title="Beginning" value="<<" disabled="{!disablePrevious}" reRender="myPanel,myButtons"/>
+                                    <apex:commandButton action="{!Previous}" title="Previous" value="<" disabled="{!disablePrevious}" reRender="myPanel,myButtons"/>
+                                    <apex:commandButton action="{!Next}" title="Next" value=">" disabled="{!disableNext}" reRender="myPanel,myButtons"/>
+                                    <apex:commandButton action="{!End}" title="End" value=">>" disabled="{!disableNext}" reRender="myPanel,myButtons"/>
+                                
+                            </apex:outputPanel>
+                        </apex:pageBlockButtons>
+                    </apex:pageBlock>
+                </div>
+            </div>
+            </apex:form>
+        </div>
+        <!--End the Container-->
+        <!--start the footer-->
+        <c:psitefooter ></c:psitefooter>
+    </c:visualstrapblock>
+</apex:page>

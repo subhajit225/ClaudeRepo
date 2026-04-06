@@ -1,0 +1,9 @@
+<apex:component access="global" controller="PolarisOrderTemplateClass">
+    <apex:attribute name="orderId" description="Receive Order Id" type="Id" required="required" assignTo="{!ordId}" />
+    <apex:outputPanel rendered="{!isDataProtection}">
+        <br /><b>Evaluation product use guidelines for Salesforce Data Protection</b> 
+        <br />
+        Please note that evaluation products provided by Rubrik are intended solely for testing and evaluation purposes and deployment of evaluation products in a production environment is strictly prohibited. Therefore, you must only use test or non-production data during the evaluation or proof-of-concept (POC) of Salesforce Data Protection.
+        <br />
+    </apex:outputPanel> 
+</apex:component>

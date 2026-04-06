@@ -1,0 +1,59 @@
+<apex:component controller="CaseCommentClass" access="global">
+    <apex:attribute name="CaseIds" description="Salesforce Id of the Case" type="Id" assignTo="{!caseId}" />
+
+    <apex:attribute name="Preview" description="preview the component" type="Boolean" assignTo="{!isPreview}" />
+
+    <apex:variable var="rowNumber" value="{!0}"/>
+    <apex:dataTable value="{!CaseComment}" var="Comment" width="100%">
+        <apex:column >
+            <hr />
+            <b>Comment date/time:</b> {!Comment.LastModifiedDate}<br />
+            <b>Comment author:</b> &nbsp;
+
+            <apex:outputPanel rendered="{!Comment.UserId !=null}">
+                <apex:OutputLink value="{!$Label.Community_Base_URL+'profile/'+Comment.UserId}" >{!Comment.Name}</apex:OutputLink>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!Comment.UserId =null}">{!Comment.Name}</apex:OutputPanel>
+
+            ({!IF(ISBLANK(Comment.Title),Comment.CompanyName,Comment.Title+' at '+Comment.CompanyName)})<br /> <br/>
+            <!--commented by sandeep for e2ca-->
+            <!--<apex:outputField value="{!Comment.cc.CommentBody}"/>-->
+            <!--Code change for e2ca start style="white-space: break-spaces;"-->
+            <div  >
+                <apex:outputText value="{!Comment.CommentBody}" escape="false"/>  
+            </div>
+            <!--Code change for e2ca end-->
+
+            <br/>
+
+            <apex:variable var="rowNumber" value="{!rowNumber+1}"/>
+            <apex:outputPanel rendered="{!rowNumber == 1}">
+                <br/>
+                <apex:OutputLink style="background-color: #009dac;
+                                        line-height: 1.875rem;
+                                        text-transform: uppercase!important;
+                                        font-size: 14px;
+                                        border-radius: 2px!important;
+                                        color: #ffffff!important;
+                                        text-decoration: none;
+                                        padding: .5rem 0;
+                                        padding-right: 1rem;
+                                        padding-left: 1rem;
+                                        text-align: center; " value="{!$Label.Community_Base_URL+'viewcase?id='+Comment.ParentId+'&isComment=true'}" rendered="{!rowNumber == 1}" >Add Comment</apex:OutputLink>
+                &nbsp;&nbsp;
+                <apex:OutputLink style="background-color: #009dac;
+                                        line-height: 1.875rem;
+                                        text-transform: uppercase!important;
+                                        font-size: 14px;
+                                        border-radius: 2px!important;
+                                        color: #ffffff!important;
+                                        text-decoration: none;
+                                        padding: .5rem 0;
+                                        padding-right: 1rem;
+                                        padding-left: 1rem;
+                                        text-align: center; " value="{!$Label.Community_Base_URL+'viewcase?id='+Comment.ParentId+'&isEscalated=true'}" rendered="{!rowNumber == 1}" >Escalate case</apex:OutputLink>
+            </apex:outputPanel>
+        </apex:column>
+    </apex:dataTable>
+    <hr />
+</apex:component>

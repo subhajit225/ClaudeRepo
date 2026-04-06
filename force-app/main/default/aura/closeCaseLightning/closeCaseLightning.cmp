@@ -1,0 +1,252 @@
+<aura:component implements="force:lightningQuickAction,force:hasRecordId,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes" controller="CaseDetailController">
+    <aura:attribute name="activeSections" type="List" default="['Resolution Information','KCS','Case Specifics','Attach Articles','Case Description','Most recent public comment','Case Information','F']" />
+    <aura:attribute type="String" name="recordId"/>
+    <aura:attribute type="String" name="Status"/>
+    <aura:attribute type="String" name="recordType"/>
+    <aura:attribute type="String" name="proactiveCampaign" default=""/>
+    <aura:attribute type="String" name="proactiveCustomerCampaign" default=""/>
+    <aura:attribute type="String" name="entitlementValue" default=""/>
+    <aura:attribute type="Boolean" name="hasError" default="false"/>
+    <aura:attribute type="Boolean" name="platformRequired" default="false"/>
+    <aura:attribute type="Object[]" name="emailsList"/>
+    <aura:attribute type="Boolean" name="hasErrorForDuplicateResol" default="false"/>
+    <aura:attribute type="Case" name="duplicateCase" default="{'sobjectType': 'Case'}"/>
+    <aura:attribute name="options" type="List" default="[
+                                                        {'label': '--None--', 'value': ''},
+                                                        {'label': 'FED', 'value': 'FED'},
+                                                        {'label': 'CEM', 'value': 'CEM'},
+                                                        {'label': 'No Entitlement', 'value': 'No Entitlement'},
+                                                        {'label': 'Entitlement Expired', 'value': 'Entitlement Expired'},
+                                                        {'label': 'Other', 'value': 'Other'}
+                                                        ]"/>
+    <aura:attribute name="isReTriggerChecked" type="Boolean" default="false"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doinit}"/>
+    <lightning:workspaceAPI aura:id="workspace"/>
+    <div id="scrollUp">
+        <lightning:recordEditForm recordId="{!v.recordId}" objectApiName="Case" onload="{!c.handleOnload}" onsuccess="{!c.handleSuccess}" onsubmit="{!c.handleSubmit}" aura:Id="recordForm" onerror="{!c.handleError}">
+            <div class="headerButtons" style="text-align:center;">
+                <lightning:button variant="neutral" type="button" name="Cancel" label="Cancel" onclick="{!c.closeModal}"/>
+                <lightning:button disabled="{!v.disabled}" variant="brand" type="submit" name="save" label="Save"/>
+            </div>
+            <lightning:messages />
+            <lightning:accordion aura:id="accordion" allowMultipleSectionsOpen="true" activeSectionName="{! v.activeSections}">
+                <lightning:accordionSection name="Case Information" label="Case Information">
+                    <div class="slds-wrap slds-grid">
+                        <aura:if isTrue="{!OR(v.recordType == 'Support Case',v.recordType == 'Customer Success')}">
+                            <div class="slds-size_6-of-12" >
+                                <lightning:outputField fieldName="OwnerId"></lightning:outputField>
+                                <lightning:inputField fieldName="CaseNumber"></lightning:inputField>
+                                <lightning:inputField fieldName="AccountId"  class="EmailTemplateFields"></lightning:inputField>
+                                <lightning:inputField class="permanentFixAndCreatedDate" fieldName="CreatedDate"></lightning:inputField>
+                            </div>
+                            <div class="slds-size_6-of-12" >
+                                <lightning:inputField fieldName="ContactId" class="EmailTemplateFields"></lightning:inputField>
+                                <lightning:inputField fieldName="Priority" class="EmailTemplateFields"></lightning:inputField>
+                                <lightning:inputField fieldName="Workaround_Provided__c" aura:id="workaroundProvided" class="permanentFixAndCreatedDate" required="true"></lightning:inputField>
+                                <lightning:inputField fieldName="Workaround_Verified__c" aura:id="workaroundVerified" class="permanentFixAndCreatedDate" required="true"></lightning:inputField>
+                                <lightning:inputField fieldName="Alert_Key__c"></lightning:inputField>
+                            </div>
+                            <aura:set attribute="else">
+                                <div class="slds-size_6-of-12" >
+                                    <lightning:outputField fieldName="Status"></lightning:outputField>
+                                    <lightning:inputField fieldName="Current_Status__c"></lightning:inputField>
+                                    <lightning:inputField fieldName="Resolution_Code__c"  required="true"></lightning:inputField>
+                                    <aura:if isTrue="{!v.recordType == 'Partner Case'}">
+                                        <!-- CS21-2810: Add Abra_Tags__c field on case close layout -->
+                                        <lightning:inputField fieldName="Abra_Tags__c"></lightning:inputField>
+                                    </aura:if>
+                                </div>
+                                <div class="slds-size_6-of-12" >
+                                    <lightning:inputField fieldName="Priority"  required="true"></lightning:inputField>
+                                    <lightning:inputField fieldName="Next_Step__c"  class="permanentFixAndCreatedDate"></lightning:inputField>
+                                    <lightning:inputField fieldName="Resolution_Details__c"  class="permanentFixAndCreatedDate" required="true"></lightning:inputField>
+                                </div>
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                </lightning:accordionSection>
+                <aura:if isTrue="{!OR(v.recordType == 'Support Case',v.recordType == 'Customer Success')}">
+                    <lightning:accordionSection name="Resolution Information" label="Resolution Information">
+                        <div class="slds-wrap slds-grid">
+                            <div class="slds-size_6-of-12" >
+                                <div class="slds-wrap slds-grid" style="margin-bottom: 10px;">
+                                    <div class="slds-size_4-of-12">
+                                        <label>Status <span style="color:red">*</span></label>
+                                    </div>
+                                    <div class="slds-size_8-of-12" style="margin-left: -3px;">
+                                        <lightning:select name="select1" label="Status" required="true" value="{!v.Status}" variant="label-hidden">
+                                            <option value="" disabled="true">choose one...</option>
+                                            <option value="Closed">Closed</option>
+                                        </lightning:select>
+                                    </div>
+                                </div>
+                                <lightning:inputField fieldName="Status" value="{!v.Status}" style="display:none;"></lightning:inputField>
+
+                                <!-- Removed inputField because the field is not present on the related layout and edit form
+                            throws and error on load if the field is not present on the layout but used as input field -->
+                                <!--<lightning:inputField fieldName="Duplicate_Case_Id__c"/>-->
+                                <c:SingleCustomLookup aura:id="duplicateCaseIdLookup" objectAPIName="Case"
+                                                      IconName="standard:case"
+                                                      selectedRecord="{!v.duplicateCase}"
+                                                      label="Duplicate Case Id"
+                                                      sideDisplay="true"
+                                                      displayText="Search Cases..."/>
+
+                                <br/>
+                                <br/>
+                                <lightning:inputField fieldName="Type"></lightning:inputField>
+                                <!-- added for CS21-2953 - Ashish-->
+                                <aura:if isTrue="{!v.recordType == 'Customer Success'}"> 
+                                    <lightning:inputField fieldName="Re_trigger__c" aura:id="reTriggerField" onchange="{!c.handleReTrigger}"></lightning:inputField>
+                                    <lightning:inputField fieldName="Trigger_After_Date__c" aura:id="triggerDateField" disabled="{!not(v.isReTriggerChecked)}" ></lightning:inputField>	
+                                    <lightning:inputField fieldName="No_Re_trigger_Reason__c" aura:id="noTriggerReasonField" ></lightning:inputField>
+                                </aura:if>
+                                <!-- CS21-2953 - End -->
+                            </div>
+                            <div class="slds-size_6-of-12" >
+                                <lightning:inputField fieldName="Origin" aura:id="origin" required="true" onchange="{!c.originChange}"></lightning:inputField>
+                                <lightning:inputField fieldName="Resolution__c" required="true" aura:id="resolutionField" onchange="{!c.resFieldChange}"></lightning:inputField>
+                                <!-- added for CS21-817 - Veera -->
+                                <lightning:inputField fieldName="ThirdPartyHWType__c" required="true"></lightning:inputField>
+                                <!-- CS21-817 - End -->
+                                <!-- added for CS21-752 - Veera-->
+                                <lightning:inputField fieldName="Proactive_Resolution_Code__c" required="true"></lightning:inputField>
+                                <lightning:inputField fieldName="Proactive_Campaign_Resolution_comment__c"></lightning:inputField>
+								<lightning:inputField fieldName="Description_for_other__c"></lightning:inputField>
+                                <!-- CS21-752 - End -->
+                            </div>
+                            <lightning:inputField fieldName="Resolution_Details__c" aura:id = "details" class="{!if(v.hasError,'redborder EmailTemplateFields','EmailTemplateFields')}" onchange="{!c.resDetailChange}" ></lightning:inputField>
+                            <aura:if isTrue="{!v.hasError}">
+                                <p style="color:rgb(194, 57, 52);">Complete this field.</p>
+                            </aura:if>
+                            <lightning:inputField fieldName="Platform_Type__c" required="{!v.platformRequired}" aura:id = "platformType" ></lightning:inputField>
+                            <lightning:inputField fieldName="Proactive_customer_campaign_type__c" value="{!v.proactiveCustomerCampaign}"></lightning:inputField>
+                            <lightning:inputField fieldName="Proactive_customer_campaign_resolution__c" value="{!v.proactiveCampaign}"></lightning:inputField>
+                         
+                            <!--CS21-2000 - Start-->
+                           <aura:if isTrue="{!v.recordType == 'Customer Success'}"> 
+                                <aura:if isTrue="{!OR(v.proactiveCustomerCampaign == 'UCL',v.proactiveCustomerCampaign == 'CNP')}">
+                            <lightning:inputField required="true" fieldName="Cloud_Name__c"></lightning:inputField>	
+                            </aura:if>
+                                <aura:if isTrue="{!OR(v.proactiveCustomerCampaign == 'Orchestrated Recovery',v.proactiveCustomerCampaign == 'UCL')}">
+                                    <lightning:inputField required="true" fieldName="CS_Product__c" ></lightning:inputField>	
+                                </aura:if>
+                             </aura:if>   
+                            <!--CS21-2000 - End-->
+                            
+                            <aura:if isTrue="{!AND(v.recordType == 'Customer Success',v.proactiveCampaign == 'Others')}">
+                                <lightning:inputField fieldName="If_Other__c" required="true"></lightning:inputField>
+                            </aura:if>
+                            <lightning:inputField fieldName="Alert_Instructions_Internal__c"></lightning:inputField>
+                        </div>
+                    </lightning:accordionSection>
+                    <lightning:accordionSection name="KCS" label="KCS">
+                        <div class="slds-wrap slds-grid slds-p-top_small">
+                            <div class="slds-size_6-of-12" >
+                                <lightning:inputField class="KcsAndSupportFields" fieldName="KCS_Article_Candidate__c" required="{!if(v.hasErrorForDuplicateResol,true,false)}"></lightning:inputField>
+                                <lightning:inputField class="KcsAndSupportFields" fieldName="KCS_Article_Status__c"></lightning:inputField>
+                                <!-- Ashish: removing field from layout as per CS21-2780 ticket -->
+                                <!--lightning:inputField class="KcsAndSupportFields" fieldName="Supportability_Improvement_Requested__c" required="true"></lightning:inputField-->
+                                <lightning:inputField fieldName="Documentation_Type__c"></lightning:inputField>
+                            </div>
+                            <div class="slds-size_6-of-12" >
+                                <lightning:inputField class="KcsAndSupportFields" fieldName="Web_Link_to_Documentation__c"></lightning:inputField>
+                                <lightning:inputField fieldName="KCS_or_Supportability_comments__c"></lightning:inputField>
+                            </div>
+                        </div>
+                    </lightning:accordionSection>
+                    <lightning:accordionSection label="Attach Articles">
+                        <div class="slds-wrap slds-grid">
+                            <div class="slds-size_12-of-12" >
+                                <c:articleSearch recordId="{!v.recordId}"/>
+                            </div>
+                        </div>
+                    </lightning:accordionSection>
+
+                    <lightning:accordionSection name="Case Specifics" label="Case Specifics">
+                        <div class="slds-wrap slds-grid">
+                            <div class="slds-size_6-of-12" >
+                                <lightning:inputField fieldName="Platform__c" required="true"></lightning:inputField>
+                                <lightning:inputField fieldName="Product_Area__c" required="true" aura:id="Product_Area__c"></lightning:inputField>
+
+                            </div>
+                            <div class="slds-size_6-of-12" >
+                                <lightning:inputField fieldName="Problem_Type__c" required="true"></lightning:inputField>
+                                <lightning:inputField fieldName="Sub_Component__c" required="true"></lightning:inputField>
+                                <lightning:inputField fieldName="If_Other__c"></lightning:inputField>
+                                <lightning:inputField fieldName="Software_Version__c" class="EmailTemplateFields"></lightning:inputField>
+                            </div>
+                            <div class="slds-size_6-of-12">
+                                <lightning:inputField fieldName="Jira_Reference_urls__c" disabled="true"></lightning:inputField>
+                            </div>
+                            <!-- CS21-2810: Add Abra_Tags__c field on case close layout -->
+                            <div class="slds-size_6-of-12">
+                                <lightning:inputField fieldName="Abra_Tags__c"></lightning:inputField>
+                            </div>
+                        </div>
+                    </lightning:accordionSection>
+                </aura:if>
+                <aura:if isTrue="{!v.recordType == 'Customer Success'}">
+                    <lightning:accordionSection name="F" label="Customer Success">
+                        <aura:set attribute="actions">
+                            <div><b style="    color: red;"> |  </b> Required Information </div>
+                        </aura:set>
+                        <aura:set attribute="body">
+                            <div class="c-container">
+                                <lightning:layout pullToBoundary="medium">
+                                    <lightning:layoutItem size="6" padding="horizontal-medium">
+                                        <lightning:inputField fieldName="CSM_Owner__c" aura:id="CSM_Owner__c" variant="label-stacked" required="true" />
+                                        <lightning:inputField fieldName="Product_Name__c" aura:id="Product_Name__c"   variant="label-stacked" required="true"/>
+                                        <lightning:inputField fieldName="Phase__c" aura:id="Phase__c"  variant="label-stacked" required="true" />
+                                        <lightning:inputField fieldName="Sub_Phase__c" aura:id="Sub_Phase__c"  variant="label-stacked" required="true"/>
+                                        <lightning:inputField fieldName="Churn_Reason__c" aura:id="Churn_Reason__c"  variant="label-stacked" required="true" />
+                                    </lightning:layoutItem>
+                                    <lightning:layoutItem size="6" padding="horizontal-medium">
+                                        <div>
+                                            <lightning:combobox aura:id="exception" name="Entitlement Exception" value="{!v.entitlementValue}" label="Entitlement Exception" placeholder="Select Exception" options="{! v.options }"/>
+                                        </div>
+                                        <div>
+                                            <lightning:input name="input8"  aura:id="otherException"  placeholder="Provide info if Other" label="Other" disabled="{!v.entitlementValue !='Other'}" required="{!v.entitlementValue =='Other'}"/>
+                                        </div>
+                                        <div>
+                                            <lightning:inputField fieldName="Entitlement__c" aura:id="Entitlement__c"  variant="label-stacked" required="{!v.entitlementValue ==''}" />
+                                        </div>
+                                        <lightning:inputField fieldName="Customer_First_Contact__c" aura:id="Customer_First_Contact__c"  variant="label-stacked" required="false" />
+                                        <lightning:inputField fieldName="Customer_s_First_Response__c" aura:id="Customer_s_First_Response__c"  variant="label-stacked" required="false" />
+                                        <lightning:inputField fieldName="Customer_Onboarding_Adoption_Completion__c" aura:id="Customer_Onboarding_Adoption_Completion__c"  variant="label-stacked" required="false"/>
+                                    </lightning:layoutItem>
+                                </lightning:layout>
+                            </div>
+                        </aura:set>
+                    </lightning:accordionSection>
+                </aura:if>
+                <lightning:accordionSection name="Case Description" label="Case Description">
+                    <div class="slds-wrap slds-grid">
+                        <div class="slds-size_12-of-12" >
+                            <lightning:inputField fieldName="Subject" class="EmailTemplateFields"></lightning:inputField>
+                            <lightning:inputField fieldName="Description"></lightning:inputField>
+                        </div>
+                    </div>
+                </lightning:accordionSection>
+                <lightning:accordionSection name="Most recent public comment" label="Most recent public comment">
+                    <div class="slds-wrap slds-grid">
+                        <div class="slds-size_12-of-12" >
+                            <lightning:inputField fieldName="E2CAdv__Public_Recent_Comments__c"></lightning:inputField>
+                        </div>
+                    </div>
+                </lightning:accordionSection>
+                <lightning:accordionSection name="Emails" label="Comments">
+                    <!--<div class="hideButton">
+                        <E2CP:CommentList recordId="{!v.recordId}"/>
+                    </div>-->
+                    <E2CAdv:ShowRecentComment recordId="{!v.recordId}" commentCount="50" longCommentRecordId1="" />
+                </lightning:accordionSection>
+
+            </lightning:accordion>
+            <div style="text-align:center;">
+                <lightning:button variant="neutral" type="button" name="Cancel" label="Cancel" onclick="{!c.closeModal}"/>
+                <lightning:button disabled="{!v.disabled}" variant="brand" type="submit" name="save" label="Save"/>
+            </div>
+        </lightning:recordEditForm>
+    </div>
+</aura:component>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Credit_Calculation_Status__c</fullName>
+    <description>This field stores the current stage of the credit calculation process for the order item. Values for this field are sourced directly from NetSuite. Any change to this field&apos;s value will automatically trigger the credit calculation process for the associated order item. JIRA Story: FY25SR-319 and FY25SR-1144</description>
+    <inlineHelpText>Indicates the current status of the credit calculation. Values are populated from NetSuite. A change in this status triggers the credit calculation.</inlineHelpText>
+    <label>Credit Calculation Status</label>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>To process</fullName>
+                <default>false</default>
+                <label>To process</label>
+            </value>
+            <value>
+                <fullName>Completed</fullName>
+                <default>false</default>
+                <label>Completed</label>
+            </value>
+            <value>
+                <fullName>Failed</fullName>
+                <default>false</default>
+                <label>Failed</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

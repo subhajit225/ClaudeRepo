@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Actual_Milestone_Payout__c</fullName>
+    <formula>IF(AND(ISPICKVAL(Payout_Type__c,&apos;All or Nothing&apos;), Milestones_Completed__c), Max_Milestone_Payout__c , IF(ISPICKVAL(Payout_Type__c,&apos;Partial&apos;),Max_Milestone_Payout__c * Funded_Head_Partial__c , 0))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Actual Milestone Payout</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

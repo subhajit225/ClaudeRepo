@@ -1,0 +1,104 @@
+<apex:page showHeader="true" sidebar="true" controller="EntitlementsWithMissingAssetsController" lightningStylesheets="true">
+    <apex:slds rendered="{!$User.UITheme != 'Theme3'}"/> 
+    <apex:form >
+        <apex:pageBlock >
+             <div style="position: absolute ; left : 16px; top: 12px; display: inline-block; justify-content: space-between; align-items: flex-start;">
+                  <apex:commandButton style="margin-top: .125rem; margin-bottom: .125rem;" value="Download Report" onclick="exportToExcel(event);" styleClass="slds-button slds-button_neutral" />  
+            </div>
+            <apex:pageBlockButtons >
+                <apex:commandButton action="{!previous}" value="Previous" rendered="{!hasPrevious}" />
+                <apex:commandButton action="{!next}" value="Next" rendered="{!hasNext}" />
+            </apex:pageBlockButtons>
+            <apex:outputText value="Showing Page {!currentPage} of {!pages}" style="float: right;"/>
+            <apex:pageBlockTable value="{!entitlements}" var="ent" styleClass="pdtable">
+                <apex:column value="{!ent.Id}" />
+                <apex:column headerValue="Entitlement Name">
+                    <apex:outputLink value="/{!ent.Id}" target="_blank">{!ent.Name}</apex:outputLink>
+                </apex:column>
+                <apex:column headerValue="Order Line">
+                    <apex:outputLink value="/{!ent.Order_Service_Item__c}" target="_blank">{!ent.Order_Service_Item__r.OrderItemNumber}</apex:outputLink>
+                </apex:column>
+                <apex:column headerValue="Order">
+                    <apex:outputLink value="/{!ent.Order_Service_Item__r.OrderId}" target="_blank">{!ent.Order_Service_Item__r.Order.OrderNumber}</apex:outputLink>
+                </apex:column>
+                <apex:column headerValue="Order Process Type">
+                    <apex:outputText value="{!ent.Order_Service_Item__r.Order.ProcessType__c}"></apex:outputText>
+                </apex:column>
+                <apex:column headerValue="Order Shipment Status">
+                    <apex:outputText value="{!ent.Order_Service_Item__r.Order.SD_Status__c}"></apex:outputText>
+                </apex:column>
+                <apex:column headerValue="Support Start Date">
+                    <apex:outputText value="{0,date,MM/dd/yyyy}">
+                        <apex:param value="{!ent.StartDate}"/>
+                    </apex:outputText>
+                </apex:column>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+    <style type="text/css">
+        .pdtable {
+            border-collapse: collapse;
+        }
+        .pdtable th, .pdtable td {
+            border: 1px solid black;
+            padding: 5px;
+        }
+        body .pbBottomButtons .pbButtonb, .slds-vf-scope .pbBottomButtons .pbButtonb {
+           text-align: right;
+           Padding-right: 16px;
+    	}
+    </style>
+    <style type="text/css" media="print">
+        .pdtable {
+            border-collapse: collapse;
+        }
+        .pdtable th, .pdtable td {
+            border: 1px solid black;
+            padding: 5px;
+        }
+    </style>
+    <script>
+        function exportToExcel(event) {
+            event.preventDefault(); // Prevent default button behavior
+            var table = document.querySelector(".pdtable");
+            
+            // Apply inline styles to all table cells for Excel
+            table.querySelectorAll('th, td').forEach(function(cell) {
+                cell.style.border = '1px solid #CCCCCC'; // Light gray border
+                cell.style.padding = '3px';
+            });
+            
+            // Ensure all rows have the same number of cells as the header row
+            var headerRowCells = table.querySelector('tr:first-child').querySelectorAll('th, td');
+            table.querySelectorAll('tr').forEach(function(row) {
+                var rowCells = row.querySelectorAll('th, td');
+                if (rowCells.length < headerRowCells.length) {
+                    for (var i = rowCells.length; i < headerRowCells.length; i++) {
+                        var emptyCell = document.createElement(rowCells[0].tagName);
+                        emptyCell.style.border = '1px solid #CCCCCC'; // Light gray border
+                        emptyCell.style.padding = '3px';
+                        emptyCell.innerHTML = '&nbsp;'; // Insert non-breaking space
+                        row.appendChild(emptyCell);
+                    }
+                }
+            });
+            
+            var html = table.outerHTML;
+            var url = 'data:application/vnd.ms-excel,' + encodeURIComponent(html);
+    
+            var downloadLink = document.createElement("a");
+            downloadLink.href = url;
+            downloadLink.download = "EntitlementsWithMissingAssets.xls";
+    
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            
+            // Remove inline styles after download
+            table.querySelectorAll('th, td').forEach(function(cell) {
+                cell.style.border = '';
+                cell.style.padding = '';
+            });
+        }
+    </script>
+</apex:page>

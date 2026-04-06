@@ -1,0 +1,20 @@
+<apex:component controller="OrderCaseInfoController" access="global">
+    <apex:attribute name="theOrderId" assignTo="{!orderId}" type="String" description="Id of the order"/>
+    <b>Contact name: </b>{!CaseInfo.Contact.Name}<br/>
+    <b>Contact email: </b>{!CaseInfo.Contact.Email}<br/>
+    <b>Contact phone: </b>{!CaseInfo.ContactPhone}<br/>
+    <b>Priority: </b>{!CaseInfo.Priority}<br/>
+    <b>Software version: </b>{!CaseInfo.Software_Version__c}<br/>
+    <b>Cluster UUID :</b> {!CaseInfo.Cluster__r.Name}<br />
+    <b>Cluster Tag: </b>{!CaseInfo.Cluster_Tag__c}<br/>
+    <b>Problem type: </b>{!CaseInfo.Problem_Type__c}<br/>
+    <b>Assigned to: </b>{!CaseInfo.Owner.Name}<br/>
+    <b>Current status: </b>{!CaseInfo.Current_Status__c}<br/>
+    <b>Case origin: </b>{!CaseInfo.Origin}<br/>
+    <b>Desired contact method: </b>{!CaseInfo.Contact_method__c}<br/>
+    <br/>
+    <p style="color: #5e9ca0;"><span style="color: #000000;"><b>Subject: </b> {!CaseInfo.Subject}</span></p>
+    <hr />
+    <b>Description:</b><br />
+    <apex:outputField value="{!CaseInfo.Description}"></apex:outputField>
+</apex:component>

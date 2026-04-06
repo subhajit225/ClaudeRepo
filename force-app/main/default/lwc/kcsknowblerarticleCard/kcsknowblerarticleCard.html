@@ -1,0 +1,135 @@
+<template>
+  <div class={flexipageregionwidth} onmouseleave={mouseOut}>
+    <!-- <div class="slds-box">
+      </div> -->
+    <div class="detailbox small d-flex">
+      <div class="card_item d-flex">
+        <div class="d-flex card_inner_top_content ">
+          <div class="inner_top_main_content d-flex">
+            <div class="avatar">
+              <lightning-avatar variant="circle" src={item.FullPhotoUrl}
+                fallback-icon-name="standard:person_account" alternative-text={item.Owner.Name}></lightning-avatar>
+            </div>
+            <div class="name_truncate">
+              <div class="slds-truncate article_username owner_name">
+                <div class="slds-popover slds-popover_tooltip slds-nubbin_top-left" role="tooltip">
+                  <div class=" owner_name_tooltip">{item.Owner.Name}</div>
+                </div>
+                <div class="owner_name_label">
+                  {item.Owner.Name}
+                </div>
+              </div>
+              <div class="article_number">{item.ArticleNumber}</div>
+            </div>
+          </div>
+          <div class="d-flex inner_top_right_content circularbar">
+            <div class="slds-dropdown-trigger slds-dropdown-trigger_click edit_button slds-is-open" data-id={cardindex}>
+              <template if:true={circularbar}>
+                <template if:true={alreadyevaluated}>
+                  <div>
+                    <c-kcsknowbler-circularbar evaluationscore={evaluationscore} predictedscore={predictedscore}
+                      languagechanged={languagechanged}></c-kcsknowbler-circularbar>
+                  </div>
+                </template>
+              </template>
+              <template if:true={item.showDropdown}>
+                <div class="slds-dropdown slds-dropdown_right">
+                  <template if:false={ispublisharticletab}>
+                    <ul class="slds-dropdown__list" role="menu" aria-label="Show More">
+                      <li class="slds-dropdown__item" role="presentation" onclick={openSubTab}>
+                        <div class="manage_salesforce">
+                          <img src={manage} class="manage_salesforce_icon" alt="failed to load"> Manage in Salesforce
+                        </div>
+                      </li>
+                      <template if:true={showEdit}>
+                        <li onclick={openEdit}>
+                          <div class="edit_article">
+                            <img src={edit} class="manage_salesforce_icon" alt="failed to load"> Edit Article
+                          </div>
+                        </li>
+                      </template>
+                    </ul>
+                  </template>
+                  <template if:true={ispublisharticletab}>
+                    <ul class="slds-dropdown__list publishmenu" role="menu" aria-label="Show More">
+                      <li class="slds-dropdown__item" role="presentation" onclick={attachToCase}>
+                        <div class="edit_article attach">
+                          <img src={edit} class="manage_salesforce_icon" alt="failed to load"> Attach to case
+                        </div>
+                      </li>
+                      <li class="slds-dropdown__item" role="presentation" onclick={copytoclipboard}>
+                        <div class="edit_article">
+                          <img src={edit} class="manage_salesforce_icon" alt="failed to load"> Copy to clipboard
+                        </div>
+                      </li>
+                      <li class="slds-dropdown__item" role="presentation" onclick={casecomment}>
+                        <div class="edit_article">
+                          <img src={edit} class="manage_salesforce_icon" alt="failed to load"> Link via case comment
+                        </div>
+                      </li>
+                      <li class="slds-dropdown__item " role="presentation" onclick={caseemail}>
+                        <div class="edit_article">
+                          <img src={edit} class="manage_salesforce_icon" alt="failed to load"> Send link via email
+                        </div>
+                      </li>
+                    </ul>
+                  </template>
+                </div>
+              </template>
+            </div>
+          </div>
+        </div>
+        <!-- Parent preview start-->
+        <div class="d-flex flex_direction_column Card_inner_mid_content">
+          <div class={getCardTitle} onclick={opendetails}>{item.Title}</div>
+        </div>
+        <!-- Parent preview end-->
+        <div class="d-flex card_inner_bottom_content article_card_bottom">
+          <template if:true={item.RecordType}>
+            <div class="article_type" title={item.RecordType.Name}>{item.RecordType.Name}</div>
+            <div class="article_dot">.</div>
+          </template>
+          <div class="card_calander">
+            <div class="slds-popover slds-popover_tooltip slds-nubbin_bottom-left" role="tooltip">
+              <div class="calander_tooltip">Last Modified Date</div>
+            </div>
+            <img src={calander} class="card_calender_img" alt="filed to Load">
+            <div class="article_date">
+              <p>
+                <lightning-formatted-date-time value={item.LastModifiedDate} year="2-digit" month="short" day="2-digit"
+                  hour="2-digit" minute="2-digit" time-zone={timezone}></lightning-formatted-date-time>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="predictedScore">
+          <c-kcsknowblerpredicted-score articlepredictiondata={articlepredictiondata}
+            onpredictedscoreevent={predictedscoreevent} predictedscore={predictedscore}
+            languagechanged={languagechanged} onalreadyevaluatedevent={alreadyevaluatedevent}
+            alreadyevaluated={alreadyevaluated} noprediction={noprediction} waiting={waiting} largescreen={largescreen}>
+          </c-kcsknowblerpredicted-score>
+        </div>
+      </div>
+      <template if:true={progressbar}>
+        <template if:true={alreadyevaluated}>
+          <div class={progressvalueclass}>
+            {progress}%
+          </div>
+          <div class={progressclass}>
+            <div class="bar">
+            </div>
+          </div>
+        </template>
+      </template>
+    </div>
+  </div>
+  <template if:true={evaluatedata}>
+    <c-kcs_knowblermodal-component evaluatedata={evaluatedata} predicteddatafromcard={articlepredictiondata}
+      alreadyevaluatedflag={alreadyevaluatedflag} articlenumber={articleno} oncloseevaluate={closeevaluate}
+      contenthealthdata={contenthealthdata} largescreen={largescreen} owneremail={owneremail} newnumber={newnumber}
+      evaluationscore={evaluationscore} languagechanged={languagechanged} parameters={parameters}
+      totalevaluationpoints={totalevaluationpoints}>
+    </c-kcs_knowblermodal-component>
+  </template>
+  <div lwc:dom="manual"></div>
+</template>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RCDM_AWS_QTY_Min_12</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+NOT($Setup.ShGl_DisableBusinessLogic__c.Disable_POC_Validation_Rules__c),
+ISPICKVAL(Product_Family_for_PoC__c, &quot;1-Yr Subscription to Rubrik Cloud Data Management for AWS 1TB raw, incl support&quot;),
+VALUE(TEXT(POC_Qty__c)) &lt; 12,$Profile.Name &lt;&gt; &quot;Rubrik Data Migration Admin&quot;  )</errorConditionFormula>
+    <errorDisplayField>Product_Family_for_PoC__c</errorDisplayField>
+    <errorMessage>Min quantity is 12 when selecting Rubrik Cloud Data Management for initial cluster</errorMessage>
+</ValidationRule>

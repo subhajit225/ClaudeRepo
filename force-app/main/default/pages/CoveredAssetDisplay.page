@@ -1,0 +1,30 @@
+<apex:page showHeader="false" sidebar="false" cache="false" controller="NetAppQuoteLinesContr" contentType="text/xml" action="{!init}">
+    <block>
+        <table table-layout="fixed" width="99%" border-color="#000000" border-width="0px" border-style="solid">
+            <table-column column-width="20%" />
+            <table-column column-width="80%" />
+            <table-header>
+                <table-row font-weight="bold" font-size="0.7em" text-align="left" background-color="#47baef" color="#ffffff">
+                    <table-cell border="1px solid white" margin="0pt" padding="2pt" padding-top="2pt" text-align="left">
+                        <block>Product Code</block>
+                    </table-cell>
+                    <table-cell border="1px solid white" margin="0pt" padding="2pt" padding-top="2pt" text-align="Left">
+                        <block>Serial Number</block>
+                    </table-cell>
+                </table-row>
+            </table-header>
+            <table-body>
+                <apex:repeat var="qli" value="{!coveredAssetToDisplay}">
+                    <table-row font-size="0.7em">
+                        <table-cell border="1px solid white" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left">
+                            <block>{!qli.hwName}</block>
+                        </table-cell>
+                        <table-cell border="1px solid white" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left">
+                            <block>{!qli.assetName}</block>
+                        </table-cell>
+                    </table-row>
+                </apex:repeat>
+            </table-body>
+        </table>
+    </block>
+</apex:page>

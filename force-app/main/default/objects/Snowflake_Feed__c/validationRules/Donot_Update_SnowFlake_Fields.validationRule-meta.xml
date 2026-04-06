@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Donot_Update_SnowFlake_Fields</fullName>
+    <active>true</active>
+    <description>This Validation Rule is to restrict the user to Update Cluster and Origin Fields On Update.</description>
+    <errorConditionFormula>AND(!ISNEW(), OR( ISCHANGED(Origin__c),ISCHANGED( Type__c )))</errorConditionFormula>
+    <errorMessage>Please Donot Update Type And Origin</errorMessage>
+</ValidationRule>

@@ -1,0 +1,16 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="crumbs" type="list"/>       
+    <aura:attribute name="label" type="string"/>
+    <aura:attribute name="page" type="string"/>
+    
+    <aura:attribute name="pageName" type="string"/>
+    <aura:attribute name="parentPageName" type="string"/>
+    
+    <aura:handler name="init" value="{! this }" action="{! c.doInit }"/>
+    
+    <lightning:breadcrumbs>        
+        <aura:iteration items="{! v.crumbs }" var="crumb" indexVar="index">
+            <lightning:breadcrumb label="{!crumb.label }" name ="{!crumb.url }" onclick="{! c.gotoURL }" class="{!if(crumb.url, '','noLink')}"/>
+        </aura:iteration>
+    </lightning:breadcrumbs>
+</aura:component>

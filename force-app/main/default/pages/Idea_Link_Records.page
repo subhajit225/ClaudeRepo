@@ -1,0 +1,19 @@
+<apex:page standardController="Aha_Ideas__c" lightningStylesheets="true" docType="html-5.0">
+    <div style="overflow: scroll; width: auto; height: 200px;">
+        <apex:form >
+            <apex:pageBlock >
+                <apex:variable var="sizeOfIdeaLink" value="{!0}"/>
+                <apex:pageBlockTable value="{!Aha_Ideas__c.Aha_Idea_Links__r}" var="idealink" rendered="{!NOT(ISNULL(Aha_Ideas__c.Aha_Idea_Links__r))}">
+                    <apex:column headerValue="Aha Idea Number">
+                        <apex:outputlink value="/{!idealink.Aha_Ideas__c}">{!idealink.Aha_Idea_Number__c}</apex:outputlink>
+                    </apex:column>
+                    <apex:column value="{!idealink.Case_Number__c}"/>
+                    <apex:column value="{!idealink.Opportunity_Name__c}"/>
+                </apex:pageBlockTable>
+                <apex:repeat value="{!Aha_Ideas__c.Aha_Idea_Links__r}">
+                    <apex:variable var="sizeOfIdeaLink" value="{!sizeOfIdeaLink + 1}"/>
+                </apex:repeat>
+                <apex:outputText value="No records found." rendered="{!if(sizeOfIdeaLink == 0,true,false)}"/>                   </apex:pageBlock>
+        </apex:form>
+    </div>
+</apex:page>

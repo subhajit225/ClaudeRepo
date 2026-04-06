@@ -1,0 +1,785 @@
+<apex:page id="RMAForm" standardController="Case" extensions="RMAFormOrderController" docType="HTML-5.0" standardStylesheets="true" showHeader="false" sidebar="false" lightningStylesheets="true">
+<!--PRDOPS23-22 -->
+  <head>
+
+    <title>RMA Order Form</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <apex:stylesheet value="{!URLFOR($Resource.rubrik_Assets, '/css/font-awesome.min.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.rubrik_Assets, '/css/datatables.min.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.rubrik_Assets, '/css/jquery-ui.min.css')}" />
+    <apex:includeScript value="{!URLFOR($Resource.rubrik_Assets, '/js/jquery.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.rubrik_Assets, '/js/datatables.min.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.rubrik_Assets, '/js/jquery-ui.min.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.rubrik_Assets, '/js/RmaFormInvalidDomainForShipToEmailField.js')}" />
+    <apex:slds />
+    <apex:stylesheet value="{!URLFOR($Resource.rubrik_Assets, '/css/rmaFormOrderStyles.css')}" />
+    <style>
+    .account_lookup a { 
+        border: none !important;
+        width: 50px !important ;
+    }
+    .lookupInput input {
+        pointer-events: none;
+    }
+    .ui-datepicker-next{
+        width:3em !important;
+        border: none !important;
+        background: transparent !important;
+    }    
+    .ui-icon-circle-triangle-e{
+        text-indent: 0 !important;
+        width: 4rem !important;
+        color:white !important;
+        left: 30% !important;
+    } 
+    .ui-datepicker-prev{
+        width:3em !important;
+        border: none !important;
+        background: transparent !important;
+    } 
+    .ui-icon-circle-triangle-w{
+        text-indent: 0 !important;
+        width: 4rem !important;
+        color:white !important;
+        left: 30% !important;
+    }
+    .ui-datepicker .ui-datepicker-prev span, .ui-datepicker .ui-datepicker-next span{
+        margin-left: -6px !important;
+        top: 52% !important;
+    }
+</style>
+
+  </head>
+
+  <!-- Show This Spinner when page loads -->
+  <div id="spinner-brand-on-load" class="spinner-brand" style="position:relative">
+    <div class="slds-spinner_container slds-is-fixed">
+      <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+        <span class="slds-assistive-text">Loading</span>
+        <div class="slds-spinner__dot-a"></div>
+        <div class="slds-spinner__dot-b"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slds slds-scope" id="slds">
+    <header class="srp__header" role="banner">
+      <div class="slds-text-heading--large">
+        <span class="slds-icon_container" title="RMA Request Form">
+          <svg aria-hidden="true" class="slds-icon">
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/resource/1474545310000/SLDS0121/assets/icons/standard-sprite/svg/symbols.svg#marketing_actions"></use>
+          </svg>
+        </span>
+        RMA Request Form
+      </div>
+    </header>
+
+
+    <!-- Toast Header -->
+    <div id="toast-header" style="display: none">
+      <div class="slds-notify_container slds-is-fixed">
+        <div class="slds-notify slds-notify_toast slds-theme_error" role="status">
+          <span class="slds-assistive-text">error</span>
+          <span class="slds-icon_container slds-icon-utility-error slds-m-right_small slds-no-flex slds-align-top" title="toast">
+            <svg class="slds-icon slds-icon_small" aria-hidden="true">
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/utility-sprite/svg/symbols.svg#error')}"></use>
+
+            </svg>
+          </span>
+          <div class="slds-notify__content">
+            <h2 id="toast-header-text" class="slds-text-heading_small">
+              Error Toast
+            </h2>
+          </div>
+          <div class="slds-notify__close">
+            <button id="header-toast-close" class="slds-button slds-button_icon slds-button_icon-inverse" title="Close">
+              <svg class="slds-button__icon slds-button__icon_large" aria-hidden="true">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/resource/1474545310000/SLDS0121/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+              </svg>
+              <span class="slds-assistive-text">Close</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="formWidth">
+     <apex:form id="shippingInformation">
+      <section>
+        <div class="slds-clearfix slds-section-title--divider">
+          <div class="slds-float_left">
+            <h3 class="slds-text-align--left">Order Information</h3>
+          </div>
+          <div class="slds-float_right slds-capitalise">
+            <div class="account-name">
+              Account Name :
+              <span id="account-name">Loading Account Name ...</span>
+            </div>
+            Case Number :
+            <span id="case-number"> Loading Case Number...</span>
+          </div>
+        </div>
+
+        <div class="slds-grid slds-gutters slds-wrap">
+          <div class="slds-col slds-size_6-of-12">
+            <div class="slds-form-element is-required">
+              <!--PRDOPS-23-22 -->
+              <label class="slds-form-element__label">  RMA Account Name </label>
+              <div class="slds-form-element__control">              
+                <apex:inputField id="account_lookup" ignoreEditPermissionForRendering="true" styleClass="slds-input account_lookup" onchange="getAccountId(this.id);" value="{!newcase.AccountId}"/>
+              </div>
+            </div>
+          </div>
+          <div class="slds-col slds-size_6-of-12">
+            
+          </div>
+          <div class="slds-col slds-size_6-of-12">
+            <div class="slds-form-element is-required">
+              <label class="slds-form-element__label"> Cluster </label>
+              <div class="slds-form-element__control">
+                <input type="text" id="cluster-uuid" class="slds-input" />
+              </div>
+            </div>
+          </div>
+          <div class="slds-col slds-size_6-of-12">
+            <div class="slds-form-element is-required">
+              <label class="slds-form-element__label"> Customer Reference # </label>
+              <div class="slds-form-element__control">
+                <input required="required" type="text" id="customer-reference-number" class="slds-input" />
+              </div>
+            </div>
+          </div>
+          <div class="slds-col slds-size_6-of-12">
+            <div class="slds-form-element is-required">
+              <label class="slds-form-element__label" for="inputAsset">
+                <abbr class="slds-required colorclass colorclass" title="required" /> Select Components
+              </label>
+
+              <div class="slds-form-element__control">
+                <select id="select-component-dropdown" class="slds-select">
+                  <option value="">Please Select</option>
+                  <option value="Appliance">Appliance</option>
+                  <option value="Chassis">Chassis</option>
+                  <option value="HDD">HDD</option>
+                  <option value="SSD">SSD</option>
+                  <option value="Memory">Memory</option>
+                  <option value="Node">Node</option>
+                  <option value="PSU">PSU</option>
+                  <option value="CMOS">CMOS Battery</option>
+                </select>
+              </div>
+
+            </div>
+          </div>
+          <div class="slds-col slds-size_6-of-12">
+            <div id="component-quantity-and-search" style="display: none" class="horizontal-form-element">
+              <div class="slds-form-element is-required">
+                <label class="slds-form-element__label">
+                  Component Quantity
+                </label>
+                <div class="slds-form-element__control">
+                  <input id="component-quantity" class="slds-input form" type="text" />
+                </div>
+              </div>
+
+              <button class="slds-button slds-button_brand search-btn" disabled="disabled" type="button">
+                <svg class="
+                        slds-icon
+                        slds-input__icon slds-input__icon_right
+                        slds-icon-text-default
+                      " aria-hidden="true">
+                  <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/resource/1474545310000/SLDS0121/assets/icons/utility-sprite/svg/symbols.svg#search"></use>
+                </svg>
+                <span id="search-btn-label">Search Chassis </span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!--selected components-->
+        <div id="selected-components-section" class="table-wrapper selected-components" style="display:none;overflow-y: hidden;">
+          <div class="table-header">Selected Components</div>
+          <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+            <thead>
+              <tr class="slds-hint-parent">
+                <th width="20%">Type</th>
+                <th width="25%">Component Serial</th>
+                <th width="25%">Failure Reason</th>
+                <th class="slds-text-align_center" width="20%">&nbsp;</th>
+                <th class="slds-text-align_center" width="20%">Action</th>
+
+              </tr>
+            </thead>
+            <tbody id="selected-components-section-table-body">
+
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="5">
+                  <a onclick="openViewAllModal();return false;">View all
+                    <b id="selected-components-section-count">(5)</b>
+                  </a>
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </section>
+      
+        <section>
+          <h3 class="slds-section-title--divider slds-text-align--left">
+            Other Information
+          </h3>
+          <div class="slds-grid slds-wrap slds-gutters">
+            <div class="slds-col slds-size_6-of-12">
+              <div class="slds-form-element is-required">
+                <label class="slds-form-element__label"> &nbsp; </label>
+                <div class="slds-form-element__control checkbox-block">
+                  <div class="slds-checkbox">
+                    <input type="checkbox" name="copy-address-from-account" id="copy-address-from-account" />
+                    <label class="slds-checkbox__label" for="copy-address-from-account">
+                      <span class="slds-checkbox_faux"></span>
+                      <span class="slds-form-element__label">Copy Address from Account</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="slds-form-element is-required">
+                <label class="slds-form-element__label"> Shipping Street </label>
+                <div class="slds-form-element__control">
+                  <input class="slds-input" required="required" maxlength="255" name="shipping-address-street" id="shipping-address-street"
+                  />
+                </div>
+              </div>
+              <div class="slds-form-element is-required">
+                <label class="slds-form-element__label"> Shipping City </label>
+                <div class="slds-form-element__control">
+                  <input class="slds-input" required="required" maxlength="255" type="text" name="shipping-address-city" id="shipping-address-city"
+                  />
+                </div>
+              </div>
+              <div class="slds-form-element is-required">
+                <label class="slds-form-element__label" for="shippingAddressCountry">
+                  <abbr class="slds-required colorclass colorclass" title="required" /> Shipping Country
+                </label>
+
+                <div class="slds-form-element__control">
+                  <select id="shippingAddressCountry" class="slds-select"></select>
+                </div>
+
+              </div>
+              <div class="slds-form-element is-required">
+                <label class="slds-form-element__label">
+                  <abbr class="slds-required colorclass colorclass" title="required" /> Shipping State </label>
+                <div class="slds-form-element__control">
+                  <select id="shippingAddressState" class="slds-select"></select>
+                </div>
+              </div>
+              <div class="slds-form-element is-required">
+                <label class="slds-form-element__label"> Shipping Zip Code </label>
+                <div class="slds-form-element__control">
+                  <input class="slds-input" required="required" type="text" maxlength="255" name="shipping-address-zipcode" id="shipping-address-zipcode"
+                    cols="30" rows="10" />
+                </div>
+              </div>
+            </div>
+            <div class="slds-col slds-size_6-of-12">
+              <div class="slds-form-element is-required">
+                <label class="slds-form-element__label">
+                  Ship To Contact Name
+                </label>
+                <div class="slds-form-element__control">
+                  <input class="slds-input" required="required" type="text" name="shipping-contact-name" id="shipping-contact-name" />
+                </div>
+              </div>
+              <div class="slds-form-element is-required">
+                <label class="slds-form-element__label"> Ship To Email </label>
+                <div class="slds-form-element__control">
+                  <input class="slds-input" required="required" type="email" name="shipping-contact-email" id="shipping-contact-email" />
+                </div>
+              </div>
+
+              <div class="slds-form-element is-required">
+                <label class="slds-form-element__label">
+                  Ship To Phone number
+                </label>
+                <div class="slds-form-element__control">
+                  <input class="slds-input" type="tel" required="required" name="shipping-contact-phone-number" id="shipping-contact-phone-number"
+                  />
+                </div>
+              </div>
+
+              <div class="slds-form-element is-required">
+                <label class="slds-form-element__label" for="serviceType">
+                  <abbr class="slds-required colorclass colorclass" title="required" /> Service Type
+                </label>
+
+                <div class="slds-form-element__control">
+                  <select id="serviceType" class="slds-select"></select>
+                </div>
+
+              </div>
+
+              <div class="slds-form-element is-required" title="Please Enter Rubrik Email address(example@Rubrik.com)">
+                <label class="slds-form-element__label">
+                  Additional Interested Parties
+                </label>
+                <div class="slds-form-element__control">
+                  <input class="slds-input" type="email" multiple="multiple" maxlength="255" placeholder="example1@Rubrik.com,example2@Rubrik.com"
+                    id="additional-interested-parties-emails" />
+                </div>
+              </div>
+
+              <div class="slds-form-element is-required" title="Enter a Message for Vendor">
+                <label class="slds-form-element__label">
+                  Special Instruction
+                </label>
+                <div class="slds-form-element__control">
+                  <input class="slds-input" type="text" multiple="multiple" maxlength="255" placeholder="Enter Message For Vendor here" id="vendor-message"
+                  />
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </section>
+        <section id="smart-hands-section" class="smartHand-information" style="display: none">
+          <h3 class="slds-section-title--divider slds-text-align--left">
+            SMART HANDS INFORMATION
+          </h3>
+
+          <div class="slds-grid slds-wrap slds-gutters">
+            <div class="slds-col slds-size_6-of-12">
+              <div class="slds-form-element">
+                <div class="slds-form-element__control">
+                  <div class="slds-checkbox">
+                    <input type="checkbox" disabled="disabled" name="options" id="entitled-for-smart-hands-service" />
+                    <label class="slds-checkbox__label" for="entitled-for-smart-hands-service">
+                      <span class="slds-checkbox_faux"></span>
+                      <span class="slds-form-element__label">Entitled for Smart Hands Service</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="slds-col slds-size_6-of-12">
+              <div class="slds-form-element">
+                <div class="slds-form-element__control">
+                  <div class="slds-checkbox">
+                    <input type="checkbox" name="options" id="send-smart-hand-service" />
+                    <label class="slds-checkbox__label" for="send-smart-hand-service">
+                      <span class="slds-checkbox_faux"></span>
+                      <span class="slds-form-element__label">Send Smart Hand Service?</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="margin:0.8rem;">
+            Note: Entitled for Smart Hand Service checkbox is auto checked for enterprise customers and customer with LTV 1 million or
+            above.
+            <br/>
+          </div>
+          <div id="send-smart-hand-service-section" class="slds-grid slds-wrap slds-gutters smartHand-Services" style="display: none;">
+            <div class="slds-col slds-size_6-of-12">
+              <div class="slds-form-element">
+                <label class="slds-form-element__label">
+                  <span>Date of Smart Hands Arrival</span>
+                  <div class="slds-is-relative slds-tooltip-block">
+                    <div class="slds-form-element">
+                      <div class="slds-form-element__icon slds-align-middle">
+                        <a class="slds-button slds-button_icon
+                              slds-button slds-button_icon
+                              slds-info-button" aria-describedby="help" title="Help" href="javascript:void(0);">
+                          <i class="fa fa-info-circle"></i>
+                        </a>
+                      </div>
+                    </div>
+                    <div class="slds-popover slds-popover_tooltip
+                          slds-nubbin_bottom-left
+                          slds-fall-into-ground" role="tooltip" id="help">
+                      <div class="slds-popover__body">
+                        Date of when the Tech should arrive (if the date is blank, this will be replaced with the level of service below)
+                      </div>
+                    </div>
+                  </div>
+                </label>
+                <!-- <label class="slds-form-element__label">
+                  Date of Smart Hands Arrival</label> -->
+                <div class="slds-form-element__control">
+                  <input type="text" class="slds-input datepicker" />
+                </div>
+              </div>
+            </div>
+            <div class="slds-col slds-size_6-of-12">
+
+              <div class="slds-form-element is-required">
+                <label class="slds-form-element__label" for="smartHandsTime">
+                  <abbr class="slds-required colorclass colorclass" title="required" /> Time of Smart Hands Arrival
+                </label>
+
+                <div class="slds-form-element__control">
+                  <select id="smartHandsTime" class="slds-select"></select>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        </section>
+      </apex:form>
+      <div class="slds-text-align_center btn-block">
+        <button id="rma-cancel" class="slds-button slds-button--neutral">Cancel</button>
+        <button id="rma-save" disabled="disabled" class="slds-button slds-button--brand">Save</button>
+      </div>
+    </div>
+
+    <!--modal starts from here-->
+    <div class="modal-wrapper">
+      <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1"
+        class="slds-modal" id="search-component-modal">
+        <div class="slds-modal__container">
+          <header class="slds-modal__header">
+            <button class="
+                    slds-button slds-button_icon
+                    slds-modal__close
+                    slds-button_icon-inverse
+                  " id="searchModalClose" title="Close">
+              <svg aria-hidden="true" class="slds-icon icon-text-email slds-icon--small">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.SLDS0121, 'assets/icons/utility-sprite/svg/symbols.svg#close')}"></use>
+              </svg>
+            </button>
+            <h2 id="search-modal-heading" class="slds-text-heading_medium slds-hyphenate">
+              Modal Heading
+            </h2>
+          </header>
+          <div class="slds-modal__content slds-p-around_medium">
+            <div class="table-wrapper">
+              <div id="search-modal-filter-block" class="filter-block">
+
+                <div class="slds-form-element">
+                  <div id="allowed-quantity-info" class="slds-form-element">
+                    <strong id="selected-component-type-for-showing-quantity" class="slds-form-element__label"></strong>
+                    <span id="allowed-component-quantity"></span>
+                  </div>
+                  <div class="slds-form-element">
+                    <label class="slds-form-element__label">Selection</label>
+                    <div class="slds-form-element__control">
+                      <div class="slds-select_container">
+                        <select id="search-modal-filter-select-list" class="slds-select selection">
+                          <option value="Cluster">Cluster</option>
+                          <option value="Node">Node</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="slds-form-element">
+                  <label id="search-modal-filter-label" class="slds-form-element__label"> Cluster UUID</label>
+                  <div class="slds-form-element__control">
+                    <input type="text" size="40" class="slds-input" />
+                  </div>
+                </div>
+
+                <div class="slds-form-element">
+                  <button id="search-modal-filter-btn" class="slds-button slds-button_brand">Filter</button>
+                </div>
+              </div>
+              <table id="searchDataTable" class="slds-table slds-table_cell-buffer slds-table_bordered">
+                <thead>
+                  <tr class="slds-hint-parent">
+                    <th width="10%" class="no-sort">&nbsp;</th>
+                    <th width="20%">Appliance</th>
+                    <th width="20%">Component Serial</th>
+                    <th width="30%" class="no-sort">Failure Reason</th>
+                    <th width="20%">&nbsp;</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+
+          <footer class="slds-modal__footer">
+            <div id="search-modal-footer-toast" style="display:none">
+              <div class="slds-notify_container slds-is-absolute">
+                <div class="slds-notify slds-notify_toast slds-theme_error" role="status">
+                  <span class="slds-assistive-text">error</span>
+                  <span class=" slds-icon_container slds-icon-utility-error slds-m-right_small slds-no-flex slds-align-top " title="toast">
+                    <svg class="slds-icon slds-icon_small" aria-hidden="true">
+                      <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/utility-sprite/svg/symbols.svg#error')}"></use>
+                    </svg>
+                  </span>
+                  <div class="slds-notify__content">
+                    <h2 id="search-modal-footer-toast-text" class="slds-text-heading_small">
+                      Error Toast
+                    </h2>
+                  </div>
+                  <div class="slds-notify__close">
+                    <button id="search-modal-footer-toast-close" class="slds-button slds-button_icon slds-button_icon-inverse" title="Close">
+                      <svg class="slds-button__icon slds-button__icon_large" aria-hidden="true">
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/resource/1474545310000/SLDS0121/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                      </svg>
+                      <span class="slds-assistive-text">Close</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Need styling -->
+            <div class="slds-clearfix">
+              <div disabled="true" class="slds-float_left">
+                <button id="search-modal-prev-1000" class="slds-button slds-button_outline-brand">
+                  Previous 1000
+                </button>
+                <button id="search-modal-next-1000" class="slds-button slds-button_outline-brand">
+                  Next 1000
+                </button>
+              </div>
+              <div class="slds-float_right">
+                <button id="search-modal-cancel" class="slds-button slds-button_outline-brand">
+                  Cancel
+                </button>
+                <button id="search-modal-save" class="slds-button slds-button_brand">
+                  Save
+                </button>
+              </div>
+            </div>
+          </footer>
+        </div>
+      </section>
+      <div class="slds-backdrop" id="backdrop"></div>
+    </div>
+
+    <!--selected components view all modal starts from here-->
+    <div class="modal-wrapper">
+      <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1"
+        class="slds-modal" id="viewall-modal">
+        <div class="slds-modal__container">
+          <header class="slds-modal__header">
+            <button class="  slds-button slds-button_icon  slds-modal__close  slds-button_icon-inverse" title="Close" onclick="closeViewAllModal();">
+              <svg aria-hidden="true" class="slds-icon icon-text-email slds-icon--small">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.SLDS0121, 'assets/icons/utility-sprite/svg/symbols.svg#close')}"></use>
+              </svg>
+            </button>
+            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">
+              Selected Components
+            </h2>
+          </header>
+          <div class="slds-modal__content slds-p-around_medium">
+            <div class="table-wrapper selected-components">
+              <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                <thead>
+                  <tr class="slds-hint-parent">
+                    <th width="20%">Type</th>
+                    <th width="30%">Component Serial</th>
+                    <th width="25%">Failure Reason</th>
+                    <th class="slds-text-align_center" width="20%">&nbsp;</th>
+                    <th class="slds-text-align_center" width="15%">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="selected-components-modal-table-body">
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <footer class="slds-modal__footer">
+            <button class="slds-button slds-button_outline-brand" onclick="closeViewAllModal()">
+              Cancel
+            </button>
+            <button class="slds-button slds-button_brand" onclick="saveAndCloseViewAllModal()">
+              Save
+            </button>
+          </footer>
+        </div>
+      </section>
+      <div class="slds-backdrop" id="view-backdrop"></div>
+    </div>
+
+    <div class="modal-wrapper">
+      <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1"
+        class="slds-modal" id="smart-hands-comment-modal">
+        <div class="slds-modal__container">
+          <header class="slds-modal__header">
+            <button id="smart-hands-modal-close" class="
+                    slds-button slds-button_icon
+                    slds-modal__close
+                    slds-button_icon-inverse
+                  " title="Close">
+              <svg aria-hidden="true" class="slds-icon icon-text-email slds-icon--small">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.SLDS0121, 'assets/icons/utility-sprite/svg/symbols.svg#close')}"></use>
+              </svg>
+            </button>
+            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">
+              Justification for RMA Exception Approval
+            </h2>
+          </header>
+          <div class="slds-modal__content slds-p-around_medium">
+            <div id="smart-hands-comment-modal-reason">
+
+            </div>
+            <div class="slds-form-element__control">
+              <input class="slds-input" type="text" name="smart-hands-comment-reason" id="smart-hands-comment-reason" />
+            </div>
+
+          </div>
+          <footer class="slds-modal__footer">
+            <button id="smart-hands-modal-cancel" class="slds-button slds-button_brand">
+              Save
+            </button>
+
+          </footer>
+        </div>
+      </section>
+      <div class="slds-backdrop" id="view-backdrop"></div>
+    </div>
+
+    <!--success toast starts here-->
+    <div id="rma-save-success" style="display:none;">
+      <div class="slds-notify_container slds-is-fixed">
+        <div class="slds-notify slds-notify_toast slds-theme_success" role="status">
+          <span class="slds-assistive-text">success</span>
+          <span class="slds-icon_container slds-icon-utility-success slds-m-right_small slds-no-flex slds-align-top" title="Description of icon when needed">
+            <svg class="slds-icon slds-icon_small" aria-hidden="true">
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/utility-sprite/svg/symbols.svg#success')}"></use>
+            </svg>
+          </span>
+          <div class="slds-notify__content">
+            <h2 class="slds-text-heading_small ">RMA Order Saved successfully
+              <button id="save-success-to-case" class="slds-button slds-button_outline">
+                Back to Case
+              </button>&nbsp;&nbsp;
+              <button id="save-success-to-rma" class="slds-button slds-button_outline">
+                Redirect to RMA Order
+              </button>
+            </h2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <svg id="error-icon" style="display: none;" class="slds-icon slds-input__icon slds-input__icon_left" aria-hidden="true">
+    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/resource/1474545310000/SLDS0121/assets/icons/utility-sprite/svg/symbols.svg#error"></use>
+  </svg>
+  <apex:includeScript value="{!URLFOR($Resource.rubrik_Assets, '/js/rmaFormOrderScript.js')}" />
+  <apex:includeScript value="/support/console/48.0/integration.js" />
+  <script>
+    function getAccountId(data){  
+        const urlParams = new URLSearchParams(location.search);
+        const caseId = urlParams.get("id");
+        const accountId = getElementByIdCS('RMAForm:shippingInformation:account_lookup_lkid').value;
+        const csNumber = "{!newcase.CaseNumber}";
+        location.href = `/apex/RMAFormOrder?id=${caseId}&accId=${accountId}&csNum=${csNumber}`;
+    }
+    const sessionId = "{!$Api.Session_ID}";
+
+    const j$ = jQuery.noConflict();
+    j$('.lookupInput a').css({ "border": "none", "width": "50px","padding": "1px","position": "absolute","margin-left": "-6%", "background": "transparent","box-shadow": "none"});         
+    j$('.lookupInput').css({ "width":"100%"});
+  
+    /**js for other option for failure reason**/
+    j$(".failure-select").change(function () {
+      var tableRow = j$(this).closest("tr");
+      if (j$(this).val() == "Other") {
+        console.log("in if", tableRow);
+        j$(tableRow).find(".other-input").removeClass("slds-hide");
+      } else {
+        j$(tableRow).find(".other-input").addClass("slds-hide");
+      }
+    });
+
+
+    j$(".datepicker").datepicker({
+      beforeShowDay: j$.datepicker.noWeekends,
+      dateFormat: "mm/dd/yy",
+      minDate: 1,
+    });
+    j$(".slds-info-button").hover(
+      function (e) {
+        j$(this)
+          .closest("div.slds-tooltip-block")
+          .find(".slds-popover_tooltip")
+          .addClass("slds-rise-from-ground")
+          .removeClass("slds-fall-into-ground");
+      },
+      function (e) {
+        j$(this)
+          .closest("div.slds-tooltip-block")
+          .find(".slds-popover_tooltip")
+          .removeClass("slds-rise-from-ground")
+          .addClass("slds-fall-into-ground");
+      }
+    );
+
+    const domElements = new Object();
+
+    // domElements["smartHandsTime"] = document.getElementById(
+    //   "{! $Component.shippingInformation.smartHandsTime }"
+    // );
+
+    const callServer = (params, callMethod) => {
+      console.log(
+        `%cCall Server: ${JSON.stringify({
+          params,
+          TYPE: callMethod,
+        })}`,
+        cssStyle0
+      );
+      return new Promise((resolve, reject) => {
+        if(callMethod =='SAVE_RMA' || callMethod =='GET_VALIDITY_AND_NRD_POLICY'){
+            disableElem(domElements.saveRma);  
+        }
+        Visualforce.remoting.Manager.invokeAction(
+          "{!$RemoteAction.RMAFormOrderController.singleSourceOfTruth}",
+          JSON.stringify({
+            params,
+            TYPE: callMethod,
+          }),
+          (result, event) => {
+            try {
+              if(callMethod =='SAVE_RMA' || callMethod =='GET_VALIDITY_AND_NRD_POLICY'  ){
+                 enableElem(domElements.saveRma);  
+              }
+              if (event.status && event.type === "rpc") {
+                let a = "quot";
+                result = JSON.parse(result.replaceAll(`&${a};`, `\"`));
+                varResult = result;
+                console.log(
+                  `%cCall Server Result for ${callMethod}`,
+                  cssStyleBgGreenFgWhite
+                );
+                resolve(result);
+              } else if (event.type === "exception") {
+                console.error(`Exception: ${event.message}`);
+                showHeaderErrorToast(event.message);
+              } else {
+                console.error(`Error: ${event.message}`);
+                showHeaderErrorToast(event.message);
+              }
+            } catch {
+              showHeaderErrorToast(
+                "Some thing unexpected happened, try refreshing or contact Admin"
+              );
+            }
+          }
+        );
+      });
+    };
+
+    document.body.dispatchEvent(
+      new CustomEvent("loadedDomMappings", {
+        detail: {
+          isLoaded: true,
+        },
+        bubbles: true
+      })
+    );
+  </script>
+</apex:page>

@@ -1,0 +1,13 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" controller="PSTimeEntryAppController" access="global" >
+    <aura:attribute name="today" type="Date" />
+    <aura:attribute name="currentUserName" type="String"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <div class="slds-grid" style="background-color:black">
+        <h1 style="color:white" id="header43" class="slds-m-center_small slds-align--absolute-center slds-m-vertical--medium">
+            Hello {!v.currentUserName}, welcome to the PS Time Entry Wizard. Today is &nbsp;  
+            <lightning:formattedDateTime value="{!v.today}"/>
+        </h1>
+    </div>
+</aura:component>

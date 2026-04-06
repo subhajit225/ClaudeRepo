@@ -1,0 +1,22 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="pstask" type="PS_Task__c"/>
+    <aura:attribute name="ClusterAccountId" type="String"/>
+    <force:recordData recordId="{!v.recordId}"
+                      fields="Contact__c,Task_Status__c,Contact__r.Name,Special_Handling_Instructions__c,Order_Product__c,Task_Type__c"
+                      targetFields="{!v.pstask}"
+                      /> 
+    <aura:handler name="change" value="{!v.pstask.Task_Status__c}" action="{!c.onchangevalue}"/>
+     
+    <aura:if isTrue="{!and(v.pstask.Special_Handling_Instructions__c == null,v.pstask.Order_Product__c == 'RBK-DATA-MIGRATION')}">
+        <aura:if isTrue="{!v.pstask.Task_Status__c =='Open'}">
+            <lightning:button variant="brand" label="Provide Special Instruction" title="Provide Special Instruction" onclick="{!c.onchangevalue}" />
+        </aura:if>
+		<aura:set attribute="else">
+            <div style="text-align:center;">
+                <lightning:button variant="brand" label="Update" title="Update" onclick="{!c.onUpdateInstructions}" />
+            </div>
+            <br/>
+            Special handling :  <lightning:formattedRichText value="{!v.pstask.Special_Handling_Instructions__c}"/><br/>
+        </aura:set>
+    </aura:if>
+</aura:component>

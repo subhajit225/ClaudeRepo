@@ -1,0 +1,31 @@
+<template>
+<!-- Row 1 -->
+<div class="slds-p-around_x-large custom-learning-track-card">
+<lightning-layout multiple-rows >
+	<lightning-layout-item size="12" small-device-size="8" medium-device-size="8" large-device-size="8" padding="horizontal-small">
+		<div class="heading-36 slds-m-bottom_large">Learning Courses from Rubrik Partner Academy</div>
+	</lightning-layout-item>
+	<lightning-layout-item size="12" small-device-size="4" medium-device-size="4" large-device-size="4" padding="horizontal-small">
+		<div class="slds-p-bottom_x-large slds-float_right slds-p-top_medium">
+            <lightning-button variant="brand" label="Learn More" title="Learn More" onclick={handleClick} class="slds-p-top_medium"></lightning-button>
+        </div>
+	</lightning-layout-item>
+</lightning-layout>
+<!-- Row 2 -->
+<lightning-layout multiple-rows horizontal-align="spread" class="container">
+    <template for:each={fetchedCourseDetails} for:item="detail">
+       <lightning-layout-item flexibility="auto" padding="horizontal-small" key={detail.certificateLabel}>
+        <a href={detail.certificateLink} target={detail.target}>
+        <div class="slds-p-around_x-large courseBox">
+            <div class={detail.cssClass}>
+                <lightning-icon icon-name={detail.iconName} alternative-text="Preview" title="Preview" class="tickicon"></lightning-icon>
+            </div>
+            <div class=" slds-align_absolute-center slds-text-align--center course">{detail.certificateLabel}</div>
+            <div class=" slds-align_absolute-center slds-text-align--center category">{detail.certificateCategory}</div>
+        </div>
+        </a>
+    </lightning-layout-item>
+    </template>
+</lightning-layout>
+</div>
+</template>

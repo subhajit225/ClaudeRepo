@@ -1,0 +1,205 @@
+<apex:page controller="OpportunityAddDealRegController" tabStyle="Opportunity" lightningStylesheets="true">
+    <apex:slds rendered="{!$User.UITheme != 'Theme3'}"/>
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+    </script>
+ 
+    <script>
+    function convertLead(){
+        //alert(3);
+        var yourArray = []; 
+        $("input:checkbox[class=apiClassStyle]:checked").each(function(){
+            yourArray.push($(this).attr("leadId"));
+            
+        });
+        if(yourArray.length == 0) {
+            alert('Please select checkbox to convert lead');
+            return false;
+        }
+        else {
+            var jsonAPI = JSON.stringify(yourArray);
+            $('[id$=jsonHidden]').val(jsonAPI);
+            console.log(yourArray);   
+            console.log(JSON.stringify(yourArray));
+            //alert(yourArray);
+            showSpinner();
+            return true;
+        }
+        
+    }
+    
+    function onCheck(obj){
+        if(obj.checked){
+            $('.apiClassStyle:checkbox:checked').each(function(){
+                $(this).prop('checked', false); 
+            });
+            $(obj).prop('checked', true); 
+        }
+    }
+    function showSpinner(){
+        document.getElementById('opaque').style.display='block';
+        var popUp = document.getElementById('pageStatus');
+        popUp.style.display = 'block';
+         
+    }
+    </script>
+    <style>
+        .search-text {
+        border: 1px solid #BAA994;
+        width: 27vw;
+        height: 38px;
+        box-shadow: inset -2px 1px 1px #D5D5D5, 1px 1px #EDE7DF;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+        padding-left: 36px;
+        padding-right: 36px;
+        font-size: 16px;
+        background: #fff url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAaBAMAAABWeiG6AAAAA3NCSVQICAjb4U/gAAAAD1BMVEXe3t7////m5ub39/fv7+9d3/qMAAAACXBIWXMAAAsSAAALEgHS3X78AAAAFnRFWHRDcmVhdGlvbiBUaW1lADAxLzExLzEyymPybAAAABh0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzT7MfTgAAAJJJREFUGJVVkOsRwyAMgxXCAKFmAHpZoLlkgKTdf6cK23lYP4DvBLINShD68kX63biDep/4gmpxbMjr1jAaViTuFTCccPTDRzcwSEMqBsWWvYahZTBxNBwiRvd6a7inkOx1J69b0W/L2RV7notwKnN5zZR93uZ8GAp5FrWtf1n6SLRx/ZraN9JOTxR+3wPLVgJSfwffF4JRS32lAAAAAElFTkSuQmCC) no-repeat 5px;
+        }
+        
+        .search-button {
+        margin-left: -1px !important;
+        border: 1px solid #7DA07E !important;
+        border-radius: 0 5px 5px 0 !important;
+        padding-right: 13px !important;
+        padding-left: 13px !important;
+        height: 40px !important;
+        background-color: #BDD3BE !important;
+        background-image: -ms-linear-gradient(top, #BDD3BE 0%, #93B894 80%) !important;
+        background-image: -moz-linear-gradient(top, #BDD3BE 0%, #93B894 80%) !important;
+        background-image: -webkit-linear-gradient(top, #BDD3BE 0%, #93B894 80%) !important;
+        background-image: linear-gradient(top, #BDD3BE 0%, #93B894 80%) !important;
+        box-shadow: inset 0 1px 1px #DCE7DC, 0 1px #EDE7DF !important;
+        color: #557B56 !important;
+        font-weight: bold !important;
+        font-size: 16px !important;
+        text-shadow: 0 1px #DCE7DC !important;
+        }
+        
+        .search-div {
+        margin-top: 20px;
+        margin-bottom: 20px !important;
+        display: inline-block;
+        margin: 0;
+        padding: 9px;
+        border: 1px solid #BAA994;
+        border-radius: 5px;
+        background-color: #EDE5DB;
+        background-image: -ms-linear-gradient(top, #EDE5DB 0%, #DCD0C2 80%);
+        background-image: -moz-linear-gradient(top, #EDE5DB 0%, #DCD0C2 80%);
+        background-image: -webkit-linear-gradient(top, #EDE5DB 0%, #DCD0C2 80%);
+        background-image: linear-gradient(top, #EDE5DB 0%, #DCD0C2 8a0%);
+        box-shadow: inset 0 1px #F6F2EC, 0 3px 2px #E5E5E5;
+        }
+        .alert-warning {
+        color: #8a6d3b;
+        background-color: #fcf8e3;
+        border-color: #faebcc;
+        }
+        .alert {
+        padding: 15px !important;
+        margin-bottom: 20px !important;
+        border: 1px solid transparent !important;
+        border-radius: 4px !important;
+        }
+    </style>    
+      <style>
+    #pageStatus{
+        display: none;
+        width:200px;
+        height: 65px;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        text-align:center;
+        padding:10px;
+        font:normal 16px Tahoma, Geneva, sans-serif;
+        margin-left: -100px;
+        margin-top: -100px;
+        z-index:2;
+        overflow: auto;
+        border:1px solid #CCC;
+        background-color:white;
+        z-index:100;
+        padding:5px;
+        line-height:20px;
+     }
+     #opaque {
+         position: fixed;
+         top: 0px;
+         left: 0px;
+         width: 100%;
+         height: 100%;
+         z-index: 1;
+         display: none;
+         background-color: gray;
+         filter: alpha(opacity=30);
+         opacity: 0.3;
+         -moz-opacity:0.3;
+         -khtml-opacity:0.3
+     }
+     * html #opaque {
+         position: absolute;
+     }
+  </style>
+
+    <apex:form >
+        <apex:inputHidden id="jsonHidden" value="{!jsonHidden}"/>
+        <apex:pageMessages id="showmsg"></apex:pageMessages>
+       
+        <div id="opaque"/>
+        <div id="pageStatus" style="display:none">
+            <p align="center" style='{font-family:"Arial", Helvetica, sans-serif; font-size:20px;}'>
+                <apex:image value="{!$Resource.spinner}" width="25" height="25"/>
+                <apex:outputLabel value="Loading..."/>
+            </p>
+        </div>
+        <apex:outputPanel rendered="{!showWarning == true}" style="margin-bottom:10px !important"> 
+            <div class="alert alert-warning">
+                <strong>Warning!</strong>  Page can only be accessible by "Add Deal reg" Button on the opportunity page layout.
+            </div>
+            
+            <br/>
+        </apex:outputPanel>
+        <apex:outputPanel rendered="{!originalId != null}" style="margin-bottom:10px !important"> 
+            <div class="search-div">
+                <apex:inputText value="{!searchText}" label="Opportunity Name" html-placeholder="Search By First Or Last Name Or Deal Reg No." styleclass="search-text"/> 
+                <apex:commandButton action="{!Search}" value="Search" styleClass="search-button" />
+                <apex:commandButton action="{!cancel}" value="Cancel" styleClass="search-button" />
+            </div>
+        </apex:outputPanel>
+        <apex:pageBlock title="Select lead to Convert. " rendered="{!sizeOfList != 0}" >
+             <apex:pageBlockButtons >
+                <apex:commandButton value="<<" action="{!beginning}" disabled="{!DisablePrevious}" />
+                <apex:commandButton value="<" action="{!previous}" disabled="{!DisablePrevious}" />
+                <apex:commandButton value=">" action="{!next}" disabled="{!DisableNext}" />
+                <apex:commandButton value=">>" action="{!last}" disabled="{!DisableNext}" />
+            </apex:pageBlockButtons>
+            <apex:pageBlockTable value="{!LeadsToShow}" var="con" >
+                <apex:column headerValue="Action">
+                    <apex:inputCheckbox styleclass="apiClassStyle" html-leadId="{!con}" onclick="onCheck(this)"/>
+                </apex:column>
+                <apex:column headerValue="Name">
+                <apex:outputLink value="/{!con.Id}" target="_blank">
+                        {!con.name}
+                    </apex:outputLink>
+                    </apex:column>
+                <apex:column value="{!con.Deal_Reg_Number__c}" headerValue="Primary Deal Registration"/>    
+                <apex:column value="{!con.Company}" />
+                <apex:column value="{!con.Partner_Lookup__r.Name}" headerValue="Partner"/>
+                <apex:column value="{!con.Partner_Rep__c}" />
+                <apex:column headerValue="Email">
+                    <apex:outputField value="{!con.Email}" />
+                </apex:column>
+            </apex:pageBlockTable>
+            
+                <div class="row" style="margin-bottom:11px;margin-top:11px;">   
+                    <center>
+                        <apex:commandButton value="Convert Lead" action="{!convertLead}" onclick="return convertLead()" status="pageStatus" styleClass="btn btn-primary" />
+                        <apex:commandButton value="Cancel" action="{!cancel}" />
+                    </center>
+                </div>
+            
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

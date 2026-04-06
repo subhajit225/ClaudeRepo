@@ -1,0 +1,59 @@
+<aura:component controller="serviceContractList" implements="force:lightningQuickActionWithoutHeader,force:hasRecordId">
+    
+    <aura:attribute name="mycolumn" type="Object[]"/>
+    <aura:attribute type="ServiceContract[]" name="contrList"/>
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="quoteId" type="String" />
+    <aura:attribute name="quoteName" type="String" default="Quote" /> <!--MS CPQ22-6072-->
+    <aura:attribute name="accountRecord" type="Object"/>
+    <aura:attribute name="opportunityRecord" type="Object"/>
+    <aura:attribute name="recordLoadError" type="String"/>
+    <aura:attribute name="selectedRows" type="List"/>
+    <aura:attribute name="message" type="String"/>
+    <aura:attribute name="showtable" type="Boolean" />
+    <aura:attribute name="showcomp" type="Boolean" default="false"   />
+    <aura:attribute name="visible" type="Boolean" default="false"   /><!--SOX CPQ22-5028-->
+    <aura:attribute name="showmsg" type="Boolean" />
+    <aura:attribute name="HasQuoteAccess" type="Boolean" /> <!--SOX-->
+    <aura:attribute name="isLoading" type="Boolean" default="false" /> <!--FY25SR-1745-->
+    <aura:attribute name="showSMSPage" type="Boolean" default="true"/>
+    <!--<aura:handler name="init" value="{!this}" action="{!c.fetchcontract}"/>-->
+   <aura:handler name="init" value="{!this}" action="{!c.handleRecordUpdated1}"/>
+ 
+    <aura:if isTrue="{!v.visible}"><!--SOX CPQ22-5028-->
+    <force:recordData aura:id="recordLoader"
+    recordId="{!v.recordId}"
+    fields="StageName,AccountId,Billing_Country__c,Partner_Lookup__c,Distributor_Lookup__c,Opportunity_Sub_Type__c,Opportunity_Type__c,Pricebook2Id,ContactId,OwnerId,SBQQ__QuotePricebookId__c,Sell_to_Partner__c,Sell_to_Partner__r.Name"
+    targetFields="{!v.opportunityRecord}"
+    targetError="{!v.recordLoadError}"
+    recordUpdated="{!c.handleRecordUpdated1}"
+    /> 
+    </aura:if><!--SOX CPQ22-5028-->
+    
+	<aura:if isTrue="{!v.showmsg}">
+    <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+      <span class="slds-assistive-text">error</span>
+      <span class="slds-icon_container slds-icon-utility-error slds-m-right_x-small" title="Description of icon when needed">
+
+      </span>
+      <h2>
+            <p><span class="bolded"><label>"{!v.message}"</label> </span></p>
+        
+      </h2>
+  </div>
+	</aura:if>
+    <div>
+    	 <aura:if isTrue="{!v.showcomp}">
+             <lightning:inputField aura:id="opportunityStage" fieldName="StageName" class="slds-hide" />
+
+            <c:Create_Quote_Ltng recordId= "{!v.recordId}" showCmp = "{!v.showcomp}"/>
+                 
+         </aura:if>
+    </div>
+    <!--FY25SR-1745-->
+    <aura:if isTrue="{!v.isLoading}">
+        <lightning:spinner alternativeText="Loading.." variant="brand" />
+    </aura:if>
+    <!--FY25SR-1745-->
+
+</aura:component>

@@ -1,0 +1,115 @@
+<template>
+    <lightning-card>
+           <h3 slot="title">
+               <lightning-icon icon-name="standard:opportunity_splits" alternative-text="opportunity splits" size="small"></lightning-icon>
+               &nbsp;{primaryopp.Name}
+           </h3>
+           <div class="slds-align_absolute-left slds-p-left_small slds-text-color_default slds-p-top_medium">
+                   Account Name : {primaryopp.Account.Name}
+           </div>
+           <div class="slds-align_absolute-left slds-p-left_small slds-text-color_default slds-p-top_medium">
+                   Opportunity Total Value : {optyTotalValueUI}
+           </div>
+           <div class="slds-align_absolute-left slds-p-left_small slds-text-color_default slds-p-top_medium">
+                   Expansion Opportunity Total Value : {newoptyTotalValueUI} 
+           </div>
+            <div class="slds-align_absolute-left slds-p-left_small slds-text-color_default slds-p-top_small slds-p-bottom_large">
+                   Expansion Total ACV Value : {optyTotalACVValueUI}
+           </div>
+           <template if:true={showLoader}>
+               <lightning-spinner alternative-text="Loading" size="medium" class="spinnerClass"></lightning-spinner>
+           </template>    
+           <template for:each={itemList} for:item="item" for:index="index">
+                   <lightning-layout key={item.id} class="layoutCSS">
+                       <!--<template if:false={isglobal}>
+                           <lightning-layout-item size="12" small-device-size="2" medium-device-size="2" large-device-size="2"
+                           padding="around-small"></lightning-layout-item>
+                       </template>-->
+                       <lightning-layout-item size="12" small-device-size="2" medium-device-size="2" large-device-size="2"
+                           padding="around-small">
+                             <template if:true={item.firstItem}>
+                               <div class="slds-p-top_xx-small">
+                                   <lightning-input value ={oppOwnerName} type="text" label="Team Member" read-only></lightning-input>
+                               </div>
+                           </template>
+                           <template if:false={item.firstItem}>
+                               <div class="slds-p-top_x-small"><span style="color:red;" class="slds-p-top_small">*</span><label>Team Member</label></div>
+                               <c-custom-look-up-l-w-c default-record-id={item.userId} tableindex={index} value ={item.userId} name="Team Member" objectname="User" iconname="standard:user" placeholder="Search user..." onselected={handleUserChange}></c-custom-look-up-l-w-c>
+                           </template>
+                       </lightning-layout-item>
+                       <lightning-layout-item size="12" small-device-size="2" medium-device-size="2" large-device-size="2"
+                           padding="around-small">
+                          <lightning-input data-id={index} value ={item.splitperc} type="number" step="0.01" label="Booking Split (%)"  required onblur={handlePercChange}></lightning-input>
+                       </lightning-layout-item>
+                       <!-- commented for SAL25-668-->
+                       <!--<lightning-layout-item size="12" small-device-size="2" medium-device-size="2" large-device-size="2"
+                           padding="around-small">
+                          <lightning-input data-id={index} class="slds-p-top_medium" value ={item.cperc} type="number" step="0.01"  label="Commission/Credit Split(%)" style="white-space: nowrap;"  required onblur={handleCPercChange}></lightning-input>
+                       </lightning-layout-item>
+                       <template if:true={isglobal}>
+                            <lightning-layout-item size="12" small-device-size="2" medium-device-size="2" large-device-size="2"
+                                padding="around-small">
+                                <lightning-input data-id={index} class="slds-p-top_medium" value ={item.uplift} type="number" readonly label="Global Acct Uplift(%)" ></lightning-input>
+                            </lightning-layout-item>
+                       </template>-->
+                       <lightning-layout-item size="12" small-device-size="2" medium-device-size="2" large-device-size="2"
+                           padding="around-small">
+                           <lightning-input data-id={index} class="slds-p-top_medium" value ={item.splitamount} type="number" formatter="currency" label="Booking Split New/Expansion (TCV)"  read-only></lightning-input>
+                       </lightning-layout-item>
+                        <lightning-layout-item size="12" small-device-size="2" medium-device-size="2" large-device-size="2"
+                           padding="around-small">
+                           <lightning-input data-id={index} class="slds-p-top_medium" value ={item.splitACVamount} type="number" formatter="currency" label="Booking Split New/Expansion (ACV)"  read-only></lightning-input>
+                       </lightning-layout-item>
+                       <lightning-layout-item 
+                           padding="around-small" class="columnCSS">
+                           <div class="slds-p-top_medium">
+                               <template if:false={disableButtons}>
+                                   <lightning-icon icon-name="action:new" size="x-small" access-key={item.id} id={index}
+                                       alternative-text="Add Row"  title="Add Row" onclick={addRow}>
+                                   </lightning-icon>
+                                   <lightning-icon icon-name="action:delete" size="x-small" access-key={item.id} id={index}
+                                       alternative-text="Delete Row"  title="Delete Row" onclick={removeRow}>
+                                   </lightning-icon>
+                               </template>
+                           </div>
+                       </lightning-layout-item>
+                     
+                   </lightning-layout>
+           </template>
+           <lightning-layout class="layoutCSS">
+               <!--<template if:false={isglobal}>
+                    <lightning-layout-item size="12" small-device-size="2" medium-device-size="2" large-device-size="2"
+                    padding="around-small"></lightning-layout-item>
+               </template>-->
+               <lightning-layout-item size="12" small-device-size="2" medium-device-size="2" large-device-size="2"
+                   padding="around-small"><lightning-input value ="Totals" type="number" readonly ></lightning-input></lightning-layout-item>
+                <lightning-layout-item size="12" small-device-size="2" medium-device-size="2" large-device-size="2"
+                   padding="around-small"><lightning-input value ={totalSplit} type="number" readonly ></lightning-input></lightning-layout-item>   
+                <!--<lightning-layout-item size="12" small-device-size="2" medium-device-size="2" large-device-size="2"
+                   padding="around-small"> <lightning-input value ={totalCSplit} type="number" readonly ></lightning-input></lightning-layout-item>
+                <template if:true={isglobal}>
+                    <lightning-layout-item size="12" small-device-size="2" medium-device-size="2" large-device-size="2"
+                    padding="around-small"> <lightning-input value ={totalUplift} type="number" readonly ></lightning-input></lightning-layout-item> 
+                </template> --> 
+               <lightning-layout-item size="12" small-device-size="2" medium-device-size="2" large-device-size="2"
+                   padding="around-small">
+                   <div>
+                       <lightning-input value ={totalAmount} type="number" formatter="currency" label="Total Amount" read-only></lightning-input>
+                   </div>
+               </lightning-layout-item> 
+               <lightning-layout-item size="12" small-device-size="2" medium-device-size="2" large-device-size="2"
+                   padding="around-small">
+                   <div>
+                       <lightning-input value ={totalACVAmount} type="number" formatter="currency" label="Total Amount" read-only></lightning-input>
+                   </div>
+               </lightning-layout-item>  
+               <lightning-layout-item 
+                    padding="around-small" class="columnCSS"><div class="slds-p-top_medium"></div>
+                </lightning-layout-item>      
+           </lightning-layout>
+            <div slot="footer">
+               <lightning-button variant="brand" onclick={handleSubmit} name="submit" disabled={disableButtons} label="Submit"></lightning-button>
+               <lightning-button variant="neutral" onclick={handleCancel} name="cancel" label="Cancel">  </lightning-button>
+            </div>
+       </lightning-card>
+   </template>

@@ -1,0 +1,135 @@
+<!--
+* Visualforce Component Name :- CustomerTemperatureComponent
+* Controller :- CustomerTemperatureController
+* Author :- Shiva Sharma
+* Created Date :- 27-04-2018
+* Description : This Page is being used i
+* 
+*************Change Logs***************************************************************************
+* 
+* Modified By          Date        Description 
+* 
+
+*************Change Logs Ends**********************************************************************
+-->
+<apex:component >
+    
+    <apex:attribute name="chartName" description="This will contain Case Subject." type="String"/>
+    <apex:attribute name="ChartData" description="This will contain Case Subject." type="String"/>
+    <apex:attribute name="mobileView" description="This will contain Case Subject." type="String"/>
+    <apex:outputPanel rendered="{!chartName != 'gauage'}">
+        <div id="divpie" style="height:250px;width:250px">
+            <canvas id="{!'donot'+chartName+mobileView}" width="150px" height="150px"></canvas>
+         </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"/>
+        <apex:includeScript value="{!$Resource.chartbundle}"/>
+            
+            
+        <script>
+        var color=["#1abc9c","#2ecc71","#3498db","#9b59b6","#34495e","#f1c40f","#e67e22","#e74c3c","#ecf0f1","#1abc9c","#2ecc71","#3498db","#9b59b6","#34495e","#f1c40f","#e67e22","#e74c3c","#ecf0f1"];
+        
+        var colors=new Array();
+        
+        
+        for (i = 0; i < color.length; i++) {
+            colors.push(color[i]);
+        }
+        var data = [];
+        var bgColor = [];
+        var labels = [];
+        var chartResult = JSON.parse( '{!ChartData}') ;
+        if('{!chartName}' == 'doughnut'){
+            for (var key in chartResult) {
+                data.push(chartResult[key]);  
+            }
+            bgColor.push("#D7C575");
+            bgColor.push("#67CC33");
+            bgColor.push("#FFB40E");
+            bgColor.push("#e74c3c");
+            
+            
+            for (var key in data) {
+                labels.push(data[key]+'%');  
+            }
+            labels.reverse();
+            data.reverse();
+        }else{
+            data.push(chartResult.result.toFixed(1));
+            labels.push(chartResult.result+'%');
+            var unhappy = (100 - chartResult.result).toFixed(1);
+            data.push(unhappy);
+            labels.push(unhappy+'%');
+            bgColor.push("#2ecc71");
+            bgColor.push("#e74c3c");
+        }
+        var unhappy = (100 - chartResult.result).toFixed(2);
+        var arr1=new Array();
+        arr1.push('happiness factor');
+        var chartNm = 'donot'+'{!chartName}'+'{!mobileView}';
+        var ctx2 =$('#'+chartNm);
+        var myPie = new Chart(ctx2,{
+            type: '{!chartName}',
+            data: {
+                labels: labels,
+                
+                datasets: [{
+                    label: arr1,
+                    backgroundColor:bgColor, 
+                    data: data,
+                    showTooltips: true
+                }]
+            },
+            options: {
+                legend: {
+                    position: 'bottom'
+                },
+                tooltips: {enabled: false},
+                hover: {mode: null}
+            }
+        });
+        </script>
+    </apex:outputPanel>
+    <apex:outputPanel rendered="{!chartName == 'gauage'}">
+        <apex:includeScript value="{!$Resource.gaugeJs}"/>    
+        <div id="divpie2">
+            <canvas id="{!chartName+mobileView}" ></canvas><br/>
+            
+        </div>
+        <span id="res" style="margin-left: 130px;font-size: 22px;color: #D7C575;"></span>
+        <script>
+        var chartResult = JSON.parse( '{!ChartData}') ;
+        document.getElementById('res').innerHTML = chartResult.result+"%";
+        var opts = {
+            currval : chartResult.result,
+            angle: 0, // The span of the gauge arc
+            lineWidth: 0.44, // The line thickness
+            radiusScale: 1, // Relative radius
+            pointer: {
+                length: 0.6, // // Relative to gauge radius
+                strokeWidth: 0.035, // The thickness
+                color: '#000000' // Fill color
+            },
+            fontSize : 33,
+            limitMax: false,     // If false, max value increases automatically if value > maxValue
+            limitMin: false,     // If true, the min value of the gauge will be fixed
+             // to see which ones work best for you
+            generateGradient: true,
+            highDpiSupport: true,  
+            staticZones: [
+                {strokeStyle: "#D7C575", min: 75, max: 100}, // Red from 100 to 130
+                {strokeStyle: "#67CC33", min: 50, max: 75}, // Yellow
+                {strokeStyle: "#FFB40E", min: 25, max: 50}, // Green
+                {strokeStyle: "#e74c3c", min: 0, max: 25}, // Yellow
+            ]// High resolution support
+            
+        };
+        var target = document.getElementById('{!chartName}'+'{!mobileView}'); // your canvas element
+        var gauge = new Gauge(target).setOptions(opts); // create sexy gauge!
+        gauge.maxValue = 100; // set max gauge value
+        gauge.setMinValue(0);  // Prefer setter over gauge.minValue = 0
+        gauge.animationSpeed = 32; // set animation speed (32 is default value)
+        gauge.set(chartResult.result); // set actual value
+        </script>
+    </apex:outputPanel>
+    
+</apex:component>

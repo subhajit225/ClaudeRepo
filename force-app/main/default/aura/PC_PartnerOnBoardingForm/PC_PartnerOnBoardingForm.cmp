@@ -1,0 +1,534 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" controller="PC_PartnerOnboardingRequestContoller">
+    <aura:attribute name="newpartnerOnboard" type="Object"/>
+    <aura:attribute name="simplePartnerOnboard" type="Object"/>
+    <aura:attribute name="newPartnerOnboardError" type="String"/>
+    <aura:attribute name="checkboxValue" type="List" />
+    <aura:attribute name="options" type="List"/>  
+    <aura:attribute name="recTypeId" type="Id"/>  
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="reqFieldMsg" type="string" default="Complete this field."/>
+    <aura:attribute name="reqZipMsg" type="string" />
+    <aura:attribute name="reqEmailMsg" type="string" />
+    <aura:attribute name="saveMessage" type="string" default=""/>
+    <aura:attribute name="showsaveMessage" type="Boolean" default="false"/>
+    <aura:attribute name="showStateProvince__c" type="Boolean" default="true"/>
+    <aura:attribute name="showTerritory__c" type="Boolean" default="true"/>
+    <aura:attribute name="showDistributor__c" type="Boolean" default="true"/>
+    <aura:attribute name="showBusinessSection" type="Boolean" default="false"/>
+    <aura:attribute name="selectedTerOptions" type="List" default="[]"/>
+    
+    <aura:attribute name="TertiaryCheckValue" type="boolean" default="false"/>
+    <aura:attribute name="SecondaryCheckValue" type="boolean" default="false"/>
+    <aura:attribute name="masterCheckValue" type="boolean" default="false"/>
+    <aura:attribute name="iframeheight" type="Integer" default="700px"/>
+    <aura:attribute name="vfHost" type="String" default="devsb-rubrik.cs67.force.com/partnersnew"/>
+    <aura:attribute name="isOpenMaster" type="boolean" default="false"/>
+    <aura:attribute name="isOpenSecondary" type="boolean" default="false"/>
+    <aura:attribute name="isOpenTertiary" type="boolean" default="false"/>
+    
+    
+    <!-- Picklist Attributes -->
+    <aura:attribute name="selectedTerritory" type="string" />
+    <aura:attribute name="selectedSegment" type="string" />
+    <aura:attribute name="selectedLookUpRecords" type="List" default="[]" />
+    <aura:attribute name="PSellingCountriesSelected" type="List" default="[]" />
+    <aura:attribute name="PSellingCountriesOptions" type="List" default="[]" />
+    <aura:attribute name="PartnerTypeoptions" type="List" />
+    <aura:attribute name="countryoptions" type="List" />
+    <aura:attribute name="referralsourceoptions" type="List" />
+    <aura:attribute name="optionsStateProvince__c" type="List" />
+    <aura:attribute name="disableStateProvince__c" type="boolean" default="true"/>
+    <aura:attribute name="optionsTerritory__c" type="List" />
+    <aura:attribute name="optionsSegment__c" type="List" />
+    <aura:attribute name="disableTerritory__c" type="boolean" default="true"/>
+    <aura:attribute name="optionsDistributor__c" type="List" />
+    <aura:attribute name="optionsPSDistributor__c" type="List" />
+    <aura:attribute name="disableDistributor__c" type="boolean" default="true"/>
+    <aura:attribute name="showSegment__c" type="boolean" default="false"/>
+    
+    <aura:attribute name="DependentFieldMapStateProvince__c" type="map" description="map to store dependent values with controlling value"/>
+    <aura:attribute name="DependentFieldMapTerritory__c" type="map" description="map to store dependent values with controlling value"/>
+    <aura:attribute name="DependentFieldMapDistributor__c" type="map" description="map to store dependent values with controlling value"/>
+    
+    <aura:attribute name="requiredFields" type="List" default="Referral_Source__c,Postal_Code__c,Country__c,StateProvince__c,PartnerType__c,Distributor__c" /> <!-- Country__c,StateProvince__c,Territory__c,Distributor__c,Region__c-->
+    <aura:attribute name="businessSectionRequiredFields" type="List" default="Referral_Source__c,Distributor__c"/>
+    <aura:attribute name="separateValidationRequiredFields" type="List" default="Postal_Code__c"/>
+    <aura:attribute name="optionQuestions" type="List" default="[
+                                                                {'label': 'Yes', 'value': 'Yes'},
+                                                                {'label': 'No', 'value': 'No'}
+                                                                ]"/>    
+    <!--<aura:attribute name="queValue_1" type="String" default=""/>
+    <aura:attribute name="queValue_2" type="String" default=""/>
+    <aura:attribute name="queValue_3" type="String" default=""/>
+    <aura:attribute name="queValue_4" type="String" default=""/>
+    <aura:attribute name="queValue_5" type="String" default=""/> -->
+    
+    <aura:attribute name="faq_1" type="boolean" default="false"/>
+    <aura:attribute name="faq_2" type="boolean" default="false"/>
+    <aura:attribute name="faq_3" type="boolean" default="false"/>
+    <aura:attribute name="faq_4" type="boolean" default="false"/>
+    <aura:attribute name="faq_5" type="boolean" default="false"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>  
+    <aura:handler name="change" value="{!v.selectedLookUpRecords}" action="{!c.onSegmentControllerFieldChange}"/>
+    
+    <!--Use "slds-m-around_xx-large" class to add standard X-Large padding to the component--> 
+    <div class="slds-m-around_xx-large" >
+        
+        <aura:if isTrue="{!v.isOpenMaster}">
+            <!--###### MODAL BOX Start######--> 
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <!-- ###### MODAL BOX HEADER Start ######-->
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close" onclick="{! c.closeMasterModel }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Master Terms and Condition</h2></header>
+                    <!--###### MODAL BOX BODY Part Start######-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <iframe aura:id="vfFrame" src="{!v.vfHost + '/apex/Pactsafe?groupType=Master&amp;partnerType='+v.simplePartnerOnboard.PartnerType__c+'&amp;email='+v.simplePartnerOnboard.Email__c}" width="100%" height="100%" style="padding-left : 10px"/>
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>
+        <aura:if isTrue="{!v.isOpenSecondary}">
+            <!--###### MODAL BOX Start######--> 
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <!-- ###### MODAL BOX HEADER Start ######-->
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close" onclick="{! c.closeSecondaryModel }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Secondary Terms and Condition</h2></header>
+                    <!--###### MODAL BOX BODY Part Start######-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <iframe aura:id="vfFrame" src="{!v.vfHost + '/apex/Pactsafe?groupType=Secondary&amp;partnerType='+v.simplePartnerOnboard.PartnerType__c+'&amp;email='+v.simplePartnerOnboard.Email__c}" width="100%" height="100%" style="padding-left : 10px"/>
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>
+        <aura:if isTrue="{!v.isOpenTertiary}">
+            <!--###### MODAL BOX Start######--> 
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <!-- ###### MODAL BOX HEADER Start ######-->
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close" onclick="{! c.closeTertiaryModel }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Tertiary Terms and Condition</h2></header>
+                    <!--###### MODAL BOX BODY Part Start######-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <iframe aura:id="vfFrame" src="{!v.vfHost + '/apex/Pactsafe?groupType=Tertiary&amp;partnerType='+v.simplePartnerOnboard.PartnerType__c+'&amp;email='+v.simplePartnerOnboard.Email__c}" width="100%" height="100%" style="padding-left : 10px"/>
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>
+    </div>
+    
+    <force:recordData aura:id="PartnerOnboardRecordCreator"
+                      layoutType="FULL"
+                      targetRecord="{!v.newpartnerOnboard}"
+                      targetFields ="{!v.simplePartnerOnboard}"
+                      targetError="{!v.newPartnerOnboardError}"
+                      />
+    <aura:if isTrue="{!!v.showsaveMessage}">    
+        <lightning:recordEditForm aura:id="recordEditForm" 
+                                  objectApiName="Partner_Onboarding_Request__c">
+            
+            <h3 class="slds-text-heading_large slds-align_absolute-center slds-size_4-of-4">
+                <b> Transform Your Business. <br/>
+                    Become A Rubrik Partner.</b>
+            </h3>
+            <h1 class="slds-text-heading_medium slds-align_absolute-center slds-m-top_large">
+                We’re disrupting a $48 billion backup and recovery market with a 100% channel-focused business model.
+            </h1>
+            <p class="slds-text-title slds-align_absolute-center slds-m-top_large">
+                By completing and submitting this Online Company Application (“Application”), Company promises Rubrik: All the following information is accurate, complete and current. Company will notify Rubrik promptly of all changes. The person(s) completing this Application and accepting the Terms is authorized by the Company to do so. Once Rubrik accepts Company’s Application, the Company acknowledges and agrees it is bound by the Terms, and, if Company does not agree to all of these Terms, do not proceed to complete this Application and accept the Terms.
+            </p>
+            <lightning:messages />
+            <br/>
+            <div class="slds-section__title slds-m-top_large">COMPANY INFORMATION</div>
+            <div class="c-container">
+                <lightning:layout multipleRows="true">
+                    <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="4" padding="around-small">
+                        <lightning:input aura:id="pobField" label="Full Legal Name of Company"  value="{!v.simplePartnerOnboard.Company_Name__c}" required="true"/>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="4" padding="around-small">
+                        <lightning:input aura:id="pobField" label="Address 1" value="{!v.simplePartnerOnboard.Address_1__c}" required="true"/>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="4" padding="around-small">
+                        <lightning:input aura:id="pobField" label="Address 2" value="{!v.simplePartnerOnboard.Address_2__c}" />
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="4" padding="around-small">
+                        <lightning:input aura:id="pobField" label="City" value="{!v.simplePartnerOnboard.City__c}" required="true"/>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="4" padding="around-small">
+                        <!-- <lightning:select name="Country__c" aura:id="Country__c" label="Country" value="{!v.simplePartnerOnboard.Country__c}" required="true"  onchange="{!c.onCountryControllerFieldChange}" >
+                            <aura:iteration items="{!v.countryoptions}" var="item">
+                                <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                            </aura:iteration>
+                        </lightning:select> -->
+                        <lightning:inputField aura:id="Country__c" fieldName="Country__c" id="Country__c" onchange="{!c.onCountryControllerFieldChange}" class="customRequired " value="{!v.simplePartnerOnboard.Country__c}" variant ="label-stacked"/> 
+                        <div role="alert" aura:id="Country__c_help" class="form-element__helpError none">{!v.reqFieldMsg}</div> 
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="4" padding="around-small">
+                        <!-- <aura:if isTrue="{!v.showStateProvince__c == true}">
+                            <lightning:select name="StateProvince__c" aura:id="StateProvince__c" label="State/Province" value="{!v.simplePartnerOnboard.StateProvince__c}" disabled="{!v.disableStateProvince__c}" required="{!!v.disableStateProvince__c}">
+                                <aura:iteration items="{!v.optionsStateProvince__c}" var="item">
+                                    <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                                </aura:iteration>
+                            </lightning:select> 
+                        </aura:if>   -->
+                        <lightning:inputField fieldName="StateProvince__c" aura:id="StateProvince__c" class="customRequired " value="{!v.simplePartnerOnboard.StateProvince__c}" variant ="label-stacked"/>
+                        <div role="alert" aura:id="StateProvince__c_help" class="form-element__helpError none">{!v.reqFieldMsg}</div>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="4" padding="around-small">
+                        <lightning:input fieldName="Postal_Code__c" label="Postal Code" aura:id="Postal_Code__c" value="{!v.simplePartnerOnboard.Postal_Code__c}" class="customRequired "/>
+                        <div role="alert" aura:id="Postal_Code__c_help" class="form-element__helpError none">{!v.reqZipMsg}</div>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="4" padding="around-small">
+                        <lightning:input label="Website"  aura:id="pobField" value="{!v.simplePartnerOnboard.Website__c}" required="true"  /> <!--  class="customRequired " -->
+                        <!-- <div role="alert" aura:id="Website__c_help" class="form-element__helpError none">{!v.reqEmailMsg}</div>-->
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" padding="around-small">
+                        <lightning:textarea aura:id="pobField" label="Please provide an overview of your interest in becoming a Rubrik Partner." value="{!v.simplePartnerOnboard.Interest_in_becoming_a_Rubrik_Partner__c}" required="true" placeholder=""/>
+                    </lightning:layoutItem>
+                </lightning:layout>
+            </div>
+            <lightning:layout multipleRows="true">
+               
+                <lightning:layoutItem size="12" padding="around-small">
+                    <div>
+                        <lightning:radioGroup name="question_2" 
+                                              label="Is any owner, officer, or director of your company currently employed by a government entity (including public and state-owned entities) or have they been employed by a government entity within the past three years?"
+                                              options="{! v.optionQuestions }"
+                                              value="{!v.simplePartnerOnboard.Employed_by_Gov_Entity__c}"
+                                              type="radio"
+                                              required="true"
+                                              aura:id="pobField"
+                                              />
+                    </div>
+                    <!--  <div aura:id="div_2"  class="none">
+                        <lightning:input aura:id="pobField" name="FAQ2_answer__c" label="Please explain" value="{!v.simplePartnerOnboard.FAQ2_answer__c}"  required="{!v.faq_2}"/>
+                    </div>-->
+                </lightning:layoutItem>
+                <lightning:layoutItem size="12" padding="around-small">
+                    <div>
+                        <lightning:radioGroup name="question_3" 
+                                              label="Does your company do business with or sell to government entities (including public and state-owned entities)?"
+                                              options="{! v.optionQuestions }"
+                                              value="{!v.simplePartnerOnboard.Sell_to_Gov_Entities__c}"
+                                              type="radio"
+                                              required="true"
+                                              aura:id="pobField"
+                                              />
+                    </div>
+                    <!-- <div aura:id="div_3" class="none">
+                        <lightning:input aura:id="pobField" name="FAQ3_answer__c" label="Please explain" value="{!v.simplePartnerOnboard.FAQ3_answer__c}"  required="{!v.faq_3}"/>
+                    </div> -->
+                </lightning:layoutItem>   
+                <aura:if isTrue="{!v.simplePartnerOnboard.Sell_to_Gov_Entities__c == 'Yes'}">
+                    <lightning:layoutItem size="12" padding="around-small">
+                        <div>
+                            <lightning:radioGroup name="question_5" 
+                                                  label="Does your company have FCPA policies or procedures in place designed to prevent violations of anticorruption regulations?"
+                                                  options="{! v.optionQuestions }"
+                                                  value="{!v.simplePartnerOnboard.FCPAPP__c}"
+                                                  type="radio"
+                                                  required="{!v.simplePartnerOnboard.Sell_to_Gov_Entities__c == 'Yes'}"
+                                                  aura:id="pobField"
+                                                  />
+                        </div>
+                    </lightning:layoutItem>  
+                </aura:if>
+                <lightning:layoutItem size="12" padding="around-small">
+                    <div>
+                        <lightning:radioGroup name="question_4" 
+                                              label="Has there ever been any violation, voluntary self-disclosure, investigation, government inquiry, allegation, or enforcement action by, against, or involving your company or anyone working on its behalf related to anti-corruption laws?"
+                                              options="{! v.optionQuestions }"
+                                              value="{!v.simplePartnerOnboard.Violation_of_Anti_Corruption_Laws__c}"
+                                              type="radio"
+                                              onchange="{!c.handleQueChange }"
+                                              required="true"
+                                              aura:id="pobField"
+                                              />
+                    </div>
+                    <div aura:id="div_4" class="none">
+                        <lightning:input aura:id="pobField" name="Violation_of_Anti_Corruption_Laws_Notes__c" label="Please explain" value="{!v.simplePartnerOnboard.Violation_of_Anti_Corruption_Laws_Notes__c}"  required="{!v.faq_4}"/>
+                    </div>
+                </lightning:layoutItem>
+                
+                
+            </lightning:layout>
+            <!--<lightning:layout multipleRows="true">
+                <lightning:layoutItem size="12" padding="around-small">
+                    <div>
+                        <lightning:radioGroup name="question_1" 
+                                              label="Does your company have FCPA or anti-bribery compliance policies and procedures, or else a Code of Conduct that addresses these issues?  If so, please confirm that these policies and procedures address the U.S. FCPA and the UK Bribery Act."
+                                              options="{! v.optionQuestions }"
+                                              value="{!v.simplePartnerOnboard.FAQ1_Response__c}"
+                                              type="radio"
+                                              onchange="{!c.handleQueChange }"
+                                              required="true"
+                                              aura:id="pobField"
+                                              />
+                    </div>
+                    <div aura:id="div_1" class="none">
+                        <lightning:input aura:id="pobField" name="FAQ1_answer__c" type="checkbox" label="Please confirm" checked="{!v.simplePartnerOnboard.FAQ1_answer__c}"  required="{!v.faq_1}"/>
+                    </div>
+                    <div aura:id="div_1" class="none">
+                        <lightning:input aura:id="pobField" name="FAQ1_Comments__c" label="Please explain" value="{!v.simplePartnerOnboard.FAQ1_Comments__c}"  required="{!!v.faq_1}"/>
+                    </div>
+                </lightning:layoutItem>
+                
+                <lightning:layoutItem size="12" padding="around-small">
+                    <div>
+                        <lightning:radioGroup name="question_2" 
+                                              label="Has your company made any payments, gifts, hospitality (e.g., meals, lodging, travel), to any government official or candidate for public office, or any contributions or donations to any political parties, candidates for public office or government agencies in the past five years?  If so, please describe."
+                                              options="{! v.optionQuestions }"
+                                              value="{!v.simplePartnerOnboard.FAQ2_Response__c}"
+                                              type="radio"
+                                              onchange="{!c.handleQueChange }"
+                                              required="true"
+                                              aura:id="pobField"
+                                              />
+                    </div>
+                    <div aura:id="div_2"  class="none">
+                        <lightning:input aura:id="pobField" name="FAQ2_answer__c" label="Please explain" value="{!v.simplePartnerOnboard.FAQ2_answer__c}"  required="{!v.faq_2}"/>
+                    </div>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="12" padding="around-small">
+                    <div>
+                        <lightning:radioGroup name="question_3" 
+                                              label="Is any owner, officer, or director of your company currently a government official or have they been a government official within the past three years?  If yes, please describe."
+                                              options="{! v.optionQuestions }"
+                                              value="{!v.simplePartnerOnboard.FAQ3_Response__c}"
+                                              type="radio"
+                                              onchange="{!c.handleQueChange }"
+                                              required="true"
+                                              aura:id="pobField"
+                                              />
+                    </div>
+                    <div aura:id="div_3" class="none">
+                        <lightning:input aura:id="pobField" name="FAQ3_answer__c" label="Please explain" value="{!v.simplePartnerOnboard.FAQ3_answer__c}"  required="{!v.faq_3}"/>
+                    </div>
+                </lightning:layoutItem>
+                
+                <lightning:layoutItem size="12" padding="around-small">
+                    <div>
+                        <lightning:radioGroup name="question_4" 
+                                              label="Has your company or anyone working on its behalf ever been convicted, fined, indicted, or charged in any criminal or regulatory proceeding related to bribery or corruption?  If so, please describe."
+                                              options="{! v.optionQuestions }"
+                                              value="{!v.simplePartnerOnboard.FAQ4_Response__c}"
+                                              type="radio"
+                                              onchange="{!c.handleQueChange }"
+                                              required="true"
+                                              aura:id="pobField"
+                                              />
+                    </div>
+                    <div aura:id="div_4" class="none">
+                        <lightning:input aura:id="pobField" name="FAQ4_answer__c" label="Please explain" value="{!v.simplePartnerOnboard.FAQ4_answer__c}"  required="{!v.faq_4}"/>
+                    </div>
+                </lightning:layoutItem>
+                
+                <lightning:layoutItem size="12" padding="around-small">
+                    
+                    <div>
+                        <lightning:radioGroup name="question_5" 
+                                              label="Has there ever been any violations, voluntary self-disclosures, investigations, government inquiries, allegations, or enforcement actions by, against, or involving the company directly or indirectly relating to anti-corruption laws?  If so, please describe."
+                                              options="{! v.optionQuestions }"
+                                              value="{!v.simplePartnerOnboard.FAQ5_Response__c}"
+                                              type="radio"
+                                              onchange="{!c.handleQueChange }"
+                                              required="true"
+                                              aura:id="pobField"
+                                              />
+                    </div>
+                    <div aura:id="div_5" class="none">
+                        <lightning:input aura:id="pobField" name="FAQ5_answer__c" label="Please explain" value="{!v.simplePartnerOnboard.FAQ5_answer__c}"  required="{!v.faq_5}"/>
+                    </div>
+                </lightning:layoutItem>            
+                                
+            </lightning:layout>-->
+            <div class="slds-section__title">CONTACT INFORMATION</div>
+            <div class="c-container">
+                <lightning:layout multipleRows="true">
+                    <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="4" padding="around-small">
+                        <lightning:input aura:id="pobField" label="First Name"  value="{!v.simplePartnerOnboard.First_Name__c}" required="true"/>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="4" padding="around-small">
+                        <lightning:input aura:id="pobField" label="Last Name" value="{!v.simplePartnerOnboard.Last_Name__c}" required="true"/>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="4" padding="around-small">
+                        <lightning:input aura:id="Email__c" label="Email" fieldName="Email__c" value="{!v.simplePartnerOnboard.Email__c}"  pattern="[^@]+@[^\.]+\..+" required="true" onchange="{!c.emailonchange}"/> <!--   class="customRequired"-->
+                        <!-- <div role="alert" aura:id="Email__c_help" class="form-element__helpError none">{!v.reqEmailMsg}</div> -->
+                    </lightning:layoutItem>
+                    
+                    <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="4" padding="around-small">
+                        <lightning:input aura:id="pobField" label="Phone" value="{!v.simplePartnerOnboard.Phone__c}" required="true" type="tel" pattern="(\+\d{1,3}\s?)?((\(\d{3}\)\s?)|(\d{3})(\s|-?))(\d{3}(\s|-?))(\d{4})(\s?(([E|e]xt[:|.|]?)|x|X)(\s?\d+))?"/> 
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="4" padding="around-small">
+                        <lightning:input aura:id="pobField" label="Job Title" value="{!v.simplePartnerOnboard.Title__c}" required="true"/>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="4" padding="around-small">
+                        <lightning:select name="PartnerType__c" aura:id="PartnerType__c" label="Partner Type" value="{!v.simplePartnerOnboard.PartnerType__c}" required="true"  onchange="{!c.onPartnerTypeChange}" class="slds-select removeborder">
+                            <aura:iteration items="{!v.PartnerTypeoptions}" var="item">
+                                <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                            </aura:iteration>
+                        </lightning:select>
+                        <!-- <lightning:inputField id="PartnerType__c" label="Partner Type" fieldName="PartnerType__c" onchange="{!c.onPartnerTypeChange}" aura:id="PartnerType__c" class="customRequired " value="{!v.simplePartnerOnboard.PartnerType__c}"/> 
+                        <div role="alert" aura:id="PartnerType__c_help" class="form-element__helpError none">{!v.reqFieldMsg}</div> -->
+                    </lightning:layoutItem>
+                </lightning:layout>
+            </div>
+            <aura:if isTrue="{!v.showBusinessSection}">
+                <div class="slds-section__title  slds-m-top_large">BUSINESS INFORMATION</div>
+                <div class="c-container">
+                    <lightning:layout multipleRows="true">
+                       
+                <!--         <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="4" padding="around-small">
+                    <div class="customRequired">
+                        
+                         <lightning:select name="Partner_Selling_Countries__c" aura:id="Partner_Selling_Countries__c" label="Please list the countries where you plan to sell Rubrik’s products." value="{!v.simplePartnerOnboard.Partner_Selling_Countries__c}" onchange="{!c.partnerSellingChange}">
+                                    <aura:iteration items="{!v.PSellingCountriesOptions}" var="item">
+                                        <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                                    </aura:iteration>
+                                </lightning:select>
+                    </div>    
+                             
+                    <div role="alert" aura:id="Partner_Selling_Countries__c_help" class="form-element__helpError none">{!v.reqFieldMsg}</div> 
+                     
+                </lightning:layoutItem>-->
+                         <aura:if isTrue="{!v.showSegment__c}"> 
+                         <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="4" padding="around-small">
+                          
+                             <div class="customRequired">
+                                    <c:PC_reUsableMultiSelectLookup aura:id="Segment__c"
+                                                                    lstSelectedRecords="{!v.selectedLookUpRecords}"
+                                                                    listOfSearchRecords = "{!v.optionsSegment__c}"                      
+                                                                    label="Segment" />
+                                </div>     
+                                <div role="alert" aura:id="Segment__c_help" class="form-element__helpError none">{!v.reqFieldMsg}</div> 
+                         
+                        </lightning:layoutItem>
+                           </aura:if>    
+                        <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="4" padding="around-small">
+                            <aura:if isTrue="{!v.showDistributor__c}">
+                                <lightning:select name="Distributor__c" aura:id="Distributor__c" label="Distributor" value="{!v.simplePartnerOnboard.Distributor__c}" disabled="{!v.disableDistributor__c}"   required="{!if(!v.disableDistributor__c &amp;&amp; v.showBusinessSection &amp;&amp; v.simplePartnerOnboard.PartnerType__c != 'Distributor',true,false)}">
+                                    <aura:iteration items="{!v.optionsDistributor__c}" var="item">
+                                        <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                                    </aura:iteration>
+                                </lightning:select>
+                            </aura:if>
+                            <!-- <lightning:inputField id="Distributor__c" fieldName="Distributor__c" aura:id="Distributor__c" class="customRequired" value="{!v.simplePartnerOnboard.Distributor__c}"/> 
+                            <div role="alert" aura:id="Distributor__c_help" class="form-element__helpError none">{!v.reqFieldMsg}</div>-->
+                        </lightning:layoutItem>
+                         <aura:if isTrue="{!v.showSegment__c}"> 
+                         <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" padding="around-small">
+                           
+                             <B>Note to North America Resellers:</B>
+                             Rubrik has a closed-source distribution model in North America for partners selling into the non-Public Sector markets (Rubrik Public Sector markets include Federal, State, Local and state-funded Education).  This means that authorized partners who sell Rubrik products and services into non-Public Sector US customers will be required to choose one Rubrik authorized Distributor from whom to purchase.  Once a reseller has selected their distributor of choice, they will work exclusively with that distributor for all Rubrik products and services for a minimum period of one year.
+                        	
+                             </lightning:layoutItem>
+                             </aura:if>
+                    </lightning:layout>
+                </div>
+                <div class="c-container">
+                    <lightning:layout multipleRows="true">
+                        <lightning:layoutItem padding="around-small" size="8">
+                            <div class="page-section page-left">
+                                <lightning:layoutItem size="12" smallDeviceSize="8" mediumDeviceSize="10" largeDeviceSize="10" padding="around-small"> 
+                                    <div class="slds-form-element__label">Please indicate which vendors your organization works with today *</div>
+                                    <lightning:checkboxGroup aura:id="mygroup"         
+                                                             name="checkboxGroup" 
+                                                             options="{!v.options}"         
+                                                             value="{!v.checkboxValue}"         
+                                                             onchange="{!c.handleCheck}"/>
+                                </lightning:layoutItem>
+                                <lightning:layoutItem size="12" smallDeviceSize="8" mediumDeviceSize="10" largeDeviceSize="10" padding="around-small">    
+                                    <!--  <label class="slds-form-element__label" for="textarea-id-01">Additional Comments</label>
+                                    <textarea id="textarea-id-01" class="slds-textarea" placeholder=""></textarea> -->
+                                    <lightning:textarea aura:id="pobField" label="Additional Comments" value="{!v.simplePartnerOnboard.Additional_Comments__c}"  placeholder=""/>
+                                </lightning:layoutItem>
+                            </div>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem padding="around-small" size="4">
+                            <div class="page-section page-right">
+                                <lightning:layoutItem size="12" smallDeviceSize="10" mediumDeviceSize="12" largeDeviceSize="12" padding="around-small">
+                                    <!-- <lightning:select name="Referral_Source__c" aura:id="Referral_Source__c" label="Referral Source" value="{!v.simplePartnerOnboard.Referral_Source__c}"  required="{!v.showBusinessSection}">
+                                        <aura:iteration items="{!v.referralsourceoptions}" var="item">
+                                            <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                                        </aura:iteration>
+                                    </lightning:select> -->
+                                    <lightning:inputField  id="Referral_Source__c"  fieldName="Referral_Source__c"  aura:id="Referral_Source__c" value="{!v.simplePartnerOnboard.Referral_Source__c}" required="{!v.showBusinessSection}" variant ="label-stacked"/> 
+                                    <div role="alert" aura:id="Referral_Source__c_help" class="form-element__helpError none">{!v.reqFieldMsg}</div>	
+                                </lightning:layoutItem>
+                                <lightning:layoutItem size="12" smallDeviceSize="10" mediumDeviceSize="12" largeDeviceSize="12" padding="around-small">
+                                    <lightning:input aura:id="pobField" label="Number of outside sales reps" value="{!v.simplePartnerOnboard.Outside_Sales__c}" required="{!v.showBusinessSection}" type="number"/>
+                                </lightning:layoutItem>  
+                                <lightning:layoutItem size="12" smallDeviceSize="10" mediumDeviceSize="12" largeDeviceSize="12" padding="around-small">
+                                    <lightning:input aura:id="pobField" label="Number of technical sales reps" value="{!v.simplePartnerOnboard.Technical_Sales__c}" required="{!v.showBusinessSection}" type="number"/>
+                                </lightning:layoutItem>  
+                                <lightning:layoutItem size="12" smallDeviceSize="10" mediumDeviceSize="12" largeDeviceSize="12" padding="around-small">
+                                    <lightning:input aura:id="pobField" label="Number of inside sales reps" value="{!v.simplePartnerOnboard.Inside_Sales__c}" required="{!v.showBusinessSection}" type="number"/>
+                                </lightning:layoutItem> 
+                                <!--   <lightning:layoutItem size="12" smallDeviceSize="10" mediumDeviceSize="12" largeDeviceSize="12" padding="around-small">
+                                    <lightning:input aura:id="TCCB" type="checkbox" label="By clicking on “I Accept” you confirm you are authorized to bind your organization to the Terms and Conditions set forth above.By clicking on “I Accept” you confirm that your application has not yet been accepted by Rubrik, Inc. but you will be notified of the acceptance or rejection of this application within 48 business hours of submission." name="TC" value="TC" onchange="{!c.handleCheck}" />
+                                </lightning:layoutItem>  -->
+                            </div>
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                </div>
+            </aura:if>
+            
+            <lightning:layout multipleRows="true">
+                <lightning:layoutItem size="12" padding="around-small">
+                    <div class="page-section page-left">
+                        <aura:if isTrue="{!v.simplePartnerOnboard.PartnerType__c != 'Alliance Partner'}">
+                            <lightning:layoutItem size="12" >
+                                <ui:outputCheckbox value="{!v.masterCheckValue}"/>
+                                <a class="slds-m-left_xx-small" href="javascript:void(0)" onclick="{!c.openMasterModel}">Master Terms and Conditions</a>&nbsp;
+                                <div role="alert" aura:id="masterCheckValue_help" class="form-element__helpError none">Please Agree Master Terms and Conditions</div>	     
+                            </lightning:layoutItem>   
+                        </aura:if>
+                        <aura:if isTrue="{!v.simplePartnerOnboard.PartnerType__c == 'MSP-Reseller' || v.simplePartnerOnboard.PartnerType__c == 'MSP' || v.simplePartnerOnboard.PartnerType__c == 'Reseller'}">
+                            <lightning:layoutItem size="12" >
+                                <ui:outputCheckbox value="{!v.SecondaryCheckValue}"/>
+                                <a class="slds-m-left_xx-small" href="javascript:void(0)" onclick="{!c.openSecondaryModel}">Secondary Terms and Conditions</a>&nbsp;
+                                <div role="alert" aura:id="SecondaryCheckValue_help" class="form-element__helpError none">Please Agree Secondary Terms and Conditions</div>	          
+                            </lightning:layoutItem>
+                        </aura:if>
+                        <aura:if isTrue="{!v.simplePartnerOnboard.PartnerType__c == 'MSP-Reseller'}">
+                            <lightning:layoutItem size="12" >
+                                <ui:outputCheckbox value="{!v.TertiaryCheckValue}"/>
+                                <a class="slds-m-left_xx-small" href="javascript:void(0)" onclick="{!c.openTertiaryModel}">Tertiary Terms and Conditions</a>&nbsp;
+                                <div role="alert" aura:id="TertiaryCheckValue_help" class="form-element__helpError none">Please Agree Tertiary Terms and Conditions</div>	          
+                            </lightning:layoutItem>
+                        </aura:if>
+                    </div>
+                </lightning:layoutItem>
+            </lightning:layout>
+            <div class="slds-align_absolute-center">
+                <lightning:button label="Submit" variant="brand" onclick="{!c.handleSaveForm}"/>
+                <lightning:spinner aura:id="mySpinner" alternativeText="Saving.." title="Saving.." variant="brand" size="large" class="slds-hide"/>
+            </div>
+            <!-- Display Lightning Data Service errors -->
+            <aura:if isTrue="{!not(empty(v.newPartnerOnboardError))}">
+                <div class="recordError">
+                    {!v.newPartnerOnboardError}</div>
+            </aura:if>            
+        </lightning:recordEditForm>        
+    </aura:if>    
+    <aura:if isTrue="{!v.showsaveMessage == true}">
+        <aura:unescapedHtml value="{!v.saveMessage}" />
+    </aura:if>
+</aura:component>

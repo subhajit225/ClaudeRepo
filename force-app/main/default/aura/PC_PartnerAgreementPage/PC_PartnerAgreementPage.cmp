@@ -1,0 +1,50 @@
+<aura:component   extends="c:PC_UtilityCmp" implements="forceCommunity:availableForAllPageTypes" access="global" controller="PC_PartnerAgreementController">
+    <aura:attribute name="masterCheckValue" type="boolean" default="false"/>	
+    <aura:attribute name="isOpenMaster" type="boolean" default="false"/>
+    <aura:attribute name="iframeheight" type="Integer" default="1000px"/>
+    <aura:attribute name="vfHost" type="String" default="devsb-rubrik.cs67.force.com/partnersnew"/>
+    
+    <aura:attribute name="userEmail" type="string"/>
+    <aura:attribute name="partnerType" type="string"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>  
+    
+    <div class="slds-m-around_xx-large" >
+        <aura:if isTrue="{!v.isOpenMaster}">
+            <!--###### MODAL BOX Start######--> 
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <!-- ###### MODAL BOX HEADER Start ######-->
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close" onclick="{! c.closeMasterModel }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Master-Reseller Terms and Condition</h2></header>
+                    <!--###### MODAL BOX BODY Part Start######-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <iframe aura:id="vfFrame" src="{!v.vfHost + '/apex/Pactsafe?groupType=Master-Reseller&amp;partnerType='+v.partnerType+'&amp;email='+v.userEmail}" width="100%" height="100%" style="padding-left : 10px"/>
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>
+    </div>
+    <lightning:layout multipleRows="true">
+        <lightning:layoutItem size="12" padding="around-small">
+            <div class="page-section page-left">
+                <lightning:layoutItem size="12" >
+                    <ui:outputCheckbox value="{!v.masterCheckValue}"/>
+                    <a class="slds-m-left_xx-small disable" aura:id="masterlink" href="javascript:void(0)" onclick="{!c.openMasterModel}" >Master-Reseller Terms and Conditions</a>&nbsp;
+                    <div role="alert" aura:id="masterCheckValue_help" class="form-element__helpError none">Please Agree Master-Reseller Terms and Conditions</div>	     
+                </lightning:layoutItem>   
+            </div>
+        </lightning:layoutItem>
+    </lightning:layout>
+    <div class="slds-align_absolute-center">
+        <aura:if isTrue="{!v.partnerType != ''}">
+         	<lightning:button label="Submit" variant="brand" onclick="{!c.handleSaveForm}"/>
+        </aura:if>    
+        <lightning:spinner aura:id="mySpinner" alternativeText="Saving.." title="Saving.." variant="brand" size="large" class="slds-hide"/>
+    </div>
+</aura:component>

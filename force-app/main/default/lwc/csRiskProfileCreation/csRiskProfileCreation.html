@@ -1,0 +1,96 @@
+<template>   
+    <lightning-quick-action-panel header={quickActionHeader} class="slds-is-relative">
+        <template if:true={isLoading}>
+            <div class="slds-spinner_container slds-align_absolute-center" style="background-color: white;">
+                <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </template>
+        <template if:true={fields}>
+            <lightning-record-edit-form object-api-name="Risk_Profile__c" onsuccess={handleSuccess}
+                onsubmit={handleSubmit} onload={handleLoad} onerror={handleError} record-id={riskProfileRecordId}>
+
+
+                <div class="slds-grid slds-wrap">
+                    <template for:each={fields} for:item="field">
+                        <div if:true={field.isVisible} key={field.fieldName} class={columnClass}>
+                            <template lwc:if={field.disabled}>
+                                <lightning-input-field field-name={field.fieldName} value={field.value}
+                                    onchange={handleFieldChange} disabled ></lightning-input-field>
+                            </template>
+                            <template lwc:else>
+                                <lightning-input-field onchange={handleFieldChange} field-name={field.fieldName} value={field.value} required={field.required} data-field={field.fieldName}>
+                                </lightning-input-field>
+                            </template>
+                        </div>
+                    </template>
+
+                </div>
+                <div if:false={isLoading} class="slds-grid slds-gutters slds-wrap slds-p-horizontal_small">
+                    <div if:true={graphQLDataLoaded} class={extendedColumnClass}>
+                        <c-cs-multi-select-lookup lwc:ref="entitlementLookup" record-id={recordId} label="Entitlement"
+                            placeholder="Search Entitlement..." object-api-name="Entitlement" subtitle="Entitlement"
+                            field-api-name="Name" icon-name="standard:entitlement"
+                            onselect={handleSelected} limit="7" sort-by="CreatedDate DESC" value={selectedEntitlements}
+                            is-multi-select lookup-fx={entitlementLookupFx} onload={handleComponentLoad} object-label="Entitlement" onnoentitlement={handleNoEntitlement} required={isEntitlementRequired}>
+                        </c-cs-multi-select-lookup>
+                    </div>
+
+                    <div if:true={graphQLDataLoaded} class={extendedColumnClass}>
+                        <c-cs-multi-select-lookup lwc:ref="productFeatureLookup" data-id="productFeatureLookup"
+                            record-id={recordId} label="Component Feature" placeholder="Search Component Feature..."
+                            object-api-name="Bundle_Components_Allocation__c" subtitle="Component Feature" field-api-name="Component_sku_Parsed__c"
+                            search-by="" icon-name="standard:contact" onselect={handleSelected} limit="7" sub-field-api-name="Product_SKU__c"
+                            is-multi-select lookup-fx={pdmLookupFx} sort-by="CreatedDate DESC"
+                            value={selectedPDMFeatures} onload={handleComponentLoad} read-only={noEntitlementsSelected} object-label="Component Feature" required={isComponentRequired} onnocomponent={handleNoComponent}>
+                        </c-cs-multi-select-lookup>
+                    </div>
+
+                    <div if:true={graphQLDataLoaded} lwc:ref="riskProfileWatcherLookup" class={extendedColumnClass}>
+                        <c-cs-multi-select-lookup data-id="riskProfileWatcherLookup" record-id={recordId}
+                            label="Watcher" placeholder="Search Users..." object-api-name="User" subfield="Email"
+                            field-api-name="Name" icon-name="standard:user" onselect={handleSelected}
+                            limit="7" lookup-fx='riskProfileWatcher' value={selectedRiskWatchers} is-multi-select
+                            sort-by="CreatedDate DESC" onload={handleComponentLoad} read-only={areWatchersNotAccessible} object-label="User">
+                        </c-cs-multi-select-lookup>
+                    </div>
+                </div>
+            </lightning-record-edit-form>
+        </template>
+        <div slot="footer">
+                <c-cs-popovers lwc:if={error} variant="error">
+                    <div slot="value">
+                        <button class="slds-button slds-button_icon slds-button_icon-error" title="Error">
+                            <svg class="slds-button__icon" aria-hidden="true">
+                            <use xlink:href="/_slds/icons/utility-sprite/svg/symbols.svg#error"></use>
+                            </svg>
+                            <span class="slds-assistive-text">Error</span>
+                        </button>
+                    </div>
+                    <div slot="header" class="slds-media slds-media_center slds-has-flexi-truncate ">
+                        <div class="slds-media__figure">
+                          <span class="slds-icon_container slds-icon-utility-error">
+                            <svg class="slds-icon slds-icon_x-small" aria-hidden="true">
+                              <use xlink:href="/_slds/icons/utility-sprite/svg/symbols.svg#error"></use>
+                            </svg>
+                          </span>
+                        </div>
+                        <div class="slds-media__body">
+                          <h2 class="slds-truncate slds-text-heading_medium" style="text-align: start;" id="dialog-heading-id-1" title="We hit a snag.">We hit a snag.</h2>
+                        </div>
+                      </div>
+                    <div slot="body">
+                        <p style="text-align: start;"> {error} </p>
+                        
+                    </div>
+                </c-cs-popovers>
+            <button class="slds-button slds-button_neutral" aria-label="Cancel and close" onclick={handleCancel}>Cancel</button>
+            <button if:true={isFormValidated} class="slds-button slds-button_brand slds-m-left_x-small" onclick={handleSubmit}>Save</button>
+            <button if:false={isFormValidated} class="slds-button slds-button_brand slds-m-left_x-small" onclick={handleSubmit} disabled>Save</button>
+        </div>
+    </lightning-quick-action-panel>
+
+</template>

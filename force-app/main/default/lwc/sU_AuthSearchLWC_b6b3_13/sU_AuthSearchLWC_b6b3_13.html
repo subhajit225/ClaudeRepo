@@ -1,0 +1,611 @@
+<template>
+    <div class="suContainer su__h-100">
+        <div class={eventClass}>
+            <template if:true={customSettingsFilled}>
+                <template if:true={suResultsLoader}>
+                    <template if:true={loadingState}>
+                        <div class=" su__loader-Screen">
+                            <div class="loading">
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                            </div>
+                        </div>
+                    </template>
+                </template>
+                <template if:false={suResultsLoader}>
+                    <div class="su__position-relative su__w-100 su__h-100vh">
+                        <div class="su__spinner-main su__w-100 su__h-100 su__position-absolute">
+                            <div class="loading">
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+                <template if:true={suResultsLoader}>
+                    <div data-id="searchUnifyContainer" class="su__h-100">
+                        <template if:true={previewModalVal}>
+                            <div class="su__animate-fadeInRight">
+                                <div class="previewModal">
+                                    <div class="su__d-flex su__justify-content-between su__p-2 su__flex-vcenter">
+                                        <div class="su__preview-tag">
+                                            <div class="su__line-clamp">
+                                                <div class="su__font-14 su__ml-2">{typeofContentForPreview}</div>
+                                            </div>
+                                            <div>
+                                                <div class=" su__text-truncatePreviewLabel su__ml-2 su__px-2 su__f-regular su__color-black su__preview-contentLabel su__font-14 "
+                                                    style="text-align: center; margin-top:5px">{previewSourceLabel}</div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-12 su__close-preview">
+                                            <lightning-button-icon icon-name="utility:close" variant="bare"
+                                                size="medium" alternative-text="Close" onclick={closePreviewModal}
+                                                title="Close"></lightning-button-icon>
+                                        </div>
+                                    </div>
+                                    <div class="su__width-100 su__w-100 su__h-100p">
+                                        <iframe class="PreviewIframeModal" width="420" height="345" src={previewSrcVal}>
+                                        </iframe>
+                                    </div>
+                                </div>
+                                <div class="su__Previewbackdrop" onclick={closePreviewModal}></div>
+                            </div>
+                        </template>
+                        <c-s-u_-auth-customize-setting_b6b3_13  mergedresults={resultsInAllContentSources}
+                            totalresults={totalResults} translation-object={translationObject}
+                            search-query-data={searchQueryData} page-size-adv-filtr={pageSizeAdvFiltr}
+                            all-content-hide-facet={allContentHideFacet} aggregationsdata={aggregationsData} active={active}
+                            default-tab={defaultTab} active-tab-index={activeTabIndex}
+                            custom-settings-filled={customSettingsFilled} tabsfilter={tabsFilter}
+                            knowledge-graph-response-recorded={knowledgeGraphResponseRecorded}
+                            featured-response-recorded={featuredResponseRecorded} page-num={pageNum} no-result-found={noResultFound}
+                            selected-type-filter={selectedTypeFilter} hidden-keys={hiddenKeys} content-tag={contentTag}
+                            hidden-key-array={hiddenKeyArray} smart-facets-admin={smartFacetsAdmin}
+                            is-auto-learning={isAutoLearning}>
+                        </c-s-u_-auth-customize-setting_b6b3_13 >
+                        <!-- Starts here - Code for Search Feedback -->
+                        <template if:true={searchFeedbackEnabled}>
+                            <template if:false={noResultFound}>
+                                <div class="su__feedback-searchsvg su__font-12 su__position-fixed su__zindex su__cursor"
+                                    onclick={openFeedbackModal}>
+                                    <svg width="80" height="80" viewBox="0 0 80 80">
+                                        <defs>
+                                            <filter id="Ellipse_763" x="0" y="0" width="80" height="80" filterUnits="userSpaceOnUse">
+                                                <feOffset dy="3" input="SourceAlpha"></feOffset>
+                                                <feGaussianBlur stdDeviation="3" result="blur"></feGaussianBlur>
+                                                <feFlood flood-opacity="0.161"></feFlood>
+                                                <feComposite operator="in" in2="blur"></feComposite>
+                                                <feComposite in="SourceGraphic"></feComposite>
+                                            </filter>
+                                        </defs>
+                                        <g id="Component_11_17" data-name="Component 11 – 17" transform="translate(9 6)">
+                                            <g id="Group_13423" data-name="Group 13423" transform="translate(-1241 -1113)">
+                                                <g transform="matrix(1, 0, 0, 1, 1232, 1107)" filter="url(#Ellipse_763)">
+                                                    <circle id="Ellipse_763-2" data-name="Ellipse 763" cx="31" cy="31" r="31"
+                                                        transform="translate(9 6)" fill="#fff"></circle>
+                                                </g>
+                                                <g id="Group_13310" data-name="Group 13310" transform="translate(1248.618 1120.618)">
+                                                    <path id="Path_11276" data-name="Path 11276"
+                                                        d="M-481.668,59.582q0-2.432,0-4.864c0-.983.34-1.333,1.3-1.4a4.075,4.075,0,0,0,3.109-1.92,5.041,5.041,0,0,0,.882-3c0-.986-.165-1.957-.2-2.938a2.931,2.931,0,0,1,.1-1.023,1.48,1.48,0,0,1,1.636-1.029,3.294,3.294,0,0,1,2.65,2.169,8.079,8.079,0,0,1,.351,3.665c-.063.774-.185,1.544-.283,2.316-.077.6.138.854.752.855,1.9,0,3.8-.006,5.706,0a1.955,1.955,0,0,1,1.732,2.958,1.9,1.9,0,0,1-1.049.85c-.219.077-.256.144-.088.338a1.916,1.916,0,0,1-.612,3.214c-.272.148-.08.221.018.319a1.934,1.934,0,0,1-.083,2.932,1.314,1.314,0,0,1-.418.261c-.315.1-.377.216-.181.53a1.929,1.929,0,0,1-1.067,2.857,1.562,1.562,0,0,1-.6.065l-6.261-.433-4.886-.334c-.445-.03-.892-.051-1.336-.092a1.162,1.162,0,0,1-1.169-1.287C-481.671,62.927-481.668,61.254-481.668,59.582Z"
+                                                        transform="translate(495.658 -37.604)" fill="#56c5ff"></path>
+                                                    <path id="Path_11277" data-name="Path 11277"
+                                                        d="M-437.527,124.206a11.741,11.741,0,0,1,4.71,3.186,11.827,11.827,0,0,1,.962,14.682.879.879,0,0,0-.16.533c0,1.456,0,2.912,0,4.368a2.184,2.184,0,0,1-1.332,2.178,2.219,2.219,0,0,1-2.519-.44c-.688-.61-1.388-1.206-2.074-1.816a.483.483,0,0,0-.507-.13,11.822,11.822,0,0,1-13.618-5.822,11.712,11.712,0,0,1-.985-2.443c-.078-.27,0-.331.258-.3.444.045.891.082,1.337.092.262.006.361.123.449.358a9.809,9.809,0,0,0,7.125,6.393,9.488,9.488,0,0,0,5.934-.437.467.467,0,0,1,.57.091c.913.817,1.84,1.619,2.762,2.426.122.107.238.266.427.19s.142-.279.142-.436c0-1.558.006-3.116,0-4.674a.988.988,0,0,1,.229-.662,9.945,9.945,0,0,0-3.4-15.135c-.211-.1-.271-.2-.213-.429A3.273,3.273,0,0,0-437.527,124.206Z"
+                                                        transform="translate(470.569 -108.518)" fill="#3e4753"></path>
+                                                    <path id="Path_11278" data-name="Path 11278"
+                                                        d="M-541.431,123.826c0,2.35,0,4.7.006,7.049,0,.274-.051.376-.351.364-.676-.025-1.353-.015-2.03,0-.2,0-.278-.054-.259-.259a3.157,3.157,0,0,0,0-.5,1.291,1.291,0,0,1,.437-1.195,1.589,1.589,0,0,0-.088-2.3,1.656,1.656,0,0,0-2.367.076,1.614,1.614,0,0,0,.058,2.3.938.938,0,0,1,.366.916,2.073,2.073,0,0,0,0,.23c0,.775,0,.775-.789.711a2.008,2.008,0,0,1-1.836-2c-.01-2.184,0-4.367,0-6.551,0-1.4,0-2.809,0-4.214a2.008,2.008,0,0,1,2.094-2.1c1.468-.006,2.937.009,4.405-.011.323,0,.362.117.361.39C-541.434,119.1-541.43,121.464-541.431,123.826Z"
+                                                        transform="translate(554.119 -101.623)" fill="#3e4753"></path>
+                                                    <rect id="Rectangle_5828" data-name="Rectangle 5828" width="46" height="46"
+                                                        transform="translate(0.383 0.382)" fill="none"></rect>
+                                                </g>
+                                            </g>
+                                        </g>
+                                    </svg>
+                                </div>
+                            </template>
+                        </template>
+                        <template if:true={showFeedbackModal}>
+                            <c-s-u_-auth-feedback-modal_b6b3_13  uid={uid} end-point={endPoint} search-string={searchString}
+                                search-feedback-enabled={searchFeedbackEnabled} current-user-email={currentUserEmail}
+                                search-conversion-feedback={searchConversionFeedback} list-response-data={responselistdata} custom-data={data}
+                                total-pages={totalpages} total-results={totalresults} page-num={pageNum} page-size={pageSize}
+                                title-clicked-value={titleClickedValue} search-feedback-response-data={searchFeedbackResponseData}
+                                feedback-position={feedbackPosition} user-type-check={userTypeCheck} is-submit-button-active={isSubmitButtonActive}></c-s-u_-auth-feedback-modal_b6b3_13 >
+                        </template>
+                        <!-- Ends here - code for search feedback -->
+                        <template if:true={showMobileFilterSection}>
+                            <div class="su__filterSectionMobileView">
+                                <div class="su__MobileViewFilterModal su__MobileViewFilterModalShowHide">
+                                    <c-s-u_-auth-filter-section_b6b3_13  show-clear-filters-button={showClearFiltersButton}
+                                        selected-type-filter={selectedTypeFilter} show-filter=true
+                                        tabs-filter={tabsFilter} uid={uid} gototopcontainer={gototopcontainer}
+                                        end-point={endPoint} bearer={bearer} search-query={searchQuery}
+                                        merged-array={mergedArray} smart-facets-admin={smartFacetsAdmin}
+                                        smart-aggregations={smartAggregations} aggregations-data-in={aggregationsData}
+                                        translation-object={translationObject} showmobilefiltersection={showMobileFilterSection}>
+                                    </c-s-u_-auth-filter-section_b6b3_13 >
+                                </div>
+                                <div data-id="myElementModal"
+                                    class=" slds-backdrop  slds-backdrop_open su__bookmark-backdrop su__MobileViewFilterModalShowHide"
+                                    role="button" onclick={closeMobileFilterFunc}></div>
+                            </div>
+                        </template>
+                        <div class={loading}>
+                            <div class={showViewedResults}>
+                                <template if:false={noResultFound}>
+                                    <div class="main-container searchUnifyContainer">
+                                        <div>
+                                            <c-s-u_-auth-tabs_b6b3_13  merge-sources-type-index={mergeSourcesTypeIndex}
+                                                tabsfilter={tabsFilter}
+                                                aggregationsdata={aggregationsData}></c-s-u_-auth-tabs_b6b3_13 >
+                                        </div>
+                                        <c-s-u_-auth-header-section_b6b3_13  show-clear-filters-button={showClearFiltersButton}
+                                            search-string={searchString} langlist={currentLanguageSelected}
+                                            advanced-search-selected={advancedSearchSelected}
+                                            selected-type-filter={selectedTypeFilter} aggregations-data={aggregationsData}
+                                            selected-sticky-filter={selectedStickyFilter} show-filter={showFilter}
+                                            tabs-filter={tabsFilter} gototopcontainer={goToTopContainer} uid={uid}
+                                            end-point={endPoint} bearer={bearer} search-query={searchQuery}
+                                            all-content-hide-facet={allContentHideFacet} bookmark-list={bookmarkSearches}
+                                            language-enabled={languageEnabled} merged-array={mergedArray}
+                                            translation-object={translationObject} allarehidden={allAreHidden}
+                                            exactphrase={exactPhrase} activelistview={activelistview}
+                                            withoneormore={withOneOrMore} withoutthewords={withoutTheWords}
+                                            totalresults={totalResults} mergedresults={resultsInAllContentSources}
+                                            pagenum={pageNum} totalpages={totalPages} searchresultime={resultTime}
+                                            sort-by-check={sortByCheck} loading={loading} correctspell={correctspell}
+                                            response-list-data={responseListData} withwildcardsearches={withWildcardSearch}
+                                            has-wildcard-search={hasWildcardSearch} show-hide-did-you-mean={showHideDidYouMean}></c-s-u_-auth-header-section_b6b3_13 >
+                                        <c-s-u_-auth-bookmark_b6b3_13  uid={uid} bookmark-searches={bookmarkSearches}
+                                            translation-object={translationObject}></c-s-u_-auth-bookmark_b6b3_13 >
+                                        <c-s-u_-auth-saved-bookmark_b6b3_13  translation-object={translationObject}>
+                                        </c-s-u_-auth-saved-bookmark_b6b3_13 >
+                                        <div class={margin30px} data-id="searchUnifyContainerResultSection">
+                                            <div class="su__filter-data-section">
+                                                <template if:false={fullWidth}>
+                                                    <div class="filterSectionClass su__d-block su__w-25">
+                                                        <div data-name="filterBlock" class="su_margin-right27">
+                                                            <c-s-u_-auth-filter-section_b6b3_13  show-clear-filters-button={showClearFiltersButton}
+                                                                selected-type-filter={selectedTypeFilter} 
+                                                                show-filter=true tabs-filter={tabsFilter} uid={uid} gototopcontainer={gototopcontainer}
+                                                                end-point={endPoint} bearer={bearer} search-query={searchQuery} merged-array={mergedArray}
+                                                                default-filter-collapse={defaultFilterCollapse} aggregations-data-in={aggregationsData}
+                                                                translation-object={translationObject} showmobilefiltersection={showMobileFilterSection}>
+                                                            </c-s-u_-auth-filter-section_b6b3_13 >
+                                                        </div>
+                                                    </div>
+                                                </template>
+                                                <div data-id="datasection" class={dataSectionClass}>
+                                                    <template if:false={hideDataSection}>
+                                                        <c-s-u_-auth-search-data-section_b6b3_13  tabsfilter={tabsFilter}
+                                                            response-list-data={responseListData}
+                                                            show-pagination={showPagination}
+                                                            latesturlval={latestUrlVal}
+                                                            end-point-pagination={endPointPagination}
+                                                            pagination-list={paginationList}
+                                                            resultsectioncontainer={resultSectionContainer}
+                                                            counter={counter}
+                                                            similiar-search-data={similiarSearchData}
+                                                            mergedresults={resultsInAllContentSources}
+                                                            selected-sticky-filter={selectedStickyFilter}
+                                                            aggregationsdata={aggregationsData} pagenum={pageNum}
+                                                            total-pages={totalPages} totalresults={totalResults}
+                                                            maincontainerwidth={maincontainerwidth}
+                                                            searchresultime={resultTime} sort-by-check={sortByCheck}
+                                                            resultlabel={result} 
+                                                            loading={loading} summary-collapsible={summaryCollapsible}
+                                                            current-user-email={currentUserEmail}
+                                                            translation-object={translationObject}
+                                                            similar-searches={similarSearches}
+                                                            get-recommendations-enable={getRecommendationsEnable}
+                                                            search-query-data={searchQueryData}
+                                                            knowledge-graph={knowledgeGraph}
+                                                            knowledge-graph-meta-graph={knowledgeGraphMetaGraph}
+                                                            meta-graph={metaGraph}
+                                                            knowledge-graph-related-tiles={knowledgeGraphRelatedTiles}
+                                                            related-tiles={relatedTiles}
+                                                            knowledge-graph-response-recorded={knowledgeGraphResponseRecorded}
+                                                            feature-snippet={featureSnippet}
+                                                            feature-snippet-data={featureSnippetData}
+                                                            featured-response-recorded={featuredResponseRecorded}
+                                                            hide-title={hideTitle} hide-url={hideUrl}
+                                                            hide-summary={hideSummary} hide-metadata={hideMetadata}
+                                                            hide-icon={hideIcon} hide-tag={hideTag}
+                                                            show-advertisement={showAdvertisement} end-point={endPoint}
+                                                            uid={uid} search-string={searchString} bearer={bearer}
+                                                            withwildcardsearches={withWildcardSearch} show-hide-did-you-mean={showHideDidYouMean}
+                                                            has-wildcard-search={hasWildcardSearch} search-conversion-feedback={searchConversionFeedback} page-size={pageSize} search-feedback-response-data={searchFeedbackResponseData} is-search-conversion={isSearchConversion}
+                                                            fail-text={failText} empty-search-string={emptySearchString} total-results={totalResults} gpt-active={gptActive} gpt-context={gptContext} gpt-links={gptLinks} page-num={pageNum} is-device-mobile={isDeviceMobile}></c-s-u_-auth-search-data-section_b6b3_13 >
+                                                    </template>
+                                                </div>
+                                            </div>                                          
+                                            <template if:true={showScroll}>
+                                                <div class="su__back-to-top su__position-fixed su__cursor su__zindex su__d-md-block su__d-xs-none"
+                                                    onclick={goToTopFunc}>
+                                                    <div id="goToTopBtn"
+                                                        class="su__btn-back-to-top su_radius-top su__px-2 su__py-2 su__shadow docs-scroll-fab scrolling su__d-none su__bg-blue-grd"
+                                                        aria-label="Back to Top" role="button" tabindex="0"
+                                                        style="display: block;">
+                                                        <span class="su__text-white font-12">
+                                                            Page Top
+                                                        </span>
+                                                        <span>
+                                                            <svg title={close} class="su__position-relative" width="20"
+                                                                height="20" viewBox="0 0 24 24">
+                                                                <path d="M8 11h3v10h2V11h3l-4-4-4 4zM4 3v2h16V3H4z"
+                                                                    fill="#fff"></path>
+                                                            </svg>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                            <!-- <div class="body-section">
+                                                <div class="div footerSection">
+                                                    <template if:true={showPagination}>
+                                                        <c-s-u_-auth-pagination_b6b3_13  pagenum={pageNum}
+                                                            latesturlval={latestUrlVal} pagesize={pageSize}
+                                                            totalresults={totalResults} totalpages={totalPages}
+                                                            counter={counter} endpointpagination={endPointPagination}
+                                                            paginationlist={paginationList}
+                                                            responselistdata={responseListData}
+                                                            mergedresults={resultsInAllContentSources}
+                                                            translation-object={translationObject}
+                                                            resultsectioncontainer={resultSectionContainer}></c-s-u_-auth-pagination_b6b3_13 >
+                                                    </template>
+                                                </div>
+                                            </div> -->
+                                            <div
+                                                class="su__fixed-bottom docs-scroll-fab scrolling su__shadow su__bg-white su__d-md-none su__d-xs-block">
+                                                <div
+                                                    class="su__mobile-navigation su__px-2 su__px-sm-1 su__py-2 su__flex-vcenter su__justify-content-between">
+                                                    <div class="su__col su__text-center font-9 su__font-bold su__px-sm-1"
+                                                        onclick={goToTopFunc}>
+                                                        <div class="su__mob-icon"><svg width="20" height="20"
+                                                                viewBox="0 0 24 24">
+                                                                <path
+                                                                    d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+                                                                    fill="#333" class="su__active-path"></path>
+                                                            </svg></div>
+                                                        {translationObject.Search}
+                                                    </div>
+                                                    <div class="su__col su__text-center font-9 su__font-bold su__px-sm-1"
+                                                        onclick={toggleExpandAdvanceSearch}>
+                                                        <span class="su__d-block">
+                                                            <div class="su__mob-icon"><svg width="20" height="20"
+                                                                    viewBox="0 0 58 58" xmlns="http://www.w3.org/2000/svg">
+                                                                    <g id="Advance_search_1" data-name="Advance search � 1"
+                                                                        clip-path="url(#clip-Advance_search_1)">
+                                                                        <g id="Group_1450" data-name="Group 1450"
+                                                                            transform="translate(1774.646 -2045.384)">
+                                                                            <path id="Path_1602" data-name="Path 1602"
+                                                                                d="M0,0H63.354V63.354H0Z"
+                                                                                transform="translate(-1780 2040)"
+                                                                                fill="none"></path>
+                                                                            <path id="Subtraction_2" class="su__active-path"
+                                                                                data-name="Subtraction 2"
+                                                                                d="M40.682,58.136H5.783A5.8,5.8,0,0,1,0,52.322L.029,5.814A5.8,5.8,0,0,1,5.811,0H26.646a5.742,5.742,0,0,1,4.1,1.715L44.779,15.755a5.746,5.746,0,0,1,1.715,4.1V51.13L35.364,39.968a14.52,14.52,0,0,0-9.589-22.324,15.236,15.236,0,0,0-2.527-.214A14.564,14.564,0,0,0,8.834,33.952,14.692,14.692,0,0,0,22.55,46.48c.256.014.516.021.771.021a14.55,14.55,0,0,0,7.946-2.4L44.14,56.973A5.733,5.733,0,0,1,40.682,58.136ZM23.291,8.629a2.185,2.185,0,0,0,0,4.37h7.646a2.185,2.185,0,0,0,0-4.37ZM8,8.629A2.185,2.185,0,1,0,8,13h7.646a2.185,2.185,0,1,0,0-4.37ZM23.247,40.7a8.708,8.708,0,1,1,6.167-2.551A8.661,8.661,0,0,1,23.247,40.7Z"
+                                                                                transform="translate(-1769.43 2045.571)"
+                                                                                fill="#464646"></path>
+                                                                        </g>
+                                                                    </g>
+                                                                </svg></div>
+                                                        </span>
+                                                        <span>
+                                                            {translationObject.Advanced_Search}
+                                                        </span>
+                                                    </div>
+                                                    <div class="su__col su__text-center font-9 su__font-bold su__px-sm-1"
+                                                        onclick={starClicked}>
+                                                        <span class="su__d-block">
+                                                            <div class="su__mob-icon"><svg
+                                                                    class="su__bookmark-icon su__bg-white-hover-50"
+                                                                    width="24" height="24" viewBox="0 0 24 24">
+                                                                    <path
+                                                                        d="M19.65,9.04l-4.84-.42L12.92,4.17a1,1,0,0,0-1.84,0L9.19,8.63l-4.83.41a1,1,0,0,0-.57,1.75l3.67,3.18-1.1,4.72a1,1,0,0,0,1.49,1.08L12,17.27l4.15,2.51a1,1,0,0,0,1.49-1.08l-1.1-4.73,3.67-3.18a1,1,0,0,0-.56-1.75Z"
+                                                                        fill="#535355" class="su__active-path"></path>
+                                                                </svg></div>
+                                                        </span>
+                                                        <span>
+                                                            {translationObject.Add_Bookmarks}</span>
+                                                    </div>
+                                                    <div class="su__col su__text-center font-9 su__font-bold su__px-sm-1"
+                                                        onclick={toggleSavedBookmark}>
+                                                        <span class="su__d-block">
+                                                            <div class="su__mob-icon"><svg
+                                                                    class="su__savebokmark-icon su__bg-white-hover-50"
+                                                                    width="24" height="24" viewBox="0 0 24 24">
+                                                                    <path
+                                                                        d="M17,20H5a1,1,0,0,1-1-1V7A1,1,0,0,0,2,7V20a2.006,2.006,0,0,0,2,2H17a1,1,0,0,0,0-2ZM20,2H8A2.006,2.006,0,0,0,6,4V16a2.006,2.006,0,0,0,2,2H20a2.006,2.006,0,0,0,2-2V4A2.006,2.006,0,0,0,20,2Zm0,10-2.5-1.5L15,12V4h5Z"
+                                                                        fill="#535355" class="su__active-path"></path>
+                                                                </svg></div>
+                                                        </span>
+                                                        <span>
+                                                            {translationObject.Saved_Bookmarks}
+                                                        </span>
+                                                    </div>
+                                                    <div class="su__col su__text-center font-9 su__font-bold su__px-sm-1"
+                                                        onclick={toggleSearchTips}>
+                                                        <span class="su__d-block">
+                                                            <div class="su__mob-icon"><svg class="su__margin-auto"
+                                                                    width="24" height="24" viewBox="0 0 24 24"
+                                                                    xmlns="http://www.w3.org/2000/svg">
+                                                                    <defs>
+                                                                        <clipPath id="clip-Tips">
+                                                                            <rect width="24" height="24"></rect>
+                                                                        </clipPath>
+                                                                    </defs>
+                                                                    <g id="Tips" clip-path="url(#clip-Tips)">
+                                                                        <g id="outline-wb_incandescent-24px">
+                                                                            <path id="Path_1665" data-name="Path 1665"
+                                                                                d="M0,24H24V0H0Z" fill="none"></path>
+                                                                            <path id="Path_1666" data-name="Path 1666"
+                                                                                class="su__active-path"
+                                                                                d="M3.55,5.96,4.96,4.55l1.79,1.8L5.34,7.76ZM11,5.05h2v-3H11Zm-10,9H4v-2H1ZM13,21V17.04l1-.58a4,4,0,1,0-4,0l1,.58V21h2m2,2H9V18.19a6,6,0,1,1,6,0V23Zm5-8.95h3v-2H20ZM17.24,6.34l1.79-1.8,1.41,1.41-1.8,1.79Z"
+                                                                                transform="translate(0 -1.05)" fill="#333">
+                                                                            </path>
+                                                                        </g>
+                                                                    </g>
+                                                                </svg></div>
+                                                        </span>
+                                                        <span>
+                                                            {translationObject.Search_Tips}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+                                <template if:true={noResultFound}>
+                                    <template if:true={showHideDidYouMean}>
+                                        <div class="suggestion font-12 su__loading-view">
+                                            <b
+                                                class="su__font-bold font-14 su__mr-2 su__rtlmr-0 su__rtlml-2 su__text-warning su__loading-view">{translationObject.Did_you_mean}:
+                                            </b>
+                                            <a class="su__loading-view" href="javascript:void(0)" onclick={correctSpelling}>
+                                                <span style="color:rgb(164, 163, 166)"
+                                                    class="font-12 su__text-decoration su__color-lgray">
+                                                    {correctspell}
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </template>
+                                    <div class="su__mt-4"></div>
+                                    <template if:true={showClearFiltersButton1}>
+                                        <div data-id="divblock" class="slds-col slds-size_4-of-12">
+                                            <div class="slds-clearfix">
+                                                <div class="slds-float_left">
+                                                    <template if:true={showClearFiltersButton1}>
+                                                        <label onclick={clearFilterForSlider1} class={clearAllClass}>
+                                                            {translationObject.Clear_all_filters}
+                                                        </label>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                    <div
+                                        class="su__text-center su__sorry-no-result su__p-2 su__text-black font-14 su__font-bold ">
+                                        {noResultMsg}</div>
+                                    <div class="no-results-img su__text-center su__mb-4">
+                                        <svg height="240" viewBox="0 0 248 240" width="248" style="height:240px;">
+                                            <defs>
+                                                <linearGradient gradientUnits="objectBoundingBox" id="linear-gradient"
+                                                    x1="1.78" x2="1.78" y1="0.849" y2="-0.151">
+                                                    <stop offset="0" stopcolor="gray" stop-opacity="0.251">
+                                                    </stop>
+                                                    <stop offset="0.54" stopcolor="gray" stop-opacity="0.122">
+                                                    </stop>
+                                                    <stop offset="1" stopcolor="gray" stop-opacity="0.102">
+                                                    </stop>
+                                                </linearGradient>
+                                                <linearGradient gradientUnits="objectBoundingBox" id="linear-gradient-2"
+                                                    x1="0.5" x2="0.5" y1="1">
+                                                    <stop offset="0" stopcolor="gray" stop-opacity="0.251">
+                                                    </stop>
+                                                    <stop offset="0.226" stopcolor="gray">
+                                                    </stop>
+                                                    <stop offset="1" stopcolor="gray" stop-opacity="0.102">
+                                                    </stop>
+                                                </linearGradient>
+                                                <linearGradient id="linear-gradient-3" x1="0.5" x2="0.5"
+                                                    xlink:href="#linear-gradient" y1="0.999" y2="-0.001">
+                                                </linearGradient>
+                                                <clipPath id="clip-No_result">
+                                                    <rect height="240" width="248">
+                                                    </rect>
+                                                </clipPath>
+                                            </defs>
+                                            <g clip-path="url(#clip-No_result)" data-name="No result" id="No_result">
+                                                <g data-name="Group 1379" id="Group_1379"
+                                                    transform="translate(-1979 6868.191)">
+                                                    <g data-name="Group 1378" id="Group_1378"
+                                                        transform="translate(1260 -7220)">
+                                                        <g data-name="Group 1376" id="Group_1376"
+                                                            transform="translate(-568 7389)">
+                                                            <g data-name="Group 1370" id="Group_1370" opacity="0.5"
+                                                                transform="translate(1310.642 -7018.522)">
+                                                                <rect data-name="Rectangle 2131" fill="#d2d6df"
+                                                                    height="175.731" id="Rectangle_2131"
+                                                                    transform="matrix(0.978, -0.21, 0.21, 0.978, 0, 26.683)"
+                                                                    width="127.188">
+                                                                </rect>
+                                                            </g>
+                                                            <rect data-name="Rectangle 2132" fill="#fafafa" height="171.849"
+                                                                id="Rectangle_2132"
+                                                                transform="matrix(0.978, -0.21, 0.21, 0.978, 1312.495, -6990.915)"
+                                                                width="123.95">
+                                                            </rect>
+                                                            <path
+                                                                d="M445.247,91.462a8.8,8.8,0,1,0,10.241,6.8A8.7,8.7,0,0,0,445.247,91.462Zm2.913,13.585a5.078,5.078,0,1,1,3.783-6.024,5.018,5.018,0,0,1-3.783,6.024Z"
+                                                                data-name="Path 1557" fill="url(#linear-gradient)"
+                                                                id="Path_1557" transform="translate(923.385 -7116.92)">
+                                                            </path>
+                                                            <rect data-name="Rectangle 2134" fill="#d2d6df" height="14.238"
+                                                                id="Rectangle_2134"
+                                                                transform="matrix(0.978, -0.21, 0.21, 0.978, 1342.125, -7005.545)"
+                                                                width="60.195">
+                                                            </rect>
+                                                            <path
+                                                                d="M445.5,91.461a8.413,8.413,0,1,0,9.991,6.461,8.413,8.413,0,0,0-9.991-6.461Zm2.783,12.982a4.856,4.856,0,1,1,3.729-5.765A4.856,4.856,0,0,1,448.288,104.444Z"
+                                                                data-name="Path 1558" fill="#d2d6df" id="Path_1558"
+                                                                transform="translate(923.127 -7116.92)">
+                                                            </path>
+                                                            <g data-name="Group 1371" id="Group_1371" opacity="0.5"
+                                                                transform="translate(1366.906 -6996.9)">
+                                                                <rect data-name="Rectangle 2136"
+                                                                    fill="url(#linear-gradient-2)" height="175.731"
+                                                                    id="Rectangle_2136" width="127.188">
+                                                                </rect>
+                                                            </g>
+                                                            <rect data-name="Rectangle 2137" fill="#fff" height="171.849"
+                                                                id="Rectangle_2137"
+                                                                transform="translate(1368.524 -6995.605)" width="123.95">
+                                                            </rect>
+                                                            <path
+                                                                d="M646.917,118a8.8,8.8,0,1,0,8.6,8.8A8.7,8.7,0,0,0,646.917,118Zm0,13.88a5.078,5.078,0,1,1,4.958-5.078,5.018,5.018,0,0,1-4.958,5.054Z"
+                                                                data-name="Path 1559" fill="url(#linear-gradient-3)"
+                                                                id="Path_1559" transform="translate(783.744 -7135.597)">
+                                                            </path>
+                                                            <rect data-name="Rectangle 2139" fill="#d2d6df" height="14.238"
+                                                                id="Rectangle_2139"
+                                                                transform="translate(1400.564 -7003.696)" width="60.195">
+                                                            </rect>
+                                                            <path
+                                                                d="M647.343,118a8.413,8.413,0,1,0,8.413,8.413A8.413,8.413,0,0,0,647.343,118Zm0,13.268a4.86,4.86,0,1,0,0-.015Z"
+                                                                data-name="Path 1560" fill="#d2d6df" id="Path_1560"
+                                                                transform="translate(783.318 -7135.597)">
+                                                            </path>
+                                                            <g data-name="Group 1372" id="Group_1372" opacity="0.5"
+                                                                transform="translate(1288.955 -6813.181)">
+                                                                <rect data-name="Rectangle 2140" fill="#d2d6df"
+                                                                    height="6.425" id="Rectangle_2140"
+                                                                    transform="translate(2.645)" width="1.133">
+                                                                </rect>
+                                                                <rect data-name="Rectangle 2141" fill="#d2d6df"
+                                                                    height="6.425" id="Rectangle_2141"
+                                                                    transform="translate(6.425 2.648) rotate(90)"
+                                                                    width="1.133">
+                                                                </rect>
+                                                            </g>
+                                                            <g data-name="Group 1373" id="Group_1373" opacity="0.5"
+                                                                transform="translate(1420.35 -7035.191)">
+                                                                <rect data-name="Rectangle 2142" fill="#d2d6df"
+                                                                    height="6.425" id="Rectangle_2142"
+                                                                    transform="translate(2.645)" width="1.133">
+                                                                </rect>
+                                                                <rect data-name="Rectangle 2143" fill="#d2d6df"
+                                                                    height="6.425" id="Rectangle_2143"
+                                                                    transform="translate(6.425 2.645) rotate(90)"
+                                                                    width="1.133">
+                                                                </rect>
+                                                            </g>
+                                                            <path
+                                                                d="M950.232,826.19a1.389,1.389,0,0,1-.774-1.678.668.668,0,0,0,.03-.154h0a.7.7,0,0,0-1.25-.461h0a.67.67,0,0,0-.078.136,1.389,1.389,0,0,1-1.678.774.671.671,0,0,0-.154-.03h0a.7.7,0,0,0-.461,1.25h0a.669.669,0,0,0,.135.078,1.389,1.389,0,0,1,.774,1.678.67.67,0,0,0-.03.154h0a.7.7,0,0,0,1.25.461h0a.665.665,0,0,0,.078-.136,1.388,1.388,0,0,1,1.678-.774.672.672,0,0,0,.154.03h0a.7.7,0,0,0,.461-1.25h0A.67.67,0,0,0,950.232,826.19Z"
+                                                                data-name="Path 1561" fill="#d2d6df" id="Path_1561"
+                                                                opacity="0.5" transform="translate(569.028 -7628.675)">
+                                                            </path>
+                                                            <path
+                                                                d="M315.822,621.13a1.389,1.389,0,0,1-.774-1.678.668.668,0,0,0,.03-.154h0a.7.7,0,0,0-1.25-.461h0a.673.673,0,0,0-.078.136,1.389,1.389,0,0,1-1.678.774.672.672,0,0,0-.154-.03h0a.7.7,0,0,0-.461,1.25h0a.669.669,0,0,0,.136.078,1.389,1.389,0,0,1,.774,1.678.669.669,0,0,0-.03.154h0a.7.7,0,0,0,1.25.461h0a.67.67,0,0,0,.078-.136,1.389,1.389,0,0,1,1.678-.774.665.665,0,0,0,.154.03h0a.7.7,0,0,0,.461-1.25h0A.668.668,0,0,0,315.822,621.13Z"
+                                                                data-name="Path 1562" fill="#d2d6df" id="Path_1562"
+                                                                opacity="0.5" transform="translate(1012.345 -7485.382)">
+                                                            </path>
+                                                            <path
+                                                                d="M844.232,121.81a1.389,1.389,0,0,1-.774-1.678.663.663,0,0,0,.03-.154h0a.7.7,0,0,0-1.25-.461h0a.669.669,0,0,0-.078.136,1.389,1.389,0,0,1-1.678.774.669.669,0,0,0-.154-.03h0a.7.7,0,0,0-.461,1.25h0a.67.67,0,0,0,.136.078,1.389,1.389,0,0,1,.774,1.678.672.672,0,0,0-.03.154h0a.7.7,0,0,0,1.25.461h0a.669.669,0,0,0,.078-.136,1.389,1.389,0,0,1,1.678-.774.669.669,0,0,0,.154.03h0a.7.7,0,0,0,.461-1.25h0A.67.67,0,0,0,844.232,121.81Z"
+                                                                data-name="Path 1563" fill="#d2d6df" id="Path_1563"
+                                                                opacity="0.81" transform="translate(643.099 -7136.464)">
+                                                            </path>
+                                                            <circle cx="2.268" cy="2.268" data-name="Ellipse 93"
+                                                                fill="#d2d6df" id="Ellipse_93" opacity="0.64" r="2.268"
+                                                                transform="translate(1529.51 -6942.736)">
+                                                            </circle>
+                                                            <circle cx="2.268" cy="2.268" data-name="Ellipse 94"
+                                                                fill="#d2d6df" id="Ellipse_94" opacity="0.97" r="2.268"
+                                                                transform="translate(1354.231 -6812.558)">
+                                                            </circle>
+                                                            <circle cx="2.268" cy="2.268" data-name="Ellipse 95"
+                                                                fill="#d2d6df" id="Ellipse_95" opacity="0.5" r="2.268"
+                                                                transform="translate(1506.218 -6893.71)">
+                                                            </circle>
+                                                            <circle cx="2.268" cy="2.268" data-name="Ellipse 96"
+                                                                fill="#d2d6df" id="Ellipse_96" r="2.268"
+                                                                transform="translate(1310.98 -7008.437)">
+                                                            </circle>
+                                                            <circle cx="2.268" cy="2.268" data-name="Ellipse 97"
+                                                                fill="#d2d6df" id="Ellipse_97" opacity="0.5" r="2.268"
+                                                                transform="translate(1287 -6946.564)">
+                                                            </circle>
+                                                            <g data-name="Group 1375" id="Group_1375"
+                                                                transform="translate(-423 -260)">
+                                                                <g data-name="Group 1374" id="Group_1374"
+                                                                    transform="translate(1444.089 -6766.049)">
+                                                                    <circle cx="39.333" cy="39.333" data-name="Ellipse 98"
+                                                                        fill="#fff" id="Ellipse_98" r="39.333"
+                                                                        transform="translate(358.911 125.642) rotate(-35.421)">
+                                                                    </circle>
+                                                                    <path
+                                                                        d="M440.312,105.883a39.33,39.33,0,0,1-55.568,55.566,39.331,39.331,0,1,0,55.568-55.566Z"
+                                                                        data-name="Path 1570" fill="#fff" id="Path_1570"
+                                                                        opacity="0.4">
+                                                                    </path>
+                                                                    <path
+                                                                        d="M422.03,121.965a2.65,2.65,0,0,1,2.8-.414,1.2,1.2,0,0,0,.984-2.189,5.042,5.042,0,0,0-5.174.649c-1.2.964.188,2.925,1.394,1.954Z"
+                                                                        data-name="Path 1571" fill="#d2d6df" id="Path_1571">
+                                                                    </path>
+                                                                    <path
+                                                                        d="M409.314,120.273a5.045,5.045,0,0,0-5.044-1.323,1.2,1.2,0,0,0,.688,2.3,2.649,2.649,0,0,1,2.718.777c1.066,1.119,2.7-.639,1.638-1.754Z"
+                                                                        data-name="Path 1572" fill="#d2d6df" id="Path_1572">
+                                                                    </path>
+                                                                    <path
+                                                                        d="M415.52,104.712c5.023,6.02-3.359,10.161-11.851,17.246s-13.879,14.432-18.9,8.412-2.21-16.644,6.282-23.729S410.5,98.692,415.52,104.712Z"
+                                                                        data-name="Path 1573" fill="#fff" id="Path_1573">
+                                                                    </path>
+                                                                    <path
+                                                                        d="M433.563,148.289a26.764,26.764,0,0,0-37.7,7.75c-.79,1.225,1.03,2.587,1.824,1.357a24.477,24.477,0,0,1,34.515-7.284c1.219.8,2.58-1.017,1.357-1.823Z"
+                                                                        data-name="Path 1574" fill="#d2d6df" id="Path_1574">
+                                                                    </path>
+                                                                    <path
+                                                                        d="M432.019,130.3a4.7,4.7,0,0,1-8.257-1.361c-.493-1.448-2.834-.911-2.335.555a7.125,7.125,0,0,0,12.62,2.091c.943-1.227-1.093-2.5-2.028-1.285Z"
+                                                                        data-name="Path 1575" fill="#d2d6df" id="Path_1575">
+                                                                    </path>
+                                                                    <path
+                                                                        d="M398,130.3a4.7,4.7,0,0,0,8.257-1.361c.492-1.448,2.834-.911,2.335.555a7.125,7.125,0,0,1-12.62,2.091c-.944-1.227,1.093-2.5,2.028-1.285Z"
+                                                                        data-name="Path 1576" fill="#d2d6df" id="Path_1576">
+                                                                    </path>
+                                                                </g>
+                                                                <path
+                                                                    d="M704.152,370.976a46.238,46.238,0,1,0-7.564,70.429l33.423,34.769a2.251,2.251,0,0,0,3.183.062l8.329-8.009a2.251,2.251,0,0,0,.062-3.183L708.16,430.279a46.243,46.243,0,0,0-4.007-59.3ZM693.741,426.85a33.073,33.073,0,1,1,.919-46.765,33.073,33.073,0,0,1-.919,46.765Z"
+                                                                    data-name="Path 1577" fill="#d2d6df" id="Path_1577"
+                                                                    transform="translate(1187 -7033.523)">
+                                                                </path>
+                                                            </g>
+                                                        </g>
+                                                    </g>
+                                                </g>
+                                            </g>
+                                        </svg>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- code for opening the citations modal starts here      -->
+                    <template if:true={showCitationModal}>
+                        <c-s-u_-auth-citation-modal_b6b3_13  show-citation-modal={showCitationModal} pos-x-citation-modal={posXCitationModal}
+                            pos-y-citation-modal={posYCitationModal} merge-result-hits={mergeResultHits} citation-url={citationUrl}
+                            is-device-mobile={isDeviceMobile} diamond-position-x={diamondPositionX}   diamond-position-y={diamondPositionY}  show-viewed-results={showViewedResults} visibility={visibilityCitations} button-hover={buttonHovered}></c-s-u_-auth-citation-modal_b6b3_13  >
+                    </template>
+                    <!-- code for opening the citations modal ends here      -->
+                </template>
+            </template>
+            <template if:false={customSettingsFilled}>
+                <span class="customSettingErrMsg">{customSettingErrorMessage}</span>
+            </template>           
+        </div>
+    </div>
+</template>

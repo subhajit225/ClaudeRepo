@@ -1,0 +1,29 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" controller="PC_HelpLinkController">
+    <aura:attribute name="Label" type="string"/>
+    <aura:attribute name="isLabelRequired" type="boolean"/>
+    <aura:attribute name="Link1" type="string"/>
+    <aura:attribute name="Link1Id" type="string"/>
+    <aura:attribute name="linkType" type="string"/>
+    <aura:attribute name="url" type="string" default="helplinks"/>
+    <aura:attribute name="fileurl" type="url"/>
+    
+    <aura:attribute name="selectedDocumentId" type="string"/>
+    <aura:attribute name="lstContentDoc" type="List"/>
+    <aura:attribute name="hasModalOpen" type="boolean" default="false"/>
+    
+    
+    
+    <div class="slds-grid slds-grid_vertical">
+        <aura:if isTrue="{!v.isLabelRequired}">
+            <div class="slds-align_absolute-center fontclass slds-text-title_bold slds-m-top_small">{!v.Label}</div>
+        </aura:if>
+        <aura:if isTrue="{!not(empty(v.Link1Id))}">
+            <div class="slds-col slds-align_absolute-center slds-p-top_medium">
+                <p>
+                    <a onclick="{!c.handleClick}" data-Id="{!v.Link1Id}">{!v.Link1}</a>
+                </p>          
+            </div>
+        </aura:if>
+    </div>
+    
+</aura:component>

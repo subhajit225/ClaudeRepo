@@ -1,0 +1,70 @@
+<template>
+  <template if:true={items.length}>
+    <table style="background-color: #ffffff" aria-describedby="Data Category">
+      <thead>
+        <tr>
+          <th><span class="datacatHead">Data Category</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <template for:each={items} for:item="item" for:index="index">
+          <div key={item.label} class="su_main_cat">
+            <template if:true={item.listChildCategory.length}>
+              <template if:true={item.expanded}>
+                <img
+                  alt="up"
+                  src={up}
+                  class="iconexpcol"
+                  onclick={handleUpDown}
+                  data-label={item.label}
+                  data-id={index}
+                />
+              </template>
+              <template if:false={item.expanded}>
+                <img
+                  alt="up"
+                  src={down}
+                  class="iconexpcol"
+                  onclick={handleUpDown}
+                  data-label={item.label}
+                  data-id={index}
+                />
+              </template>
+              <lightning-input
+                class="chkInp"
+                type="checkbox"
+                disabled={item.disabled}
+                checked={item.checked}
+                label={item.label}
+                onchange={handleChange}
+              ></lightning-input>
+              <div class="datacategory_label">{item.label}</div>
+            </template>
+            <template if:false={item.listChildCategory.length}>
+              <lightning-input
+                class="chkInp"
+                style="padding-left: 16px"
+                disabled={item.disabled}
+                type="checkbox"
+                checked={item.checked}
+                label={item.label}
+                onchange={handleChange}
+              ></lightning-input>
+              <div class="datacategory_label">{item.label}</div>
+            </template>
+          </div>
+          <template if:true={item.expanded}>
+            <div class="su_child_cat" key={item.label}>
+              <c-knowbler-data-cat-child
+                items={item.listChildCategory}
+                parent={item.label}
+                ischild
+                onchangevalue={dcChangeValue}
+              ></c-knowbler-data-cat-child>
+            </div>
+          </template>
+        </template>
+      </tbody>
+    </table>
+  </template>
+</template>

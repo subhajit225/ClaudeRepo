@@ -1,0 +1,32 @@
+<apex:component controller="PocReturnEmailController" access="global">
+    <apex:attribute name="PocReturnIDVar" type="Id" description="Id of the account" assignTo="{!PocReturnID}"/>
+    
+    Rubrik Order : {!OrderList}
+
+
+    <table border = "1" cellspacing = "1">
+        <tr>
+            <td>Product Name</td>
+            <td>Description </td>    
+            <td>Qnty</td>    
+            <td>Serial No</td>     
+             <td>Location</td>    
+            <td>Shipping Carrier</td>    
+             <td>Tracking</td>    
+                          
+        </tr>
+        <apex:repeat value="{!PocReturnItem}" var="con">
+            <tr>
+                <td>{!con.ProductName}</td>
+                <td>{!con.Description}</td>     
+                <td>{!con.Quantity}</td>     
+                <td>{!con.SerialNumber}</td>  
+                 <td>{!con.LocationName}</td>
+                  <td>{!con.ShippingCompanyName}</td>  
+                 <td>{!con.TrackingNumber}</td>
+            </tr>
+        </apex:repeat>        
+    </table>
+   
+   
+</apex:component>

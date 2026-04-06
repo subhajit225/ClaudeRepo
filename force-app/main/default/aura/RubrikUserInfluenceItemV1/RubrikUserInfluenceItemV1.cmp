@@ -1,0 +1,17 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="influenceName" type="String"/>
+    <aura:attribute name="influenceIcon" type="String"/>
+    <aura:attribute name="influenceCount" type="Integer"/>
+    
+    <div class="slds-grid slds-wrap">
+        <div class="slds-size_2-of-2">
+            <div class="ialignment">
+                <lightning:icon iconName="{!v.influenceIcon}" alternativeText="{!v.influenceName}" size="large" title="{!v.influenceName}" class="icon"/>
+                <div class="slds-text-align_center row">
+                    <p class="points">{!v.influenceCount}</p>
+                    <span class="label">{!v.influenceName}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

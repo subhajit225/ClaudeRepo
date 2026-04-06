@@ -1,0 +1,27 @@
+<apex:page standardcontroller="Case"
+    extensions="ServiceConsoleCommentExtension" showHeader="false">
+    <!-- Uses publisher.js rather than interaction.js -->
+    <apex:includeScript value="/canvas/sdk/js/28.0/publisher.js"/>
+    <div>
+        <apex:form >
+            <!-- Creates a case comment and on complete notifies the Case Feed page
+                that a related list and the feed have been updated -->
+            <apex:actionFunction action="{!addComment}" name="addComment" rerender="out" oncomplete="Sfdc.canvas.publisher.publish(
+            {name : 'publisher.refresh',  payload : 
+            {feed: true, objectRelatedLists: {}}});"/>   
+            <apex:outputPanel id="out" >
+               <!--<apex:inputField value="{!Case.Status}"/>
+               <br/>-->
+               <apex:outputtext rendered="{!Case.isClosed==false}">Change Status to:&nbsp;</apex:outputtext><apex:selectList value="{!Case.Status}" multiselect="false" size="1" styleclass="form-control input-sm" rendered="{!Case.isClosed==false}" >
+                                       <apex:selectOptions value="{!Statuses}"/>
+                                    </apex:selectList> <br/>
+               Set as Public&nbsp;<apex:inputField value="{!comment.isPublished}" label="Public"/>
+                <apex:inputField value="{!comment.commentbody}" style="width:98%; height:160px;" label="Body"/>
+
+            </apex:outputPanel>
+        </apex:form><br />
+        <button type="button" onclick="addComment();" style="position:fixed; bottom:0px; 
+        right:2px; padding: 5px 10px; font-size:13px;" id="cpbutton" >Post Case Comment
+        </button>
+    </div>              
+</apex:page>

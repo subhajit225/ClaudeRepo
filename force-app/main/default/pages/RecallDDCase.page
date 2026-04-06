@@ -1,0 +1,82 @@
+<apex:page standardController="Deal_Desk_Case__c" extensions="DDCaseExtController" sidebar="false" lightningStylesheets="true"  showheader="false" standardstylesheets="false">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    
+    <style type="text/css">
+        
+        /* This is for the full screen DIV */
+        .popupBackground {
+            /* Background color */
+            background-color:#e4e4ea;
+            opacity: 0.20;
+            filter: alpha(opacity = 20);
+            
+            /* Dimensions */
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 998;
+            position: absolute;
+        }
+    
+    /* This is for the message DIV */
+    .PopupPanel {
+        /* Dimensions */
+        left: 50%;
+        width: 100px;
+        //margin-left: -100px;
+        border-radius: 15px
+        top: 50%;
+        height: 100px;
+        margin-top: 200px;
+        z-index: 999;
+        position: fixed;
+    }
+    
+    
+    </style>
+    
+    <script>
+        
+        window.onload = function() { 
+        onRecall();
+    }
+    
+    function onAfterRecall(ErrorMessage){
+        
+        if(ErrorMessage != ''){
+            window.onload = showToast();
+            function showToast() {
+                sforce.one.showToast({
+                    "title": "Warning",
+                    "message": ErrorMessage,
+                    "type": "error"
+                });
+            }
+            reDirect();
+        }else{
+            
+            
+            reDirect();
+        }
+        
+    }
+    
+    </script>
+    <apex:slds />
+    <apex:form >
+        <apex:actionStatus id="pleasewait" >
+            <apex:facet name="start">
+                <div>
+                    <div class="popupBackground"></div>
+                    <div class="PopupPanel">
+                        <img src="/img/loading32.gif" width="50" height="50"/><br/>Please Wait Processing .....
+                    </div>
+                </div>
+            </apex:facet>
+        </apex:actionStatus>				
+        <apex:actionfunction name="onRecall" action="{!onRecall}" oncomplete="onAfterRecall('{!ErrorMessage}')" status="pleasewait" rerender="msgId"/>
+        <apex:actionfunction name="reDirect" action="{!reDirect}"/>
+    </apex:form>
+    <apex:pageMessages />
+</apex:page>

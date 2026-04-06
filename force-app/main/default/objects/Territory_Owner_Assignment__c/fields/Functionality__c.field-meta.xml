@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Functionality__c</fullName>
+    <description>Determines the ETM recalculation of TART or owner update based on functionality effected</description>
+    <label>Functionality</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Owner Assignment</fullName>
+                <default>true</default>
+                <label>Owner Assignment</label>
+            </value>
+            <value>
+                <fullName>Split Opportunity</fullName>
+                <default>false</default>
+                <label>Split Opportunity</label>
+            </value>
+            <value>
+                <fullName>Sales Engineer Assignment</fullName>
+                <default>false</default>
+                <label>Sales Engineer Assignment</label>
+            </value>
+            <value>
+                <fullName>Alliance Rep Assignment</fullName>
+                <default>false</default>
+                <label>Alliance Rep Assignment</label>
+            </value>
+            <value>
+                <fullName>SDR Assignment</fullName>
+                <default>false</default>
+                <label>SDR Assignment</label>
+            </value>
+            <value>
+                <fullName>Opp Co-Owner Assignment</fullName>
+                <default>false</default>
+                <label>Opp Co-Owner Assignment</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

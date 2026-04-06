@@ -1,0 +1,265 @@
+<template>
+    <lightning-modal-header label='Replacement Product Search'>
+            <!-- <span>
+                <lightning-icon icon-name="action:approval"
+                  style="zoom:60%">
+                </lightning-icon>
+            </span> -->
+            <template if:true={showmsg}>
+                  <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                    <span class="slds-assistive-text">error</span>
+                    <span class="slds-icon_container slds-icon-utility-error slds-m-right_x-small"
+                      title="Description of icon when needed"></span>
+                    <h2>
+                      <p>
+                        <span class="bolded">
+                          <label>{message}</label>
+                        </span>
+                      </p>
+                    </h2>
+                  </div>
+	          </template>
+            
+        </lightning-modal-header>        
+        <lightning-modal-body>
+            <div>
+                <div>
+                    <div style="margin-left:1cm;margin-right:1cm">
+                        <template if:true={showSpinner}>
+                              <lightning-spinner
+                                    alternative-text="Loading..." variant="brand">
+                              </lightning-spinner>                            
+                        </template>
+                        <span 
+                        style="font-size:15px;">
+        <template if:false={isSKUSelected}>
+          <lightning-layout multiple-rows>
+            <lightning-layout-item size="12" padding="around-small" small-device-size="3" medium-device-size="6" large-device-size="2" >
+              <div class="custom-box">								
+                <lightning-input name="Search Products" label="Enter Product Name" type="search" value={searchProdName}
+                class="slds-m-vertical_medium" onchange={handleSearchProduct}></lightning-input>
+              </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" padding="around-small" small-device-size="3" medium-device-size="6" large-device-size="2">
+              <div class="custom-box">
+                <lightning-input name="Search Product Description" label="Enter Product Description" type="search" value={searchProdDes}
+                class="slds-m-vertical_medium" onchange={handleprodDescription}></lightning-input>
+              </div>
+            </lightning-layout-item>				
+            <lightning-layout-item size="12" style="padding-top: 1.7rem" padding="around-small" small-device-size="3" medium-device-size="6" large-device-size="2">
+              <div class="custom-box">
+                <lightning-combobox label = "Product Type" value={prdtypeval}
+                                  options={prdTypeOptions} onchange={handleProdTypeChange}></lightning-combobox>					
+              </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" style="padding-top: 1.7rem" padding="around-small" small-device-size="3" medium-device-size="6" large-device-size="2">
+              <div class="custom-box">
+                <lightning-combobox label = "License Type" value={prdlictypeval} 
+                                  options={prdLicTypeOptions} onchange={handleProdLicTypeChange}></lightning-combobox>
+              </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" style="padding-top: 1.7rem" padding="around-small" small-device-size="3" medium-device-size="6" large-device-size="2">
+              <div class="custom-box">
+                <lightning-combobox label = "License Category" value={prdlicCatval} 
+                                  options={prdLicCatoptions} onchange={handleProdLicCatChange}></lightning-combobox>
+              </div>
+            </lightning-layout-item>
+          </lightning-layout>
+          <div id="containerDiv" onmousemove={handlemousemove} onmouseup={handlemouseup}
+                    ondblclick={handledblclickresizable}
+                    class="slds-table_header-fixed_container slds-border_right slds-border_left tableScroll slds-table--header-fixed_container slds-scrollable_y"
+                    onscroll={tableOuterDivScrolled} style="height: 500px; overflow-x: scroll">
+            <div id="tableViewInnerDiv" onscroll={tableScrolled} class="slds-scrollable_y tableViewInnerDiv">
+          <!-- <div style="height: 500px; overflow-x: scroll" class="slds-table--header-fixed_container slds-scrollable_y"> -->
+              <!-- <lightning-datatable data={prodList} columns={columns} key-field="Id" max-row-selection="1" onrowselection={handleRowSelection}>
+              </lightning-datatable> -->
+              <!-- <div class="slds-scrollable_x" style="height: 100rem;width: 180rem;"> -->
+              <table class="slds-table slds-table_bordered slds-table_header-fixed slds-table_resizable-cols slds-table_fixed-layout">
+                    <thead>
+                    <tr>						
+                        <!-- <th scope="col" style="width: 7%" data-field-name="srnum" title="selection">
+                          <div class="slds-truncate" title="Selection"></div>
+                        </th> -->
+                        <th class="slds-is-resizable dv-dynamic-width" scope="col" style="width: 2.5em" title="Selection">
+                          <div class="slds-cell-fixed" style="width: 2.5em">
+                                <a class="slds-th__action slds-text-link--reset ">
+                                    <span class="slds-truncate"></span>
+                                </a>
+                                <div class="slds-resizable">
+                                    <span class="slds-resizable__handle" onmousedown={handlemousedown}>
+                                        <span class="slds-resizable__divider"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </th>
+                        <!-- <th scope="col" style="width: 15%" data-field-name="srnum" title="Product Name">
+                          <div class="slds-truncate" title="Number">Product Name</div>
+                        </th> -->
+                        <th class="slds-is-resizable dv-dynamic-width" scope="col" style={fixedWidth} title="Product Name">
+                          <div class="slds-cell-fixed" style={fixedWidth}>
+                                <a class="slds-th__action slds-text-link--reset ">
+                                    <span class="slds-truncate">Product Name</span>
+                                </a>
+                                <div class="slds-resizable">
+                                    <span class="slds-resizable__handle" onmousedown={handlemousedown}>
+                                        <span class="slds-resizable__divider"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="slds-is-resizable dv-dynamic-width" scope="col" style={fixedWidth} title="Prod Description">
+                          <div class="slds-cell-fixed" style={fixedWidth}>
+                                <a class="slds-th__action slds-text-link--reset ">
+                                    <span class="slds-truncate">Product Description</span>
+                                </a>
+                                <div class="slds-resizable">
+                                    <span class="slds-resizable__handle" onmousedown={handlemousedown}>
+                                        <span class="slds-resizable__divider"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="slds-is-resizable dv-dynamic-width" scope="col" style={fixedWidth} title="Replacement category">
+                          <div class="slds-cell-fixed" style={fixedWidth}>
+                                <a class="slds-th__action slds-text-link--reset ">
+                                    <span class="slds-truncate">Replacement Category</span>
+                                </a>
+                                <div class="slds-resizable">
+                                    <span class="slds-resizable__handle" onmousedown={handlemousedown}>
+                                        <span class="slds-resizable__divider"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="slds-is-resizable dv-dynamic-width" scope="col" style={fixedWidth} title="License Type">
+                          <div class="slds-cell-fixed" style={fixedWidth}>
+                                <a class="slds-th__action slds-text-link--reset ">
+                                    <span class="slds-truncate">License Type</span>
+                                </a>
+                                <div class="slds-resizable">
+                                    <span class="slds-resizable__handle" onmousedown={handlemousedown}>
+                                        <span class="slds-resizable__divider"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="slds-is-resizable dv-dynamic-width" scope="col" style={fixedWidth} title="Product Type">
+                          <div class="slds-cell-fixed" style={fixedWidth}>
+                                <a class="slds-th__action slds-text-link--reset ">
+                                    <span class="slds-truncate">Product Type</span>
+                                </a>
+                                <div class="slds-resizable">
+                                    <span class="slds-resizable__handle" onmousedown={handlemousedown}>
+                                        <span class="slds-resizable__divider"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="slds-is-resizable dv-dynamic-width" scope="col" style={fixedWidth} title="License Category">
+                          <div class="slds-cell-fixed" style={fixedWidth}>
+                                <a class="slds-th__action slds-text-link--reset ">
+                                    <span class="slds-truncate">License Category</span>
+                                </a>
+                                <div class="slds-resizable">
+                                    <span class="slds-resizable__handle" onmousedown={handlemousedown}>
+                                        <span class="slds-resizable__divider"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </th>                        
+                    </tr>
+                    </thead>
+                    <tbody>
+                      <template for:each={prodList} for:item="skudata" for:index="indexdata">
+                      <tr key={skudata.customIndex}>
+                          <td>
+                            <div class="slds-truncate dv-dynamic-width" style={fixedWidth}>
+                                <div class="slds-truncate" title="">
+                                  <template if:true={skudata.showSelectCheckBox}>
+                                    <template if:true={skudata.isRowSelected}>
+                                        <lightning-input type="radio" value={skudata.isRowSelected} data-index={indexdata} name="radio"
+                                            data-name="radio" data-custom-index={skudata.customIndex} onchange={handleRadioChange} checked>
+                                          </lightning-input>
+                                    </template>                                    
+                                    <template if:false={skudata.isRowSelected}>
+                                          <lightning-input type="radio" value={skudata.isRowSelected} data-index={indexdata} name="radio"
+                                            data-name="radio" data-custom-index={skudata.customIndex} onchange={handleRadioChange}>
+                                          </lightning-input>
+                                    </template>
+                                  </template>
+                                </div>
+                            </div>
+                          </td>
+                          <!-- <td data-label="Product Name"> -->
+                            <td>
+                              <div class="slds-truncate dv-dynamic-width" style={fixedWidth}> {skudata.productName} </div>
+                            </td>
+                          <!-- </td> -->
+                          <td>
+                              <div class="slds-truncate dv-dynamic-width" style={fixedWidth}> {skudata.productDescription} </div>
+                          </td>
+                          <td>
+                              <div class="slds-truncate dv-dynamic-width" style={fixedWidth}>{skudata.productReplacementCategory}</div>
+                          </td>
+                          <td>
+                              <div class="slds-truncate dv-dynamic-width" style={fixedWidth}> {skudata.productLicenseType} </div>
+                          </td>
+                          <td data-label="Product Type">
+                              <div class="slds-truncate dv-dynamic-width" style={fixedWidth}>{skudata.productProductType} </div>
+                          </td>
+                          <td>
+                              <div class="slds-truncate dv-dynamic-width" style={fixedWidth}>{skudata.productLicenseCategory}</div>
+                          </td>                          
+                         
+                          </tr>     <!-- FY25SR-1705 Start -->
+                                <template if:true={componentVisible}>
+                                    <template if:true={skudata.showAssets}>                        
+                                        <tr key={skudata.customIndex}>        
+                                          <td colspan="12">
+                                            <div ondblclick={handleDoubleClick}> 
+                                            <div class="parent-container">
+                                              <c-sku-asset-non-asset-selection customerrors={customErrorMessages} 
+                                              quote-details={quoteDetails}
+                                              rowsel={selectedRowval} 
+                                              sourceent={entdata} sourcequantitysum={quantitySum} sourcecustomindex={customIndex} 
+                                              onskupathevent={handleSkuAssetNonAssetChange}></c-sku-asset-non-asset-selection>
+                                            </div>
+                                            </div> 
+                                          </td>                                                                               
+                                        </tr>                                                                           
+                                    </template>
+                                  </template>
+                                    <!-- FY25SR-1705 End -->
+                                    <!-- FY25SR-1084 Start -->
+                                    <template if:true={skudata.showAttributeSection}>                                                                                      
+                                        <tr key={skudata.customIndex}>        
+                                          <td colspan="12">
+                                            <div ondblclick={handleDoubleClick}> 
+                                            <div class="parent-container">
+                                              <c-sku-drawer-new-rep-component customerrors={customErrorMessages} rowsel={selectedRowval} sourceent={entdata} sourcequantitysum={quantitySum} sourcecustomindex={customIndex} onskuattributesevent={handleSkuAttributes} ismismatchqty={isMismatchQTY}></c-sku-drawer-new-rep-component>
+                                            </div>
+                                            </div> 
+                                          </td>                                                                               
+                                        </tr>                                                                           
+                                    </template> 
+                                    <!-- FY25SR-1084 End -->                                       
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+          </div>                
+        </template>
+        <template if:true={error}>
+                {error}
+        </template>
+                       </span>
+                    </div>
+                </div>
+            </div>
+        </lightning-modal-body>
+        <lightning-modal-footer>          
+            <lightning-button label="OK" variant=”brand” 
+                   onclick={handleOkay}></lightning-button>
+        </lightning-modal-footer>
+        <c-new-rep-event-wrapper onwrapevent={handleSkuData}></c-new-rep-event-wrapper>
+</template>

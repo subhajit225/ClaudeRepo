@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Risk_Reason_Mandatory</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND( ISPICKVAL ( DNT_Reason__c , &apos;&apos; ) , Do_Not_Trigger__c )</errorConditionFormula>
+    <errorDisplayField>DNT_Reason__c</errorDisplayField>
+    <errorMessage>Please select a reason for Do Not Trigger</errorMessage>
+</ValidationRule>

@@ -1,0 +1,25 @@
+<!--
+    Name: csCaseTransferSuggestedQueue
+    JIRA : CS21-482 - Transfer Request Button - Automation
+    Created By : Veera Gandi
+-->
+<template>
+    <lightning-record-edit-form object-api-name="Case" record-id={recordId} onsubmit={handleSubmit}
+        onsuccess={handleSuccess}>
+        <lightning-messages> </lightning-messages>
+        <div class="slds-grid slds-wrap">
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field field-name="SuggestedTransferQueue__c" variant="label-stacked" required>
+                </lightning-input-field>
+            </div>
+
+            <div class="slds-col slds-size_1-of-2 slds-m-top_large">
+                <lightning-button variant="brand" type="submit" name="save" label="Update">
+                </lightning-button>
+            </div>
+        </div>
+    </lightning-record-edit-form>
+    <div if:true={showSpinner}>
+        <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+    </div> 
+</template>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MSP_Legal_Partner_Onboarding_Request</fullName>
+    <columns>NAME</columns>
+    <columns>Agreed_Term_Conditions__c</columns>
+    <columns>Company_Name__c</columns>
+    <columns>Partner_Onboarding_Status__c</columns>
+    <columns>PartnerType__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>PartnerType__c</field>
+        <operation>equals</operation>
+        <value>MSP,MSP-Reseller</value>
+    </filters>
+    <label>MSP Legal</label>
+    <sharedTo>
+        <allInternalUsers></allInternalUsers>
+    </sharedTo>
+</ListView>

@@ -1,0 +1,51 @@
+<apex:page standardController="Case" >
+     <apex:includeLightning />
+    <apex:includeScript value="/support/console/46.0/integration.js"/>
+
+    <div id="CaseContainer" />
+    
+    <script>
+    $Lightning.use("c:LGT_CaseApp", function() {
+       $Lightning.createComponent("c:LGT_NewCase",
+                                  { 
+                                      recordId : "{!Case.Id}"
+                                  },
+                                  "CaseContainer",
+                                  function(component) {
+
+                                  });
+   });
+    
+    function receiveMessage(event){
+        var primaryId ; 
+        if (event.data.startsWith('500')){
+            if (sforce.console.isInConsole()) {
+                //debugger;
+                sforce.console.getEnclosingTabId(closeSubtab);
+                sforce.one.navigateToSObject(event.data, "detail");
+            } else {
+                sforce.one.navigateToSObject(event.data, "detail");
+            }
+            return;
+        }
+        
+        
+        if (event.data == "close"){
+            sforce.console.getEnclosingTabId(function(result2){
+                    var tabId = result2.id;
+                    sforce.console.closeTab(tabId);
+                });
+            return;
+        }   
+        var openSuccess = function openSuccess(result) {
+            //Report whether opening the new tab was successful
+            
+        };
+    }
+     var closeSubtab = function closeSubtab(result) {
+        var tabId = result.id;
+        sforce.console.closeTab(tabId);
+    };
+    window.addEventListener("message", receiveMessage, false);
+    </script>
+</apex:page>

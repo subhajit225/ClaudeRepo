@@ -1,0 +1,46 @@
+.parent{
+    position: relative;
+    height: calc(100% - 140px)!important;
+    overflow: auto;
+    /* margin: 10px 10px 10px 5px; */
+}
+.containerDateModal{
+    border: 1px solid black;
+    border-radius: 4px;
+    position: absolute;
+    margin-left: auto;
+    top:0;
+    right:0;
+    z-index: 9;
+    background-color: #ffffff;
+    height: 210px;
+    width: 280px;
+}
+.containerTabHead{
+    background-color:#fafffc;
+    border:1px solid grey;
+    border-radius:8px;
+    display:flex;
+    align-items:center;
+    width:fit-content;
+}
+.tabTitle{
+    display:flex;
+    justify-content:space-between;
+    align-items: center;
+}
+.tabIcon{
+    --lwc-colorTextIconDefault:#33a3d4;
+    display:flex;
+    flex-direction:row;
+    align-items: center;
+}
+.OnlineIcon{
+    --lwc-colorTextIconDefault: green;
+}
+.OfflineIcon{
+    --lwc-colorTextIconDefault: red;
+}
+.slds-checkbox_faux{
+    margin: 0px !important;
+}

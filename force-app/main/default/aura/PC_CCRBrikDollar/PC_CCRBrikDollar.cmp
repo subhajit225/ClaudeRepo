@@ -1,0 +1,25 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes"  access="global" controller="PC_TilesInformation">
+    <aura:attribute name="label" type="string"/>
+     <aura:attribute name="incId" type="string"/>
+    <aura:attribute name="url" type="string"/>
+    <aura:attribute name="imgurl" type="string"/> 
+    <aura:attribute name="Navurl" type="string"/> 
+    <aura:attribute name="ccrAmount" type="decimal"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <div class="slds-box_x-large slds-text-align_center tileMenuItemCard">
+        <div class="uiMenuItem forceCommunityTileMenuItem" data-aura-class="uiMenuItem forceCommunityTileMenuItem">
+            <span class="navTileLink" href="/partnersnew/s/incentivesclaim" role="menuitem" data-special-link="true" title="BrikDollars YTD">
+                <div class="tileLabel" onclick="{!c.handleClick}">{!v.label}</div> 
+                <div class="slds-align--absolute-center imagePreview" onclick="{!c.handleClick}"  clas="backImage" style="{!'background-image: url('+v.imgurl+'); height:130px;'}">
+                    <div class="slds-grid slds-grid_vertical">
+                        <div class="slds-col">
+                            <span><p class="textColor">Amount: {!v.ccrAmount}</p></span> 
+                        </div>
+                    </div>
+                </div>
+            </span>
+        </div>
+    </div>
+    
+</aura:component>

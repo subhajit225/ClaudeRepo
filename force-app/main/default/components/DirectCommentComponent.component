@@ -1,0 +1,237 @@
+<apex:component access="global" controller="DirectCommentController" >
+    <apex:attribute name="relatedToId" assignTo="{!subId}" description="Customer Subscription Record Id" type="String" access="global"/>
+    <div style="margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;padding-left:0;padding-right:0;padding-top:0;padding-bottom:0;background-color:#f2f2f2" bgcolor="#F2F2F2">
+        
+        <span style="padding:0px;font-size:0px;line-height:0px;max-height:0px;color:#f2f2f2;margin:0px;"><apex:outputText escape="false" value="{!CusSubInfo.Community_Feed__r.Title__c}" ></apex:outputText>
+        </span><table style="color:#2a94d6;background-color:#2a94d6" width="100%" cellpadding="0" cellspacing="0" border="0"> <tbody><tr><td style="line-height:6px;font-size:6px" bgcolor="#2A94D6" height="6">&nbsp;</td></tr>
+        </tbody></table><table style="color:#f2f2f2;background-color:#f2f2f2" width="100%" cellpadding="0" cellspacing="0" border="0"> <tbody><tr><td style="line-height:25px;font-size:25px" bgcolor="#F2F2F2" height="25">&nbsp;</td></tr>
+        </tbody></table> <table border="0" cellpadding="0" cellspacing="0" bgcolor="#F2F2F2" width="100%" align="center">
+        <tbody><tr>
+            <td align="center">
+                
+                <table style="background-color:#ffffff;max-width:600px"  cellpadding="0" cellspacing="0" border="0" align="center" bgcolor="#FFFFFF">
+                    <tbody>
+                        <tr>
+                            <td align="left">        
+                                <table cellpadding="0" cellspacing="0" width="100%" border="0">
+                                    <tbody>
+                                        <tr>
+                                            <td width="20" bgcolor="#FFFFFF">&nbsp;</td>
+                                            <td bgcolor="#FFFFFF"><table style="color:#ffffff;background-color:#ffffff" width="100%" cellpadding="0" cellspacing="0" border="0"> <tbody><tr><td style="line-height:28px;font-size:28px" bgcolor="#FFFFFF" height="28">&nbsp;</td></tr>
+                                                </tbody></table>  <table cellpadding="0" cellspacing="0" width="100%" border="0">
+                                                <tbody>
+                                                    <tr>
+                                                        <td width="20" bgcolor="#FFFFFF">&nbsp;</td>
+                                                        <td bgcolor="#FFFFFF"><div>    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                                            <tbody><tr style="vertical-align:top">
+                                                                <td width="45" style="font-family:'Salesforce Sans','Helvetica Neue',Helvetica,Arial,'Sans Serif';font-size:14px;vertical-align:top;width:45" valign="top">
+                                                                    <img border="0"  src="{!CommentOwnerProfileImgURL}" width="45" alt="" style="display:block;border-radius:50%" height="45" class="CToWUd"/></td>
+                                                                <td width="10">&nbsp;</td>
+                                                                <td style="font-family:'Salesforce Sans','Helvetica Neue',Helvetica,Arial,'Sans Serif';font-size:14px;color:#000000;vertical-align:top" valign="top">
+                                                                    <div style="margin:6px 0px 4px 0px">
+                                                                        <span><span><span style="text-decoration:none;color:#015ba7"><font color="#015BA7">{!CusSubInfo.Community_Feed__r.CreatedBy.CommunityNickname}</font></span><span style="color:#888888"> </span></span></span>
+                                                                    </div>
+                                                                    <div></div>
+                                                                </td>
+                                                                </tr>
+                                                            </tbody></table>
+                                                            <div style="margin:12px 0px 12px 0px;font-size:16px;font-family:'Salesforce Sans','Helvetica Neue',Helvetica,Arial,'Sans Serif'">
+                                                                <div><span><p style="margin:0"><apex:outputText escape="false" value="{!CusSubInfo.Community_Feed__r.Title__c}" ></apex:outputText></p></span></div>
+                                                                <table style="color:#ffffff;background-color:#ffffff" width="100%" cellpadding="0" cellspacing="0" border="0"> <tbody><tr><td style="line-height:18px;font-size:18px" bgcolor="#FFFFFF" height="18">&nbsp;</td></tr>
+                                                                    </tbody></table>        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                                                <tbody><tr>
+                                                                    <td>
+                                                                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                                                            <tbody><tr>
+                                                                                <td style="font-family:'Salesforce Sans','Helvetica Neue',Helvetica,Arial,'Sans Serif';font-size:14px" width="116">
+                                                                                    <span>  
+                                                                                        
+                                                                                        <a href=" {!communityURL}/s/question/{!CusSubInfo.Community_Feed__r.FeedCommentId__c}/detail" style="font-family:'Salesforce Sans','Helvetica Neue',Helvetica,Arial,'Sans Serif';font-size:14px;color:#ffffff;background-color:#137cbd;text-decoration:none;text-align:center;border:1px solid #137cbd;border-radius:4px;background-image:linear-gradient(top,#137cbd,#137cbd);background-image:-o-linear-gradient(top,#137cbd,#137cbd);background-image:-moz-linear-gradient(top,#137cbd,#137cbd);background-image:-webkit-linear-gradient(top,#137cbd,#137cbd);background-image:-ms-linear-gradient(top,#137cbd,#137cbd);display:inline-block;line-height:28px;width:114px" target="_blank"><span style="white-space:nowrap">View/Answer</span></a>
+                                                                                        
+                                                                                    </span>
+                                                                                </td>
+                                                                                <td style="font-family:'Salesforce Sans','Helvetica Neue',Helvetica,Arial,'Sans Serif';font-size:14px">
+                                                                                    <div style="color:#595959;padding-left:0;padding-right:0;padding-top:0;padding-bottom:0;margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;white-space:nowrap"> &nbsp; </div>
+                                                                                </td>
+                                                                                </tr>
+                                                                            </tbody></table>
+                                                                    </td>
+                                                                    </tr>
+                                                                </tbody></table>
+                                                            </div>
+                                                            </div></td>
+                                                        <td width="20" bgcolor="#FFFFFF">&nbsp;</td>
+                                                    </tr>
+                                                </tbody>
+                                                </table>
+                                                <table style="color:#ffffff;background-color:#ffffff" width="100%" cellpadding="0" cellspacing="0" border="0"> <tbody><tr><td style="line-height:28px;font-size:28px" bgcolor="#FFFFFF" height="28">&nbsp;</td></tr>
+                                                    </tbody></table><div>  <table style="font-size:1px;line-height:1px" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                                <tbody><tr>
+                                                    <td height="1" width="20" bgcolor="#FFFFFF">&nbsp;</td>
+                                                    <td style="border-top:solid 1px #e0e5ee" height="1">&nbsp;</td>
+                                                    <td height="1" width="20" bgcolor="#FFFFFF">&nbsp;</td>
+                                                    </tr>
+                                                    <tr><td style="line-height:10px;font-size:10px" bgcolor="#FFFFFF" height="10">&nbsp;</td></tr>
+                                                </tbody></table>
+                                                <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                                    <tbody><tr>
+                                                        <td style="font-family:'Salesforce Sans','Helvetica Neue',Helvetica,Arial,'Sans Serif'">
+                                                            <div style="padding-left:0;padding-right:0;padding-top:0;padding-bottom:0;margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;font-size:14px"><b>Replying to</b></div>
+                                                        </td>
+                                                        </tr>
+                                                    </tbody></table>
+                                                
+                                                <table style="color:#ffffff;background-color:#ffffff" width="100%" cellpadding="0" cellspacing="0" border="0"> <tbody><tr><td style="line-height:15px;font-size:15px" bgcolor="#FFFFFF" height="15">&nbsp;</td></tr>
+                                                    </tbody></table>  <table cellpadding="0" cellspacing="0" width="100%" border="0">
+                                                <tbody>
+                                                    <tr>
+                                                        <td width="20" bgcolor="#FFFFFF">&nbsp;</td>
+                                                        <td bgcolor="#FFFFFF"><div>    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                                            <tbody><tr style="vertical-align:top">
+                                                                <td width="45" style="font-family:'Salesforce Sans','Helvetica Neue',Helvetica,Arial,'Sans Serif';font-size:14px;vertical-align:top;width:45" valign="top">
+                                                                    <img border="0" src="{!postOwnerProfileImgURL}" width="45" alt="" style="display:block;border-radius:50%" height="45" class="CToWUd" /></td>
+                                                                <td width="10">&nbsp;</td>
+                                                                <td style="font-family:'Salesforce Sans','Helvetica Neue',Helvetica,Arial,'Sans Serif';font-size:14px;color:#000000;vertical-align:top" valign="top">
+                                                                    <div style="margin:6px 0px 4px 0px">
+                                                                        <span><span><span style="text-decoration:none;color:#015ba7"><font color="#015BA7">{! CusSubInfo.Post_Creator__r.CommunityNickname}</font></span><span style="color:#888888"> </span> asked a question.</span></span>
+                                                                    </div>
+                                                                    <div>    <table style="font-size:12px;color:#4f6a92" cellpadding="0" cellspacing="0" border="0" width="100%">
+                                                                        <tbody><tr>
+                                                                            <td style="font-family:'Salesforce Sans','Helvetica Neue',Helvetica,Arial,'Sans Serif';font-size:12px;color:#4f6a92">
+                                                                                <div style="padding-left:0;padding-right:0;padding-top:0;padding-bottom:0;margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;font-size:14px;font-size:12px;color:#4f6a92"><span style="text-decoration:none;color:#4f6a92"><font color="#4F6A92"><apex:outputText value="{0, date, MMMM d','  yyyy h:mm a }">
+                                                                                    <apex:param value="{!CusSubInfo.CreatedDate}" /> 
+                                                                                    </apex:outputText></font></span></div>
+                                                                            </td>
+                                                                            </tr>
+                                                                        </tbody></table>
+                                                                    </div>
+                                                                </td>
+                                                                </tr>
+                                                            </tbody></table>
+                                                            <div style="margin:12px 0px 12px 0px;font-size:14px;font-family:'Salesforce Sans','Helvetica Neue',Helvetica,Arial,'Sans Serif'">
+                                                                <div><div><div><span style="font-weight:bold"><apex:outputText escape="false" value="{!CusSubInfo.Title__c}" ></apex:outputText></span></div><div><span></span></div></div></div>
+                                                            </div>
+                                                            </div></td>
+                                                        <td width="20" bgcolor="#FFFFFF">&nbsp;</td>
+                                                    </tr>
+                                                </tbody>
+                                                </table>
+                                                
+                                                
+                                                <table style="color:#ffffff;background-color:#ffffff" width="100%" cellpadding="0" cellspacing="0" border="0"> <tbody><tr><td style="line-height:10px;font-size:10px" bgcolor="#FFFFFF" height="10">&nbsp;</td></tr>
+                                                    </tbody></table>  <table cellpadding="0" cellspacing="0" width="100%" border="0">
+                                                <tbody>
+                                                    <tr>
+                                                        <td width="20" bgcolor="#FFFFFF">&nbsp;</td>
+                                                        <td bgcolor="#FFFFFF">          <table cellpadding="0" cellspacing="0" width="100%">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td width="18">&nbsp;</td>
+                                                                    <td>
+                                                                        <div>    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                                                            <tbody><tr>
+                                                                                <td style="line-height:15px;font-size:15px;background-color:#ffffff;color:#ffffff" height="15" width="30" background="{!communityURL + '/img/chatterEmail/line_vert.png'}">
+                                                                                    <div>
+                                                                                        &nbsp;  </div>
+                                                                                    
+                                                                                </td>
+                                                                                <td style="line-height:15px;font-size:15px" height="15">&nbsp;</td>
+                                                                                </tr>
+                                                                                <tr style="vertical-align:top">
+                                                                                    <td width="30" style="font-family:'Salesforce Sans','Helvetica Neue',Helvetica,Arial,'Sans Serif';font-size:14px;vertical-align:top;width:30" valign="top">
+                                                                                        <div style="border-top:3px solid #ffffff;border-bottom:3px solid #ffffff">
+                                                                                            <img border="0" src="{!CommentOwnerProfileImgURL}" width="30" alt="" style="display:block;border-radius:50%" height="30" class="CToWUd"/></div>
+                                                                                    </td>
+                                                                                    <td width="10">&nbsp;</td>
+                                                                                    <td style="font-family:'Salesforce Sans','Helvetica Neue',Helvetica,Arial,'Sans Serif';font-size:14px;color:#000000;vertical-align:top" valign="top">
+                                                                                        <div style="margin:7px 0px 10px 0px">
+                                                                                            <span><span><span style="text-decoration:none;color:#015ba7"><font color="#015BA7">{!CusSubInfo.Community_Feed__r.CreatedBy.CommunityNickname}</font></span><span style="color:#888888"> </span></span></span>
+                                                                                        </div>
+                                                                                        <div style="margin:0px 0px 12px 0px">
+                                                                                            <div><span><p style="margin:0"><apex:outputText escape="false" value="{!CusSubInfo.Community_Feed__r.Title__c}" ></apex:outputText></p></span></div>
+                                                                                        </div>
+                                                                                        <div>    <table style="font-size:12px;color:#4f6a92" cellpadding="0" cellspacing="0" border="0" width="100%">
+                                                                                            <tbody><tr>
+                                                                                                <td style="font-family:'Salesforce Sans','Helvetica Neue',Helvetica,Arial,'Sans Serif';font-size:12px;color:#4f6a92">
+                                                                                                    <div style="padding-left:0;padding-right:0;padding-top:0;padding-bottom:0;margin-left:0;margin-right:0;margin-top:0;margin-bottom:0;font-size:14px;font-size:12px;color:#4f6a92"><span style="text-decoration:none;color:#4f6a92"><font color="#4F6A92"><apex:outputText value="{0, date, MMMM d','  yyyy h:mm a }">
+                                                                                                        <apex:param value="{!CusSubInfo.Community_Feed__r.CreatedDate}" /> 
+                                                                                                        </apex:outputText></font></span></div>
+                                                                                                </td>
+                                                                                                </tr>
+                                                                                            </tbody></table>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td style="line-height:15px;font-size:15px;background-color:#ffffff;color:#ffffff" height="15" width="30">
+                                                                                        &nbsp;
+                                                                                    </td>
+                                                                                    <td style="line-height:15px;font-size:15px" height="15">&nbsp;</td>
+                                                                                </tr>
+                                                                            </tbody></table>
+                                                                        </div>                </td>
+                                                                </tr>
+                                                            </tbody>
+                                                            </table>
+                                                        </td>
+                                                        <td width="20" bgcolor="#FFFFFF">&nbsp;</td>
+                                                    </tr>
+                                                </tbody>
+                                                </table>
+                                                
+                                                </div><table style="color:#ffffff;background-color:#ffffff" width="100%" cellpadding="0" cellspacing="0" border="0"> <tbody><tr><td style="line-height:28px;font-size:28px" bgcolor="#FFFFFF" height="28">&nbsp;</td></tr>
+                                                </tbody></table></td>
+                                            <td width="20" bgcolor="#FFFFFF">&nbsp;</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                
+                                
+                                <table width="100%" cellpadding="0" cellspacing="0" bgcolor="#F2F2F2" style="background-color:#f2f2f2" border="0">
+                                    <tbody>
+                                        <tr>
+                                            <td bgcolor="#F2F2F2" style="font-family:'Salesforce Sans','Helvetica Neue',Helvetica,Arial,'Sans Serif';font-size:12px;color:#595959">
+                                                <table style="font-family:'Salesforce Sans','Helvetica Neue',Helvetica,Arial,'Sans Serif';font-size:12px;color:#595959" cellpadding="0" cellspacing="0" width="100%" border="0">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td width="20" bgcolor="#F2F2F2">&nbsp;</td>
+                                                            <td bgcolor="#F2F2F2">  <table style="font-family:'Salesforce Sans','Helvetica Neue',Helvetica,Arial,'Sans Serif';font-size:12px;color:#595959" cellpadding="0" cellspacing="0" width="100%" border="0">
+                                                                <tbody>
+                                                                    <tr><td style="line-height:18px;font-size:18px" bgcolor="#F2F2F2" height="18">&nbsp;</td></tr>
+                                                                    <tr><td>                            <div>You’re receiving this email because you contributed or subscribed to this post.</div>
+                                                                        <table style="color:#f2f2f2;background-color:#f2f2f2" width="100%" cellpadding="0" cellspacing="0" border="0"> <tbody><tr><td style="line-height:2px;font-size:2px" bgcolor="#F2F2F2" height="2">&nbsp;</td></tr>
+                                                                            </tbody></table>                            <div>To update your settings, click <i>Subscriptions</i> on the <a href="{!dynamicUrl + 'topiccatalog'}" target="_blank">Forums homepage.</a></div>
+                                                                        <table style="color:#f2f2f2;background-color:#f2f2f2" width="100%" cellpadding="0" cellspacing="0" border="0"> <tbody><tr><td style="line-height:8px;font-size:8px" bgcolor="#F2F2F2" height="8">&nbsp;</td></tr>
+                                                                            </tbody></table> 
+                                                                        <table style="color:#f2f2f2;background-color:#f2f2f2" width="100%" cellpadding="0" cellspacing="0" border="0"> <tbody><tr><td style="line-height:10px;font-size:10px" bgcolor="#F2F2F2" height="10">&nbsp;</td></tr>
+                                                                            </tbody></table>                            <div style="text-decoration:none;color:#727272;font-style:italic">Copyright © 2023 Rubrik, Inc., All rights reserved. 3495 Deer Creek Rd, Palo Alto, CA 94304</div>
+                                                                        <table style="color:#f2f2f2;background-color:#f2f2f2" width="100%" cellpadding="0" cellspacing="0" border="0"> <tbody><tr><td style="line-height:10px;font-size:10px" bgcolor="#F2F2F2" height="10">&nbsp;</td></tr>
+                                                                            </tbody></table>                            <div><a href="{!communityURL + '/s/topiccatalog'}"><img src="{!RubrikLogoUrl}" alt="Rubrik Support" title="Rubrik Support" class="CToWUd" /></a></div>
+                                                                        </td></tr>
+                                                                    <tr><td style="line-height:18px;font-size:18px" bgcolor="#F2F2F2" height="18">&nbsp;</td></tr>
+                                                                </tbody>
+                                                                </table>
+                                                            </td>
+                                                            <td width="20" bgcolor="#F2F2F2">&nbsp;</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr><td style="line-height:20px;font-size:20px" bgcolor="#F2F2F2" height="20">&nbsp;</td></tr>
+                                    </tbody>
+                                </table>
+                                
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+            </td>
+            </tr>
+        </tbody></table>
+        <img src="" alt="" height="1" title="" width="2" class="CToWUd"/></div>
+    
+    
+    
+</apex:component>

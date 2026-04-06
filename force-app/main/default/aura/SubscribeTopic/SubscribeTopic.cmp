@@ -1,0 +1,38 @@
+<aura:component controller ="SubscribeTopicController" implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,force:hasRecordId" access="global" >
+    <aura:attribute name="isSubscribed" type="Boolean"/>
+    <aura:attribute name="isSubscribed1" type="Boolean"/>
+    <aura:attribute name="topicId" type="String"/>
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+    <aura:attribute name="networkId" type="String" default="0DB1W00000001vMWAQ"/>
+    <aura:attribute name="Modal1Open" type="boolean" default="false"/>
+    <aura:attribute name="SubUnsub" type="String" default="Subscribe to category"/>
+    
+    <div style="text-align: right; margin-right: 30px;">
+        <aura:if isTrue="{!v.Modal1Open}">
+            ###### MODAL BOX Start From Here ######-->
+            <div class="demo-only" style="height: 640px;">
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <header class="slds-modal__header">
+                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">You have {!if( v.isSubscribed,'subscribed','unsubscribed')} to this category.</h2>
+                        </header>
+                        <footer class="slds-modal__footer">
+                            <button class="manageBtn slds-button slds-button--brand" onclick="{!c.close1Bttn}">Ok</button>
+                        </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </div>
+            
+            <div class="slds-backdrop slds-backdrop--open"></div>
+            <!--###### MODAL BOX Part END Here ######-->
+        </aura:if>
+    </div>
+            
+    <div class="slds-m-top_xx-large slds-align_absolute-center">
+        <lightning:button  class="manageBtn" label="{!v.SubUnsub}" title="{!v.SubUnsub}" onclick="{! c.manageSubscription }" />
+        <!-- added for Forum Gamification CS21-712-->
+        <!--<lightning:button class="manageBtn" label="My Forums Profile" title="Profile Page" onclick="{!c.navigateToUserProfile}" />-->
+        <!-- End - CS21-712 -->
+    </div>
+</aura:component>

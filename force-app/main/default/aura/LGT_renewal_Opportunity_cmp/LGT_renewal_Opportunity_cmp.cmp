@@ -1,0 +1,40 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" >
+    <aura:attribute name="CaseRecord" type="Object"/>
+    <aura:attribute name="recordLoadError" type="String"/>
+    <aura:attribute name="oppRecordId" type="String"/>
+    <aura:attribute name="disableCSS" type="boolean" default="false"/>
+    <aura:attribute name="enableForm" type="boolean" default="false"/>
+    <aura:handler name="change" value="{!v.CaseRecord.RecordType.Name}" action="{!c.doinit}"/>
+    <aura:if isTrue="{!!v.disableCSS}">
+        <aura:html tag="style">
+            button.slds-button.slds-button_neutral.cuf-publisherCancelButton.uiButton--default.uiButton--brand.uiButton {
+            display: none;
+            }
+            .runtime_platform_actionsQuickActionWrapper .quick-actions-panel{
+            display: contents !important;
+            }
+        </aura:html >
+    </aura:if>
+    <force:recordData aura:id="recordLoader"
+                      recordId="{!v.recordId}"
+                      fields="RecordType.Name,Opportunity_lookup__c,Opportunity_lookup__r.Name"
+                      targetFields="{!v.CaseRecord}"
+                      targetError="{!v.recordLoadError}"
+                      />
+
+    <lightning:recordForm
+                          recordId="{!v.oppRecordId}"
+                          objectApiName="Opportunity"
+                          layoutType="Full"
+                          mode="edit"
+                          onerror="{!c.handleError}"
+                          onsuccess="{!c.handleSuccess}"
+                          columns="2"
+                          
+                          />
+    <aura:if isTrue="{!v.enableForm}">    
+      
+    <c:opportunityStageMovingConfirmation aura:id="lWCComponent223" recordId="{!v.oppRecordId}"></c:opportunityStageMovingConfirmation>   
+  </aura:if>
+ 
+</aura:component>

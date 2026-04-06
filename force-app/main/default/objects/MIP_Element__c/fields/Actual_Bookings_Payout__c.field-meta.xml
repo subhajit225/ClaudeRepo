@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Actual_Bookings_Payout__c</fullName>
+    <formula>CASE(Bookings_Tier_Attained__c,
+&apos;Baseline&apos;, Baseline_Bookings_Rebate_Payout__c, 
+&apos;Tier 1&apos;, Tier_1_Bookings_Rebate_Payout__c ,
+&apos;Tier 2&apos;, Tier_2_Bookings_Rebate_Payout__c , 
+&apos;Tier 3&apos;, Tier_3_Bookings_Rebate_Payout__c ,0)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Actual Bookings Payout</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

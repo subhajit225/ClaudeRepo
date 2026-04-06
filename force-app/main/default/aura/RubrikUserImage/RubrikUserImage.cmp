@@ -1,0 +1,21 @@
+<aura:component >
+    <aura:attribute name="photoURL" type="string"/>
+    <aura:attribute name="name" type="string"/>
+    <aura:attribute name="userId" type="string"/>
+    <aura:attribute name="enableNavigation" type="boolean" default="false"/>
+    <aura:attribute name="isRubrikEmployee" type="boolean" default="false"/>
+    <aura:attribute name="rubrikIconMargin" type="string"/>
+    <aura:attribute name="imageHeight" type="string"/>
+    <aura:attribute name="imageWidth" type="string"/>
+    
+    <div onclick="{!c.navigateToUserProfile}" data-id="{!v.userId}">
+        <div class="layered pointer">
+            <img alt="" src="{!v.photoURL}" title="{!v.name}" class="image" style="{!'height:' + v.imageHeight + ';' + 'width:' + v.imageWidth}"/>
+            <aura:if isTrue="{!v.isRubrikEmployee}">
+                <span class="rubrik" style="{!'margin-left:' + v.rubrikIconMargin}">
+                    <c:rubrikSVGIcon></c:rubrikSVGIcon>
+                </span>
+            </aura:if> 
+        </div>  
+    </div>
+</aura:component>

@@ -1,0 +1,21 @@
+<!-- 
+Aura Component to set the default values in E2CA page. 
+JIRA>> CS21-1993 
+Created by- Raveesh
+Date- 1/23/24
+-->
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    <aura:registerEvent name="FetchDynnamicCaseEvent"
+                        type="E2CAdv:FetchDynnamicCaseEvent"/>
+    <aura:attribute name="CaseId" type="String" access="global" />
+    <aura:attribute name="caseRecord" type="Object"/>
+    <aura:attribute name="recordLoadError" type="String"/>
+    
+    <force:recordData aura:id="recordLoader"
+                      recordId="{!v.CaseId}"
+                      fields="Priority"
+                      targetFields="{!v.caseRecord}"
+                      targetError="{!v.recordLoadError}"
+                      recordUpdated="{!c.doinit}"
+                      />
+</aura:component>

@@ -1,0 +1,1114 @@
+<template>
+  <template if:false={articleListData.showDetailPage}>
+    <div class={flexipageregionwidth} onclick={closeOptionsDropdown}>
+      <template if:true={showloader}>
+        <c-knowbler-loader
+          fromcreation
+          loadingcard={loadingcard}
+          flexipageregionwidth={flexipageregionwidth}
+          kcsheight={kcsheight}
+        ></c-knowbler-loader>
+      </template>
+      <template if:false={showloader}>
+        <div class={flexipageregionwidth}>
+          <div class="layout-body-two">
+            <div class="mainContainer">
+              <template if:true={norecordflag}>
+                <div style="display: none" class="recordForm">
+                  <lightning-record-edit-form
+                    object-api-name={destobj}
+                    onload={handleLoad}
+                    record-type-id={recordtypeID}
+                  >
+                  </lightning-record-edit-form>
+                </div>
+              </template>
+              <template if:false={norecordflag}>
+                <div onkeypress={stopEnter}>
+                  <lightning-record-edit-form
+                    data-id="save-as-draft"
+                    onsubmit={checkDuplicateArticles}
+                    onsuccess={handleSuccess}
+                    onerror={handleError}
+                    object-api-name={destobj}
+                    record-id={currentid}
+                    record-type-id={recordtypeID}
+                  >
+                    <div class="topBar">
+                      <div class="topBarNav">
+                        <lightning-icon
+                          onclick={handleBack}
+                          class="backIcon"
+                          icon-name="utility:chevronleft"
+                        >
+                        </lightning-icon>
+                        <template if:true={iseditarticle}>
+                          <span class="newArticle">Edit Article</span>
+                        </template>
+                        <template if:false={iseditarticle}>
+                          <span class="newArticle">New Article</span>
+                        </template>
+                      </div>
+                      <div class="topBarLinks">
+                        <template if:false={displayTitleLoader}>
+                          <template if:true={contentHealthSettings.previewArticleContentHealth}>
+                            <div class={contentHealthCheckClass}>
+                            <div class="slds-popover slds-popover_tooltip slds-nubbin_top-left" role="tooltip">
+                              <div class="knowbler__calculate-health-btn-tooltip">{tooltipContent}</div>
+                            </div>
+                            <svg width="28.446" height="28.446" viewBox="0 0 28.446 28.446" onclick={generateContentHealth}>
+                              <path id="Subtraction_1" data-name="Subtraction 1" d="M23.274,28.446v0L21.658,24.89,18.1,23.274l3.556-1.616L23.274,18.1l1.616,3.556,3.556,1.616L24.89,24.89l-1.615,3.554Zm-12.93-3.879a10.341,10.341,0,1,1,7.316-3.029A10.276,10.276,0,0,1,10.344,24.567ZM3.943,10.8a7.645,7.645,0,0,0-.207,8.016,1.542,1.542,0,0,0,1.331.769h10.64a1.543,1.543,0,0,0,1.321-.769A7.678,7.678,0,0,0,6.216,8.539l1.42.944a6.142,6.142,0,0,1,7.219,1.281,6.142,6.142,0,0,1,.851,7.281H5.064a6.126,6.126,0,0,1-.169-5.82L3.951,10.8ZM4.95,9.538h0L9.3,16.056a1.524,1.524,0,0,0,1.086.451,1.545,1.545,0,0,0,1.087-.451,1.536,1.536,0,0,0,0-2.173Zm18.324.806v0L21.658,6.789,18.1,5.172l3.556-1.616L23.274,0,24.89,3.556l3.556,1.616L24.89,6.789l-1.615,3.553Z" transform="translate(0 0)" fill="#2b91ff"/>
+                            </svg>
+                          </div>
+                          </template>
+                        </template>
+                        <div data-id="saveLink" class={saveButtonClass} >
+                            <img src={save} alt="save">
+                            <lightning-button data-id="savedraft" type="submit" variant="base" label="Save as draft" title="Save as draft"
+                              class="saveIcon saveHeading">
+                            </lightning-button>
+                          <!--Publish and Ataach Menu dropdown-->
+                          <div
+                            class="cursor"
+                            tabindex="0"
+                            contenteditable
+                            onblur={hidemenu}
+                          >
+                            <template if:true={canpublisharticles}>
+                              <lightning-button-icon
+                                icon-name="utility:chevronup"
+                                alternative-text="menu"
+                                class="slds-m-left_xx-small upicon"
+                                title="menu"
+                                variant="bare"
+                                icon-size="xx-small"
+                                onclick={hidemenu}
+                              >
+                              </lightning-button-icon>
+                              <lightning-button-icon
+                                icon-name="utility:chevrondown"
+                                alternative-text="menu"
+                                class="slds-m-left_xx-small downicon"
+                                title="menu"
+                                variant="bare"
+                                icon-size="xx-small"
+                                onclick={showmenu}
+                              >
+                              </lightning-button-icon>
+                              <div class="menuitems">
+                                <div
+                                  data-id="publish"
+                                  class="item"
+                                  contenteditable="false"
+                                  onclick={checkDuplicateArticles}
+                                >
+                                  Publish
+                                </div>
+                                <template if:false={caseclosed}>
+                                  <div data-id="publish-attach" class="item" contenteditable="false" onclick={checkDuplicateArticles}>
+                                    Publish & attach
+                                  </div>
+                                </template>
+                              </div>
+                            </template>
+                          </div>
+                        </div>
+                        <div class="closeIconTop" onclick={showAlertModal}>
+                          <img src={close} alt="error" />
+                        </div>
+                      </div>
+                    </div>
+                    <template if:true={getDisplayAutoGenLoader}>
+                      <div class="knowbler-title-loader-wrapper">
+                        <div class="knowbler-title-loader">
+                          <div class="kcs-loader-container">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                          </div>
+                        </div>
+
+                        <div class="knowbler-title-loader-text">Auto-generating</div>
+                        <div class="knowbler-title-loader-cross-btn">
+                          <div class="slds-popover slds-popover_tooltip slds-nubbin_top-right" role="tooltip">
+                            <div class="knowbler-title-loader-tooltip">Cancel Auto-generating</div>
+                          </div>
+                          <span onclick={cancelTitleGeneration}>
+                            <svg width="18" height="18" viewBox="0 0 18 18">
+                              <path data-name="Path 12253" d="M0,0H18V18H0Z" fill="none" opacity="0.87" />
+                              <path data-name="Path 12254"
+                                d="M9.5,2A7.5,7.5,0,1,0,17,9.5,7.493,7.493,0,0,0,9.5,2Zm3.225,10.725a.747.747,0,0,1-1.057,0L9.5,10.557,7.332,12.725a.748.748,0,0,1-1.057-1.057L8.443,9.5,6.275,7.332A.748.748,0,0,1,7.332,6.275L9.5,8.443l2.168-2.168a.748.748,0,1,1,1.057,1.057L10.557,9.5l2.167,2.168a.761.761,0,0,1,0,1.057Z"
+                                transform="translate(-0.5 -0.5)" fill="#36b8ff" />
+                            </svg>
+                          </span>
+                        </div>
+                      </div>
+                    </template>
+                    <template if:true={titleGenerated}>
+                      <div class='knowbler-generated-successfully-header'>
+                        <img src={generated} alt="generated-successfully" />
+                        <span>Generated successfully</span>
+                      </div>
+                    </template>
+                    <div class="recordForm">
+                      <template if:false={showSection}>
+                        <c-knowbler-article-tab
+                          tabs={tabs}
+                          query={query}
+                          onhanldesectionchange={hanldesectionchange}
+                          activevalue={activevalue}
+                        >
+                        </c-knowbler-article-tab>
+                      </template>
+                      <div class="slds-grid slds-wrap">
+                        <template for:each={mapping} for:item="item">
+                          <template if:true={isCreateTab}>
+                            <template if:true={item.isCreate}>
+                              <template if:true={item.isString}>
+                                <div class="knowbler__input-label-wrapper" key={item.label}>
+                                  <div class="input_label" title={item.label}>
+                                    {item.label}
+                                    <template if:true={item.mandatory}>
+                                      <sup class="input_error">*</sup>
+                                    </template>
+                                    <template if:true={item.isInlineHelpText}>
+                                      <lightning-helptext content={item.InlineHelpText}></lightning-helptext>
+                                    </template>
+                                  </div>
+                                  <template if:true={iseditarticle}>
+                                  <template if:true={item.autoGen}>
+                                    <template if:true={llmStatus.type}>
+                                      <div class="knowbler__regenerate-hover" data-index={index}>
+                                        <div class="slds-popover slds-popover_tooltip slds-nubbin_top-right"
+                                          role="tooltip">
+                                          <div class="picklist_tooltip">
+                                            Title Regeneration
+                                          </div>
+                                        </div>
+                                        <div class={getRegenerationIconClass} data-item={item.name}
+                                          onclick={regenerateContent}>
+                                          <span class="knowbler__regenerate-icon-img">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                              viewBox="0 0 14 14">
+                                              <g transform="translate(12.043 11.709)">
+                                                <g data-name="refresh" transform="translate(-12.043 -11.861)">
+                                                  <g data-name="refresh" transform="translate(0 0)">
+                                                    <rect data-name="Rectangle 5406" width="14" height="14"
+                                                      transform="translate(0 0.152)" fill="#546c7e" opacity="0" />
+                                                    <path data-name="Path 12260"
+                                                      d="M13.286,9.19a.6.6,0,0,0-.743.386A4.245,4.245,0,0,1,8.458,12.5,4.222,4.222,0,0,1,4.189,8.34,4.222,4.222,0,0,1,8.458,4.178a4.317,4.317,0,0,1,2.765.993l-1.29-.214a.6.6,0,1,0-.19,1.177l2.521.416h.1a.6.6,0,0,0,.2-.036.2.2,0,0,0,.059-.036.464.464,0,0,0,.119-.065l.054-.065c0-.03.054-.054.077-.089s0-.059.03-.083a.8.8,0,0,0,.042-.107l.446-2.378A.605.605,0,0,0,12.2,3.464l-.161.862A5.476,5.476,0,0,0,8.458,2.989,5.411,5.411,0,0,0,3,8.34a5.411,5.411,0,0,0,5.458,5.351A5.423,5.423,0,0,0,13.7,9.933a.595.595,0,0,0-.416-.743Z"
+                                                      transform="translate(-1.161 -1.378)" fill="#546c7e" />
+                                                  </g>
+                                                </g>
+                                              </g>
+                                            </svg>
+                                          </span>
+                                          Re-generate
+                                        </div>
+                                      </div>
+                                      </template>  
+                                    </template>
+                                  </template>
+                                </div>
+                                <template if:true={item.mandatory}>
+                                  <template if:false={item.autoGen}>
+                                    <template if:true={displayTitleLoader}>
+                                      <lightning-input-field class="formInp inputchange" name={item.name} key={item.name}
+                                        field-name={item.name} value={item.value} data-name={item.name} id={item.name}
+                                        onchange={handleChange} disabled="true">
+                                      </lightning-input-field>
+                                    </template>
+                                    <template if:false={displayTitleLoader}>
+                                      <lightning-input-field class="formInp inputchange" name={item.name} key={item.name}
+                                        field-name={item.name} value={item.value} data-name={item.name} id={item.name}
+                                        onchange={handleChange}>
+                                      </lightning-input-field>
+                                    </template>
+                                  </template>
+                                  <template if:true={item.autoGen}>
+                                    <template if:true={displayTitleLoader}>
+                                      <div class="knowbler-title-blue-field" key={item.name}></div>
+                                    </template>
+                                    <template if:false={displayTitleLoader}>
+                                      <!-- <template if:true={displaySummaryLoader}>
+                                        <lightning-input-field class="formInp inputchange" name={item.name} key={item.name}
+                                        field-name={item.name} value={item.value} data-name={item.name} id={item.name}
+                                        onchange={handleChange} disabled="true">
+                                        </lightning-input-field>
+                                      </template> -->
+                                      <!-- <template if:false={displaySummaryLoader}> -->
+                                      <lightning-input-field class="formInp inputchange" name={item.name} key={item.name}
+                                        field-name={item.name} value={item.value} data-name={item.name} id={item.name}
+                                        onchange={handleChange}>
+                                      </lightning-input-field>
+                                      <!-- </template> -->
+                                    </template>
+                                  </template>
+                                </template>
+                                <template if:false={item.mandatory}>
+                                  <template if:false={item.autoGen}>
+                                    <lightning-input-field class="formInp inputchange" name={item.name} key={item.name}
+                                      field-name={item.name} value={item.value} data-name={item.name} id={item.name}
+                                      onchange={handleChange}>
+                                    </lightning-input-field>
+                                  </template>
+                                  <template if:true={item.autoGen}>
+                                    <template if:true={displayTitleLoader}>
+                                      <div class="knowbler-title-blue-field" key={item.name}></div>
+                                    </template>
+                                    <template if:false={displayTitleLoader}>
+                                      <lightning-input-field class="formInp inputchange" name={item.name} key={item.name}
+                                        field-name={item.name} value={item.value} data-name={item.name} id={item.name}
+                                        onchange={handleChange}>
+                                      </lightning-input-field>
+                                    </template>
+                                  </template>
+                                </template>
+                              </template>
+                              <template if:true={item.isMultipicklist}>
+                                <div
+                                  key={item.name}
+                                  class="picklist_view slds-col slds-size_1-of-2 slds-large-size_1-of-1 slds-medium-size_1-of-1 slds-small-size_1-of-1"
+                                >
+                                  <template if:true={item.dependentPicklist}>
+                                    <div class="picklist_hover">
+                                      <div
+                                        class="slds-popover slds-popover_tooltip slds-nubbin_bottom-right slds-slide-from-top-to-bottom"
+                                        role="tooltip"
+                                      >
+                                        <div class="picklist_tooltip">
+                                          Dependent on Controlling Field
+                                          ({item.isControllerLabel})
+                                        </div>
+                                      </div>
+                                      <div>
+                                        <img
+                                          src={dependPicklist}
+                                          class="dependent_img"
+                                          alt={item.label}
+                                        />
+                                      </div>
+                                    </div>
+                                  </template>
+                                  <template if:true={item.isControllingPicklist}>
+                                    <div class="picklist_hover">
+                                      <div
+                                        class="slds-popover slds-popover_tooltip slds-nubbin_bottom-right slds-slide-from-top-to-bottom"
+                                        role="tooltip"
+                                      >
+                                        <div class="picklist_tooltip">
+                                          {item.label}
+                                        </div>
+                                      </div>
+                                      <div>
+                                        <img
+                                          src={controlPicklist}
+                                          class="controlling_img"
+                                          alt={item.label}
+                                        />
+                                      </div>
+                                    </div>
+                                  </template>
+                                  <div class="picklist_label">{item.label}</div>
+                                  <lightning-input-field
+                                    class="formInp"
+                                    name={item.name}
+                                    value={item.value}
+                                    data-name={item.label}
+                                    field-name={item.name}
+                                    onchange={handleChange}
+                                  >
+                                  </lightning-input-field>
+                                </div>
+                              </template>
+                              <template if:true={item.isPicklist}>
+                                <div
+                                  key={item.name}
+                                  class="picklist_view slds-col slds-large-size_1-of-2 slds-medium-size_1-of-2 slds-small-size_1-of-2"
+                                >
+                                  <template if:true={item.dependentPicklist}>
+                                    <div class="picklist_hover">
+                                      <div
+                                        class="slds-popover slds-popover_tooltip slds-nubbin_bottom-right slds-slide-from-top-to-bottom"
+                                        role="tooltip"
+                                      >
+                                        <div class="picklist_tooltip">
+                                          Dependent on Controlling Field
+                                          ({item.isControllerLabel})
+                                        </div>
+                                      </div>
+                                      <div>
+                                        <img
+                                          src={dependPicklist}
+                                          class="dependent_img"
+                                          alt={item.label}
+                                        />
+                                      </div>
+                                    </div>
+                                  </template>
+                                  <template if:true={item.isControllingPicklist}>
+                                    <div class="picklist_hover">
+                                      <div
+                                        class="slds-popover slds-popover_tooltip slds-nubbin_bottom-right slds-slide-from-top-to-bottom"
+                                        role="tooltip"
+                                      >
+                                        <div class="picklist_tooltip">
+                                          {item.label}
+                                        </div>
+                                      </div>
+                                      <div>
+                                        <img
+                                          src={controlPicklist}
+                                          class="controlling_img"
+                                          alt={item.label}
+                                        />
+                                      </div>
+                                    </div>
+                                  </template>
+                                  <div class="picklist_label">{item.label}</div>
+                                  <lightning-input-field
+                                    class="formInp"
+                                    name={item.name}
+                                    value={item.value}
+                                    data-name={item.label}
+                                    field-name={item.name}
+                                    onchange={handleChange}
+                                  >
+                                  </lightning-input-field>
+                                </div>
+                              </template>
+                              <template if:true={item.isPlainTextArea}>
+                                <div class="knowbler__input-label-wrapper" key={item.label}>
+                                  <div class="input_label" title={item.label}>
+                                    {item.label}
+                                    <template if:true={item.isInlineHelpText}>
+                                      <lightning-helptext content={item.InlineHelpText}></lightning-helptext>
+                                    </template>
+                                  </div>
+                                  <template if:true={iseditarticle}>
+                                  <template if:true={item.autoGen}>
+                                    <div class="knowbler__regenerate-hover" data-index={index}>
+                                      <div class="slds-popover slds-popover_tooltip slds-nubbin_top-right" role="tooltip">
+                                        <div class="picklist_tooltip">
+                                          Summary Regeneration
+                                        </div>
+                                      </div>
+                                      <div class={getRegenerationIconClass} data-item={item.name}
+                                        onclick={regenerateContent}>
+                                        <span class="knowbler__regenerate-icon-img">
+                                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                            viewBox="0 0 14 14">
+                                            <g transform="translate(12.043 11.709)">
+                                              <g data-name="refresh" transform="translate(-12.043 -11.861)">
+                                                <g data-name="refresh" transform="translate(0 0)">
+                                                  <rect data-name="Rectangle 5406" width="14" height="14"
+                                                    transform="translate(0 0.152)" fill="#546c7e" opacity="0" />
+                                                  <path data-name="Path 12260"
+                                                    d="M13.286,9.19a.6.6,0,0,0-.743.386A4.245,4.245,0,0,1,8.458,12.5,4.222,4.222,0,0,1,4.189,8.34,4.222,4.222,0,0,1,8.458,4.178a4.317,4.317,0,0,1,2.765.993l-1.29-.214a.6.6,0,1,0-.19,1.177l2.521.416h.1a.6.6,0,0,0,.2-.036.2.2,0,0,0,.059-.036.464.464,0,0,0,.119-.065l.054-.065c0-.03.054-.054.077-.089s0-.059.03-.083a.8.8,0,0,0,.042-.107l.446-2.378A.605.605,0,0,0,12.2,3.464l-.161.862A5.476,5.476,0,0,0,8.458,2.989,5.411,5.411,0,0,0,3,8.34a5.411,5.411,0,0,0,5.458,5.351A5.423,5.423,0,0,0,13.7,9.933a.595.595,0,0,0-.416-.743Z"
+                                                    transform="translate(-1.161 -1.378)" fill="#546c7e" />
+                                                </g>
+                                              </g>
+                                            </g>
+                                          </svg>
+                                        </span>
+                                        Re-generate
+                                      </div>
+                                    </div>
+                                    </template>  
+                                  </template>
+                                </div>
+                                <template if:false={item.autoGen}>
+                                  <lightning-input-field
+                                    class="formInp plain-text-area-field inputchange  slds-col slds-small-size_1-of-1 slds-medium-size_1-of-1 slds-large-size_1-of-1"
+                                    key={item.name} name={item.name} value={item.value} field-name={item.name}
+                                    data-name={item.label} id={item.label} data-exclude-stopenter="true"
+                                    onchange={handleChange}>
+                                  </lightning-input-field>
+                                </template>
+                                <template if:true={item.autoGen}>
+                                  <template if:true={displaySummaryLoader}>
+                                    <div class="knowbler-summary-blue-field" key={item.name}></div>
+                                  </template>
+                                  <template if:false={displaySummaryLoader}>
+                                    <lightning-input-field
+                                      class="formInp plain-text-area-field inputchange slds-col slds-small-size_1-of-1 slds-medium-size_1-of-1 slds-large-size_1-of-1"
+                                      key={item.name} name={item.name} value={item.value} field-name={item.name}
+                                      data-name={item.label} id={item.label} data-exclude-stopenter="true"
+                                      onchange={handleChange}>
+                                    </lightning-input-field>
+                                  </template>
+                                </template>
+                              </template>
+                              <template if:true={item.isRichTextArea}>
+                                <div class="knowbler__input-label-wrapper" key={item.label}>
+                                  <div class="input_label" title={item.label}>
+                                    {item.label}
+                                    <template if:true={item.mandatory}>
+                                      <sup class="input_error">*</sup>
+                                    </template>
+                                    <template if:true={item.isInlineHelpText}>
+                                      <lightning-helptext content={item.InlineHelpText}></lightning-helptext>
+                                    </template>
+                                  </div>
+                                  <template if:true={iseditarticle}>
+                                  <template if:true={item.autoGen}>
+                                    <div class="knowbler__regenerate-hover" data-index={index}>
+                                      <div class="slds-popover slds-popover_tooltip slds-nubbin_top-right" role="tooltip">
+                                        <div class="picklist_tooltip">
+                                          Summary Regeneration
+                                        </div>
+                                      </div>
+                                      <div class={getRegenerationIconClass} data-item={item.name}
+                                        onclick={regenerateContent}>
+                                        <span class="knowbler__regenerate-icon-img">
+                                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                            viewBox="0 0 14 14">
+                                            <g transform="translate(12.043 11.709)">
+                                              <g data-name="refresh" transform="translate(-12.043 -11.861)">
+                                                <g data-name="refresh" transform="translate(0 0)">
+                                                  <rect data-name="Rectangle 5406" width="14" height="14"
+                                                    transform="translate(0 0.152)" fill="#546c7e" opacity="0" />
+                                                  <path data-name="Path 12260"
+                                                    d="M13.286,9.19a.6.6,0,0,0-.743.386A4.245,4.245,0,0,1,8.458,12.5,4.222,4.222,0,0,1,4.189,8.34,4.222,4.222,0,0,1,8.458,4.178a4.317,4.317,0,0,1,2.765.993l-1.29-.214a.6.6,0,1,0-.19,1.177l2.521.416h.1a.6.6,0,0,0,.2-.036.2.2,0,0,0,.059-.036.464.464,0,0,0,.119-.065l.054-.065c0-.03.054-.054.077-.089s0-.059.03-.083a.8.8,0,0,0,.042-.107l.446-2.378A.605.605,0,0,0,12.2,3.464l-.161.862A5.476,5.476,0,0,0,8.458,2.989,5.411,5.411,0,0,0,3,8.34a5.411,5.411,0,0,0,5.458,5.351A5.423,5.423,0,0,0,13.7,9.933a.595.595,0,0,0-.416-.743Z"
+                                                    transform="translate(-1.161 -1.378)" fill="#546c7e" />
+                                                </g>
+                                              </g>
+                                            </g>
+                                          </svg>
+                                        </span>
+                                        Re-generate
+                                      </div>
+                                    </div>
+                                    </template>  
+                                  </template>
+                                </div>
+                                <template if:false={item.autoGen}>
+                                  <c-knowbler-editor class="ck_editor" key={item.name} destobj={destobj} exp={exp}
+                                    fieldname={item.name} fieldvalue={item.value} oneditorvaluechange={handleChanges}>
+                                  </c-knowbler-editor>
+                                </template>
+                                  <template if:true={item.autoGen}>
+                                    <template if:true={displaySummaryLoader}>
+                                      <div class="knowbler-summary-blue-field" key={item.name}></div>
+                                    </template>
+                                    <template if:false={displaySummaryLoader}>
+                                      <c-knowbler-editor class="ck_editor" key={item.name} destobj={destobj} exp={exp}
+                                        fieldname={item.name} fieldvalue={item.value} oneditorvaluechange={handleChanges}>
+                                      </c-knowbler-editor>
+                                    </template>
+                                  </template>
+                              </template>
+                              <template if:true={item.isInt}>
+                                <div
+                                  class="input_label"
+                                  title={item.label}
+                                  key={item.label}
+                                >
+                                  {item.label}
+                                </div>
+                                <lightning-input-field
+                                  class="formInp plain-text-area-field inputchange  slds-col slds-small-size_1-of-1 slds-medium-size_1-of-1 slds-large-size_1-of-1"
+                                  key={item.name} name={item.name} value={item.value} field-name={item.name}
+                                  data-name={item.label} id={item.label} data-exclude-stopenter="true">
+                                </lightning-input-field>
+                              </template>
+                            </template>
+                          </template>
+                          <template if:false={isCreateTab}>
+                            <template if:true={item.isAccess}>
+                              <template if:true={item.isString}>
+                                <div class="knowbler__input-label-wrapper" key={item.label}>
+                                  <div class="input_label" title={item.label}>
+                                    {item.label}
+                                    <template if:true={item.mandatory}>
+                                      <sup class="input_error">*</sup>
+                                    </template>
+                                    <template if:true={item.isInlineHelpText}>
+                                      <lightning-helptext content={item.InlineHelpText}></lightning-helptext>
+                                    </template>
+                                  </div>
+                                  <template if:true={iseditarticle}>
+                                  <template if:true={item.autoGen}>
+                                    <template if:true={llmStatus.type}>
+                                      <div class="knowbler__regenerate-hover" data-index={index}>
+                                        <div class="slds-popover slds-popover_tooltip slds-nubbin_top-right"
+                                          role="tooltip">
+                                          <div class="picklist_tooltip">
+                                            Title Regeneration
+                                          </div>
+                                        </div>
+                                        <div class={getRegenerationIconClass} data-item={item.name}
+                                          onclick={regenerateContent}>
+                                          <span class="knowbler__regenerate-icon-img">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                              viewBox="0 0 14 14">
+                                              <g transform="translate(12.043 11.709)">
+                                                <g data-name="refresh" transform="translate(-12.043 -11.861)">
+                                                  <g data-name="refresh" transform="translate(0 0)">
+                                                    <rect data-name="Rectangle 5406" width="14" height="14"
+                                                      transform="translate(0 0.152)" fill="#546c7e" opacity="0" />
+                                                    <path data-name="Path 12260"
+                                                      d="M13.286,9.19a.6.6,0,0,0-.743.386A4.245,4.245,0,0,1,8.458,12.5,4.222,4.222,0,0,1,4.189,8.34,4.222,4.222,0,0,1,8.458,4.178a4.317,4.317,0,0,1,2.765.993l-1.29-.214a.6.6,0,1,0-.19,1.177l2.521.416h.1a.6.6,0,0,0,.2-.036.2.2,0,0,0,.059-.036.464.464,0,0,0,.119-.065l.054-.065c0-.03.054-.054.077-.089s0-.059.03-.083a.8.8,0,0,0,.042-.107l.446-2.378A.605.605,0,0,0,12.2,3.464l-.161.862A5.476,5.476,0,0,0,8.458,2.989,5.411,5.411,0,0,0,3,8.34a5.411,5.411,0,0,0,5.458,5.351A5.423,5.423,0,0,0,13.7,9.933a.595.595,0,0,0-.416-.743Z"
+                                                      transform="translate(-1.161 -1.378)" fill="#546c7e" />
+                                                  </g>
+                                                </g>
+                                              </g>
+                                            </svg>
+                                          </span>
+                                          Re-generate
+                                        </div>
+                                      </div>
+                                      </template>  
+                                    </template>
+                                  </template>
+                                </div>
+                                <template if:true={item.mandatory}>
+                                  <template if:false={item.autoGen}>
+                                    <template if:true={displayTitleLoader}>
+                                      <lightning-input-field class="formInp inputchange" name={item.name} key={item.name}
+                                        field-name={item.name} value={item.value} data-name={item.name} id={item.name}
+                                        onchange={handleChange} disabled="true">
+                                      </lightning-input-field>
+                                    </template>
+                                    <template if:false={displayTitleLoader}>
+                                      <lightning-input-field class="formInp inputchange" name={item.name} key={item.name}
+                                        field-name={item.name} value={item.value} data-name={item.name} id={item.name}
+                                        onchange={handleChange}>
+                                      </lightning-input-field>
+                                    </template>
+                                  </template>
+                                  <template if:true={item.autoGen}>
+                                    <template if:true={displayTitleLoader}>
+                                      <div class="knowbler-title-blue-field" key={item.name}></div>
+                                    </template>
+                                    <template if:false={displayTitleLoader}>
+                                      <!-- <template if:true={displaySummaryLoader}>
+                                        <lightning-input-field class="formInp inputchange" name={item.name} key={item.name}
+                                        field-name={item.name} value={item.value} data-name={item.name} id={item.name}
+                                        onchange={handleChange} disabled="true">
+                                        </lightning-input-field>
+                                      </template> -->
+                                      <!-- <template if:false={displaySummaryLoader}> -->
+                                      <lightning-input-field class="formInp inputchange" name={item.name} key={item.name}
+                                        field-name={item.name} value={item.value} data-name={item.name} id={item.name}
+                                        onchange={handleChange}>
+                                      </lightning-input-field>
+                                      <!-- </template> -->
+                                    </template>
+                                  </template>
+                                </template>
+                                <template if:false={item.mandatory}>
+                                  <template if:false={item.autoGen}>
+                                    <lightning-input-field class="formInp inputchange" name={item.name} key={item.name}
+                                      field-name={item.name} value={item.value} data-name={item.name} id={item.name}
+                                      onchange={handleChange}>
+                                    </lightning-input-field>
+                                  </template>
+                                  <template if:true={item.autoGen}>
+                                    <template if:true={displayTitleLoader}>
+                                      <div class="knowbler-title-blue-field" key={item.name}></div>
+                                    </template>
+                                    <template if:false={displayTitleLoader}>
+                                      <lightning-input-field class="formInp inputchange" name={item.name} key={item.name}
+                                        field-name={item.name} value={item.value} data-name={item.name} id={item.name}
+                                        onchange={handleChange}>
+                                      </lightning-input-field>
+                                    </template>
+                                  </template>
+                                </template>
+                              </template>
+                              <template if:true={item.isMultipicklist}>
+                                <div
+                                  key={item.name}
+                                  class="picklist_view slds-col slds-size_1-of-2 slds-large-size_1-of-1 slds-medium-size_1-of-1 slds-small-size_1-of-1"
+                                >
+                                  <template if:true={item.dependentPicklist}>
+                                    <div class="picklist_hover">
+                                      <div
+                                        class="slds-popover slds-popover_tooltip slds-nubbin_bottom-right slds-slide-from-top-to-bottom"
+                                        role="tooltip"
+                                      >
+                                        <div class="picklist_tooltip">
+                                          Dependent on Controlling Field
+                                          ({item.isControllerLabel})
+                                        </div>
+                                      </div>
+                                      <div>
+                                        <img
+                                          src={dependPicklist}
+                                          class="dependent_img"
+                                          alt={item.label}
+                                        />
+                                      </div>
+                                    </div>
+                                  </template>
+                                  <template if:true={item.isControllingPicklist}>
+                                    <div class="picklist_hover">
+                                      <div
+                                        class="slds-popover slds-popover_tooltip slds-nubbin_bottom-right slds-slide-from-top-to-bottom"
+                                        role="tooltip"
+                                      >
+                                        <div class="picklist_tooltip">
+                                          {item.label}
+                                        </div>
+                                      </div>
+                                      <div>
+                                        <img
+                                          src={controlPicklist}
+                                          class="controlling_img"
+                                          alt={item.label}
+                                        />
+                                      </div>
+                                    </div>
+                                  </template>
+                                  <div class="picklist_label">{item.label}</div>
+                                  <lightning-input-field
+                                    class="formInp"
+                                    name={item.name}
+                                    value={item.value}
+                                    data-name={item.label}
+                                    field-name={item.name}
+                                    onchange={handleChange}
+                                  >
+                                  </lightning-input-field>
+                                </div>
+                              </template>
+                              <template if:true={item.isPicklist}>
+                                <div
+                                  key={item.name}
+                                  class="picklist_view slds-col slds-large-size_1-of-2 slds-medium-size_1-of-2 slds-small-size_1-of-2"
+                                >
+                                  <template if:true={item.dependentPicklist}>
+                                    <div class="picklist_hover">
+                                      <div
+                                        class="slds-popover slds-popover_tooltip slds-nubbin_bottom-right slds-slide-from-top-to-bottom"
+                                        role="tooltip"
+                                      >
+                                        <div class="picklist_tooltip">
+                                          Dependent on Controlling Field
+                                          ({item.isControllerLabel})
+                                        </div>
+                                      </div>
+                                      <div>
+                                        <img
+                                          src={dependPicklist}
+                                          class="dependent_img"
+                                          alt={item.label}
+                                        />
+                                      </div>
+                                    </div>
+                                  </template>
+                                  <template if:true={item.isControllingPicklist}>
+                                    <div class="picklist_hover">
+                                      <div
+                                        class="slds-popover slds-popover_tooltip slds-nubbin_bottom-right slds-slide-from-top-to-bottom"
+                                        role="tooltip"
+                                      >
+                                        <div class="picklist_tooltip">
+                                          {item.label}
+                                        </div>
+                                      </div>
+                                      <div>
+                                        <img
+                                          src={controlPicklist}
+                                          class="controlling_img"
+                                          alt={item.label}
+                                        />
+                                      </div>
+                                    </div>
+                                  </template>
+                                  <div class="picklist_label">{item.label}</div>
+                                  <lightning-input-field
+                                    field-level-help={item.label}
+                                    class="formInp"
+                                    name={item.name}
+                                    value={item.value}
+                                    data-name={item.label}
+                                    field-name={item.name}
+                                    onchange={handleChange}
+                                  ></lightning-input-field>
+                                </div>
+                              </template>
+                              <template if:true={item.isPlainTextArea}>
+                                <div class="knowbler__input-label-wrapper" key={item.label}>
+                                  <div class="input_label" title={item.label}>
+                                    {item.label}
+                                    <template if:true={item.isInlineHelpText}>
+                                      <lightning-helptext content={item.InlineHelpText}></lightning-helptext>
+                                    </template>
+                                  </div>
+                                  <template if:true={iseditarticle}>
+                                  <template if:true={item.autoGen}>
+                                    <div class="knowbler__regenerate-hover" data-index={index}>
+                                      <div class="slds-popover slds-popover_tooltip slds-nubbin_top-right" role="tooltip">
+                                        <div class="picklist_tooltip">
+                                          Summary Regeneration
+                                        </div>
+                                      </div>
+                                      <div class={getRegenerationIconClass} data-item={item.name}
+                                        onclick={regenerateContent}>
+                                        <span class="knowbler__regenerate-icon-img">
+                                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                            viewBox="0 0 14 14">
+                                            <g transform="translate(12.043 11.709)">
+                                              <g data-name="refresh" transform="translate(-12.043 -11.861)">
+                                                <g data-name="refresh" transform="translate(0 0)">
+                                                  <rect data-name="Rectangle 5406" width="14" height="14"
+                                                    transform="translate(0 0.152)" fill="#546c7e" opacity="0" />
+                                                  <path data-name="Path 12260"
+                                                    d="M13.286,9.19a.6.6,0,0,0-.743.386A4.245,4.245,0,0,1,8.458,12.5,4.222,4.222,0,0,1,4.189,8.34,4.222,4.222,0,0,1,8.458,4.178a4.317,4.317,0,0,1,2.765.993l-1.29-.214a.6.6,0,1,0-.19,1.177l2.521.416h.1a.6.6,0,0,0,.2-.036.2.2,0,0,0,.059-.036.464.464,0,0,0,.119-.065l.054-.065c0-.03.054-.054.077-.089s0-.059.03-.083a.8.8,0,0,0,.042-.107l.446-2.378A.605.605,0,0,0,12.2,3.464l-.161.862A5.476,5.476,0,0,0,8.458,2.989,5.411,5.411,0,0,0,3,8.34a5.411,5.411,0,0,0,5.458,5.351A5.423,5.423,0,0,0,13.7,9.933a.595.595,0,0,0-.416-.743Z"
+                                                    transform="translate(-1.161 -1.378)" fill="#546c7e" />
+                                                </g>
+                                              </g>
+                                            </g>
+                                          </svg>
+                                        </span>
+                                        Re-generate
+                                      </div>
+                                    </div>
+                                    </template>  
+                                  </template>
+                                </div>
+                                <template if:false={item.autoGen}>
+                                  <lightning-input-field
+                                    class="formInp plain-text-area-field inputchange slds-col slds-small-size_1-of-1 slds-medium-size_1-of-1 slds-large-size_1-of-1"
+                                    key={item.name} name={item.name} value={item.value} field-name={item.name}
+                                    data-name={item.label} id={item.label} data-exclude-stopenter="true"
+                                    onchange={handleChange}>
+                                  </lightning-input-field>
+                                </template>
+                                <template if:true={item.autoGen}>
+                                  <template if:true={displaySummaryLoader}>
+                                    <div class="knowbler-summary-blue-field" key={item.name}></div>
+                                  </template>
+                                  <template if:false={displaySummaryLoader}>
+                                    <lightning-input-field
+                                      class="formInp plain-text-area-field inputchange  slds-col slds-small-size_1-of-1 slds-medium-size_1-of-1 slds-large-size_1-of-1"
+                                      key={item.name} name={item.name} value={item.value} field-name={item.name}
+                                      data-name={item.label} id={item.label} data-exclude-stopenter="true"
+                                      onchange={handleChange}>
+                                    </lightning-input-field>
+                                  </template>
+                                </template>
+                                </template>
+                                <template if:true={item.isRichTextArea}>
+                                  <div class="knowbler__input-label-wrapper" key={item.label}>
+                                    <div class="input_label" title={item.label}>
+                                      {item.label}
+                                      <template if:true={item.mandatory}>
+                                        <sup class="input_error">*</sup>
+                                      </template>
+                                      <template if:true={item.isInlineHelpText}>
+                                        <lightning-helptext content={item.InlineHelpText}></lightning-helptext>
+                                      </template>
+                                    </div>
+                                    <template if:true={iseditarticle}>
+                                    <template if:true={item.autoGen}>
+                                      <div class="knowbler__regenerate-hover" data-index={index}>
+                                        <div class="slds-popover slds-popover_tooltip slds-nubbin_top-right"
+                                          role="tooltip">
+                                          <div class="picklist_tooltip">
+                                            Summary Regeneration
+                                          </div>
+                                        </div>
+                                        <div class={getRegenerationIconClass} data-item={item.name}
+                                          onclick={regenerateContent}>
+                                          <span class="knowbler__regenerate-icon-img">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                              viewBox="0 0 14 14">
+                                              <g transform="translate(12.043 11.709)">
+                                                <g data-name="refresh" transform="translate(-12.043 -11.861)">
+                                                  <g data-name="refresh" transform="translate(0 0)">
+                                                    <rect data-name="Rectangle 5406" width="14" height="14"
+                                                      transform="translate(0 0.152)" fill="#546c7e" opacity="0" />
+                                                    <path data-name="Path 12260"
+                                                      d="M13.286,9.19a.6.6,0,0,0-.743.386A4.245,4.245,0,0,1,8.458,12.5,4.222,4.222,0,0,1,4.189,8.34,4.222,4.222,0,0,1,8.458,4.178a4.317,4.317,0,0,1,2.765.993l-1.29-.214a.6.6,0,1,0-.19,1.177l2.521.416h.1a.6.6,0,0,0,.2-.036.2.2,0,0,0,.059-.036.464.464,0,0,0,.119-.065l.054-.065c0-.03.054-.054.077-.089s0-.059.03-.083a.8.8,0,0,0,.042-.107l.446-2.378A.605.605,0,0,0,12.2,3.464l-.161.862A5.476,5.476,0,0,0,8.458,2.989,5.411,5.411,0,0,0,3,8.34a5.411,5.411,0,0,0,5.458,5.351A5.423,5.423,0,0,0,13.7,9.933a.595.595,0,0,0-.416-.743Z"
+                                                      transform="translate(-1.161 -1.378)" fill="#546c7e" />
+                                                  </g>
+                                                </g>
+                                              </g>
+                                            </svg>
+                                          </span>
+                                          Re-generate
+                                        </div>
+                                      </div>
+                                      </template>  
+                                    </template>
+                                  </div>
+                                  <template if:false={item.autoGen}>
+                                    <c-knowbler-editor class="ck_editor" key={item.name} destobj={destobj} exp={exp}
+                                      fieldname={item.name} fieldvalue={item.value} oneditorvaluechange={handleChanges}>
+                                    </c-knowbler-editor>
+                                  </template>
+                                  <template if:true={item.autoGen}>
+                                    <template if:true={displaySummaryLoader}>
+                                      <div class="knowbler-summary-blue-field" key={item.name}></div>
+                                    </template>
+                                    <template if:false={displaySummaryLoader}>
+                                      <c-knowbler-editor class="ck_editor" key={item.name} destobj={destobj} exp={exp}
+                                        fieldname={item.name} fieldvalue={item.value} oneditorvaluechange={handleChanges}>
+                                      </c-knowbler-editor>
+                                    </template>
+                                  </template>
+                                </template>
+                                <template if:true={item.isInt}>
+                                  <div class="input_label" title={item.label} key={item.label}>
+                                    {item.label}
+                                  </div>
+                                  <lightning-input-field
+                                    class="formInp plain-text-area-field inputchange  slds-col slds-small-size_1-of-1 slds-medium-size_1-of-1 slds-large-size_1-of-1"
+                                    key={item.name} name={item.name} value={item.value} field-name={item.name}
+                                    data-name={item.label} id={item.label} data-exclude-stopenter="true">
+                                  </lightning-input-field>
+                                </template>
+                            </template>
+                          </template>
+                        </template>
+                      </div>
+                      <template if:true={hasFileUploadPermission}>
+                        <div class="knowbler__upload-file-section">
+                          <div class="knowbler__upload-file-label-wrapper">
+                            <div class="knowbler__upload-file-label">Attachments</div>
+                            <div class="knowbler__upload-file-label-icon knowbler__file-upload-info-icon">
+                              <div class="slds-popover slds-popover_tooltip slds-nubbin_top-left" role="tooltip">
+                                <div class="knowbler__calculate-health-btn-tooltip">Maximum file size 2 GB.</div>
+                              </div>
+                              <svg width="16" height="16" viewBox="0 0 16 16">
+                                <g transform="translate(4.05 4.05) rotate(180)">
+                                  <g data-name="alert-circle" transform="translate(-12 -12)">
+                                    <g data-name="alert-circle">
+                                      <rect data-name="Rectangle 10935" width="16" height="16" transform="translate(0.05 0.05)" fill="#767676" opacity="0"/>
+                                      <path data-name="Path 18799" d="M8.708,2a6.708,6.708,0,1,0,6.708,6.708A6.708,6.708,0,0,0,8.708,2Zm0,10.063a.671.671,0,1,1,.671-.671A.671.671,0,0,1,8.708,12.063Zm.671-2.683a.671.671,0,0,1-1.342,0V6.025a.671.671,0,0,1,1.342,0Z" transform="translate(-0.658 -0.658)" fill="#767676"/>
+                                    </g>
+                                  </g>
+                                </g>
+                              </svg>
+                            </div>
+                          </div>
+                          <lightning-file-upload
+                            record-id={currentid}
+                            onuploadfinished={handleUploadFinished}
+                            multiple
+                          ></lightning-file-upload>
+                        </div>
+                        <div class="knowbler__uploaded-files-section">
+                          <template if:false={loadFilesList}>
+                            <template for:each={allFilesList} for:item="fileInfo" for:index="index">
+                              <template if:false={fileInfo.disable}>
+                                <div class="knowbler__upload-files-list-wrapper" key={fileInfo.documentId}>
+                                  <div class="knowbler__upload-file-wrapper">
+                                    <div class="knowbler__upload-file-icon">
+                                      <lightning-icon icon-name={fileInfo.fileIcon} size="small" alternative-text="File"></lightning-icon>
+                                    </div>
+                                    <a href={fileInfo.fileLink} class="knowbler__upload-file-name" target="_blank">{fileInfo.name}</a>
+                                  </div>
+                                  <div class="knowbler__upload-file-cross-btn" onclick={handleRemoveUploadFile} data-id={fileInfo.documentId}>
+                                    <svg width="21" height="21" viewBox="0 0 21 21">
+                                      <g transform="translate(12.912 12.485)">
+                                        <g transform="translate(-12.485 -12.485)">
+                                          <g transform="translate(0 0)">
+                                            <rect width="21" height="21" transform="translate(20.573 21) rotate(180)" opacity="0"/>
+                                            <path d="M12.043,10.893l3.507-3.5a.819.819,0,1,0-1.158-1.158l-3.5,3.507-3.5-3.507A.819.819,0,0,0,6.235,7.394l3.507,3.5-3.507,3.5A.819.819,0,1,0,7.394,15.55l3.5-3.507,3.5,3.507a.819.819,0,1,0,1.158-1.158Z" transform="translate(-0.606 -0.606)"/>
+                                          </g>
+                                        </g>
+                                      </g>
+                                    </svg>
+                                  </div>
+                                </div>
+                              </template>
+                              <template if:true={fileInfo.disable}>
+                                <div class="knowbler__upload-files-list-wrapper knowbler__upload-file-disable" key={fileInfo.documentId}>
+                                  <div class="knowbler__upload-file-wrapper">
+                                    <div class="knowbler__upload-file-icon">
+                                      <lightning-icon icon-name={fileInfo.fileIcon} size="small" alternative-text="File"></lightning-icon>
+                                    </div>
+                                    <a href={fileInfo.fileLink} class="knowbler__upload-file-name" target="_blank">{fileInfo.name}</a>
+                                  </div>
+                                  <div class="knowbler__upload-file-cross-btn" onclick={handleRemoveUploadFile} data-id={fileInfo.documentId}>
+                                    <svg width="21" height="21" viewBox="0 0 21 21">
+                                      <g transform="translate(12.912 12.485)">
+                                        <g transform="translate(-12.485 -12.485)">
+                                          <g transform="translate(0 0)">
+                                            <rect width="21" height="21" transform="translate(20.573 21) rotate(180)" opacity="0"/>
+                                            <path d="M12.043,10.893l3.507-3.5a.819.819,0,1,0-1.158-1.158l-3.5,3.507-3.5-3.507A.819.819,0,0,0,6.235,7.394l3.507,3.5-3.507,3.5A.819.819,0,1,0,7.394,15.55l3.5-3.507,3.5,3.507a.819.819,0,1,0,1.158-1.158Z" transform="translate(-0.606 -0.606)"/>
+                                          </g>
+                                        </g>
+                                      </g>
+                                    </svg>
+                                  </div>
+                                </div>
+                              </template>
+                            </template>
+                            <template if:true={loadFilesList}>
+                              <div class="knowbler__file-upload-loader-wrapper">
+                                <div class="knowbler__load-file-text">Please wait...</div>
+                                <div class="knowbler__custom-loader"></div>
+                              </div>
+                            </template>
+                          </template>
+                        </div>
+                      </template>
+                      <div class="dataCat">
+                        <c-knowbler-data-category iseditarticle alldatacategories={alldatacategories}
+                          refreshdata={refreshdata} recordid={currentid} onsavecategory={saveClicked}
+                          selectedcategorytree={selectedCategoryTree}></c-knowbler-data-category>
+                      </div>
+                    </div>
+                  </lightning-record-edit-form>
+                </div>
+              </template>
+              <template if:true={displayDuplicacyModal}>
+                <div class="knowbler__salesforce-alert-popup-overlay" onclick={closeDuplicacyModal}></div>
+                <div class="knowbler__salesforce-alert-popup-dialog knowbler__salesforce-alert-popup-dialog-duplicate">
+                  <div class="knowbler__salesforce-alert-popup-content">
+                    <div class="knowbler__salesforce-alert-popup-body">
+                      <div class="knowbler__salesforce-alert-popup-content-header">
+                        <div class="button" onclick={closeDuplicacyModal}>
+                          <svg class="knowbler__salesforce-cursor-pointer knowbler__salesforce-icon"
+                            xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                            viewBox="0 0 18 18">
+                            <g id="arrow-backward" transform="translate(6 6) rotate(180)">
+                              <g id="arrow-backward-2" data-name="arrow-backward"
+                                transform="translate(-12 -12)">
+                                <g id="arrow-backward-3" data-name="arrow-backward">
+                                  <rect id="Rectangle_11280_backward"
+                                    data-name="Rectangle 11280" width="18" height="18"
+                                    transform="translate(0 18) rotate(-90)"
+                                    opacity="0" />
+                                  <path id="Path_18351_backward" data-name="Path 18351"
+                                    d="M4.75,11h8.9l-2.722,3.27a.751.751,0,0,0,1.155.96l3.75-4.5a.892.892,0,0,0,.068-.113c0-.038.037-.06.052-.1a.721.721,0,0,0,0-.54c0-.038-.037-.06-.052-.1a.893.893,0,0,0-.068-.112l-3.75-4.5a.751.751,0,1,0-1.155.96L13.645,9.5H4.75a.75.75,0,0,0,0,1.5Z"
+                                    transform="translate(-1 -1.25)" />
+                                </g>
+                              </g>
+                            </g>
+                          </svg>
+                          <span>Back to editing</span>
+                        </div>
+                        <div class="button" onclick={proceedAnyway}>
+                          <span>Proceed anyway</span>
+                          <svg class="knowbler__salesforce-cursor-pointer knowbler__salesforce-icon"
+                            id="arrow-forward" xmlns="http://www.w3.org/2000/svg" width="18"
+                            height="18" viewBox="0 0 18 18">
+                            <g id="arrow-forward-2" data-name="arrow-forward">
+                              <g id="arrow-forward-3" data-name="arrow-forward">
+                                <rect id="Rectangle_11280" data-name="Rectangle 11280"
+                                  width="18" height="18"
+                                  transform="translate(18) rotate(90)" opacity="0" />
+                                <path id="Path_18351" data-name="Path 18351"
+                                  d="M.75,4.5h8.9L6.923,1.231A.751.751,0,0,1,8.078.271l3.75,4.5a.892.892,0,0,1,.068.113c0,.038.037.06.052.1a.721.721,0,0,1,0,.54c0,.038-.037.06-.052.1a.893.893,0,0,1-.068.112l-3.75,4.5a.751.751,0,1,1-1.155-.96L9.645,6H.75a.75.75,0,0,1,0-1.5Z"
+                                  transform="translate(3 3.749)" />
+                              </g>
+                            </g>
+                          </svg>
+                        </div>
+                      </div>
+                      <div class="knowbler__salesforce-articles-listing">
+                        <div class="knowbler__salesforce-articles-listing-title-div">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="26" height="23"
+                            viewBox="0 0 26 23">
+                            <g id="Group_19997" data-name="Group 19997"
+                              transform="translate(-54 -240)">
+                              <g id="file-text" transform="translate(54 240)" opacity="0.35">
+                                <g id="file-text-2" data-name="file-text"
+                                  transform="translate(0 0)">
+                                  <g id="file-text-3" data-name="file-text">
+                                    <rect id="Rectangle_5408" data-name="Rectangle 5408"
+                                      width="20" height="20" fill="#3e7555"
+                                      opacity="0" />
+                                    <path id="Path_11429" data-name="Path 11429"
+                                      d="M17.132,6.447l-3.7-4.172A.834.834,0,0,0,12.81,2H6.136A2.111,2.111,0,0,0,4,4.086V16.6a2.111,2.111,0,0,0,2.136,2.086h9.077A2.111,2.111,0,0,0,17.349,16.6V7.006a.834.834,0,0,0-.217-.559Zm-8.96,3.9h2.5a.834.834,0,0,1,0,1.669h-2.5a.834.834,0,1,1,0-1.669Zm5.006,5.006H8.172a.834.834,0,1,1,0-1.669h5.006a.834.834,0,1,1,0,1.669Zm-.242-8.343a.659.659,0,0,1-.592-.709V3.669l3.12,3.337Z"
+                                      transform="translate(-0.663 -0.331)"
+                                      fill="#3e7555" />
+                                  </g>
+                                </g>
+                              </g>
+                              <g id="file-text-4" data-name="file-text"
+                                transform="translate(60.307 243.154)">
+                                <g id="file-text-5" data-name="file-text"
+                                  transform="translate(0 0)">
+                                  <g id="file-text-6" data-name="file-text">
+                                    <rect id="Rectangle_5408-2"
+                                      data-name="Rectangle 5408" width="20"
+                                      height="20" transform="translate(-0.307 -0.154)"
+                                      fill="#3e7555" opacity="0" />
+                                    <path id="Path_11429-2" data-name="Path 11429"
+                                      d="M17.132,6.447l-3.7-4.172A.834.834,0,0,0,12.81,2H6.136A2.111,2.111,0,0,0,4,4.086V16.6a2.111,2.111,0,0,0,2.136,2.086h9.077A2.111,2.111,0,0,0,17.349,16.6V7.006a.834.834,0,0,0-.217-.559Zm-8.96,3.9h2.5a.834.834,0,0,1,0,1.669h-2.5a.834.834,0,1,1,0-1.669Zm5.006,5.006H8.172a.834.834,0,1,1,0-1.669h5.006a.834.834,0,1,1,0,1.669Zm-.242-8.343a.659.659,0,0,1-.592-.709V3.669l3.12,3.337Z"
+                                      transform="translate(-1.13 -0.148)"
+                                      fill="#3e7555" />
+                                  </g>
+                                </g>
+                              </g>
+                            </g>
+                          </svg>
+
+                          <span class="heading">
+                            Similar articles found ({cardLength})
+                          </span>
+                        </div>
+                        <div class="knowbler__salesforce-articles-listing-description">
+                          Seems like you're duplicating an article. Here's a list of similar
+                          ones.
+                        </div>
+                        <div class="knowbler__zendesk-articles-list">
+                          <template class="knowbler__zendesk-articles-list"
+                            for:each={articlesData} for:item="item" for:index="cardIndex">
+                            <div key={item.id} class="knowbler__salesforce-article-card">
+                              <c-knowbler-article-card 
+                                cardlength={cardLength}
+                                destobj={destobj}
+                                currentuserlanguage={currentuserlanguage}
+                                item={item}
+                                cardindex={cardIndex}
+                                cardindexs={cardIndex}
+                                onopenmanagescreen={openManageScreen}
+                                ondotclick={dotClick}
+                                onpreviewopen={previewOpen}
+                                ongotohome={gotohome}
+                                duplicacylisting={duplicacylisting}
+                              >
+                              </c-knowbler-article-card>
+                            </div>
+                          </template>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </div>
+        </div>
+      </template>
+    <c-knowbler-modal-component oncloseregeneration={cancelTitleGeneration}
+      oncontinueregeneration={callRegenerationMethod} onregeneratearticlefield={handleRetry}
+      onautogenerate={handleRetry} stayleave={stayleaveflag} client-settings={clientSettings}
+      createsuccess={createflag} saveprog={progressflag} onleave={handleBackLeave} onhandlesave={handleVideo}
+      ispublish={isPublish} onclosemodal={closePublishModal} onpublishnow={publishnow}
+      onschedulepublish={schedulepublish} ispublishnow={ispublishnow} onclosepublish={handlepublish}
+      ispublishattach={ispublishattach} draftarticlemode={draftarticlemode} onreferencenow={referencenow}
+      onresolutionnow={resolutionnow} onreferenceschedule={referenceschedule}
+      onresolutionschedule={resolutionschedule} caseid={caseid} casenumber={casenumber} jwttoken={jwttoken}
+      endpoint={endpoint} newnumber={newnumber} unique-number={uniqueNumber}>
+    </c-knowbler-modal-component>
+  </div>
+  </template>
+  <template if:true={articleListData.showDetailPage}>
+    <c-knowbler-manage-article
+      destobj={destobj}
+      alldatacategories={alldatacategories}
+      kcsheight={kcsheight}
+      draftarticlemode={draftarticlemode}
+      detailarticle={articleListData.detailArticle}
+      currentid={articleListData.currentId}
+      flexipageregionwidth={flexipageregionwidth}
+      namerecordtype={recordt}
+      norecordtype={articleListData.flagForm}
+      currentuserlanguage={articleListData.userLanguage}
+      configrecord={articleListData.configRecord}
+      mappingfields={articleListData.mappingFields}
+      onshoweditpage={hideScreen}
+      onmanagearticle={openManageScreen}
+    ></c-knowbler-manage-article>
+  </template>
+</template>

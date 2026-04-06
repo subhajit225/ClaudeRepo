@@ -1,0 +1,13 @@
+<apex:page showHeader="false" sidebar="false" cache="false" contentType="text/xml" controller="OutstandingInvoiceAdditionalController">
+    <block font-size="{!template.SBQQ__FontSize__c}" font-family="{!template.SBQQ__FontFamily__c}">
+            <block margin-top="1em">
+                {!oneTimeSpecialLabel}
+            </block>
+            <block margin-top="1em">
+                {!replacementTNCLabel}
+            </block>
+            <block margin-top="1em">
+                {!futureUnbilledLabel}
+            </block>
+    </block>
+</apex:page>

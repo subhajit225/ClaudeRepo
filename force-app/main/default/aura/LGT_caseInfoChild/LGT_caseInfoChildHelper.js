@@ -1,0 +1,5 @@
+({
+    fetchData: function (cmp) {
+        
+    },    
+});

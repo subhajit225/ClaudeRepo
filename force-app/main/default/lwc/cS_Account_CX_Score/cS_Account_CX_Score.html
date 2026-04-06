@@ -1,0 +1,57 @@
+<template>
+     <div style="float: right;position: absolute;right: 20px;top: 7px;">
+        <lightning-button-stateful
+            label-when-off="Know More"
+            label-when-on="Know More"
+            label-when-hover="Know More"
+            icon-name-when-off="utility:help"
+            icon-name-when-on="utility:help"
+            icon-name-when-hover="utility:help"
+            onclick={handleConfluenceLink}>
+        </lightning-button-stateful> &nbsp;&nbsp;
+        <lightning-button label="View in Tableau" title="View in Tableau" onclick={handleDashboardLink}></lightning-button>
+    </div>
+     <lightning-tabset>
+        <lightning-tab label="Account Score">
+            
+            <c-c-s-account-score record-id={recordId}></c-c-s-account-score>
+        </lightning-tab>
+        <lightning-tab label="Historical" title="2nd tab extended title">
+            <template if:true={showCharts}>
+                <div>
+                    <center>
+                        <table style="width:40%">
+                            <thead>
+                                <tr>
+                                    <th colspan="4" style="background-color: rgb(201, 203, 207);text-align:center;">Health Score of Overall CX Score</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="background-color: rgb(100, 149, 237);text-align:center;"><b>Excellent(>=75)</b></td>
+                                    <td style="background-color: rgb(50, 205, 50);text-align:center;"><b>Good(>50-&lt;75)</b></td>
+                                    <td style="background-color: rgb(228, 208, 10);text-align:center;"><b>Poor(>30-50)</b></td>
+                                    <td style="background-color: rgb(222, 49, 99);text-align:center;"><b>Fragile(&lt;=30)</b></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </center>
+                   
+                </div>
+                <br/>
+                <lightning-tabset >
+                    <lightning-tab label="Monthly">
+                        <c-c-s-l-w-cchart-j-s chart-data={monthlyData} chart-name="Monthly Trend" chart-id="month" location="3"></c-c-s-l-w-cchart-j-s>
+                    </lightning-tab>
+                    <lightning-tab label="Weekly" title="2nd tab extended title">
+                        <c-c-s-l-w-cchart-j-s chart-data={weeklyData} chart-name="Weekly Trend" chart-id="week" location="2"></c-c-s-l-w-cchart-j-s>
+                    </lightning-tab>
+                    <lightning-tab label="Quarterly">
+                        <c-c-s-l-w-cchart-j-s chart-data={quaterlyData} chart-name="Quarterly Trend" chart-id="quater" location="1"></c-c-s-l-w-cchart-j-s>
+                    </lightning-tab>
+                </lightning-tabset>
+            </template>
+        </lightning-tab>
+    </lightning-tabset>
+   
+</template>

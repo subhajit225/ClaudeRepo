@@ -1,0 +1,7 @@
+<apex:component controller="attachmentInfoController" access="global">
+    <apex:attribute name="theCaseId" assignTo="{!caseId}" type="String" description="Id of the case"/>
+    <apex:repeat value="{!CaseAndAttachInfo}" var="cdl">
+        New attachment&nbsp; <apex:outputLink value="{!$Label.Attachment_download_link}{!cdl.contentDocId}">{!cdl.title}&nbsp;({!cdl.fileSize1})</apex:outputLink>
+        added to case <a href = "{!$Label.BaseUrlOrg}{!cdl.caseId}">{!cdl.caseNumber}</a> by {!$User.FirstName} {!$User.LastName} ({!cdl.accName}) on <b>{!MONTH(TODAY())}/{!DAY(TODAY())}/{!YEAR(TODAY())}</b>.<br/>        
+    </apex:repeat> 
+</apex:component>

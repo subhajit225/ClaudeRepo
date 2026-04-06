@@ -1,0 +1,29 @@
+<apex:page standardStylesheets="false" sidebar="false" cache="false" showheader="false"  title="Login: Rubrik Community" applyBodyTag="false">
+ <c:visualstrapblock >
+ 
+ <style>
+ .table > tbody > tr:first-child > td {
+    border: none !important;
+ }
+ </style>
+    
+        <!--start header-->
+        <c:siteheader ></c:siteheader>
+        <!--end Header-->
+
+        
+         <div class="container">
+        <div class="row rowcontainer" >
+          <div class="col-md-12">
+          <c:pageTitle name="Login" ></c:pageTitle>
+                  <c:SiteLogin id="siteLogin"/>
+
+        </div>
+        </div>
+        </div>
+
+ <!--start the footer-->
+        <c:sitefooter ></c:sitefooter>
+        
+    </c:visualstrapblock>
+</apex:page>

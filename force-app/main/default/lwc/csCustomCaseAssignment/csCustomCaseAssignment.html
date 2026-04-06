@@ -1,0 +1,136 @@
+<template>
+  <div class="spinner">
+    <template if:true={showSpinner}>
+      <lightning-spinner alternative-text="Loading" variant="brand" size="large">
+      </lightning-spinner>
+    </template>
+  </div>
+  <template if:true={isModalOpen}>
+    <!--###### MODAL BOX Start######-->
+    <lightning-card>
+      <div role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+        aria-describedby="modal-content-id-1" class="slds-fade-in-open">
+        <div>
+          <!-- modal header start -->
+          <header class="custom-header slds-modal__header">
+            <h2 class="slds-text-heading_medium slds-hyphenate">Customer Success Cases Assignment</h2>
+          </header>
+          <!-- modal body start -->
+          <div class="slds-modal__content" id="modal-content-id-3">
+            <lightning-card>
+              <template if:true={visibleCases}>
+                <div class="slds-col slds-size_1-of-12 slds-m-left_medium">
+                  <div>
+                    <lightning-combobox name="progress" label="No. of Records to Submit" value={noOfRecords}
+                      placeholder="Select Option" options={recordOptions} onchange={handleChange}></lightning-combobox>
+                  </div>
+
+                </div>
+                <div class="slds-box slds-m-around_medium">
+                  <div class="slds-grid slds-wrap slds-border_bottom slds-p-bottom_xx-small">
+                    <div class="slds-col slds-size_1-of-12"><strong>Case Number</strong></div>
+                    <div class="slds-col slds-size_2-of-12"><strong>Date/Time Opened</strong></div>
+                    <div class="slds-col slds-size_2-of-12"><strong>Account Name</strong></div>
+                    <div class="slds-col slds-size_2-of-12"><strong>Product Name</strong></div>
+                    <div class="slds-col slds-size_1-of-12"><strong>Phase</strong></div>
+                    <div class="slds-col slds-size_1-of-12"><strong>CSM Open Cases</strong></div>
+                    <div class="slds-col slds-size_2-of-12"><strong>Case Owner</strong></div>
+                    <div class="slds-col slds-size_1-of-12"><strong></strong></div>
+                  </div>
+                  <template for:each={visibleCases} for:item="caseRec">
+                    <div key={caseRec.Id} class="slds-grid slds-wrap slds-p-vertical_xx-small slds-border_bottom">
+                      <div class="slds-col slds-size_1-of-12">
+                        <lightning-formatted-url value={caseRec.caseLink} target="_blank" class="pointer break-word"
+                          label={caseRec.caseNumber}></lightning-formatted-url>
+                      </div>
+                      <div class="slds-col slds-size_2-of-12">
+                        <lightning-formatted-date-time value={caseRec.caseCreatedDate} year="numeric" month="short"
+                          day="2-digit" hour="2-digit" minute="2-digit" time-zone="UTC">
+                        </lightning-formatted-date-time>
+                      </div>
+                      <div class="slds-col slds-size_2-of-12">{caseRec.accountName}</div>
+                      <div class="slds-col slds-size_2-of-12">{caseRec.productName}</div>
+                      <div class="slds-col slds-size_1-of-12">{caseRec.phase}</div>
+                      <div class="slds-col slds-size_1-of-12">{caseRec.caseCount}</div>
+                      <div class="slds-col slds-size_2-of-12" data-id={caseRec.id}>
+                        <template if:true={caseRec.hasQueue}>
+                          <lightning-input type="text" value={caseRec.queueName} disabled variant="label-hidden">
+                          </lightning-input>
+                        </template>
+                        <template if:false={caseRec.hasQueue}>
+                          <lightning-record-picker label="test" variant="label-hidden" object-api-name="User"
+                            placeholder="Select a user" value={caseRec.ownerId} disabled={caseRec.disabled}
+                            onchange={handleOwnerChange}>
+                          </lightning-record-picker>
+                        </template>
+                      </div>
+                      <div class="slds-col slds-size_1-of-12 slds-text-align_center">
+                        <template if:true={caseRec.isEdit}>
+                          <lightning-button-icon icon-name="utility:close" variant="bare" size="small" title="Cancel"
+                            onclick={handleCloseClick} data-id={caseRec.id}>
+                          </lightning-button-icon>
+                        </template>
+                        <template if:false={caseRec.isEdit}>
+                          <lightning-button-icon icon-name="utility:edit" variant="bare" size="small" title="Edit"
+                            onclick={handleEditClick} data-id={caseRec.id}>
+                          </lightning-button-icon>
+                        </template>
+                      </div>
+                    </div>
+                  </template>
+                  <!-- Pagination Controls -->
+                  <div class="pagination-container">
+                    <p class="info-text">
+                      Displaying {totalRecords} out of {totalCasesAvailable} items
+                    </p>
+
+                    <div class="pagination">
+                      <button class="page-btn" onclick={handlePrev} disabled={isFirstPage} title="Previous">‹‹</button>
+
+                      <template for:each={pageList} for:item="page">
+                        <template if:true={page.isEllipsis}>
+                          <span key={page.key} class="ellipsis">...</span>
+                        </template>
+                        <template if:false={page.isEllipsis}>
+                          <button
+                        key={page.key}
+                        class={page.class}
+                        data-page={page.number}
+                        onclick={handlePageClick}>
+                        {page.number}
+                    </button>
+                        </template>
+                      </template>
+
+                      <button class="page-btn" onclick={handleNext} disabled={isLastPage} title="Next">››</button>
+                    </div>
+                  </div>
+                  <footer class="custom-footer slds-modal__footer">
+                    <template if:true={showActionButtons}>
+                      <lightning-button class="slds-button slds-m-top_x-small" variant="brand" label="Export"
+                        onclick={exportData}></lightning-button>
+                      <lightning-button class="slds-button slds-m-top_x-small" variant="brand"
+                        label="Submit Assignments" onclick={handleAssignments}></lightning-button>
+                    </template>
+                    <lightning-button class="slds-button slds-m-top_small" variant="neutral" type="button" name="cancel"
+                      label="Cancel" onclick={closeModal}></lightning-button>
+                  </footer>
+                </div>
+              </template>
+              <template if:true={error}>
+                <p><strong>Error</strong></p>
+                <ul>
+                  <template for:each={error} for:item="err">
+                    <li key={err}>{err}</li>
+                  </template>
+                </ul>
+              </template>
+            </lightning-card>
+          </div>
+
+        </div>
+      </div>
+    </lightning-card>
+    <!--####### END OF MODAL BOX #######-->
+  </template>
+</template>

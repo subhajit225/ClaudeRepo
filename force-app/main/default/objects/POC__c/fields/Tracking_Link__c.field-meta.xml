@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Tracking_Link__c</fullName>
+    <externalId>false</externalId>
+    <formula>CASE( Shipping_Method__c ,
+&apos;AIT&apos;,
+HYPERLINK(&apos;http://fastrak.aitworldwide.com/FormattedDefault.aspx&apos;,
+&apos;AIT&apos;,
+&quot;_blank&quot;),
+&apos;UPS&apos;,
+HYPERLINK(&apos;https://www.ups.com/WebTracking/track?loc=en_gb&apos;,
+&apos;UPS&apos;,
+&quot;_blank&quot;),
+&apos;FedEx&apos;,
+HYPERLINK(&apos;http://www.fedex.com/us/track/ &apos;,
+&apos;FEDEX&apos;,
+&quot;_blank&quot;),
+&apos;DHL&apos;,
+HYPERLINK(&apos;http://www.dhl.com/en/express/tracking.html&apos;,
+&apos;DHL&apos;,
+&quot;_blank&quot;),
+&apos;Kintetsu World Express&apos;,
+HYPERLINK(&apos;https://www.kwe.co.jp/en/support/tracking&apos;,
+&apos;Kintetsu&apos;,
+&quot;_blank&quot;),
+&apos;&apos;)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>(DEPRECATED) Tracking Link</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

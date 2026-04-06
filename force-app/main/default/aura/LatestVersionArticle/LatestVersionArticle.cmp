@@ -1,0 +1,5 @@
+<aura:component controller="KnowledgeNavigateController" implements="force:hasRecordId,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes" access="global">
+    <aura:attribute name="recordId" type="String"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.navigateToLatest}"/>
+</aura:component>

@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+	<apiVersion>54.0</apiVersion>
+	<isExposed>true</isExposed>
+	<targets>
+		<target>lightning__FlowScreen</target>
+	</targets>
+	<targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <property name="showReviewButton" type="boolean" label="Show Review Button" role="inputOnly"/>
+			<property name="reviewClicked" type="boolean" label="Review Button Clicked" role="outputOnly"/>
+		</targetConfig>
+	</targetConfigs>
+</LightningComponentBundle>

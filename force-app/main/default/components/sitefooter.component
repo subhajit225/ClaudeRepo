@@ -1,0 +1,347 @@
+<apex:component id="footerComponent"  controller="Util">
+    <style>
+        .footer{
+        position: static !important;
+        bottom: 0;
+        width: 100%;
+        min-height: 297px;
+        background-color: #001F2B;
+        border:0px;
+        padding:40px 0 50px 0;;
+        float:left;
+        }
+        .footerContent{
+        width:90%;
+        margin:0 auto;
+        padding:0 40px;
+        }
+        .footerline {
+        height: 1px !important;
+        margin-top: 5px !important;
+        margin-bottom: 20px !important;
+        border: 0 !important;
+        border-top: none !important;
+        background-color: rgba(255,255,255,0.2) !important;
+        }
+        
+        .footerListHead {
+        box-sizing: border-box;
+        font-family: Gotham-Light;
+        font-size: 14px;
+        line-height: 24px;
+        text-transform: uppercase;
+        color: #FFFFFF;
+        padding-top:14px;
+        padding-bottom:1px
+        }
+        
+        a.footerLink {
+        font-family: Gotham-Light;
+        color: #FFFFFF;
+        font-weight: 300 !important;
+        font-size: 14px !important;
+        line-height: 28px !important;
+        color: hsla(0,0%,100%,.8) !important;
+        -webkit-transition: all .2s ease-in-out !important;
+        transition: all .2s ease-in-out !important;
+        opacity: .9 !important;
+        text-decoration: none;
+        }
+        
+        a.socialcolor {
+        color: #FFFFFF !important;
+        }
+        
+        a.footerlink:hover {
+        font-family: Gotham-Light;
+        color: #FFFFFF;
+        font-weight: 300 !important;
+        font-size: 14px !important;
+        line-height: 28px !important;
+        color: hsla(0,0%,100%,.8) !important;
+        -webkit-transition: all .2s ease-in-out !important;
+        transition: all .2s ease-in-out !important;
+        opacity: 1 !important;
+        text-decoration: none;
+        }
+        
+        .footertext {
+        font-family: Gotham-Light;
+        color: hsla(0,0%,100%,.8) !important;
+        font-weight: 300 !important;
+        font-size: 14px !important;
+        line-height: 24px !important;
+        }
+        
+        .footerbottomleft{
+        margin-left:-15px;
+        opacity: 0.8 !important;
+        }
+        
+        .footerbottomright{
+        margin-right:-15px;
+        opacity: 0.8 !important;
+        
+        }
+        
+        .bullet{
+        padding:10px;
+        }
+        
+        
+    </style>
+    
+    <style>
+        .globalHeaderBar {
+            display: none;
+        }
+        html body{
+         display: none;
+        }
+    </style>
+    <script>
+        var url = location.pathname; 
+         console.log(url);
+        //Article
+        if(url.includes('/articles/How_To/')){
+           
+            url = url.replace('/articles/How_To/','/s/article/');
+            window.location.href = url;
+        }else if(url.startsWith('/a5B')){
+            url = '/s/documentationdetail?id='+url.substring(1, url.lastIndexOf('/'));
+            window.location.href = url;
+        } else{
+            url = url.toLowerCase();
+            
+            //Login Page 
+            if(url.includes('/idp/login')){
+               // url = location.href;
+                
+                //url = url.replace('https://support.rubrik.com/idp/login','https://support.rubrik.com/s/idp/login');
+            }
+            
+            //Register Page 
+            if(url.includes('/selfregisterpage')){
+                url = url.replace('/selfregisterpage/','/s/login/SelfRegister');
+            }
+            //Forgot Paswword
+            if(url.includes('/forgotpassword')){
+                url = url.replace('/forgotpassword','/LightningForgotPassword');
+            }
+            //Case Page 
+            if(url.includes('/case/500')){
+                url = url.replace('/case/','/s/viewcase?id=');
+            }
+            //idea list 
+            if(url.includes('/ideashome')){
+                url = url.replace('/ideashome','/s/idealist');
+            }
+            
+            //NewCase
+            if(url.includes('/newcase')){
+                url = '/s/newcases';
+            } 
+            //doc
+            if(url.startsWith('/a5b')){
+                url = '/s/documentationdetail?id='+url.substring(1, url.lastIndexOf('/'));
+            } 
+            //Idea Detail
+            //Idea Detail
+            if(url.includes('/ideaview')){
+                url = url.replace('/ideaview','/s/ideadetail');
+            }
+            //Idea New
+            if(url.includes('/newidea')){
+                url = url.replace('/newidea','/s/idealist?newIdea=true');
+            }
+        
+            //Register Product
+            if(url.includes('/registerproduct')){
+                url = url.replace('/registerproduct','/s/registerproduct');
+            }
+        
+            //Download
+            if(url.includes('/downloads')){
+                url = url.replace('/downloads','/s/documentation');
+            }
+        
+            //AdminPanelPage
+            if(url.includes('/adminpanelpage')){
+                url = url.replace('/adminpanelpage','/s/adminpanelpage');
+            }
+            
+            //Article
+            if(url.includes('/articles/how_to/')){
+                url = url.replace('/articles/how_to/','/s/article/');
+                window.location.href = url;
+            }
+        
+            //About
+            if(url.includes('/about')){
+                url = url.replace('/about','/s/about');
+            }
+            //file
+            if(url.includes('servlet.filedownload')){
+                console.log('url2',url);
+                url = '/s?returl='+window.location.search;
+            }
+            
+            if(url != location.pathname.toLowerCase()){
+                window.location.href = url;
+            }
+            
+            //idp Login
+            if(url.includes('/idp/login')){
+                document.getElementsByTagName("body")[0].style.display = "block";
+    
+            }
+        }
+    </script>
+     <apex:outputPanel rendered="{!Usertype=='Trial'}">
+        <footer class="footer footertext" id="last-footer">
+            
+            <!--/.container-->
+            <div class="footerContent">
+                <div class="row block">
+                    <div class="col-md-6 block">
+                        <div class="row block">
+                            <div class="col-md-6 nopad">
+                                <apex:image value="{!$Resource.communityfooterlogonotext}" width="54px;padding:5px;margin-top:5px;"/>
+                                <br/>
+                                <apex:outputtext value="{!$Label.footerText}" style="opacity: 0.8 !important;"/>
+                            </div>
+                        </div>
+                        <div class="row block">
+                            <div class="col-md-12">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row block">
+                            <apex:outputPanel layout="none" rendered="{!NOT($Setup.Customer_Community_Tab_Settings__c.Hide_Standard_Tabs__c)}">
+                                <div class="col-md-4 nopad">
+                                    <div class="footerListHead block">Knowledge base<br/></div>
+                                    <a href="{!URLFOR($Page.trialKnowledge, null, null)}" class="footerLink block">View knowledge base</a><br/>
+                                </div>
+                            </apex:outputPanel>
+                            <apex:outputPanel layout="none" rendered="{!NOT($Setup.Customer_Community_Tab_Settings__c.Hide_Standard_Tabs__c)}">
+                                <div class="col-md-4 nopad">
+                                    <div class="footerListHead block">Documentation<br/></div>
+                                    <a href="{!URLFOR($Page.Downloads, null, null)}" class="footerLink block">View documentation</a><br/>
+                                </div>
+                            </apex:outputPanel>
+                            <div class="col-md-4 nopad">
+                                <div class="footerListHead block">About<br/></div>
+                                <a href="{!URLFOR($Page.About, null, null)}" class="footerLink block">About Rubrik</a><br/>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="row block">
+                    <div class="col-md-12">
+                        <a href="https://twitter.com/rubrikInc" target="_blank" class="socialcolor"><apex:image value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/twiter.png')}" styleClass="" /></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a href="https://www.linkedin.com/company/rubrik-inc" target="_blank" class="socialcolor"><apex:image value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/linkedin.png')}" styleClass="" /></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a href="https://www.facebook.com/rubrikinc/" target="_blank" class="socialcolor"><apex:image value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/facebok.png')}" styleClass="" /></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a href="https://www.youtube.com/channel/UCDoKLwlfdfH61rkzD3pu_ZQ" target="_blank" class="socialcolor"><apex:image value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/youtube.png')}" styleClass="" /></a>
+                        <!--this is the bottom row-->
+                        <hr class="footerline"/>
+                        <div class="col-md-6 nopad">
+                            <div class="text-left inline-block footerbottomleft"> Built in Palo Alto, CA <span class="bullet">&bull;</span> <a href="https://www.rubrik.com/privacy-policy/" class="footerLink block" target="_blank">Privacy Policy</a> <span class="bullet">&bull;</span> <a href="https://www.rubrik.com/en/legal/ccpa-compliance">CA Residents only: Do not sell my personal information</a><span class="bullet">&bull;</span><a href="https://www.rubrik.com/contact-us/" class="footerLink block" target="_blank">Contact Us</a> </div>
+                        </div>
+                        <div class="col-md-6 nopad">
+                            <div class="text-right inline-block footerbottomright"> © {!year(today())} Rubrik - The Cloud Data Management Company </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            </footer>
+            </apex:outputPanel>
+    
+    <apex:outputPanel rendered="{!Usertype !='Trial'}">
+        <footer class="footer footertext" id="last-footer">
+            
+            <!--/.container-->
+            <div class="footerContent">
+                <div class="row block">
+                    <div class="col-md-6 block">
+                        <div class="row block">
+                            <div class="col-md-6 nopad">
+                                <apex:image value="{!$Resource.communityfooterlogonotext}" width="54px;padding:5px;margin-top:5px;"/>
+                                <br/>
+                                <apex:outputtext value="{!$Label.footerText}" style="opacity: 0.8 !important;"/>
+                            </div>
+                        </div>
+                        <div class="row block">
+                            <div class="col-md-12">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row block">
+                            <apex:outputPanel layout="none" rendered="{!NOT($Setup.Customer_Community_Tab_Settings__c.Hide_Standard_Tabs__c)}">
+                                <div class="col-md-4 nopad">
+                                    <div class="footerListHead block">My Cases<br/></div>
+                                    <a href="{!URLFOR($Page.NewCase, null, null)}" class="footerLink block">Create case</a><br/>
+                                    <a href="{!URLFOR($Page.CaseHome, null, null)}" class="footerLink block">View cases</a><br/>
+                                </div>
+                            </apex:outputPanel>
+                            <apex:outputPanel layout="none" rendered="{!NOT($Setup.Customer_Community_Tab_Settings__c.Hide_Standard_Tabs__c)}">
+                                <div class="col-md-4 nopad">
+                                    <div class="footerListHead block">Ideas<br/></div>
+                                    <a href="{!URLFOR($Page.NewIdea, null, null)}" class="footerLink block">Submit idea</a><br/>
+                                    <a href="{!URLFOR($Page.IdeasHome, null, null)}" class="footerLink">Search ideas</a><br/>
+                                </div>
+                            </apex:outputPanel>
+                            <apex:outputPanel layout="none" rendered="{!NOT($Setup.Customer_Community_Tab_Settings__c.Hide_Standard_Tabs__c)}">
+                                <div class="col-md-4 nopad">
+                                    <div class="footerListHead block">Documentation<br/></div>
+                                    <a href="{!URLFOR($Page.Downloads, null, null)}" class="footerLink block">View documentation</a><br/>
+                                    <a href="{!URLFOR($Page.NewCase, null, null)}" class="footerLink block">Request upgrade</a><br/>
+                                </div>
+                            </apex:outputPanel>
+                        </div>
+                        <div class="row block">
+                            <apex:outputPanel layout="none" rendered="{!NOT($Setup.Customer_Community_Tab_Settings__c.Hide_Standard_Tabs__c)}">
+                                <div class="col-md-4 nopad">
+                                    <div class="footerListHead block">Knowledge base<br/></div>
+                                    <a href="{!URLFOR($Page.Knowledge, null, null)}" class="footerLink block">View knowledge base</a><br/>
+                                </div>
+                            </apex:outputPanel>
+                            <apex:outputPanel layout="none" rendered="{!NOT($Setup.Customer_Community_Tab_Settings__c.Hide_Standard_Tabs__c)}">
+                                <div class="col-md-4 nopad">
+                                    <div class="footerListHead block">My Products<br/></div>
+                                    <a href="{!URLFOR($Page.Products, null, null)}" class="footerLink block">View products</a><br/>
+                                </div>
+                            </apex:outputPanel>
+                            <div class="col-md-4 nopad">
+                                <div class="footerListHead block">About<br/></div>
+                                <a href="{!URLFOR($Page.About, null, null)}" class="footerLink block">About Rubrik</a><br/>
+                                <a href="https://www.rubrik.com/support/#contact-numbers" target="_blank" class="footerLink block">Contact Rubrik Support</a><br/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row block">
+                    <div class="col-md-12">
+                        <a href="https://twitter.com/rubrikInc" target="_blank" class="socialcolor"><apex:image value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/twiter.png')}" styleClass="" /></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a href="https://www.linkedin.com/company/rubrik-inc" target="_blank" class="socialcolor"><apex:image value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/linkedin.png')}" styleClass="" /></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a href="https://www.facebook.com/rubrikinc/" target="_blank" class="socialcolor"><apex:image value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/facebok.png')}" styleClass="" /></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a href="https://www.youtube.com/channel/UCDoKLwlfdfH61rkzD3pu_ZQ" target="_blank" class="socialcolor"><apex:image value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/youtube.png')}" styleClass="" /></a>
+                        <!--this is the bottom row-->
+                        <hr class="footerline"/>
+                        <div class="col-md-6 nopad">
+                            <div class="text-left inline-block footerbottomleft"> Built in Palo Alto, CA <span class="bullet">&bull;</span> <a href="https://www.rubrik.com/privacy-policy/" class="footerLink block" target="_blank">Privacy Policy</a> <span class="bullet">&bull;</span> <a href="https://www.rubrik.com/contact-us/" class="footerLink block" target="_blank">Contact Us</a> </div>
+                        </div>
+                        <div class="col-md-6 nopad">
+                            <div class="text-right inline-block footerbottomright"> © {!year(today())} Rubrik - The Cloud Data Management Company </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--script type="text/javascript" src="https://rubrik.searchunify.com:3000/resources/Allow/an.js?uid=0ab64cd8-80e5-11e8-9c20-06fa346ec5c0"></script-->
+            </footer>
+    </apex:outputPanel>
+    
+</apex:component>

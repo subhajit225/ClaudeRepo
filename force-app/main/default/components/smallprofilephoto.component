@@ -1,0 +1,11 @@
+<apex:component selfClosing="true"
+                controller="CommunityUserPhotoUploadController">
+                
+    <apex:attribute name="subject" type="Id"
+                    assignTo="{!userId}"
+                    required="true"
+                    description="The User ID for the community user"/>
+
+        <apex:image value="{!largePhotoUrl}" width="24px"/>
+ 
+</apex:component>

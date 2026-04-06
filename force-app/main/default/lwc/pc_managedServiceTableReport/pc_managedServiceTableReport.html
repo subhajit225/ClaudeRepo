@@ -1,0 +1,30 @@
+<template>
+    <lightning-spinner if:true={loadSpinner} alternative-text="Loading" size="medium" variant="brand" class="spinner-background"></lightning-spinner>
+    <lightning-card class="opportunity-card">
+        <div class="heading-36 slds-m-bottom_small">My Managed Service Engagements</div>
+        <lightning-layout multiple-rows="true" horizontal-align="spread" class="slds-grid slds-wrap slds-grid_vertical-align-end">
+            <lightning-layout-item size="12" large-device-size="2" medium-device-size="3" small-device-size="12" class="slds-p-left_x-small">
+                <div class="slds-input-has-icon slds-input-has-icon--right " >
+                    <lightning-button-icon icon-name="utility:search" variant="bare" class="slds-input__icon"> </lightning-button-icon>
+                    <lightning-input class="search-box" type="test" placeholder="Search" name="" variant="label-hidden" data-id="nameInput" onchange={handleSearchChange} value={serachValue}></lightning-input>
+                </div>
+            </lightning-layout-item>
+                
+            <lightning-layout-item size="12" large-device-size="3" medium-device-size="3" small-device-size="12" class="slds-p-right_small slds-p-top_xx-small slds-p-left_xx-small slds-p-bottom_xx-small">
+                <div class="slds-m-top_large slds-p-top_xx-small slds-float_right">
+                    <lightning-button variant="brand" label="Reset" title="Reset" onclick={handleResetClick} class="slds-m-left_xx-small"></lightning-button>
+                    <lightning-button variant="brand" label="Export" title="Export" onclick={handleExportClick} class="slds-m-left_xx-small" icon-name="utility:download" disabled={disableExport}></lightning-button>
+                </div>
+            </lightning-layout-item>
+        </lightning-layout>
+        <div class="custom-table-wrapper custom-opportunity-table slds-m-top_medium">
+            <lightning-datatable
+                    key-field="id"
+                    data={dealRegList}
+                    row-number-offset={rowOffset}
+                    hide-checkbox-column
+                    columns={columns}>
+            </lightning-datatable>
+        </div>
+    </lightning-card>
+</template>

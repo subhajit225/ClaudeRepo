@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Engineering_Confidence_in_Delivery__c</fullName>
+    <description>CS21-3714: Aha - Salesforce Discrepancies in tracking ideas/RFEs</description>
+    <label>Engineering Confidence in Delivery</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Green</fullName>
+                <default>false</default>
+                <label>Green</label>
+            </value>
+            <value>
+                <fullName>Yellow</fullName>
+                <default>false</default>
+                <label>Yellow</label>
+            </value>
+            <value>
+                <fullName>Red</fullName>
+                <default>false</default>
+                <label>Red</label>
+            </value>
+            <value>
+                <fullName>Orange - PRD pending</fullName>
+                <default>false</default>
+                <label>Orange - PRD pending</label>
+            </value>
+            <value>
+                <fullName>Blue - Complete</fullName>
+                <default>false</default>
+                <label>Blue - Complete</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,164 @@
+<apex:page StandardController="Case" cache="false" extensions="CommunityCaseExtension" standardStylesheets="false" sidebar="false" showheader="false" title="Case: {!Case.CaseNumber} - Rubrik Community" applyBodyTag="false" action="{!case($User.UserType,
+                          "Standard",urlFor($Action.Case.View, Case.Id, null, true),
+                          "PowerPartner",urlFor($Action.Case.View, Case.Id, null, true),
+                          "CSPLitePortal",null,
+                          "CustomerSuccess",null,
+                          "PowerCustomerSuccess",null,
+                          "CsnOnly",null,
+                          null)}">
+    <link rel="shortcut icon" href="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/favicon.ico')}" type="image/x-icon" />
+    <link rel="icon" href="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/favicon1.png')}" type="image/png" />
+    <style>
+    .pbSubsection, pbBody {
+    padding: 25px;
+    }
+    table {
+    padding: 5px;
+    }
+    td.labelCol {
+    font-size: 16px;
+    font-family: Gotham-Medium;
+    padding-left: 10px
+    }
+    td.dataCol {
+    padding: 5px;
+    padding-right: 15px;
+    }
+
+    td.data2Col {
+    padding: 5px;
+    padding-left: 15px;
+    }
+    td {
+    padding: 15px;
+    }
+    wrapper{
+    padding-bottom: 5px;
+    }
+    
+    .btnpad{
+    padding: 15px;
+    }
+    
+    </style>
+    <c:visualstrapblock >
+
+        <!--start header-->
+        <c:siteheader ></c:siteheader>
+        <!--end Header-->
+       <br />
+       <apex:form >
+       <script>
+           function reloadClose(){
+               location.reload();
+           }
+       </script>
+           <div class="container">
+                <div class="row text-center btnpad">
+                    <div class="">
+                       <apex:commandButton styleClass="btn rubrik-btn" action="{!closeCase}" title="Close Case" value="Close Case" rendered="{!AND(Case.isClosed==false,Case.Status!='Customer requested close')}" oncomplete="reloadClose()"/>&nbsp; 
+                       <apex:commandButton styleClass="btn rubrik-btn" action="{!URLFOR($Page.AddColleagues, null ,[id=case.id])}" title="Manage Colleagues" value="Manage Colleagues" rendered="{!AND(Case.isClosed==false,Case.Status!='Customer requested close')}" />&nbsp; 
+                       <apex:commandButton styleClass="btn rubrik-btn" action="{!URLFOR($Page.AddComment, null ,[id=case.id,escalate=1])}" title="Request Escalation" value="Request Escalation" rendered="{!AND(Case.isClosed==false,Case.Status!='Customer requested close',Case.isEscalated=false)}" />&nbsp; 
+                       <apex:commandButton styleClass="btn rubrik-btn" action="{!URLFOR($Page.AddComment, null ,[id=case.id,escalate=0])}" title="Reopen" value="Reopen the Case" rendered="{!OR(Case.isClosed!=false,Case.Status=='Customer requested close')}" />&nbsp;
+                       <apex:commandButton styleClass="btn rubrik-btn" action="{!URLFOR($Page.AddComment, null ,[id=case.id])}" title="Add Comment" value="Add Comment" rendered="{!AND(Case.isClosed==false,Case.Status!='Customer requested close')}"/>&nbsp; 
+                       <apex:commandButton styleClass="btn rubrik-btn" action="{!URLFOR($Page.UploadFile, null ,[id=case.id,casenumber=case.casenumber])}" title="Upload File" value="Upload File" rendered="{!AND(Case.isClosed==false,Case.Status!='Customer requested close')}"/>
+                    </div>
+                </div>
+            </div>
+         </apex:form>         
+        <!--start the Container-->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                
+            <apex:detail relatedList="false" relatedListHover="false" inlineEdit="false"/>
+            
+                </div>
+                <div class="col-md-12">
+
+        <h3>Articles</h3>  
+            <!--start the Articles-->
+            <apex:datatable var="ka" value="{!case.casearticles}" id="articles" styleClass="table">
+                    <apex:column headervalue="Article">
+                    <a href="{!URLFOR($Page.ArticleView, null, [id=ka.KnowledgeArticleId])}">{!ka.KnowledgeArticleVersion.Title}</a>
+                    </apex:column>                    
+             </apex:datatable>
+      
+              <h3>Attachments</h3>  
+            <!--start the case comments-->
+            
+            <apex:datatable var="a" value="{!case.attachments}" id="attach" styleClass="table" >
+                    <apex:column headervalue="Name">
+                        
+                        <apex:outputLink value="{!URLFOR($Action.Attachment.Download,a.id)}" >
+                            {!a.Name}
+                        </apex:outputLink>
+                    </apex:column>                    
+             </apex:datatable>
+             
+                    <!--
+            <apex:datatable var="a" value="{!RubrikCaseAttachments}" id="attach" styleClass="table" >
+                    <apex:column headervalue="File">
+                        <apex:outputLink value="{!a.File_Path__c}">{!a.File_Name__c}</apex:outputLink>                                                
+                    </apex:column>
+                    <apex:column headervalue="File Size (MB)">
+                        <apex:outputfield value="{!a.Attachment_Size_in_MB__c }" />                        
+                    </apex:column>
+                    <apex:column headervalue="Created Date">
+                        <apex:outputfield value="{!a.CreatedDate}" />                        
+                    </apex:column>                
+             </apex:datatable>            
+             -->
+
+
+        <h3>Case Comments</h3>  
+            <!--start the case comments-->
+            <apex:datatable var="c" value="{!comments}" id="comments" styleClass="table"  >
+                    <apex:column headervalue="Comment">
+                     <apex:outputfield value="{!c.commentbody}" />
+                    </apex:column>                    
+                    <apex:column headervalue="Date">
+                     <apex:outputfield value="{!c.createdDate}"/>
+                    </apex:column> 
+                    <apex:column headervalue="Commentor">
+                     <apex:outputfield value="{!c.createdBy.Name}"/>
+                    </apex:column> 
+             </apex:datatable>
+      
+                </div>
+
+
+            </div>
+        </div>
+        <!--End the Container-->
+        <apex:form >
+           <div class="container">
+            <apex:pageBlock rendered="{!Case.isClosed=false}">
+                <div>
+                       <p style="font-family: Arial; font-size: 12px;"><b>How are we doing on this case?</b></p>
+                                              <div style="font-family: Arial; font-size: 12px; overflow:hidden;"><table cellpadding="100" cellspacing="0" border="0" style="border-collapse: separate; border-spacing: 10px 5px; margin: 0 0; width: 320px;"><tr><td  width="25%" style="vertical-align:bottom; text-align:center;"><a style="text-decoration:none;" href="https://app.customerthermometer.com/?template=log_feedback&hash=3f9e5aeb&embed_data=dGVtcGVyYXR1cmVfaWQ9MSZ0aGVybW9tZXRlcl9pZD0yNTk3Nw==&e={!$User.Email}&f={!$User.FirstName}&l={!$User.LastName}&c={!Case.Account.Name}&c1={!Case.CaseNumber}&c2={!Case.Owner.Name}&c3={!Case.Case_Thread_ID__c}&c4=portal&c5=&c6=&c7=&c8=&c9=&c10=" target="_blank"><img style="border: none;" src="https://app.customerthermometer.com/sites/app/images/icon_sets/emb_smiley1a/Gold-1.jpg" alt="Gold Star" title="Gold Star" class="_temp" /></a></td><td width="25%" style="vertical-align:bottom; text-align:center;"><a style="text-decoration:none;" href="https://app.customerthermometer.com/?template=log_feedback&hash=4b81ee7f&embed_data=dGVtcGVyYXR1cmVfaWQ9MiZ0aGVybW9tZXRlcl9pZD0yNTk3Nw==&e={!$User.Email}&f={!$User.FirstName}&l={!$User.LastName}&c={!Case.Account.Name}&c1={!Case.CaseNumber}&c2={!Case.Owner.Name}&c3={!Case.Case_Thread_ID__c}&c4=portal&c5=&c6=&c7=&c8=&c9=&c10=" target="_blank"><img style="border: none;" src="https://app.customerthermometer.com/sites/app/images/icon_sets/emb_smiley1a/Green-1.jpg" alt="Green Light" title="Green Light" class="_temp" /></a></td><td width="25%" style="vertical-align:bottom; text-align:center;"><a style="text-decoration:none;" href="https://app.customerthermometer.com/?template=log_feedback&hash=321758f9&embed_data=dGVtcGVyYXR1cmVfaWQ9MyZ0aGVybW9tZXRlcl9pZD0yNTk3Nw==&e={!$User.Email}&f={!$User.FirstName}&l={!$User.LastName}&c={!Case.Account.Name}&c1={!Case.CaseNumber}&c2={!Case.Owner.Name}&c3={!Case.Case_Thread_ID__c}&c4=portal&c5=&c6=&c7=&c8=&c9=&c10=" target="_blank"><img style="border: none;" src="https://app.customerthermometer.com/sites/app/images/icon_sets/emb_smiley1a/Amber-1.jpg" alt="Yellow Light" title="Yellow Light" class="_temp" /></a></td><td width="25%" style="vertical-align:bottom; text-align:center;"><a style="text-decoration:none;" href="https://app.customerthermometer.com/?template=log_feedback&hash=dcb5229d&embed_data=dGVtcGVyYXR1cmVfaWQ9NCZ0aGVybW9tZXRlcl9pZD0yNTk3Nw==&e={!$User.Email}&f={!$User.FirstName}&l={!$User.LastName}&c={!Case.Account.Name}&c1={!Case.CaseNumber}&c2={!Case.Owner.Name}&c3={!Case.Case_Thread_ID__c}&c4=portal&c5=&c6=&c7=&c8=&c9=&c10=" target="_blank"><img style="border: none;" src="https://app.customerthermometer.com/sites/app/images/icon_sets/emb_smiley1a/Red-1.jpg" alt="Red Light" title="Red Light" class="_temp" /></a></td></tr><tr><td style="text-align:center;"><span style="color:#B17657;">Excellent</span></td><td style="text-align:center;"><span style="color:#66CC33;">Good</span></td><td style="text-align:center;"><span style="color:#FFB40D;">Average</span></td><td style="text-align:center;"><span style="color:#CC3333;">Disappointed</span></td></tr></table></div><p style="font-family: Arial; font-size: 12px;">Your feedback is extremely valuable and only takes one click. Please click or tap the rating above which best represents your current experience.</p>
+                </div>              
+            </apex:pageBlock>
+           </div>
+        </apex:form>
+        <apex:form >
+           <div class="container">
+                <div class="row text-center btnpad">
+                    <div class="">
+                       <apex:commandButton styleClass="btn rubrik-btn" action="{!closeCase}" title="Close Case" value="Close Case" rendered="{!AND(Case.isClosed==false,Case.Status!='Customer requested close')}"/>&nbsp; 
+                       <apex:commandButton styleClass="btn rubrik-btn" action="{!URLFOR($Page.AddColleagues, null ,[id=case.id])}" title="Manage Colleagues" value="Manage Colleagues" rendered="{!AND(Case.isClosed==false,Case.Status!='Customer requested close')}"  oncomplete="reloadClose()"/>&nbsp; 
+                       <apex:commandButton styleClass="btn rubrik-btn" action="{!URLFOR($Page.AddComment, null ,[id=case.id,escalate=1])}" title="Request Escalation" value="Request Escalation" rendered="{!AND(Case.isClosed==false,Case.Status!='Customer requested close',Case.isEscalated=false)}" />&nbsp; 
+                       <apex:commandButton styleClass="btn rubrik-btn" action="{!URLFOR($Page.AddComment, null ,[id=case.id,escalate=0])}" title="Reopen" value="Reopen the Case" rendered="{!OR(Case.isClosed!=false,Case.Status=='Customer requested close')}" />&nbsp;
+                       <apex:commandButton styleClass="btn rubrik-btn" action="{!URLFOR($Page.AddComment, null ,[id=case.id])}" title="Add Comment" value="Add Comment" rendered="{!AND(Case.isClosed==false,Case.Status!='Customer requested close')}"/>&nbsp; 
+                       <apex:commandButton styleClass="btn rubrik-btn" action="{!URLFOR($Page.UploadFile, null ,[id=case.id,casenumber=case.casenumber])}" title="Upload File" value="Upload File" rendered="{!AND(Case.isClosed==false,Case.Status!='Customer requested close')}"/>
+                    </div>
+                </div>
+            </div>
+         </apex:form> 
+<br />
+        <!--start the footer-->
+        <c:sitefooter ></c:sitefooter>
+        
+    </c:visualstrapblock>           
+                
+</apex:page>

@@ -1,0 +1,176 @@
+<apex:page standardController="Case" extensions="AssistRequestFormController" lightningStylesheets="true">
+    <div id="hideBlock">
+        <apex:pageMessage severity="warning" title="{!assistRequestMessage}" strength="1" escape="false" rendered="{!hasAssistRequest}"></apex:pageMessage>
+    </div>
+    <style>
+        .spinnerBg{
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        background-color: #000;
+        opacity: 0.1;
+        z-index: 999999;
+        }
+        .spinner{
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        background-image: url("/img/loading32.gif");
+        background-size: 56px;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center;
+        z-index: 9999999;
+        opacity: 1;
+        }
+    </style>
+    <script>
+    function toggleDelbox() {
+        var elems = document.getElementById('checkboxRemove');
+        var shouldShowList = false;
+        document.getElementById('j_id0:assistForm:assistBlock:j_id45').value = '';
+        if (elems.checked) 
+            shouldShowList = true;
+        else
+            document.getElementById('j_id0:assistForm:assistBlock:j_id45').value = '';
+
+        document.querySelector('#blockInsight').style.display = shouldShowList ? '' : 'none';
+    }
+    </script>
+    <apex:form id="assistForm">
+        
+        <apex:actionStatus id="spinnerStatus">
+            <apex:facet name="start">
+                <div class="spinnerBg" />
+                <div class="spinner" />
+            </apex:facet>
+        </apex:actionStatus>
+        
+        <apex:sectionHeader title="Assist Request" subtitle="New Assist Request"/>
+        <apex:pageBlock id="assistBlock">  
+            <apex:pageBlockSection title="Assist Request Information">
+                <!--apex:pageBlockSection columns="4" collapsible="true" title="Heads Up to Support Team    " >
+<apex:outputField value="{!thisCase.Account.Heads_Up_to_Support_Team__c}" label="" style="width:160%;"/>
+</apex:pageBlockSection-->
+                
+                <apex:inputField value="{!assistRequest.Case__c}"/>
+                <apex:outputField value="{!thisCase.Priority}" label="Case Priority"/>
+                <apex:inputField value="{!assistRequest.Account__c}"/>
+                <apex:inputField value="{!assistRequest.Status__c}"/>
+                <apex:inputField value="{!assistRequest.SlackChannel__c}"/>
+                
+                <apex:inputField value="{!assistRequest.Rubrik_version__c}"/>
+                <apex:inputField value="{!assistRequest.Cluster_UUID__c}"/>
+                <apex:inputField value="{!assistRequest.Grafana_Link__c}"/>
+                <apex:inputField value="{!assistRequest.Cluster_Stats_Sentry_AI_URL__c}"/>
+                <apex:inputField value="{!assistRequest.Support_tunnel__c}"/>
+                <apex:inputField value="{!assistRequest.Customer_preferred_time_zone_of_contact__c}"/>
+                <apex:inputField value="{!assistRequest.Tagged_KB_article__c}"/>
+                <apex:inputField value="{!assistRequest.Issue_Summary__c}"/>
+
+                <apex:inputField value="{!assistRequest.Affected_node__c}"/>
+                <apex:inputField value="{!assistRequest.Customer_impact_and_current_status__c}"/>
+                <apex:outputField value="{!assistRequest.JIRA_Reference__c}"/>
+
+                <apex:outputText label="Reported By"> {!$User.FirstName} {!$User.LastName}</apex:outputText>
+                <apex:inputField value="{!assistRequest.Type__c}" required="true"/>
+                <apex:pageBlockSectionItem />
+            </apex:pageBlockSection>
+            <apex:pageBlockSection columns="1" id="blockSection">
+                <apex:inputField id="ask" value="{!assistRequest.What_is_the_Ask__c}" style="width: 100%; height: 300px" onkeyup="showARCharecterLimit();">
+                    <!--Added for CS21-444 - Veera -->
+                    <span id="charLimit"></span>
+                    <!--CS21-444 - End -->
+                </apex:inputField>
+                Is there a relevant Insight for this issue in SentryAI?
+                <input type="checkbox" name="Is there a relevant Insight for this issue in SentryAI?" id="checkboxRemove" value="" onclick="toggleDelbox();"/>
+                
+                
+                
+                
+            </apex:pageBlockSection>
+            <div id="blockInsight" style="display:none" >
+                <apex:outputLabel >Insight Id</apex:outputLabel>
+                <apex:inputField value="{!assistRequest.InsightId__c}" label="Insight Id"/>
+            </div>
+            <apex:pageBlockButtons location="bottom">
+                <apex:commandButton value="Submit" action="{!save}"   status="spinnerStatus"/>
+                <apex:commandButton value="Cancel" action="{!cancel}"/>
+            </apex:pageBlockButtons> 
+        </apex:pageBlock>
+        
+    </apex:form>   
+    
+    <ul class="slds-accordion">
+        <li class="slds-accordion__list-item">
+            <section class="slds-accordion__section slds-is-open">
+                <div class="slds-accordion__summary">
+                    <h3 class="slds-accordion__summary-heading">
+                        <button onclick="toogleSection();" id="buttonSec" class="slds-button slds-button_reset" style="text-decoration: underline;">
+                           Hide Recent Cases
+                        </button>
+                    </h3>
+                </div>
+                <div class="slds-accordion__content" id="accordion-details-01"> 
+                    <div id="pageSec">
+                        <apex:include pageName="RecentCasesPage"/>
+                    </div>
+                </div>
+            </section>
+        </li>
+    </ul>
+    
+        <script>
+    
+        function toogleSection(){
+            var pageSec = document.getElementById("pageSec");
+            var buttonSec =  document.getElementById("buttonSec");
+            if(pageSec.style.display == "none"){
+                pageSec.style.display="block";
+                buttonSec.innerHTML = "Hide Recent Cases";
+            }else{
+                pageSec.style.display="none";
+                buttonSec.innerHTML = "Show Recent Cases";
+            }
+            
+        }
+        
+        function toogleHeadUp(){
+            var hideHeadsUp = document.getElementById("$id=hideHeadsUp");
+            var buttonHeads =  document.getElementById("buttonHeads");
+            if(hideHeadsUp.style.display == "none"){
+                hideHeadsUp.style.display="block";
+                buttonHeads.innerHTML = "Hide Heads Up";
+            }else{
+                hideHeadsUp.style.display="none";
+                buttonHeads.innerHTML = "Show Heads Up";
+            }
+            return false;
+        }
+        
+        function hideMessage(){
+            var hideBlock = document.getElementById("hideBlock");
+            var buttonSec =  document.getElementById("buttonSec");
+            hideBlock.style.display="none";
+            return null;
+        }
+        
+        //Added for CS21-444 - Veera
+    function showARCharecterLimit() {
+        var charMessage =  document.getElementById("charLimit");
+        var assistAsk =  document.getElementById('{!$Component.assistForm.assistBlock.blockSection.ask}').value;
+        
+        if (assistAsk && assistAsk.length >= 31000) {
+            charMessage.innerHTML = "Error: You have entered " + (assistAsk.length -31000)+" characters over the limit.";
+            charMessage.style = "color:red;display:block"
+        } else if (assistAsk && assistAsk.length > 28000){
+            charMessage.innerHTML = "Warning: " + (31000 - assistAsk.length) + " Characters Remaining.";
+            charMessage.style = "color:green;display:block"
+        } else {
+            charMessage.style.display="none";
+        }
+    }
+    //CS21-444 - End
+        
+        </script>
+</apex:page>

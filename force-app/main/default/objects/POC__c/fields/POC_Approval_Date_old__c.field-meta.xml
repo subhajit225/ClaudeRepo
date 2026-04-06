@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>POC_Approval_Date_old__c</fullName>
+    <description>Updates the Approval Date and will feed into Estimated POC Decision Date</description>
+    <formula>IF(ISPICKVAL( Approval_Status__c , &apos;Approved&apos;), NOW(), NULL)</formula>
+    <label>(DEPRECATED) POC Approval Date</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>DateTime</type>
+</CustomField>

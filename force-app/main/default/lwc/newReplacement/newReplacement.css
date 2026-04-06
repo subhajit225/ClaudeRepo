@@ -1,0 +1,75 @@
+table {
+    table-layout: fixed;
+    border-collapse: collapse;
+    width: 100%;
+    position: relative;
+}  
+th,
+td {
+    text-align: left;
+    padding: 8px;
+    width: 100px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Added for FY25SR-1569 */
+.button-container {
+  position: fixed; 
+  bottom: 0px;
+  z-index: 10; 
+  padding: 10px;
+  width : 100%;
+  background-color: white;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Added By Shivani for spinner issue */
+.spinner-container {
+  position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(255, 255, 255, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.freezeRow {
+    position: sticky !important;
+    top: 0;
+    z-index: 10;
+    border : 2px solid grey;
+}
+
+.column-container {
+  position: fixed; /* Makes the container stay in place */
+  top: 300px; /* Or any other desired position */
+  left: 0; /* Or any other desired position */
+  right: 0; /* Or any other desired position */
+  /* background-color: white; Optional: Add a background color */
+  z-index: 10; /* Ensure it stays on top of other content */
+  padding: 10px; /* Optional: Add some padding */
+}
+
+.compact-input lightning-input,
+.compact-input lightning-combobox,
+.compact-input lightning-textarea {
+    margin-bottom: 0.5rem;
+}
+/*CPQ22-6009*/
+.outlined-block {
+    border: 1px solid #d8dde6;
+    border-radius: 6px;
+    padding: 0.15rem 0.75rem 1.25rem; /* top right/left bottom */
+    background-color: #f8fafb;
+    box-shadow: none;
+}
+/* optional: tighten spacing of items inside the block */
+.outlined-block .slds-layout__item {
+    padding-bottom: 0.25rem;
+}

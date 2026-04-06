@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Sales_CCR_Status_cannot_be_changed_SaOps</fullName>
+    <active>true</active>
+    <description>Sales CCR Status cannot be changed by Sales Ops other than Completed.</description>
+    <errorConditionFormula>AND(
+    NOT($Setup.ShGl_DisableBusinessLogic__c.Disable_CCR_Validation_Rules__c), 
+    $Profile.Name = &apos;Sales Operations&apos;,
+    RecordType.Name = &apos;Sales CCR&apos;,
+    ISCHANGED(User__c),
+    OR(
+        AND(
+            NOT(ISPICKVAL(PRIORVALUE(User__c), &apos;Approved&apos;)),
+            ISPICKVAL(User__c,&apos;Completed&apos;)),
+        NOT(ISPICKVAL(User__c,&apos;Completed&apos;))
+    )
+)</errorConditionFormula>
+    <errorDisplayField>User__c</errorDisplayField>
+    <errorMessage>You do not have access to change the CCR Status directly. Please follow the approval process and then mark Complete.</errorMessage>
+</ValidationRule>

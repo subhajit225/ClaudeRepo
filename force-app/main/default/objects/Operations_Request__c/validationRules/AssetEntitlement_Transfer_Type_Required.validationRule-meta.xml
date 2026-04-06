@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>AssetEntitlement_Transfer_Type_Required</fullName>
+    <active>true</active>
+    <description>SAL26-928</description>
+    <errorConditionFormula>AND(
+NOT($Setup.ShGl_DisableBusinessLogic__c.Disable_Operation_Request_VRs__c),
+ISPICKVAL( Issue__c , &apos;Entitlement/Asset Transfer&apos;) ,
+ISPICKVAL(Asset_Entitlement_Transfer_Type__c, &apos;&apos;)
+)</errorConditionFormula>
+    <errorDisplayField>Asset_Entitlement_Transfer_Type__c</errorDisplayField>
+    <errorMessage>Asset/Entitlement Transfer Type is required when issue is Entitlement/Asset Transfer.</errorMessage>
+</ValidationRule>

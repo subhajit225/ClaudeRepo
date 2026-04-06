@@ -1,0 +1,48 @@
+<apex:page standardController="Assist_Request__c" extensions="UpdateAssistRequestController" lightningStylesheets="true" >
+    <apex:form id="assistForm">
+        <apex:sectionHeader title="Assist Request" subtitle="Update Assist Request"/>
+        
+        <apex:pageBlock id="assistBlock">
+            <apex:actionStatus id="status">
+                <apex:facet name="start">
+                    <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.75; z-index: 1000; background-color: black;">
+                        &nbsp;
+                    </div>
+                    <div style="position: fixed; left: 0; top: 0; bottom: 0; right: 0; z-index: 1001; margin: 30% 50%">
+                        <img src="http://upload.wikimedia.org/wikipedia/commons/e/ed/Cursor_Windows_Vista.gif" />
+                    </div>
+                </apex:facet>
+            </apex:actionStatus>
+            <h1> Response Update Assist Request</h1><br/>
+            <apex:inputField id="ask" value="{!assistRequest.Summary_of_the_Issue_Problem_Statement__c}" required="true"  style="width: 500px; height: 100px" onkeyup="showARCharecterLimit();" >
+                <!--Added for CS21-444 - Veera -->
+                <span id="charLimit"></span>
+                <!--CS21-444 - End -->
+            </apex:inputField>
+            
+            <apex:pageBlockButtons location="bottom">
+                <apex:commandButton value="Update" action="{!addResponse}"  reRender="counter" status="status"/>
+                <apex:commandButton value="Cancel" action="{!cancel}"/>
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+    </apex:form>
+    <script>
+    //Added for CS21-444 - Veera
+    function showARCharecterLimit() {
+        var charMessage =  document.getElementById("charLimit");
+        var assistAsk =  document.getElementById('{!$Component.assistForm.assistBlock.ask}').value;
+        
+        if (assistAsk && assistAsk.length == 3960) {
+            charMessage.innerHTML = "Error: You have reached your maximum limit of characters allowed.";
+            charMessage.style = "color:red;display:block"
+        } else if (assistAsk && assistAsk.length > 3560){
+            charMessage.innerHTML = "Warning: " + (3960 - assistAsk.length) + " Characters Remaining.";
+            charMessage.style = "color:green;display:block"
+        } else {
+            charMessage.style.display="none";
+        }
+    }
+    //CS21-444 - End
+    
+    </script>
+</apex:page>

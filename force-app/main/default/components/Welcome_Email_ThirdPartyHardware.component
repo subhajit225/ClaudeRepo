@@ -1,0 +1,17 @@
+<apex:component access="global" controller="WelcomeEmail_ThirdPartyHardwareCont">
+    <apex:attribute name="orderId" description="Receive Order Id" type="Id" required="required" assignTo="{!ordId}"/>
+    <apex:outputPanel rendered="{!entitlements.size > 0}">
+        <br/><b>Third party hardware activation instructions</b><br />
+        Your order includes third party hardware support, which enables Rubrik Cloud Data Management on qualified industry-leading hardware platforms. You'll need the following information to deploy Rubrik CDM on your hardware platform. If you encounter any issues, please contact support@rubrik.com.
+        <br />
+        <apex:repeat value="{!entitlements}" var="ent">
+            <ol>
+                <li><b>Entitlement ID: </b> {!LEFT(ent.Id,15)}</li>
+                <!--<li><b>Appliance Model: </b>{!ent.Order_Service_Item__r.Product2.Appliance_Model__c}</li>-->
+                <li><b>Manufacturing users^: </b>{!ent.Order_Service_Item__r.Order.Opportunity.Initial_Contacts_Name__r.Name}, {!ent.Order_Service_Item__r.Order.Opportunity.Rubrik_Sales_Engineer__r.Name}</li>
+            </ol>
+        </apex:repeat>
+        ^ The installation process has been activated for these Rubrik Support Portal logins. If additional contacts need to be added, please contact Rubrik Support.
+        <br />
+  </apex:outputPanel>
+</apex:component>

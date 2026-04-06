@@ -1,0 +1,17 @@
+<apex:page >
+    <apex:slds />
+    <apex:includeLightning />
+    <div id="LightningComponentid" />    
+    
+    <script>
+    $Lightning.use("c:EscalationManagementTeamApp", function() {
+        $Lightning.createComponent("c:escalationManagementTeam",
+          { 
+          },
+          "LightningComponentid",
+          function(cmp) {
+             console.log('LWC Componenet added in VF page');
+          });
+    });
+    </script>
+</apex:page>

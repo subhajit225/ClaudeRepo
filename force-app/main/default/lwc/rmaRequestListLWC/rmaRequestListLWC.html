@@ -1,0 +1,155 @@
+<template>
+    <div class="slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12" data-dev-aura-id="RMA_Div">
+      <lightning-card>
+        <!--  To make Account's Rma Request section collapsible by default and load the data on expansion as per CS-595
+        -->
+        <!-- <lightning-accordion data-dev-aura-id="accordion" allow-multiple-sections-open onsectiontoggle={handleSectionToggle}>
+          <lightning-accordion-section name="A" label="Account's RMA Requests"> -->
+            <template if:true={spinnerForRMA}>
+              <lightning-spinner alternative-text="Loading" size="medium" variant="brand"></lightning-spinner>
+            </template>
+            <div class="slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12 tableDiv">
+              <div class="slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12 RMA_highlightFields">
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered tableBorder">
+                  <thead class="font">
+                    <tr class="slds-line-height_reset">
+                      <th scope="col">
+                        <div class="slds-truncate" title="RMA Request">
+                          <div class="arrowContain">
+                            <a class="casenocolor" href="javascript:void(0);" name="Name" id="desc" onclick={sortTable}>
+                                                          RMA Request
+                                                      </a>
+                            <template if:true={sortedByName}>
+                              <template if:true={sortedDirectionAsc}>
+                                <lightning-icon class="right-alignment" icon-name="utility:chevronup" size="xx-small"></lightning-icon>
+                              </template>
+                              <template if:false={sortedDirectionAsc}>
+                                <lightning-icon class="right-alignment" icon-name="utility:chevrondown" size="xx-small"></lightning-icon>
+                              </template>
+                            </template>
+                          </div>
+                        </div>
+                      </th>
+                      <th scope="col">
+                        <div class="slds-truncate" title="Node Name">
+                          <div class="arrowContain">
+                            <a class="casenocolor" href="javascript:void(0);" name="Node__c" id="desc1" onclick={sortTable}>
+                                                          Node Name
+                                                      </a>
+                            <template if:true={sortedByNode}>
+                              <template if:true={sortedDirectionAsc}>
+                                <lightning-icon class="right-alignment" icon-name="utility:chevronup" size="xx-small"></lightning-icon>
+                              </template>
+                              <template if:false={sortedDirectionAsc}>
+                                <lightning-icon class="right-alignment" icon-name="utility:chevrondown" size="xx-small"></lightning-icon>
+                              </template>
+                            </template>
+                          </div>
+                        </div>
+                      </th>
+                      <th>
+                        <div class="slds-truncate" title="Service Type">
+                          <div class="arrowContain">
+                            <a class="casenocolor" href="javascript:void(0);" name="Service_Type__c" id="desc2" onclick={sortTable}>
+                                                          Service Type
+                                                      </a>
+                            <template if:true={sortedByServiceType}>
+                              <template if:true={sortedDirectionAsc}>
+                                <lightning-icon class="right-alignment" icon-name="utility:chevronup" size="xx-small"></lightning-icon>
+                              </template>
+                              <template if:false={sortedDirectionAsc}>
+                                <lightning-icon class="right-alignment" icon-name="utility:chevrondown" size="xx-small"></lightning-icon>
+                              </template>
+                            </template>
+                          </div>
+                        </div>
+                      </th>
+                      <th>
+                        <div class="slds-truncate" title="Cluster">
+                          <div class="arrowContain">
+                            <a class="casenocolor" href="javascript:void(0);" name="Cluster__c" id="desc3" onclick={sortTable}>
+                                                          Cluster
+                                                      </a>
+                            <template if:true={sortedByCluster}>
+                              <template if:true={sortedDirectionAsc}>
+                                <lightning-icon class="right-alignment" icon-name="utility:chevronup" size="xx-small"></lightning-icon>
+                              </template>
+                              <template if:false={sortedDirectionAsc}>
+                                <lightning-icon class="right-alignment" icon-name="utility:chevrondown" size="xx-small"></lightning-icon>
+                              </template>
+                            </template>
+                          </div>
+                        </div>
+                      </th>
+                      <th>
+                        <div class="slds-truncate" title="Status">
+                          <div class="arrowContain">
+                            <a class="casenocolor" href="javascript:void(0);" name="Status__c" id="desc4" onclick={sortTable}>
+                                                          Status
+                                                      </a>
+                            <template if:true={sortedByStatus}>
+                              <template if:true={sortedDirectionAsc}>
+                                <lightning-icon class="right-alignment" icon-name="utility:chevronup" size="xx-small"></lightning-icon>
+                              </template>
+                              <template if:false={sortedDirectionAsc}>
+                                <lightning-icon class="right-alignment" icon-name="utility:chevrondown" size="xx-small"></lightning-icon>
+                              </template>
+                            </template>
+                          </div>
+                        </div>
+                      </th>
+                      <th>
+                        <div class="slds-truncate" title="Case#">
+                          <div class="arrowContain">
+                            <a class="casenocolor" href="javascript:void(0);" name="Parent_Case__r.CaseNumber" id="desc5" onclick={sortTable}>
+                                                          Case#
+                                                      </a>
+                            <template if:true={sortedByCaseNumber}>
+                              <template if:true={sortedDirectionAsc}>
+                                <lightning-icon class="right-alignment" icon-name="utility:chevronup" size="xx-small"></lightning-icon>
+                              </template>
+                              <template if:false={sortedDirectionAsc}>
+                                <lightning-icon class="right-alignment" icon-name="utility:chevrondown" size="xx-small"></lightning-icon>
+                              </template>
+                            </template>
+                          </div>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="font">
+                    <template for:each={rmaRecords} for:item="RMARequests">
+                      <tr key={RMARequests} class="bottomBorder">
+                        <td>
+                          <a id={RMARequests.Id} href="javascript:void(0);" onclick={openRmaRequestDetailPage} tabindex="-1">{RMARequests.Name}</a>
+                        </td>
+                        <td>{RMARequests.Node__c}</td>
+                        <td>{RMARequests.Service_Type__c}</td>
+                        <td>{RMARequests.Cluster__c}</td>
+                        <td>{RMARequests.Status__c}</td>
+                        <td>{RMARequests.Parent_Case__r.CaseNumber}</td>
+                      </tr>
+                    </template>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div>
+              <template if:true={showAllRecords}>
+                <template if:true={showAllButton}>
+                  <button onclick={handleShowAllBtn} class="showButton slds-button slds-button_icon slds-align_absolute-center" tabindex="0" title="Show All">
+                                      Show All
+                                  </button>
+                </template>
+              </template>
+              <template if:false={showAllRecords}>
+                <button onclick={handleShowLessBtn} class="showButton slds-button slds-button_icon slds-align_absolute-center" tabindex="0" title="Show Less">
+                                      Show Less
+                                  </button>
+              </template>
+            </div>
+          <!-- </lightning-accordion-section>
+        </lightning-accordion> -->
+      </lightning-card>
+    </div>
+  </template>

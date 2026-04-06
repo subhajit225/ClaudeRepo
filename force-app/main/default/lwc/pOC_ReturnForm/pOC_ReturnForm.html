@@ -1,0 +1,197 @@
+<template>
+    
+    <lightning-card  title="Request Return">
+        <div if:false={hideSpinner} class="">
+            <lightning-spinner
+                alternative-text="Loading..." variant="brand">
+            </lightning-spinner>
+        </div>
+         <c-custom-toast auto-close-time="5000"></c-custom-toast>
+        <lightning-record-edit-form object-api-name="POC_Return__c" onsubmit ={handleSubmit}>
+            <lightning-messages>  </lightning-messages>
+                   
+            <div class="slds-box slds-theme_shade">
+                <lightning-input-field field-name="Pickup_Required__c" class="slds-p-around_small" variant="label-stacked" data-field="Pickup_Required__c" onchange={handleFieldSelected}>  </lightning-input-field>
+            </div>
+            <lightning-layout multiple-rows if:true={fieldsSelected.Pickup_Required__c}>
+                 
+                
+                <lightning-layout-item size="4" padding="around-small" >
+                    <lightning-input label="Pick Up Date" required="true" type="date" min={minDate} variant="label-stacked" onchange={onDateChange}>  </lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item size="4" padding="around-small">
+                    <lightning-input-field field-name="Available_Pick_Up_Times__c" required="true" variant="label-stacked" >  </lightning-input-field>
+                </lightning-layout-item>
+                <lightning-layout-item size="4" padding="around-small">
+                </lightning-layout-item>
+                <lightning-layout-item size="4" padding="around-small">
+                    <lightning-input-field field-name="Contact_name__c" required="true" value={pocRecord.Shipping_Contact__c} variant="label-stacked">  </lightning-input-field>
+                </lightning-layout-item>
+                <lightning-layout-item size="4" padding="around-small">
+                    <lightning-input-field field-name="Pick_up_Contact_Phone__c"  required="true" value={pocRecord.Shipping_Contact_Phone__c} variant="label-stacked">  </lightning-input-field>
+                </lightning-layout-item>
+                <lightning-layout-item size="4" padding="around-small">
+                    <lightning-input-field field-name="Pick_up_Contact_Email__c" required="true" value={pocRecord.Shipping_Contact_Email__c} variant="label-stacked">  </lightning-input-field>
+                </lightning-layout-item>
+                <lightning-layout-item size="4" padding="around-small">
+                    <lightning-input-field field-name="Pick_up_Street__c" required="true" value={pocRecord.Shipping_Street__c} variant="label-stacked"> </lightning-input-field>
+                </lightning-layout-item>
+                <lightning-layout-item size="4" padding="around-small">
+                    <lightning-input-field field-name="Pick_up_City__c"  value={pocRecord.Shipping_City__c} variant="label-stacked">  </lightning-input-field>
+                </lightning-layout-item>
+                
+                <lightning-layout-item size="4" padding="around-small" >
+                    <!--lightning-input-field field-name="Pick_up_State__c" value={pocRecord.Shipping_State__c} variant="label-stacked" data-field={_stateValues}>  </lightning-input-field-->
+                    <lightning-combobox name="Select State" placeholder="Select State" options={stateValues} value ={PickupState} label="Pickup State"  onchange={handlepickupSateChange}></lightning-combobox>
+                </lightning-layout-item>
+                <lightning-layout-item size="4" padding="around-small">
+                    <lightning-input-field field-name="Pickup_Country__c" required="true" value={pocRecord.Ship_To_Country__c} variant="label-stacked" onchange={handleShippingCountryChange}>  </lightning-input-field>                 
+                </lightning-layout-item>
+                <lightning-layout-item size="4" padding="around-small">
+                    <lightning-input-field field-name="Pick_up_zip_code__c" value={pocRecord.Shipping_Zip_Postal_Code__c} variant="label-stacked">  </lightning-input-field>
+                </lightning-layout-item>
+                <lightning-layout-item size="4" padding="around-small">
+                    <lightning-input-field field-name="Additional_Shipping_Notes__c"  variant="label-stacked">  </lightning-input-field>
+                </lightning-layout-item>
+                
+            </lightning-layout>
+
+            <div class="slds-box slds-theme_shade">
+                <lightning-input-field field-name="Return_to_Rubrik_warehouse__c" class="slds-p-around_small" variant="label-stacked" data-field="Return_to_Rubrik_warehouse__c" onchange={handleFieldSelected}>  </lightning-input-field>
+            </div>
+            <lightning-layout multiple-rows if:false={fieldsSelected.Return_to_Rubrik_warehouse__c}>
+                <!--ask deliver to an account or user--> 
+                <lightning-layout-item size="4" padding="around-small">
+                    <lightning-combobox name="DeliveryPerson" label="Return to a Partner or Rubrik Employee" options={deliveryOptions} onchange={handleDeliveryAccountChange} value={_value}></lightning-combobox>
+                </lightning-layout-item>
+
+                <template if:false={rubrikEmployeeSelected}>
+                    <lightning-layout-item size="4" padding="around-small">
+                        <lightning-input-field field-name="Delivery_Account__c" variant="label-stacked" >  </lightning-input-field>
+                    </lightning-layout-item>
+                </template>
+
+                <template if:true={rubrikEmployeeSelected}>
+                    <lightning-layout-item size="4" padding="around-small">
+                        <lightning-input-field field-name="Delivery_User__c"  variant="label-stacked">  </lightning-input-field>
+                    </lightning-layout-item>
+                </template>
+
+                <lightning-layout-item size="4" padding="around-small">
+                    <lightning-input-field field-name="Delivery_Contact_Name__c" required="true"  variant="label-stacked">  </lightning-input-field>
+                </lightning-layout-item>
+                <lightning-layout-item size="4" padding="around-small">
+                    <lightning-input-field field-name="Delivery_Email__c" required="true" variant="label-stacked">  </lightning-input-field>
+                </lightning-layout-item>
+                <lightning-layout-item size="4" padding="around-small">
+                    <lightning-input-field field-name="Delivery_Phone__c" required="true" variant="label-stacked"> </lightning-input-field>
+                </lightning-layout-item>
+                <lightning-layout-item size="4" padding="around-small">
+                    <lightning-input-field field-name="Delivery_Street__c" required="true"  variant="label-stacked">  </lightning-input-field>
+                </lightning-layout-item>
+                <lightning-layout-item size="4" padding="around-small">
+                    <lightning-input-field field-name="Delivery_City__c"   variant="label-stacked">  </lightning-input-field>
+                </lightning-layout-item>
+                <lightning-layout-item size="4" padding="around-small" >
+                    <!--lightning-input-field field-name="Delivery_State__c"  variant="label-stacked">  </lightning-input-field-->
+                    <lightning-combobox name="Select State" placeholder="Select State" options={deliveryStateValues} label="Delivery State" value={Delivery_State__c} onchange={handleStateChange}></lightning-combobox>
+                </lightning-layout-item>
+                <lightning-layout-item size="4" padding="around-small">
+                    <lightning-input-field field-name="Delivery_Country__c" required="true" variant="label-stacked" onchange={handleDeliveryCountryChange}>  </lightning-input-field>
+                </lightning-layout-item>
+                <lightning-layout-item size="4" padding="around-small">
+                    <lightning-input-field field-name="Delivery_Zip_code__c"  variant="label-stacked">  </lightning-input-field>
+                </lightning-layout-item>
+                
+                
+                
+                
+            </lightning-layout>    
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                <thead style="font-size:12px;">
+                    <tr class="slds-line-height_reset">
+                        <!--<th class="" scope="col">
+                            <div class="slds-truncate">
+                                <lightning-input onchange={allSelected} type="checkbox"></lightning-input>
+                            </div>
+                            </th>-->
+                        <th class="" scope="col">
+                            <div class="slds-truncate " title="Product">Product</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="Serial No">Serial No</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="Damaged">
+                                Damaged
+                            </div>
+                        </th>
+                        <th class="" scope="col" >
+                            <div class="slds-truncate" style="width: 8vw;" title="Original Packaging Available">
+                                Original Packaging Available
+                            </div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" style="width: 8vw;" title="Require a secure erase">Require a secure erase</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" style="width: 8vw;" title="Complete an SD Reset">Complete an SD Reset</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="Damage Details">Damage Details</div>
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <template for:each={allReturnRecords} for:item="con">
+                        <tr key={con.Id}>
+                            <!--<th scope="col">
+                                <div>
+                                    <lightning-input type="checkbox" checked={con.selected} data-id={con.index} data-field="selected" onchange={handleCheckboxChange}></lightning-input>
+                                </div>
+                                </th>-->
+                            <th scope="col">
+                                <div>{con.productName} </div>
+                            </th>
+                            <th scope="col">
+                                <div>{con.serial}</div>
+                            </th>
+                            <th scope="col">
+                                <div>
+                                    <lightning-input type="checkbox" checked={con.damaged} data-id={con.index} data-field="damaged" onchange={handleCheckboxChange}></lightning-input>
+                                </div>
+                            </th>
+                            <th scope="col">
+                                <div>
+                                    <lightning-input type="checkbox" checked={con.originalPackaging} data-id={con.index} data-field="originalPackaging" onchange={handleCheckboxChange}></lightning-input>
+                                </div>
+                            </th>
+                            <th scope="col">
+                                <div>
+                                    <lightning-input type="checkbox" chcked={con.eraseRequested} data-id={con.index} data-field="eraseRequested" onchange={handleCheckboxChange}></lightning-input>
+                                </div>
+                            </th>
+                            <th scope="col">
+                                <div>
+                                    <lightning-input type="checkbox" chcked={con.sdResetComplete} data-id={con.index} data-field="sdResetComplete" onchange={handleCheckboxChange}></lightning-input>
+                                </div>
+                            </th>
+                            <th scope="col">
+                                <div>
+                                    <lightning-textarea name="input1" data-id={con.index} label="Enter some text" variant="label-hidden" onchange={handletextChange} ></lightning-textarea>
+                                </div>
+                            </th>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+            <div class="buttonCenter">
+                <lightning-button  class="slds-m-top_small" variant="brand" type="submit" name="update" label="Submit"> </lightning-button> &nbsp;
+
+                <lightning-button  class="slds-m-top_small" variant="brand" type="button" name="update" label="Cancel" onclick={cancleButtonEvent}> </lightning-button>
+                    
+            </div>
+        </lightning-record-edit-form>
+    </lightning-card>
+</template>

@@ -1,0 +1,114 @@
+<template>
+    <template if:true={showmodal}>
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+            class="slds-modal slds-fade-in-open">
+            <div class={getBookmarkDivClass}>
+                <!-- Heading -->
+                <div class="su__bookmark-popup-title su__p-2 su__flex-vcenter su__bg-blue-grd">
+                    <div class="su__p-2 su__bg-white-circle su__radius-50">
+                        <svg title={translationObject.Bookmarks} width="24" height="24" viewBox="0 0 24 24">
+                            <defs>
+                                <clipPath id="clip-Saved_Book_mark">
+                                    <rect width="24" height="24"></rect>
+                                </clipPath>
+                            </defs>
+                            <g id="Saved_Book_mark" data-name="Saved Book mark" clip-path="url(#clip-Saved_Book_mark)">
+                                <g id="Group_1350" data-name="Group 1350" transform="translate(3977 10079)">
+                                    <g id="Group_1345" data-name="Group 1345" transform="translate(-5280 -10120)">
+                                        <g id="round-collections_bookmark-24px" transform="translate(1303 41)">
+                                            <path id="Path_1546" data-name="Path 1546" d="M0,0H24V24H0Z" fill="none">
+                                            </path>
+                                            <path id="Path_1547" data-name="Path 1547"
+                                                d="M17,20H5a1,1,0,0,1-1-1V7A1,1,0,0,0,2,7V20a2.006,2.006,0,0,0,2,2H17a1,1,0,0,0,0-2ZM20,2H8A2.006,2.006,0,0,0,6,4V16a2.006,2.006,0,0,0,2,2H20a2.006,2.006,0,0,0,2-2V4A2.006,2.006,0,0,0,20,2Zm0,10-2.5-1.5L15,12V4h5Z"
+                                                fill="#fff"></path>
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="su__bookmark-title su__align-self-center">
+                        <div class="font-16 su__text-white su__font-bold su__loading-view">
+                            Add Bookmarks
+                        </div>
+                    </div>
+                    <div class="su__close-icon su__align-self-center su__cursor" onclick={closeIcon}>
+                        <svg width="24" height="24" viewBox="0 0 24 24">
+                            <path class="su__fill-white"
+                                d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z">
+                            </path>
+                            <path d="M0 0h24v24H0z" fill="none"></path>
+                        </svg>
+                    </div>
+                </div>
+                <!-- Mid body -->
+
+                <div class="su__bookmark-inner">
+                    <div class="su__no-bookmark su__my-3 su__my-sm-1 su__text-center">
+                        <svg width="91" height="95" viewBox="0 0 91 95">
+                            <defs>
+                                <linearGradient id="linear-gradient" x1="0.5" x2="0.5" y2="1"
+                                    gradientUnits="objectBoundingBox">
+                                    <stop offset="0" stop-color="#55c7ff"></stop>
+                                    <stop offset="1" stop-color="#7886f7"></stop>
+                                </linearGradient>
+                                <clipPath id="clip-Book_mark">
+                                    <rect width="91" height="95"></rect>
+                                </clipPath>
+                            </defs>
+                            <g id="Book_mark" data-name="Book mark" clip-path="url(#clip-Book_mark)">
+                                <g id="Group_1381" data-name="Group 1381" transform="translate(-2647 7160)">
+                                    <g id="Group_1359" data-name="Group 1359" transform="translate(1911 -7362)">
+                                        <g id="Group_1355" data-name="Group 1355" transform="translate(52)">
+                                            <g id="round-collections_bookmark-24-24px" transform="translate(695 217)"
+                                                opacity="0.4">
+                                                <path id="Path_15466" data-name="Path 1546" d="M0,0H80V80H0Z"
+                                                    fill="none">
+                                                </path>
+                                                <path id="Path_15477" data-name="Path 1547"
+                                                    d="M48,57.2H11.2a3.076,3.076,0,0,1-3.067-3.067v-36.8a3.067,3.067,0,0,0-6.133,0V57.2a6.151,6.151,0,0,0,6.133,6.133H48A3.067,3.067,0,1,0,48,57.2ZM57.2,2H20.4a6.151,6.151,0,0,0-6.133,6.133v36.8A6.151,6.151,0,0,0,20.4,51.067H57.2a6.151,6.151,0,0,0,6.133-6.133V8.133A6.151,6.151,0,0,0,57.2,2Zm0,30.667-7.667-4.6-7.667,4.6V8.133H57.2Z"
+                                                    transform="translate(7.333 7.333)" fill="#919bb0"></path>
+                                            </g>
+                                            <g id="round-stars-24px" transform="translate(684 202)">
+                                                <path id="Path_1553" data-name="Path 1553" d="M0,0H34.781V34.781H0Z"
+                                                    fill="none"></path>
+                                                <path id="Path_1554" data-name="Path 1554"
+                                                    d="M16.478,2A14.492,14.492,0,1,0,30.985,16.492,14.485,14.485,0,0,0,16.478,2Zm4.681,22.3-4.667-2.812L11.826,24.3a.727.727,0,0,1-1.087-.783l1.232-5.3-4.1-3.551a.732.732,0,0,1,.42-1.275l5.42-.464,2.116-5a.721.721,0,0,1,1.333,0l2.116,4.985,5.42.464a.726.726,0,0,1,.406,1.275L21,18.2l1.232,5.319a.719.719,0,0,1-1.072.783Z"
+                                                    transform="translate(0.898 0.898)" fill="url(#linear-gradient)">
+                                                </path>
+                                            </g>
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="su__w-100 su__my-3 su__text-left">
+                        <lightning-input class="searchtext" placeholder="Title for this bookmark"
+                            data-name="temp" onchange={bookMarkTyped}></lightning-input>
+                    </div>
+                    <template if:false={bookmarkSearchesLength}>
+                        <p
+                            class="font-12 su__color-dgray su__pt-4 su__bookmark_bottom_content su__d-inline su__pb-0 su__loading-view">
+                            {translationObject.You_can_bookmark_upto_20_searches}
+                        </p>
+                    </template>
+                    <template if:true={isBookmarkDuplicate}>
+                        <p
+                            class="font-12 su__color-dred su__pt-4 su__bookmark_bottom_content su__d-inline su__pb-1 su__loading-view">
+                            Bookmark with same name already exists
+                        </p>
+                    </template>
+                </div>
+                <div class="su__bookmark-btn su__w-100">
+                    <button
+                        class="su__btn su__bg-blue-grd su__w-100 su__text-white su__cursor su__bookmark-save-btn su__font-bold font-14 su__loading-view"
+                        onclick={saveToLocal} disabled={renderBookmarksButtons}>
+                        {translationObject.Save}
+                    </button>
+                </div>
+            </div>
+            <div class="slds-backdrop slds-backdrop_open su__bookmark-backdrop" onclick={closeIcon}></div>
+        </section>
+    </template>
+</template>

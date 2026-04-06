@@ -1,0 +1,54 @@
+<template>
+     <template if:true={showmsg}>
+		<div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+			<span class="slds-assistive-text">error</span>
+			<span class="slds-icon_container slds-icon-utility-error slds-m-right_x-small"
+				title="Description of icon when needed"></span>
+			<h2>
+				<p>
+					<span class="bolded"> 
+						<label>{message}</label>
+					</span>
+				</p>
+			</h2>
+		</div>
+	</template>
+        <template if:true={showSpinner}>
+		<div id="spinnerDiv" style="height: 10rem">
+			<div class="slds-spinner_container">
+				<div role="status" class="slds-spinner slds-spinner_medium">
+					<span class="slds-assistive-text">Loading</span>
+					<div class="slds-spinner__dot-a"></div>
+					<div class="slds-spinner__dot-b"></div>
+				</div>
+			</div>
+		</div>
+	</template>
+    <div class="combo-wrapper">
+	 <template if:true={rowsel.multiAddAssets}>
+		<lightning-layout horizontal-align="space" style="padding-bottom:0px;">
+            <lightning-layout-item padding="around-small">
+                <div class="custom-box">
+					<c-multiselect-combobox-lwc class="custom-combobox" options={networkTypeOptions} selected-values={networkSelValue}
+                                        placeholder='Select Network' onselectoption={handleNetworkTypeChange}>
+        			</c-multiselect-combobox-lwc>
+				</div>
+            </lightning-layout-item>
+            <lightning-layout-item padding="around-small">
+                <div class="custom-box" style="width: 320px !important;">
+					<c-multiselect-combobox-lwc options={targetPathSKU} class="custom-combobox" selected-values={selectedOptions} multi-add={rowsel.multiAddAssets}
+                                            placeholder='Select Path' onselectoption={handleSelectPath} filter-attrs={networkTypeFilter}>
+    				</c-multiselect-combobox-lwc>
+				</div>
+            </lightning-layout-item>
+		</lightning-layout>
+		<label class="custom-error">{assetVerbiage}</label> 
+	 </template>
+	 <template if:false={rowsel.multiAddAssets}>
+		<c-multiselect-combobox-lwc options={targetPathSKU} class="custom-combobox" selected-values={selectedOptions} multi-add={rowsel.multiAddAssets}
+                                            placeholder='(Optional) Choose Non-Asset based instead' onselectoption={handleselectoptionparent}>
+		</c-multiselect-combobox-lwc>
+		<label class="custom-error">{nonAssetVerbiage}</label> 
+	 </template>
+    </div>
+</template>

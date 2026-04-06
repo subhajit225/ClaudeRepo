@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Weightage__c</fullName>
+    <description>CS21-2561 AR Feedback Revamp Fields</description>
+    <formula>(IF(ISPICKVAL(Troubleshooting_Skills_Category__c  , &apos;Yes&apos;),20,0)+
+ IF(ISPICKVAL(Case_Communication_Category__c, &apos;Yes&apos;),20,0)+
+ IF(ISPICKVAL(Issue_Understanding_Category__c, &apos;Yes&apos;),20,0)+
+ IF(ISPICKVAL(Research_Skills_Category__c, &apos;Yes&apos;),20,0)+
+ IF(ISPICKVAL(Resolution_Skill_Category__c, &apos;Yes&apos;),20,0))/100</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Weightage</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Percent</type>
+</CustomField>

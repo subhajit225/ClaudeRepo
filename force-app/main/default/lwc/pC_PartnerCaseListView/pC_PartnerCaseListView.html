@@ -1,0 +1,66 @@
+<template>
+    <div class="slds-card">
+        <template if:true={isLoading}>
+            <lightning-spinner variant="brand" size="large"> </lightning-spinner>
+        </template>
+        <div class="slds-p-around_small slds-grid slds-grid_align-spread">
+            <div>
+                <h1 class="heading-36">{formTitle}</h1>
+            </div>
+            <div>
+                <lightning-combobox label="View Cases" options={filterOptions} value={selectedFilter}
+                    dropdown-alignment="right" onchange={handleFilterChange}></lightning-combobox>
+            </div>
+        </div>
+        <div style="overflow: auto;">
+            <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                <thead>
+                    <tr>
+                        <template for:each={columns} for:item="column">
+                            <th key={column.fieldName}>{column.label}</th>
+                        </template>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template if:true={hasCases}>
+                        <template for:each={cases} for:item="caseRecord">
+                            <tr key={caseRecord.key}>
+                                <template for:each={caseRecord.fields} for:item="field">
+                                    <td key={field.key}>
+                                        <template if:true={field.isLink}>
+                                            <a href={field.caseLink} target="_self">{field.value}</a>
+                                        </template>
+                                        <template if:false={field.isLink}>
+                                            {field.value}
+                                        </template>
+                                    </td>
+                                </template>
+                            </tr>
+                        </template>
+                    </template>
+                    <template if:false={hasCases}>
+                        <tr>
+                            <td colspan={columnCount}>No cases found.</td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="slds-p-top_small slds-grid slds-grid_align-spread">
+
+            <div class="inputClass slds-p-top_large">Page {currentPage} of {totalPages}</div>
+
+            <div class="slds-p-top_large">
+                <lightning-button variant="brand" title="Previous" label="Previous" onclick={handlePrevious} disabled={isFirstPage}></lightning-button>
+                <lightning-button class="slds-p-left_xx-small" variant="brand" title="Next" label="Next" onclick={handleNext} disabled={isLastPage}></lightning-button>
+            </div>
+
+            <div>
+                <lightning-combobox label="Records per Page" options={pageSizeOptions} value={pageSize}
+                    onchange={handlePageSizeChange}></lightning-combobox>
+            </div>
+
+        </div>
+    </div>
+</template>

@@ -1,0 +1,29 @@
+<apex:page standardController="PO_Stage__c" extensions="AcceptPOController" lightningStylesheets="true">
+    <apex:includeLightning />
+    <apex:pageMessages ></apex:pageMessages>
+    <apex:form >
+        <apex:outputPanel rendered="{!!displayInputMessagePanel}">
+            <apex:pageBlock title="Validatons">
+                <apex:pageBlockTable columns="2" value="{!errorMessagesMap}" var="message">
+                    <apex:column value="{!message}" headerValue="Validation"></apex:column>
+                    <apex:column value="{!errorMessagesMap[message]}" headerValue="Status"></apex:column>
+                </apex:pageBlockTable>
+                <apex:pageBlockButtons >
+                    <apex:commandButton action="{!toggleReject}" value="Reject" />
+                    <apex:commandButton action="{!cancel}" value="Cancel" />
+                </apex:pageBlockButtons>
+            </apex:pageBlock>
+        </apex:outputPanel>
+        <apex:outputPanel rendered="{!displayInputMessagePanel}">
+            <apex:pageBlock title="Enter Reason of rejection">
+                <apex:inputTextarea style="width:70%" cols="10" value="{!inputMessage}" title="Enter Reason of rejection"/>
+                <apex:pageBlockButtons location="{!IF($User.UITheme != 'Theme3', 'bottom', '')}">
+                    <apex:commandButton action="{!reject}" value="Reject" />
+                    <apex:commandButton action="{!cancel}" value="Cancel" />
+                </apex:pageBlockButtons>
+            </apex:pageBlock>
+        </apex:outputPanel>
+        
+        
+    </apex:form>
+</apex:page>

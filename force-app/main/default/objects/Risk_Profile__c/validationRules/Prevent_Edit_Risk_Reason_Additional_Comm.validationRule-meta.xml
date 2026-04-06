@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Prevent_Edit_Risk_Reason_Additional_Comm</fullName>
+    <active>true</active>
+    <description>This validation rule ensures that the field Risk Reason Additional Comments in the Risk_Profile__c object can only be edited by the record&apos;s creator). If any other user attempts to modify the field, the validation rule will trigger error</description>
+    <errorConditionFormula>AND(
+    ISCHANGED(Risk_Reason_Additional_Comments__c),
+    CreatedById &lt;&gt; $User.Id,
+    NOT($Permission.Risk_Profile_Advance_Permissions),
+    TEXT(Risk_Origin__c) = &apos;Manual&apos;
+)</errorConditionFormula>
+    <errorDisplayField>Risk_Reason_Additional_Comments__c</errorDisplayField>
+    <errorMessage>Only the creator of this record can edit the Risk Reason Additional Comments.</errorMessage>
+</ValidationRule>

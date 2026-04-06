@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ETM_Theatre_updates_needed</fullName>
+    <columns>NAME</columns>
+    <columns>Page_Name__c</columns>
+    <columns>Order__c</columns>
+    <columns>Image_Type__c</columns>
+    <columns>Active__c</columns>
+    <columns>Account_Owner_Theater__c</columns>
+    <columns>Theatre__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Account_Owner_Theater__c</field>
+        <operation>notEqual</operation>
+    </filters>
+    <filters>
+        <field>Active__c</field>
+        <operation>equals</operation>
+        <value>1</value>
+    </filters>
+    <label>ETM Theatre updates needed</label>
+</ListView>

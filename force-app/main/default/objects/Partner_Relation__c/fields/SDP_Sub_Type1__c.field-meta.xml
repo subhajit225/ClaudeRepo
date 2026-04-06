@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SDP_Sub_Type1__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(
+    NOT(Opportunity__r.IsClosed), 
+    TEXT(Partner_Account__r.MSP_Sub_Type__c), 
+    TEXT(SDP_Sub_Type__c)
+)</formula>
+    <label>SDP Sub-Type</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

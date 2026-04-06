@@ -1,0 +1,144 @@
+<template>
+    <template if:true={customSettingsFilled}>
+        <template if:false={loadingResult}>
+            <lightning-card title={pageheadertitle} class="su__custom-lightning-card">
+                <div class={showViewedResults}>
+                    <template if:true={showNoResults}>
+                        <div class="su_list_title">{noresultfoundmsg}</div>
+                    </template>
+                    <template if:false={showNoResults}>
+                        <div class="su_list_autocompleteDiv">
+                            <template for:each={autosuggestList} for:item="autosuggestItem"
+                                for:index="indexVar">
+                                <div key={autosuggestItem.href}
+                                    class="slds-large-size--1-of-1 slds-small-size--1-of-1 slds-medium-size--1-of-1 su_list_authlist-element">
+                                    <div class="su_list-search-icon">
+                                        <template if:true={autosuggestItem.icon}>
+                                            <div class="su__w-h-20px">
+                                                <img class="su__w-h-20px su__loading-view"
+                                                    src={autosuggestItem.icon}
+                                                    title={autosuggestItem.objLabel} />
+                                            </div>
+                                        </template>
+                                        <h5 class="su_list-search-title su__text-truncate-custom">
+                                            <a target="_blank"
+                                                title={autosuggestItem.highlight.TitleToDisplayString}
+                                                access-key={autosuggestItem.Id}
+                                                href={autosuggestItem.href}
+                                                data-id={autosuggestItem._id} data-rank={indexVar}
+                                                data-url={autosuggestItem.href}
+                                                data-sub={autosuggestItem.highlight.TitleToDisplayString}
+                                                data-value={autosuggestItem._id}
+                                                data-type={autosuggestItem.objName}
+                                                data-index={autosuggestItem.sourceName}
+                                                data-track={autosuggestItem.trackAnalytics}
+                                                onmousedown={openResult}>
+                                                <template if:true={autosuggestItem.highlightTitleToDisplayString}>
+                                                        <lightning-formatted-rich-text
+                                                            value={autosuggestItem.highlight.TitleToDisplayString}>
+                                                        </lightning-formatted-rich-text>
+                                                </template>
+                                                <template if:false={autosuggestItem.highlightTitleToDisplayString}>
+                                                        <lightning-formatted-rich-text
+                                                            value={autosuggestItem.href}>
+                                                        </lightning-formatted-rich-text>
+                                                </template>
+                                            </a>
+                                        </h5>
+                                    </div>
+                                    <template if:true={showDescMetadata}>
+                                        <div class="slds-large-size--1-of-1 slds-small-size--1-of-1 slds-medium-size--1-of-1 su-authlist-content">
+                                            <template if:true={showbody}>
+                                                <template for:each={autosuggestItem.highlight.SummaryToDisplay}
+                                                    for:item="summary">
+                                                    <div class="su-autoSummary-section-child" key={summary}>
+                                                        <lightning-formatted-rich-text value={summary}></lightning-formatted-rich-text>
+                                                    </div>
+                                                </template>
+                                            </template>
+                                            <template if:true={showmetadata}>
+                                                <div style="line-height:18px">
+                                                    <template for:each={autosuggestItem.metadata}
+                                                        for:item="metadata">
+                                                        <template if:true={metadata.value}>
+                                                            <span class="su-metadata"
+                                                                style="display:inline-block" key={metadata}>
+                                                                <span style="margin-right:12px">
+                                                                    <template
+                                                                        if:true={metadata.metaKeyValBoolean}>
+                                                                        <b class="su-metadataTitle">
+                                                                            {metadata.metaKeyVal}
+                                                                        </b>&lrm;:
+                                                                        <template for:each={metadata.value}
+                                                                            for:item="metadataVal">
+                                                                            <lightning-formatted-date-time
+                                                                                key={metadataVal}
+                                                                                year="numeric"
+                                                                                month="numeric"
+                                                                                day="numeric" hour="2-digit"
+                                                                                minute="2-digit"
+                                                                                time-zone-name="short"
+                                                                                hour12="true"
+                                                                                style="margin-left: 4px;"
+                                                                                value={metadataVal}>
+                                                                            </lightning-formatted-date-time>
+                                                                        </template>
+                                                                    </template>
+                                                                    <template
+                                                                        if:false={metadata.metaKeyValBoolean}>
+                                                                        <template
+                                                                            if:true={metadata.metaKeyVal}>
+                                                                            <b class="su-metadataTitle">
+                                                                                {metadata.metaKeyVal}&lrm;:
+                                                                            </b>
+                                                                        </template>
+                                                                        <template for:each={metadata.value}
+                                                                            for:item="metadataVal"
+                                                                            for:index="singleVal">
+                                                                            <span class="su-metadataVal"
+                                                                                style="margin-left: 4px;"
+                                                                                key={metadataVal}>
+                                                                                {metadataVal}
+                                                                            </span>
+
+                                                                        </template>
+                                                                    </template>
+
+                                                                </span>
+                                                            </span>
+                                                        </template>
+                                                    </template>
+                                                </div>
+                                            </template>
+
+                                        </div>
+                                    </template>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+                <template if:true={isShowSearchButton}>
+                    <div class="su__cursor-authlist">
+                        <a class="searchBtn" onclick={searchButtonPress}>{gotosearchpagemsg}</a>
+                    </div>
+                </template>
+            </lightning-card>
+        </template>
+        <template if:true={loadingResult}>
+            <div class="disSpinerDiv">
+                <div data-id="dvSpinner3" class="loadingCon global siteforceLoadingBalls su_disSpiner">
+                    <div class="customBalls">
+                        <span class="loadingBall first"></span>
+                        <span class="loadingBall second"></span>
+                        <span class="loadingBall third"></span>
+                        <span class="assistiveText">Loading</span>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </template>
+    <template if:false={customSettingsFilled}>
+        <span class="customSettingErrMsg">{customSettingErrorMessage}</span>
+    </template>
+</template>

@@ -1,0 +1,60 @@
+<template>
+	<div class="knowbler__content-health-unique-article-card-container">
+		<div class="knowbler__content-health-unique-article-left-section">
+			<div class="knowbler__content-health-unique-article-head">
+				<lightning-avatar variant="circle" src={item.SmallPhotoUrl} fallback-icon-name="standard:person_account"
+					alternative-text={item.Owner.Name}></lightning-avatar>
+				<div class="knowbler__content-health-unique-article-profile">
+                    <div>{item.Owner.Name}</div>
+                    <div class="id">{item.ArticleNumber}</div>
+                </div>
+			</div>
+            <div class="knowbler__content-health-unique-article-description">{item.Title}</div>
+            <div class="knowbler__content-health-unique-article-date"><svg width="14" height="14" viewBox="0 0 14 14">
+                <defs>
+                  <clipPath id="clip-Artboard_1">
+                    <rect width="14" height="14" />
+                  </clipPath>
+                </defs>
+                <g
+                  id="Artboard_1"
+                  data-name="Artboard – 1"
+                  clip-path="url(#clip-Artboard_1)"
+                >
+                  <g
+                    id="Group_19255"
+                    data-name="Group 19255"
+                    transform="translate(13627.689 -1354.435)"
+                  >
+                    <path
+                      id="Path_202"
+                      data-name="Path 202"
+                      d="M9.841,1.313H9.185V.657a.656.656,0,1,0-1.312,0v.656H3.935V.657a.656.656,0,1,0-1.312,0v.656H1.967A1.967,1.967,0,0,0,0,3.283v7.874a1.967,1.967,0,0,0,1.968,1.969H9.841a1.967,1.967,0,0,0,1.969-1.969V3.282A1.967,1.967,0,0,0,9.841,1.313ZM1.967,2.626h.656v.656a.656.656,0,1,0,1.312,0V2.626H7.872v.656a.656.656,0,1,0,1.312,0V2.626h.656a.656.656,0,0,1,.656.656V5.907H1.311V3.282a.656.656,0,0,1,.656-.656Zm7.874,9.187H1.967a.656.656,0,0,1-.656-.656V7.219H10.5v3.938a.656.656,0,0,1-.656.656Z"
+                      transform="translate(-13626.688 1354.872)"
+                      fill="#7b7890"
+                    />
+                    <path
+                      id="Path_203"
+                      data-name="Path 203"
+                      d="M5.682,0H.656a.656.656,0,1,0,0,1.312H5.682A.656.656,0,1,0,5.682,0Z"
+                      transform="translate(-13623.842 1363.404)"
+                      fill="#7b7890"
+                    />
+                  </g>
+                </g>
+              </svg>
+              <lightning-formatted-date-time
+                  value={item.LastModifiedDate}
+                  year="2-digit"
+                  month="short"
+                  day="2-digit"
+                  hour="2-digit"
+                  minute="2-digit"
+                  time-zone={timezone}
+                ></lightning-formatted-date-time>
+              </div>
+		</div> 
+
+		<div>{item.similarity}%</div>
+	</div>
+</template>

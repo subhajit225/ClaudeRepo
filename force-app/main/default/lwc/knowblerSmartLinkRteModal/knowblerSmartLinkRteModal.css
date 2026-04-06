@@ -1,0 +1,63 @@
+.picklists {
+  display: flex;
+  justify-content: space-between;
+}
+.langPicklist,
+.statusPicklist {
+  width: 48%;
+}
+.smartlinkDiv {
+  background-color: #ffffff;
+  padding: 0.5rem 0.5rem;
+}
+.modal {
+  width: 328px;
+  background-color: white;
+  border-radius: 0.5rem;
+  margin: auto;
+  padding: 12px 20px;
+}
+
+.displayModal {
+  display: flex;
+  position: fixed;
+  position: absolute;
+  top: -60px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+  opacity: 1;
+  pointer-events: all;
+  transition: opacity 250ms ease;
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
+.textAreaBody {
+  --sds-c-textarea-sizing-min-height: 175px;
+}
+
+label {
+  font-size: 20px;
+}
+:host {
+  --lwc-inputStaticFontSize: 30px;
+  --lwc-inputStaticFontWeight: bold;
+}
+.closeImgPopup {
+  text-align: right;
+  cursor: pointer;
+}
+.targetPicklist {
+  margin-bottom: 2rem;
+}
+.displayModal .slds-button.slds-button_neutral {
+  font-size: 14px;
+  color: #3e7555 !important;
+  font-family: 'Poppins Regular';
+  border: 1px solid #3e7555 !important;
+}
+.smart_link_btn {
+  display: flex;
+  justify-content: center;
+}

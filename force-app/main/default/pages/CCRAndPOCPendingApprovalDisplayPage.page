@@ -1,0 +1,18 @@
+<apex:page >
+    <apex:includeLightning />
+    
+    <div style="width:95%;height:100%;" id="CcrPocContainer" />
+    
+    <script>
+        $Lightning.use("c:CCRAndPOCPendingApprovalDisplayLtngOutApp", function() {
+            $Lightning.createComponent("c:CCRAndPOCPendingApprovalDisplay",
+            { 
+               
+            },
+            "CcrPocContainer",
+            function(cmp) {
+            console.log('Component created');
+            });
+        });
+    </script>
+</apex:page>

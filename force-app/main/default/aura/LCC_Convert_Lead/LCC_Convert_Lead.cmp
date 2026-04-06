@@ -1,0 +1,34 @@
+<aura:component  controller="LCC_ButtonsController" 
+                implements="force:hasRecordId,force:lightningQuickActionWithoutHeader">
+    <aura:attribute name="sObjectInfo" type="Object" />
+    <aura:attribute name="simpleRecord" type="Object" access="global"/>
+    <aura:attribute name="recordError" type="String"/>
+    <aura:attribute name="content" type="String"/>
+    <aura:attribute name="showok" type="Boolean" default="false"/>
+    <aura:attribute name="wcList" type="List" default="[]"/>
+    <aura:attribute name="showcancel" type="Boolean" default="false"/>
+    <aura:attribute name="EnableCM" type="Boolean"/>
+    <aura:attribute name="userDivision" type="String"/>
+    <lightning:quickActionAPI aura:id="quickActionAPI"/>
+    <lightning:navigation aura:id="navService"/>
+    <force:recordData aura:id="recordLoader"
+      recordId="{!v.recordId}"        
+      targetRecord="{!v.simpleRecord}"
+      targetFields="{!v.sObjectInfo}"      
+      targetError="{!v.recordError}"
+      fields = "Id,CountryCode,isFederalIntel__c,SDR_Led__c,Converting__c,Deal_Registration__c"                          
+      mode="EDIT"
+      recordUpdated="{!c.handleRecordUpdated}"                
+    />  
+   <div class="slds-p-top_large slds-align_absolute-center">
+        {!v.content}
+    </div>
+	<aura:if isTrue="{!v.showcancel}">
+        <div class="slds-p-top_large slds-align_absolute-center">
+            <aura:if isTrue="{!v.showok}">
+            	<lightning:button variant="brand" label="Ok"  onclick="{! c.handleClick }"/>
+            </aura:if>
+            <lightning:button variant="brand" label="Cancel"  onclick="{! c.handleCancel }"/>
+        </div>  
+    </aura:if>   
+</aura:component>

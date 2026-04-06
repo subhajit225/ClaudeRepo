@@ -1,0 +1,2117 @@
+<apex:page id="RMAForm" standardController="case" extensions="RMAOrderHandlerExtnClass" docType="HTML-5.0" standardStylesheets="true">
+     <apex:stylesheet value="{!URLFOR($Resource.SLDS0121, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js" />
+    <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel = "stylesheet"/>
+   
+    <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <apex:stylesheet value="{!URLFOR($Resource.DealReg, 'DealRegCss.css')}" />
+    <!--<apex:stylesheet value="{!URLFOR($Resource.SelectBoxCSS, 'jquery.selectBoxIt.css')}" />-->
+    <apex:includeScript value="{!URLFOR($Resource.DealReg, 'DealRegScript.js')}" />
+
+    <apex:includeScript value="/support/console/48.0/integration.js"/>
+    <script type="text/javascript">
+        function closeSubTab() {
+            if (sforce.console.isInConsole()) {
+                sforce.console.getEnclosingTabId(closeTab);
+            }
+            else {
+                window.close();
+            }
+        }
+
+        var closeTab = function closeTab(result) {
+            //Now that we have the primary tab ID, we can open a new subtab in it
+            var subTabId = result.id;
+            sforce.console.closeTab(subTabId);
+        };
+    </script>
+
+    <style>
+   .ui-datepicker-header {
+   background: #666;
+   border: 1px solid #555;
+   color: #EEE;
+    }
+    
+  .colorclass{
+      color:red;
+  }
+  .formWidth{
+      width:75%;
+      margin-top: 20px;
+  }
+   div.header {
+      padding: 10px;
+   }
+   .imageCSS{
+       min-width:100% !important;
+       height:100px !important;
+
+   }
+   .paddingCSS{
+       padding: 15px;
+   }
+    .slds-select{
+        height: 34px !important;
+    }
+    .srp__header {
+    display: block;
+    padding: 48px 32px;
+    background: #16325c;
+    color: #fff;
+    position: relative;
+    }
+    .inlinecss{
+        display:inline !important;
+    }
+</style>
+
+<style>
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+.dateFormat {
+    padding: 0 2px;
+    display: none;
+}
+.slds li {
+    list-style-position: inside;
+    list-style-type: disc !important;
+    list-style: aqua;
+}
+
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 220px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 2px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+</style>
+
+
+    <div class="slds" id="slds">
+        <header class="srp__header" role="banner">
+      <div class="slds-text-heading--large">
+        <span class="slds-icon_container" title="RMA Request Form">
+          <svg aria-hidden="true" class="slds-icon">
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/resource/1474545310000/SLDS0121/assets/icons/standard-sprite/svg/symbols.svg#marketing_actions"></use>
+          </svg>
+        </span>
+        RMA Request Form</div>
+      <!--<div class="header-nav">
+        <span class="header-nav__item">
+          <a href="/one/one.app?source=aloha#/sObject/a0x3E000000ACrGQAW/view?t=1482341780132" target="_blank">FAQs</a></span>
+        <span class="header-nav__item">
+          logged in as <a href="/00524000002WLAzAAO">Shadab</a>
+        </span><span id="j_id0:j_id5">
+            <span class="header-nav__item">
+                <a href="/apex/TrackTix_AdminCofigPage">Admin Config Page</a>
+            </span></span>
+        
+      </div>-->
+    </header>
+        <apex:form id="requestForm" >
+            <div id="requestFormDiv">
+            <div class="slds" id="slds">
+                 <div class="spinner">
+                 <div class="slds-spinner_container">
+                      <div class="slds-spinner slds-spinner--small" role="alert">
+                        <span class="slds-assistive-text">Loading</span>
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                      </div> 
+                      </div>
+                      </div> 
+                      </div>
+                <apex:outputPanel id="requestFormPanel" >
+                    <script>
+                //alert('rendered');
+                </script>
+                    <apex:outputPanel id="duplicateConMessageDiv" >
+                  <!--  <script>
+                alert('rendered');
+                </script>-->
+                       <!-- <apex:outputPanel rendered="{!isValidSupport}">
+                            <div class="slds-notify_container paddingCSS slds-size--1-of-1">
+                          <div class="slds-notify slds-notify--alert slds-theme--warning" role="alert">
+                            <span class="slds-assistive-text">Warning</span>
+                            <div class="slds-notify__content">
+                              <h2 class="slds-text-heading--small">This Asset does not have valid Premium Support.</h2>
+                            </div>
+                          </div>
+                        </div>
+                        </apex:outputPanel>-->
+
+
+                </apex:outputPanel>
+                
+                    <div class="slds-form--horizontal formWidth">
+                        <!--<div class="slds-form-element is-required slds-size--1-of-2">
+                            <label class="slds-form-element__label" for="inputFirstName">
+                                <abbr class="slds-required colorclass" title="required">&nbsp;</abbr>Case Number
+
+
+                            </label>
+                            <div class="slds-form-element__control">
+                                <apex:outputField id="inputFirstName"  value="{!CaseRecord.CaseNumber}" />
+                            </div>
+                        </div>-->
+                        
+                        <h3 class="slds-section-title--divider slds-text-align--left" style="width: 133%;margin-left: 2px !important;">Order Information</h3>
+                        <div class="slds-form-element is-required slds-m-top--large slds-size--1-of-1">
+                            <label class="slds-form-element__label" for="inputLastName">
+                                <abbr class="slds-required colorclass colorclass" title="required"></abbr>Case Number
+
+
+                            </label>
+                            <div class="slds-form-element__control">
+                                <apex:outputField id="inputCaseNumber"  value="{!CaseRecord.CaseNumber}" />
+                            </div>
+                        </div>
+                         <apex:pageMessages > </apex:pageMessages>
+                        <div class="slds-form-element is-required slds-m-top--large slds-size--1-of-1">
+                            <label class="slds-form-element__label" for="inputAsset">
+                                <abbr class="slds-required colorclass colorclass" title="required"></abbr>Select Components
+
+
+                            </label>
+                            <!--<div class="slds-form-element__control">
+                                <apex:selectList value="{!selectedAssetId}"  size="1" styleClass="form slds-select form required email" title="Choose an Asset">
+                                    <apex:selectOptions value="{!assetOptionsList}"></apex:selectOptions>
+                                        <apex:actionSupport event="onchange" rerender="NodePanel,MemoryPanel,PowerSupplyPanel,DrivePanel,NicPanel,duplicateConMessageDiv" action="{!fetchAssetConfigs}"/>
+
+                                </apex:selectList>
+                            </div>-->
+
+                            <div class="slds-form-element__control">
+                                <!--<apex:SelectList id="inputLastName" styleClass="slds-input form required" type="text" onkeydown="validateField(this);" onclick="validateField(this);" value="{!PR_Request.Last_Name__c}" >-->
+                                <!--<apex:selectList value="{!listOfSelectedComponents}" size="4" multiselect="true" styleClass="form slds-select form required email" title="Choose an Asset">
+                                    <apex:selectOptions value="{!listOfComponents}"></apex:selectOptions>-->
+                                       <!-- <apex:actionSupport event="onchange" rerender="NodePanel,MemoryPanel,PowerSupplyPanel,DrivePanel,NicPanel,duplicateConMessageDiv" action="{!fetchAssetConfigs}"/>-->
+
+                                <!--</apex:selectList>-->
+                                <div>
+                               <!-- <button class="slds-button slds-button--brand" type="button" style="display:block" id="selectbutton" title="Save selection">Go
+
+                                 </button>-->
+                                 </div>
+
+                                <apex:selectList id="componentSelect" value="{!listOfSelectedComponents}" size="5" multiselect="true" styleClass="slds-size--1-of-1 appliance_select_box" title="Select Components">
+                                        <apex:selectOptions value="{!listOfComponents}"></apex:selectOptions>
+                                        <apex:actionSupport event="onchange"  action="{!makeComponentInputSeletion}"/>
+                                        </apex:selectList>
+
+                            </div>
+
+                        </div>
+
+                        <!-- rerender="NodeQuantityPanel,DriveQuantityPanel,MemoryQuantityPanel,PsupplyQuantityPanel,NICQuantityPanel,duplicateConMessageDiv"-->
+                       <div>
+                       <apex:outputpanel id="ApplianceQuantityPanel">
+                                   <script>
+                                       $j(document).ready(function() {
+                                                $j('.spinner').show();
+                                               var getUrlParameter = function getUrlParameter(sParam) {
+                                                    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+                                                        sURLVariables = sPageURL.split('&'),
+                                                        sParameterName,
+                                                        i;
+                                                
+                                                    for (i = 0; i < sURLVariables.length; i++) {
+                                                        sParameterName = sURLVariables[i].split('=');
+                                                
+                                                        if (sParameterName[0] === sParam) {
+                                                            return sParameterName[1] === undefined ? true : sParameterName[1];
+                                                        }
+                                                    }
+                                                };
+                                                var RMA_Name = getUrlParameter('RMAName') != ''? getUrlParameter('RMAName'):'';
+                                                console.log('RMA_Name =='+RMA_Name);
+                                                var RMAID= getUrlParameter('RMAId') != ''?getUrlParameter('RMAId'):'' ;
+                                                var caseName  ='Go back to Case';
+                                                if(getUrlParameter('msg') == 'success'){
+                                                    document.getElementById('requestFormDiv').style.display ='none';
+                                                    $j('#successmsg').text('Your RMA request ');
+                                                    $j('#successmsg').append($j('<a href="/'+RMAID+'" target="_blank">'+RMA_Name+'</a>'));
+                                                    $j('#successmsg').append(' has been submitted successfully. An order will be created and processed soon. ');
+                                                    $j('#successmsg').append($j('<a href="/'+getUrlParameter('id')+'">'+caseName+'</a>'));
+                                                    document.getElementById('successMessageDiv').style.display ='block';
+                                                    //setTimeout('window.close()', 15000);
+                                                    }
+                                                 else if(getUrlParameter('msg') == 'pending'){
+                                                        document.getElementById('requestFormDiv').style.display ='none';
+                                                        
+                                                      /*  $j('#pendingmsg').text('Your RMA request ');
+                                                    $j('#pendingmsg').append($j('<a href="/'+RMAID+'" target="_blank">'+RMA_Name+'</a>'));
+                                                    $j('#pendingmsg').append(' has been submitted successfully.\n Asset related to selected Serial Number(s) does not have valid Entitlement, so your request will be redirected for Approval. ');
+                                                       $j('#pendingmsg').append($j('<a href="/'+getUrlParameter('id')+'">'+caseName+'</a>'));
+                                                        document.getElementById('duplicateConMessageDiv').style.display ='block';
+                                                    */
+                                                    }
+                                              
+                                              console.log($j(".appliance_select_box option:selected" ).text());
+                                              /*if ($j(".appliance_select_box option:selected" ).text().indexOf('Appliance') != -1) {
+                                               console.log($j(".appliance_select_box option:selected" ).text());
+                                                  $j('.appliance_select_box option').not(':selected').prop('disabled', true);
+                                                    $j('.appliance_select_box :selected').each(function(i, selected){ 
+                                                      console.log('selected =='+$j(selected));
+                                                      if($j(selected).text() != 'Appliance' ){
+                                                          $j(selected).prop('selected', false);
+                                                          $j(selected).prop('disabled', true);
+                                                          }
+                                                    });
+                                                    
+                                                  
+                                                  
+                                                }
+                                                else if ($j('.appliance_select_box').val() === null) {
+                                                   var options = $j('.appliance_select_box option:disabled'); 
+                                                   if (options.length > 0) {
+                                                      options.prop('disabled', false);
+                                                      
+                                                   }
+                                                }*/
+                                              $j('.spinner').hide();
+                                            });
+                                            
+                                            $j( ".slds-modal__close" ).click(function() {
+                                                  console.log('button Clicked');
+                                                  $j( "#duplicateConMessageDiv" ).hide();
+                                             });
+                                            
+                                   </script>
+
+                                    <apex:outputPanel rendered="{!boolApplianceQuantity}" >
+                                      <div class="slds-form-element is-required slds-m-top--large">
+                                            <label class="slds-form-element__label" for="inputLastName">
+                                                <abbr class="slds-required colorclass colorclass" title="required"></abbr> Appliance Quantity
+                                                </label>
+                                            <div class="slds-form-element__control">
+                                                <apex:inputField id="ApplianceQuantity" onkeydown="hideError(this);" onclick="hideError(this);"  styleClass="slds-input form" value="{!RMAOrder.Appliance_Quantity__c}"/>
+                                            </div>
+                                        </div>
+                                   </apex:outputPanel>
+                                </apex:outputPanel>
+
+                                <apex:outputpanel id="ChassisQuantityPanel">
+                                    <apex:outputPanel rendered="{!boolChassisQuantity}">
+                                    <div class="slds-form-element is-required slds-m-top--large">
+                                            <label class="slds-form-element__label" for="inputLastName">
+                                                <abbr class="slds-required colorclass colorclass" title="required"></abbr> Chassis Quantity
+
+
+                                            </label>
+                                            <div class="slds-form-element__control">
+                                                <apex:inputField id="ChassisQuantity" styleClass="slds-input form" type="text" onkeydown="hideError(this);" onclick="hideError(this);" value="{!RMAOrder.Chasis_Quantity__c}" />
+                                            </div>
+                                        </div>
+                                    </apex:outputPanel>
+                                </apex:outputPanel>
+                                <apex:outputpanel id="DriveQuantityPanel">
+                                    <apex:outputPanel rendered="{!boolDriveQuantity}">
+                                    <div class="slds-form-element is-required slds-m-top--large">
+                                            <label class="slds-form-element__label" for="inputLastName">
+                                                <abbr class="slds-required colorclass colorclass" title="required"></abbr> HDD Drive Quantity
+
+
+                                            </label>
+                                            <div class="slds-form-element__control">
+                                                <apex:inputField id="HDDDriveQuantity" styleClass="slds-input form" type="text" onkeydown="hideError(this);" onclick="hideError(this);" value="{!RMAOrder.Drive_Quantity__c}" />
+                                            </div>
+                                        </div>
+                                    </apex:outputPanel>
+                                </apex:outputPanel>
+                                <apex:outputpanel id="SSDDriveQuantityPanel">
+                                    
+                                    <apex:outputPanel rendered="{!boolSSDDriveQuantity}">
+                                    <apex:outputText rendered="{!isSSDSelected}"> <div style="color:red"><b> Please remove all other component selection apart from SSD as SSD Serial Numbers are filter on specifc criteria (R300 and R500 series is excluded)</b></div></apex:outputText>
+                                    <div class="slds-form-element is-required slds-m-top--large">
+                                            <label class="slds-form-element__label" for="inputLastName">
+                                                <abbr class="slds-required colorclass colorclass" title="required"></abbr> SSD Drive Quantity
+
+
+                                            </label>
+                                            <div class="slds-form-element__control">
+                                                <apex:inputField id="SSDDriveQuantity" styleClass="slds-input form" type="text" onkeydown="hideError(this);" onclick="hideError(this);" value="{!RMAOrder.SSD_Quantity__c}" />
+                                            </div>
+                                        </div>
+                                    </apex:outputPanel>
+                                </apex:outputPanel>
+                                
+                                <apex:outputpanel id="MemoryQuantityPanel">
+                                    <apex:outputPanel rendered="{!boolMemoryQuantity}">
+                                    <div class="slds-form-element is-required slds-m-top--large">
+                                            <label class="slds-form-element__label" for="inputLastName">
+                                                <abbr class="slds-required colorclass colorclass" title="required"></abbr> Memory Quantity
+
+
+                                            </label>
+                                            <div class="slds-form-element__control">
+                                                <apex:inputField id="MemoryQuantity" styleClass="slds-input form" type="text" onkeydown="hideError(this);" onclick="hideError(this);" value="{!RMAOrder.Memory_Quantity__c}" />
+                                            </div>
+                                        </div>
+                                    </apex:outputPanel>
+                                </apex:outputPanel>
+
+                                <apex:outputpanel id="NICQuantityPanel">
+                                    <!--<apex:outputPanel rendered="{!boolNICQuantity}">
+                                    <div class="slds-form-element is-required slds-m-top--large">
+                                            <label class="slds-form-element__label" for="inputLastName">
+                                                <abbr class="slds-required colorclass colorclass" title="required"></abbr> NIC Quantity
+
+
+                                            </label>
+                                            <div class="slds-form-element__control">
+                                                <apex:inputField id="NICQuantity" styleClass="slds-input form" type="text" onkeydown="hideError(this);" onclick="hideError(this);" value="{!RMAOrder.NIC_Quantity__c}" />
+                                            </div>
+                                        </div>
+                                    </apex:outputPanel>-->
+                                </apex:outputPanel>
+                                <apex:outputpanel id="NodeQuantityPanel">
+
+                                    <apex:outputPanel rendered="{!boolNodeQuantity}">
+                                      <div class="slds-form-element is-required slds-m-top--large">
+                                            <label class="slds-form-element__label" for="inputLastName">
+                                                <abbr class="slds-required colorclass colorclass" title="required"></abbr> Node Quantity
+                                                </label>
+                                            <div class="slds-form-element__control">
+                                                <apex:inputField id="NodeQuantity" onkeydown="hideError(this);" onclick="hideError(this);"  styleClass="slds-input form" value="{!RMAOrder.Node_Quantity__c}"/>
+                                            </div>
+                                        </div>
+                                   </apex:outputPanel>
+                                </apex:outputPanel>
+
+                                <apex:outputpanel id="PsupplyQuantityPanel">
+                                    <apex:outputPanel rendered="{!boolPSupplyQuantity}">
+                                    <div class="slds-form-element is-required slds-m-top--large">
+                                            <label class="slds-form-element__label" for="inputLastName">
+                                                <abbr class="slds-required colorclass colorclass" title="required"></abbr> Power Supply Quantity
+
+
+                                            </label>
+                                            <div class="slds-form-element__control">
+                                                <apex:inputField id="PSupplyQuantity" styleClass="slds-input form" type="text" onkeydown="hideError(this);" onclick="hideError(this);" value="{!RMAOrder.Power_Supply_Quantity__c}" />
+                                            </div>
+                                        </div>
+                                    </apex:outputPanel>
+                                </apex:outputPanel>
+
+                                <apex:outputpanel id="CMOSBatteryQuantityPanel">
+                                    <apex:outputPanel rendered="{!boolCMOSBatteryQuantity}">
+                                    <div class="slds-form-element is-required slds-m-top--large">
+                                            <label class="slds-form-element__label" for="inputLastName">
+                                                <abbr class="slds-required colorclass colorclass" title="required"></abbr> CMOS Battery Quantity
+
+
+                                            </label>
+                                            <div class="slds-form-element__control">
+                                                <apex:inputField id="CMOSQuantity" styleClass="slds-input form" type="text" onkeydown="hideError(this);" onclick="hideError(this);" value="{!RMAOrder.CMOS_Battery_Quantity__c}" />
+                                            </div>
+                                        </div>
+                                    </apex:outputPanel>
+                                </apex:outputPanel>
+
+                        </div>
+                      <!--  <apex:outputPanel id="IsDarkSitePanel" rendered="{!listOfSelectedComponents.size >0}">
+                        <div class="slds-form-element is-required slds-m-top--large">
+                                <label class="slds-form-element__label" for="inputLastName">
+                                    <abbr class="slds-required colorclass colorclass" title="required">&nbsp;</abbr>Is DarkSite?
+                                </label>
+                                <div class="slds-form-element__control">
+                                    <apex:selectList id="darkSite" value="{!isDarkSite}" size="1" styleClass="slds-size--1-of-1" title="Is DarkSite">
+                                        <apex:selectOptions value="{!listDarkSite}"/>
+                                        <apex:actionSupport event="onchange" rerender="boolclusterId"/>
+                                    </apex:selectList>
+
+                                </div>
+                            </div>
+                        </apex:outputPanel>
+                        <apex:outputPanel id="boolclusterId" >
+                        <apex:outputpanel rendered="{!isDarkSite=='No'}">
+                        <script>
+                            //alert('{!isDarkSite}');
+                        </script>
+                        <div class="slds-form-element is-required slds-m-top--large">
+                                <label class="slds-form-element__label" for="inputLastName">
+                                    <abbr class="slds-required colorclass colorclass" title="required"></abbr>Do You have Cluster ID
+                                </label>
+                                <div class="slds-form-element__control">
+                                    <apex:inputCheckBox value="{!boolDoHaveClusterID}">
+                                    <apex:actionSupport event="onchange" rerender="ApplianceSelectPanel,ClusterIdPanel,DrivePanel,NicPanel,NodePanel,PowerSupplyPanel"/>  </apex:inputCheckBox>
+                                </div>
+                            </div>
+                            </apex:outputPanel>
+                            </apex:outputPanel>-->
+                            <apex:outputpanel id="ClusterIdPanel">
+                                    <apex:outputPanel rendered="{!listOfSelectedComponents.size >0}">
+                             <div class="slds-form-element is-required slds-m-top--large slds-size--1-of-1">
+                                <label class="slds-form-element__label" for="inputLastName">
+                                    <abbr class="slds-required colorclass colorclass" title="required"></abbr>Select Cluster ID
+
+
+                                </label>
+                                <div class="slds-form-element__control">
+                                   <apex:selectList id="ClusterID" value="{!RMAOrder.Cluster_ID__c}" size="1"  multiselect="false" styleClass="slds-size--1-of-1" title="Select Cluster ID">
+                                       <!-- <apex:selectOptions value="{!clusterIDOptionsList}"/>-->
+                                        <apex:selectOptions value="{!clusterIDOptionsList.0}"/>
+                                        <apex:selectOptions value="{!clusterIDOptionsList.1}"/>
+                                        <apex:selectOptions value="{!clusterIDOptionsList.2}"/>
+                                        <apex:selectOptions value="{!clusterIDOptionsList.3}"/>
+                                        <apex:selectOptions value="{!clusterIDOptionsList.4}"/>
+                                        <apex:actionSupport event="onchange" rerender="ApplianceSelectPanel,NodePanel" action="{!makeComponentSeletion}"/>
+
+                                    </apex:selectList>
+
+
+
+                                </div>
+                            </div>
+                            </apex:outputPanel>
+                                </apex:outputPanel>
+                                <apex:outputPanel id="ApplianceSelectPanel">
+                                <!-- <script>
+                                alert('rendered');
+                                alert('{!applianceOptionsList}');
+                              </script>-->
+                                <apex:outputPanel rendered="{!boolApplianceSerialnumber}">
+                               
+                                <div class="slds-form-element is-required slds-m-top--large slds-size--1-of-1">
+                                <label class="slds-form-element__label" for="inputLastName">
+                                    <abbr class="slds-required colorclass colorclass" title="required"></abbr>Select Appliance
+
+
+                                </label>
+                                <div class="slds-form-element__control">
+                                  <apex:outputPanel rendered="{!boolApplianceQuantity}" >
+                                   <apex:selectList id="AppliancePanelParent" value="{!selectedApplianceList}" size="5" multiselect="true" onchange="createFailureTypesAppliance('Appliance',this.id)" styleClass="slds-size--1-of-1" title="Select Nodes">
+                                        <apex:selectOptions value="{!applianceOptionsList}"/>
+                                        <!--<apex:actionSupport event="onchange" rerender="ChassisPanel,PowerSupplyPanel" action="{!makeAssetSeletion}"/>-->
+                                    </apex:selectList>
+                                  </apex:outputPanel>
+                                  <apex:outputPanel rendered="{!!boolApplianceQuantity}" >
+                                      <apex:selectList id="AppliancePanel" value="{!selectedApplianceList}" size="5" multiselect="true" styleClass="slds-size--1-of-1" title="Select Nodes">
+                                        <apex:selectOptions value="{!applianceOptionsList}"/>
+                                        <apex:actionSupport event="onchange" rerender="ChassisPanel,PowerSupplyPanel" action="{!makeAssetSeletion}"/>
+                                    </apex:selectList>
+                                  </apex:outputPanel>
+
+
+                                </div>
+                            </div>
+                            </apex:outputPanel>
+                            </apex:outputPanel>
+                            <apex:outputPanel id="ChassisPanel">
+                            <apex:outputPanel rendered="{!boolChassisSerialnumber}">
+                            <div class="slds-form-element is-required slds-m-top--large">
+                                <label class="slds-form-element__label" for="inputLastName">
+                                    <abbr class="slds-required colorclass colorclass" title="required"></abbr>Select Chassis
+                                </label>
+                                <div class="slds-form-element__control">
+                                    <apex:selectList id="ChasisSelect" value="{!SelectedChassisList}" onclick="hideError(this);" size="5" onchange="createFailureTypesChassis('Chassis',this.id)" multiselect="true" styleClass="slds-size--1-of-1" title="Choose a Memory">
+                                        <apex:selectOptions value="{!chassisOptionsList}"></apex:selectOptions>
+                                    </apex:selectList>
+                                </div>
+                            </div>
+                        </apex:outputPanel>
+                        </apex:outputPanel>
+                            <apex:outputPanel id="PowerSupplyPanel">
+                            <apex:outputPanel rendered="{!boolPSupplySerialnumber}">
+                            <div class="slds-form-element is-required slds-m-top--large">
+                                <label class="slds-form-element__label" for="inputLastName">
+                                    <abbr class="slds-required colorclass colorclass" title="required"></abbr>Select PSU
+
+
+                                </label>
+                                <div class="slds-form-element__control">
+                                    <apex:selectList id="PSUSelect" value="{!selectedPowerSupplyList}" onclick="hideError(this);" onchange="createFailureTypesPSU('PSU',this.id)" size="5" multiselect="true" styleClass="slds-size--1-of-1" title="Choose a Power Supply">
+                                        <apex:selectOptions value="{!powerSupplyOptionsList}"></apex:selectOptions>
+                                    </apex:selectList>
+                                </div>
+                            </div>
+                        </apex:outputPanel>
+                        </apex:outputPanel>
+                            <apex:outputPanel id="NodePanel">
+                         <apex:outputPanel rendered="{!boolNodeSerialnumber}">
+                        <div class="slds-form-element is-required slds-m-top--large slds-size--1-of-1">
+                                <label class="slds-form-element__label" for="inputLastName">
+                                    <abbr class="slds-required colorclass colorclass" title="required"></abbr>Select Node
+
+
+                                </label>
+                                <div class="slds-form-element__control">
+                                <script>
+                                console.log('{!listOfSelectedComponents}');
+                                </script>
+                                <apex:outputPanel rendered="{!boolNodeQuantity}">
+                                   <apex:selectList id="NodeSelectParent" value="{!selectedNodeList}" size="5" multiselect="true" onchange="createFailureTypesNode('Node',this.id)" styleClass="slds-size--1-of-1" title="Select Nodes">
+                                        <apex:selectOptions value="{!nodeOptionsList}"/>
+                                        <!--<apex:actionSupport event="onchange" rerender="DrivePanel,SSDDrivePanel,MemoryPanel,NicPanel" action="{!makeAssetSeletion}"/>-->
+                                    </apex:selectList>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!!boolNodeQuantity}">
+                                   <apex:selectList id="NodeSelect" value="{!selectedNodeList}" size="5" multiselect="true" styleClass="slds-size--1-of-1" title="Select Nodes">
+                                        <apex:selectOptions value="{!nodeOptionsList}"/>
+                                        <apex:actionSupport event="onchange" rerender="DrivePanel,SSDDrivePanel,MemoryPanel,NicPanel,CMOSBatteryPanel" action="{!makeAssetSeletion}"/>
+                                    </apex:selectList>
+                                </apex:outputPanel>
+
+
+                                </div>
+                            </div>
+                            </apex:outputPanel>
+                        </apex:outputPanel>
+                           
+                        <apex:outputPanel id="DrivePanel">
+                            <apex:outputPanel rendered="{!boolDriveSerialnumber}">
+                            <div class="slds-form-element is-required slds-m-top--large">
+                                <label class="slds-form-element__label" for="inputLastName">
+                                    <abbr class="slds-required colorclass colorclass" title="required"></abbr>Select HDD Drive
+
+
+                                </label>
+                                <div class="slds-form-element__control">
+                                    <apex:selectList id="HDDDriveSelect" value="{!selectedDriveList}" onchange="createFailureTypesDrive('HDD',this.id)" size="5" multiselect="true" styleClass="slds-size--1-of-1" title="Select HDD Drives">
+                                        <apex:selectOptions value="{!driveOptionsList}" ></apex:selectOptions>
+                                       <!-- <apex:actionSupport event="onchange" rerender="DriveFailurePanel,SSDDrivePanel,MemoryPanel,NicPanel" action="{!makeAssetSeletion}"/>
+                                   --> </apex:selectList>
+                                </div>
+                            </div>
+                        </apex:outputPanel>
+                        </apex:outputPanel>
+                        
+                        
+                        <apex:outputPanel id="SSDDrivePanel">
+                            <apex:outputPanel rendered="{!boolSSDDriveSerialnumber}">
+                            <div class="slds-form-element is-required slds-m-top--large">
+                                <label class="slds-form-element__label" for="inputLastName">
+                                    <abbr class="slds-required colorclass colorclass" title="required"></abbr>Select SSD Drive
+
+
+                                </label>
+                                <div class="slds-form-element__control">
+                                    <apex:selectList id="SSDDriveSelect" value="{!selectedSSDDriveList}" size="5" multiselect="true" onchange="createFailureTypesSSDDrive('SSD',this.id)" styleClass="slds-size--1-of-1" title="Select SSD Drives">
+                                        <apex:selectOptions value="{!ssdDriveOptionsList}"></apex:selectOptions>
+                                    </apex:selectList>
+                                </div>
+                            </div>
+                        </apex:outputPanel>
+                        </apex:outputPanel>
+                        
+                        <apex:outputPanel id="MemoryPanel">
+                            <apex:outputPanel rendered="{!boolMemorySerialnumber}">
+                            <div class="slds-form-element is-required slds-m-top--large">
+                                <label class="slds-form-element__label" for="inputLastName">
+                                    <abbr class="slds-required colorclass colorclass" title="required"></abbr>Select Memory
+
+
+                                </label>
+                                <div class="slds-form-element__control">
+                                    <apex:selectList id="MemorySelect" value="{!selectedMemoryList}" size="5" onchange="createFailureTypesMem('Memory',this.id)" multiselect="true" styleClass="slds-size--1-of-1" title="Select Memory">
+                                        <apex:selectOptions value="{!memoryOptionsList}"></apex:selectOptions>
+                                    </apex:selectList>
+                                </div>
+                            </div>
+                        </apex:outputPanel>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel id="CMOSBatteryPanel">
+                            <apex:outputPanel rendered="{!boolCMOSBatterySerialnumber}">
+                            <div class="slds-form-element is-required slds-m-top--large">
+                                <label class="slds-form-element__label" for="inputLastName">
+                                    <abbr class="slds-required colorclass colorclass" title="required"></abbr>Select CMOS Battery
+
+
+                                </label>
+                                <div class="slds-form-element__control">
+                                    <apex:selectList id="CMOSSelect" value="{!selectedCMOSBatteryList}" size="5" multiselect="true" styleClass="slds-size--1-of-1" title="Select Memory">
+                                        <apex:selectOptions value="{!CMOSBatteryOptionsList}"></apex:selectOptions>
+                                    </apex:selectList>
+                                </div>
+                            </div>
+                        </apex:outputPanel>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel id="NicPanel">
+                         <!--<apex:outputPanel rendered="{!boolNicSerialnumber}">
+                            <div class="slds-form-element is-required slds-m-top--large">
+                                <label class="slds-form-element__label" for="inputLastName">
+                                    <abbr class="slds-required colorclass colorclass" title="required"></abbr>Select NIC
+
+
+                                </label>
+                                <div class="slds-form-element__control">
+                                    <apex:selectList id="NICSelect" value="{!selectedNicList}" onclick="hideError(this);" size="5" multiselect="true" styleClass="slds-size--1-of-1" title="Choose a NIC">
+                                        <apex:selectOptions value="{!nicOptionsList}"></apex:selectOptions>
+                                    </apex:selectList>
+                                </div>
+                            </div>
+                        </apex:outputPanel>-->
+                        </apex:outputPanel>
+                        <apex:outputpanel >
+                         <div class="slds-form-element is-required slds-m-top--large" id="FailureLabelDiv" style="display: none;">
+                                <label class="slds-form-element__label" for="inputLastName">
+                                    <abbr class="slds-required colorclass colorclass" title="required"></abbr>
+                                    Select Failure Reasons
+                            </label>
+                            <div id="FailureDiv" class="slds-form-element__control">
+                              <div id="MemoryFailureDiv" class="slds-form-element__control inlinecss" style="display:none;"></div>
+                              <div id="NodeFailureDiv" class="slds-form-element__control inlinecss" style="display:none;"></div>
+                              <div id="DriveFailureDiv" class="slds-form-element__control inlinecss" style="display:none;"></div>
+                              <div id="SSDDriveFailureDiv" class="slds-form-element__control inlinecss" style="display:none;"></div>
+                              <div id="ChassisFailureDiv" class="slds-form-element__control inlinecss" style="display:none;"></div>
+                              <div id="PSUFailureDiv" class="slds-form-element__control inlinecss" style="display:none;"></div>
+                              <div id="ApplianceFailureDiv" class="slds-form-element__control inlinecss" style="display:none;"></div>
+                            </div>
+                          </div>
+                        </apex:outputpanel>
+                         
+                <br/>
+                
+                    <!-- <div class="slds-form-element is-required slds-m-top--large">
+                        <label class="slds-form-element__label" for="inputLastName">
+                            <abbr class="slds-required colorclass colorclass" title="required"></abbr> Level Of Service
+
+
+                        </label>
+                        <div class="slds-form-element__control">
+                            
+                        </div>
+                    </div> -->
+                    
+                <h3 class="slds-section-title--divider slds-text-align--left" style="width: 133%;margin-left: 1px !important;">Other Information</h3>
+
+                        <div class="slds-form-element is-required slds-m-top--large">
+                                <label class="slds-form-element__label" for="inputLastName">
+                                    <abbr class="slds-required colorclass colorclass" title="required"></abbr> Service Type
+
+
+                                </label>
+                                <div class="slds-form-element__control">
+                                    <apex:inputField id="Type" styleClass="slds-select form required" type="text" onkeydown="hideError(this);" onclick="hideError(this);" value="{!RMAOrder.Service_Type__c}" />
+                                </div>
+                            </div>
+                            
+                            <div class="slds-form-element is-required slds-m-top--large">
+                                <label class="slds-form-element__label" for="inputShipToName">
+                                    <abbr class="slds-required colorclass colorclass" title="required"></abbr> Ship To Contact Name
+
+
+                                </label>
+                                <div class="slds-form-element__control">
+                                    <apex:inputField id="shiptoname" styleClass="slds-select form required" type="text" onkeydown="hideError(this);" onclick="hideError(this);" value="{!RMAOrder.Ship_To_Contact_Name__c}" />
+                                </div>
+                            </div>
+                            <div class="slds-form-element is-required slds-m-top--large">
+                                <label class="slds-form-element__label" for="inputLastName">
+                                    <abbr class="slds-required colorclass colorclass" title="required"></abbr> Ship to Email
+
+
+                                </label>
+                                <div class="slds-form-element__control">
+                                    <apex:inputField id="shiptoemail" styleClass="slds-select form required email" type="text" onkeydown="hideError(this);" onclick="validateField(this);" value="{!RMAOrder.Ship_To_Email__c}" />
+                                </div>
+                            </div>
+                            
+                            <div class="slds-form-element is-required slds-m-top--large">
+                                <label class="slds-form-element__label" for="inputLastName">
+                                    <abbr class="slds-required colorclass colorclass" title="required"></abbr> Ship To Phone Number
+
+
+                                </label>
+                                <div class="slds-form-element__control">
+                                    <apex:inputField id="shiptophone" styleClass="slds-select form required phone" type="text" onkeydown="hideError(this);" onclick="hideError(this);" value="{!RMAOrder.Ship_To_Phone_Number__c}" />
+                                </div>
+                            </div>
+                            
+                         <div class="slds-form-element is-required slds-m-top--large">
+                                <label class="slds-form-element__label" for="inputLastName">
+                                    <abbr class="slds-required colorclass colorclass" title="required"></abbr>Copy Address from Account
+
+
+                                </label>
+                                <div class="slds-form-element__control">
+                                    <apex:inputCheckBox value="{!CopyAddress}">
+                                    <apex:actionSupport event="onchange" action="{!setAddress}" rerender="AddressPanel,scriptPanel"/>  </apex:inputCheckBox>
+                                </div>
+                            </div>
+                    </div>
+                </apex:outputPanel>
+
+                <apex:outputPanel id="AddressPanel" >
+                <apex:outputPanel >
+                    <div class="slds-form--horizontal formWidth">
+                    <div class="slds-form-element is-required slds-m-top--large">
+                                <label class="slds-form-element__label" for="inputLastName">
+                                    <abbr class="colorclass colorclass" title="required"></abbr>Shipping Street
+
+
+                                </label>
+                                 <div class="slds-form-element__control">
+                                    <apex:inputtext id="Street" styleClass="slds-input form required" onkeydown="hideError(this);" onclick="hideError(this);" value="{!RMAOrder.Shipping_Street__c}" />
+                                </div>
+                            </div>
+
+                            <div class="slds-form-element is-required slds-m-top--large">
+                                <label class="slds-form-element__label" for="inputLastName">
+                                    <abbr class="slds-required colorclass colorclass" title="required"></abbr>Shipping City
+
+
+                                </label>
+                                <div class="slds-form-element__control">
+                                    <apex:inputField id="city" styleClass="slds-input form required" type="text" onkeydown="hideError(this);" onclick="hideError(this);" value="{!RMAOrder.Shipping_City__c}" />
+                                </div>
+                            </div>
+                             <apex:actionFunction name="passSelectedCountry"  action="{!CompareCountries}" rerender="showSmartHandService,showSmartHand,TestDiv,datePanel" >
+                                 <apex:param name="selectedcountry" value="" />          
+                             </apex:actionFunction>
+                             
+                            <apex:outputPanel id="bob">
+
+                            </apex:outputPanel>
+                            
+
+
+                                            
+                            <div class="slds-form-element is-required slds-m-top--large">
+                                <label class="slds-form-element__label" for="inputLastName">
+                                    <abbr class="slds-required colorclass colorclass" title="required"></abbr>Shipping Country
+
+
+                                </label>
+                                <!-- added for Sf2898 start -->
+                                <div class="slds-form-element__control">
+                                    <apex:inputField id="Country" styleClass="slds-select form required" type="text" onkeydown="hideError(this);" onclick="hideError(this);" onchange="myFunction(this.value);" value="{!RMAOrder.ShippingCountry__c}" />
+                                    
+                                </div>
+                                
+                                <script>
+                                function myFunction(val) {
+                                  
+                                  var str =val;
+                                  <!--console.log('Value selected on VF page : '+str);-->
+                                  passSelectedCountry(str);
+                                }
+                                </script>
+                                
+                                
+                            </div>
+                            <!-- END -->
+
+                            <div class="slds-form-element is-required slds-m-top--large">
+                                <label class="slds-form-element__label" for="inputLastName">
+                                    <abbr class="slds-required colorclass colorclass" title="required"></abbr>Shipping State/Province
+
+
+                                </label>
+                                <!--<div id="selectList1">
+                                    <apex:inputField id="State" styleClass="slds-select slds-input required"   onkeydown="validateField(this);" onclick="validateField(this);" value="{!RMAOrder.ShippingState__c}" />
+                                </div>-->
+                                <div class="slds-form-element__control" id="selectList1">
+                                    <apex:inputField id="State" styleClass="slds-select form required" type="text" onkeydown="hideError(this);" onclick="hideError(this);" value="{!RMAOrder.ShippingState__c}" />
+                                </div>
+                            </div>
+
+                            <div class="slds-form-element is-required slds-m-top--large">
+                                <label class="slds-form-element__label" for="inputLastName">
+                                    <abbr class="slds-required colorclass colorclass" title="required"></abbr>Shipping Zip Code
+
+
+                                </label>
+                                <div class="slds-form-element__control">
+                                    <apex:inputField id="Zip" styleClass="slds-input form required" type="text" onkeydown="hideError(this);" onclick="hideError(this);" value="{!RMAOrder.Shipping_Zip_Postal_Code__c}" />
+                                </div>
+                            </div>
+                            <div class="slds-form-element is-required slds-m-top--large">
+                                <label class="slds-form-element__label" for="inputLastName">
+                                    <abbr class="slds-required colorclass colorclass" title="required"></abbr> Additional Interested Parties
+
+
+                                </label>
+                                <div class="slds-form-element__control">
+                                  
+                                  <apex:inputText value="{!RMAOrder.Additional_Interested_Parties_RMA__c}" styleClass="slds-input"  onblur="EmailValidation(this.value);" id="AdditionalEmail"/> 
+                                </div>
+                            </div>
+                            <script>
+                                function EmailValidation() {
+                                var emailAddress= document.getElementById('RMAForm:requestForm:AdditionalEmail').value ;
+                                if(!emailAddress)
+                                 {
+                                 return true;
+                                 }
+                                var patt= new RegExp('^[a-zA-Z][a-zA-Z0-9]*(?:[\.|\-|\_][a-zA-Z0-9]+)*@[rR][uU][bB][rR][iI][kK].[cC][oO][mM](?:,[a-zA-Z][a-zA-Z0-9]*(?:[\.|\-|\_][a-zA-Z0-9]+)*@[rR][uU][bB][rR][iI][kK].[cC][oO][mM])*$');
+                                console.log('Entering into EmailValidation emailAddress'+emailAddress);
+                                var flag=patt.test(emailAddress);
+                                console.log('Entering into EmailValidation flag '+flag);
+                                if(flag==false){
+                                     var thisvar = $j("input[id$='AdditionalEmail']");
+                                      $j(thisvar).css("border-color", "#8C0005");
+                                      var errorContent = "<div class='dealRError' style='right: 5.5px; margin-bottom: -34px; z-index: 100; position: relative;'><div class='dealRErrorArrowWrap' style='position: initial;'><div class='dealRErrorArrow'></div></div><div class='dealRErrorMsg'>Please Enter comma seperated Rubrik Email address(example@Rubrik.com)</div></div>";
+                                       if(! $j(thisvar).parent().find(".dealRError").length)
+                                       $j(thisvar).after($j(errorContent).fadeIn(500));
+                                       
+                                   return false;
+
+                                }
+                                return flag;
+                                
+                                                               
+                                }
+                                </script>
+
+                            
+                            </div>
+                            </apex:outputPanel>
+                </apex:outputPanel>
+                
+                <!-- Added for SF2898 start -->
+                <apex:outputPanel id="showSmartHand">
+                <apex:outputPanel rendered="{!flag == 'true'}">
+                <div class="slds-form--horizontal formWidth">
+                <div class="slds-form-element is-required slds-m-top--large">
+                <h3 class="slds-section-title--divider slds-text-align--left" style="width: 133%;margin-left: 1px !important;">Smart Hands Information</h3>
+                  <div style="padding-left:21%; text-align:left"><h2><b>{!$LAbel.RMA_SmartHandsDescription}</b></h2></div>
+
+                    <div class="slds-form-element is-required slds-m-top--large">
+                        <label class="slds-form-element__label" for="inputLastName">
+                            <abbr class="slds-required colorclass colorclass" title="required"></abbr> Entitled for Smart Hands Service
+                        </label>
+                        <div class="slds-form-element__control">
+                            <!--<input id="smarthand" value="{!smartHandQualified}" type="checkbox" readonly="true" />-->
+                            <apex:inputCheckbox id="smarthand" value="{!smartHandQualified}" immediate="true" onclick="return false"/>
+                        </div>
+                    </div>
+                    <apex:outputPanel id="showSmartHandService">
+                     <div class="slds-form-element is-required slds-m-top--large">
+                        <label class="slds-form-element__label" for="inputLastName">
+                            <abbr class="slds-required colorclass colorclass" title="required"></abbr> Send Smart Hand Service?
+                        </label>
+                        <div class="slds-form-element__control">
+                            <apex:inputCheckbox id="smarthandrequested" value="{!smartHandRequested}">
+                                <apex:actionSupport event="onchange" rerender="datePanel" />
+                            </apex:inputcheckbox>
+                        </div>
+                    </div>
+                    </apex:outputPanel>
+                    </div>
+                    </div>
+                    </apex:outputPanel>
+                    </apex:outputPanel>
+                    <apex:outputPanel id="TestDiv">
+                    <apex:outputPanel rendered="{!flag == 'false'}">
+                    <div class="slds-form--horizontal formWidth">
+                    <div class="slds-form-element is-required slds-m-top--large">
+                        <h3 class="slds-section-title--divider slds-text-align--left" style="width: 133%;margin-left: 1px !important;">Smart Hands Information</h3>
+                        <div style="padding-left:21%; text-align:left"><h2><b> Note: This Country Is Not Eligible For Smart Hands.</b></h2></div>
+                    </div>
+                     </div>
+                    </apex:outputPanel>
+                    </apex:outputPanel>
+                    <!--End-->
+                    
+                    <apex:outputPanel id="datePanel">
+                    <apex:outputPanel id="smartHandsDatePanel" rendered="{! AND(flag == 'true',smartHandRequested == true)}">
+                    <div class="slds-form--horizontal formWidth">
+                    <div class="slds-form-element is-required slds-m-top--large">
+                        <span><label class="slds-form-element__label" for="inputLastName">
+                            <abbr class="slds-required colorclass colorclass" title="required"></abbr> Date of Smart Hands Arrival
+                        </label>
+                        <div class="tooltip">
+                        <apex:image url="{!$Resource.HelpTextIcon}" width="20" height="20" Styleclass="tooltip"/>
+                        <span class="tooltiptext">{!$Label.RMA_ArrivalDateHelpText}</span>
+                        </div>
+                        </span>
+                        <apex:actionFunction name="setdateValue"  action="{!setsmartHandDate}" rerender="bob" >
+                                 <apex:param id="dateValue" name="dateValue" value="" />          
+                        </apex:actionFunction>
+                        <script>
+                      $(document).ready(function () {
+                             var myclass =$("#arrivalDate");
+                             console.log(' IN function');
+                             console.log('test Div',myclass);
+                             var currentdate= "{!timezoneDate}";
+                             var convertedDate= new Date(currentdate);
+                             convertedDate.setDate(convertedDate.getDate() + 1);
+                             console.log('currentdate',currentdate);
+                             console.log('convertedDate',convertedDate);
+                            $("#arrivalDate").datepicker({
+                                dateFormat: 'mm/dd/yy',   
+                                beforeShowDay: $.datepicker.noWeekends,
+                                minDate: new Date(convertedDate)
+                            });
+                        });
+                        </script>
+                        <script>
+                          function setVal() {
+                          var dateval =document.getElementById("arrivalDate").value;
+                          console.log('date Value',dateval);
+                          setdateValue(dateval);
+                          console.log('calling SetVal');
+                        
+                            }
+            </script>
+                        <div class="slds-form-element__control">
+                                <!-- <apex:inputField value="{!RMAOrder.Smart_Hands_Date__c}" /> -->
+                                <!-- <apex:inputText id="selected_date" onclick="DatePicker.pickDate(true, this, false);"  
+                                value="{!RMAOrder.Smart_Hands_Date__c}" size="10" style="width:70px;"/>
+                                <apex:input type="date" value="{!startDate}" required="true" />
+                                <apex:input type="date" id="arrivalDate"  type="date" value="{!RMAOrder.Smart_Hands_Date__c}" size="10" />
+                             <apex:inputField id="arrivalDate" onfocus="DatePicker.pickDate(false, this , false);" value="{!RMAOrder.Smart_Hands_Date__c}"/>  
+                           --> 
+                           <!--<apex:inputField id="arrivalDate" styleClass="slds-input form required"  value="{!RMAOrder.Date_of_Smart_Hands_Arrival__c}" onkeydown="hideError(this);" onclick="hideError(this);" /> -->
+                           <input readonly="true" type="text" class="slds-input form required" onChange="setVal();" id="arrivalDate"  />
+                            </div>
+                    </div>
+                    <div class="slds-form-element is-required slds-m-top--large">
+                        <label class="slds-form-element__label" for="inputLastName">
+                            <abbr class="slds-required colorclass colorclass" title="required"></abbr> Time of Smart Hands Tech Arrival
+                            
+
+                        </label>
+                        <div class="slds-form-element__control">
+                               <apex:inputField id="arrivalTime" styleClass="slds-input form required"  value="{!RMAOrder.Time_of_Smart_Hands_Tech_Arrival__c}" />
+                            </div>
+                    </div>
+                    </div>
+                  </apex:outputPanel>
+                  </apex:outputPanel>
+                            
+                 <br/>
+                
+                
+                <div class="slds-text-align--center slds-m-top--small">
+                      <apex:commandButton value="Cancel" onclick="closeSubTab();" styleClass="slds-button slds-button--neutral" rendered="{!OR($User.UIThemeDisplayed == 'Theme2', $User.UIThemeDisplayed == 'Theme3')}"/>
+                      <apex:commandButton value="Cancel" action="{!cancel}" styleClass="slds-button slds-button--neutral" rendered="{!AND($User.UIThemeDisplayed != 'Theme2', $User.UIThemeDisplayed != 'Theme3')}"/>
+                        <!-- <button class="slds-button slds-button--neutral" onclick="history.go(-1);">Cancel</button> -->
+                        <!--<button class="slds-button slds-button--brand" onclick="validateData();$j('#button1').click(function(e){ e.preventDefault()}); validateOnSaveClick(); return false;">Save</button>-->
+                        <button class="slds-button slds-button--brand saveRecordButton"  onclick="submitRMAOnClick(this);return false;">Save</button>
+
+                    </div>
+                    
+                <!--<apex:actionFunction name="validateRecord"  action="{!getEntitlementStatus}" immediate="true" reRender="successMsgPanel,duplicateConMessageDiv,scriptPanel" oncomplete="alert('done');"/>-->
+                <apex:actionStatus id="saveStatus">
+                    <apex:facet name="start">
+                        <apex:outputPanel >&nbsp;
+                        <img src="/img/loading.gif" />
+                        &nbsp;Saving...</apex:outputPanel>
+                    </apex:facet>
+                    <apex:facet name="stop">
+                        <apex:image value="{!URLFOR('/s.gif')}" alt="" style="height:17px;" />
+                    </apex:facet>
+               </apex:actionStatus> 
+                <apex:outputpanel >
+                <apex:actionstatus id="actStatusId">
+                <apex:facet name="start">
+                <div class="waitingSearchDiv" id="el_loading" style="background-color: #DCD6D6; height: 100%;opacity:0.65;width:100%;">
+                <div class="waitingHolder" style="top: 74.2px; width: 91px;">
+                <img class="waitingImage" src="/img/loading.gif"     title="Please Wait..." />
+                <span class="waitingDescription">Saving...</span>
+                </div>
+                </div>
+                </apex:facet>
+                </apex:actionstatus>
+                </apex:outputpanel>
+                <apex:actionFunction name="saveRecordtoServer"  action="{!saveRMA}" reRender="successMsgPanel,duplicateConMessageDiv,duplicateConMessageDivPanel" oncomplete="showMessageonSave();" status="saveStatus"> 
+
+                <apex:param id="aname" name="jsonMapFailureReasonsSelection" value="" />
+                <apex:param id="Othername" name="jsonMapFailureOtherReasonsSelection" value="" />
+              </apex:actionFunction>
+                
+            </div>
+  <script>
+  $j(function () {
+    $j('input').blur();
+});
+    var button ;
+    var validatebutton ;
+  function submitRMAOnClick (objSubmitBtn) {
+                  console.log('objSubmitBtn'+objSubmitBtn);
+                  button=objSubmitBtn;
+                        objSubmitBtn.disabled = true;
+                        objSubmitBtn.value = 'Saving...';
+                        var emailValResult = EmailValidation();
+                        if(emailValResult == true){
+                        var result =validateData();
+                        }
+                        
+                        if(!isValid) {
+                         //console.log('validate failed'+result);
+                          objSubmitBtn.disabled = false;
+                          objSubmitBtn.value = 'Save';
+                        }
+                      }
+  </script>
+  <apex:outputPanel id="scriptPanel">
+  <script>
+  /*function createDynamicFailureList(type,selectCompList){
+    document.getElementById("FailureDiv").innerHTML = "";
+    var myDiv = document.getElementById("FailureDiv");
+    console.log('value selectCompList=='+selectCompList);
+    console.log('value tyep=='+type);
+    //Create array of options to be added
+    var array = ["Volvo","Saab","Mercades","Audi"];
+    selectCompList = ["123","1234","12345","123456"];
+    console.log('value selectCompList=='+selectCompList);
+    for(var i=0; i<selectCompList.length; i++){
+        //Create and append select list
+        var divList = document.createElement("div");
+        divList.setAttribute("id", selectCompList[i]+'_div');
+        var selectList = document.createElement("select");
+        selectList.setAttribute("id", selectCompList[i]);
+        divList.appendChild(selectList);
+        console.log('value count=='+selectList);
+        console.log('value div=='+myDiv);
+        //Create and append the options
+        for (var i = 0; i < array.length; i++) {
+        var option = document.createElement("option");
+        option.setAttribute("value", array[i]);
+        option.text = array[i];
+        selectList.appendChild(option);
+        }
+        myDiv.appendChild(divList);
+    }
+  }*/
+  var smartHandsAssetMap = JSON.parse('{!jsonMapSmartHandAsset}');
+        console.log('mapSmartHandCheck=='+JSON.stringify(smartHandsAssetMap));
+        var smartHandAvailable;
+  function createFailureTypesMem(type, selectid){
+    var element = document.getElementById(selectid);
+    var text = element.options[element.selectedIndex].value;
+    if(text != 'Other'){
+        document.getElementById("FailureLabelDiv").style.display = "block";
+        document.getElementById("MemoryFailureDiv").style.display = "block";
+        var myDiv = document.getElementById("MemoryFailureDiv");
+        var failureMap = JSON.parse('{!jsonMapFailureReasons}');
+        console.log('==failureMap ==='+JSON.stringify(failureMap));
+        var fails = '';
+        var selects = document.getElementById(selectid);
+
+        fails = failureMap.Memory.split(';');  
+        
+        createFailureOptions(type,myDiv ,fails, selectid, 'MemoryFailureDiv');
+    }
+    else {
+        document.getElementById('RMAForm:requestForm:hiddenValue').value = false;
+        document.getElementById("FailureLabelDiv").style.display = "none";
+        document.getElementById("MemoryFailureDiv").style.display = "none";
+    }
+  }
+  function createFailureTypesChassis(type, selectid){
+    var element = document.getElementById(selectid);
+    var text = element.options[element.selectedIndex].value;
+    if(text != 'Other'){
+    document.getElementById("FailureLabelDiv").style.display = "block";
+    document.getElementById("ChassisFailureDiv").style.display = "block";
+    var myDiv = document.getElementById("ChassisFailureDiv");
+    var failureMap = JSON.parse('{!jsonMapFailureReasons}');
+    console.log('==failureMap ==='+JSON.stringify(failureMap));
+    var fails = '';
+    var selects = document.getElementById(selectid);
+
+    fails = failureMap.Chassis.split(';');  
+    
+    createFailureOptions(type,myDiv ,fails, selectid, 'ChassisFailureDiv');
+    }
+    else {
+        document.getElementById('RMAForm:requestForm:hiddenValue').value = false;
+        document.getElementById("FailureLabelDiv").style.display = "none";
+        document.getElementById("ChassisFailureDiv").style.display = "none";
+    }
+  }
+  function createFailureTypesAppliance(type, selectid){
+    var element = document.getElementById(selectid);
+    var text = element.options[element.selectedIndex].value;
+    if(text != 'Other'){
+        document.getElementById("FailureLabelDiv").style.display = "block";
+        document.getElementById("ApplianceFailureDiv").style.display = "block";
+        var myDiv = document.getElementById("ApplianceFailureDiv");
+        var failureMap = JSON.parse('{!jsonMapFailureReasons}');
+        console.log('==failureMap ==='+JSON.stringify(failureMap));
+        var fails = '';
+        var selects = document.getElementById(selectid);
+
+        fails = failureMap.Appliance.split(';');  
+        
+        createFailureOptions(type,myDiv ,fails, selectid, 'ApplianceFailureDiv');
+    }
+    else {
+        document.getElementById('RMAForm:requestForm:hiddenValue').value = false;
+        document.getElementById("FailureLabelDiv").style.display = "none";
+        document.getElementById("ApplianceFailureDiv").style.display = "none";
+    }
+  }
+  function createFailureTypesDrive(type, selectid){
+    var element = document.getElementById(selectid);
+    var text = element.options[element.selectedIndex].value;
+    console.log('drive text--'+text);
+    console.log('drive element--'+element);
+    if(text != 'Other'){
+        document.getElementById("FailureLabelDiv").style.display = "block";
+        document.getElementById("DriveFailureDiv").style.display = "block";
+        var myDiv = document.getElementById("DriveFailureDiv");
+        var failureMap = JSON.parse('{!jsonMapFailureReasons}');
+        console.log('==failureMap ==='+JSON.stringify(failureMap));
+        var fails = '';
+        var selects = document.getElementById(selectid);
+
+        fails = failureMap.HDD.split(';');  
+        
+        createFailureOptions(type,myDiv ,fails, selectid, 'DriveFailureDiv');
+    }
+    else {
+        // console.log('in else'+text);
+        // document.getElementById('DriveFailureDiv').innerHTML = '';
+        // document.getElementById('RMAForm:requestForm:hiddenValue').value = false;
+        // document.getElementById("FailureLabelDiv").style.display = "none";
+        // document.getElementById("DriveFailureDiv").style.display = "none";
+        // smartHandAvailable = false;
+        // document.getElementById('RMAForm:requestForm:smarthand').checked = smartHandAvailable;
+        // console.log('in else after'+document.getElementById('RMAForm:requestForm:hiddenValue').value);
+        revertSmartHansOnOtherSelection('DriveFailureDiv');
+    }
+  }
+  function createFailureTypesSSDDrive(type, selectid){
+    var element = document.getElementById(selectid);
+    var text = element.options[element.selectedIndex].value;
+    console.log('drive text--'+text);
+    console.log('drive element--'+element);
+    if(text != 'Other'){
+        document.getElementById("FailureLabelDiv").style.display = "block";
+        document.getElementById("SSDDriveFailureDiv").style.display = "block";
+        var myDiv = document.getElementById("SSDDriveFailureDiv");
+        var failureMap = JSON.parse('{!jsonMapFailureReasons}');
+        console.log('==failureMap ==='+JSON.stringify(failureMap));
+        var fails = '';
+        var selects = document.getElementById(selectid);
+
+        fails = failureMap.HDD.split(';');  
+        
+        createFailureOptions(type,myDiv ,fails, selectid, 'SSDDriveFailureDiv');
+    }
+    else {
+        
+        revertSmartHansOnOtherSelection('SSDDriveFailureDiv');
+    }
+  }
+  function revertSmartHansOnOtherSelection(divId) {
+        console.log('in else'+divId);
+        document.getElementById(divId).innerHTML = '';
+        document.getElementById('RMAForm:requestForm:hiddenValue').value = false;
+        document.getElementById("FailureLabelDiv").style.display = "none";
+        document.getElementById(divId).style.display = "none";
+        smartHandAvailable = false;
+        document.getElementById('RMAForm:requestForm:smarthand').checked = smartHandAvailable;
+        document.getElementById('RMAForm:requestForm:smarthand').value = smartHandAvailable;
+        console.log('in else after'+document.getElementById('RMAForm:requestForm:hiddenValue').value);
+  }
+  function createFailureTypesNode(type, selectid){
+    var element = document.getElementById(selectid);
+    var text = element.options[element.selectedIndex].value;
+    if(text != 'Other'){
+        document.getElementById("FailureLabelDiv").style.display = "block";
+        document.getElementById("NodeFailureDiv").style.display = "block";
+        var myDiv = document.getElementById("NodeFailureDiv");
+        var failureMap = JSON.parse('{!jsonMapFailureReasons}');
+        console.log('==failureMap ==='+JSON.stringify(failureMap));
+        var fails = '';
+        var selects = document.getElementById(selectid);
+
+        fails = failureMap.Node.split(';');  
+        
+        createFailureOptions(type,myDiv ,fails, selectid, 'NodeFailureDiv');
+    }
+    else {
+        document.getElementById('RMAForm:requestForm:hiddenValue').value = false;
+        document.getElementById("FailureLabelDiv").style.display = "none";
+        document.getElementById("NodeFailureDiv").style.display = "none";
+    }
+  }
+  function createFailureTypesPSU(type, selectid){
+    var element = document.getElementById(selectid);
+    var text = element.options[element.selectedIndex].value;
+    if(text != 'Other'){
+        document.getElementById("FailureLabelDiv").style.display = "block";
+        document.getElementById("PSUFailureDiv").style.display = "block";
+        var myDiv = document.getElementById("PSUFailureDiv");
+        var failureMap = JSON.parse('{!jsonMapFailureReasons}');
+        console.log('==failureMap ==='+JSON.stringify(failureMap));
+        var fails = '';
+        var selects = document.getElementById(selectid);
+
+        fails = failureMap.PSU.split(';');  
+        
+        createFailureOptions(type,myDiv ,fails, selectid, 'PSUFailureDiv');
+    }
+    else {
+        document.getElementById('RMAForm:requestForm:hiddenValue').value = false;
+        document.getElementById("FailureLabelDiv").style.display = "none";
+        document.getElementById("PSUFailureDiv").style.display = "none";
+    }
+  }
+  function toggleSelect(selId){
+    console.log('selId=='+selId);
+    console.log('22222==');
+    var selOtherDiv =document.getElementById(selId.id+'_otherDiv');
+    
+    console.log('selOtherDiv=='+selOtherDiv);
+    if( selOtherDiv != null){
+      console.log(' inside selOtherDiv=='+selOtherDiv);
+      $j('#'+selId.id+'_otherDiv').remove();
+      $j('#'+selId.id).find('br.brclass').remove();
+      console.log(' after selOtherDiv=='+selOtherDiv);
+      
+  }
+  var divElement ='';
+    var strSelectedValue = selId.options[selId.selectedIndex].value;
+    console.log('strSelectedValue =='+strSelectedValue);
+    if(strSelectedValue =='Other'){
+       var otherText = document.createElement('textarea');
+      console.log('selId.id =='+selId.id);
+       otherText.setAttribute("id", selId.id+"_otherDiv");
+       otherText.setAttribute('class', 'slds-input form required');
+      // selId.options[selId.selectedIndex].value='Other';
+      // //selId.selectedIndex = "Other";
+      // //console.log('typeFailureDiv =='+selectDivId);
+       divElement = document.getElementById(selId.id);
+       //console.log('divElement =='+divElement.innerHTML);
+       //divElement.append('<br/>');
+       divElement.append(otherText);
+       var brtag =document.createElement('br')
+       brtag.setAttribute("class", 'brclass');
+       divElement.append(brtag);
+       //console.log('divElement 222=='+divElement.innerHTML);
+       //divElement.appendChild(otherText);
+       //console.log('selId 222=='+selId.innerHTML);
+
+      // $j("#selId.id option[text=" + strSelectedValue +"]").attr("selected","selected");
+      //divElement.innerHTML += '<br/><br/>';
+      console.log('in other');
+      //return false;
+    }
+    else{
+       divElement.innerHTML += '<br/><br/>';
+    }
+  }
+  
+  function createFailureOptions(type, myDiv, failsTypes, selectid, selectDivId){
+    console.log('==type div==='+myDiv);
+    if(myDiv != null)
+    myDiv.innerHTML = "";
+    console.log('==inside ==='+myDiv);
+    
+    
+    var selects = document.getElementById(selectid);
+     fails = failsTypes; 
+
+    console.log('==fails ==='+fails);
+    var result = [];
+      var options = selects && selects.options;
+      var opt;
+
+      for (var i=0, iLen=options.length; i<iLen; i++) {
+        opt = options[i];
+
+        if (opt.selected) {
+          result.push(opt.value || opt.text);
+        }
+      }
+    console.log('==selectedDriveList type==='+result);
+    // var matching  = smartHandsAssetMap[result];
+    // console.log('==matching ==='+matching);
+    
+    
+    var sNumbers = result;
+    var allbools =[];
+for (var c in sNumbers) {
+    console.log('==[c]==='+sNumbers[c]);
+    console.log('==smartHandsAssetMap ==='+smartHandsAssetMap);
+    console.log('==smartHandsAssetMap[c]==='+smartHandsAssetMap[sNumbers[c]]);
+    allbools.push(smartHandsAssetMap[sNumbers[c]]);
+    console.log('==allbools==='+allbools);
+    var newElement = document.createElement('div');
+    
+    newElement.id = sNumbers[c]; newElement.className = "slds-size--1-of-1 inlinecss";
+    var selectList = document.createElement('select');
+    selectList.setAttribute("id", sNumbers[c]);
+    for(var m in fails){
+    var options = document.createElement('option');
+    options.text = fails[m];
+    options.value = fails[m];
+    selectList.appendChild(options);
+    }
+    console.log('type=='+type);
+    console.log('selectDivId=='+selectDivId);
+    /*if(selectDivId == 'DriveFailureDiv'){
+        selectList.setAttribute("onchange", "toggleSelect(this,'DriveFailureDiv')");
+    }
+    if(selectDivId == 'MemoryFailureDiv'){
+        selectList.setAttribute("onchange", "toggleSelect(this,'MemoryFailureDiv')");
+    }
+    if(selectDivId == 'NodeFailureDiv'){
+        selectList.setAttribute("onchange", "toggleSelect(this,'NodeFailureDiv')");
+    }
+    if(selectDivId == 'PSUFailureDiv'){
+        selectList.setAttribute("onchange", "toggleSelect(this,'PSUFailureDiv')");
+    }
+    if(selectDivId == 'ApplianceFailureDiv'){
+        selectList.setAttribute("onchange", "toggleSelect(this,'ApplianceFailureDiv')");
+    }
+    if(selectDivId == 'ChassisFailureDiv'){
+        selectList.setAttribute("onchange", "toggleSelect(this,'ChassisFailureDiv')");
+    }*/
+    //selectList.onchange=toggleSelect.bind( selectList, selectDivId);
+    //selectList.setAttribute("onchange", "toggleSelect(this,selectDivId)");
+    console.log('toggleSelect'+JSON.stringify(selectList));
+    console.log('value count==');
+    selectList.setAttribute("onchange", "toggleSelect(this)");
+    var childDiv = document.createElement('h1');
+    childDiv.innerHTML = sNumbers[c];
+    newElement.appendChild(childDiv);
+    newElement.innerHTML += '&nbsp;&nbsp;&nbsp;';
+    newElement.appendChild(selectList);
+    newElement.innerHTML += '<br/><br/>';
+    myDiv.appendChild(newElement);
+    
+    console.log('end');
+
+  }
+
+  var boolCheck = function(element) {
+  // checks whether an element is even
+  return element  === true;
+};
+console.log('allbools'+allbools);
+console.log('allbools.some(boolCheck)--'+allbools.some(boolCheck));
+if(document.getElementById('RMAForm:requestForm:smarthand') != undefined){
+    document.getElementById('RMAForm:requestForm:smarthand').checked = allbools.every(boolCheck);
+}
+document.getElementById('RMAForm:requestForm:hiddenValue').value = allbools.every(boolCheck);
+console.log('hidden value 11--'+document.getElementById('RMAForm:requestForm:hiddenValue').value);
+smartHandAvailable = allbools.every(boolCheck);
+console.log('smartHandAvailable---'+smartHandAvailable);
+
+//   if(allbools.some(boolCheck)) {
+//         document.getElementById('RMAForm:requestForm:smarthand').checked = false;
+//     }
+//     else {
+//         document.getElementById('RMAForm:requestForm:smarthand').checked = true;
+//     }
+  } 
+  
+
+  /*function createFailureTypes(type, selectid){
+  
+    document.getElementById("FailureLabelDiv").style.display = "block";
+    document.getElementById("FailureDiv").innerHTML = "";
+    var myDiv = document.getElementById("FailureDiv");
+    //var selects = document.getElementById(selectid);;
+    var failureMap = JSON.parse('{!jsonMapFailureReasons}');
+    console.log('==failureMap ==='+JSON.stringify(failureMap));
+    var fails = '';
+    var selectArray =[];
+    console.log('==bool dr ==='+{!boolDriveQuantity});
+    console.log('==bool m==='+{!boolMemoryQuantity});
+    console.log('==bool p==='+{!boolPSupplyQuantity});
+    console.log('==bool n==='+{!boolNodeQuantity});
+    console.log('==bool a==='+{!boolApplianceQuantity});
+    console.log('==bool c==='+{!boolChassisQuantity});
+    if(true =={!boolDriveQuantity}){
+        var selectsId = document.getElementById("RMAForm:requestForm:HDDDriveSelect");
+        console.log('==Com1 ===');
+        selectArray.push(selectsId);
+    }
+    if(true =={!boolMemoryQuantity}){
+      var selectsId = document.getElementById("RMAForm:requestForm:MemorySelect");
+      console.log('==Com2===');
+      selectArray.push(selectsId);
+    }
+    if(true =={!boolPSupplyQuantity}){
+        var selectsId = document.getElementById("RMAForm:requestForm:PSUSelect");
+        console.log('==Com3 ===');
+       selectArray.push(selectsId);
+     }
+    if(true =={!boolApplianceQuantity}){
+        var selectsId =  document.getElementById("RMAForm:requestForm:AppliancePanel"); 
+        console.log('==Com4 ===');
+        selectArray.push(selectsId);  
+    }
+    if(true =={!boolNodeQuantity}){
+        var selectsId =  document.getElementById("RMAForm:requestForm:NodeSelectParent");
+        console.log('==Com5 ===');
+        selectArray.push(selectsId);  
+    }
+    if(true =={!boolChassisQuantity}){
+        var selectsId =  document.getElementById("RMAForm:requestForm:ChasisSelect");
+        console.log('==Com6 ===');
+        selectArray.push(selectsId);
+    }
+    console.log('selectArray'+selectArray);
+    
+    if(type =='HDD')
+        //selects = document.getElementById("RMAForm:requestForm:HDDDriveSelect");
+        {fails = failureMap.HDD.split(';');
+          var map = new Object(); // or var map = {};
+          map['HDD'] = fails;
+        }
+    else if(type =='Memory')
+        //selects = document.getElementById("RMAForm:requestForm:MemorySelect");
+        {fails = failureMap.Memory.split(';');
+        var map = new Object(); // or var map = {};
+          map['Memory'] = fails;
+        }
+    else if(type =='PSU')
+        //selects = document.getElementById("RMAForm:requestForm:PSUSelect");
+       {fails = failureMap.PSU.split(';');
+       var map = new Object(); // or var map = {};
+          map['PSU'] = fails;
+        }
+    else if(type =='Appliance')
+        //selects = document.getElementById("RMAForm:requestForm:AppliancePanel"); 
+        {fails = failureMap.Appliance.split(';');  
+        var map = new Object(); // or var map = {};
+          map['Appliance'] = fails;
+        } 
+    else if(type =='Node')
+        //selects = document.getElementById("RMAForm:requestForm:NodeSelect");
+        {fails = failureMap.Node.split(';');  
+        var map = new Object(); // or var map = {};
+          map['Node'] = fails;
+        }
+
+    else if(type =='Chassis')
+        //selects = document.getElementById("RMAForm:requestForm:ChasisSelect");
+        {fails = failureMap.Chassis.split(';');  
+        var map = new Object(); // or var map = {};
+          map['Chassis'] = fails;
+        }   
+    
+    
+    console.log('==fails ==='+fails);
+    var result = [];
+    for(var selects in selectArray ){
+      var options = selectArray[selects] && selectArray[selects].options;
+      var opt;
+
+      for (var i=0, iLen=options.length; i<iLen; i++) {
+        opt = options[i];
+
+        if (opt.selected) {
+          result.push(opt.value || opt.text);
+        }
+      }
+    }
+    console.log('==selectedDriveList type==='+result);
+    
+    var sNumbers = result;
+    for (var c in sNumbers) {
+    var newElement = document.createElement('div');
+    newElement.id = sNumbers[c]; newElement.className = "slds-size--1-of-1 inlinecss";
+    var selectList = document.createElement('select');
+    selectList.setAttribute("id", sNumbers[c]);
+    for(var m in map[type]){
+    var options = document.createElement('option');
+    options.text = fails[m];
+    options.value = fails[m];
+    selectList.appendChild(options);
+    }
+    console.log('value count==');
+    
+    var childDiv = document.createElement('h1');
+    childDiv.innerHTML = sNumbers[c];
+    newElement.appendChild(childDiv);
+    newElement.innerHTML += '&nbsp;&nbsp;&nbsp;';
+    newElement.appendChild(selectList);
+    newElement.innerHTML += '<br/><br/>';
+    myDiv.appendChild(newElement);
+}
+
+  }
+  */
+  //onClick="SubmitCCROnClick(this);"
+ var map = new Object();
+ var otherTextmap = new Object();
+ function saveRecord(){
+     console.log('save record');
+     //$j(".saveRecordButton").prop('disabled', true);
+     $j('.spinner').show();
+     var isValid1 = validateComponentSelection();
+     var isValid2 =  validateApplianceQuantity();
+     var isValid3 =  validateChassisQuantity();
+     //var isValid4 =  validateNICQuantity();
+     var isValid5 =  validateDriveQuantity();
+     var isValid6 =  validatePSUQuantity() ;
+     var isValid7 = validateNodeQuantity();
+     var isValid8 = validateMemoryQuantity();
+     var isValid9 = validateSSDDriveQuantity();
+     //var isValid10 = showMessageonSave();
+
+     console.log('isValid1=='+ isValid1);
+     console.log('isValid2=='+ isValid2);
+     console.log('isValid31=='+ isValid3);
+     //console.log('isValid4=='+ isValid4);
+     console.log('isValid5=='+ isValid5);
+     console.log('isValid6=='+ isValid6);
+     console.log('isValid7=='+ isValid7);
+     console.log('isValid8=='+ isValid8);
+     //console.log('isValid9=='+ isValid9);
+
+        if(isValid1 && isValid2 && isValid3 && isValid5 && isValid6 && isValid7 && isValid8 && isValid9)//&& isValid4 )
+         {
+          var map = new Object(); // or var map = {};
+          $j("#FailureDiv").find("select").each(function (){
+            console.log('test----');
+            var getValue=$j(this).val();
+            map[$j(this).attr('id')] = getValue;
+          });
+          var otherTextmap = new Object(); // or var map = {};
+          $j("#FailureDiv").find("textarea").each(function (){
+            console.log('test----');
+            var getValue=$j(this).val();
+            var parseId = $j(this).attr('id').split('_');
+            var sNo = parseId[0];
+            otherTextmap[sNo] = getValue;
+          });
+          console.log('map=='+JSON.stringify(map));
+          console.log('map=='+JSON.stringify(otherTextmap));
+          saveRecordtoServer(JSON.stringify(map),JSON.stringify(otherTextmap));
+          console.log('called');
+         }
+         else{
+             button.disabled = false;
+         }
+         
+
+ }
+ function validateComment(validateBtn){
+  var boolVal = false;
+  validatebutton =validateBtn;
+  validatebutton.disabled =true;
+  console.log('in validate');
+  console.log('in validate'+$j("textarea[id$='Comment']").html());
+  console.log('Element'+document.getElementById("RMAForm:requestForm:Comment"));
+  console.log('Element2'+document.getElementById("RMAForm:requestForm:Comment").value);
+  if($j("textarea[id$='Comment']").val() == ''){
+  //if(document.getElementById("RMAForm:requestForm:Comment").value ==''){
+   console.log('in validate if');
+     var thisvar = $j("textarea[id$='Comment']");
+     //console.log('records componentSelect ==='+ $j("textarea[id$='Comment']").val());
+              $j(thisvar).css("border-color", "#8C0005");
+                var errorContent = "<div class='dealRError' style='right: 5.5px; margin-bottom: -34px; z-index: 100; position: relative;'><div class='dealRErrorArrowWrap' style='position: initial;'><div class='dealRErrorArrow'></div></div><div class='dealRErrorMsg'>Please enter Comment</div></div>";
+                   if(! $j(thisvar).parent().find(".dealRError").length)
+                   $j(thisvar).after($j(errorContent).fadeIn(500));
+             boolVal = false;
+             //$j('#duplicateConMessageDiv').hide();
+             validatebutton.disabled =false;
+             return false;
+     }
+     else{
+     console.log('in validate else111');
+         //document.getElementById("RMAForm:requestForm:Comment");   // 
+         var thisvar = $j("textarea[id$='Comment']");
+             console.log('in validate else222');
+              $j(thisvar).css("border-color", "#aeb0b6");
+             //alert('success');
+             console.log('in validate else333');
+             boolVal = true;
+             var issuccess = saveRecordtoServer(JSON.stringify(map),JSON.stringify(otherTextmap)); //saveRecord(); //saveRecordtoServer();
+             var sPageURL = decodeURIComponent(window.location.search.substring(1));
+             console.log('in validate else444'+sPageURL);
+             return true;
+     }
+     console.log('boolVal =='+boolVal)
+     if(boolVal){
+      
+      
+      }
+ }
+ function validateComponentSelection(){
+    var errorContent ;
+
+     if($j("select[id$='componentSelect'] :selected").length == 0){
+     var thisvar = $j("select[id$='componentSelect']");
+     console.log('records componentSelect ==='+ $j("select[id$='componentSelect'] :selected").length);
+              $j(thisvar).css("border-color", "#8C0005");
+                var errorContent = "<div class='dealRError' style='right: 5.5px; margin-bottom: -34px; z-index: 100; position: relative;'><div class='dealRErrorArrowWrap' style='position: initial;'><div class='dealRErrorArrow'></div></div><div class='dealRErrorMsg'>Please Select at least one Component</div></div>";
+                   if(! $j(thisvar).parent().find(".dealRError").length)
+                   $j(thisvar).after($j(errorContent).fadeIn(500));
+             return false;
+     }
+     else{
+         var thisvar = $j("input[id$='componentSelect']");
+              $j(thisvar).css("border-color", "#aeb0b6");
+             //alert('success');
+             return true;
+     }
+ }
+ function validateApplianceQuantity() {
+      console.log('{!boolApplianceQuantity}');
+      var errorContent ;
+         if({!boolApplianceQuantity} == true){
+         console.log('records ==='+ $j("select[id$='AppliancePanelParent'] :selected").length);
+          console.log('records ==='+$j("input[id$='AppliancePanelParent']").val());
+            if($j("select[id$='AppliancePanelParent'] :selected").val() !='Other' && $j("select[id$='AppliancePanelParent'] :selected").length != $j("input[id$='ApplianceQuantity']").val()){
+             //alert('Quatity not euals to selected Serial Numbers');
+             var thisvar = $j("input[id$='ApplianceQuantity']");
+              $j(thisvar).css("border-color", "#8C0005");
+                var errorContent = "<div class='dealRError' style='right: 5.5px; margin-bottom: -34px; z-index: 100; position: relative;'><div class='dealRErrorArrowWrap' style='position: initial;'><div class='dealRErrorArrow'></div></div><div class='dealRErrorMsg'>Entered Quantity not equal to selected Serial Numbers</div></div>";
+                   if(! $j(thisvar).parent().find(".dealRError").length)
+                   $j(thisvar).after($j(errorContent).fadeIn(500));
+             return false;
+            }
+            else{
+             return true;
+            }
+
+
+         }else{
+             var thisvar = $j("input[id$='ApplianceQuantity']");
+              $j(thisvar).css("border-color", "#aeb0b6");
+             //alert('success');
+             return true;
+         }
+
+
+
+     }
+     function validateChassisQuantity() {
+      console.log('{!boolChassisQuantity}');
+      var errorContent ;
+         if({!boolChassisQuantity} == true){
+         console.log('records ==='+ $j("select[id$='ChasisSelect'] :selected").length);
+          console.log('records ==='+$j("input[id$='ChassisQuantity']").val());
+            if($j("select[id$='ChasisSelect'] :selected").val() !='Other' && $j("select[id$='ChasisSelect'] :selected").length != $j("input[id$='ChassisQuantity']").val()){
+             var thisvar = $j("input[id$='ChassisQuantity']");
+              $j(thisvar).css("border-color", "#8C0005");
+                var errorContent = "<div class='dealRError' style='right: 5.5px; margin-bottom: -34px; z-index: 100; position: relative;'><div class='dealRErrorArrowWrap' style='position: initial;'><div class='dealRErrorArrow'></div></div><div class='dealRErrorMsg'>Entered Quantity not equal to selected Serial Numbers</div></div>";
+                   if(! $j(thisvar).parent().find(".dealRError").length)
+                   $j(thisvar).after($j(errorContent).fadeIn(500));
+             return false;
+            }
+            else{
+             return true;
+            }
+
+         }
+         else{
+         var thisvar = $j("input[id$='ChassisQuantity']");
+         $j(thisvar).css("border-color", "#aeb0b6");
+             return true;
+         }
+
+
+     }
+     function validateNodeQuantity() {
+      console.log('{!boolNodeQuantity}');
+      var errorContent ;
+         if({!boolNodeQuantity} == true){
+         console.log('records ==='+ $j("select[id$='NodeSelectParent'] :selected").length);
+          console.log('records ==='+$j("input[id$='NodeQuantity']").val());
+            if($j("select[id$='NodeSelectParent'] :selected").val() !='Other' && $j("select[id$='NodeSelectParent'] :selected").length != $j("input[id$='NodeQuantity']").val()){
+             var thisvar = $j("input[id$='NodeQuantity']");
+              $j(thisvar).css("border-color", "#8C0005");
+                var errorContent = "<div class='dealRError' style='right: 5.5px; margin-bottom: -34px; z-index: 100; position: relative;'><div class='dealRErrorArrowWrap' style='position: initial;'><div class='dealRErrorArrow'></div></div><div class='dealRErrorMsg'>Entered Quantity not equal to selected Serial Numbers</div></div>";
+                   if(! $j(thisvar).parent().find(".dealRError").length)
+                   $j(thisvar).after($j(errorContent).fadeIn(500));
+             return false;
+            }
+            else{
+             return true;
+            }
+
+         }
+         else{
+         var thisvar = $j("input[id$='NodeQuantity']");
+         $j(thisvar).css("border-color", "#aeb0b6");
+             return true;
+         }
+
+
+     }
+     
+     function validateDriveQuantity() {
+      console.log('{!boolDriveQuantity}');
+      var errorContent ;
+         if({!boolDriveQuantity} == true){
+         console.log('records quantity ==='+ $j("select[id$='HDDDriveSelect'] :selected").length);
+         console.log('records val ==='+ $j("select[id$='HDDDriveSelect'] :selected").val());
+          console.log('records ==='+$j("input[id$='HDDDriveQuantity']").val());
+            if($j("select[id$='HDDDriveSelect'] :selected").val() !='Other' && $j("select[id$='HDDDriveSelect'] :selected").length != $j("input[id$='HDDDriveQuantity']").val()){
+             var thisvar = $j("input[id$='HDDDriveQuantity']");
+              $j(thisvar).css("border-color", "#8C0005");
+                var errorContent = "<div class='dealRError' style='right: 5.5px; margin-bottom: -34px; z-index: 100; position: relative;'><div class='dealRErrorArrowWrap' style='position: initial;'><div class='dealRErrorArrow'></div></div><div class='dealRErrorMsg'>Entered Quantity not equal to selected Serial Numbers</div></div>";
+                   if(! $j(thisvar).parent().find(".dealRError").length)
+                   $j(thisvar).after($j(errorContent).fadeIn(500));
+             return false;
+            }
+            else{
+             return true;
+            }
+
+         }
+         else{
+         var thisvar = $j("input[id$='HDDDriveQuantity']");
+         $j(thisvar).css("border-color", "#aeb0b6");
+             return true;
+         }
+
+
+     }
+     
+     function validateSSDDriveQuantity() {
+      console.log('{!boolSSDDriveQuantity}');
+      var errorContent ;
+         if({!boolSSDDriveQuantity} == true){
+         console.log('records ==='+ $j("select[id$='SSDDriveSelect'] :selected").length);
+          console.log('records ==='+$j("input[id$='SSDDriveQuantity']").val());
+            if($j("select[id$='SSDDriveSelect'] :selected").val() !='Other' && $j("select[id$='SSDDriveSelect'] :selected").length != $j("input[id$='SSDDriveQuantity']").val()){
+             var thisvar = $j("input[id$='SSDDriveQuantity']");
+              $j(thisvar).css("border-color", "#8C0005");
+                var errorContent = "<div class='dealRError' style='right: 5.5px; margin-bottom: -34px; z-index: 100; position: relative;'><div class='dealRErrorArrowWrap' style='position: initial;'><div class='dealRErrorArrow'></div></div><div class='dealRErrorMsg'>Entered Quantity not equal to selected Serial Numbers</div></div>";
+                   if(! $j(thisvar).parent().find(".dealRError").length)
+                   $j(thisvar).after($j(errorContent).fadeIn(500));
+             return false;
+            }
+            else{
+             return true;
+            }
+
+         }
+         else{
+         var thisvar = $j("input[id$='SSDDriveQuantity']");
+         $j(thisvar).css("border-color", "#aeb0b6");
+             return true;
+         }
+
+
+     }
+     
+     function validateMemoryQuantity() {
+      console.log('{!boolMemoryQuantity}');
+      var errorContent ;
+         if({!boolMemoryQuantity} == true){
+         console.log('records ==='+ $j("select[id$='MemorySelect'] :selected").length);
+          console.log('records ==='+$j("input[id$='MemoryQuantity']").val());
+            if($j("select[id$='MemorySelect'] :selected").val() !='Other' && $j("select[id$='MemorySelect'] :selected").length != $j("input[id$='MemoryQuantity']").val()){
+             var thisvar = $j("input[id$='MemoryQuantity']");
+              $j(thisvar).css("border-color", "#8C0005");
+                var errorContent = "<div class='dealRError' style='right: 5.5px; margin-bottom: -34px; z-index: 100; position: relative;'><div class='dealRErrorArrowWrap' style='position: initial;'><div class='dealRErrorArrow'></div></div><div class='dealRErrorMsg'>Entered Quantity not equal to selected Serial Numbers</div></div>";
+                   if(! $j(thisvar).parent().find(".dealRError").length)
+                   $j(thisvar).after($j(errorContent).fadeIn(500));
+             return false;
+            }
+            else{
+             return true;
+            }
+
+         }
+         else{
+         var thisvar = $j("input[id$='MemoryQuantity']");
+         $j(thisvar).css("border-color", "#aeb0b6");
+             return true;
+         }
+
+
+     }
+     function validatePSUQuantity() {
+      console.log('{!boolPSupplyQuantity}');
+      var errorContent ;
+         if({!boolPSupplyQuantity} == true){
+         console.log('records ==='+ $j("select[id$='PSUSelect'] :selected").length);
+          console.log('records ==='+$j("input[id$='PSupplyQuantity']").val());
+            if($j("select[id$='PSUSelect'] :selected").val() !='Other' && $j("select[id$='PSUSelect'] :selected").length != $j("input[id$='PSupplyQuantity']").val()){
+             var thisvar = $j("input[id$='PSupplyQuantity']");
+              $j(thisvar).css("border-color", "#8C0005");
+                var errorContent = "<div class='dealRError' style='right: 5.5px; margin-bottom: -34px; z-index: 100; position: relative;'><div class='dealRErrorArrowWrap' style='position: initial;'><div class='dealRErrorArrow'></div></div><div class='dealRErrorMsg'>Entered Quantity not equal to selected Serial Numbers</div></div>";
+                   if(! $j(thisvar).parent().find(".dealRError").length)
+                   $j(thisvar).after($j(errorContent).fadeIn(500));
+             return false;
+            }
+            else{
+             return true;
+            }
+
+         }
+         else{
+         var thisvar = $j("input[id$='PSupplyQuantity']");
+             $j(thisvar).css("border-color", "#aeb0b6");
+             return true;
+         }
+
+
+     }
+     
+     // Mutation object
+        var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+        
+        // Defining observer 
+        var observer = new MutationObserver(function(mutations) { 
+            // If the myListClass was removed from the list - re-assign it
+            if(!jQuery('#selectList1 select').first().hasClass('slds-select')){
+                jQuery('#selectList1 select').first().addClass('slds-select');
+            }
+            /*if(!jQuery('#selectList2 select').first().hasClass('slds-select')){
+                jQuery('#selectList2 select').first().addClass('slds-select');
+            }
+            if(!jQuery('#selectList3 select').first().hasClass('slds-select')){
+                jQuery('#selectList3 select').first().addClass('slds-select');
+            }
+            
+            if(!jQuery('#selectList4 select').first().hasClass('slds-select')){
+                jQuery('#selectList4 select').first().addClass('slds-select');
+            }*/
+        });
+        
+        // A target object fot the observer
+        var myNode1 = document.querySelector('#selectList1'); 
+        //var myNode2 = document.querySelector('#selectList2');
+        //var myNode3 = document.querySelector('#selectList3');
+        //var myNode4 = document.querySelector('#selectList4');
+        // Assigning observer to the dependent picklist
+        observer.observe(myNode1, {
+            childList: true,
+            subtree: true,
+            attributes: true
+        });
+        /*observer.observe(myNode2, {
+            childList: true,
+            subtree: true,
+            attributes: true
+        });
+        observer.observe(myNode3, {
+            childList: true,
+            subtree: true,
+            attributes: true
+        });
+        observer.observe(myNode4, {
+            childList: true,
+            subtree: true,
+            attributes: true
+        });*/
+
+
+</script>
+<!--
+/*function validateNICQuantity() {
+      console.log('{!boolNICQuantity}');
+      var errorContent ;
+         if({!boolNICQuantity} == true){
+         console.log('records ==='+ $j("select[id$='NICSelect'] :selected").length);
+          console.log('records ==='+$j("input[id$='NICQuantity']").val());
+            if($j("select[id$='NICSelect'] :selected").val() !='Other' && $j("select[id$='NICSelect'] :selected").length != $j("input[id$='NICQuantity']").val()){
+             var thisvar = $j("input[id$='NICQuantity']");
+              $j(thisvar).css("border-color", "#8C0005");
+                var errorContent = "<div class='dealRError' style='right: 5.5px; margin-bottom: -34px; z-index: 100; position: relative;'><div class='dealRErrorArrowWrap' style='position: initial;'><div class='dealRErrorArrow'></div></div><div class='dealRErrorMsg'>Entered Quantity not equal to selected Serial Numbers</div></div>";
+                   if(! $j(thisvar).parent().find(".dealRError").length)
+                   $j(thisvar).after($j(errorContent).fadeIn(500));
+             return false;
+            }
+            else{
+             return true;
+            }
+
+         }
+         else{
+             var thisvar = $j("input[id$='NICQuantity']");
+             $j(thisvar).css("border-color", "#aeb0b6");
+             return true;
+         }
+
+     }*/
+-->
+</apex:outputPanel>
+
+<div class="slds">
+<div id="successMessageDiv" style="display:none">
+                <apex:outputPanel id="successMsgPanel">
+                <script>
+               // alert({!isValidSupport});
+                
+                
+                function showMessageonSave(){
+                    console.log('is valid save'+{!RMAOrder.Valid_Support__c});
+                    var smartHandRequestedbool = false;
+                    var _elementSmarthandrequested = document.getElementById('RMAForm:requestForm:smarthandrequested');
+                    if(_elementSmarthandrequested != undefined){
+                        smartHandRequestedbool = _elementSmarthandrequested.checked;  
+                    }
+                    var smartHandQualifiedbool = false;
+                    var _elementSmarthand = document.getElementById('RMAForm:requestForm:smarthand');
+                    if(_elementSmarthand != undefined){
+                        smartHandQualifiedbool = _elementSmarthand.checked;
+                    }
+                    if({!isValidSupport} == true && ((smartHandRequestedbool == true && smartHandQualifiedbool == true) || smartHandRequestedbool == false)){
+                    console.log('in True');
+                    //alert('2'+{!isValidSupport});
+                    document.getElementById('requestFormDiv').style.display ='none';
+                    document.getElementById('successMessageDiv').style.display ='block';
+                    setTimeout('window.close()', 15000);
+                    }
+                    else{
+                        document.getElementById('requestFormDiv').style.display ='none';
+                        document.getElementById('duplicateConMessageDiv').style.display ='block';
+                        console.log('smartHandAvailable 222---'+smartHandAvailable);
+
+                        console.log('hidden value 11--'+document.getElementById('RMAForm:requestForm:hiddenValue').value);
+                        if(smartHandQualifiedbool == true) {
+                            document.getElementById('RMAForm:requestForm:smartHandsWarning').style.display ='none';
+                        }
+                        else {
+                            console.log('{!smartHandRequested} 222---'+{!smartHandRequested});
+
+                            var _elementSmarthand = document.getElementById('RMAForm:requestForm:smarthand');
+                            var _elementSmarthandrequested = document.getElementById('RMAForm:requestForm:smarthandrequested');
+
+                            var smartHandChecked = false;
+                            var smartHandRequestedChecked = false;
+                            if(_elementSmarthand != undefined){
+                                smartHandChecked = document.getElementById('RMAForm:requestForm:smarthand').checked;
+                            }
+
+                            if(_elementSmarthandrequested != undefined){
+                                smartHandRequestedChecked = document.getElementById('RMAForm:requestForm:smarthandrequested').checked;
+                            }
+
+                            console.log(smartHandChecked);
+                            if(smartHandRequestedChecked && smartHandChecked ==false) {
+                                document.getElementById('RMAForm:requestForm:smartHandsWarning').style.display ='block';
+                            }
+                            else {
+                                document.getElementById('RMAForm:requestForm:smartHandsWarning').style.display ='none';
+                            }
+                        }
+                        //}
+                    }
+                }
+                function showFormonBack(){
+                    console.log('smartHandAvailable 333---'+smartHandAvailable);
+                    console.log('hidden value 22--'+document.getElementById('RMAForm:requestForm:hiddenValue').value);
+                    $j("textarea[id$='Comment']").val('');
+                    document.getElementById('requestFormDiv').style.display ='block';
+                    document.getElementById('duplicateConMessageDiv').style.display ='none';
+                    //document.getElementById('smartHandsWarning').style.display ='none';
+                    
+                    button.disabled = false;
+                    //validatebutton.disabled =false;
+                    return false;
+                    
+                }
+                </script>
+                
+                    <div class="slds-notify_container paddingCSS">
+                        <div class="slds-notify slds-notify--alert slds-theme--success slds-theme--alert-texture" role="alert">
+                            <span class="slds-assistive-text">Success</span>
+                            <h2>
+                                <svg aria-hidden="true" class="slds-icon icon-text-email slds-icon--small slds-m-right--x-small">
+                                    <use
+                                        xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.SLDS0121, 'assets/icons/standard-sprite/svg/symbols.svg#custom19')}">
+                                    </use>
+                                </svg><div id="successmsg"></div>
+
+                            </h2>
+                        </div>
+                    </div>
+                </apex:outputPanel>
+            </div>
+            <div id="duplicateConMessageDiv" style="display:none">
+                <apex:outputPanel id="duplicateConMessageDivPanel">
+                    <!--<div class="slds-notify_container paddingCSS">
+                        <div class="slds-notify slds-notify--alert slds-theme--warning" role="alert">
+                            <span class="slds-assistive-text">Warning</span>
+                            <div class="slds-notify__content">
+                                <div id="pendingmsg"></div>
+                                <h2 class="slds-text-heading--small"> </h2>
+                            </div>
+                        </div>
+                    </div>-->
+                    
+                    <div role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-open">
+                          <div class="slds-modal__container">
+                            <div class="slds-modal__header">
+                              <button class="slds-button slds-modal__close slds-button--icon-inverse" title="Close" onclick="showFormonBack();return false;">
+                                <svg aria-hidden="true" class="slds-button__icon slds-button__icon--large">
+                                <use
+                                        xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Resource.SLDS0121, '/assets/icons/utility-sprite/svg/symbols.svg#close')}">
+                                    </use>
+                                  
+                                </svg>
+                                <span class="slds-assistive-text">Close</span>
+                              </button>
+                              <h2 id="header43" class="slds-text-heading--medium">Comment for Justification</h2>
+                            </div>
+                            <div class="slds-modal__content slds-p-around--medium">
+                              <div>
+                               <ul>
+                               <apex:outputPanel id="isValidPanel" rendered="{!!isValidSupport}"><li> 
+                                 
+                                    Asset related to selected Serial Numbers does not have valid entitlement.This RMA request will be processed after approval, Please enter the approval comments. 
+                                 
+                                 </li></apex:outputPanel>
+                                 <apex:outputPanel id="smartHandsWarning" style="display:none" ><li> 
+                                    Asset related to selected Serial Numbers does not have valid Smart Hand Entitlement.This RMA request will be processed after approval, Please enter the approval comments. 
+                                   
+                                 </li>
+                                 <!--<apex:pageMessages > </apex:pageMessages>
+                                 <li> {!saveErrorMessage != ''}
+                                 <apex:outputText id="errorMessage" value="{!saveErrorMessage}" rendered="{!saveErrorMessage != ''}"></apex:outputText>
+                                 </li>-->
+                                </apex:outputPanel>
+                                 </ul>
+                                 <div class="slds-form-element is-required slds-m-top--large">
+                                <label class="slds-form-element__label" for="inputComments">
+                                    <abbr class="slds-required colorclass colorclass" title="required"></abbr>Approval Comment
+
+
+                                </label>
+                                <div class="slds-form-element__control">
+                                    <apex:inputField id="Comment" styleClass="slds-input" type="text" onkeydown="hideError(this);" onclick="hideError(this);" value="{!RMAOrder.Comment_if_any__c}" />
+                                </div>
+                           
+                                 </div>
+                                </div>
+                            </div>
+                            <div class="slds-modal__footer slds-modal__footer--directional">
+                              <button class="slds-button slds-button--neutral" onclick="showFormonBack(); return false;">Back</button>
+                              <button class="slds-button slds-button--brand" onclick="validateComment(this);return false;">Save</button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="slds-backdrop slds-backdrop--open"></div>
+                        <apex:inputHidden id="hiddenValue" ></apex:inputHidden>
+                    </apex:outputPanel>
+            </div>
+            </div>
+
+
+</apex:form></div>
+
+</apex:page>

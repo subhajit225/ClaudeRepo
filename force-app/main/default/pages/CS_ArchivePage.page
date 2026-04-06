@@ -1,0 +1,58 @@
+<apex:page standardController="Case_Special_Handling__c" recordSetVar="accounts" extensions="CS_CaseSpecialArchiveController" action="{!archiveRecords}">
+    <apex:form >
+        <apex:actionFunction name="redirectBack" action="{!redirectBack}" rerender="out" status="myStatus"/>
+    </apex:form>
+    
+    <script>
+    var subTabId = '';
+    var primaryTabid = '';
+
+    var getSubTabId = function getSubTabId(result) {
+        subTabId = result.id;
+    };
+    
+    var getPrimaryTabId = function getPrimaryTabId(result) {
+        primaryTabid = result.id;
+        ifInConsole(); 
+    }
+    
+    function ifInConsole(){
+        if(subTabId != primaryTabid){
+            setTimeout(navToPreviousWindow, 3000)
+            function navToPreviousWindow() {
+                sforce.console.closeTab(subTabId);
+            }
+        }
+        else{
+            redirectBack();
+        }
+    }
+    
+    
+    </script>
+    <apex:pageMessages />
+    <div>
+        <apex:outputText rendered="{!navBack}" id="navBack">
+            <apex:includeScript value="/support/console/50.0/integration.js"/>
+            <script>
+            if (sforce.console.isInConsole()) {  
+                sforce.console.getFocusedSubtabId(getSubTabId);
+                sforce.console.getFocusedPrimaryTabId(getPrimaryTabId);
+            }
+            else {
+                setTimeout(navToPreviousWindow, 3000)
+                function navToPreviousWindow() {
+                    redirectBack();
+                }
+            };         
+    </script>
+            
+        </apex:outputText>    
+    </div>
+    <div style="justify-content: center; display: flex;">
+        <apex:outputPanel >
+            <img src="/img/loading32.gif" width="25" height="25" />
+            <apex:outputLabel value="redirecting back..."/>
+        </apex:outputPanel>            
+    </div>
+</apex:page>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>My_view_CP</fullName>
+    <columns>NAME</columns>
+    <columns>SCAC__c</columns>
+    <columns>RMAServiceType__c</columns>
+    <columns>OrderServiceLevel__c</columns>
+    <columns>OrderShippingCarrier__c</columns>
+    <columns>Shipping_Country__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>RMAServiceType__c</field>
+        <operation>equals</operation>
+        <value>Next Business Day: 10:30am</value>
+    </filters>
+    <label>My view_CP</label>
+</ListView>

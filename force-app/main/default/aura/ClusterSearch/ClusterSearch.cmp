@@ -1,0 +1,164 @@
+<aura:component controller="searchClusterController"  implements="forceCommunity:availableForAllPageTypes,lightning:isUrlAddressable" access="global">   
+    
+    <!-- CREATE ATTRIBUTE/VARIABLE-->
+    <aura:attribute name="searchResult" type="List" />
+    <aura:attribute name="NodeResult" type="List" />
+    <aura:handler name="init" value="this" action="{!c.init}"/>
+    <aura:attribute name="searchKeyword" type="String" description="use for store user search input"/>
+    <aura:attribute name="Message" type="boolean" default="false" description="use for display no record found message"/>
+    <aura:attribute name="TotalNumberOfRecord" type="integer" default="0" description="use for display Number of records"/>
+    <!-- SHOW LOADING SPINNER--> 
+    <lightning:spinner variant="brand" size="large" aura:id="Id_spinner" class="slds-hide" />
+    
+    <div class="slds-m-around_medium">
+        <!-- SEARCH INPUT AND SEARCH BUTTON--> 
+        <lightning:layout>
+            <lightning:layoutItem size="3" padding="around-small">
+                <lightning:input value="{!v.searchKeyword}"
+                                 required="true"
+                                 placeholder="Search Clusters.."
+                                 aura:id="searchField" />
+            </lightning:layoutItem>
+            <lightning:layoutItem size="2" padding="around-small">
+                <lightning:button onclick="{!c.Search}"
+                                  variant="brand"
+                                  label="Search"
+                                  iconName="utility:search"/> 
+            </lightning:layoutItem>
+        </lightning:layout>
+        
+        <!-- ERROR MESSAGE IF NOT RECORDS FOUND--> 
+        
+        
+        <!-- TABLE CONTENT--> 
+        <aura:if isTrue="{!and(v.searchResult.length>0, v.searchResult!='')}">
+            <div>
+                <h1 style=" float:left;font-size:20px;"><b>Clusters</b></h1>
+            </div>
+        
+            <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                <thead>
+                    <tr class="slds-text-title_caps">
+                        
+                        
+                        <th scope="col">
+                            <div class="slds-truncate" title="Cluster UUID">Cluster UUID</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="Cluster UUID">Storage Usage</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="Cluster Tag">Cluster Tag</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="CDM End of Support status">CDM End of Support status</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="Cluster Tag">Objects Protected</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="Cluster Tag">Snapshot Count</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody> 
+                    <aura:iteration items="{!v.searchResult}" var="cluster" indexVar="count">
+                        <tr>                            
+                            <td>
+                                <div class="slds-truncate">{!cluster.Name}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!cluster.storage_usage__c	}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!cluster.tag__c}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!cluster.CDM_End_of_Support_Status__c}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!cluster.objects_protected__c}</div>
+                            </td> 
+                            <td>  
+                                <div class="slds-truncate"><lightning:formattedNumber value="{!cluster.snapshot_count__c}" maximumFractionDigits="0"></lightning:formattedNumber></div>
+                            </td>
+                        </tr>
+                    </aura:iteration>
+                </tbody>
+            </table>
+            
+        </aura:if>    
+        <br/>
+        <br/>
+        <aura:if isTrue="{!and(v.NodeResult.length>0, v.NodeResult!='')}">
+            <div>
+                <h1 style=" float:left;font-size:20px;"><b>Nodes</b></h1>
+            </div>
+        
+            <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                <thead>
+                    <tr class="slds-text-title_caps">
+                        
+                        
+                        <th scope="col">
+                            <div class="slds-truncate" title="Cluster UUID">Node Serial Number</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="Cluster UUID">Chassis Name</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="Cluster UUID">Software Version</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="Cluster UUID">Asset Name</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="Cluster UUID">Cluster UUID</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="Cluster UUID">Cluster Tag</div>
+                        </th>
+                        
+                    </tr>
+                </thead>
+                <tbody> 
+                    
+                    <aura:iteration items="{!v.NodeResult}" var="Node" indexVar="count">
+                        <tr>
+                            <td>
+                                <div class="slds-truncate">{!Node.Name}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!Node.chassis__r.Name}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!Node.software_version__c}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!Node.asset__r.Name}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!Node.cluster__r.Name}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!Node.cluster__r.tag__c}</div>
+                            </td>
+
+
+                        </tr>
+                    </aura:iteration>
+                </tbody>
+            </table>
+            
+        </aura:if>
+        <!---<aura:if isTrue="{!v.Message}">
+                <div class="slds-notify_container slds-is-relative">
+                    <div class="slds-notify slds-notify_toast slds-theme_error" role="alert">
+                        <div class="slds-notify__content">
+                            <h2 class="slds-text-heading_small">No Records Found...</h2>
+                        </div>
+                    </div>
+                </div>
+            </aura:if>-->
+    </div>
+</aura:component>

@@ -1,0 +1,66 @@
+<template>
+  <template if:true={cmpvisible}>
+    <div class="mainContainer">
+      <div style="width: 100%">
+        <div class="fieldData">
+          <lightning-record-view-form
+            record-id={kid}
+            record-type-id={recordtypeid}
+            object-api-name={destobj}
+            onerror={handleViewFormError}
+          >
+            <template for:each={currentArticleDetail} for:item="item">
+              <div class="manage_title d-flex-column" key={item.label}>
+                <label
+                  for={item.label}
+                  class="font_family text_truncate article-preview-field-label"
+                  >{item.label}</label
+                >
+                <lightning-output-field
+                  class="detailed_text"
+                  id={item.label}
+                  variant="label-hidden"
+                  field-name={item.name}
+                ></lightning-output-field>
+              </div>
+              <div class="border_bottom" key={item.key}></div>
+            </template>
+          </lightning-record-view-form>
+          <div class="manageForm" style="display: none">
+            <lightning-record-edit-form
+              record-type-id={recordtypeid}
+              object-api-name={destobj}
+              onload={handleLoad}
+              onerror={handleEditFormError}
+            ></lightning-record-edit-form>
+          </div>
+          <template if:true={hasFileUploadPermission}>
+            <div class="slds-form-element slds-form-element_readonly" style="border-bottom: none;">
+                <span class="slds-form-element__label"> Attachment</span>
+                <template if:false={loadFilesList}>
+                  <template for:each={allFilesList} for:item="fileInfo" for:index="index">
+                  <div class="knowbler__upload-files-list-wrapper" key={fileInfo.documentId}>
+                      <div class="knowbler__upload-file-wrapper">
+                      <div class="knowbler__upload-file-icon">
+                          <lightning-icon icon-name={fileInfo.fileIcon} size="small" alternative-text="File"></lightning-icon>
+                      </div>
+                      <a class="knowbler__upload-file-name" href={fileInfo.fileLink} target="_blank">{fileInfo.name}</a>
+                      </div>
+                  </div>
+                  </template>
+                  <template if:true={loadFilesList}>
+                    <div class="knowbler__file-upload-loader-wrapper">
+                      <div class="knowbler__load-file-text">Please wait...</div>
+                      <div class="knowbler__custom-loader"></div>
+                   </div>
+                  </template>
+                </template>
+
+            </div>
+        </template>
+        </div>
+      </div>
+    </div>
+  </template>
+  <c-knowbler-modal-component></c-knowbler-modal-component>
+</template>

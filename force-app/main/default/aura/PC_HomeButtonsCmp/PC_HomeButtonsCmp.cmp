@@ -1,0 +1,23 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" Controller="PC_ProfileController">
+    <aura:attribute name="name" type="string"/>
+    <aura:attribute name="user" type="User"/>
+    
+    <div class="slds-size_1-of-1">        
+        <div class="slds-box_x-small slds-text-align_center slds-m-around_x-small tileMenuItemCard" style="height:190px;">
+            <div class="uiMenuItem forceCommunityTileMenuItem" data-aura-class="slds-box uiMenuItem forceCommunityTileMenuItem">
+                <!-- <a class="navTileLink" role="menuitem" data-special-link="true" title="Register a Deal">-->
+                <div class="slds-m-bottom_x-large" >
+                    <p class="slds-text-align_left">
+                    <c:PC_Button label="Popular" url="popular"></c:PC_Button>
+                    </p>
+                    <p class="slds-text-align_left">
+                    <c:PC_Button label="My Pins" url="mypins"></c:PC_Button>
+                    </p>
+                    <p class="slds-text-align_left">
+                    <c:PC_Button label="Whats New" url="whatsnew"></c:PC_Button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

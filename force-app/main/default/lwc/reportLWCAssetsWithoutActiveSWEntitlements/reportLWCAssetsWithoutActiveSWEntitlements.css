@@ -1,0 +1,131 @@
+/* Main container with offset for Salesforce header */
+.report-container {
+    background-color: #f3f6f9;
+}
+
+/* Sticky header positioning */
+.sticky-header-wrapper {
+    left: 1rem;
+    right: 1rem;
+    z-index: 100; /* Below Salesforce header z-index */
+    background: #f3f6f9;
+}
+
+.sticky-header {
+    border-radius: 0.25rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Table container with scroll */
+.table-container {
+    margin-top: 0.5rem;
+    border-radius: 0.25rem;
+    overflow-y: auto;
+    position: relative;
+}
+
+/* Modern Enhanced Filter Bar */
+.filter-container {
+    margin: 0 auto;
+    padding: 1.5rem !important;
+    background: #ffffff;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.filter-item {
+    display: flex;
+    align-items: center;
+    padding: 0 1.75rem;
+}
+
+/* Enhanced Input Styling */
+.filter-input {
+    --slds-c-input-radius-border: 6px;
+    --slds-c-input-shadow-focus: 0 0 0 2px #0176d3;
+    --slds-c-input-color-border: #dddbda;
+    --slds-c-input-spacing-horizontal: 1rem;
+    --slds-c-input-spacing-vertical: 0.75rem;
+    width: 100%;
+}
+
+/* Label Styling */
+.filter-input .slds-form-element__label {
+    font-size: 0.8125rem;
+    color: #444;
+    font-weight: 800;
+    min-width: 120px;
+    padding-right: 1rem;
+    margin-bottom: 0;
+}
+
+/* Input Field Styling */
+.filter-input .slds-input {
+    padding: 0.65rem 1rem;
+    border: 1px solid #e0e0e0;
+    background: #fafaf9;
+    flex-grow: 1;
+}
+
+/* Date Input Specific */
+.filter-input .slds-input[type="date"] {
+    padding: 0.6rem 1rem;
+}
+
+/* Search Button */
+.search-button {
+    --slds-c-button-radius-border: 6px;
+    --slds-c-button-brand-color-background: #0176d3;
+    --slds-c-button-brand-color-background-hover: #0160a3;
+    --slds-c-button-spacing-block: 0.75rem;
+    --slds-c-button-spacing-inline: 1.5rem;
+    min-width: 120px;
+    height: 40px;
+    transition: all 0.2s ease;
+}
+
+.search-button:hover {
+    transform: translateY(-1px);
+}
+
+/* Sticky Datatable Headers */
+.datatable-wrapper {
+    position: relative;
+    height: calc(100vh - 16rem); /* Adjust based on your layout */
+    overflow: auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 48em) {
+    .sticky-header-wrapper {
+        top: 3rem; /* Adjust for mobile header */
+        left: 0.5rem;
+        right: 0.5rem;
+    }
+    
+    .table-container {
+        height: calc(100vh - 10rem);
+    }
+    
+    .report-container {
+        padding-top: 4.5rem;
+    }
+
+    .filter-container {
+        padding: 1rem !important;
+    }
+    
+    .filter-item {
+        padding: 0.5rem 0;
+    }
+    
+    .filter-input .slds-form-element__label {
+        min-width: 100px;
+        padding-right: 0.75rem;
+    }
+    
+    .search-button {
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+}

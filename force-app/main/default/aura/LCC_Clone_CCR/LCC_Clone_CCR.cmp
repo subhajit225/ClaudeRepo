@@ -1,0 +1,209 @@
+<aura:component  implements="flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickActionwithoutHeader" controller="LCC_Clone_CCR_Controller">        
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="userName" type="string" />
+    <aura:attribute name="recordTypeName" type="string" />
+    <aura:attribute name="showInternalSection" type="Boolean" default="true" />
+    <aura:attribute name="ccrRec" type="CCR__c"/>
+
+    <lightning:workspaceAPI aura:id="workspace"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <div class="demo-only" style="height:6rem;">
+        <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+            <span class="slds-assistive-text">Loading</span>
+            <div class="slds-spinner__dot-a"></div>
+            <div class="slds-spinner__dot-b"></div>
+        </div>
+    </div>
+    
+    <!--
+    <div class="modal-header slds-modal__header slds-modal__header">
+        <div class="title slds-text-heading_medium">Clone</div>
+    </div>
+    <div class="slds-p-bottom_large slds-p-left_large">
+        <lightning:recordEditForm objectApiName="CCR__c">
+            <div class="modal-body scrollable slds-modal__content slds-p-around_medium">
+                <div class="slds-section__title slds-m-top_large">Information</div>
+                <div class="c-container">
+                    <lightning:layout multipleRows="true">
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                            <lightning:inputField fieldName="OwnerId" value="{!v.ccrRec.OwnerId}"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                            <lightning:inputField fieldName="RecordTypeId"  value="{!v.ccrRec.RecordTypeId}" readonly="true" disabled="true"/>
+                        </lightning:layoutItem> 
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                            <lightning:inputField fieldName="Affective_Person__c" aura:id="Affective_Person__cSave" value="{!v.ccrRec.Affective_Person__c}" required="true"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                            <lightning:outputField fieldName="Name"  value=""/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                            <lightning:inputField fieldName="Affected_Person_Manual__c" aura:id="Affected_Person_Manual__cSave" value="{!v.ccrRec.Affected_Person_Manual__c}"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                            <lightning:inputField fieldName="CCR_Type__c" aura:id="CCR_Type__cSave" value="{!v.ccrRec.CCR_Type__c}"  required="true"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                            <lightning:inputField fieldName="Manager_at_VP_level__c" aura:id="Manager_at_VP_level__cSave" value="{!v.ccrRec.Manager_at_VP_level__c}"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                            <lightning:inputField fieldName="Justifications__c" aura:id="Justifications__cSave" value="{!v.ccrRec.Justifications__c}"  required="true"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                            <lightning:inputField fieldName="Return_Completed__c" aura:id="Return_Completed__cSave" value="{!v.ccrRec.Return_Completed__c}"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                            <lightning:inputField fieldName="User__c" aura:id="User__cSave" value="Pending"  required="true"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                            <lightning:inputField fieldName="City__c" aura:id="City__cSave" value="{!v.ccrRec.City__c}"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                            <lightning:inputField fieldName="Effective_Date__c" aura:id="Effective_Date__cSave" value="{!v.ccrRec.Effective_Date__c}" required="true"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                            <lightning:inputField fieldName="Country__c" aura:id="Country__cSave" value="{!v.ccrRec.Country__c}"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                            <lightning:inputField fieldName="Effective_End_Date__c" aura:id="Effective_End_Date__cSave" value="{!v.ccrRec.Effective_End_Date__c}" required="true"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                            <lightning:inputField fieldName="StateCode__c" aura:id="StateCode__cSave" value="{!v.ccrRec.StateCode__c}"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                            <lightning:input aura:id="Impacts_Commission__cSave" name="Impacts_Commission__cSave" type="checkbox" label="Impact Commission" checked="{!v.ccrRec.Impacts_Commission__c}"/>
+                             <lightning:inputField fieldName="Impacts_Commission__c" aura:id="Impacts_Commission__cSave" value="{!v.ccrRec.Impacts_Commission__c}"/> //commeented
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                            <lightning:inputField fieldName="Amount__c" aura:id="Amount__cSave" value="{!v.ccrRec.Amount__c}" />
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                            <lightning:input aura:id="Re_submitted__cSave" name="Re_submitted__cSave" type="checkbox" label="Re-submitted?" checked="{!v.ccrRec.Re_submitted__c}"/>	
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                            <lightning:inputField fieldName="Booking__c" aura:id="Booking__cSave" value="{!v.ccrRec.Booking__c}" />
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                            <lightning:inputField fieldName="Incentive__c" aura:id="Incentive__cSave" value="{!v.ccrRec.Incentive__c}"/>
+                        </lightning:layoutItem>                      
+                    </lightning:layout>
+                </div>
+                
+                <div class="slds-section__title slds-m-top_large">Account &amp; Opportunity Info</div>
+                <div class="c-container">
+                    <lightning:layout multipleRows="true">
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                            <lightning:inputField fieldName="Asset__c" aura:id="Asset__cSave" value="{!v.ccrRec.Asset__c}"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                            <lightning:inputField fieldName="Cost_of_Goods_Sold__c" aura:id="Cost_of_Goods_Sold__cSave" value="{!v.ccrRec.Cost_of_Goods_Sold__c}"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                            <lightning:inputField fieldName="Account_Name__c" aura:id="Account_Name__cSave" value="{!v.ccrRec.Account_Name__c}"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                            <lightning:inputField fieldName="Number_of_Briks_swapped__c" aura:id="Number_of_Briks_swapped__cSave" value="{!v.ccrRec.Number_of_Briks_swapped__c}"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                            <lightning:inputField fieldName="Opportunity__c" aura:id="Opportunity__cSave" value="{!v.ccrRec.Opportunity__c}"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                            <lightning:inputField fieldName="Restocking_Fee_Amount__c" aura:id="Restocking_Fee_Amount__cSave" value="{!v.ccrRec.Restocking_Fee_Amount__c}"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                            <lightning:inputField fieldName="New_Opportunity__c" aura:id="New_Opportunity__cSave" value="{!v.ccrRec.New_Opportunity__c}"/>
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                </div>
+                
+                <div class="slds-section__title slds-m-top_large">Partner Info</div>
+                <div class="c-container">
+                    <lightning:layout multipleRows="true">
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" padding="around-small">
+                            <lightning:inputField fieldName="Partner_Company_Name__c" aura:id="Partner_Company_Name__cSave" value="{!v.ccrRec.Partner_Company_Name__c}"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                            <lightning:inputField fieldName="Referral_Fee_Amount__c" aura:id="Referral_Fee_Amount__cSave" value="{!v.ccrRec.Referral_Fee_Amount__c}"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                            <lightning:inputField fieldName="Referral_Fee_Percent__c" aura:id="Referral_Fee_Percent__cSave" value="{!v.ccrRec.Referral_Fee_Percent__c}"/>
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                </div>
+                
+                <div class="slds-section__title slds-m-top_large">Justification</div>
+                <div class="c-container">
+                    <lightning:layout multipleRows="true">
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                            <lightning:inputField fieldName="Comment__c" aura:id="Comment__cSave" value="{!v.ccrRec.Comment__c}"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                            <lightning:inputField fieldName="Return_Reasons__c" aura:id="Return_Reasons__cSave" value="{!v.ccrRec.Return_Reasons__c}"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                            <lightning:inputField fieldName="Describe_Sales_Campaign__c" aura:id="Describe_Sales_Campaign__cSave" value="{!v.ccrRec.Describe_Sales_Campaign__c}"/>
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                </div>
+                
+                <div class="slds-section__title slds-m-top_large">Virgin/Non-Virgin Territory &amp; Quota</div>
+                <div class="c-container">
+                    <lightning:layout multipleRows="true">
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" padding="around-small">
+                            <lightning:inputField fieldName="Proposed_Start_Date__c" aura:id="Proposed_Start_Date__cSave" value="{!v.ccrRec.Proposed_Start_Date__c}"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" padding="around-small">
+                            <lightning:inputField fieldName="Proposed_OTE__c" aura:id="Proposed_OTE__cSave" value="{!v.ccrRec.Proposed_OTE__c}"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" padding="around-small">
+                            <lightning:inputField fieldName="Territory__c" aura:id="Territory__cSave" value="{!v.ccrRec.Territory__c}"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" padding="around-small">
+                            <lightning:inputField fieldName="Quota__c" aura:id="Quota__cSave" value="{!v.ccrRec.Quota__c}"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" padding="around-small">
+                            <lightning:inputField fieldName="Pipeline_Status_Virgin_or_Non_Virgin__c" aura:id="Pipeline_Status_Virgin_or_Non_Virgin__cSave" value="{!v.ccrRec.Pipeline_Status_Virgin_or_Non_Virgin__c}"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" padding="around-small">
+                            <lightning:inputField fieldName="Existing_Customers_getting_transferred__c" aura:id="Existing_Customers_getting_transferred__cSave" value="{!v.ccrRec.Existing_Customers_getting_transferred__c}"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" padding="around-small">
+                            <lightning:inputField fieldName="Which_Accounts__c" aura:id="Which_Accounts__cSave" value="{!v.ccrRec.Which_Accounts__c}"/>
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                </div>
+                <aura:if isTrue="{!v.showInternalSection}">
+                    <div class="slds-section__title slds-m-top_large">Internal</div>
+                    <div class="c-container">
+                        <lightning:layout multipleRows="true">
+                            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                                <lightning:inputField fieldName="Internal_Notes__c" aura:id="Internal_Notes__cSave" value="{!v.ccrRec.Internal_Notes__c}"/>
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                    </div>
+                </aura:if>    
+                <div class="slds-section__title slds-m-top_large">System Information</div>
+                <div class="c-container">
+                    <lightning:layout multipleRows="true">
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                            <lightning:inputField fieldName="Current_Approver_Email__c" aura:id="Current_Approver_Email__cSave" value="{!v.ccrRec.Current_Approver_Email__c}"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                            <lightning:inputField fieldName="Second_Level_Manager__c" aura:id="Second_Level_Manager__cSave" value="{!v.ccrRec.Second_Level_Manager__c}"/>
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                </div>
+            </div>  
+            <div class="slds-clearfix">
+                <div class="slds-clearfix">
+                    <div class="slds-float_right" role="group" >
+                        <lightning:button class="slds-m-top_small slds-m-right_small" label="Cancel" onclick="{!c.handleCancelRecord}"/>
+                        <lightning:button class="slds-m-top_small" type="submit" label="Save" variant="brand" onclick="{!c.handleSaveRecord}"/>
+                    </div>
+                </div>
+            </div>
+        </lightning:recordEditForm>                                
+    </div>   
+	--> 
+</aura:component>

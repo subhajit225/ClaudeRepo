@@ -1,0 +1,56 @@
+<template>
+  <lightning-card title="Entitlement Reports">
+    <lightning-tabset active-tab-value={activeTab} variant="scoped">
+      <div class="slds-m-around_x-small">
+        <lightning-tab style="border: white" label="Entitlements with missing Assets" value="1" onactive={handleActive}>
+          <c-entitlements-with-missing-assets current-tab="1"></c-entitlements-with-missing-assets>
+          <!--<iframe style ="border: white; height : calc(100vh - 302px);" id="EntitlementsWithMissingAssets" src="/apex/EntitlementsWithMissingAssets" width="100%" > </iframe></span>-->
+        </lightning-tab>
+        <lightning-tab style="border: white" label="Assets with missing Support Dates" value="2" onactive={handleActive}>
+          <!-- <iframe style ="border: white; height : calc(100vh - 302px);" id="AssetsWithMissingSupportDates" src="/apex/AssetsWithMissingDates" width="100%" height="350px"> </iframe></span>-->
+          <c-assets-with-missing-support-date current-tab="2"></c-assets-with-missing-support-date>
+        </lightning-tab>
+        <lightning-tab label="Duplicate Entitlements" value="3" onactive={handleActive}>
+          <c-duplicate-entitlements current-tab="3"></c-duplicate-entitlements>
+        </lightning-tab>
+        <lightning-tab label="Entitlements with missing linked Assets" value="4" onactive={handleActive}>
+          <c-show-entitlement-lwc asset-tab="MissingAsset" current-tab="4"></c-show-entitlement-lwc>
+        </lightning-tab>
+        <lightning-tab label="Entitlement with mismatched linked Asset Quantity" value="5" onactive={handleActive}>
+          <c-show-entitlement-lwc current-tab="5"></c-show-entitlement-lwc>
+        </lightning-tab>
+        <lightning-tab label="Missing Manufacturing Entitlement" value="6" onactive={handleActive}>
+          <c-missing-manufacturing-Entitlement current-tab="6"></c-missing-manufacturing-Entitlement>
+        </lightning-tab>
+        <lightning-tab style="border: white" label="Service Contracts With Missing Support Dates" value="7" onactive={handleActive}>
+          <c-service-contract-with-missing-support-dates current-tab="7"></c-service-contract-with-missing-support-dates>
+        </lightning-tab>
+        <lightning-tab style="border: white" label="Entitlement with missing Support Dates" value="8" onactive={handleActive}>
+          <c-entiltlements-with-missing-support-dates current-tab="8"></c-entiltlements-with-missing-support-dates>
+          <!--<iframe style ="border: white; height : calc(100vh - 302px);" id="AssetsWithMissingSupportDates" src="/apex/AssetsWithMissingDates" width="100%" height="350px"> </iframe></span>-->
+        </lightning-tab>
+        <!--Start PRDOPS26-313-->
+        <lightning-tab style="border: white" label="Entitlement not created within SLA (1 hour)" value="9" onactive={handleActive}>
+          <c-report-viewer current-tab="9" report-developer-name="Entitlement_Creation_Time"></c-report-viewer>
+        </lightning-tab>
+        <!--End PRDOPS26-313-->
+        <!--Start PRDOPS26-383-->
+        <lightning-tab style="border: white" label="TradeUp Unflagged Report" value="10" onactive={handleActive}>
+          <c-trade-up-unflagged-report-l-w-c current-tab="10"></c-trade-up-unflagged-report-l-w-c>
+        </lightning-tab>
+        <!--End PRDOPS26-383-->
+        <lightning-tab style="border: white" label="Asset-Level Entitlement Capacity Mismatch Report" value="11" onactive={handleActive}>
+          <c-assets-with-mismatched-quantities current-tab="11"></c-assets-with-mismatched-quantities>
+        </lightning-tab>
+        <!--Start PRDOPS26-594-->
+        <lightning-tab style ="border: white;" label="Assets Without Active SW Entitlements" value="12" onactive={handleActive}>
+          <c-report-l-w-c-assets-without-active-s-w-entitlements current-tab="12"></c-report-l-w-c-assets-without-active-s-w-entitlements>
+        </lightning-tab>
+        <lightning-tab style ="border: white;" label="Shipping Detail Report" value="13" onactive={handleActive}>
+          <c-report-viewer current-tab="13" report-developer-name="ASPEN_HW_SW_Shipped_HW_Shipped_Report"></c-report-viewer>
+        </lightning-tab>
+
+      </div>
+    </lightning-tabset>
+  </lightning-card>
+</template>

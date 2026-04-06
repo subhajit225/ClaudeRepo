@@ -1,0 +1,78 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" controller="su_vf_console.SUAuthentication">
+  <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+  <!-- Client Driven Input Variable -->
+  <aura:attribute name="recommendedHeading" type="String" default="Recommended Results" access="global"/>
+  <aura:attribute name="pagesize" type="String" default="10" access="global"/>
+  <!-- Client Driven Input Variable ends here-->
+  <aura:attribute name="scConfigObj" type="Object" />
+  <aura:attribute name="recommendedList" type="List" default=""/>
+  <aura:attribute name="endPoint" type="String"/>
+  <aura:attribute name="uid" type="String"/>
+  <aura:attribute name="customSettingErrorMessage" type="String"/>
+  <aura:attribute name="Bearer" type="String" default="" />
+  <aura:attribute name="customSettingsFilled" type="Boolean" default="false" />
+  <aura:attribute name="currentUserEmail" type="String" default=""/>
+  <aura:attribute name="child" type="String" />
+  <aura:attribute name="redirectionUrl" type="String" />
+  <aura:handler event="su_vf_console:SUComponentEvent" action="{!c.getValueFunc}" />
+  <!-- <c:SUSearchUnifyHeaderDynamic aura:id="SuAnalytics" /> -->
+  <aura:if isTrue="{!v.customSettingsFilled}">
+	<c:SUAuthHeaderDynamic aura:id="SuAnalytics" endPoint="{!v.endPoint}" uid="{!v.uid}" currentUserEmail="{!v.currentUserEmail}" customSettingErrorMessage="{!v.customSettingErrorMessage}"/>
+  	<aura:if isTrue="{!if(v.recommendedList.length > 0, true,false)}"> 
+		<div class="{!if(v.child, 'slds-grid slds-wrap su__recommended-articles-width','slds-grid slds-wrap su__recommended-articles-full-width su__width-100' )}">
+			<div id="su_recommendBox" class="su__col-lg-12 su__col-md-12 su__col-xs-12 recommended-main">
+				<div class="su_recommendContainer su__w-100">
+					<div class="su-recommendBoxDiv su__position-relative su__mt-4 su__px-3 su__pt-3 su__pb-1 su__sm-shadow su__bg-white su-nopad">
+						<div class="su__d-flex su__align-items-start su__border-b">
+							<div class="Icon-feather-thumbs-up"></div>
+							<div class="su__ribbon-row-block su__w-100 su__clearfix su__loading-view">
+								<div class="su__font-16 su__text-black-100 su__font-normal su__mb-2 su__ml-1">
+									{!v.recommendedHeading}
+								</div>
+							</div>
+						</div>
+						<div class=" su-recommendDiv su__p-0  su-nopad" id="suRecommendElement">
+							<aura:iteration items="{!v.recommendedList}" var="suRecommendItem" indexVar="indexVar">
+								<aura:if isTrue="{!if(suRecommendItem.highlight.TitleToDisplay,true,false)}">
+									<div 
+										class= "{!if(v.redirectionUrl, 'su__d-flex su__align-items-center su__py-2 su__justify-content-between su__widget ','su__d-flex su__align-items-center su__py-2 su__justify-content-between su_recommended__border-b'  )}"        >
+										<div
+											class="{!if(suRecommendItem.contentTag, 'su-recommend-element su__d-flex su__align-items-start su__w-60','' )}">
+											<div>
+												<a class="su-recommend-title" href="{!suRecommendItem.href}" target="_blank"
+													data-Id="{!suRecommendItem._id}" data-Rank="{!indexVar}"
+													data-Sub="{!suRecommendItem.highlight.TitleToDisplayString[0]}"
+													data-url="{!suRecommendItem.href}" data-Type="{!suRecommendItem.objName}"
+													data-Index="{!suRecommendItem.sourceName}">
+													<aura:unescapedHtml value="{!suRecommendItem.highlight.TitleToDisplay[0] || suRecommendItem.href}">
+													</aura:unescapedHtml>
+												</a>
+											</div>
+										</div>
+										<aura:if isTrue="{!suRecommendItem.contentTag}">
+											<div class="su__w-30 su__py-2">
+												<p class="recommendation-label su__text-center su__whitespace-initial">
+													{!suRecommendItem.contentTag}</p>
+											</div>
+                                        </aura:if>
+									</div>
+								</aura:if>
+							</aura:iteration>
+						</div>
+						<aura:if isTrue="{!v.redirectionUrl}">
+							<div class="su__recommendations-ViewMore">
+								<a href="{!v.redirectionUrl}" target="_blank" rel="noopener noreferrer" class="su__text-decoration su__recommendations-content">
+									<span class="su__recommendations-ViewMore-text">View more articles</span>
+								</a>
+							</div>
+						</aura:if>
+					</div>
+				</div>
+			</div>
+		</div>
+	</aura:if>
+	<!-- <aura:set attribute="else">
+		<span class="su-customSettingErrMsg">{!v.customSettingErrorMessage}</span>
+	</aura:set> -->
+  </aura:if>
+</aura:component>

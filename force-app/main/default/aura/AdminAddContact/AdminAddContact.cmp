@@ -1,0 +1,102 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes"  access="global"  controller="AdminPanelApexController">
+    <aura:attribute name="newcontact" type="Object"/>
+    <aura:attribute name="removeIndex" type="string"/> 
+    <aura:attribute name="ContListNew" type="Object[]" access="global"/> 
+    <aura:registerevent name="addRow" type="c:AdminContactEvent"></aura:registerevent>
+    <aura:attribute name="ContList" type="Object[]" access="global"/> 
+    <aura:attribute name="isError" type="boolean"  default="false"/>
+    <aura:attribute name="isChecked" type="boolean"  default="true"/>
+    <br/>
+    <div class="slds-grid slds-wrap textStyle " >
+        <!-- added fields below notification to highlight required fields -
+         CS21-426 - Veera -->
+        <div class="slds-clearfix">
+            <div class="slds-small-size--12-of-12 slds-medium-size--12-of-12 slds-large-size--12-of-12 slds-m-left_x-large message">
+                * Field is required 
+            </div>
+        </div>
+        <div class="slds-small-size--8-of-12 slds-medium-size--12-of-12 slds-large-size--12-of-12 ">
+            <table class="slds-table tableClass slds-max-medium-table_stacked" style="width:95%;" id="viewTable">
+                <thead >
+                    <tr class="slds-line-height_reset ">
+                        <th scope="col" class="textStyle slds-cell-wrap" >
+                            <div class="slds-truncate" title="S.No">S.No</div>
+                        </th>
+                        <th scope="col" class="textStyle slds-cell-wrap">
+                            <div class="slds-truncate slds-cell-wrap" title="First Name"><span class="message">*</span>First Name</div>
+                        </th>
+                        <th scope="col" class="textStyle slds-cell-wrap">
+                            <div class="slds-truncate" title="Last Name"><span class="message">*</span>Last Name</div>
+                        </th>
+                        <th scope="col" class="textStyle slds-cell-wrap">
+                            <div class="slds-truncate" title="Email"><span class="message">*</span>Email</div>
+                        </th>
+                        <th scope="col" class="textStyle slds-cell-wrap">
+                            <div class="slds-truncate" title="Title">Title</div>
+                        </th>
+                        <th scope="col" class="textStyle slds-cell-wrap">
+                            <div class="slds-truncate" title="Phone">Phone</div>
+                        </th>
+                        <th scope="col" class="textStyle slds-cell-wrap">
+                            <div class="slds-truncate" title="Action">Action</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="textStyle">
+                    <aura:iteration items="{!v.ContList}" var="acc" indexVar="index">
+                        <tr class="rowborder1">
+                            <td style="width:4%;" class="slds-cell-wrap TdWidth" scope="row" data-label="S.No">
+                                <lightning:input aura:id="newUserForm" readonly="true" name="S.No" value="{!index + 1}" />
+                            </td>
+                            <td class="slds-cell-wrap" data-label="First Name">
+                                <lightning:input aura:id="newUserForm" type="Text" name="first Name"  required="" value="{!acc.firstName}"/> 
+                                <aura:if isTrue="{!and(acc.firstName == '',acc.hasError)}">
+                                    <span class='ErrorMsg'>Please Complete This Field</span>
+                                </aura:if>
+                            </td>
+                            <td class="slds-cell-wrap" data-label="Last Name">
+                                <lightning:input aura:id="newUserForm" type="Text" name="last Name"  required="" value="{!acc.lastName}"/> 
+                                <aura:if isTrue="{!and(acc.lastName == '', acc.hasError)}">
+                                    <span class='ErrorMsg'>Please Complete This Field</span>
+                                </aura:if>
+                            </td>
+                            <td class="slds-cell-wrap emailTd" data-label="Email">
+                                <lightning:input  aura:id="newUserEmail" type="Email" name="email"  required="" value="{!acc.email}"  onchange="{! c.checkError}"  class="emailInputTd"/> 
+                               <aura:if isTrue="{!and(acc.email == '', acc.hasError)}">
+                                   <span class='ErrorMsg'>Please Complete This Field</span>
+                                         <aura:set attribute="else">
+                                    <span class='ErrorMsg'>{!acc.errorMessage}</span> 
+                                       </aura:set>
+                                       </aura:if>
+
+
+                            </td>
+                            <!-- removed required check for title and Phone fields.
+							     Updated Phone pattern to allow more genric phone numbers - CS21-426 - Veera -->
+                            <td class="slds-cell-wrap" data-label="Title">
+                                <lightning:input aura:id="newUserForm" type="Text" name="title"  required="" value="{!acc.title}"/>
+                            </td>
+                            <td class="slds-cell-wrap" data-label="Phone">
+                                <lightning:input aura:id="newUserphone" type="Phone" name="phone" required="" value="{!acc.phone}"
+                                                 pattern="[^a-z^A-Z]{7,20}" 
+                                                 messageWhenPatternMismatch="Your entry does not match the allowed pattern. e.g. +14159999999, (415) 999-9999, 9999999999"/>        
+                            </td>
+                            <td  data-label="Action">
+                                <aura:if isTrue="{!v.ContList.length > 1}"> 
+                                    <lightning:button class="rubbtnX slds-m-top_large" label="X" onclick="{!c.removeRow}" title="{!index}"/>
+                                </aura:if>
+                                <aura:if isTrue="{!index +1 == v.ContList.length}"> 
+                                    <lightning:button class="rubbtnX slds-m-top_large" label="+" onclick="{!c.addRow}"/>
+                                </aura:if>
+                            </td>
+                        </tr>
+                    </aura:iteration>
+                </tbody>
+            </table>
+            <br/> 
+            <div class="slds-align_absolute-center">
+                <lightning:input type="Checkbox" name="userName" aura:id="check123" onchange="{!c.oncheck}" value="{!v.isChecked}" checked="{!v.isChecked}" label="Activate Support Portal login and send new user welcome letter."/>
+            </div>
+        </div>
+    </div>
+</aura:component>

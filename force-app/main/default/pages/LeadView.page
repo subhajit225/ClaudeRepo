@@ -1,0 +1,68 @@
+<apex:page StandardController="Lead" cache="false" standardStylesheets="false" sidebar="false" showheader="false" title="Lead {!Lead.Name} - Rubrik Community" applyBodyTag="false" action="{!case($User.UserType,
+                          "Standard",urlFor($Action.Lead.View, Lead.Id, null, true),
+                          "PowerPartner",null,
+                          "CSPLitePortal",null,
+                          "CustomerSuccess",null,
+                          "PowerCustomerSuccess",null,
+                          "CsnOnly",null,
+                          null)}">
+    <style>
+    .pbSubsection, pbBody {
+    padding: 25px;
+    }
+    table {
+    padding: 5px;
+    }
+    td.labelCol {
+    font-size: 16px;
+    font-family: Gotham-Medium;
+    padding-left: 10px
+    }
+    td.dataCol {
+    padding: 5px;
+    padding-right: 15px;
+    }
+
+    td.data2Col {
+    padding: 5px;
+    padding-left: 15px;
+    }
+    td {
+    padding: 15px;
+    }
+    wrapper{
+    padding-bottom: 5px;
+    }
+    
+    .btnpad{
+    padding: 15px;
+    }
+    
+    </style>
+    <c:visualstrapblock >
+
+        <!--start header-->
+        <c:siteheader ></c:siteheader>
+        <!--end Header-->
+        
+        <!--start the Container-->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                
+                 <apex:detail relatedList="false" relatedListHover="false" inlineEdit="false"/>
+            
+                </div>
+             
+        </div>
+        </div>
+        <!--End the Container-->
+
+        
+        <!--start the footer-->
+        <c:sitefooter rendered="{!NOT(ISPICKVAL($User.UserType,'PowerPartner'))}"/>
+        <c:psitefooter rendered="{!ISPICKVAL($User.UserType,'PowerPartner')}"/>
+        
+    </c:visualstrapblock>           
+                
+</apex:page>

@@ -1,0 +1,216 @@
+<aura:component controller="CaseDetailController" implements="force:hasRecordId,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes">
+    <!--Style-->
+    <aura:html tag="style">
+        .modal-body{ 
+        height : 40vh !important; 
+        max-height: 40vh !important; 
+        }
+    </aura:html>
+    
+    <!-- attributes -->
+    <lightning:workspaceAPI aura:id="workspace" />
+    <!--aura:handler event="lightning:tabFocused" action="{! c.onTabFocused }"/-->
+    <aura:attribute name="lastModifiedDate" type="DateTime" />
+    <aura:attribute name="data" type="Object" default="{ 'sobjectType': 'Case','Account_type_preserved__c' :'Test'}"/>
+    <aura:attribute name="fieldsList" type="Object[]"/>
+    <aura:attribute name="objectName" type="String"/>    
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="caseRecord" type="Case"/>
+    <aura:attribute name="currentIndex" type="Integer" default="0"/>
+    <aura:attribute name="errors" type="Object" default="[]"/>
+    <aura:attribute name="draftValues" type="Object" default="[]"/>
+    <aura:attribute name="caseInfoSectionHide" type="Boolean" default="false"/>
+    <aura:attribute name="isOpen" type="boolean" default="false" />
+    <aura:attribute name="saved" type="Boolean" default="false" />
+    <aura:attribute name="ratingEditMode" type="boolean" default="false" />
+    <aura:attribute name="showSpinner" type="boolean" default="false" />
+    <aura:attribute name="updateCaseRecord" type="Case"/>
+    <aura:registerEvent name="RecTypeEvent" type="c:recordTypeEvent" />
+    <aura:attribute name="isHotSectionOpen" type="boolean" default="false" />
+    <aura:attribute name="isHotSectionSaved" type="boolean" default="false" />
+    <aura:attribute name="escalationOwnerManagerName" type="String" default="" />
+    <aura:attribute name="EscalationManagerFlag" type="boolean" default="false" />
+    <aura:attribute name="isCurrentUserSupportManager" type="boolean" default="false" />
+    <aura:attribute name="userRecord" type="User" />
+    <aura:attribute name="exception" type="boolean" default="false"/>  
+    <aura:attribute name="createCustomerSuccess" type="boolean" default="false"/>  
+    <aura:attribute name="exceptionMsg" type="String" default=""/>  
+    <aura:attribute name="isSnooze" type="Boolean" default="false"/>
+
+    <force:recordData aura:id="forceRecord"
+                      recordId="{!$SObjectType.CurrentUser.Id}"
+                      fields="Profile.Name,Id,Name,is_Customer_Success_User__c"
+                      targetFields="{!v.userRecord}"
+                       />
+    <!-- handlers-->
+    <aura:handler name="change" value="{! v.userRecord.is_Customer_Success_User__c }" action="{! c.init }"/>
+    
+    <!-- the container element determine the height of the datatable -->
+    <div class="slds-grid slds-wrap slds-size_12-of-12">
+        <div class="slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12" aura:id="TC_Div">
+            
+            <lightning:card>
+                <div class="slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12 slds-p-horizontal_x-small" style="font-size: 1rem;">
+                    <lightning:icon aura:id= "TC_DownArrow" iconName="utility:chevrondown" class="slds-show slds-icon_container slds-p-left_xx-small slds-float_left" size="xx-small" onclick="{!c.hideCaseInfoSection}" style="padding:3px 3px 0 0;"></lightning:icon>
+                    <lightning:icon aura:id= "TC_RightArrow" iconName="utility:chevronright" class="slds-hide slds-icon_container slds-p-left_xx-small slds-float_left" size="xx-small" onclick="{!c.showCaseInfoSection}" style="padding:3px 3px 0 0;"></lightning:icon>
+                    <span class="slds-truncate" style="font-weight:bold;">{!IF(!v.userRecord.is_Customer_Success_User__c,'Case Info','Customer Success')} </span>
+                </div>
+                <aura:if isTrue="{!v.exception}">
+                    <div style="color:white;background-color:#FFBF00;font-size:24px;text-align: center;" >
+                        {!v.exceptionMsg}
+                        <aura:if isTrue="{!v.createCustomerSuccess}">
+                            <br/><a href="javascript:void()" style="font-size:16px;" onclick="{!c.createRecord}">Click here to create the Customer Success record</a> 
+                        </aura:if>
+                    </div>
+                </aura:if>
+                
+                <aura:if isTrue="{!and(!v.exception,!v.caseInfoSectionHide)}">
+                    <lightning:recordEditForm recordId="{!v.recordId}" objectApiName="Case">
+                        <lightning:messages />
+                        <div class="slds-grid slds-wrap">
+                            <aura:iteration items="{!v.fieldsList}" var="item" indexVar="index">
+                                 <div class="slds-size_1-of-6">
+                                    <c:LGT_caseInfoChild fieldName = "{!item.label}" 
+                                                         fieldApi = "{!item.Name}" 
+                                                         fieldType = "{!item.Type}"
+                                                         caseRecord = "{!v.caseRecord}" 
+                                                         recordId = "{!v.recordId}" 
+                                                         isOpen = "{!v.isOpen}" 
+                                                         saved = "{!v.saved}" 
+                                                         isHotSectionOpen = "{!v.isHotSectionOpen}" 
+                                                         isHotSectionSaved = "{!v.isHotSectionSaved}" 
+                                                         aura:id = "{!v.index}" 
+                                                         currentIndex = "{!v.currentIndex}"  
+                                                         showSpinner = "{!v.showSpinner}"
+                                                         escalationOwnerManagerName = "{!v.escalationOwnerManagerName}"
+                                                         isCurrentUserSupportManager = "{!v.isCurrentUserSupportManager}"/>
+                                </div>
+                            </aura:iteration>
+                        </div>
+                    </lightning:recordEditForm>
+                </aura:if>
+            </lightning:card>
+        </div>
+        <div>
+            <aura:if isTrue="{!and(v.isOpen,!v.isSaved)}">
+                <!-- <div style="{!if(and(v.isOpen,!v.saved),'display:block','display:none;')}" >-->
+                <!--###### MODAL BOX Start######--> 
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <!-- ###### MODAL BOX HEADER Start ######-->
+                        <header class="slds-modal__header">
+                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Case Info</h2>
+                        </header>
+                        <aura:if isTrue="{!v.userRecord.is_Customer_Success_User__c == false}">
+                            <lightning:recordEditForm recordId="{!v.recordId}" objectApiName="Case" onsuccess="{!c.handleSuccess}">
+                                <lightning:messages />
+                                <!--###### MODAL BOX BODY Part Start######-->
+                                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                                    <lightning:inputField fieldName="Platform__c" required="true" />
+                                    <lightning:inputField fieldName="Product_Area__c" required="true" />
+                                    <lightning:inputField fieldName="Problem_Type__c" required="true" />
+                                    <lightning:inputField fieldName="Sub_Component__c" />
+                                    <lightning:inputField fieldName="If_Other__c" />
+                                    <lightning:inputField fieldName="Software_Version__c" required="true" />
+                                </div>
+                                <footer class="slds-modal__footer">
+                                    <lightning:button class="slds-m-top_small"
+                                                      variant="brand"
+                                                      type="submit"
+                                                      name="update"
+                                                      label="Update">
+                                    </lightning:button>
+                                    <lightning:button class="slds-m-top_small"
+                                                      variant="neutral"
+                                                      type="button"
+                                                      name="Cancel"
+                                                      label="Cancel" onclick="{!c.closeModal}">
+                                    </lightning:button>
+                                </footer>
+                            </lightning:recordEditForm>
+                            <aura:set attribute="else">
+                                <lightning:recordEditForm recordId="{!v.recordId}" objectApiName="Case" onsuccess="{!c.handleSuccess}" onload="{!c.handleLoad}">
+                                    <lightning:messages />
+                                    <!--###### MODAL BOX BODY Part Start######-->
+                                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                                        <lightning:inputField aura:id="subPhase" fieldName="Sub_Phase__c" required="true" onchange="{!c.checkSubPhase}"/>
+                                        <lightning:inputField fieldName="Churn_Reason__c" required="true" />
+                                        <aura:if isTrue="{!v.isSnooze == true}">
+                                        <lightning:inputField  fieldName="Snooze_End_DateTime__c" required="true" />
+                                        </aura:if>
+                                    </div>
+                                    <footer class="slds-modal__footer">
+                                        <lightning:button class="slds-m-top_small"
+                                                          variant="brand"
+                                                          type="submit"
+                                                          name="update"
+                                                          label="Update">
+                                        </lightning:button>
+                                        <lightning:button class="slds-m-top_small"
+                                                          variant="neutral"
+                                                          type="button"
+                                                          name="Cancel"
+                                                          label="Cancel" onclick="{!c.closeModal}">
+                                        </lightning:button>
+                                    </footer>
+                                </lightning:recordEditForm>
+                            </aura:set>
+                        </aura:if>
+                        
+                        <!--###### MODAL BOX FOOTER Part Start ######-->
+                    </div>
+                </section>
+                <!--<div class="slds-backdrop slds-backdrop_open"></div>-->
+                <!--###### MODAL BOX Part END Here ######-->
+                <!--</div>-->
+               <div class="slds-backdrop slds-backdrop_open"></div> 
+            </aura:if>
+        </div>
+        
+        <div>
+            <aura:if isTrue="{!and(v.isHotSectionOpen,!v.isHotSectionSaved)}">
+                <!--###### MODAL BOX Start######--> 
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <!-- ###### MODAL BOX HEADER Start ######-->
+                        <header class="slds-modal__header">
+                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Case Hot/Critical Section</h2>
+                        </header>
+                        <lightning:recordEditForm recordId="{!v.recordId}" objectApiName="Case" onsuccess="{!c.handleHotSectionSuccess}">
+                            <lightning:messages />
+                            <!--###### MODAL BOX BODY Part Start######-->
+                            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                                <lightning:inputField fieldName="HotCriticalIssue__c" onchange="{!c.handleEscalationManagerField}"/>
+                                <lightning:inputField fieldName="EscalationManagerOwner__c" aura:id="HotCriticalOwner" required="{!v.EscalationManagerFlag}" disabled="{!!v.EscalationManagerFlag}"/>
+                                <lightning:inputField fieldName="Current_Status__c" required="true" />
+                                <lightning:inputField fieldName="Next_Step__c" required="true"/>
+                            </div>
+                            <footer class="slds-modal__footer">
+                                <lightning:button class="slds-m-top_small"
+                                                  variant="brand"
+                                                  type="submit"
+                                                  name="update"
+                                                  label="Update">
+                                </lightning:button>
+                                <lightning:button class="slds-m-top_small"
+                                                  variant="neutral"
+                                                  type="button"
+                                                  name="Cancel"
+                                                  label="Cancel" onclick="{!c.closeHotSectionModal}">
+                                </lightning:button>
+                            </footer>
+                        </lightning:recordEditForm>
+                        
+                        <!--###### MODAL BOX FOOTER Part Start ######-->
+                    </div>
+                </section>
+                <!--<div class="slds-backdrop slds-backdrop_open"></div>-->
+                <!--###### MODAL BOX Part END Here ######-->
+                <!--</div>-->
+                <div class="slds-backdrop slds-backdrop_open"></div> 
+            </aura:if>
+        </div>
+        
+    </div> 
+    <lightning:spinner aura:id="spinner" alternativeText="Loading" size="medium" style="{!if(v.showSpinner,'display:block;','display:none;')}"/>
+</aura:component>

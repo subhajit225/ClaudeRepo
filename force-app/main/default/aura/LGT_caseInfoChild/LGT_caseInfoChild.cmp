@@ -1,0 +1,105 @@
+<aura:component controller="CaseDetailController" implements="force:hasRecordId,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes" access="global" >
+    <!-- attributes -->
+    <aura:attribute name="data" type="Object" description=""/>
+    <aura:attribute name="fieldName" type="String"/>
+    <aura:attribute name="statusValue" type="String"/>
+    <aura:attribute name="fieldValue" type="String"/>
+    <aura:attribute name="fieldLabel" type="String"/>
+    <aura:attribute name="fieldApi" type="String"/>
+    <aura:attribute name="fieldType" type="String"/>
+    <aura:attribute name="isOpen" type="boolean" />
+    <aura:attribute name="saved" type="boolean" />
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="errors" type="Object" default="[]"/>
+    <aura:attribute name="draftValues" type="Object" default="[]"/>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="caseRecord" type="Case"/>
+    <aura:handler name="init" value="{! this }" action="{!c.init }"/>
+    <aura:attribute name="nameEditMode" type="boolean" default="false" />
+    <aura:attribute name="ratingEditMode" type="boolean" default="false" />
+    <aura:attribute name="currentIndex" type="Integer" default="0"/>
+    <aura:attribute name="showSpinner" type="boolean" default="false" />
+    <aura:handler name="change" value="{!v.currentIndex}" action="{!c.closeRatingBox1 }"/>
+    <aura:attribute name="showTextPopUp" type="boolean" default="false"/>
+    <aura:attribute name="viewMoreButton" type="boolean" default="false"/>
+    <aura:attribute name="showLookupFields" type="boolean" default="false"/>
+    <aura:attribute name="isHotSectionOpen" type="boolean" default="false" />
+    <aura:attribute name="isHotSectionSaved" type="boolean" default="false" />
+    <aura:attribute name="escalationOwnerManagerName" type="String" default="" />
+    <aura:attribute name="isCurrentUserSupportManager" type="boolean" default="false" />
+
+    <tr>
+        <td class="{!v.fieldApi+'  slds-cell-edit TC_highlightFields'}" style="display: inline-flex;">
+            <!-- show input and output section based on boolean flag --> 
+            
+            <!-- Inline Edit Section in else case-->  
+            <div style="{!if(v.ratingEditMode == false,'display: inline-grid;','display:none;')}">
+                <aura:if isTrue="{!v.fieldApi == 'Case_Owner_Name__c'}">
+                	<label class="caseOwnerLabel">Case Owner</label>
+                    <lightning:outputField class="caseOwnerValue" fieldName="{!v.fieldApi}" variant="label-hidden"/>
+                    <aura:set attribute="else">
+                        <aura:if isTrue="{!v.fieldApi == 'EscalationManagerOwner__c'}">
+                                <label class="caseOwnerLabel slds-m-top_xxx-small">Escalation Manager Owner</label>
+                                <ui:outputText value="{!v.escalationOwnerManagerName}" class="slds-m-left_xx-small"/>
+                            <aura:set attribute="else">
+                                <lightning:outputField fieldName="{!v.fieldApi}"/> 
+                            </aura:set>
+                        </aura:if>
+                    </aura:set>
+                </aura:if>
+                
+            </div>
+            <!--<div style="{!if(v.ratingEditMode == true,'display: inline-flex;','display:none;')}"> -->
+            <div class="{!if(v.ratingEditMode == true,'slds-show','slds-hide')}"> 
+                <aura:if isTrue="{!v.fieldType=='DATETIME'}">
+                    <div class="slds-form-element slds-form-element_vertical">
+                        <label class="slds-form-element__label"><strong>{!v.fieldName}</strong></label>
+                        <div class="slds-form-element__control">
+                            <lightning:inputField aura:id="{!v.fieldApi}" variant="label-hidden" fieldName="{!v.fieldApi}" value="{!v.fieldValue}"/>
+                        </div>
+                    </div>
+                    <aura:set attribute="else">
+                        <lightning:inputField aura:id="{!v.fieldApi}" fieldName="{!v.fieldApi}" value="{!v.fieldValue}"/>
+                    </aura:set>
+                </aura:if>
+            </div>
+            <aura:if isTrue="{!v.showLookupFields}">
+                <div style="display:block;    word-break: break-all;">
+                    <label class="caseOwnerLabel slds-m-top_xxx-small">{!v.fieldLabel}</label><br/>
+                    <ui:outputText value="{!v.fieldValue}" class="slds-m-left_xx-small"/>
+                </div>
+            </aura:if>
+            <aura:if isTrue="{!v.ratingEditMode == false}">
+                <!--<aura:if isTrue = "{!or(or(or(or(or(or(or(or(v.fieldApi == 'Status',v.fieldApi == 'Origin'),v.fieldApi == 'Priority'),v.fieldApi == 'Platform__c'),v.fieldApi == 'Problem_Type__c'),v.fieldApi == 'Sub_Component__c'),v.fieldApi == 'Software_Version__c'),v.fieldApi == 'Case_Severity__c'),v.fieldApi == 'Product_Area__c')}">-->
+                <aura:if isTrue = "{!(v.fieldApi == 'Status' || v.fieldApi == 'Origin' || v.fieldApi == 'Priority' || v.fieldApi == 'Platform__c' 
+                                   || v.fieldApi == 'Problem_Type__c' 
+                                   || v.fieldApi == 'Sub_Component__c' || v.fieldApi == 'Software_Version__c' 
+                                   || v.fieldApi == 'Case_Severity__c' 
+                                   || v.fieldApi == 'Product_Name__c' || v.fieldApi == 'If_Other__c' 
+                                   || v.fieldApi == 'Product_Area__c' || v.fieldApi == 'Phase__c' 
+                                   || v.fieldApi == 'Churn_Reason__c' || v.fieldApi == 'CSM_Owner__c' 
+                                   || v.fieldApi == 'Quoting_Specialist__c' ||  and(v.fieldApi == 'OwnerId', v.caseRecord.RecordType.Name == 'Renewal Case')
+                                   || v.fieldApi == 'CSM_Summary_Status__c' || v.fieldApi == 'CustomerFirstContact__c' 
+                                   || v.fieldApi == 'CustomerOnboardingCompletion__c' || v.fieldApi == 'CustomersFirstResponse__c' 
+                                   || v.fieldApi == 'Entitlement__c' || v.fieldApi == 'Sub_Phase__c' || v.fieldApi == 'Snooze_End_DateTime__c' || v.fieldApi == 'Customer_Sentiments__c'
+                                   || and(v.fieldApi == 'Sales_Escalated__c', v.isCurrentUserSupportManager)
+                                   || and(v.fieldApi == 'HotCriticalIssue__c', v.isCurrentUserSupportManager))}">    
+                    <button onclick="{!c.inlineEditRating}" class="slds-button slds-button_icon slds-cell-edit__button slds-m-left_x-small" tabindex="0" title="Edit Rating" Id="{!v.fieldApi}">
+                        <lightning:icon iconName="utility:edit" size="xx-small" alternativeText="edit"/>
+                    </button>
+                </aura:if>
+                <aura:set attribute="else">
+                    <button onclick="{!c.closeRatingBox1}" class="slds-button slds-button_icon slds-cell-edit__button slds-m-left_x-small" tabindex="0" >
+                        <lightning:icon iconName="utility:close" size="xx-small" alternativeText="edit"/>
+                    </button>
+                    <button onclick="{!c.saveRecord}" class="slds-button slds-button_icon slds-cell-edit__button slds-m-left_x-small" tabindex="0" title="Edit Rating" Id="{!v.fieldApi}">
+                        <lightning:icon iconName="utility:check" size="xx-small" alternativeText="edit"/>
+                    </button>
+                </aura:set>
+            </aura:if>
+        </td> 
+    </tr>
+    
+    <!-- the container element determine the height of the datatable -->
+    
+</aura:component>

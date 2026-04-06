@@ -1,0 +1,42 @@
+<template>
+    <div class="slds-p-horizontal_small slds-p-vertical_x-large footer-parent">
+        <lightning-layout class="pc-footer">
+            <lightning-layout-item size="12" small-device-size="6" medium-device-size="4" large-device-size="1" class="slds-m-top_xxx-small">
+                <span class="slds-align_absolute-center">
+                    <img src={footerLogo} width="65" />
+                </span>
+            </lightning-layout-item>
+            <lightning-layout-item class="footerLabel" size="12" small-device-size="6" medium-device-size="4" large-device-size="3">
+                <span class="slds-float_left">
+                    {footerLabel}
+                </span>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" small-device-size="6" medium-device-size="4" large-device-size="7" class="slds-m-top_xxx-small">
+                <span>
+                    <ul class="slds-list_horizontal slds-list_dotted slds-has-dividers_left slds-float_left slds-p-horizontal_small">
+                        <template for:each={footerItems} for:item="listItem">
+                            <li class="slds-item" key={listItem.Id}>
+                                <a class="noLink" href={listItem.Navigate_Url__c} target={listItem.URLType}>
+                                    {listItem.Navigate_Text__c}
+                                </a>
+                            </li>
+                        </template>
+                    </ul>
+                </span>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" small-device-size="6" medium-device-size="4" large-device-size="1">
+                <span>
+                    <ul class="slds-list_horizontal slds-float_right">
+                        <template for:each={footerIconsList} for:item="listItem">
+                            <li class="slds-item slds-p-horizontal_xxx-small" key={listItem.Id}>
+                                <a class="noLink" href={listItem.Navigate_Url__c} target={listItem.URLType}>
+                                    <img src={listItem.Image_Url__c} width="25"/>
+                                </a>
+                            </li>
+                        </template>
+                    </ul>
+                </span>
+            </lightning-layout-item>
+        </lightning-layout>
+    </div>
+</template>

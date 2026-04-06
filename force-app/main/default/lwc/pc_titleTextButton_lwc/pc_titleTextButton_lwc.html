@@ -1,0 +1,37 @@
+<template>
+    <template if:true={isData}>
+            <lightning-layout>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+                    <div class="slds-col slds-p-horizontal_medium">
+                        <span>
+                            <template if:false={showHeader}>
+                                <div class="slds-m-bottom_xx-small">
+                                    <h1 class="heading-22">{headerValue}</h1>
+                                </div>
+                            </template>
+                            <template if:true={showTitle}>
+                                <div class="slds-m-bottom_xx-small">
+                                    <h1 class="heading-58">{titleValue}</h1>
+                                </div>
+                            </template>
+                            <template if:true={showText}>
+                                <div class="slds-m-bottom_xx-small">
+                                    <p class="cardBodyDescription">{textValue}</p>
+                                </div>
+                            </template>
+                            <template if:true={showButton}>
+                                <div class="slds-m-top_xx-small">
+                                    <lightning-button variant="brand" label={buttonValue} title={buttonValue} onclick={handleButtonClick} >
+                                    </lightning-button>
+                                    <template if:true={showManageServiceButton}>
+                                        <lightning-button variant="brand" label="Managed Service Engagement Request" title="Managed Service Engagement Request" onclick={handleButtonClick2} class="slds-p-left_x-small">
+                                        </lightning-button>
+                                    </template>
+                                </div>
+                            </template>
+                        </span>
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>
+    </template>
+</template>

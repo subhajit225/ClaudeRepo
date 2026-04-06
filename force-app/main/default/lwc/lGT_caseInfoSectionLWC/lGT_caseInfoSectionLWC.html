@@ -1,0 +1,286 @@
+<template>
+    <lightning-card>
+        <div class="spinner">
+            <template if:true={showSpinner}>
+                <lightning-spinner alternative-text="Loading" variant="brand" size="large">
+                </lightning-spinner>
+            </template>
+        </div>
+        <lightning-accordion allow-multiple-sections-open active-section-name={activeSections}>
+            <lightning-accordion-section name="A" class="section-title" label={sectionLabel}>
+                <div class="slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12 slds-p-left_x-small">
+                    <div class="font-style">
+                        <template lwc:if={exception}>
+                            <!-- Show Exceptions -->
+                            {exceptionMsg}
+                            <template if:true={createCustomerSuccess}>
+                                <br/><a href="javascript:void()" style="font-size:16px;" onclick={createRecord}>Click
+                                    here to create the Customer Success record</a>
+                            </template>
+                        </template>
+                        <!--End Of Show Exceptions -->
+                        <template lwc:else>
+                            <div class="slds-grid slds-wrap">
+                                <template if:true={fieldsList} for:each={fieldsList} for:item="item" for:index="index">
+                                    <!--################################## EDIT MODE #################################-->
+                                    <div if:true={item.isEditMode} key={item.Name}
+                                        class="slds-size_1-of-6 slds-grid slds-form-element_stacked margin-bottom">
+                                        <lightning-record-edit-form data-id={item.Name} class={item.Name}
+                                            record-id={recordId} object-api-name="Case" onsubmit={saveCaseRecord}
+                                            onsuccess={handleAfterSave} onerror={handleError} density="comfy">
+                                            <lightning-messages></lightning-messages>
+                                            <div class="slds-grid">
+                                                <template lwc:if={item.isFieldTypeDateTime}>
+                                                    <div class="slds-form-element">
+                                                        <label class="slds-form-element__label caseOwnerLabel">{item.label}</label>
+                                                        <lightning-input-field data-id={item.Name}
+                                                            field-name={item.Name} variant="label-hidden"
+                                                            value={fieldValue}></lightning-input-field>
+                                                    </div>
+                                                </template>
+                                                <template lwc:else>
+                                                    <div if:true={item.isLookupField}>
+                                                        <div class="display-block">
+                                                            <label class="caseOwnerLabel slds-m-top_xxx-small">{item.label}</label><br/>
+                                                            <lightning-formatted-text class="break-word"
+                                                                value={item.lookupFieldValue}>
+                                                            </lightning-formatted-text>
+                                                        </div>
+                                                    </div>
+                                                    <div if:false={item.isLookupField} class="slds-form-element">
+                                                        <label for={item.Name} class="caseOwnerLabel slds-form-element__label">{item.label}</label>
+                                                        <lightning-input-field data-id={item.Name}
+                                                            field-name={item.Name} variant="label-hidden"
+                                                            onchange={handleFieldChange}></lightning-input-field>
+                                                    </div>
+                                                </template>
+                                                <div class="slds-grid">
+                                                    <div class="slds-p-right_x-small slds-p-left_xx-small"
+                                                        key={item.Name}>
+                                                        <lightning-button-icon name="close" data-id={item.Name}
+                                                            onclick={closeInlineEdit} variant="bare" size="medium"
+                                                            class="pointer" icon-name="utility:close"
+                                                            alternative-text="Close">
+                                                        </lightning-button-icon>
+                                                    </div>
+                                                    <div key={item.Name}>
+                                                        <lightning-button-icon name="save" data-id={item.Name}
+                                                            type="submit" icon-name="utility:check" variant="bare"
+                                                            size="medium" alternative-text="Save">
+                                                        </lightning-button-icon>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </lightning-record-edit-form>
+                                    </div>
+                                    <!--################################## VIEW MODE #################################-->
+                                    <div if:false={item.isEditMode} key={item.Name}
+                                        class="slds-size_1-of-6 slds-grid slds-form-element_stacked margin-bottom ">
+                                        <lightning-record-view-form data-id={item.Name} record-id={recordId}
+                                            object-api-name="Case" density="comfy">
+                                            <div if:true={item.isLookupField}>
+                                                <div class="display-block">
+                                                    <label class="caseOwnerLabel slds-m-top_xxx-small">{item.label}</label><br/>
+                                                    <template lwc:if={item.isUrlField}>
+                                                        <lightning-formatted-url value={item.lookupFieldValue}
+                                                            target="_blank" class="pointer break-word">
+                                                        </lightning-formatted-url>
+                                                    </template>
+                                                    <template lwc:elseif={item.isCustomUrl}>
+                                                        <div if:true={item.showCopyIcon} class="copy-icon">
+                                                            <lightning-formatted-url value={item.customUrlLink}
+                                                                target="_blank" class="pointer break-word"
+                                                                label={item.lookupFieldValue}></lightning-formatted-url>
+                                                            <lightning-icon class="slds-m-left_x-small pointer"
+                                                                icon-name="utility:copy" data-id={item.Name}
+                                                                data-label={item.lookupFieldValue} size="xx-small"
+                                                                alternative-text="Copy" title="Copy"
+                                                                onclick={handleCopyClick}></lightning-icon>
+                                                        </div>
+                                                    </template>
+                                                    <template lwc:else>
+                                                        <lightning-formatted-text value={item.lookupFieldValue}>
+                                                        </lightning-formatted-text>
+                                                    </template>
+
+                                                </div>
+                                            </div>
+                                            <div if:false={item.isLookupField}>
+                                                <template lwc:if={item.isFieldTypeDateTime}>
+                                                    <label for={item.Name} class="caseOwnerLabel slds-form-element__label">{item.label}</label>
+                                                    <lightning-output-field field-name={item.Name}
+                                                        class="caseOwnerLabel" variant="label-hidden">
+                                                    </lightning-output-field>
+                                                </template>
+                                                <template lwc:else>
+                                                    <div if:true={item.showCopyIcon}>
+                                                        <label for={item.Name} class="caseOwnerLabel slds-form-element__label ">{item.label}</label>
+                                                        <div class="copy-icon">
+                                                            <template lwc:if={item.showCaseUrl}>
+                                                                <!--CaseNumber Link-->
+                                                                <lightning-formatted-url value={item.caseUrl}
+                                                                    target="_blank" class="pointer break-word"
+                                                                    label={item.caseNumberText}>
+                                                                </lightning-formatted-url>
+                                                            </template>
+                                                            <template lwc:else>
+                                                                <lightning-output-field field-name={item.Name}
+                                                                    variant="label-hidden"> </lightning-output-field>
+                                                            </template>
+                                                            <lightning-icon class="slds-m-left_x-small pointer"
+                                                                icon-name="utility:copy" data-id={item.Name}
+                                                                size="xx-small" alternative-text="Copy" title="Copy"
+                                                                onclick={handleCopyClick}></lightning-icon>
+                                                        </div>
+                                                    </div>
+                                                    <div if:false={item.showCopyIcon}>
+                                                        <template lwc:if={item.showCustomLabel}>
+                                                            <div class="slds-grid_vertical">
+                                                                <label for={item.Name} class="caseOwnerLabel slds-form-element__label">{item.label}</label>
+                                                                <lightning-output-field id={item.Name}
+                                                                    field-name={item.Name} variant="label-hidden">
+                                                                </lightning-output-field>
+                                                            </div>
+                                                        </template>
+                                                        <template lwc:else>
+                                                            <lightning-output-field field-name={item.Name}
+                                                                class="caseOwnerLabel"> </lightning-output-field>
+                                                        </template>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </lightning-record-view-form>
+                                        <!-- SHOW EDIT BUTTON -->
+                                        <div key={item.Name} if:true={item.isNotRatingField}
+                                            class="slds-p-left_xx-small">
+                                            <lightning-button-icon name="edit" class="pointer" data-id={item.Name}
+                                                onclick={inlineEdit} variant="bare" size="medium"
+                                                icon-name="utility:edit" alternative-text="Edit">
+                                            </lightning-button-icon>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </lightning-accordion-section>
+        </lightning-accordion>
+    </lightning-card>
+    <!--------------------------------------------MODAL Code------------------------------------------->
+    <div>
+        <!--####### MODAL BOX START #######-->
+        <template if:true={isOpen}>
+            <template if:false={isSaved}>
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                    aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <!-- <template if:true={showSpinner}>
+                            <lightning-spinner alternative-text="Loading" size="large">
+                            </lightning-spinner>
+                        </template> -->
+                        <!-- modal header start -->
+                        <header class="slds-modal__header">
+                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Case Info</h2>
+                        </header>
+                        <template if:false={isCustomerSuccessUsr}>
+                            <!-- modal body start -->
+                            <lightning-record-edit-form id="recordViewForm2" record-id={recordId} object-api-name="Case"
+                                onsubmit={handleSubmit} onsuccess={handleSuccess}>
+                                <lightning-messages></lightning-messages>
+                                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                                    <lightning-input-field field-name="Platform__c" required="true">
+                                    </lightning-input-field>
+                                    <lightning-input-field field-name="Product_Area__c" required="true">
+                                    </lightning-input-field>
+                                    <lightning-input-field field-name="Problem_Type__c" required="true">
+                                    </lightning-input-field>
+                                    <lightning-input-field field-name="Sub_Component__c"></lightning-input-field>
+                                    <lightning-input-field field-name="If_Other__c"></lightning-input-field>
+                                    <lightning-input-field field-name="Software_Version__c" required="true">
+                                    </lightning-input-field>
+                                </div>
+                                <footer class="slds-modal__footer">
+                                    <lightning-button class="slds-button slds-m-top_small" variant="brand" type="submit"
+                                        name="update" label="Update"></lightning-button>
+                                    <lightning-button class="slds-button slds-m-top_small" variant="neutral"
+                                        type="button" name="cancel" label="Cancel" onclick={closeModal}>
+                                    </lightning-button>
+                                </footer>
+                            </lightning-record-edit-form>
+                        </template>
+                        <template if:true={isCustomerSuccessUsr}>
+                            <lightning-record-edit-form id="recordViewForm3" record-id={recordId} object-api-name="Case"
+                                onload={handleLoad}>
+                                <lightning-messages></lightning-messages>
+                                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+                                    <lightning-input-field data-id="subPhase" field-name="Sub_Phase__c" required="true"
+                                        onchange={checkSubPhase}></lightning-input-field>
+                                    <lightning-input-field field-name="Churn_Reason__c" required="true">
+                                    </lightning-input-field>
+                                    <template if:true={isSnooze}>
+                                        <lightning-input-field field-name="Snooze_End_DateTime__c" required="true">
+                                        </lightning-input-field>
+                                    </template>
+                                </div>
+                                <footer class="slds-modal__footer">
+                                    <lightning-button class="slds-button slds-m-top_small" variant="brand" type="submit"
+                                        name="update" label="Update"></lightning-button>
+                                    <lightning-button class="slds-button slds-m-top_small" variant="neutral"
+                                        type="button" name="cancel" label="Cancel" onclick={closeModal}>
+                                    </lightning-button>
+                                </footer>
+                            </lightning-record-edit-form>
+                        </template>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </template>
+        </template>
+        <!--####### END OF MODAL BOX #######-->
+    </div>
+    <div>
+        <template if:true={isHotSectionOpen}>
+            <template if:false={isHotSectionSaved}>
+                <!--###### MODAL BOX Start######-->
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                    aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <!-- <template if:true={showSpinner}>
+                                <lightning-spinner alternative-text="Loading" size="large">
+                                </lightning-spinner>
+                            </template> -->
+                        <!-- modal header start -->
+                        <header class="slds-modal__header">
+                            <h2 class="slds-text-heading_medium slds-hyphenate">Case Hot/Critical Section</h2>
+                        </header>
+                        <lightning-record-edit-form id="recordViewForm4" record-id={recordId} object-api-name="Case"
+                            onsubmit={handleHotSectionSubmit} onsuccess={handleHotSectionSuccess}>
+                            <lightning-messages></lightning-messages>
+                            <!-- modal body start -->
+                            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-3">
+                                <lightning-input-field field-name="HotCriticalIssue__c"
+                                    onchange={handleEscalationManagerField}></lightning-input-field>
+                                <lightning-input-field field-name="EscalationManagerOwner__c" data-id="HotCriticalOwner"
+                                    required={escalationManagerFlag} disabled={disableEscalationManagerFlag}>
+                                </lightning-input-field>
+                                <lightning-input-field field-name="Current_Status__c" required="true">
+                                </lightning-input-field>
+                                <lightning-input-field field-name="Next_Step__c" required="true">
+                                </lightning-input-field>
+                            </div>
+                            <footer class="slds-modal__footer">
+                                <lightning-button class="slds-button slds-m-top_x-small" variant="brand" label="Update"
+                                    type="submit"></lightning-button>
+                                <lightning-button class="slds-button slds-m-top_x-small" variant="neutral"
+                                    label="Cancel" onclick={closeHotSectionModal}></lightning-button>
+                            </footer>
+                        </lightning-record-edit-form>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+                <!--####### END OF MODAL BOX #######-->
+            </template>
+        </template>
+    </div>
+</template>

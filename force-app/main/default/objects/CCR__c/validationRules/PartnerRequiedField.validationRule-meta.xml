@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PartnerRequiedField</fullName>
+    <active>true</active>
+    <description>PRIT26-20 : Removed Partner_SE_Phone__c check</description>
+    <errorConditionFormula>CONTAINS( UPPER(Incentive__r.Name) , &apos;NEW CUSTOMER CLOSED DEAL INCENTIVE&apos;)
+&amp;&amp; (
+ISBLANK( Partner_SE_Name__c )
+||ISBLANK( Partner_SE_Email__c )
+)</errorConditionFormula>
+    <errorMessage>Please enter value in Partner SE Name and Email</errorMessage>
+</ValidationRule>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Archived_Clusters</fullName>
+    <columns>account__c</columns>
+    <columns>tag__c</columns>
+    <columns>NAME</columns>
+    <columns>software_version__c</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>LAST_UPDATE</columns>
+    <columns>archived__c</columns>
+    <columns>Replica_Storage__c</columns>
+    <columns>storage_usage__c</columns>
+    <columns>Cloud_Provider__c</columns>
+    <columns>total_archival_usage__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>archived__c</field>
+        <operation>equals</operation>
+        <value>1</value>
+    </filters>
+    <label>Archived Clusters</label>
+    <sharedTo>
+        <allInternalUsers></allInternalUsers>
+    </sharedTo>
+</ListView>

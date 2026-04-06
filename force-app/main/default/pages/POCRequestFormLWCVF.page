@@ -1,0 +1,30 @@
+<apex:page standardController="Opportunity" standardStylesheets="false">
+    <apex:includeLightning />
+    <div id="Con" />
+    <script>
+        console.log('Opportuinty Id', '{!$CurrentPage.parameters.id}');
+        $Lightning.use("c:POCRequestApp", function(){
+            $Lightning.createComponent(
+                "c:aura_newPOCForm",
+                {"recordId":'{!$CurrentPage.parameters.id}',"showPOCForm":true,"callfromVfPage":true},
+                "Con",
+                function(cmp) {
+                    console.log('INSIDE VF PAGE REDIRECT');
+                    $A.eventService.addHandler({
+                        event: 'force:navigateToSObject',
+                        handler: function(event) {
+                            window.location = '/' + event.getParam("recordId");
+                            console.log('event', event.getParam("recordId"));
+                        }
+                    });
+                    $A.eventService.addHandler({
+                        event: 'force:showToast',
+                        handler: function(event) {
+                            console.log('event Called');
+                        }
+                    });
+                });
+            });        
+      </script>
+    
+</apex:page>

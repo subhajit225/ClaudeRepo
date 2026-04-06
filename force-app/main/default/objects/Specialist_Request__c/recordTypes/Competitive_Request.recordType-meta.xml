@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Competitive_Request</fullName>
+    <active>true</active>
+    <label>Competitive Request</label>
+    <picklistValues>
+        <picklist>Audience_Level__c</picklist>
+        <values>
+            <fullName>Administrator</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Executive</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Middle Management</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>N%2FA</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Audience_Type__c</picklist>
+        <values>
+            <fullName>IT</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rubrik Internal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Security</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Audience__c</picklist>
+        <values>
+            <fullName>Channel Partner Account Team</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Existing Customer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Prospect</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rubrik Account Team</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Location__c</picklist>
+        <values>
+            <fullName>Onsite</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Virtual</fullName>
+            <default>true</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Primary_Focus_Area__c</picklist>
+        <values>
+            <fullName>Competitive</fullName>
+            <default>true</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Purpose__c</picklist>
+        <values>
+            <fullName>Champion Building</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Champion Enabling</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RFx Assistance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Strategy%2FKnowledge Sharing</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Secondary_Focus_Area__c</picklist>
+        <values>
+            <fullName>AWS Native</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Actifio</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Arcserve</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Avamar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AvePoint</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Azure Native</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>BackupExec</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Barracuda</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Clumio</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cohesity</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CommVault</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DataDomain</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Datto</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dell APEX%2FDruva</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DellEMC DPS %28Data Protection Suite%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DellEMC PowerProtect</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Druva</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Eon%2Eio</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GCP Native</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Generic Array %28ie NetApp%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HPE Data Protector %5C MicroFocus Data Protector</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HYCU</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>IBM Cloud Native</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>IBM Spectrum Protect</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>IDPA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>KeepIt</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>M365 Native</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>N2WS</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NetBackup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>OCI Native</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Semperis</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unitrends</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Veeam</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Zerto</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Status__c</picklist>
+        <values>
+            <fullName>Canceled</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Completed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Draft</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>Pending Additional Review</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SEM Approved</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Specialist Accepted</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Submitted</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Type__c</picklist>
+        <values>
+            <fullName>Demo</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Meeting</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>POC</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Support%2FCustomer Escalation</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Validation_Code__c</picklist>
+        <values>
+            <fullName>Canceled</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Closed</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>

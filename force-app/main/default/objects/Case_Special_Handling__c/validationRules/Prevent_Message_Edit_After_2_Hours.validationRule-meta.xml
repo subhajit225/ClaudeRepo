@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Prevent_Message_Edit_After_2_Hours</fullName>
+    <active>true</active>
+    <description>Allow messages to be edited for initial 2 hours of record creation</description>
+    <errorConditionFormula>AND(
+    ISCHANGED(Message__c),
+    NOW() &gt; (CreatedDate + (2 / 24))
+)</errorConditionFormula>
+    <errorMessage>You cannot edit the Message field after 2 hours from creation.</errorMessage>
+</ValidationRule>

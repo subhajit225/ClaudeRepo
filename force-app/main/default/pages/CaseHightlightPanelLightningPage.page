@@ -1,0 +1,35 @@
+<apex:page standardController="Case" lightningStylesheets="true" >
+        <apex:slds />
+    <div class="slds-scope">
+    <apex:form >
+    <body style="background-color:#eceaef">
+        <div>
+        <font size = "3"> <b>Status: </b></font>
+            &nbsp;&nbsp;&nbsp;<font size = "3" color="#937bd1"><b><apex:outputField value="{!Case.Status }" ></apex:outputField> </b></font>&nbsp;&nbsp;&nbsp;
+        <font size = "3"> <b>Priority: </b></font>
+            &nbsp;&nbsp;&nbsp;<font size = "3" color="#937bd1"><b><apex:outputField value="{!Case.Priority }" ></apex:outputField> </b></font>&nbsp;&nbsp;&nbsp;
+            <font size = "3"> <b>Type: </b></font>
+            &nbsp;&nbsp;&nbsp;<font size = "3" color="#937bd1"><b><apex:outputField value="{!Case.Type }" ></apex:outputField> </b></font>&nbsp;&nbsp;&nbsp;
+        <font size = "3"> <b>Product Area: </b></font>
+            &nbsp;&nbsp;&nbsp;<font size = "3" color="#937bd1"><b><apex:outputField value="{!Case.Product_Area__c }" ></apex:outputField> </b></font>&nbsp;&nbsp;&nbsp;
+        <font size = "3"> <b>Case Age: </b></font>
+            &nbsp;&nbsp;&nbsp;<font size = "3" color="#937bd1"><b><apex:outputField value="{!Case.CaseAge__c }" ></apex:outputField> </b></font>&nbsp;&nbsp;&nbsp;
+        <font size = "3"> <b>Origin: </b></font>
+            &nbsp;&nbsp;&nbsp;<font size = "3" color="#937bd1"><b><apex:outputField value="{!Case.Origin }" ></apex:outputField> </b></font>&nbsp;&nbsp;&nbsp;
+        </div>
+        <div>
+        <font size = "3"> <b>Name: </b></font>
+        	&nbsp;&nbsp;&nbsp;<font size = "3" color="#937bd1"><b><apex:outputField value="{!Case.Contact.Name }" ></apex:outputField> </b></font>&nbsp;&nbsp;&nbsp;
+        <font size = "3"> <b>Email: </b></font>
+        	&nbsp;&nbsp;&nbsp;<font size = "3" color="#937bd1"><b><apex:outputField value="{!Case.ContactEmail }" ></apex:outputField> </b></font>&nbsp;&nbsp;&nbsp;
+        <font size = "3"> <b>Phone: </b></font>
+        	&nbsp;&nbsp;&nbsp;<font size = "3" color="#937bd1"><b><apex:outputField value="{!Case.ContactPhone  }" ></apex:outputField> </b></font>&nbsp;&nbsp;&nbsp;
+        <font size = "3"> <b>Mobile: </b></font>
+            &nbsp;&nbsp;&nbsp;<font size = "3" color="#937bd1"><b><apex:outputField value="{!Case.ContactMobile }" ></apex:outputField> </b></font>&nbsp;&nbsp;&nbsp;
+        <font size = "3"> <b>Account Type: </b></font>
+            &nbsp;&nbsp;&nbsp;<font size = "3" color="#937bd1"><b><apex:outputField value="{!Case.Account_type__c }" ></apex:outputField> </b></font>&nbsp;&nbsp;&nbsp;
+        </div>
+        </body>
+    </apex:form>                
+    </div>
+</apex:page>

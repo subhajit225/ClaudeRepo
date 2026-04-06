@@ -1,0 +1,80 @@
+<template>
+    <lightning-layout multiple-rows horizontal-align="spread" class="slds-m-bottom--x-large">
+        <lightning-layout-item size="12" padding="around-small" small-device-size="12" medium-device-size="12" large-device-size="12" >
+            <div class="heading-58">Rubrik Account Manager Lookup</div>
+        </lightning-layout-item>
+        <template if:true={countryPicklist.data}>
+            <lightning-layout-item size="5" padding="around-small" small-device-size="5" medium-device-size="5" large-device-size="5">
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label" for="horizontal-input-id-01">Name</label>
+                    <div class="slds-form-element__control">
+                        <c-custom-look-up-l-w-c class="custom-lookup" name="Account Search" objectname="Account" iconname="standard:user" placeholder="Search Account..." 
+                        onselected={handleSelected} onclear={handleClear} recordtype={recordtype} onsearch={handleSearchText}></c-custom-look-up-l-w-c>
+                    </div>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="5" padding="around-small" small-device-size="5" medium-device-size="5" large-device-size="5">
+                <div class="slds-form-element">
+                    <lightning-combobox name="Country" label="Country" options={countryPicklist.data.values} onchange={handleCountry} disabled={isDisabled}></lightning-combobox>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item alignment-bump="top" size="2" padding="around-small" small-device-size="2" medium-device-size="2" large-device-size="2">
+                <div class="slds-form-element">
+                    <lightning-button label="Search" variant="brand" onclick={handleSearch} disabled={isDisabled}></lightning-button>
+                </div>
+            </lightning-layout-item>
+        </template>
+    </lightning-layout>
+    <table class="slds-table slds-m-bottom_medium account-manager-table">
+        <thead>
+            <tr>
+                <template if:false={recsNotAvailable}>
+                    <th class="account-name">
+                        <div title="Account Name">Account Name</div>
+                    </th>
+                    <th>
+                        <div title="Account Owner">Account Owner</div>
+                    </th>
+                    <th class="account-email">
+                        <div title="Account Owner Email">Account Owner Email</div>
+                    </th>
+                    <th class="account-emails">
+                        <div title="Account Tier">Account Tier</div>
+                    </th>
+                    <th>
+                        <div title="Country">Country</div>
+                    </th>
+                </template>
+                <template if:true={recsNotAvailable}>
+                    <th>
+                        <div class="slds-text-align_center" title="No Available Account">No Available Account</div>
+                    </th>
+                </template>
+            </tr>
+        </thead>
+        <tbody>
+            <template if:true={showSpinner}>
+                <lightning-spinner alternative-text="Loading" size="large" variant="brand"></lightning-spinner>
+            </template>
+            <template for:each={recordsList} for:item="item" for:index="index">
+                <tr class="slds-hint-parent" key={item.Id}>
+                    <th data-label="Account Name" scope="row">
+                        <div class="slds-truncate" title={item.Name}>{item.Name}</div>
+                    </th>
+                    <th data-label="Account Owner" scope="row">
+                        <div class="slds-truncate" title={item.Owner.Name}>{item.Owner.Name}</div>
+                    </th>
+                <th data-label="Account Owner Email" scope="row">
+                        <div class="slds-truncate" title={item.Owner.Email}>{item.Owner.Email}</div>
+                    </th>
+                    <th data-label="Account Tier" scope="row">
+                        <div class="slds-truncate" title={item.Tier}>{item.Parent_Tier__c}</div>
+                    </th>
+                    <th data-label="Country" scope="row">
+                        <div class="slds-truncate" title={item.Country}>{item.BillingCountry}</div>
+                    </th>
+                </tr> 
+            </template>
+        </tbody>
+    </table> 
+</template>

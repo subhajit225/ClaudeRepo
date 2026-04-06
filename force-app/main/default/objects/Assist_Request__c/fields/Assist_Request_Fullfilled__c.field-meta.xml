@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Assist_Request_Fullfilled__c</fullName>
+    <label>Assist Request - Fullfilled?</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Provided Steps Resolved the Issue</fullName>
+                <default>false</default>
+                <label>Provided Steps Resolved the Issue</label>
+            </value>
+            <value>
+                <fullName>Response Update Assist Request</fullName>
+                <default>false</default>
+                <label>Response Update Assist Request</label>
+            </value>
+            <value>
+                <fullName>Isolated to Non Rubrik Issue</fullName>
+                <default>false</default>
+                <label>Isolated to Non Rubrik Issue</label>
+            </value>
+            <value>
+                <fullName>Unresolved/Request Reopen</fullName>
+                <default>false</default>
+                <label>Unresolved/Request Reopen</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

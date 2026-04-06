@@ -1,0 +1,119 @@
+.siteforceLoadingBalls.global {
+    text-align: center;
+    background: var(--lwc-globalSpinnerBackground, rgba(255, 255, 255, 0.8));
+    border-radius: var(--lwc-borderRadiusSmall, 0.125rem);
+    padding: 40px;
+    color: var(--slds-g-color-neutral-base-80, #ccc);
+    top: 50%;
+    left: 50%;
+    margin-left: -86px;
+    margin-top: -50px;
+    position: fixed;
+    z-index: 99999;
+    display: block;
+    font-size: 20px;
+}
+
+.siteforceLoadingBalls.loadingCon {
+    transition: all .3s ease-in-out 0s;
+    margin-top: 10px;
+}
+
+.siteforceLoadingBalls .loadingBall {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    border-radius: 1em;
+    animation: bouncedelay 1.4s infinite ease-in-out;
+    animation-delay: -.48s;
+    animation-fill-mode: both;
+    background-color: var(--lwc-inlineSpinnerBackground, #7e8f9a);
+    margin-right: 16px;
+}
+
+.siteforceLoadingBalls .loadingBall.second {
+    animation-delay: -.32s;
+}
+
+.siteforceLoadingBalls .loadingBall.third {
+    animation-delay: -.16s;
+    margin-right: 0;
+}
+
+.su_ListResultImage {
+    width: 22px;
+    max-width: inherit;
+}
+
+.su_list-search-icon {
+    display: flex;
+    align-items: center;
+}
+
+.su__viewed-results a:visited {
+    color: #609 !important
+}
+
+.su__w-100 {
+    width: 100%
+}
+
+.su__w-h-20px {
+    width: 20px;
+    height: 20px;
+    margin: 0px 14px 0px 4px;
+}
+
+.su__mr-2,
+.su__mx-2,
+.su__rtl .su__rtlmr-2,
+.su__rtl .su__rtlmx-2 {
+    margin-right: .5rem
+}
+
+.su__rtlml-2,
+.su__rtl .su__rtlmx-2 {
+    margin-left: .5rem
+}
+
+.su__rtlmr-0,
+.su__rtl .su__rtlmx-0 {
+    margin-right: 0
+}
+
+.su__cursor-authlist {
+    cursor: pointer;
+    border-top: 1px solid rgb(212, 212, 212);
+}
+
+.customSettingErrMsg {
+    font-size: 18px;
+    color: red;
+    text-align: center;
+    padding: 5px 0;
+    display: block;
+}
+
+.su-authlist-content {
+    padding: 2px 5px;
+}
+
+.searchBtn {
+    display: flex;
+    font-size: 15px;
+    font-family: 'Montserrat';
+    font-weight: 700;
+    padding: 8px;
+    align-items: center;
+    justify-content: center;
+}
+
+.su_list_autocompleteDiv .su_list_authlist-element:last-child {
+    border-bottom: 0;
+}
+
+.su_list_authlist-element {
+    border-bottom: 1px solid rgb(212, 212, 212);
+    padding: 5px 4px;
+}
+.su__text-truncate-custom{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}

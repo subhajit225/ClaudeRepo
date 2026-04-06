@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Validation_for_VAT_ID_field</fullName>
+    <active>true</active>
+    <description>This rule makes VAT mandatory for All countries except US</description>
+    <errorConditionFormula>false</errorConditionFormula>
+    <errorDisplayField>VAT_ID_If_Applicable__c</errorDisplayField>
+    <errorMessage>VAT ID is required for all countries except the United States</errorMessage>
+</ValidationRule>

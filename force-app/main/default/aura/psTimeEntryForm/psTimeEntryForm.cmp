@@ -1,0 +1,81 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,force:lightningQuickAction,force:hasRecordId,lightning:actionOverride" access="global" controller="PSTimeEntryAppController">
+    <aura:attribute name="showModal" type="Boolean" default="false"/>
+    <aura:attribute name="pageReference" type="Object"/>
+    <aura:attribute name="recordId" type="Id"/>
+    <aura:attribute name="timeEntry" type="PS_Time_Entry__c" default="{ 'sobjectType': 'PS_Time_Entry__c' }"/>
+	<lightning:workspaceAPI aura:id="workspace"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <lightning:navigation aura:id="navService" />
+
+    <aura:if isTrue="{!v.showModal}">
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 class="slds-text-heading_medium">New PS Time Entry</h2>
+                </header>
+
+                <div class="slds-modal__content slds-p-around_medium custom-scrollable-content">
+                    <lightning:recordEditForm 
+                        objectApiName="PS_Time_Entry__c"
+                        onsuccess="{!c.handleSuccess}" 
+                        onerror="{!c.handleError}">
+
+                        <h3 class="slds-section__title slds-theme_shade slds-col slds-size_1-of-1">
+                            <span class="slds-truncate slds-p-horizontal_small">Information</span>
+                        </h3>
+
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning:inputField aura:id="formFieldsToValidate" fieldName="Name" value="{!v.timeEntry.Name}" required="true"/>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning:inputField aura:id="formFields" fieldName="Billable__c" value="{!v.timeEntry.Billable__c}" disabled="true"/>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning:inputField  aura:id="formFields" fieldName="Time_Entry_Date__c" value="{!v.timeEntry.Time_Entry_Date__c}"/>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning:inputField aura:id="formFieldsToValidate" fieldName="PS_Task__c" value="{!v.timeEntry.PS_Task__c}" required="true"/>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning:inputField  aura:id="formFields" fieldName="PS_Time_Card__c" value="{!v.timeEntry.PS_Time_Card__c}"/>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning:inputField aura:id="formFields" fieldName="TaskType__c" value="{!v.timeEntry.TaskType__c}"/>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning:inputField  aura:id="formFields" fieldName="Hours_Spent__c" value="{!v.timeEntry.Hours_Spent__c}"/>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning:inputField aura:id="formFields" fieldName="Status__c" value="{!v.timeEntry.Status__c}"/>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning:inputField  aura:id="formFields" fieldName="PS_Time_Entry_Approved_Date__c" value="{!v.timeEntry.PS_Time_Entry_Approved_Date__c}"/>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning:inputField  aura:id="formFields" fieldName="Assignee__c" value="{!v.timeEntry.Assignee__c}"/>
+                            </div>
+                        </div>
+
+                        <h3 class="slds-section__title slds-theme_shade slds-col slds-size_1-of-1 slds-m-top_medium">
+                            <span class="slds-truncate slds-p-horizontal_small">Comments</span>
+                        </h3>
+
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_1-of-1">
+                                <lightning:inputField  aura:id="formFields" fieldName="Comments__c" value="{!v.timeEntry.Comments__c}"/>
+                            </div>
+                        </div>
+                    </lightning:recordEditForm>
+                </div>
+
+                <footer class="slds-modal__footer slds-text-align_center custom-fixed-footer">
+                    <lightning:button variant="neutral" label="Cancel" onclick="{!c.closeModal}" class="slds-m-right_small"/>
+                    <lightning:button label="Save and New" variant="neutral" onclick="{!c.handleSaveAndNew}" class="slds-m-right_small"/>
+                    <lightning:button variant="brand" label="Save" onclick="{!c.handleSave}" />
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+</aura:component>

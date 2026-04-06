@@ -1,0 +1,17 @@
+<apex:page id="pageId" standardController="POC__c" extensions="LCC_New_POC_RequestController" recordSetVar="POC" lightningStylesheets="true" docType="html-5.0" sidebar="false" showHeader="false" showChat="false">
+	<apex:includeScript value="/soap/ajax/42.0/connection.js"/>
+<apex:includeScript value="/soap/ajax/42.0/apex.js"/> 
+    <script>
+    sforce.connection.sessionId = "{!$Api.Session_ID}";
+    window.onload=function(){
+        loadPOCJS();
+        }
+    function loadPOCJS(){
+        loadPOC();
+        }
+    </script>
+    <apex:form id="formId">
+        <apex:actionFunction name="loadPOC" action="{!loadPOCmethod}" rerender="conId,tvId,opId" >
+        </apex:actionFunction>
+    </apex:form>
+</apex:page>

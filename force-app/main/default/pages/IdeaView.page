@@ -1,0 +1,73 @@
+<apex:page standardController="Idea"  standardStylesheets="false" cache="false" sidebar="false" showheader="false" title="Ideas - Rubrik Community" applyBodyTag="false">
+<link rel="shortcut icon" href="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/favicon.ico')}" type="image/x-icon" />
+    <link rel="icon" href="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/favicon1.png')}" type="image/png" />
+    <c:visualstrapblock >
+    <style>
+
+   .votebutton, .voteButton a, .voteButton a:hover, .votedButton a, .votedButton a:hover , votebuttonText {
+    text-decoration: none;
+    font-size: 12px !important;  
+    font-family: Gotham-Light;
+    }
+    
+    .votedUpButton .voteUp, .votedDownButton .voteDown {
+    text-decoration: none;
+    font-size: 12px !important;  
+    font-family: Gotham-Light;    
+    }
+    
+     .btnpad{
+    padding: 15px;
+    }
+    
+    </style>
+    
+        <!--start header-->
+        <c:siteheader ></c:siteheader>
+        <!--end Header-->
+        
+        <apex:form >
+      <!--start the Container-->
+        <div class="container">
+            <div class="row rowcontainer" >
+                <div class="col-md-12">
+                 <c:pageTitle Name="{!Idea.Title}"></c:pageTitle>
+                <div class="row" style="table" >
+                  <div class="col-md-1"><apex:vote objectId="{!Idea.id}" rerender="IdeaList" />  </div>
+                  <div class="col-md-10"><a href="{!URLFOR($Page.IdeaView, null, [id=Idea.Id])}">{!Idea.Title}</a><apex:outputtext value=" | Status: {!Idea.Status}" rendered="{!Idea.status!=null}"/><br />
+                  <br />
+                  <div class="ideatext"><apex:outputtext value="{!Idea.Body}" escape="false"/><br/>
+                  <b>{!Idea.NumComments} comments | Posted by {!Idea.CreatedBy.CommunityNickname} on&nbsp; <apex:outputfield value="{!Idea.CreatedDate}"/></b></div>
+                  
+                    <apex:pageBlock >
+                     <h3>Comments</h3> 
+                    <c:ideaportalcomments theideaId="{!Idea.id}"/>
+                    <c:relatedIdeas related="{!idea.Related_Ideas__c}" recordid="{!idea.Id}" />
+                    
+                </apex:pageBlock>
+                  
+              </div>
+              </div>
+              </div>
+            </div>
+        </div>
+        <!--End the Container-->
+        
+  
+           <div class="container">
+                <div class="row text-center btnpad">
+                    <div class="btn-group">
+                        <a href="{!URLFOR($Page.IdeaComment, null ,[id=idea.id])}"><button type="button" class="btn rubrik-btn" >Add Comment</button></a>
+                    </div>
+                </div>
+            </div>
+
+        
+      </apex:form>
+        
+         <!--start the footer-->
+        <c:sitefooter ></c:sitefooter>
+        
+    </c:visualstrapblock>
+   
+</apex:page>

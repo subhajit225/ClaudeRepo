@@ -1,0 +1,49 @@
+<apex:page standardStylesheets="false"  sidebar="false" showheader="false"  title="Incentives - Rubrik Partner Community" applyBodyTag="false"  
+                           >
+ <c:visualstrapblock >
+    
+    
+    <!--hide the action column from Community users-->
+    <style>
+    .actionColumn{
+    display:none;
+    }
+    
+    .pbBody{
+    padding: 5px;
+    }
+    
+    .visualstrap td, th {
+    padding: 5px !important;
+    }
+    
+    .rolodex {
+      padding: 4px !important;  
+   }
+   
+   .btnpad{
+    padding: 15px;
+    }
+    
+    
+    </style>
+    
+        <!--start header-->
+        <c:siteheader ></c:siteheader>
+        <!--end Header-->
+
+   
+
+      <!--start the Container-->
+        <div class="container">
+     <!-- <iframe  src="{!$Page.MobilePaks__MobilePaks_Tab}?isdtp=mn" style="height:1200px;width:100%;border:none;overflow:hidden;"/>-->
+            </div>
+        <!--End the Container-->
+
+       <!--start the footer-->
+        <c:psitefooter ></c:psitefooter>
+        
+       
+        
+    </c:visualstrapblock>
+</apex:page>

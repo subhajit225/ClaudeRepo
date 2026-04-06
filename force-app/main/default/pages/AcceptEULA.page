@@ -1,0 +1,20 @@
+<apex:page standardController="Download_History__c" sidebar="false" applyBodyTag="false"  standardStylesheets="false" showheader="false" extensions="DownloadExtension">
+<apex:form >
+<c:importbs />
+<c:communitystyle />
+  <c:visualstrapblock >
+  <apex:outputPanel rendered="{!accepted==false&&accepted!=null}">
+      <div class="alert alert-danger" role="alert">
+      <apex:pageMessages />
+    </div>
+    </apex:outputPanel>
+    By downloading this software, you confirm that you accept the <a href="{!$Label.EULA_Link}">EULA</a>.<br/><br/>
+    <apex:inputCheckbox value="{!record.EULA_Accepted__c}"/>&nbsp;&nbsp;
+    <apex:commandButton value="Accept and Download" title="Download" action="{!download}" styleClass="btn rubrik-btn" /><br/><br/>
+    
+    <apex:iframe src="{!$Label.EULA_Link}#view=FitH" scrolling="true"/>
+    
+    
+     </c:visualstrapblock>
+</apex:form>
+</apex:page>

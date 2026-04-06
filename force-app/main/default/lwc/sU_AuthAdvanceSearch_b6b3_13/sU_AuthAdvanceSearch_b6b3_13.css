@@ -1,0 +1,145 @@
+.showFormBlock {
+	display: block;
+}
+
+.progress-Class {
+	padding: 3px;
+}
+
+.mainFormDiv {
+	display: none;
+}
+
+.slider-Advance {
+	cursor: pointer;
+	background: white;
+	border: #c7c2c2 1px solid;
+	display: flex ;
+	align-items: center;
+	border-radius: 4px;
+	justify-content: center;
+	font-size: 14px;
+	color: rgba(70, 70, 70, 0.8);
+	padding-right: 30px;
+}
+
+.formDiv {
+	padding: 5px 15px;
+	position: absolute;
+	z-index: 99;
+	right: 0;
+	left: 0px;
+	box-shadow: 0 3px 5px -1px rgba(0, 0, 0, .2), 0 5px 8px 0 rgba(0, 0, 0, .14), 0 1px 14px 0 rgba(0, 0, 0, .12);
+	background: #fff;
+	border-radius: 6px;
+	margin-top: 1px;
+}
+@media (max-width:767px){
+	.formDiv {
+		padding: 5px 15px;
+		position: fixed;
+		z-index: 99;
+		top:50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		box-shadow: 0 3px 5px -1px rgba(0, 0, 0, .2), 0 5px 8px 0 rgba(0, 0, 0, .14), 0 1px 14px 0 rgba(0, 0, 0, .12);
+		background: #fff;
+		border-radius: 6px;
+		margin-top: 1px;
+	}
+}
+
+.formDiv::before {
+	content: "";
+	width: 0px;
+	height: 0px;
+	position: absolute;
+	top: -6px;
+	left: 50%;
+	margin-left: -5px;
+	border-left: 8px solid transparent;
+	border-right: 8px solid transparent;
+	border-bottom: 8px solid #ffffff;
+}
+
+.refineSearchBox {
+	margin: 0 auto;
+}
+
+.refineSearchBox .slds-input {
+	padding: 6px 12px !important;
+}
+
+.su_adv-wildcard {
+	position: relative;
+	bottom: 4px;
+}
+.su__advance-active-border {
+	border-color: #59befb;
+}
+.su__color-advance-search {
+	color: #59befe;
+}
+.su__advanceSearchSvgFill {
+	fill: #59befb
+}
+
+.su__advanceSearchSvgFillGrey {
+	fill: #919bb0
+}
+
+@media (min-width:768px) and (max-width:1023px) {
+	.showHideAdvanceSearch {
+		display: flex;
+		margin-left: 10px
+	}
+
+	.showHideAdvanceSearchBookmarkBanner {
+		display: none;
+	}
+
+	.su__advance_group {
+		margin: 0px;
+	}
+
+}
+
+@media (max-width:767px) {
+	.showHideAdvanceSearch {
+		display: none
+	}
+
+	.showHideAdvanceSearchBookmarkBanner {
+		display: flex;
+		border-top-left-radius: 4px;
+		border-top-right-radius: 4px;
+	}
+
+	.su__advance_group {
+		margin: 0px 10px;
+	}
+
+	.formDiv {
+		padding: 0px;
+	}
+
+	.formDiv::before {
+		display: none;
+	}
+
+}
+
+@media (min-width:1024px) {
+	.showHideAdvanceSearch {
+		display: flex
+	}
+
+	.showHideAdvanceSearchBookmarkBanner {
+		display: none;
+	}
+
+	.su__advance_group {
+		margin: 0px;
+	}
+
+}

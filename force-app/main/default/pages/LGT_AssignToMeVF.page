@@ -1,0 +1,139 @@
+<apex:page standardController="Case" lightningStylesheets="true" extensions="CaseDetailController" showHeader="false" sidebar="false">
+    <!-- Detail Page button -->
+    <apex:includeLightning />
+    <apex:slds />
+    <apex:includeScript value="/support/console/46.0/integration.js"/>
+    <div id="lightning" />
+    <div class="slds-notify_container slds-is-relative" id="boxError" style="display:none;">
+        <div class="slds-notify slds-notify_toast slds-theme_warning" role="status">
+            <span class="slds-assistive-text">warning</span>
+           
+            <div class="slds-notify__content">
+                <h2 class="slds-text-heading_small " id="errorBlock"></h2>
+            </div>
+        </div>
+    </div>
+    
+    <apex:form id="form">
+        <!-- Define the JavaScript function sayHello-->
+        <apex:actionFunction name="sayHello" action="{!navigateToCase}"  rerender="form" status="status"/>
+         <apex:actionStatus id="status">
+            <apex:facet name="start">
+            <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.75; z-index: 1000; background-color: black;">
+                &nbsp;
+            </div>
+            <div style="position: fixed; left: 0; top: 0; bottom: 0; right: 0; z-index: 1001; margin: 30% 50%">
+                <img src="http://upload.wikimedia.org/wikipedia/commons/e/ed/Cursor_Windows_Vista.gif" />
+            </div>
+            </apex:facet>
+        </apex:actionStatus>
+    </apex:form>
+
+    <script>
+    var array = [];
+    array.push('{!Case.Id}');
+    $Lightning.use("c:LGT_AssignToMeApp", function() {
+        $Lightning.createComponent("c:LGT_AssignToMeDetailCmp",{"caseList":"{!Case.Id}"},"lightning", function(component){
+        });
+        
+    });
+    function receiveMessage(event){
+        if (event.data == "close"){
+            if(sforce.console.isInConsole()) {
+                if({!$User.UIThemeDisplayed == 'Theme3'}){
+                    //window.history.back();
+                    sayHello();
+                }else{
+                    sforce.console.getFocusedPrimaryTabId(showTabId);
+                    //To Close the Current Tab OR Enclosing Tab
+                    sforce.console.getEnclosingTabId(closeSubtab);
+                }
+            }else{
+                window.history.back();
+            }
+            
+        }
+        // Added by Vijay: 1326: handling VR rules on Owner change
+        else if(event.data.includes("dbErr:")){
+            let validationErr = event.data;
+            // If Validation error
+            if(validationErr.includes("FIELD_CUSTOM_VALIDATION_EXCEPTION,")){
+                let error = validationErr.split("FIELD_CUSTOM_VALIDATION_EXCEPTION,")[1];
+                // Classic Console error message
+                if({!$User.UIThemeDisplayed == 'Theme3'}){
+                    document.getElementById("boxError").style.display = "block";
+
+                    document.getElementById("errorBlock").innerHTML= error.split(":")[0];
+                   
+                    var interval = setInterval(function(){ window.history.back();},2000);
+                }
+                // LEX Console toast error message
+                else{
+                    sforce.one.showToast({
+                        "title": "Error!",
+                        "message": error.split(":")[0],
+                        "type": "error"
+                    });
+                    if(sforce.console.isInConsole()) {
+                        sforce.console.getFocusedPrimaryTabId(showTabId);
+                        //To Close the Current Tab OR Enclosing Tab
+                        sforce.console.getEnclosingTabId(closeSubtab);
+                    }
+                    else{
+                        window.history.back();
+                    }
+                }
+            }
+        }
+        else{
+            if(event.data.includes("Case has already")){
+            	if({!$User.UIThemeDisplayed == 'Theme3'}){
+                    document.getElementById("boxError").style.display = "block";
+
+                    document.getElementById("errorBlock").innerHTML= event.data;
+                   
+                    var interval = setInterval(function(){ window.history.back();},2000);
+                }
+                else{
+                    sforce.one.showToast({
+                        "title": "Warning",
+                        "message": event.data,
+                        "type": "warning"
+                    });
+                    if(sforce.console.isInConsole()) {
+                        sforce.console.getFocusedPrimaryTabId(showTabId);
+                        //To Close the Current Tab OR Enclosing Tab
+                        sforce.console.getEnclosingTabId(closeSubtab);
+                    }
+                    else{
+                        window.history.back();
+                    }
+                }
+             }
+        }
+    }
+    var showTabId = function showTabId(result) 
+    {
+        var tabId = result.id;
+        sforce.console.refreshPrimaryTabById(tabId , true, refreshSuccess);
+    };
+    
+    var refreshSuccess = function refreshSuccess(result)                {
+        //Report whether refreshing the primary tab was successful
+        if (result.success == true) 
+        {
+            console.log('Primary tab refreshed successfully');
+        } 
+        else 
+        {
+             console.log('Primary did not refresh');
+        }
+    };
+    var closeSubtab = function closeSubtab(result) {
+        //Now that we have the tab ID, we can close it
+        var tabId = result.id;
+        sforce.console.closeTab(tabId);
+    };
+    window.addEventListener("message", receiveMessage, false);
+    </script>
+</apex:page>

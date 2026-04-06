@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Renewal_Price__c</fullName>
+    <description>Renewal Price adjusted to take care of NFR renewals; Renewal Price should be 90% of Sale Price for below NFRs; 
+RBK-R334-01-NFR, RBK-R334-02-NFR, RBK-R344-01-NFR, RBK-R344-02-NFR, RBK-R348-01-NFR</description>
+    <formula>IF(Order_Service_Item__r.Product_Name__c =&apos;RBK-R334-01-NFR&apos; || Order_Service_Item__r.Product_Name__c =&apos;RBK-R334-02-NFR&apos; || Order_Service_Item__r.Product_Name__c =&apos;RBK-R344-01-NFR&apos; || Order_Service_Item__r.Product_Name__c =&apos;RBK-R344-02-NFR&apos; || Order_Service_Item__r.Product_Name__c =&apos;RBK-R348-01-NFR&apos;, IF( ISPICKVAL( Product__r.SBQQSC__EntitlementConversion__c , &apos;One per quote line&apos; ),Order_Service_Item__r.Quantity*Order_Service_Item__r.UnitPrice *0.1, Order_Service_Item__r.UnitPrice *0.1 ), IF( ISPICKVAL( Product__r.SBQQSC__EntitlementConversion__c , &apos;One per quote line&apos; ),Order_Service_Item__r.Quantity*Order_Service_Item__r.UnitPrice, Order_Service_Item__r.UnitPrice))</formula>
+    <label>Renewal Price</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

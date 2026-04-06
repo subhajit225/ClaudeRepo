@@ -1,0 +1,11 @@
+<design:component >
+    <design:attribute name="pageSize" label="Enter default page size"
+                      description="Enter how many records you want to display on page. Default value is 10"></design:attribute>
+    <design:attribute name="searchString" label="searchString" default="{!searchString}"></design:attribute>
+    <design:attribute name="defaultSearchPage" label="Search page name on search failure" description="Enter the name of the page where search would be re-directed if search is down."></design:attribute>
+    <design:attribute name="noSearchResultFoundMsg" label="No result found message" description="Enter message to show when no matching result is found for the search term."></design:attribute>
+    <design:attribute name="defaultFilterCollapse" label="Collapse Search Filters" description="Check this box to collapse the search filter. Default is OPEN."></design:attribute>
+    <design:attribute name="listview" label="Display list view" description="Check this box for list view or uncheck for grid view. Default is list view"></design:attribute>
+    <design:attribute name="contentSourceTab" label="Show Content Source Tab" description="Check this box to show Content Source Tab."></design:attribute>
+    <design:attribute name="collapsibleSummary" label="Collapse summary" description="Check this box to collapse the summary. Default is OPEN."></design:attribute>
+</design:component>

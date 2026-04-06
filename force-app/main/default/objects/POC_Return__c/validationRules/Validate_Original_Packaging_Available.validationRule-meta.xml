@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Validate_Original_Packaging_Available</fullName>
+    <active>true</active>
+    <description>MKT26-513: Validate Original Packaging Available when POC Return is marked Pending Replacement Packaging</description>
+    <errorConditionFormula>ISPICKVAL(Status__c, &quot;Pending Replacement Packaging&quot;) &amp;&amp;
+ISBLANK(TEXT(Original_Packaging_Available__c))</errorConditionFormula>
+    <errorDisplayField>Original_Packaging_Available__c</errorDisplayField>
+    <errorMessage>Please provide Original Packaging Available&apos;, when marking POC Return as Pending Replacement Packaging</errorMessage>
+</ValidationRule>

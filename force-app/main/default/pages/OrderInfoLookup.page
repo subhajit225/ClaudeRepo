@@ -1,0 +1,133 @@
+<apex:page controller="OrderInfoLookupController" readOnly="true" standardStylesheets="false" cache="false" sidebar="false" showheader="false"  title="Downloads: Rubrik Community" applyBodyTag="false" >
+<style>
+    a.disabled {
+        pointer-events: none;
+        color: #ccc !important;
+    }
+</style>
+<c:visualstrapblock >
+
+        <c:siteheader ></c:siteheader>
+
+        <div class="container">
+           <div class="row rowcontainer" >
+              <div class="col-md-12">
+                <c:pageTitle name="Order Information Lookup" ></c:pageTitle>
+
+                <apex:form styleClass="form-horizontal">
+
+                <c:busystatus />
+
+                <apex:actionfunction name="applyFilters" action="{!apply}" status="busyStatus" rerender="pbId"></apex:actionFunction>
+                <apex:actionFunction name="refreshPageSize" action="{!refreshPageSize}" status="busyStatus" reRender="pbId"/>
+                <apex:actionFunction name="goPrevious" action="{!doPrevious}" status="busyStatus" reRender="pbId"/>
+                <apex:actionFunction name="goNext" action="{!doNext}" status="busyStatus" reRender="pbId"/>
+
+
+                <div class="row">
+                    <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="col-md-2">Distributor PO#</label>
+                        <div class="col-md-4"><apex:inputText value="{!poNumber}" id="poNumber" styleClass="form-control"/></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2">End User PO#</label>
+                        <div class="col-md-4"><apex:inputText value="{!endUserPo}" id="endUserPo" styleClass="form-control"/></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2">Rubrik SO#</label>
+                        <div class="col-md-4"><apex:inputText value="{!orderNumber}" id="orderNumber" styleClass="form-control"/></div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-4">
+                        <a href="#" onclick="javascript:applyFilters();"><button type="button" class="btn rubrik-btn" >Search</button></a>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+
+                <apex:pageBlock id="pbId">
+                    <apex:pageBlockSection title="All Orders" collapsible="false" columns="1">
+                        <apex:pageBlockTable value="{!orders}" var="order" styleClass="table">
+
+                            <apex:column headerValue="Order Number">
+                                <apex:outputText value="{!order.orderNumber}"/>
+                            </apex:column>
+
+                            <apex:column headerValue="Distributor PO Number">
+                                <apex:outputText value="{!order.distributorPONumber}"/>
+                            </apex:column>
+
+                            <apex:column headerValue="End User PO Number">
+                                <apex:outputText value="{!order.endUserPoNumber}"/>
+                            </apex:column>
+
+                            <apex:column headerValue="Order Status">
+                                <apex:outputText value="{!order.status}"/>
+                            </apex:column>
+
+                            <apex:column headerValue="Estimated Ship Date">
+                                <apex:outputText value="{0,date,MM/dd/yyyy}">
+                                    <apex:param value="{!order.estShipDate}" />
+                                </apex:outputText>
+                            </apex:column>
+
+                            <apex:column headerValue="Actual Order Ship Date">
+                                <apex:outputText value="{0,date,MM/dd/yyyy}">
+                                    <apex:param value="{!order.actualOrderShipDate}" />
+                                </apex:outputText>
+                            </apex:column>
+
+                            <apex:column headerValue="Shipping Carrier">
+                                <apex:outputText value="{!order.shippingCarrier}"/>
+                            </apex:column>
+
+                            <apex:column headerValue="Tracking No.">
+                                <apex:outputText value="{!order.trackingNo}"/>
+                            </apex:column>
+
+                            <apex:column headerValue="Tracking Link">
+                                <apex:outputText escape="false" value="{!order.trackingLink}"/>
+                            </apex:column>
+
+
+                        </apex:pageBlockTable>
+                    </apex:pageBlockSection>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-4">
+                                <span class="pagination-info">Viewing {!(page * pageSize)+1-pageSize}-{!IF((page * pageSize)>totalRecords,totalRecords,(page * pageSize))} of {!totalRecords}</span>
+                            </div>
+                            <div class="col-md-4">
+                                <span class="page-list">
+
+                                <a href="javascript:void(0);" onclick="javascript:goPrevious();" class="{!IF(!hasPrevious,'disabled','')}"><span>« Previous</span></a>
+
+                                <a href="javascript:void(0);" onclick="javascript:goNext();" class="{!IF(!hasNext,'disabled','')}"><span>Next »</span></a>
+
+                            </span>
+                            </div>
+                            <div class="col-md-4">
+                                <span class="btn-group dropup">
+                                    Records per page:
+                                <apex:selectList value="{!pageSize}" multiselect="false" size="1" onchange="refreshPageSize();">
+                                    <apex:selectOptions value="{!paginationSizeOptions}"/>
+                                </apex:selectList>
+                            </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    </apex:pageBlock>
+                </apex:form>
+
+            </div>
+          </div>
+        </div>
+
+        <c:sitefooter ></c:sitefooter>
+
+    </c:visualstrapblock>
+</apex:page>

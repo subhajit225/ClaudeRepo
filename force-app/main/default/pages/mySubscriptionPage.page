@@ -1,0 +1,181 @@
+<apex:page controller="mySubscriptionController" cache="false" standardStylesheets="false" sidebar="false" showheader="false"  title="Rubrik Community Knowledge Category Home" applyBodyTag="false">
+    <link rel="shortcut icon" href="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/favicon.ico')}" type="image/x-icon" />
+    <link rel="icon" href="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/favicon1.png')}" type="image/png" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="path/to/bootstrap-tooltip.js"></script>
+    <script type="text/javascript" src="path/to/bootstrap-confirmation.js"></script>
+    <c:visualstrapblock >
+        <style>
+            .CategContainerBlock{width:90%;margin:0 auto;padding:0 40px}
+            .top-margin{margin-top:50px;}
+            .normalImage{display:inline-block;}
+            .hoverImage{display:none;}
+            .categName{white-space: nowrap;overflow: hidden;text-overflow: ellipsis;max-width: 75ch;}
+            .artHeading{font-size:30px;font-family:"Gotham-medium";padding-bottom:20px !important;border-bottom:1px solid #eee;color:#333;}
+            .fullcontainer{padding:0px 30px 30px 0px !important;}
+            .categHead{font-size:20px;text-transform:uppercase;font-family:"Gotham-light";padding-bottom:20px !important;color:#1d2632;padding-top:30px !important;}
+            .categBlock{cursor:pointer;padding:35px !important;border:1px solid #eee;text-align:center;}
+            .categBlock:hover{background-color:#009DAC;color:#fff;background:linear-gradient(136.42deg, #00B388 0%, #00B097 13.16%, #00A9BF 51.16%, #00A6D0 72.37%, #00A6D0 72.37%, #00A5D7 81.43%, #00A3E0 100%)}
+            .categBlock:hover  .normalImage{display:none;}
+            .categBlock:hover  .hoverImage{display:inline-block;}
+            .nopadSub {
+            padding: 15px !important;
+            border: 1px solid #eee;
+            }
+            .nopad {
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            }
+            .spinnerBg{
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            background-color: #000;
+            opacity: 0.2;
+            z-index: 999999;
+            }
+            .spinner{
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            background-image: url("https://cdn-images-1.medium.com/max/1600/1*9EBHIOzhE1XfMYoKz1JcsQ.gif");
+            background-size: 70px;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+            z-index: 9999999;
+            opacity: 1;
+            }
+        </style>
+        <!--start header-->
+        <c:siteheader />
+        <!--end Header-->
+        <apex:form id="myForm">
+            <apex:actionStatus id="pageStatus">
+                <apex:facet name="start">
+                    <div class="spinnerBg" />
+                    <div class="spinner" />
+                </apex:facet>
+            </apex:actionStatus>
+            <apex:outputPanel id="finalBlock">
+                <script>
+                var kbIDO;
+                var multiSubO;
+                var keyBO;
+                function manageSubscription(kbId,multiSub,keyB,rowNum){
+                    kbIDO = kbId;
+                    
+                    multiSubO = multiSub;
+                    keyBO = keyB;
+                    document.location.search = '?key='+keyBO;
+                    console.log(kbId+'--'+multiSub+'--'+keyB);
+                    //if(multiSub == 'true'){
+                    //    $("#myModal").modal();
+                    // }else{
+                    unsSubscribeArticleJS(kbId,multiSub,keyB,rowNum);
+                    // }
+                    return false;
+                }
+                function deleteAll(){
+                    unsSubscribeArticleJS(kbIDO,true,keyBO);
+                }
+                function deleteOne(){
+                    unsSubscribeArticleJS(kbIDO,false,keyBO);
+                }
+                function uprightCategory(){
+                    console.log(keyBO);
+                    return false;
+                }
+                </script>
+                
+                <br/><br/>
+                <div class="container">
+                    <h6>                                
+                        <apex:commandLink action="/{!'KnowledgeCategoryHome'}" value="Back to knowledge categories" style="float:right;"/>
+                    </h6>
+                    <h2>Subscribed Knowledge Categories</h2>
+                    
+                    <p>This page provides more granular control of your knowledge subscriptions. Knowledge articles are grouped under your subscribed categories, and you may unsubscribe to individual articles under a category by clicking the <strong>Unsubscribe</strong> link to the right of each article.</p>
+                    <br/>
+                    <div class="panel-group" id="accordion">
+                        <apex:outputPanel id="upperPanel" >
+                            <apex:repeat value="{!SubscribedList}" var="key" >
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="{!'#'+key}">{!subscribedMap[key]}</a>
+                                        </h4>
+                                    </div>
+                                    <div id="{!key}" class="panel-collapse collapse in">
+                                        <div class="panel-body">
+                                            <table class="table">
+                                                <tbody>
+                                                    <apex:variable value="{!1}" var="rowNum"/>
+                                                    <apex:variable value="{!SubscribedList[key]}" var="recordList" id="listView"/>
+                                                    <apex:repeat value="{!recordList}" var="childKey" id="innerPanelKid">
+                                                        <tr>
+                                                            <td width="90%"><apex:commandLink value="{!childKey.Name}" action="/{!'articles/How_To/'+childKey.urlName}" target="_blank" /></td>
+                                                            <td width="10%">
+                                                                <apex:commandLink reRender="upperPanel" value="Unsubscribe" action="{!unsSubscribeArticle}">
+                                                                    <apex:param name="kbid" value="{!childKey.kbId}" assignTo="{!kbId}"/>
+                                                                    <apex:param name="delAll" value="{!childKey.multiCategory}" assignTo="{!deleteAll}"/>
+                                                                    <apex:param name="key" value="{!key}" assignTo="{!articleCat}"/>
+                                                                    <apex:param name="num" value="{!rowNum}" assignTo="{!rowNum}"/>
+                                                                </apex:commandLink>
+                                                            </td>
+                                                            <td>
+                                                            </td>
+                                                        </tr>
+                                                        <apex:variable var="rowNum" value="{!rowNum + 1}"/>
+                                                    </apex:repeat>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </apex:repeat>
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!!hasRecords}">
+                            <p>No knowledge categories or articles have been subscribed. To receive email notifications for subscribed knowledge categories or articles, click the Manage Subscription button from the 
+                                <a href="/KnowledgeCategoryHome">
+                                    Knowledge Base
+                                </a> page.</p>
+                        </apex:outputPanel>
+                    </div> 
+                </div>
+                
+                <div class="modal fade" id="myModal" role="dialog">
+                    <div class="modal-dialog">
+                        
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <center>
+                                    <h4>
+                                        This Article is Subscribed under different Category. Do you want to unsubscribe?
+                                    </h4>
+                                </center>
+                            </div>
+                            <div class="modal-footer">
+                                <center>
+                                    <button type="button" onclick="deleteAll(); return false;"  class="btn btn-primary" data-dismiss="modal">Remove from All</button>
+                                    <button type="button" onclick="deleteOne(); return false;" class="btn btn-primary" data-dismiss="modal">Remove from this Category</button>
+                                </center>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </apex:outputPanel>
+            <apex:actionFunction action="{!unsSubscribeArticle}" status="pageStatus" name="unsSubscribeArticleJS" reRender="upperPanel,listView">
+                <apex:param name="kbId" value=""/>
+                <apex:param name="multiTrue" value=""/>
+                <apex:param name="category" value=""/>
+                <apex:param name="rowNum" value=""/>
+            </apex:actionFunction>
+        </apex:form>
+        <c:sitefooter />
+    </c:visualstrapblock>
+</apex:page>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Resolution_Owner__c</fullName>
+    <externalId>false</externalId>
+    <formula>CASE( Hold_Code__c ,
+&quot;End Customer PO# Missing&quot;,&quot;Order Management&quot;,
+&quot;Bill to Customer PO # Missing&quot;,&quot;Order Management&quot;,
+&quot;Missing ship to information&quot;,&quot;Order Management&quot;,
+&quot;Missing End Customer information&quot;,&quot;Order Management&quot;,
+&quot;Missing Reseller information&quot;,&quot;Order Management&quot;,
+&quot;Missing Shipment Terms (FCA)&quot;,&quot;Order Management&quot;,
+&quot;Missing freight forwarder details&quot;,&quot;Order Management&quot;,
+&quot;Delayed Ship Date&quot;,&quot;Order Management&quot;,
+&quot;Missing EU PO#&quot;,&quot;Order Management&quot;,&quot;Verification of EU PO#&quot;,&quot;Order Management&quot;,&quot;Verification of End User PO&quot;,&quot;Order Management&quot;,
+&quot;Correct Primary Quote is Synched&quot;,&quot;Sales&quot;,
+&quot;Missing AWS Info&quot;,&quot;Sales&quot;,
+&quot;Nonstandard Pricing/Terms Not Approved&quot;,&quot;Sales Ops&quot;,
+&quot;Quote/PO Mismatch&quot;,&quot;Sales&quot;,
+&quot;Missing Serial Numbers&quot;,&quot;Sales Ops&quot;,
+&quot;Missing/Wrong Subscription Term&quot;,&quot;Sales Ops&quot;,
+&quot;Support/subscription &gt; 60 months&quot;,&quot;Sales&quot;,
+&quot;Contingencies (Standard)&quot;,&quot;Sales Ops&quot;,
+&quot;Product Not Released&quot;,&quot;Sales Ops&quot;,
+&quot;Contingencies (ones-offs)&quot;,&quot;Sales Ops&quot;,&quot;&quot;)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Resolution Owner</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

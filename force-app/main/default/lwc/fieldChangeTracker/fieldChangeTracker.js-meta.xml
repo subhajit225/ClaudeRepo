@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>56.0</apiVersion>
+    <masterLabel>Field Change Tracker</masterLabel>
+    <isExposed>true</isExposed>
+    <targets><target>lightning__RecordPage</target></targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage">
+            <property name="FieldApi" label="ObjectApiName.FieldApiname" type="String" default="" required="true" />
+            <property name="message"  label="Message to display" type="String" description="Message to display in Toast" default="Success" />
+            <property name="anyMsg" label="Extra message " type="String" default="success" description="any extra message display at place of 0"/>
+            <property name="urlMsg" label="Url Text " type="String" default="success" description="Text of URL at place of 1"/>
+            <property name="url" type="String" label="Url" default="success" description="URL at place of 1"/>
+            <property name="title" label="Message Title" type="String" default="Success"/>
+            <property name="variant" type="String" default="success" datasource="success,warning,error"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

@@ -1,0 +1,139 @@
+<template>
+    <div class="table-wrapper">
+        <div class="table-scrollable">
+            <div data-id="divBlock">
+                <template if:true={loadingData}>
+                    <lightning-spinner class="spinnerClass" variant="brand" alternative-text="Loading"
+                        size="medium"></lightning-spinner>
+                </template>
+                <template if:false={loadingData}>
+                    <template if:true={showDatatable}>
+                        <table aria-multiselectable="true" id="example"
+                            class="slds-table_cell-buffer slds-table_resizable-cols slds-table_striped heatmap-datatable tableClass" role="grid"
+                            aria-label="Heat Map">
+                            <thead class="table-header">
+                                <tr class="header-styles">
+                                    <template for:each={fixedColumns} for:item="column">
+                                        <th key={column.title} class={column.columnClass}>
+                                            <div class="sortingButtonClass">
+                                                <div class="slds-truncate textColor fontStyle">{column.label}</div>
+                                                    <lightning-button-icon lwc:if={column.isSortable}
+                                                    icon-name={column.iconName} variant="bare" size="small"
+                                                    class="sortingIconClass"
+                                                    alternative-text="sort" title="sort" name={column.title}
+                                                    onclick={handleSortClick}>
+                                                    </lightning-button-icon>
+                                            </div>
+                                        </th>
+                                    </template>
+                                    <template for:each={columns} for:item="col">
+                                        <th key={col} class="row-data columnHeaders fixedColumnSizing" data-label={col.label}>
+                                            <div class="sortingButtonClass">
+                                                <div class="truncateClass textColor fontStyle" title={col}>{col.label}</div>
+                                                <div class="verticalAlignment">
+                                                    <lightning-icon lwc:if={col.isTelemetryAvailable} variant="bare" size="xx-small" class="sortingIconClass overrideMargin" icon-name="utility:integration">
+                                                    </lightning-icon>
+                                                    <lightning-button-icon lwc:if={col.isHeaderFilter}
+                                                        data-colcategory = {col.columnCategory}
+                                                        icon-name="utility:filter" variant="bare" size="small"
+                                                        class="sortingIconClass overrideMargin"
+                                                        alternative-text="filter" title={col.label} name={col.label}
+                                                        onclick={toggleFilter}>
+                                                    </lightning-button-icon>
+                                                    <template if:true={col.showHeaderFilter}>
+                                                        <c-heat-map-header-filter filter-options={col.headerFilterOptions} column-name-to-options={columnToListOfOptions} column-category={col.columnCategory} onclick={handleChildClick} onselectedfilteroptions={handleFilterSelection}></c-heat-map-header-filter>
+                                                    </template>
+                                                    <lightning-button-icon
+                                                        icon-name={col.iconName} variant="bare" size="small"
+                                                        class="sortingIconClass overrideMargin"
+                                                        alternative-text="sort" title="sort" name={col.label}
+                                                        onclick={handleSortClick}>
+                                                        </lightning-button-icon>
+
+                                                </div>
+                                            </div>
+                                        </th>
+                                    </template>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={currentPageData} for:item="accountInstance">
+                                    <tr key={accountInstance.accountId} class="slds-hint-parent table-rows-background">
+                                        <td class="slds-cell_action-mode cellStyles fixed-column first-cell">
+                                            <a target="_blank" href="#" onclick={handleSalesforceRedirect}>
+                                                <div data-id={accountInstance.accountId} class="slds-truncate textColor accountRedirect">{accountInstance.accountName}</div>
+                                            </a>
+                                            
+                                        </td>
+                                        <!-- <td class="slds-cell_action-mode fixed-column other-cell">
+                                            <a target="_blank" href="#" onclick={handleSalesforceRedirect}>
+                                                <img data-id={accountInstance.accountId} style="padding: 5px;"
+                                                    src="https://cdn.icon-icons.com/icons2/2699/PNG/512/salesforce_logo_icon_170764.png"
+                                                    alt="Salesforce Logo">
+                                            </a>
+                                        </td> -->
+                                        <td class="slds-cell_action-mode fixed-column other-cell">
+                                            <a target="_blank" href="#" onclick={handleSentryAIRedirect}>
+                                                <img data-id={accountInstance.accountId} style="padding: 3px;"
+                                                    src="https://images.g2crowd.com/uploads/product/image/large_detail/large_detail_e1e7a02693f8a63a29f2aafa0a20958b/rubrik.png"
+                                                    alt="SentryAI">
+                                            </a>
+                                        </td>
+                                        <template for:each={accountInstance.workloadCells} for:item="cell"
+                                            for:index="index"><!--TODO:review iteration key-->
+                                            <template if:true={cell.columnClickable}>
+                                                <td key={cell.columnId} style={cell.backgroundColour}
+                                                    class={cell.cellAlignmentClass}
+                                                    data-haseditaccess={accountInstance.hasEditAccess} data-accountid={cell.accountId} data-columnname={cell.columnName} data-value={cell.value} onclick={redirectToTheRelatedClusters} ondblclick={redirectToRBRCreation}>
+                                                    {cell.value}
+                                                </td>
+                                            </template>
+                                            <template  if:false={cell.columnClickable}>
+                                                <td key={cell.columnId} style={cell.backgroundColour}
+                                                class={cell.cellAlignmentClass}
+                                                oncontextmenu={handleCellRightClick} ondblclick={handleCellDoubleClick}
+                                                data-acc-id={cell.accountId} data-val={cell.value}
+                                                data-cell-index={index} onmouseover={showModal} onmouseout={hideModal} data-haseditaccess={accountInstance.hasEditAccess}>
+                                                {cell.value}</td>
+                                            </template>
+                                        </template>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                        <template if:true={showWorkloadModal}>
+                            <div style={modalStyle}><c-heat-map-workload-modal workload={workloadToPass} show-selection-modal={showMiniModal} show-workload-entry-modal={showMultiModal} click-type={clickedType} has-edit-access={hasEditAccountAccess} max-scroll={maxScroll} onmodalaction={handleModalAction}></c-heat-map-workload-modal></div>
+                        </template>
+                    </template>
+                </template>
+            </div>
+        </div>
+        <!--  Pagination Start Here -->
+        <template lwc:if={showPagination}>
+            <div class='paginationContainer'>
+                <lightning-button class="paginationButtonClass" label="Previous" icon-name="utility:chevronleft" onclick={previousHandler}
+                    disabled={isPreviousDisabled}>
+                </lightning-button>
+                <span class="slds-badge slds-badge_lightest"
+                            style="margin-right: 10px;margin-left: 10px;">
+                            Page {pageNumber} of {totalPages}
+                </span>
+                <lightning-button class="paginationButtonClass"  label="Next" icon-name="utility:chevronright" icon-position="right" onclick={nextHandler}
+                    disabled={isNextDisabled}>
+                </lightning-button>
+            </div>
+        </template>
+        <!--  Pagination End Here -->
+        <div if:true={showHoverModal}>
+            <div style={modalStyleHover}>
+                <section role="dialog" aria-labelledby="modal-heading-01" aria-modal="true"
+                    aria-describedby="modal-content-id-1" class="modal">
+                    <div class="workload-box">
+                        <p style="padding:5px;color:white;"><lightning-formatted-text value={workloadval} ></lightning-formatted-text></p>
+                        <!--<p style="padding:5px;color:white;">{workloadval}</p>-->
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</template>

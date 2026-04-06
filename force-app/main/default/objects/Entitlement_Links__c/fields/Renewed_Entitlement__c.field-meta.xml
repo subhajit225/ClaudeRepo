@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Renewed_Entitlement__c</fullName>
+    <description>References the successor entitlement that was created through renewal, replacement (conversion or upgrade) or refresh of an entitlement. Used to track forward progression of entitlements through their lifecycle.</description>
+    <inlineHelpText>The new entitlement that resulted from renewal, replacement (conversion or upgrade) or refresh of an entitlement. This field establishes the relationship between an entitlement and its successor.</inlineHelpText>
+    <label>New Entitlement</label>
+    <referenceTo>Entitlement</referenceTo>
+    <relationshipLabel>Previous Entitlements</relationshipLabel>
+    <relationshipName>Entitlement_Links1</relationshipName>
+    <relationshipOrder>0</relationshipOrder>
+    <reparentableMasterDetail>false</reparentableMasterDetail>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>MasterDetail</type>
+    <writeRequiresMasterRead>false</writeRequiresMasterRead>
+</CustomField>

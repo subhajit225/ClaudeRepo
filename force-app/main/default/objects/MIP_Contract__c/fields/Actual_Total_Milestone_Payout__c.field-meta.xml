@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Actual_Total_Milestone_Payout__c</fullName>
+    <label>Actual Total Milestone Payout</label>
+    <summarizedField>MIP_Element__c.Actual_Milestone_Payout__c</summarizedField>
+    <summaryFilterItems>
+        <field>MIP_Element__c.RecordTypeId</field>
+        <operation>equals</operation>
+        <value>Rebate Milestone</value>
+    </summaryFilterItems>
+    <summaryForeignKey>MIP_Element__c.MIP_Contract__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

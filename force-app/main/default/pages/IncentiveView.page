@@ -1,0 +1,84 @@
+<apex:page StandardController="Incentives__c" cache="false" standardStylesheets="false" sidebar="false" showheader="false" title="Partner Incentives - Rubrik Community" applyBodyTag="false" action="{!case($User.UserType,
+                          "Standard",urlFor($Action.Incentives__c.View, Incentives__c.Id, null, true),
+                          "PowerPartner",null,
+                          "CSPLitePortal",null,
+                          "CustomerSuccess",null,
+                          "PowerCustomerSuccess",null,
+                          "CsnOnly",null,
+                          null)}">
+ <c:visualstrapblock >
+    
+    
+    <!--hide the action column from Community users-->
+    <style>
+    .actionColumn{
+    display:none;
+    }
+    
+    .pbBody{
+    padding: 5px;
+    }
+    
+    .visualstrap td, th {
+    padding: 5px !important;
+    }
+    
+    .rolodex {
+      padding: 4px !important;  
+   }
+   
+   .btnpad{
+    padding: 15px;
+    }
+    
+    
+    </style>
+    
+        <!--start header-->
+        <c:siteheader ></c:siteheader>
+        <!--end Header-->
+
+      <!--start the Container-->
+        <div class="container">
+        <!--action status overlay-->
+
+            <div class="row rowcontainer" >
+
+              <div class="col-md-12">
+                <c:pageTitle Name="{!Incentives__c.Name}"></c:pageTitle>
+          
+                  <div class="row" style="table" >
+                        <div class="col-md-1"><!--left spacing--></div>
+                        <div class="col-md-10">
+                           <a href="{!$Page.NewCCR}?incent={!Incentives__c.Id}&uid={!$user.Id}&type={!Incentives__c.Type__c}&fieldset={!Incentives__c.CCR_Type__c}"><button type="button" style=" width:184px;height:42px;" class="btn rubrik-btn text-center" >Claim Now</button></a><br/><br/>
+                         <!--<apex:outputfield value="{!Incentives__c.Name}"/><br/><br/>-->
+                    </div><!--end the row-->
+              </div>
+
+        <div class="col-md-12 text-center">
+       <apex:repeat var="a" value="{!Incentives__c.attachments}" id="attach">
+              <object data="/servlet/servlet.FileDownload?file={!a.id}" type="application/pdf" width="{!600}" height="{!720}" >
+                 <embed src="/servlet/servlet.FileDownload?file={!a.id}" width="{!600}" height="{!720}" />
+              </object >
+              <br/>
+              <br/>
+       </apex:repeat>
+       </div>
+
+        <br/>
+        <br/>
+        <br/>
+                <a href="{!URLFOR($Page.PCommunityHome)}">Return to Home</a> |   <a href="{!URLFOR($Page.Incentives)}">Return to Incentives</a>
+
+
+        </div>
+        </div>             
+
+            </div>
+        <!--End the Container-->
+
+       <!--start the footer-->
+        <c:psitefooter ></c:psitefooter>
+        
+    </c:visualstrapblock>
+</apex:page>

@@ -1,0 +1,114 @@
+<template>
+	<article class="slds-card">
+		<div class="slds-card__body m-top-zero ">
+			<div class="slds-grid border-gray slds-grid_vertical-align-center">
+				<div>
+					<span class="headerPanelLabel">CX - Operations Center Dashboard</span>
+				</div>
+				<div class="slds-col_bump-left">
+					<div style="position:relative">
+						<button data-target-id="tooltip" class="slds-button slds-button_icon" title="Settings" onclick={togglePopover} >
+						  <lightning-icon icon-name="utility:info" alternative-text="info" title="info" size="xx-small"></lightning-icon>
+					</button>
+						<template lwc:if={popoverVisible}>
+							<div class="slds-popover slds-nubbin_left-top" role="tooltip" data-id='tooltip'
+								style="position:absolute;">
+								<div class="slds-popover__body">
+									<p><strong>Dashboard Load Time:</strong> Expect delay when changing filters.</p>
+									<p><strong>Filter Values Limit:</strong> Filters contain up to 500 values. Use
+										search to
+										refine.
+									</p>
+									<p><strong>Datatable Record Limit:</strong> View max 1500 records. Apply filters for
+										more.</p>
+									<p><strong>View Reports Record Limit:</strong> Reports display up to 2000 records.
+										Filter for
+										specifics.</p>
+								</div>
+							</div>
+						</template>
+					</div>
+				</div>
+			</div>
+			<div class="slds-p-around_medium">
+				<div class="slds-grid slds-gutters slds-p-vertical_medium ">
+					<div class="slds-col slds-size_1-of-3">
+						<c-ce-multi-select-pick-list multi-select="true" name="preference-change"
+							onselectoption={handlePreferenceChange} options={accountPreferenceOptions}
+							selected-values={selectedAccountPeferences} label="Account Preference">
+						</c-ce-multi-select-pick-list>
+					</div>
+					<div class="slds-col slds-size_1-of-3">
+						<c-ce-multi-select-pick-list multi-select="true" name="name-change"
+							onselectoption={handleAccountNameChange} options={accountOptions}
+							selected-values={selectedAccountNames} label="Account Name" onsearch={handleSearch}
+							search-string={searchaccountOptions} event-on-search=true>
+						</c-ce-multi-select-pick-list>
+
+					</div>
+					<div class="slds-col slds-size_1-of-3">
+						<c-ce-multi-select-pick-list multi-select="true" name="cem-change"
+							onselectoption={handleCemChange} options={cemOptions} selected-values={selectedAccountCEMs}
+							label="CEM" onsearch={handleSearch} search-string={searchcemOptions} event-on-search=true>
+						</c-ce-multi-select-pick-list>
+					</div>
+				</div>
+
+				<div>
+					<template lwc:if={isLoading.datatable}>
+						<div class="demo-only demo-only_viewport" style="height:6rem;position:relative">
+							<lightning-spinner variant="brand" alternative-text="Loading Data" size="medium">
+							</lightning-spinner>
+						</div>
+					</template>
+					<template lwc:else>
+						<template lwc:if={filteredAccounts.length}>
+							<c-ce-datatable key-field="Id" columns={columns} dt-data={filteredAccounts}>
+							</c-ce-datatable>
+						</template>
+						<template lwc:else>
+							<div class="slds-align_absolute-center">No Data found</div>
+						</template>
+					</template>
+				</div>
+
+			</div>
+			<div class="slds-p-around_medium">
+				<div class="slds-grid slds-gutters slds-grid_align-space slds-p-vertical_medium slds-wrap">
+					<div class="slds-col slds-size_1-of-2 slds-p-top_small">
+						<c-ce-operations-metric-chart label='Total Open Cases' name="open_cases"
+							current-value={metrics.open_cases} is-loading={isLoading.open_cases}
+							onviewreport={handleNavigateToReports}>
+						</c-ce-operations-metric-chart>
+					</div>
+					<div class="slds-col slds-size_1-of-2 slds-p-top_small">
+						<c-ce-operations-metric-chart label='Total Open P1' name="open_p1"
+							current-value={metrics.open_p1} is-loading={isLoading.open_p1}
+							onviewreport={handleNavigateToReports}>
+						</c-ce-operations-metric-chart>
+					</div>
+					<div class="slds-col slds-size_1-of-2 slds-p-top_small">
+						<c-ce-operations-metric-chart label='Number of Open JIRAs Referenced' name="jiras"
+							current-value={metrics.jiras} is-loading={isLoading.jiras}
+							onviewreport={handleNavigateToReports}>
+						</c-ce-operations-metric-chart>
+					</div>
+					<div class="slds-col slds-size_1-of-2 slds-p-top_small">
+						<c-ce-operations-metric-chart label='Number of Open RFEs Referenced' name="rfes"
+							current-value={metrics.rfes} is-loading={isLoading.rfes}
+							onviewreport={handleNavigateToReports}>
+						</c-ce-operations-metric-chart>
+					</div>
+
+					<div class="slds-col slds-size_1-of-2 slds-p-top_small">
+						<c-ce-operations-metric-chart label='Total Case Volume (12 months) by Priority'
+							name="tcv_12_priority" current-value={metrics.tcv_12_priority}
+							is-loading={isLoading.tcv_12_priority} onviewreport={handleNavigateToReports}
+							chart-configuration={chartConfiguration}>
+						</c-ce-operations-metric-chart>
+					</div>
+				</div>
+			</div>
+		</div>
+	</article>
+</template>

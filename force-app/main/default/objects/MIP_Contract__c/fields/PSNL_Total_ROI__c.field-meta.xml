@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PSNL_Total_ROI__c</fullName>
+    <externalId>false</externalId>
+    <formula>PSNL_Bookings_Payout__c / ( Actual_Total_Milestone_Payout__c + Actual_Rebate_Payout__c + MDF_Payout__c +  SPIFF_Payout__c +  Max_Total_Funded_Head_Payout__c)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>PSNL Bookings / (Actual Total Rebate Payout + Actual Total Milestone Payout + MDF Payout + SPIFF Payout + Max Total Funded Head Payout)</inlineHelpText>
+    <label>PSNL Total ROI</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

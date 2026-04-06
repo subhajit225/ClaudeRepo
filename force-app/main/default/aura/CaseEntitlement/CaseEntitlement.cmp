@@ -1,0 +1,145 @@
+<aura:component controller="CaseDetailController" implements="force:appHostable,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:handler name="init" value="{!this}" action="{!c.doinit}"/>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="accountName" type="String"/>
+    <aura:attribute name="completeEditionPdtName" type="String"/>
+    <aura:attribute name="activeEntitlements" type="String[]"/>
+    <aura:attribute name="assistUrl" type="String[]"/>
+    <aura:attribute name="hasActive" type="Boolean" default="false"/>
+    <aura:attribute name="USFederal" type="Boolean" default="false"/>
+    <aura:attribute name="isUSFederalAccountPurchasedOrApproval" type="Boolean" default="false"/>
+    <aura:attribute name="isRenewalCase" type="Boolean" default="false"/>
+    <aura:attribute name="isCustomerSuccessCase" type="Boolean" default="false"/>
+    <aura:attribute name="isJiraWarned" type="Boolean" default="false"/>
+    <aura:attribute name="hasDiffDistr" type="Boolean" default="false"/>
+    <aura:attribute name="distrString" type="String" default="false"/>
+    <aura:attribute name="completeEdition" type="Boolean" default="false"/>
+    <aura:attribute name="autoShow" type="Boolean" default="false"/>
+    <aura:attribute name="igneous" type="Boolean" default="false"/>
+    <aura:attribute name="isFedRAMP" type="Boolean" default="false"/> 
+    <aura:attribute name="isRSCCDM" type="Boolean" default="false"/> 
+    <aura:attribute name="ActualaccountName" type="String"/> 
+    <aura:attribute name="accId" type="String"/> 
+    <!-- 2220 -->
+    <aura:attribute name="rrtBanner" type="Boolean" default="false"/> 
+    <!-- 2450 -->
+    <aura:attribute name="approvedSoftwareVersion" type="String" default="false"/> 
+    <!-- 2428 -->
+    <aura:attribute name="isGTCDenied" type="Boolean" default="false"/> 
+
+    <lightning:workspaceAPI aura:id="workspace"/>
+
+    <aura:if isTrue="{!v.isGTCDenied}">
+        <div style="background-color: red;color: white;font-size: large;text-align: center;"> 
+            <a onclick="{!c.handleAccRedirect}" >{!v.ActualaccountName}</a>&nbsp;has been identified on the denied party list for GTC. Therefore, Rubrik Support must not provide any technical support services to the customer or partner and new cases must not be created. 
+        	For additional information, reference the <a href="https://rubrik.atlassian.net/wiki/spaces/TSE/pages/edit-v2/3387326736?draftShareId=bfe3842d-9b98-4e28-9012-d226f1b0a3d7" target="_blank">Global Trade Compliance Automation for Rubrik support portal and case management</a> page.
+        </div><br/> 
+    </aura:if>
+
+    <aura:if isTrue="{!v.approvedSoftwareVersion}">
+        <div style="background-color: white;font-size: 15px;color: black;height: 3rem;text-align: center;">
+            <i>This account is approved for the following approved software program(s):</i>&nbsp;
+            <code class="code css-1o5d2cw"><lightning:formattedRichText value="{!v.approvedSoftwareVersion}" /></code>.&nbsp;<i>Please continue to provide technical support services through the extension period as specified. For additional information reference <a href="https://rubrik.atlassian.net/wiki/spaces/TSE/pages/3162177606/End+of+Support+policy+guidance+and+FAQ+for+the+Customer+Success+organization" target="_blank">End of Support policy guidance and FAQ for the Customer Success organization.</a></i>
+        </div><br/> 
+    </aura:if>
+
+    <aura:if isTrue="{!v.rrtBanner}">
+        <div style="background-color:#a349a5;font-size: 20px;color:white;height: 3rem;font-size: xx-large;text-align: center;font-family: var(--lwc-fontFamily,-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol');">
+            <lightning:formattedRichText value="{!$Label.c.RRT_Ransomware_Banner}" /> &nbsp;<img src="{!$Resource.rrtbannerwarningicon}" alt="My Image" class="rrtwarningicon"/>
+        </div><br/> 
+    </aura:if>
+
+    <aura:if isTrue="{!v.isFedRAMP}">
+        <div style="background-color:yellow;font-size: 20px;text-align: center;font-family: var(--lwc-fontFamily,-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol');">
+            {!v.ActualaccountName}&nbsp;<lightning:formattedRichText value="{!$Label.c.FedRAMP_Account_CL1}" />
+        </div><br/> 
+    </aura:if>
+
+    <aura:if isTrue="{!v.isRSCCDM}">
+        <div style="background-color:yellow;font-size: 20px;text-align: center;font-family: var(--lwc-fontFamily,-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol');">
+            {!v.ActualaccountName}&nbsp;<lightning:formattedRichText value="{!$Label.c.RSC_CDM_account_CL1}" />
+        </div><br/> 
+    </aura:if>
+
+    <aura:if isTrue="{!v.igneous}">
+        <div style="background-color:#FFBF00;font-size:15px;padding:5px 10px 0px 10px;border-radius:5px;color: white;" >
+            <aura:unescapedHtml value="{!v.accountName}"> </aura:unescapedHtml>
+            purchased one or more NAS Cloud Direct products. The Focus Team for NAS Cloud Direct currently provides technical support for NAS Cloud Direct products. If it’s determined that this case is for the NAS Cloud Direct product line, please assign the case to the <a href="/500?fcf=00B6f00000A0FbB" target="_blank">NAS Cloud Direct Support</a> queue.
+            <br/>
+            <a href="https://rubrik.atlassian.net/wiki/spaces/TSE/pages/1587774133/Igneous+Support+DRAFT" target="_blank">NAS Cloud Direct Support</a>
+            <br/>
+        </div><br/>
+    </aura:if>
+
+    <aura:if isTrue="{!v.completeEdition}">
+        <div style="color:white;background-color:#FFBF00;font-size:15px;padding:5px 10px 0px 10px;border-radius:5px;" >
+            <aura:unescapedHtml value="{!v.accountName}"> </aura:unescapedHtml>
+            purchased Rubrik Remote Consulting ({!v.completeEditionPdtName}) for Complete Edition, which must be used within 6 months of purchase. The Rubrik Remote Consulting service is delivered by Rubrik Support. Therefore, Rubrik Support will work with the customer through an automated Support case for the initial installation, configuration, and deployment. Please note that Complete Edition customers are provided with technical onboarding material for the initial hardware installation and racking through the<a href="https://support.rubrik.com/s/announcementdetail?Id=a406f000001rCrpAAE" target="_blank"> Getting Started documentation and videos</a> on the Rubrik Support Portal.
+            <br/>
+            <a href="https://rubrik.atlassian.net/wiki/spaces/TSE/pages/1568998017/Complete+Edition+-+Customer+onboarding+and+Support+enablement" target="_blank"><b>Complete Edition</b> - Customer onboarding and Support enablement</a>
+            <br/>
+        </div><br/>
+    </aura:if>
+
+    <aura:if isTrue="{!v.autoShow}">
+        <aura:if isTrue="{!!v.hasActive}">
+            <aura:if isTrue="{!!v.isRenewalCase}">
+                <div style="color:red;background-color:yellow;font-size:20px;    text-align: center;" >
+                    {!if(v.hasActive, 'Linked account has active entitlement', $Label.c.Inactive_Entitlement_Message_On_Case)}
+                    <br/>
+                    <div class="slds-grid slds-wrap">
+                        <div class ="slds-large-size--1-of-12 slds-Medium-size--2-of-12 slds-small-size--12-of-12 slds-grid slds-wrap Categories"></div>
+                        <div class ="slds-large-size--10-of-12 slds-Medium-size--8-of-12 slds-small-size--12-of-12 slds-grid slds-wrap Categories">
+                            <aura:iteration items="{!v.activeEntitlements}" var="entitlement">
+                                <lightning:badge label="{!entitlement}"/>
+                            </aura:iteration>
+                        </div>
+                        <div class ="slds-large-size--1-of-12 slds-Medium-size--2-of-12 slds-small-size--12-of-12 slds-grid slds-wrap Categories"></div>
+                    </div>
+                </div>
+            </aura:if>
+        </aura:if>
+        <aura:if isTrue="{!v.hasDiffDistr}">
+            <div style="color:white;background-color:red;font-size:24px;    text-align: center;" >
+                {!v.distrString}
+            </div>
+        </aura:if>
+        <aura:if isTrue="{!v.USFederal}">
+            <div style="color:white;background-color:red;font-size:24px;    text-align: center;" >
+                <lightning:formattedRichText value="{!$Label.c.US_Federal_Account_text}" />
+            </div>
+        </aura:if>
+        <aura:if isTrue="{!v.isUSFederalAccountPurchasedOrApproval}">
+            <div style="color:white;background-color:red;font-size:24px;    text-align: center;" >
+                <lightning:formattedRichText value="{!$Label.c.U_S_citizen_service_text}" />
+            </div>
+        </aura:if>
+        <aura:if isTrue="{!v.isJiraWarned}">
+            <div style="color:white;background-color:red;font-size:24px;    text-align: center;" >
+                One of the JIRA's is awaiting support input  <img src="https://cdn3.vectorstock.com/i/1000x1000/86/17/general-hazard-symbol-sign-warning-sign-vector-26678617.jpg" width="50" height="50"/>
+            </div>
+        </aura:if>
+        <aura:if isTrue="{!not(empty(v.assistUrl))}">
+            <aura:if isTrue="{!not(v.isCustomerSuccessCase)}">
+            <div style="color:white;background-color:#FFBF00;font-size:24px;    text-align: center;" >
+                This case has associated Assist Request worked by Global Escalation Team - Assist Request details:
+                <div style="display: inline;font-size: 15px;">
+                    <aura:iteration items="{!v.assistUrl}" var="assistUrl" indexVar="index">
+                        <aura:if isTrue="{!index > 0}">,&nbsp;</aura:if><aura:unescapedHtml value="{!assistUrl}"> </aura:unescapedHtml>
+                    </aura:iteration>
+                </div>
+            </div>
+        </aura:if>
+            <aura:if isTrue="{!v.isCustomerSuccessCase}">
+            	<div style="color:white;background-color:#FFBF00;font-size:24px;    text-align: center;" >
+                	This case has an associated AR:
+                	<div style="display: inline;font-size: 15px;">
+                    	<aura:iteration items="{!v.assistUrl}" var="assistUrl" indexVar="index">
+                        	<aura:if isTrue="{!index > 0}">,&nbsp;</aura:if><aura:unescapedHtml value="{!assistUrl}"> </aura:unescapedHtml>
+                    	</aura:iteration>
+                	</div>
+            	</div>
+        	</aura:if>
+		</aura:if>
+    </aura:if>
+</aura:component>

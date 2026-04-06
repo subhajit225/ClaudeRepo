@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>IsClosed__c</fullName>
+    <formula>OR(
+    ISPICKVAL(Risk_Status__c, &quot;Mitigated&quot;),
+    ISPICKVAL(Risk_Status__c, &quot;Entitlement Expired&quot;),
+    ISPICKVAL(Risk_Status__c, &quot;Entitlement Churn&quot;),
+    ISPICKVAL(Risk_Status__c, &quot;Account Churn&quot;),
+    ISPICKVAL(Risk_Status__c, &quot;Lost&quot;),
+    ISPICKVAL(Risk_Status__c, &quot;At Risk&quot;),
+    ISPICKVAL(Risk_Status__c, &quot;Partially Mitigated&quot;),
+    ISPICKVAL(Risk_Status__c, &quot;Downsell&quot;),
+    ISPICKVAL(Risk_Status__c, &quot;CX health score improved&quot;),
+    ISPICKVAL(Risk_Status__c, &quot;No Risk&quot;),
+    ISPICKVAL(Risk_Status__c, &quot;Invalid&quot;),
+    ISPICKVAL(Risk_Status__c, &quot;Requires modification of CX Score Logic&quot;),
+    ISPICKVAL(Risk_Status__c, &quot;No mitigation possible&quot;),
+    ISPICKVAL(Risk_Status__c, &quot;Less time to mitigate&quot;)
+
+
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>IsClosed</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

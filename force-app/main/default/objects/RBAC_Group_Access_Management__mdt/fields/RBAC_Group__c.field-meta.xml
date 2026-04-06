@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RBAC_Group__c</fullName>
+    <description>RBAC Group for the user</description>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>RBAC Group</label>
+    <required>true</required>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>CPQ Ops</fullName>
+                <default>true</default>
+                <label>CPQ Ops</label>
+            </value>
+            <value>
+                <fullName>Customer Support</fullName>
+                <default>false</default>
+                <label>Customer Support</label>
+            </value>
+            <value>
+                <fullName>Service Delivery Partner</fullName>
+                <default>false</default>
+                <label>Service Delivery Partner</label>
+            </value>
+            <value>
+                <fullName>Renewals User</fullName>
+                <default>false</default>
+                <label>Renewals User</label>
+            </value>
+            <value>
+                <fullName>CS Manager - CEM</fullName>
+                <default>false</default>
+                <label>CS Manager - CEM</label>
+            </value>
+            <value>
+                <fullName>CS Manager - CSM</fullName>
+                <default>false</default>
+                <label>CS Manager - CSM</label>
+            </value>
+            <value>
+                <fullName>CS Manager - Escalation</fullName>
+                <default>false</default>
+                <label>CS Manager - Escalation</label>
+            </value>
+            <value>
+                <fullName>CS User - Knowledge Publishers</fullName>
+                <default>false</default>
+                <label>CS User - Knowledge Publishers</label>
+            </value>
+            <value>
+                <fullName>CS Manager - Proactive</fullName>
+                <default>false</default>
+                <label>CS Manager - Proactive</label>
+            </value>
+            <value>
+                <fullName>CS Manager - Reactive</fullName>
+                <default>false</default>
+                <label>CS Manager - Reactive</label>
+            </value>
+            <value>
+                <fullName>CS Manager - Support Ops</fullName>
+                <default>false</default>
+                <label>CS Manager - Support Ops</label>
+            </value>
+            <value>
+                <fullName>CS Manager - Training</fullName>
+                <default>false</default>
+                <label>CS Manager - Training</label>
+            </value>
+            <value>
+                <fullName>CS User - Proactive</fullName>
+                <default>false</default>
+                <label>CS User - Proactive</label>
+            </value>
+            <value>
+                <fullName>CS User - Reactive</fullName>
+                <default>false</default>
+                <label>CS User - Reactive</label>
+            </value>
+            <value>
+                <fullName>Deal Ops</fullName>
+                <default>false</default>
+                <label>Deal Ops</label>
+            </value>
+            <value>
+                <fullName>Deal Structuring</fullName>
+                <default>false</default>
+                <label>Deal Structuring</label>
+            </value>
+            <value>
+                <fullName>Engineering Read Only</fullName>
+                <default>false</default>
+                <label>Engineering Read Only</label>
+            </value>
+            <value>
+                <fullName>Product with DDC</fullName>
+                <default>false</default>
+                <label>Product with DDC</label>
+            </value>
+            <value>
+                <fullName>Corporate and Marketing</fullName>
+                <default>false</default>
+                <label>Corporate and Marketing</label>
+            </value>
+            <value>
+                <fullName>Corporate &amp; Marketing with DDC</fullName>
+                <default>false</default>
+                <label>Corporate &amp; Marketing with DDC</label>
+            </value>
+            <value>
+                <fullName>Commission</fullName>
+                <default>false</default>
+                <label>Commission</label>
+            </value>
+            <value>
+                <fullName>Commission with DDC</fullName>
+                <default>false</default>
+                <label>Commission with DDC</label>
+            </value>
+            <value>
+                <fullName>Product</fullName>
+                <default>false</default>
+                <label>Product</label>
+            </value>
+            <value>
+                <fullName>Commission Approvers</fullName>
+                <default>false</default>
+                <label>Commission Approvers</label>
+            </value>
+            <value>
+                <fullName>Integration</fullName>
+                <default>false</default>
+                <label>Integration</label>
+            </value>
+            <value>
+                <fullName>Standard</fullName>
+                <default>false</default>
+                <label>Standard</label>
+            </value>
+            <value>
+                <fullName>System Admin</fullName>
+                <default>false</default>
+                <label>System Admin</label>
+            </value>
+            <value>
+                <fullName>IT Light Admin</fullName>
+                <default>false</default>
+                <label>IT Light Admin</label>
+            </value>
+            <value>
+                <fullName>IT Sales &amp; CPQ Support</fullName>
+                <default>false</default>
+                <label>IT Sales &amp; CPQ Support</label>
+            </value>
+            <value>
+                <fullName>IT Prod Ops Support</fullName>
+                <default>false</default>
+                <label>IT Prod Ops Support</label>
+            </value>
+            <value>
+                <fullName>IT Channel Support</fullName>
+                <default>false</default>
+                <label>IT Channel Support</label>
+            </value>
+            <value>
+                <fullName>IT CS Support</fullName>
+                <default>false</default>
+                <label>IT CS Support</label>
+            </value>
+            <value>
+                <fullName>IT Marketing Support</fullName>
+                <default>false</default>
+                <label>IT Marketing Support</label>
+            </value>
+            <value>
+                <fullName>IT Read only</fullName>
+                <default>false</default>
+                <label>IT Read only</label>
+            </value>
+            <value>
+                <fullName>Legal</fullName>
+                <default>false</default>
+                <label>Legal</label>
+            </value>
+            <value>
+                <fullName>Marketing</fullName>
+                <default>false</default>
+                <label>Marketing</label>
+            </value>
+            <value>
+                <fullName>Marketing Ops</fullName>
+                <default>false</default>
+                <label>Marketing Ops</label>
+            </value>
+            <value>
+                <fullName>Order - GSL</fullName>
+                <default>false</default>
+                <label>Order - GSL</label>
+            </value>
+            <value>
+                <fullName>Order - GTC</fullName>
+                <default>false</default>
+                <label>Order - GTC</label>
+            </value>
+            <value>
+                <fullName>Order - MFG Ops</fullName>
+                <default>false</default>
+                <label>Order - MFG Ops</label>
+            </value>
+            <value>
+                <fullName>Business Process</fullName>
+                <default>false</default>
+                <label>Business Process</label>
+            </value>
+            <value>
+                <fullName>Order - Team</fullName>
+                <default>false</default>
+                <label>Order - Team</label>
+            </value>
+            <value>
+                <fullName>Order - Management</fullName>
+                <default>false</default>
+                <label>Order - Management</label>
+            </value>
+            <value>
+                <fullName>Channel Development Manager</fullName>
+                <default>false</default>
+                <label>Channel Development Manager</label>
+            </value>
+            <value>
+                <fullName>Channel Operations</fullName>
+                <default>false</default>
+                <label>Channel Operations</label>
+            </value>
+            <value>
+                <fullName>Alliance Partner</fullName>
+                <default>false</default>
+                <label>Alliance Partner</label>
+            </value>
+            <value>
+                <fullName>Growth Manager</fullName>
+                <default>false</default>
+                <label>Growth Manager</label>
+            </value>
+            <value>
+                <fullName>Monetization</fullName>
+                <default>false</default>
+                <label>Monetization</label>
+            </value>
+            <value>
+                <fullName>Product Manager</fullName>
+                <default>false</default>
+                <label>Product Manager</label>
+            </value>
+            <value>
+                <fullName>Monetization with DDC</fullName>
+                <default>false</default>
+                <label>Monetization with DDC</label>
+            </value>
+            <value>
+                <fullName>Product with Approver</fullName>
+                <default>false</default>
+                <label>Product with Approver</label>
+            </value>
+            <value>
+                <fullName>User Research</fullName>
+                <default>false</default>
+                <label>User Research</label>
+            </value>
+            <value>
+                <fullName>Product Manager DDC/Sware</fullName>
+                <default>false</default>
+                <label>Product Manager DDC/Sware</label>
+            </value>
+            <value>
+                <fullName>Professional Services Ops</fullName>
+                <default>false</default>
+                <label>Professional Services Ops</label>
+            </value>
+            <value>
+                <fullName>Professional Services PMO</fullName>
+                <default>false</default>
+                <label>Professional Services PMO</label>
+            </value>
+            <value>
+                <fullName>Professional Services Consultants</fullName>
+                <default>false</default>
+                <label>Professional Services Consultants</label>
+            </value>
+            <value>
+                <fullName>Revenue Analyst</fullName>
+                <default>false</default>
+                <label>Revenue Analyst</label>
+            </value>
+            <value>
+                <fullName>Revenue Approvers</fullName>
+                <default>false</default>
+                <label>Revenue Approvers</label>
+            </value>
+            <value>
+                <fullName>Revenue Approver DDC</fullName>
+                <default>false</default>
+                <label>Revenue Approver DDC</label>
+            </value>
+            <value>
+                <fullName>AVP</fullName>
+                <default>false</default>
+                <label>AVP</label>
+            </value>
+            <value>
+                <fullName>GVP</fullName>
+                <default>false</default>
+                <label>GVP</label>
+            </value>
+            <value>
+                <fullName>RD</fullName>
+                <default>false</default>
+                <label>RD</label>
+            </value>
+            <value>
+                <fullName>RVP</fullName>
+                <default>false</default>
+                <label>RVP</label>
+            </value>
+            <value>
+                <fullName>Sales Engineer</fullName>
+                <default>false</default>
+                <label>Sales Engineer</label>
+            </value>
+            <value>
+                <fullName>Field Ops</fullName>
+                <default>false</default>
+                <label>Field Ops</label>
+            </value>
+            <value>
+                <fullName>Sales Process &amp; System</fullName>
+                <default>false</default>
+                <label>Sales Process &amp; System</label>
+            </value>
+            <value>
+                <fullName>SDRs(Inside Sales)</fullName>
+                <default>false</default>
+                <label>SDRs(Inside Sales)</label>
+            </value>
+            <value>
+                <fullName>SEM</fullName>
+                <default>false</default>
+                <label>SEM</label>
+            </value>
+            <value>
+                <fullName>Renewal Ops</fullName>
+                <default>false</default>
+                <label>Renewal Ops</label>
+            </value>
+            <value>
+                <fullName>Sales Compensation Manager</fullName>
+                <default>false</default>
+                <label>Sales Compensation Manager</label>
+            </value>
+            <value>
+                <fullName>Sales Compensation Analyst</fullName>
+                <default>false</default>
+                <label>Sales Compensation Analyst</label>
+            </value>
+            <value>
+                <fullName>Field Sales</fullName>
+                <default>false</default>
+                <label>Field Sales</label>
+            </value>
+            <value>
+                <fullName>Inside Sales Ops</fullName>
+                <default>false</default>
+                <label>Inside Sales Ops</label>
+            </value>
+            <value>
+                <fullName>Inside Sales Manager</fullName>
+                <default>false</default>
+                <label>Inside Sales Manager</label>
+            </value>
+            <value>
+                <fullName>Infosec</fullName>
+                <default>false</default>
+                <label>Infosec</label>
+            </value>
+            <value>
+                <fullName>Business Read Only</fullName>
+                <default>false</default>
+                <label>Business Read Only</label>
+            </value>
+            <value>
+                <fullName>API</fullName>
+                <default>false</default>
+                <label>API</label>
+            </value>
+            <value>
+                <fullName>System - IT</fullName>
+                <default>false</default>
+                <label>System - IT</label>
+            </value>
+            <value>
+                <fullName>System - Business</fullName>
+                <default>false</default>
+                <label>System - Business</label>
+            </value>
+            <value>
+                <fullName>TBH</fullName>
+                <default>false</default>
+                <label>TBH</label>
+            </value>
+            <value>
+                <fullName>Sales Enablement</fullName>
+                <default>false</default>
+                <label>Sales Enablement</label>
+            </value>
+            <value>
+                <fullName>Engineering W/Release</fullName>
+                <default>false</default>
+                <label>Engineering W/Release</label>
+            </value>
+            <value>
+                <fullName>Engineering Contact Create</fullName>
+                <default>false</default>
+                <label>Engineering Contact Create</label>
+            </value>
+            <value>
+                <fullName>IT System Admin</fullName>
+                <default>false</default>
+                <label>IT System Admin</label>
+            </value>
+            <value>
+                <fullName>Engineering - General</fullName>
+                <default>false</default>
+                <label>Engineering - General</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

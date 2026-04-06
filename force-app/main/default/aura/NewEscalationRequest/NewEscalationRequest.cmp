@@ -1,0 +1,231 @@
+<aura:component controller="EscalationApexController"  implements="force:lightningQuickAction,force:hasRecordId,force:appHostable,flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName,lightning:isUrlAddressable,forceCommunity:availableForAllPageTypes,lightning:actionOverride">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="isProceed" type="Boolean" default="true"/>
+    <aura:attribute name="isComplete" type="Boolean" default="false"/>
+    <aura:attribute name="isPrimary" type="Boolean" default="true"/>
+    <aura:attribute name="isSave" type="Boolean" default="true"/>
+    <aura:attribute name="showmodal" type="Boolean" default="false"/>
+    <aura:attribute name="hasError" type="Boolean" default="false"/>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="accountId" type="String"/>
+    <aura:attribute name="hasAccount" type="Boolean"  default="false"/>
+    <aura:attribute name="description" type="String"/>
+    <aura:attribute name="desired" type="String"/>
+    <aura:attribute name="areOne" type="String"/>
+    <aura:attribute name="record" type="Object"/>    
+    <aura:attribute name="accountContacts" type="Object[]"/>    
+    <aura:attribute name="rubrikContacts" type="Object[]"/>    
+    <aura:attribute name="primaryContacts" type="Object[]"/>    
+    <aura:attribute name="Factors" type="List" />
+    <aura:attribute name="selectedFactors" type="List"/>
+    <aura:attribute name="Product" type="List" />
+    <aura:attribute name="selectedProduct" type="List"/>
+    <lightning:workspaceAPI aura:id="workspace"/>
+    <aura:if isTrue="{!and(v.isProceed,empty(v.recordId))}">
+        <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close"  onclick="{!c.onProceed}">
+                        X
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Acknowledgement Notice</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <p>By proceeding you acknowledge that you have read the Confulence page outline the criteria required to escalate 
+                        <a href="https://rubrik.atlassian.net/wiki/spaces/CEM/pages/602047606/Account+Escalation+Request">Confluence Link</a>. If you have questions please reach out to cem-team@rubrik.com for clarification.</p>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_brand" onclick="{!c.onProceed}">Proceed</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+    <aura:if isTrue="{!v.isComplete}">
+        <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                   
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Escalation Request Submitted!</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <p>Please refer to the Confluence document for <a href="https://rubrik.atlassian.net/wiki/spaces/CEM/pages/602047606/Account+Escalation+Request#AccountEscalationRequest-SLOsforCEMsSLOs">Service Level Objectives</a></p>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_brand" onclick="{!c.onDone}">Done</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+    <lightning:card iconName="action:new_case" title="Escalation Request">
+        <lightning:recordEditForm aura:id="myRecordForm" onsuccess="{!c.handleSuccess}" onsubmit="{!c.onSubmit}" objectApiName="Escalation_Request__c" recordId="{!v.recordId}">
+            <lightning:messages />
+            <div class="c-container">
+                <lightning:layout pullToBoundary="medium">
+                    <lightning:layoutItem size="6" padding="horizontal-medium">
+                        <label class="slds-form-element__label" for="unique-id-of-input">Account Name</label>
+                        <lightning:inputField fieldName="Account__c" aura:id="accIds" disabled="{!v.hasAccount}" variant="label-hidden" value="{!v.accountId}" onchange="{!c.updateAccount}"/>
+                        <aura:if isTrue="{!and(empty(v.accountId),v.hasError)}"><p style="color:red;">Please select Account.</p></aura:if>
+                        <aura:if isTrue="{!!empty(v.recordId)}">
+                            Email : {!v.record.Account__r.Owner.Email}<br/>
+                            Title : {!v.record.Account__r.Owner.Title}<br/>
+                            Phone : {!v.record.Account__r.Owner.Phone}<br/>
+                            <!-- ETM-141 -->
+                            Region : {!v.record.Account__r.ETM_Region__c}<br/>
+                            Theater : {!v.record.Account__r.ETM_Theatre__c}<br/>
+                            <br/><br/>
+                            <label class="slds-form-element__label" for="unique-id-of-input">Submitted By</label>
+                            <lightning:inputField fieldName="Reporting_User__c" aura:id="submitted" disabled="true" variant="label-hidden"/>
+                            Email : {!v.record.Reporting_User__r.Email}<br/>
+                            Title : {!v.record.Reporting_User__r.Title}<br/>
+                            Phone : {!v.record.Reporting_User__r.Phone}<br/>
+                            <!-- ETM-141
+                            Region : {!v.record.Reporting_User__r.Region__c}<br/>
+                            Theater : {!v.record.Reporting_User__r.Theatre__c}<br/> -->
+                        </aura:if>
+                    </lightning:layoutItem>
+                    <aura:if isTrue="{!!empty(v.recordId)}">
+                        <lightning:layoutItem size="6" padding="horizontal-medium">
+                            <label class="slds-form-element__label" for="unique-id-of-input">Submitted</label>
+                             <lightning:outputField fieldName="CreatedDate" variant="label-hidden"/><br/>
+                             <label class="slds-form-element__label" for="unique-id-of-input">Escalation Severity</label>
+                             <lightning:inputField fieldName="Escalation_Severity__c"  variant="label-hidden"/><br/>
+                            <label class="slds-form-element__label" for="unique-id-of-input">Status</label>
+                             <lightning:outputField fieldName="Status__c" variant="label-hidden"/>
+                        </lightning:layoutItem>
+                    </aura:if>
+                </lightning:layout>
+                <hr/>
+                <lightning:layout pullToBoundary="medium">
+                    <lightning:layoutItem size="6" padding="horizontal-medium">
+                        <label class="slds-form-element__label" for="unique-id-of-input">Description of events leading to escalation (Please provide as much information as possible)</label>
+                        <lightning:inputField fieldName="Description_of_events__c" aura:id="desc" required="true" variant="label-hidden" value="{!v.description}"/>
+                        <aura:if isTrue="{!and(or(empty(v.description),v.description.length>32000),v.hasError)}"><p style="color:red;">{!if(!and(!empty(v.description),v.description.length>32000),'Please fill the field.','Maximum length should not be greater than 32000.')}</p></aura:if>
+                        <br/><br/>
+                        <label class="slds-form-element__label" for="unique-id-of-input">What is the desired outcome of this escalation? </label>
+                        <lightning:inputField fieldName="Desired_outcome_of_escalation__c" aura:id="desired" required="true" variant="label-hidden" value="{!v.desired}"/>
+                        <aura:if isTrue="{!and(or(empty(v.desired),v.desired.length>32000),v.hasError)}"><p style="color:red;">{!if(!and(!empty(v.desired),v.desired.length>32000),'Please fill the field','Maximum length should not be greater than 32000')}.</p></aura:if>
+                    </lightning:layoutItem>
+                </lightning:layout>
+                <hr/>
+                <lightning:layout pullToBoundary="medium">
+                    <lightning:layoutItem size="6" padding="horizontal-medium">
+                        <lightning:checkboxGroup name="Factors involved leading to escalation"
+                                                 label="Factors involved leading to escalation"
+                                                 options="{! v.Factors }"
+                                                 value="{! v.selectedFactors }"
+                                                 required="true"
+                                                 aura:id="factor"
+                                                 messageWhenValueMissing="Please select atleast two values"
+                                                />
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="6" padding="horizontal-medium">
+                        <lightning:checkboxGroup name="Product Line involved in the escalation"
+                                                 label="Product Line involved in the escalation"
+                                                 options="{! v.Product }"
+                                                 value="{! v.selectedProduct }"
+                                                 required="true"
+                                                 aura:id="product"
+                                                 messageWhenValueMissing="Please select atleast two values"
+                                                 />
+                    </lightning:layoutItem>
+                </lightning:layout>
+                <br/><hr/>
+                <lightning:layout pullToBoundary="medium">
+                    <lightning:layoutItem size="8" padding="horizontal-medium">
+                        <label class="slds-form-element__label" for="unique-id-of-input">Primary customer contacts who should be involved in escalation</label>
+                        <center>
+                     <!--         <lightning:button variant="brand" label="Create New Contact" title="Create New Contact" onclick="{! c.createContact }" /> -->
+                            <lightning:button variant="brand" label="Select Contact" title="Select Contact" onclick="{! c.addContact }" disabled="{!empty(v.accountContacts)}" />
+                        </center><br/>
+                        <aura:if isTrue="{!!empty(v.primaryContacts)}">
+                            <c:EscalatedContact contacts="{!v.primaryContacts}"  primaryContacts="{!v.accountContacts}"/>
+                        </aura:if>
+                    </lightning:layoutItem>
+                </lightning:layout> <br/><br/><hr/>
+                <lightning:layout pullToBoundary="medium">
+                    <lightning:layoutItem size="8" padding="horizontal-medium">
+                        <label class="slds-form-element__label" for="unique-id-of-input">Rubrik's contacts who should be involved in escalation</label>
+                        <!--center-->
+           <!--                 <lightning:button variant="brand" label="Create New Contact" title="Create New Contact" onclick="{! c.createContact }" />				-->
+                            <!--lightning:button variant="brand" label="Select Contact" title="Select Contact" onclick="{! c.addRubrikContact }"  disabled="{!empty(v.accountContacts)}"/>
+                        </center><br/>
+                        <aura:if isTrue="{!!empty(v.rubrikContacts)}">
+                            <c:EscalatedContact contacts="{!v.rubrikContacts}"/>
+                        </aura:if-->
+                        <lightning:inputField fieldName="Rubrik_contacts_who_should_be_involved__c" aura:id="selectedContact" required="false" variant="label-hidden" onchange="{!c.addRubrikContact}"/>
+                        <br/>
+                        <aura:if isTrue="{!!empty(v.rubrikContacts)}">
+                            <c:EscalatedContact contacts="{!v.rubrikContacts}"/>
+                        </aura:if>
+                    </lightning:layoutItem>
+                </lightning:layout><br/><hr/>
+                <lightning:layout pullToBoundary="medium">
+                    <lightning:layoutItem size="8" padding="horizontal-medium">
+                        <label class="slds-form-element__label" for="unique-id-of-input">Are any other vendors involved? If so please list contact information and details</label>
+                        <lightning:inputField fieldName="Are_any_other_vendors_involved__c" aura:id="areOne" required="false" variant="label-hidden" value="{!v.areOne}"/>
+                        <aura:if isTrue="{!and(v.areOne.length>32000,v.hasError)}"><p style="color:red;">Maximum length should not be greater than 32000.</p></aura:if>
+                    </lightning:layoutItem>
+                </lightning:layout>
+                <center>
+                    <!--aura:if isTrue="{!empty(v.recordId)}">
+                        <lightning:button variant="brand" type="submit" label="Save" title="Save" onclick="{! c.Save }" />
+                    </aura:if-->
+                    <lightning:button variant="brand" type="submit" label="Submit" title="Submit" onclick="{! c.Submit }" />
+                </center>
+            </div>
+        </lightning:recordEditForm>
+        <br/><br/><br/><br/>
+        <aura:if isTrue="{!v.showmodal}">
+            <div style="height:840px">
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal_medium slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <header class="slds-modal__header">
+                            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close"  onclick="{!c.cancel}">
+                                X
+                                <span class="slds-assistive-text">Close</span>
+                            </button>
+                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Select Contacts</h2>
+                        </header>
+                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                            <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered slds-table_fixed-layout" role="grid">
+                                <thead>
+                                    <tr class="slds-line-height_reset">
+                                        <th class="" scope="col">
+                                            <div class="slds-truncate" title="Name">Name</div>
+                                        </th>
+                                        <th class="" scope="col">
+                                            <div class="slds-truncate" title="Title">Title</div>
+                                        </th>
+                                        
+                                        <th class="" scope="col">
+                                            <div class="slds-truncate" title="Email">Email</div>
+                                        </th>
+                                        <th class="" scope="col">
+                                            <div class="slds-truncate" title="Phone">Phone</div>
+                                        </th>
+                                        <th class="gridAction" scope="col">
+                                            <div class="slds-truncate" title="Action">Action</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <aura:iteration items="{!v.accountContacts}" var="item" indexVar="index">
+                                        <c:EscalationContactComponent contact="{!item.con}" primaryContacts="{!v.primaryContacts}" buttonstate="{!item.isSelected}"/>
+                                    </aura:iteration>
+                                </tbody>
+                            </table>
+                        </div>
+                        <footer class="slds-modal__footer">
+                            <button class="slds-button slds-button_neutral" onclick="{!c.cancel}">Cancel</button>
+                        </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </div>
+        </aura:if>
+    </lightning:card>
+    
+</aura:component>

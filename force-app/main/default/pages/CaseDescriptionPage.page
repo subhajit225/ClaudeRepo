@@ -1,0 +1,17 @@
+<apex:page standardController="Case" lightningStylesheets="true" >
+        <apex:slds />
+    <div class="slds-scope">
+    <apex:form >
+    <body style="background-color:lightgrey;">
+        <div>
+        <font size = "3" color="red"> <b>Subject: </b></font>
+        <font size = "3"><apex:outputField value="{!Case.Subject }" ></apex:outputField> </font>                        
+        </div>
+        <div>
+        <font size = "3" color="red"> <b>Description: </b></font>
+        <font size = "3"><apex:outputField value="{!Case.Description }" ></apex:outputField> </font>                        
+        </div>
+        </body>
+    </apex:form>                
+    </div>
+</apex:page>

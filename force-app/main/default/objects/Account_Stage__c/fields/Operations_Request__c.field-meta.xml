@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Operations_Request__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>SAL26-323 Field is created to capture Operation Request Id while creating account stage record from operation request trigger</description>
+    <label>Operations Request</label>
+    <referenceTo>Operations_Request__c</referenceTo>
+    <relationshipLabel>Account Stage</relationshipLabel>
+    <relationshipName>Account_Stage</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

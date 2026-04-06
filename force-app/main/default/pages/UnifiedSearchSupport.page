@@ -1,0 +1,19 @@
+<apex:page title="Resource Search - Rubrik Community" cache="false" standardStylesheets="false" sidebar="false" showheader="false" applyBodyTag="false">
+   <link rel="shortcut icon" href="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/favicon.ico')}" type="image/x-icon" />
+    <link rel="icon" href="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/favicon1.png')}" type="image/png" />
+    <c:visualstrapblock >
+        <!--start header-->
+        <c:siteheader ></c:siteheader>
+        <!--end Header-->
+        <c:processing />       
+        <!--start the Container-->
+        <apex:form id="searchform">
+            <!-- SearchUnify component added here -->
+            <su_vf_community:SU_Vf_CommunityComponent />
+        </apex:form>
+        <!--End the Container-->
+        <!--start the footer-->
+        <c:sitefooter rendered="{!NOT(ISPICKVAL($User.UserType,'PowerPartner'))}"/>
+        <c:psitefooter rendered="{!ISPICKVAL($User.UserType,'PowerPartner')}"/>
+    </c:visualstrapblock>
+</apex:page>

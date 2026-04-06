@@ -1,0 +1,20 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" controller="su_vf_console.SULtngController">
+  <aura:handler name="init" value="{!this}" action="{!c.doInit}" access="global"/>
+  <aura:handler event="forceCommunity:routeChange" action="{!c.handleRouteChange}"></aura:handler>
+  <aura:attribute name="scConfigObj" type="Object" />
+  <aura:attribute name="endPoint" type="String"/>
+  <aura:attribute name="uid" type="String"/>
+  <aura:attribute name="currentUserEmail" type="String" default=""/>
+  <aura:attribute name="customSettingErrorMessage" type="String"/>
+  <aura:if isTrue="{!if(v.customSettingErrorMessage == '', true, false)}">
+    <ltng:require styles="{!join(',',v.scConfigObj.client_url+v.uid+'/main.css')}"/>
+    <!-- <ltng:require scripts="{!join(',',v.scConfigObj.client_url+v.uid+'/external_scripts.js')}"/> -->
+    <aura:set attribute="else">
+      <span class="suCustomSettingErrMsg">{!v.customSettingErrorMessage}</span>
+    </aura:set>
+  </aura:if>
+  <aura:method name="analytics" description="Analytics tracking event capture">
+    <aura:attribute name="gzaType" type="String" />
+    <aura:attribute name="gzaData" type="Object" />
+  </aura:method>
+</aura:component>

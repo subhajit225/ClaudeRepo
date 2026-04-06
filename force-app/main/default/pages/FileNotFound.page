@@ -1,0 +1,32 @@
+<apex:page standardStylesheets="false" sidebar="false" showheader="false" cache="false" title="Error - Rubrik Community" applyBodyTag="false">
+    <c:visualstrapblock >
+
+        <!--start header-->
+        <c:siteheader ></c:siteheader>
+        <!--end Header-->
+
+  
+        <!--start the Container-->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                 
+                 
+                  <apex:outputPanel layout="block" styleClass="alert alert-warning" >
+                   We're sorry there has been an error.<br/>
+                    </apex:outputpanel> 
+                 
+
+                    </div>
+    
+            </div>
+        </div>
+        <!--End the Container-->
+
+        <!--start the footer-->
+        <c:sitefooter rendered="{!NOT(ISPICKVAL($User.UserType,'PowerPartner'))}"/>
+        <!--<c:psitefooter rendered="{!ISPICKVAL($User.UserType,'PowerPartner')}"/>-->
+        
+    </c:visualstrapblock>           
+                
+</apex:page>

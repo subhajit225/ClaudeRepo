@@ -1,0 +1,107 @@
+<template>
+    <div class="su__loading-view">
+        <div class={sliderClass} onclick={handleRefineSearch}>
+            <svg class="su__close-icon su__ml-2 su__bg-white-hover-50 su__adv-icon-rtl" width="16" height="16"
+                viewBox="0 0 18 18">
+                <g transform="translate(0 0)">
+                    <rect width="18" height="1.928" rx="0.964" transform="translate(0 8.133)" fill={advanceSearchSvgColor}>
+                    </rect>
+                    <rect width="18" height="1.928" rx="0.964" transform="translate(0 1.715)" fill={advanceSearchSvgColor}>
+                    </rect>
+                    <rect width="18" height="1.928" rx="0.964" transform="translate(0 14.137)" fill={advanceSearchSvgColor}>
+                    </rect>
+                    <g>
+                        <circle cx="2.785" cy="2.785" r="2.785" transform="translate(10.288 6.406)"
+                            fill={advanceSearchSvgColor}></circle>
+                        <circle cx="2.785" cy="2.785" r="2.785" transform="translate(6.014)" fill={advanceSearchSvgColor}>
+                        </circle>
+                        <circle cx="2.785" cy="2.785" r="2.785" transform="translate(2.356 12.422)"
+                            fill={advanceSearchSvgColor}></circle>
+                    </g>
+                </g>
+            </svg>
+            <span class={advanceSearchLabelClass}>{translationObject.Advanced_Search}</span>
+        </div>
+        <div data-id="formBlock" class="mainFormDiv">
+            <div data-id="su__advanceFormDiv" class="formDiv su__AdvanceSearchBoxMobile">
+                <div
+                    class="su__bookmark-popup-title showHideAdvanceSearchBookmarkBanner su__p-2 su__flex-vcenter su__bg-blue-grd">
+                    <div class="su__p-2 su__bg-white-circle su__radius-50">
+                        <svg class="su__close-icon x su__bg-white-hover-50 " width="16" height="16" viewBox="0 0 18 18">
+                            <g transform="translate(0 0)">
+                                <rect width="18" height="1.928" rx="0.964" transform="translate(0 8.133)" fill="#fff">
+                                </rect>
+                                <rect width="18" height="1.928" rx="0.964" transform="translate(0 1.715)" fill="#fff">
+                                </rect>
+                                <rect width="18" height="1.928" rx="0.964" transform="translate(0 14.137)" fill="#fff">
+                                </rect>
+                                <g>
+                                    <circle cx="2.785" cy="2.785" r="2.785" transform="translate(10.288 6.406)"
+                                        fill="#fff"></circle>
+                                    <circle cx="2.785" cy="2.785" r="2.785" transform="translate(6.014)" fill="#fff">
+                                    </circle>
+                                    <circle cx="2.785" cy="2.785" r="2.785" transform="translate(2.356 12.422)"
+                                        fill="#fff"></circle>
+                                </g>
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="su__bookmark-title su__align-self-center">
+                        <div class="font-16 su__text-white  su__loading-view">Advanced Search</div>
+                    </div>
+                    <div class="su__close-icon su__align-self-center su__cursor" onclick={handleRefineSearch}>
+                        <svg width="24" height="24" viewBox="0 0 24 24">
+                            <path class="su__fill-white"
+                                d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z">
+                            </path>
+                            <path d="M0 0h24v24H0z" fill="none"></path>
+                        </svg>
+                    </div>
+                </div>
+                <template if:true={advancedSearchSelected}>
+                    <div class="su-clear-advance-filters">
+                        <span onclick={clearAllAdvFilters}
+                            class="su-clear-filters-button-screen su-clear-filtersBtnColor su__loading-view su__custom-margin-0">
+                            {translationObject.Clear_all}
+                        </span>
+                    </div>
+                </template>
+                <!-- su__AdvanceSearchBoxMobile -->
+                <div class="su__advance_group">
+                    <lightning-input placeholder={translationObject.With_the_exact_phrase} type="text"
+                        autocomplete="off" name="exactPhrase" value={exactPhrase} class="refineSearchBox"
+                        onkeyup={enterKeyAdvanceSearch}>
+                    </lightning-input>
+                </div>
+                <div class="su__advance_group">
+                    <lightning-input placeholder={translationObject.With_one_or_more_words} type="text"
+                        autocomplete="off" name="withOneOrMore" value={withOneOrMore} class="refineSearchBox"
+                        onkeyup={enterKeyAdvanceSearch}>
+                    </lightning-input>
+                </div>
+                <div class="su__advance_group">
+                    <lightning-input placeholder={translationObject.Without_the_words} type="text" autocomplete="off"
+                        name="withoutTheWords" value={withoutTheWords} class="refineSearchBox"
+                        onkeyup={enterKeyAdvanceSearch}>
+                    </lightning-input>
+                </div>
+                <div class="su__advance_group">
+                    <lightning-input placeholder={translationObject.With_the_wildcard_search} type="text"
+                        autocomplete="off" name="withWildcardSearch" value={withWildcardSearch} class="refineSearchBox"
+                        onkeyup={enterKeyAdvanceSearch}>
+                    </lightning-input>
+                </div>
+                <div class="su__flex-vcenter">
+                    <div class="su__width-100 su__text-center">
+                        <lightning-button label={translationObject.Refine_Search} class={refineSearchbtnClass}
+                            onclick={refineSearch}>
+                        </lightning-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- su__AdvanceSearchBoxMobile -->
+        <div data-id="AdvanceSearchBackdrop" class="su__backdrop su__d-none su__AdvanceSearchBoxMobileOverlay"
+            onclick={handleRefineSearch}></div>
+    </div>
+</template>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Cannot_remove_Lead</fullName>
+    <active>true</active>
+    <errorConditionFormula>ISCHANGED(Lead__c ) &amp;&amp;  !ISNULL(PRIORVALUE(Lead__c ))  &amp;&amp; ISBLANK(Lead__c ) &amp;&amp;  ( ISPICKVAL(Deal_Registration_Status__c  , &apos;Pending&apos;) )</errorConditionFormula>
+    <errorMessage>Can&apos;t remove a lead from Deal Registration with Status as Pending</errorMessage>
+</ValidationRule>

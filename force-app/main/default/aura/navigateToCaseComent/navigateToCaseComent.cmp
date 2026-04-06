@@ -1,0 +1,16 @@
+<aura:component
+  implements="flexipage:availableForAllPageTypes,lightning:isUrlAddressable"
+  access="global"
+>
+  <aura:attribute type="String" name="caseId" />
+  <lightning:workspaceAPI aura:id="workspace" />
+  <!-- <lightning:button label="Set Focused Tab with Label" onclick="{! c.setFocusedTabLabel }" />-->
+  <aura:attribute type="String" name="caseCommentVal" />
+  <aura:handler name="init" value="{!this}" action="{!c.init}" />
+  <div class="slds-card">
+    <c:knowblerLinkViaCaseComment
+      caseId="{!v.caseId}"
+      caseComm="{!v.caseCommentVal}"
+    />
+  </div>
+</aura:component>

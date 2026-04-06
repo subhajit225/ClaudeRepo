@@ -1,0 +1,6 @@
+<apex:page standardController="ETMStage_Monitoring__c" extensions="ETMBatchJobsController" action="{!runETMBatch}">
+    <apex:form >
+        <apex:pageMessages id="pbm"/>
+        <apex:commandButton action="{!redirectToETMStageMonitorRecord}" value="Back"/>
+    </apex:form>
+</apex:page>

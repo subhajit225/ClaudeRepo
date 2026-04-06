@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Non_Billable_Install_Hours__c</fullName>
+    <label>Non-Billable Install Hours</label>
+    <summarizedField>PS_Task__c.Non_Billable_hours_actual__c</summarizedField>
+    <summaryFilterItems>
+        <field>PS_Task__c.Task_Type__c</field>
+        <operation>equals</operation>
+        <value>Install - Non Billable</value>
+    </summaryFilterItems>
+    <summaryForeignKey>PS_Task__c.Project__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

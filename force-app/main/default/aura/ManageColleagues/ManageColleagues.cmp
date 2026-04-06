@@ -1,0 +1,234 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes"  controller="CaseApexController" access="global">
+    <aura:attribute name="Conlist" type="List"/>
+    <aura:attribute name="contactsAddedInCaseTeamMembers" type="List"/>
+    <aura:attribute name="allContacts" type="Contact"/>
+    <aura:attribute name="newcontact" type="string"/>
+    <aura:attribute name="Casenumber" type="string"/>
+    <aura:attribute name="CaseId" type="string"/>
+    <aura:attribute name="isSelectAll" type="boolean" default="false"/>
+    <aura:attribute name="isSpinner" type="boolean" default="false"/>
+    <aura:attribute name="data" type="Contact"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="newItem" type="Contact"
+                    default="{'sobjectType':'Contact',
+                             'Name':'',
+                             'UserType__c':'Employee',
+                             'UpdateComments__c':'',
+                             'Email__c':''}" />
+    <aura:attribute name="searchPhrase" type="String" />
+    <aura:attribute name="filteredData" type="List" />
+    <aura:attribute name="arrowDirection" type="string" default="arrowup" description="Use for change arrow sign direction on header based on click"/>
+    <aura:attribute name="isAsc" type="boolean" default="true" description="boolean flag for pass sorting condition to apex class"/>
+    <aura:attribute name="selectedTabsoft" type="String" default="FirstName"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+   <aura:attribute name="selectedContacts" type="List"/> 
+    <aura:attribute name="removedContacts" type="List"/>
+    <aura:attribute name="isSave" type="String" default="SAVE"/>
+    <aura:attribute name="loaded" type="Boolean" default="true" />
+    
+    
+    <div class="exampleHolder">
+        <aura:if isTrue="{! v.loaded }">
+            <lightning:spinner alternativeText="Loading" />
+        </aura:if>
+    </div>
+    <div class="slds-grid">
+        <div class="slds-size--1-of-1 ">
+            <div class="slds-grid">
+                <div class="slds-large-size_1-of-12"> </div>
+                <div class="slds-large-size_10-of-12">
+                    <div class="slds-grid ">
+                        <div class="slds-col slds-large-size_12-of-12 padaround">
+                            <div>
+                                <p class="casenumbercss">  Add a Colleagues to Case {!v.Casenumber}</p>
+                                <div >
+                                    <lightning:layout multipleRows="true" verticalAlign="end">
+                                    <button class="slds-button slds-button_brand  slds-align_absolute-center buttondesign" onclick="{!c.openModal}">ADD NEW CONTACT</button>
+                                        <lightning:layout multipleRows="true" verticalAlign="end">	
+                                           <lightning:layoutItem padding="around-small">
+                                             <div class="inline-container">
+                                               <div class="search slds-float_right">
+                                                 <!--added for CS21-839 - Rajender-->
+                                                 <lightning:layout multipleRows="true" verticalAlign="end">
+                                                  <lightning:layoutItem padding="around-small">
+                                                      <lightning:input
+                                                         placeholder="Enter text to Search"
+                                                         type="search"
+                                                         value="{!v.searchPhrase }"
+                                                         onchange="{!c.onChangeSearchPhrase }" />
+                                                 </lightning:layoutItem>
+                                                 <lightning:layoutItem padding="around-small">
+                                                   <lightning:button
+                                                         label="Search"
+                                                         class="slds-button slds-button_brand  slds-float_right searchbutton"
+                                                         onclick="{! c.handleSearch }" />
+                                                 </lightning:layoutItem>
+                                                </lightning:layout>
+                                                <!--end of CS21-839-->
+                                             </div>
+                                          </div>
+                                           </lightning:layoutItem>
+                                        </lightning:layout>
+                                    </lightning:layout>
+                                    <lightning:datatable
+                                                         aura:id="dataTableX"
+                                                         keyField="Id"
+                                                         data="{!v.data}"
+                                                         columns="{!v.columns}"
+                                                         onsave="{!c.handleSaveEdition}"
+                                                         onrowaction="{!c.handleRowAction}"/>
+                                </div>
+
+                                <div role="dialog" tabindex="-1" aria-labelledby="header43" aura:id="Modalbox" class="slds-modal slds-modal_medium">
+                                    <div class="slds-modal__container">
+                                        <header class="slds-modal__header">
+                                            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.closeModal}">
+                                                <lightning:icon iconName="action:remove" alternativeText="Approved" size="xx-small"/>
+                                                <span class="slds-assistive-text">Close</span>
+                                            </button>
+                                            <h2 id="modal-heading-01" class="alignleft slds-text-heading_medium slds-hyphenate">Contact Details</h2>
+                                        </header>
+                                        <div class="">
+                                            <div class="slds-modal__content  slds-p-around--medium">
+
+                                                <div class="slds-grid ">
+                                                    <div class="slds-size_12-of-12 fontsizefamily   " >
+                                                        <ui:inputText aura:id="fname" label="First Name"  value="{!v.newItem.FirstName}" required="true" />
+                                                    </div>
+                                                </div>
+                                                <div class="slds-grid ">
+                                                    <div class="slds-size_12-of-12 fontsizefamily  " >
+                                                        <ui:inputText aura:id="lname" required="true" label="Last Name" value="{!v.newItem.LastName}"  />
+                                                    </div>
+                                                </div>
+                                                <div class="slds-grid  ">
+                                                    <div class="slds-size_12-of-12 fontsizefamily   " >
+                                                        <ui:inputText aura:id="getEmail" required="true"  label="Email"  value="{!v.newItem.Email}"  />
+                                                    </div>
+                                                </div>
+                                                <div class="slds-grid ">
+                                                    <div class="slds-size_12-of-12 fontsizefamily   " >
+                                                        <ui:inputText aura:id="title"  required="true"  label="Title"  value="{!v.newItem.Title}"  />
+                                                    </div>
+                                                </div>
+                                                <div class="slds-grid  ">
+                                                    <div class="slds-size_12-of-12 fontsizefamily  " >
+                                                        <ui:inputText aura:id="Phone" label="Phone"  value="{!v.newItem.Phone}"  />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="slds-modal__footer">
+                                                <button class="slds-button slds-button_brand buttondesign" disabled="{!v.isSpinner}" label="{!v.isSpinner == true ? 'Saving...' : 'Save'}" onclick="{!c.savecontact1}">{!v.isSave}</button>
+                                                <button class="slds-button slds-button_neutral buttondesign" onclick="{!c.closeModal}">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="slds-backdrop " aura:id="Modalbackdrop"></div>
+
+                            <div class=" tablecls">
+                                <table class="slds-table slds-table_cell-buffer slds-table_bordered ">
+                                    <thead>
+                                        <tr class="slds-max-x-small-hide slds-line-height_reset" >
+                                            <th class="designcls" width="10%" scope="col">
+
+                                            </th>
+                                            <th class="designcls" width="15%" scope="col" onclick="{!c.sortFirstName}">
+                                                <a href="javascript:void(0);" class="casenocolor">
+                                                    <span class="slds-truncate" title="FirstName" >First Name</span>&nbsp;
+                                                    <aura:if isTrue="{! and(v.arrowDirection == 'arrowdown', v.selectedTabsoft == 'FirstName') }"><lightning:icon iconName="utility:arrowdown" class="my-icon" size="xx-small" alternativeText="Down" title="Down" /></aura:if>
+                                                    <aura:if isTrue="{! and(v.arrowDirection != 'arrowdown', v.selectedTabsoft == 'FirstName') }"><lightning:icon iconName="utility:arrowup" class="my-icon" size="xx-small" alternativeText="Up" title="Up" /></aura:if>
+                                                </a>
+                                            </th>
+                                            <th class="designcls" width="15%" scope="col" onclick="{!c.sortLastName}">
+                                                <a href="javascript:void(0);" class="casenocolor">
+                                                    <span class="slds-truncate" title="LastName" >Last Name</span>&nbsp;
+                                                    <aura:if isTrue="{! and(v.arrowDirection == 'arrowdown', v.selectedTabsoft == 'LastName') }"><lightning:icon iconName="utility:arrowdown" class="my-icon" size="xx-small" alternativeText="Down" title="Down" /></aura:if>
+                                                    <aura:if isTrue="{! and(v.arrowDirection != 'arrowdown', v.selectedTabsoft == 'LastName') }"><lightning:icon iconName="utility:arrowup" class="my-icon" size="xx-small" alternativeText="Up" title="Up" /></aura:if>
+                                                </a>
+                                            </th>
+                                            <th class="designcls" width="15%" scope="col" onclick="{!c.sortEmail}">
+                                                <a href="javascript:void(0);" class="casenocolor">
+                                                    <span class="slds-truncate" title="Email">Email</span>&nbsp;
+                                                    <aura:if isTrue="{! and(v.arrowDirection == 'arrowdown', v.selectedTabsoft == 'Email') }"><lightning:icon iconName="utility:arrowdown" class="my-icon" size="xx-small" alternativeText="Down" title="Down" /></aura:if>
+                                                    <aura:if isTrue="{! and(v.arrowDirection != 'arrowdown', v.selectedTabsoft == 'Email') }"><lightning:icon iconName="utility:arrowup" class="my-icon" size="xx-small" alternativeText="Up" title="Up" /></aura:if>
+                                                </a>
+                                            </th>
+
+                                           <!--<th class="designcls" scope="col">
+                                                <div class="slds-truncate" title="Account Name">
+                                                <div class="slds-truncate" title="Account Name">Last Name</div>
+                                                    </div>
+                                            </th>
+                                            <th class="designcls" scope="col">
+                                                <div class="slds-truncate" title="Close Date">Email</div>
+                                            </th>-->
+                                        </tr>
+                                    </thead>
+
+                                    <tbody class="borderbotom">
+                                        <aura:iteration var="con"  items="{!v.Conlist}">
+                                            <tr class=" slds-max-x-small-hide slds-hint-parent trcls">
+                                                <td data-label="Account Name ">
+                                                 
+                                                    <lightning:input aura:id="checkContact" type="checkbox" name="{!con.con.Id}" checked="{!con.isAdded}" onchange="{!c.onSelectContacts}"/>
+                                                   
+                                                </td>
+                                                <td data-label="Account Name ">
+                                                    <div class="slds-truncate fontsize" title="CaseNumber">{!con.con.FirstName}</div>
+                                                </td>
+                                                <td data-label="Close Date">
+                                                    <div class="slds-truncate fontsize" title="Status">{!con.con.LastName}</div>
+                                                </td>
+                                                <td data-label="Prospecting">
+                                                    <div class="slds-truncate fontsize" title="Priority"><a class="casenocolor" href="{!'mailto:'+con.Email}">{!con.con.Email}</a></div>
+                                                </td>
+                                            </tr>
+
+                                                <div class="table slds-x-small-show-only">
+                                                <div class="mobViewDiv">
+                                                        <div class="PhonecaseContent">
+                                                        <span class="slds-small-size--6-of-12 fontsize no-pad ">First Name :</span>
+                                                        <span class="slds-small-size--6-of-12 no-pad fontsize">
+                                                            <p class="slds-float_right nameMob">  <a href="{!'viewcase?id='+ con.Id}" class="casenocolor"> {!con.con.FirstName}</a>
+                                                            </p>
+                                                        </span>
+                                                    </div>
+                                                        <div class="PhonecaseContent">
+                                                        <span class="slds-small-size--6-of-12 fontsize no-pad ">Last Name :</span>
+                                                        <span class="slds-small-size--6-of-12 no-pad fontsize">
+                                                            <p class="slds-float_right nameMob"> {!con.con.LastName}</p>
+                                                        </span>
+                                                    </div>
+                                                        <div class="PhonecaseContent">
+                                                            <span class="slds-small-size--6-of-12 fontsize no-pad ">Email :</span>
+                                                        <span class="slds-small-size--6-of-12 no-pad fontsize">
+                                                                <p class="slds-float_right nameMob">
+                                                                <lightning:formattedEmail value="{!con.con.email}" />
+                                                            </p>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </aura:iteration>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="slds-align_absolute-center buttonpadtop">
+                                <div class="buttonsspace">
+                                    <lightning:button class="buttonsspace buttondesign " variant="brand" label="Save" title="Save" onclick="{! c.handleSelectedContacts }" />
+                                </div>
+                              <!--a class="buttonsspace" href="{!'viewcase?id='+ v.CaseId}"> <button class="slds-button slds-button_brand buttondesign " onclick="{!c.handleSelectedContacts}">SAVE</button></a-->
+                                <a href="{!'viewcase?id='+ v.CaseId}"> <button class="slds-button slds-button_brand  buttondesign ">CANCEL</button>
+                                </a>                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

@@ -1,0 +1,108 @@
+<template>
+    <template if:true={isLoading}>
+        <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+    </template>
+    <template if:true={hasAccess}>
+        <lightning-card>
+            <div class="slds-grid slds-grid_align-spread slds-p-around_small">
+                <div class="slds-media slds-align-center">
+                    <div class="header-container">
+                    <div class="header-row">
+                        <lightning-icon icon-name="utility:event" size="x-small" alternative-text="Batch Frequency Setting"></lightning-icon>
+                        <span class="header-title">Batch Frequency Setting</span>
+                    </div>
+                    <div class="checkbox-row">
+                        (Disabled?<lightning-input type="checkbox" checked={disabledFieldValue} value={disabledFieldValue} onchange={handleCheckboxChange} class="custom-checkbox"></lightning-input><span class='bracket'>)</span>
+                    </div>
+                </div>
+                </div>
+                <template if:false={emptyObjectData}>
+                <div class="lastMod">
+                    <p><strong>Last Modified By:</strong> {lastModifiedBy}</p>
+                </div>
+                </template>
+            </div>
+            <template if:false={disabledFieldValue}>
+            <!-- Main Card Content -->
+            <div class="slds-p-around_medium custom-container">
+                <div class="slds-grid slds-wrap slds-m-bottom_medium info-summary">
+
+                    <!-- Frequency For -->
+                    <div class="slds-col slds-size_1-of-3 slds-p-around_small">
+                        <div class="valueBox">
+                            <p class="label">Current Frequency For</p>
+                            <span class="value">{currentFrequencyFor}</span>
+                        </div>
+                        <template if:false={currentFrequencyFor}>&nbsp;</template>
+                        <lightning-combobox
+                            name="frequencyFor"
+                            label="New Frequency For"
+                            value={frequencyFor}
+                            options={frequencyForOptions}
+                            onchange={handleFrequencyForChange}>
+                        </lightning-combobox>
+                    </div>
+
+                    <!-- Frequency Type -->
+                    <div class="slds-col slds-size_1-of-3 slds-p-around_small">
+                        <div class="valueBox">
+                            <p class="label">Current Frequency</p>
+                            <span class="value">{currentFrequency}</span>
+                        </div>
+                        <template if:false={currentFrequency}>&nbsp;</template>
+                        <lightning-combobox
+                            name="frequency"
+                            label="New Frequency"
+                            value={newFrequency}
+                            placeholder="Select Frequency"
+                            options={frequencyOptions}
+                            onchange={handleFrequencyChange}>
+                        </lightning-combobox>
+                    </div>
+
+                    <!-- Start Date -->
+                    <div class="slds-col slds-size_1-of-3 slds-p-around_small">
+                        <div class="valueBox">
+                            <p class="label">Last Run</p>
+                            <span class="value">
+                                    <lightning-formatted-date-time 
+                                        value={lastRun}
+                                        year="numeric"
+                                        month="short"
+                                        day="2-digit"
+                                        hour="2-digit"
+                                        minute="2-digit"
+                                        time-zone="Asia/Kolkata"
+                                        hour12="true">
+                                    </lightning-formatted-date-time>
+                            </span>
+                            <template if:false={lastRun}>&nbsp;</template>
+                        </div>
+                        <lightning-input 
+                            type="date" 
+                            name="startDate" 
+                            label="New Frequency Start Date"
+                            value={newStartDate}
+                            min={minStartDate}
+                            onchange={handleDateChange}>
+                        </lightning-input>
+                    </div>
+                </div>
+            </div>
+            </template>
+            <lightning-button 
+                    variant="brand" 
+                    label="Save"
+                    onclick={handleSave}
+                    class="slds-m-top_medium slds-align_absolute-center">
+            </lightning-button>
+        </lightning-card>
+    </template>
+    <template if:false={hasAccess}>
+        <div class="slds-p-around_medium slds-text-align_center">
+            <p class="slds-text-color_error slds-text-heading_small">
+                You do not have access to view this page.
+            </p>
+        </div>
+    </template>
+</template>

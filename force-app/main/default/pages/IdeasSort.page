@@ -1,0 +1,129 @@
+<apex:page standardController="Idea" recordSetVar="ideaSetVar" standardStylesheets="false" cache="false" sidebar="false" showheader="false" title="Ideas - Rubrik Community" applyBodyTag="false">
+
+<link rel="shortcut icon" href="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/favicon.ico')}" type="image/x-icon" />
+    <link rel="icon" href="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/favicon1.png')}" type="image/png" />
+    <c:visualstrapblock >
+    
+    
+    <!--hide the action column from Community users-->
+    <style>
+    .actionColumn{
+    display:none;
+    }
+    
+    .pbBody{
+    padding: 5px;
+    }
+    
+    .visualstrap td, th {
+    padding: 5px !important;
+    }
+    
+    .rolodex {
+      padding: 4px !important;  
+   }
+   
+   .votebutton, .voteButton a, .voteButton a:hover, .votedButton a, .votedButton a:hover , votebuttonText {
+    text-decoration: none;
+    font-size: 12px !important;  
+    font-family: Gotham-Light;
+    }
+    
+    .votedUpButton .voteUp, .votedDownButton .voteDown {
+    text-decoration: none;
+    font-size: 12px !important;  
+    font-family: Gotham-Light;    
+    }
+
+    .ideatext{
+    font-size: 14px !important;  
+    font-family: Gotham-Light; 
+    padding: 5px;   
+    }    
+    
+    
+    <!--
+          <style>
+ .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+ color: #FFFFFF !important;
+ }
+   
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+    cursor: default;
+     color: #009DAC !important;
+    border: 1px solid transparent;
+    background: transparent;
+    box-shadow: none;
+}
+    </style>
+    -->
+    
+    </style>
+        <!--start header-->
+        <c:siteheader ></c:siteheader>
+        <!--end Header--
+
+
+      <!--start the Container-->
+        <div class="container">
+            <div class="row rowcontainer" >
+                <div class="col-md-12">
+                  <c:pageTitle name="Ideas" ></c:pageTitle>
+
+             <!--buttons-->
+            <div id="container">
+                <div class="row  btnpad">
+                    <div class="btn-group">
+                            <a href="{!URLFOR($Page.NewIdea, null, null)}"><button type="button" class="btn rubrik-btn" >Submit an Idea</button></a><br /><br />
+                            To search for previous Ideas, use the search box on the main landing page of the <a href="https://support.rubrik.com/CommunityHome">Support Portal</a>.
+                    </div>
+                </div>
+            </div>
+         <!--end buttons-->  
+<br/>
+<apex:pageBlock >
+        <a href="{!URLFOR($Page.IdeasHome)}">Browse All Ideas</a>
+        |&nbsp;
+        <ideas:listOutputLink sort="recent" page="IdeasSort" >Recent Ideas</ideas:listOutputLink>
+        |&nbsp;
+        <ideas:listOutputLink sort="top" page="IdeasSort">Top Ideas</ideas:listOutputLink>
+        |&nbsp;
+        <ideas:listOutputLink sort="popular" page="IdeasSort">Popular Ideas</ideas:listOutputLink>
+        |&nbsp;
+        <ideas:listOutputLink sort="comments" page="IdeasSort">Recent Comments</ideas:listOutputLink>
+        |&nbsp;
+        <ideas:ListOutputLink sort="ideas" page="IdeasSort">My Ideas</ideas:ListOutputLink>
+        |&nbsp;
+        <ideas:ListOutputLink sort="votes" page="IdeasSort">My Votes</ideas:ListOutputLink>
+    </apex:pageBlock>
+    <apex:pageBlock >
+    <br/>
+    <br/>
+    
+    
+    <apex:form >
+          <apex:repeat var="ideadata" value="{!ideaList}" id="idealist" >
+          <div class="row" style="table" >
+          <div class="col-md-1"><apex:vote objectId="{!ideadata.id}" rerender="IdeaList" />  </div>
+          <div class="col-md-10"><a href="{!URLFOR($Page.IdeaView, null, [id=ideadata.Id])}">{!ideadata.Title}</a><apex:outputtext value=" | Status: {!ideadata.Status}" rendered="{!ideadata.status!=null}"/><br/>  
+          <div class="ideatext"><apex:outputtext value="{!ideadata.Body}" escape="false"/><br/>
+          <br />
+          <b>{!ideadata.NumComments} comments | Posted by {!ideadata.CreatedBy.CommunityNickname} on&nbsp; <apex:outputfield value="{!ideadata.CreatedDate}"/></b></div>
+          </div>
+          </div>
+          <hr/>
+          </apex:repeat>
+    </apex:form>
+    </apex:pageBlock>
+
+              </div>
+            </div>
+        </div>
+        <!--End the Container-->
+
+
+       <!--start the footer-->
+        <c:sitefooter ></c:sitefooter>
+        
+    </c:visualstrapblock>
+</apex:page>

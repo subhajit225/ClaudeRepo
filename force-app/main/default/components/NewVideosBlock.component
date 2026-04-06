@@ -1,0 +1,76 @@
+<apex:component controller="VideosController">
+    <script>
+    //$.noConflict();
+    </script>
+    <style>
+        .videosHeading{font-size:50px;font-family:"Gotham-Light";margin:50px 0px 28px 0px;color:#4a4a4a;text-align:center;}
+        .seeAllVideosLink{font-size:15px;color:#009dac !important;cursor:pointer;text-transform:uppercase}
+        .seeAllVideosLink:hover{color: #009DAC !important;}
+        .videoHeading{font-size:23px;color:#4a4a4a;font-weight:bold;margin:20px 0 0 0 !important;text-align:left;padding-left:10% !important;}
+        .videoDesc{font-size:14px;color:#4a4a4a;margin:20px 0 0 0 !important;text-align:left;padding-left:10% !important;}
+        .backimg{background: url(http://www.metalinjection.net/wp-content/uploads/2014/07/space-metal.jpg);}
+        .videoBlockSection{width:90% !important;margin:0 auto !important;}
+        .MultiCarousel .MultiCarousel-inner .item > div{padding:0;margin:20px;}
+        .MultiCarousel .leftLst, .MultiCarousel .rightLst{top:calc(50% - 30px);}
+        .leftLst:focus,.rightLst:focus{outline:none !important;}
+    </style>
+    <apex:stylesheet value="{!URLFOR($Resource.RubrikCustomerCommunity, 'RubrikCommunity/Css/Carousel.css')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.RubrikCustomerCommunity, 'RubrikCommunity/Js/Carousel.js')}"/>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad" style="background-color:#f1f1f1">
+        <div class="videoBlockSection">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad videoBlock">
+                <div class="videoSection">
+                    <div class="col-lg-12 col-md-12 col-xs-12 nopad videosHeading">Our Videos</div>
+                    <div class="col-lg-12 col-md-12 col-xs-12 nopad" style="margin-bottom:15px;text-align:center;"><a class="seeAllVideosLink" href="/Knowledge?categoryType_Article=Videos">See All Videos &#62;</a></div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad CarouselBlock" style="margin-bottom: 50px;">
+                <div class="MultiCarousel" data-items="2,2,4,4" data-slide="1" id="MultiCarousel"  data-interval="1000">
+                    <div class="MultiCarousel-inner">
+                        <apex:repeat value="{!topVideos}" var="each">
+                            <div class="item">
+                                <div class="pad15" style="cursor: pointer;" data-toggle="modal" data-target="#{!each.id}">
+                                    <img src="https://img.youtube.com/vi/{!RIGHT(each.Video_URL__c,11)}/hqdefault.jpg" alt="{!each.title}" style="width:80%;"/>
+                                    <p class="videoHeading">{!IF(AND(each.title != null,LEN(each.title) > 30),LEFT(each.title ,30)+'...',each.title)}</p>
+                                    <p class="videoDesc">{!IF(AND(each.Summary != null,LEN(each.Summary) > 100),LEFT(each.Summary ,100)+'...',each.Summary)}</p>
+                                </div>
+                            </div>
+                            
+                        </apex:repeat>
+                    </div>
+                    <button class="btn btn-primary leftLst"><apex:image styleClass="img-responsive announcementImg" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/carousel_arrow_left.png')}" /></button>
+                    <button class="btn btn-primary rightLst"><apex:image styleClass="img-responsive announcementImg" value="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/carousel_arrow_right.png')}" /></button>
+                </div>
+                <script>
+                $(document).ready(function(){
+                    $(".close").click(function(){
+                        $(this).parent().siblings().each(function(){
+                            if($(this).attr("class") == "modal-body"){
+                                $(this).children().each(function(){
+                                    $(this).attr("src",$(this).attr("src"));
+                                });
+                            }
+                        });
+                    });
+                });
+                </script>
+                <apex:repeat value="{!topVideos}" var="each">
+                    <div class="modal fade" data-backdrop="static" id="{!each.id}" role="dialog">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <!--<h4 class="modal-title">{!each.title}</h4>-->
+                                    <apex:outputText styleClass="modal-title" escape="false" value="{!IF(AND(each.title != null,LEN(each.title) > 100),LEFT(each.title ,100)+'...',each.title)}" />
+                                </div>
+                                <div class="modal-body">
+                                    <apex:outputText escape="false" value="{!each.Summary__c}" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </apex:repeat>
+            </div>
+        </div>
+    </div>
+</apex:component>

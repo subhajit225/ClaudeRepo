@@ -1,0 +1,179 @@
+<aura:component controller="CS_InsightMatchesController" implements="force:appHostable,flexipage:availableForRecordHome,force:hasRecordId">
+    <aura:attribute name="insightMatchesList" type="List"/>
+    <aura:attribute name="insightMatchesWrapper" type="Object"/>
+    <aura:attribute name="insightMatchSeverityWiseList" type="List"/>
+    <aura:attribute name="sourceObject" type="String"/>
+    <aura:attribute name="showInsightMatchesSection" type="Boolean" default="false"/>
+    <aura:attribute name="showSpinner" type="Boolean" default="false"/>
+	<aura:attribute name="severityList" type="List" default="['Critical', 'Major', 'Minor', 'Info']"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doinit}"/>
+
+    <aura:if isTrue="{!or(v.sourceObject == 'Account', v.sourceObject == 'Cluster__c')}">
+    <div class ="containerDiv">
+        <aura:if isTrue="{!v.showSpinner}">
+            <lightning:spinner alternativeText="Processing.." />
+        </aura:if>
+        <aura:if isTrue="{!v.insightMatchesList.length > 0}">
+            <div class="slds-wrap slds-grid slds-size_12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 conatainer">
+                <div class="slds-large-size--1-of-12 slds-Medium-size--1-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 slds-size_1-of-12 ideaTitle"></div>
+                <div class="slds-large-size--1-of-12 slds-Medium-size--1-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 slds-size_1-of-12 focusTitle">Focus</div>
+                <div class="slds-large-size--4-of-12 slds-Medium-size--4-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 slds-size_4-of-12 ideaTitle">
+                    <table style="border-spacing: 0 5px;border-collapse: separate;">
+                        <aura:iteration items="{!v.insightMatchesList}" var="eachInsightMatch" indexVar="i">
+                            <tr>
+                                <td style="width:18px;">
+                                    <span>
+                                        <img src="{!eachInsightMatch.iconURL}" styleClass="img-responsive countryFlag" style="width:18px;padding-top:2px;" title="{!eachInsightMatch.severity}"/>
+                                    </span>
+                                </td>
+                                <td style="padding-left: 18px;">
+                                    <div class="slds-grid slds-gutters">
+                                        <div class="slds-p-right_small" style="padding-top: 4px;">
+                                    <p class="tooltip1">
+                                                <a href="{!'https://sentryai.rubrik.com/insight/'+eachInsightMatch.insight_id}" 
+                                                    target="_blank">{!eachInsightMatch.tooltip}
+                                                </a>
+                                        <div aura:id="tooltip">
+                                            <aura:if isTrue="{!or(i == 0, i == 1)}">
+                                                <span class="tooltiptextBottom"><lightning:formattedText value="{!eachInsightMatch.insight_key + ' : ' + eachInsightMatch.insight_title}"/></span>
+                                                <aura:set attribute="else">
+                                                    <span class="tooltiptextTop"><lightning:formattedText value="{!eachInsightMatch.insight_key + ' : ' + eachInsightMatch.insight_title}"/></span>
+                                                </aura:set>
+                                            </aura:if>
+                                        </div>
+                                    </p>
+                                        </div>
+                                        <div>
+                                            <!-- CS21-1057: Identifying Focus with Proactive cases -->
+                                            <lightning:icon iconName="standard:case" 
+                                                            size="small" 
+                                                            alternativeText="Indicates approval" 
+                                                            title="Proactive case(s) were generated"
+                                                            class="{!eachInsightMatch.proactive ? 'slds-show' : 'slds-hide'}"/>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </aura:iteration>
+                    </table>
+                </div>
+                <div class="slds-large-size--1-of-12 slds-Medium-size--1-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 slds-size_1-of-12 ideaTitle"></div>
+                <div class="slds-large-size--1-of-12 slds-Medium-size--1-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 slds-size_1-of-12 focusUpdatedTitle">Focus Updated</div>
+                <aura:if isTrue="{!(v.sourceObject == 'Cluster__c')}">
+                	<div class="slds-large-size--2-of-12 slds-Medium-size--2-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 slds-size_2-of-12 ideaTitle">{!v.insightMatchesWrapper.clusterfocusUpdatedDate}</div>
+                </aura:if>
+                <aura:if isTrue="{!(v.sourceObject == 'Account')}">
+                	<div class="slds-large-size--2-of-12 slds-Medium-size--2-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 slds-size_2-of-12 ideaTitle">{!v.insightMatchesWrapper.accountfocusUpdatedDate}</div>
+                </aura:if>
+            </div>
+        </aura:if>
+
+    </div>
+        </aura:if>
+
+    <aura:if isTrue="{!v.sourceObject == 'Case'}">
+        <div style="position:relative;">
+            <aura:if isTrue="{!v.showSpinner}">
+                <lightning:spinner alternativeText="Processing.." />
+            </aura:if>
+            <div class="slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12" aura:id="ISM_Div">
+                <lightning:card class="lightningCardCase">
+                    <div class="slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12 slds-section slds-p-horizontal_x-small" style="font-size:1rem;">
+                        <aura:if isTrue="{!v.showInsightMatchesSection}">
+                            <lightning:icon aura:id= "sectionDownArrow" iconName="utility:chevrondown" class="slds-icon_container slds-p-left_xx-small slds-float_left sectionHeaderArrow" size="xx-small" onclick="{!c.toggleInsightMatchesSection}"></lightning:icon>
+                            <aura:set attribute="else">
+                                <lightning:icon aura:id= "sectionRightArrow" iconName="utility:chevronright" class="slds-icon_container slds-p-left_xx-small slds-float_left sectionHeaderArrow" size="xx-small" onclick="{!c.toggleInsightMatchesSection}"></lightning:icon>
+                            </aura:set>
+                        </aura:if>
+                        <span class="slds-truncate" style="font-weight:bold;margin-right:18px;">SentryAI Focus</span>
+                        <lightning:buttonIcon iconName="utility:refresh" alternativeText="Refresh" title="Refresh" onclick="{!c.doinit}"/>
+                        <br/>
+                        <aura:if isTrue="{!v.insightMatchesWrapper.accountClustersCount != 0}">
+                            <i style="font-size: 12px;">
+                                <b class="slds-p-left_large"> Note: </b> 
+                                This Account has {!v.insightMatchesWrapper.accountClustersCount} clusters with Focus Icons, enter the Cluster UUID in the case for its Insights
+                            </i>
+                        </aura:if>
+                    </div>
+                    <aura:if isTrue="{!v.showInsightMatchesSection}">
+                        <div class="focusUpdatedTimeCase">
+                            <aura:if isTrue="{!v.insightMatchesWrapper.accountfocusUpdatedDate}">
+                                <span style="margin-right:20px;">Account Focus Updated</span>
+                                <span>{!v.insightMatchesWrapper.accountfocusUpdatedDate}</span>
+                            </aura:if>
+                            <aura:if isTrue="{!v.insightMatchesWrapper.clusterfocusUpdatedDate}">
+                                <span style="margin-right:20px;margin-left:60px;">Cluster Focus Updated</span>
+                                <span>{!v.insightMatchesWrapper.clusterfocusUpdatedDate}</span>
+                            </aura:if>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12" style="color: black !important;">
+                            <aura:if isTrue="{!v.insightMatchSeverityWiseList}">
+                                <div class="slds-p-horizontal--small slds-x-small-size_12-of-12 slds-small-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12 CSH_highlightFields">
+                                    <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 slds-size_12-of-12 ideaTitle">
+                                        <aura:iteration items="{!v.insightMatchSeverityWiseList}" var="eachSeverity">
+                                            <div aura:id="{!eachSeverity.severity}" style="margin-bottom:5px;">
+                                                <p style="margin-bottom:0px;margin-left:25px;">
+                                                    <img src="{!eachSeverity.iconURL}" styleClass="img-responsive countryFlag" style="width:21px;" title="{!eachSeverity.severity}"/>
+                                                    <span>&nbsp;({!eachSeverity.count})&nbsp;
+                                                        <span id="{!eachSeverity.downArrowId}" onclick="{!c.toggleSeveritySection}" name="{!eachSeverity}">
+                                                            <lightning:icon title="Expand" iconName="utility:chevrondown" size="xx-small" style="padding:3px 3px 0 0;"></lightning:icon>
+                                                        </span>
+                                                        <span id="{!eachSeverity.rightArrowId}" class="slds-hide" onclick="{!c.toggleSeveritySection}" name="{!eachSeverity}">
+                                                            <lightning:icon title="Collapse" iconName="utility:chevronright" size="xx-small" style="padding:3px 3px 0 0;"></lightning:icon>
+                                                        </span>
+                                                    </span>
+                                                </p>
+                                                <p id="{!eachSeverity.section}">
+                                                    <table style="border-spacing: 0 5px;border-collapse: separate;margin-left: 74px;width: -webkit-fill-available;">
+                                                        <aura:iteration items="{!eachSeverity.insightMatches}" var="eachInsightMatch">
+                                                            <tr>
+                                                                <td style="width:18px;vertical-align:top;">
+                                                                    <span>
+                                                                        <aura:if isTrue="{!(eachInsightMatch.match_level == 'account_id')}">
+                                                                            <lightning:icon iconName="standard:account" alternativeText="Account" title="Account" size="small"/>
+                                                                        </aura:if>
+                                                                        <aura:if isTrue="{!(eachInsightMatch.match_level == 'cluster_uuid')}">
+                                                                            <lightning:icon iconName="custom:custom13" alternativeText="Cluster" title="Cluster" size="small"/>
+                                                                        </aura:if>
+                                                                    </span>
+                                                                </td>
+                                                                <td style="padding-left: 18px;">
+                                                                    <div class="slds-grid slds-gutters">
+                                                                        <div class="slds-p-right_small" style="padding-top: 4px;">
+                                                                    <p class="tooltip1">
+                                                                                <a href="{!'https://sentryai.rubrik.com/insight/'+eachInsightMatch.insight_id}" 
+                                                                                    target="_blank">{!eachInsightMatch.tooltip}
+                                                                                </a>
+                                                                        <div aura:id="tooltip">
+                                                                                    <span class="tooltiptextTop">
+                                                                                        <lightning:formattedText value="{!eachInsightMatch.insight_key + ' : ' + eachInsightMatch.insight_title}"/>
+                                                                                    </span>
+                                                                        </div>
+                                                                    </p>
+                                                                        </div>
+                                                                        <div>
+                                                                          <!-- CS21-1057: Identifying Focus with Proactive cases -->
+                                                                          <lightning:icon iconName="standard:case" 
+                                                                                            size="small" 
+                                                                                            alternativeText="Indicates approval" 
+                                                                                            title="Proactive case(s) were generated"
+                                                                                            class="{!eachInsightMatch.proactive ? 'slds-show' : 'slds-hide'}"/>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </aura:iteration>
+                                                    </table>
+                                                </p>
+                                            </div>
+                                        </aura:iteration>
+                                    </div>
+                                </div>
+                            </aura:if>
+                        </div>
+                    </aura:if>
+                </lightning:card>
+            </div>
+        </div>
+   	</aura:if>
+</aura:component>

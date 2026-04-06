@@ -1,0 +1,12 @@
+<!-- This Aura component is used to overide the standard button of Custom Object i.e. New and Edit -->
+<aura:component implements="lightning:actionOverride,force:lightningQuickAction,lightning:isUrlAddressable" >
+    <aura:attribute name="id" type="String" />
+    <aura:attribute name="redirectedFromDetails" type="String" />
+    <aura:handler name="init" value="{!this}" action="{!c.onPageReferenceChange}"/>
+    <aura:handler name="change" value="{!v.pageReference}" action="{!c.onPageReferenceChange}"/>
+    <!-- We are opening cS_NewCaseSpecialHandlingLWC component when this Aura component calls -->
+    <aura:if isTrue="{!not(empty(v.redirectedFromDetails))}">
+        <c:cS_NewCaseSpecialHandlingLWC redirectedFromDetails="{!v.redirectedFromDetails}"/>
+    </aura:if> 
+    
+</aura:component>

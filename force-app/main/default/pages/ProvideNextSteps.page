@@ -1,0 +1,71 @@
+<!--
+* Visualforce Page Name :- ProvideNextSteps
+* Controller :- UpdateAssistRequestController
+* Author :- Shiva Sharma
+* Created Date :- 05-04-2020
+* Description : This Page is being used in providing next steps in assist request 
+* 
+*************Change Logs***************************************************************************
+* 
+* Modified By          Date           Description 
+* Shiva Sharma         21-01-2021     Save draft for field GET Team provide next steps
+*************Change Logs Ends**********************************************************************
+-->
+<apex:page standardController="Assist_Request__c" action="{!autosave}" extensions="UpdateAssistRequestController" lightningStylesheets="true" >
+    <apex:form id="form1">
+        <apex:actionFunction name="autosave" action="{!autosave}" rerender="nextStp"/>
+                <apex:actionFunction name="addNextSteps" action="{!addNextSteps}" rerender="nextStp"/>
+        <apex:pageBlock id="assistBlock">
+            <apex:actionStatus id="status">
+                <apex:facet name="start">
+                    <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.75; z-index: 1000; background-color: black;">
+                        &nbsp;
+                    </div>
+                    <div style="position: fixed; left: 0; top: 0; bottom: 0; right: 0; z-index: 1001; margin: 30% 50%">
+                        <img src="http://upload.wikimedia.org/wikipedia/commons/e/ed/Cursor_Windows_Vista.gif" />
+                    </div>
+                </apex:facet>
+            </apex:actionStatus>
+            <h1> Provide Next Steps</h1><br/>
+            <apex:inputField value="{!assistRequest.Findings_and_Steps_Taken__c}" id="nextStep" style="width: 100%; height: 100px" onkeyup="showARCharecterLimit();">
+                <!--Added for CS21-444 - Veera -->
+                <span id="charLimit"></span>
+                <!--CS21-444 - End -->
+            </apex:inputField>
+            <apex:pageBlockButtons location="bottom">
+                <apex:commandButton value="Update" onclick="addStep();"  reRender="counter"  status="status"/>
+                <apex:commandButton value="Cancel" action="{!cancel}"/>
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+    </apex:form>
+    <script>
+    var timer;
+    timer = window.setTimeout(recursivecall,3000);
+    function recursivecall()
+    {
+        timer = window.setTimeout(recursivecall,3000);
+        autosave();
+    }   
+    function addStep(){
+        clearTimeout(timer);
+        addNextSteps();
+        
+    } 
+    //Added for CS21-444 - Veera
+    function showARCharecterLimit() {
+        var charMessage =  document.getElementById("charLimit");
+        var assistAsk =  document.getElementById('{!$Component.form1.assistBlock.nextStep}').value;
+        
+        if (assistAsk && assistAsk.length == 3960) {
+            charMessage.innerHTML = "Error: You have reached your maximum limit of characters allowed.";
+            charMessage.style = "color:red;display:block"
+        } else if (assistAsk && assistAsk.length > 3560){
+            charMessage.innerHTML = "Warning: " + (3960 - assistAsk.length) + " Characters Remaining.";
+            charMessage.style = "color:green;display:block"
+        } else {
+            charMessage.style.display="none";
+        }
+    }
+    //CS21-444 - End
+    </script>
+</apex:page>

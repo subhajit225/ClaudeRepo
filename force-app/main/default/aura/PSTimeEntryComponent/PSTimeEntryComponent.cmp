@@ -1,0 +1,347 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" controller="PSTimeEntryAppController" access="global" >
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="weekStartDate" type="string"/>
+    <aura:attribute name="weekEndDate" type="string"/>
+    <aura:attribute name="SelProjIds" type ="list"/> 
+    <aura:attribute name="ProjectList" type ="list"/>
+    <aura:attribute name="DaysName" type="String[]" default="['Sun','Mon','Tue','Wed','Thur','Fri','Sat']"/>
+    <aura:attribute name="SelectedProjects" type = "list"/>
+    <aura:attribute name="SelectedProjectsList" type = "list"/>
+    <aura:attribute name="newProjectIdsToAdd" type = "list"/>
+    <aura:attribute name="nameEditMode" type="boolean" default="false" />
+    <aura:attribute name="istrue" type="Boolean" default="false"/>
+    <aura:attribute name="IsTotalHourError" type="Boolean" default="false"/>
+    <aura:attribute name="isCheck" type="Boolean" default="true"/>
+    <aura:attribute name="showErrorClass" type="boolean" default="false"/>
+    <aura:attribute name="isButtonActive" type="Boolean" default="true" />
+    <aura:attribute name="disablePreviousWeek" type="Boolean" default="false" />
+    <aura:attribute name="disableNextWeek" type="Boolean" default="false" />
+    <aura:attribute name="IsFirstSelect" type="Boolean" default="true" />
+    <aura:attribute name="ReadOnlyForHour" type="Boolean" default="false" />
+    <aura:attribute type="string" name="Message"/>
+    <aura:attribute type="string" name="ActualHour"/>
+    <aura:attribute name="notificationmessage" type="String"/>
+    <aura:attribute name="weekTypeString" type="String" default=""/>
+    <aura:attribute name="StartDateString" type="String"/>
+    <aura:attribute name="weekStartDateClass" type="boolean" default="true"/> 
+    <aura:attribute name="CSSTrue" type="boolean" default="false"/>  
+    <aura:attribute name="errorMessage" type="String"/>  
+    <aura:attribute name="errorTaskId" type="String"/>
+    <aura:attribute name="IsSave" type="boolean" default="true"/>
+    <aura:attribute name="changed" type="Boolean" default="false"/>
+    <aura:attribute name="IsModelOpen" type="boolean" default="false"/>
+    <!-- CREATE Handler-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler name="SelectChange1" event="c:SelectChange1" action="{!c.fetchProjects}"/> 
+    <aura:handler event="aura:waiting" action="{!c.showSpinner}"/>
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/>
+    <lightning:workspaceAPI aura:id="workspace"/>
+    <aura:attribute name="isConsoleApplication" type="boolean" default="false"/>
+    <div class="slds-theme_default">
+        <!-- Toast Message start-->
+        <div class="slds-modal slds-fade-in-open errorDiv slds-hide" aura:id="warningDiv">
+            <div class="demo-only" style="height: 4rem;">
+                <div class="slds-notify_container slds-is-relative">
+                    <div class="slds-notify slds-notify_toast slds-theme_success" role="alert">
+                        <div class=" slds-m-left_xx-large">
+                            <div class="slds-notify__content slds-m-left_small slds-align_absolute-center slds-m-left_xx-large">
+                                <lightning:icon alternativeText="Success" iconName="utility:success" size="small"
+                                                class="buttonColor slds-m-right_small" />
+                                <h2 class="slds-text-heading_small Marginclass">{!v.notificationmessage}</h2>
+                                <lightning:icon alternativeText="close" iconName="utility:close" size="x-small"
+                                                class="buttonColor slds-m-left_medium" onclick ="{!c.OnCloseToast1}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slds-modal slds-fade-in-open errorDiv slds-hide" aura:id="errorDiv">
+            <div class="demo-only" style="height: 4rem;">
+                <div class="slds-notify_container slds-is-relative">
+                    <div class="slds-notify slds-notify_toast slds-theme_error" role="alert">
+                        <div class=" slds-m-left_xx-large">
+                            <div class="slds-notify__content slds-m-left_small slds-align_absolute-center slds-m-left_xx-large">
+                                <lightning:icon alternativeText="Error" iconName="utility:error" size="small"
+                                                class="buttonColor slds-m-right_small" />
+                                <h2 class="slds-text-heading_small Marginclass">{!v.errorMessage}</h2>
+                                <lightning:icon alternativeText="close" iconName="utility:close" size="x-small"
+                                                class="buttonColor slds-m-left_medium" onclick ="{!c.OnCloseToast}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <aura:if isTrue="{!v.IsModelOpen}">
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{! c.closeModel }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Confirm!</h2> 
+                        
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <p>
+                            This will submit your weekly timecard for review and you won't be able to make any change. Are you sure to submit? 
+                        </p>
+                    </div>
+                    
+                    <footer class="slds-modal__footer">
+                        <lightning:button variant="neutral" 
+                                          label="Cancel"
+                                          title="Cancel"
+                                          onclick="{!c.closeModel}"/>
+                        <lightning:button variant="brand" 
+                                          label="Save and Submit"
+                                          title="Save and Submit"
+                                          onclick="{!c.OnSaveAndSubmit}"/>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>
+        <!--  Toast Message end-->
+        
+        <c:PSTimeEntryHeader/>
+        <aura:if isTrue="{!v.Spinner}">
+            <div aura:id="spinnerId" class="slds-spinner_container">
+                <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </aura:if>
+        <div class="slds-var-p-around_small">
+            <div class = "slds-text-heading_large">
+                Timecard
+                <aura:if isTrue="{!v.weekEndDate != null}">
+                    (<lightning:formattedDateTime timeZone="UTC" class="weekStartDateClass" value="{!v.weekStartDate}" month="short" day="2-digit"/> - 
+                    <lightning:formattedDateTime timeZone="UTC" value="{!v.weekEndDate}" month="short" day="2-digit"/>)</aura:if>
+            </div>        
+            <lightning:button  onclick ="{!c.OnBackClick}" variant = "brand" label="Go to Home" title="Go to Home" class="BackClass slds-button slds-float_right"/>       
+        </div>
+        
+        <div class="slds-clearfix slds-var-p-around_xx-small" Style="padding-bottom:15px">
+            <div class="slds-float_left" >
+                <c:MultiSelectProjectsComponent msoptions="{!v.ProjectList}" selectedOptions="{!v.SelectedProjectsList}" arraList = "{!v.SelProjIds}" ShowDropdown = "{!v.ReadOnlyForHour}"/> 
+            </div>
+            
+            <div class="slds-float_right">
+                <!-- <button class="slds-button slds-button_brand">Next Week</button>-->
+                <lightning:button variant="brand"  disabled="{!v.disableNextWeek}"  label="Next Week" title="Next Week" onclick="{!c.NextClick}" class="slds-button slds-button_brand slds-m-right_x-small"/>
+            </div>
+            <div class="slds-float_right">
+                <lightning:button variant="brand"  disabled="{!v.disablePreviousWeek}"  label="Previous Week" title="Previous Week" onclick="{!c.PreviousClick}" class="slds-button slds-button_brand slds-m-right_x-small" />
+                <!-- <button class="slds-button slds-button_brand slds-m-right_x-small">Previous Week</button> -->
+            </div>
+        </div>
+        
+        
+        <!--tabel create  -->
+        <div style="overflow-x:auto;">
+        <table class="slds-box slds-table_cell-buffer " id="salesforce_table_f3ef-da79-8c3a" style="width: 100%;">        
+            <thead class = "Mainheader">  
+                <tr class = "BlackHeader">
+                    <th class="" scope="col">
+                        <div class="slds-truncate slds-align_absolute-center" title="PROJECT NAME">PROJECT NAME</div>
+                    </th>
+                    <th class="" scope="col">
+                        <div class="slds-truncate slds-align_absolute-center" title="ACCOUNT NAME">ACCOUNT NAME</div>
+                    </th>
+                    <th class="" scope="col">
+                        <div class="slds-truncate slds-align_absolute-center" title="OPPORTUNITY NAME">OPPORTUNITY NAME</div>
+                    </th>                              
+                </tr>
+            </thead>
+           
+            <tbody class= "slds-p-bottom_xx-large">
+                <aura:iteration items="{!v.SelectedProjects}" var="Pro" >
+                    <tr class= "slds-border_top slds-border_left slds-border_right BlackHeader">
+                        <td data-label="PROJECT NAME" scope="row">
+                            <div class="slds-truncate slds-align_absolute-center" title="PROJECT NAME">
+                                <aura:if isTrue="{!v.isConsoleApplication}">
+                                    <a href="javascript:void(0)" data-recid="{!Pro.project.Id}" onclick="{!c.openPrimaryTab}">{!Pro.project.Name} </a>
+                                    <aura:set attribute="else">
+                                        <a href="{!'/' + Pro.project.Id}" target="_blank">{!Pro.project.Name} </a>
+                                    </aura:set>
+                                </aura:if>
+                            </div>
+                        </td>
+                        <td data-label="Account Name">
+                            <div class="slds-truncate slds-align_absolute-center" title="Account Name">
+                                <aura:if isTrue="{!v.isConsoleApplication}">
+                                    <a href="javascript:void(0)" data-recid="{!Pro.project.Account__c}" onclick="{!c.openPrimaryTab}">{!Pro.project.Account__r.Name} </a>
+                                    <aura:set attribute="else">
+                                        <a href="{!'/' + Pro.project.Account__c}" target="_blank">{!Pro.project.Account__r.Name}</a>
+                                    </aura:set>
+                                </aura:if>
+                            </div>
+                        </td>
+                        <td data-label="OPPORTUNITY NAME">
+                            <div class="slds-truncate slds-align_absolute-center" title="OPPORTUNITY NAME">                                
+                                <aura:if isTrue="{!v.isConsoleApplication}">
+                                    <a href="javascript:void(0)" data-recid="{!Pro.project.Opportunity__c}" onclick="{!c.openPrimaryTab}">{!Pro.project.Opportunity__r.Name} </a>
+                                    <aura:set attribute="else">
+                                        <a href="{!'/' + Pro.project.Opportunity__c}" target="_blank">{!Pro.project.Opportunity__r.Name}</a>
+                                    </aura:set>
+                                </aura:if>
+                            </div>
+                        </td>         
+                    </tr>                   
+                    <tr>
+                        <td colspan="3">
+                            <table class= "slds-box Bottomclass">
+                                <thead class= "BlackHeader" style="background-color: #919191; color: white">
+                                    <tr >
+                                        <th class="taskCol" scope="col" Style="padding-left:10px;">
+                                            <div class="slds-truncate slds-align_absolute-center" title="Task NAME">Task Name</div>
+                                        </th>
+                                        <th class="taskCol" scope="col" Style="padding-left:10px;">
+                                            <div class="slds-truncate slds-align_absolute-center" title="Order Product">Order Product</div>
+                                        </th>
+                                        <th class="taskCol" scope="col">
+                                            <div class="slds-truncate slds-align_absolute-center" title="Billable Hours Purchased">PURCHASED</div>
+                                        </th> 
+                                       <!-- <th class="taskCol" scope="col">
+                                            <div class="slds-truncate slds-align_absolute-center" title="BILLABLE HOURS APPROVED">BILLABLE <br/>DELIVERED</div>
+                                        </th>-->
+                                       <th class="taskCol" scope="col">
+                                            <div class="slds-truncate slds-align_absolute-center" title="TOTAL HOURS Delivered">TOTAL<br/>DELIVERED</div>
+                                        </th> 
+                                        <!--<th class="taskCol" scope="col">
+                                            <div class="slds-truncate slds-align_absolute-center" title=" Billable Hours Delivered">APPROVED</div>
+                                        </th>-->
+                                        <aura:iteration items="{!Pro.taskWrapperList[0].timeEntryList}" var="q" indexVar="idx">                          
+                                            <aura:if isTrue="{!lessthan(idx,7)}">
+                                                <th class="timeEntryCol" scope="col">
+                                                    <div class="slds-truncate slds-align_absolute-center" title="TIME ENTRY DATE">
+                                                        <lightning:formattedDateTime timeZone="UTC" value="{!q.Time_Entry_Date__c}" month="short" day="2-digit"/>
+                                                    </div>
+                                                </th>
+                                            </aura:if>                            
+                                        </aura:iteration>
+                                        <th class="TotalHours" scope="col">
+                                            <div class="slds-truncate slds-align_absolute-center" title="COMMENTS">Total</div>
+                                        </th>
+                                        <th class="CommentCol" scope="col">
+                                            <div class="slds-truncate slds-align_absolute-center" title="COMMENTS">Comments</div>
+                                        </th>
+                                        
+                                        <th class="timeEntryCol" scope="col">
+                                            <div class="slds-truncate slds-align_absolute-center RemoveClass" title="Clear">Clear</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <thead class= "BlackHeader" style="background-color: #919191; color: white">
+                                    <tr >
+                                        <th class="taskCol" scope="col" Style="padding-left:10px;">
+                                            <div class="slds-truncate slds-align_absolute-center" title="Task NAME"></div>
+                                        </th>
+                                        <th class="taskCol" scope="col" Style="padding-left:10px;">
+                                            <div class="slds-truncate slds-align_absolute-center" title="Order Product"></div>
+                                        </th>
+                                        <th class="taskCol" scope="col">
+                                            <div class="slds-truncate slds-align_absolute-center" title="Billable Hours Purchased"></div>
+                                        </th>
+                                        <!--<th class="taskCol" scope="col">
+                                            <div class="slds-truncate slds-align_absolute-center" title="BILLABLE HOURS APPROVED"></div>
+                                        </th>-->
+                                         <th class="taskCol" scope="col">
+                                            <div class="slds-truncate slds-align_absolute-center" title="TOTAL HOURS Delivered"></div>
+                                        </th> 
+                                        <!--<th class="taskCol" scope="col">
+                                            <div class="slds-truncate slds-align_absolute-center" title=" Billable Hours Delivered"></div>
+                                        </th>-->
+                                        
+                                        <aura:iteration items="{!v.DaysName}" var="Days" >
+                                            <th class="taskCol" scope="col">
+                                                <div class="slds-truncate slds-align_absolute-center" title="Days">
+                                                    <div>{!Days}</div> 
+                                                </div>
+                                            </th>
+                                        </aura:iteration>
+                                        <th class="TotalHours" scope="col">
+                                            <div class="slds-truncate slds-align_absolute-center" title="COMMENTS"></div>
+                                        </th>
+                                        <th class="CommentCol" scope="col">
+                                            <div class="slds-truncate slds-align_absolute-center" title="COMMENTS"></div>
+                                        </th>
+                                        
+                                        <th class="timeEntryCol" scope="col">
+                                            <div class="slds-truncate slds-align_absolute-center RemoveClass" title="Clear"></div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <aura:iteration items="{!Pro.taskWrapperList}" var="w" >
+                                    <tr class="slds-var-m-around_x-small" Style="{!if(w.taskRec.Id == v.errorTaskId, 'border: Solid #CC3333', '')}">
+                                        <td data-label="NAME" class="slds-var-m-around_x-small slds-text-align_left" style="padding:5px; width:150px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                                            <div title="Name" >
+                                                <aura:if isTrue="{!v.isConsoleApplication}">
+                                                    <a href="javascript:void(0)" data-recid="{!w.taskRec.Id}" onclick="{!c.openPrimaryTab}">{!w.taskRec.Task_Type__c +' '+w.taskRec.Task_Subtype__c}</a>
+                                                    <aura:set attribute="else">
+                                                        <a href="{!'/' + w.taskRec.Id}" target="_blank">{!w.taskRec.Task_Type__c +' '+w.taskRec.Task_Subtype__c}</a>
+                                                    </aura:set>
+                                                </aura:if>
+                                            </div>
+                                        </td>
+                                        <td class="slds-var-m-around_x-small" data-label="Order Product" style="padding:5px;width: 170px;">
+                                            <div title="Order Product">{!w.taskRec.Order_Product__c}</div>
+                                        </td>
+                                        <td class="slds-var-m-around_x-small" data-label="TOTAL BILLABLE HOURS APPROVED">
+                                            <div class="slds-align_absolute-center" title="Billable Hours PURCHASED">{!w.taskRec.Billable_Hours_Expected__c}</div>
+                                        </td>
+                                        <!--<td class="slds-var-m-around_x-small" data-label="TOTAL BILLABLE HOURS APPROVED">
+                                            <div class="slds-align_absolute-center" title="Billable Hours DELIVERED">{!w.taskRec.Billable_Hours_Actual__c}</div>
+                                        </td>-->
+                                        <td class="slds-var-m-around_x-small" data-label="TOTAL BILLABLE HOURS APPROVED">
+                                            <div class="slds-align_absolute-center" title="TOTAL Hours DELIVERED">{!w.taskRec.Total_Hours_Delivered__c}</div>
+                                        </td>
+                                        <!--<td class="slds-var-m-around_x-small" data-label="TOTAL BILLABLE HOURS APPROVED">
+                                            <div class="slds-align_absolute-center" title="Billable Hours Approved">{!w.taskRec.Billable_Hours_Approved__c}</div>
+                                        </td>-->
+                                        
+                                        <aura:iteration items="{!w.timeEntryList}" var="q" indexVar="idx">                                          
+                                            <td  class="timeEntryCol slds-var-m-around_medium" id="{!idx}" data-label="{!q.Time_Entry_Date__c}">
+                                                <ui:inputText maxlength='3'  disabled="{!v.ReadOnlyForHour}" aura:id="inputId" value="{!q.Hours_Spent__c}" class="slds-input" keyup="{!c.valuechanged}" updateOn="keyup;mouseout"/>     
+                                            </td> 
+                                        </aura:iteration>
+                                        <td class= "timeEntryCol slds-var-m-around_medium">
+                                            <ui:inputText  disabled="true" value="{!w.TotHours}" class="slds-input"/>
+                                        </td>
+                                        <td data-label="COMMENTS" class="slds-var-m-around_x-small">
+                                            <ui:inputTextArea disabled="{!v.ReadOnlyForHour}" class="slds-input textArea" rows="1" aura:id="inputId" value="{!w.comment}" /> 
+                                        </td>
+                                        <td data-label="Clear" style="vertical-align: middle; padding:0 8px;"> <!-- class="slds-align_absolute-center" -->
+                                            <button onclick="{!c.inlineEditName}" disabled="{!v.ReadOnlyForHour}" id="{!Pro.project.Id}" name="{!w.taskRec.Id}" class="slds-align_absolute-center slds-button slds-button_icon slds-cell-edit__button " tabindex="0" title="Clear" style="display:inline-flex; align-items:center; justify-content:center; height:32px; padding:0; line-height:1; border-radius:4px;">
+                                                <lightning:icon class="slds-align_absolute-center CrossCSS" iconName="utility:close" size="xx-small" alternativeText="Close" style="display:block;"/>
+                                            </button>
+                                        </td>                                       
+                                    </tr>
+                                   
+                                </aura:iteration>
+                            </table>
+                        </td>
+                    </tr>
+                </aura:iteration>           
+            </tbody>
+            
+        </table>
+    </div>
+        <div class="slds-align_absolute-center slds-m-top_small slds-m-bottom_small slds-p-bottom_small">
+            
+            <lightning:button disabled="{!if(v.ReadOnlyForHour || empty(v.SelectedProjects), true, false)}" onclick ="{!c.OnSaveClick}" variant="brand" label="Save" title="Save" class="slds-button slds-button_brand slds-m-right_x-small"/>
+            <lightning:button disabled="{!if(v.ReadOnlyForHour || empty(v.SelectedProjects), true, false)}" onclick ="{!c.openModel}" variant="brand" label="Save and Submit" title="Save and Submit" class="slds-button slds-button_brand slds-m-right_x-small"/>
+            
+            
+            <lightning:button variant="Neutral" onclick ="{!c.OnCancelClick}" label="Cancel" title="Cancel" class="slds-m-right_x-small" />
+            <!-- <button class="slds-button slds-button_brand slds-m-right_x-small">Previous Week</button> -->
+            
+        </div>
+    </div>
+</aura:component>

@@ -1,0 +1,87 @@
+<apex:page showHeader="false" sidebar="false" standardController="Case" >
+  
+  <h1>Case Audit Form: {!$User.FirstName} {!$User.LastName} {!$User.Email}</h1><br></br>
+  <h1>Case Audit Form #: {!Case.Audit_Form__c} </h1>
+              <style> 
+            .select {
+                height:33px;
+                width:255px;
+                font-size:14px;
+                font-style:arial;
+                font-weight:bold;
+                color:#26523C;
+                background-color:lightgrey; 
+                text-align:left;
+                padding-top:7px;
+                padding-bottom:7px;
+                padding-left:10px;
+                border: 0;
+            }
+        </style>
+      <apex:form >
+        <apex:pageBlock title="Case Audit Form" mode="inlineedit" >
+            <apex:pageBlockButtons >
+                <apex:commandButton action="{!save}" value="Save"/>                
+            </apex:pageBlockButtons>
+                   
+            <apex:pageBlockSection title="Case Audit Details" columns="1" > 
+                <div style="left:400px; top:275px; align:left;">
+                <apex:inputField value="{!Case.CaseNumber}"  label="Case Number: "/>                                    
+                </div>
+                <div style="left:400px; top:275px; align:left; background-color:lightblue"> 
+                <apex:inputField value="{!Case.Case_Owner_Name__c}" style="width: 150px; height: 20px" label="Case Owner Name: "/>                 
+                </div>
+                <div style="left:400px; top:275px; align:left;"> 
+                <apex:inputField value="{!Case.Auditor_Name__c}" required="true" style="width: 150px; height: 20px" label="Name of the Auditor: "/>
+                </div>
+                <div align="left" style="left:400px; top:275px; "> 
+                <apex:inputField value="{!Case.CA_Contact_Information__c}" required="true" style="width: 150px; height: 20px" label="Contact Information & Case Origin: <br>[Contact Name] [Account Name] [Contact Phone] [Contact Email] [Case Origin] were filled out correctly.</br>"/>
+                </div>
+                <div style="left:400px; top:275px; align:left;"> 
+                <apex:inputField value="{!Case.CA_Product_Information__c}" required="true" style="width: 150px; height: 20px" label="Product Information: <br>[Type] [Software Version] were filled out correctly.</br>"/>
+                </div>
+                <div style="left:400px; top:275px; align:left;"> 
+                <apex:inputField value="{!Case.CA_Case_Priority__c}" required="true" style="width: 150px; height: 20px" label="Case Priority: <br> [Priority] was correctly selected based on description of issue.</br>"/>
+                </div>
+                <div style="left:400px; top:275px; align:left;">  
+                <apex:inputField value="{!Case.CA_Problem_Category__c}" required="true" style="width: 150px; height: 20px" label="Problem Categorization: <br>[Problem Type] [Product Area] were filled out correctly.</br>"/>
+                </div>
+                <div style="left:400px; top:275px; align:left;">                 
+                <apex:inputField value="{!Case.CA_Resolution_Details__c}" required="true" style="width: 150px; height: 20px" label="Resolution Code and Resolution Details: <br>[Resolution Code] [Resolution Details ] was correct based on the case description information.</br>"/>                
+                </div>                
+                <div style="left:400px; top:275px; align:left;"> 
+                <apex:inputField value="{!Case.CA_Issue_Understanding__c}" required="true" style="width: 150px; height: 20px" label="Issue Understanding: <br>Understood the Issue effectively and gathered Pertinent Technical Information at the beginning.</br>"/>
+                </div>
+                <div style="left:400px; top:275px; align:left;">                 
+                <apex:inputField value="{!Case.CA_Case_Doc__c}" required="true" style="width: 150px; height: 20px; align:left;" label="Case Documentation / Accuracy of Log: <br>a) Engineer documented the steps performed / actions taken / next steps appropriately into the case. <br> b) Engineer's documentation matched the conversation with the customer.</br>"/> 
+                </div>
+                <div style="left:400px; top:275px; align:left;"> 
+                <apex:inputField value="{!Case.Usage_of_Knowledge_Base__c}" required="true" style="width: 150px; height: 20px" label="Usage of Knowledge Base (KCS): <br>Engineer searched existing knowledge, linked the relevant (KCS) article or created new.</br>"/>
+                </div>
+                <div style="left:400px; top:275px; align:center;"> 
+                <apex:inputField value="{!Case.JIRA_Reference_Linked_to_the_Case__c}" required="true" style="width: 150px; height: 20px" label="JIRA Reference Linked to the Case: <br>Relevant JIRA Created and Linked to the Case or Existing JIRA was Linked to the Case.</br>"/>
+                </div>                
+                <div style="left:400px; top:275px; align:center;">                                           
+                <apex:inputField value="{!Case.Case_Ownership__c}" required="true" style="width: 150px; height: 20px" label="Case Ownership: <br>a)The engineer showed acceptance of appropriate responsibility to the case from beginning to closure <br> b)The engineer understood the concerns of the customer and showed a willingness to help <br> c)The engineer was pro-active in providing updates on the investigation. He/She did not wait for customer to ask for updates on their case ?  </br>"/>
+                </div>
+                <div style="left:400px; top:275px; align:center;">                                           
+                <apex:inputField value="{!Case.Product_Improvements_Identified__c}" required="true" style="width: 150px; height: 20px" label="Product Improvements Identified?: <br>Was there a product improvement identified/already exists that would avoid opening of similar case in future?</br>"/>
+                </div>
+                <div style="left:400px; top:275px; align:left;">                                    
+                <apex:inputField value="{!Case.CA_Manager_Comments__c}" style="height:100px;width:600px"/>
+                </div>
+                <div style="left:400px; top:275px; align:left;"> 
+                <apex:inputField value="{!Case.CaseAudit_TimeStamp__c}"/>                
+                </div>
+                <div style="left:400px; top:275px; align:left;">                                    
+                <apex:inputField value="{!Case.Send_Email__c}" label="Send Notification to Case Owner"/>
+                </div>
+                <div style="left:400px; top:275px; align:left;">                                    
+                <apex:inputField value="{!Case.Auditor_Email_Id__c}" label="Send Notification to Others [Enter EmailId]: "/>
+                </div>
+            </apex:pageBlockSection>
+            
+        </apex:pageBlock>
+    </apex:form>
+  
+</apex:page>

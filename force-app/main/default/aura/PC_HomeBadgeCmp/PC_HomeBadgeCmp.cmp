@@ -1,0 +1,31 @@
+<aura:component extends="c:PC_UtilityCmp" implements="forceCommunity:availableForAllPageTypes" access="global" Controller="PC_HomeBadgeController">
+    <!-- Attributes -->
+    <aura:attribute name="dealsRegBadges" type="integer" default="0"/>
+    <aura:attribute name="trainingBadges" type="integer" default="0"/>
+    <aura:attribute name="marketingBadges" type="integer" default="0"/>
+    
+    <!-- Handlers -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <div style="background: rgb(107, 109, 112); color: white;" class="slds-page-header badge-background">
+        <lightning:layout multipleRows="true" horizontalAlign="spread">
+            <lightning:layoutItem size="6" smallDeviceSize="6" mediumDeviceSize="3" largeDeviceSize="3" padding="around-small" class="slds-border_right">
+                <span class="slds-page-header__title slds-align_absolute-center">Your Rubrik</span>
+                <span class="slds-page-header__title slds-align_absolute-center">Rewards Progress</span>
+                
+            </lightning:layoutItem>
+            <lightning:layoutItem size="6" smallDeviceSize="6" mediumDeviceSize="3" largeDeviceSize="3" padding="around-small">
+                <div class="custom-box slds-page-header__title slds-align_absolute-center slds-size_1-of-2">{!v.dealsRegBadges}</div>
+                <span class="slds-page-header__title slds-align_absolute-center">Deals Registered</span>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="6" smallDeviceSize="6" mediumDeviceSize="3" largeDeviceSize="3" padding="around-small">
+                <div class="custom-box slds-page-header__title slds-align_absolute-center slds-size_1-of-2">{!v.trainingBadges}</div>
+                <span class="slds-page-header__title slds-align_absolute-center">Training Badges</span>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="6" smallDeviceSize="6" mediumDeviceSize="3" largeDeviceSize="3" padding="around-small">
+                <div class="custom-box slds-page-header__title slds-align_absolute-center slds-size_1-of-2">{!v.marketingBadges}</div>
+                <span class="slds-page-header__title slds-align_absolute-center"> Marketing Badges</span>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </div>
+</aura:component>

@@ -1,0 +1,635 @@
+<template>
+
+    <lightning-card>
+        <template if:false={showdetail}>
+            <!-- <lightning-accordion allow-multiple-sections-open onsectiontoggle={handleToggleSection}>
+
+                <lightning-accordion-section name="A" label="Recent Cases">
+                    <lightning-helptext class="helptext" content="Default Sorted By Last Modified Date">
+                    </lightning-helptext> -->
+                    <template if:true={SpinnerForCluster}>
+                        <div class="slds-spinner_container">
+                            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative"
+                                role="alert">
+                                <span class="slds-assistive-text">Loading</span>
+                                <div class="slds-spinner__dot-a"></div>
+                                <div class="slds-spinner__dot-b"></div>
+                            </div>
+                        </div>
+                    </template>
+                    <!--Search Panel using Cluster UUID-->
+                    <div class="slds-grid slds-wrap slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12 CRTS_highlightFields"
+                        style="height: 20px !important">
+                        <div class="slds-size_9-of-12 slds-medium-size_8-of-12"></div>
+                        <div class="slds-size_12-of-12 slds-medium-size_12-of-12 filterDiv" style="text-align:right; ">
+                            <span onkeypress={getCasesOnEnter}>
+                                <lightning-input class="labelHide" type="text"
+                                    style="display:inline-block;padding-right:10px;" data-id="Subject"
+                                    accesskey="Subject"></lightning-input>
+                            </span>
+                            <div style="font-size: 11px;position: absolute;right: 179px;">Filter by cluster UUID</div>
+                            <lightning-button variant="brand" class="supportBtn btnPosition" onclick={getCases}
+                                label="Find Cases"></lightning-button>
+                        </div>
+                        <!--Show errors-->
+                        <template if:true={showError}>
+                            <div class="slds-size_12-of-12 slds-m-bottom_x-small errorMsgDiv">
+                                <span style="font-size:14px;font-weight:bold;"></span>
+                                <div> {errorMessage} </div>
+                            </div>
+                        </template>
+                    </div>
+                    <div class="slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12 tableDiv">
+                        <div class="slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12 tableDiv1">
+                            <template if:true={showCases}>
+                                <table
+                                    class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered tableBorder">
+                                    <thead class="font">
+                                        <tr class="slds-line-height_reset">
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Case Number">
+                                                    <div class="arrowContain">
+                                                        <a class="casenocolor" href="javascript:void(0);"
+                                                            name="CaseNumber" data-id="desc" onclick={Sorttable}>
+                                                            Case Number
+                                                        </a>
+                                                        <template if:true={isCNumber}>
+                                                            <template if:true={Desc}>
+
+                                                                <lightning-icon class="right-alignment"
+                                                                    icon-name="utility:chevronup" size="xx-small">
+                                                                </lightning-icon>
+                                                            </template>
+                                                            <template if:false={Desc}>
+                                                                <lightning-icon class="right-alignment"
+                                                                    icon-name="utility:chevrondown" size="xx-small">
+                                                                </lightning-icon>
+
+                                                            </template>
+                                                        </template>
+                                                    </div>
+                                                </div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Status">
+                                                    <div class="arrowContain">
+                                                        <a class="casenocolor" href="javascript:void(0);" name="Status"
+                                                            data-id="desc" onclick={Sorttable}>
+                                                            Status
+                                                        </a>
+                                                        <template if:true={isStatus}>
+                                                            <template if:true={Desc}>
+
+                                                                <lightning-icon class="right-alignment"
+                                                                    icon-name="utility:chevronup" size="xx-small">
+                                                                </lightning-icon>
+                                                            </template>
+                                                            <template if:false={Desc}>
+                                                                <lightning-icon class="right-alignment"
+                                                                    icon-name="utility:chevrondown" size="xx-small">
+                                                                </lightning-icon>
+
+                                                            </template>
+                                                        </template>
+                                                    </div>
+                                                </div>
+                                            </th>
+                                            <th class="subjectField" scope="col">
+                                                <div class="slds-truncate" title="Subject">
+                                                    <div class="arrowContain">
+                                                        <a class="casenocolor" href="javascript:void(0);" name="Subject"
+                                                            data-id="desc" onclick={Sorttable}>
+                                                            Subject
+                                                        </a>
+                                                        <template if:true={isSubject}>
+                                                            <template if:true={Desc}>
+
+                                                                <lightning-icon class="right-alignment"
+                                                                    icon-name="utility:chevronup" size="xx-small">
+                                                                </lightning-icon>
+                                                            </template>
+                                                            <template if:false={Desc}>
+                                                                <lightning-icon class="right-alignment"
+                                                                    icon-name="utility:chevrondown" size="xx-small">
+                                                                </lightning-icon>
+
+                                                            </template>
+                                                        </template>
+                                                    </div>
+                                                </div>
+                                            </th>
+                                            <th class="priorityField" scope="col">
+                                                <div class="slds-truncate" title="Priority">
+                                                    <div class="arrowContain">
+                                                        <a class="casenocolor" href="javascript:void(0);"
+                                                            name="Priority" data-id="desc" onclick={Sorttable}>
+                                                            Priority
+                                                        </a>
+                                                        <template if:true={isPriority}>
+                                                            <template if:true={Desc}>
+
+                                                                <lightning-icon class="right-alignment"
+                                                                    icon-name="utility:chevronup" size="xx-small">
+                                                                </lightning-icon>
+                                                            </template>
+                                                            <template if:false={Desc}>
+                                                                <lightning-icon class="right-alignment"
+                                                                    icon-name="utility:chevrondown" size="xx-small">
+                                                                </lightning-icon>
+
+                                                            </template>
+                                                        </template>
+                                                    </div>
+                                                </div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Owner Name">
+                                                    <div class="arrowContain">
+                                                        <a class="casenocolor" href="javascript:void(0);"
+                                                            name="Owner.Name" data-id="desc" onclick={Sorttable}>
+                                                            Owner Name
+                                                        </a>
+                                                        <template if:true={isOwner}>
+                                                            <template if:true={Desc}>
+
+                                                                <lightning-icon class="right-alignment"
+                                                                    icon-name="utility:chevronup" size="xx-small">
+                                                                </lightning-icon>
+                                                            </template>
+                                                            <template if:false={Desc}>
+                                                                <lightning-icon class="right-alignment"
+                                                                    icon-name="utility:chevrondown" size="xx-small">
+                                                                </lightning-icon>
+
+                                                            </template>
+                                                        </template>
+                                                    </div>
+                                                </div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Resolution">
+                                                    <div class="arrowContain">
+                                                        <a class="casenocolor" href="javascript:void(0);"
+                                                            name="Resolution__c" data-id="desc" onclick={Sorttable}>
+                                                            Resolution
+                                                        </a>
+                                                        <template if:true={isResolution}>
+                                                            <template if:true={Desc}>
+
+                                                                <lightning-icon class="right-alignment"
+                                                                    icon-name="utility:chevronup" size="xx-small">
+                                                                </lightning-icon>
+                                                            </template>
+                                                            <template if:false={Desc}>
+                                                                <lightning-icon class="right-alignment"
+                                                                    icon-name="utility:chevrondown" size="xx-small">
+                                                                </lightning-icon>
+
+                                                            </template>
+                                                        </template>
+                                                    </div>
+                                                </div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Cluster UUID">
+                                                    <div class="arrowContain">
+                                                        <a class="casenocolor" href="javascript:void(0);"
+                                                            name="Cluster__c" data-id="desc" onclick={Sorttable}>
+                                                            Cluster UUID
+                                                        </a>
+                                                        <template if:true={isCluster}>
+                                                            <template if:true={Desc}>
+
+                                                                <lightning-icon class="right-alignment"
+                                                                    icon-name="utility:chevronup" size="xx-small">
+                                                                </lightning-icon>
+                                                            </template>
+                                                            <template if:false={Desc}>
+                                                                <lightning-icon class="right-alignment"
+                                                                    icon-name="utility:chevrondown" size="xx-small">
+                                                                </lightning-icon>
+
+                                                            </template>
+                                                        </template>
+                                                    </div>
+                                                </div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Last Modified">
+                                                    <div class="arrowContain">
+                                                        <a class="casenocolor" href="javascript:void(0);"
+                                                            name="LastModifiedDate" data-id="desc" onclick={Sorttable}>
+                                                            Last Modified
+                                                        </a>
+                                                        <template if:true={isLastModified}>
+                                                            <template if:true={Desc}>
+
+                                                                <lightning-icon class="right-alignment"
+                                                                    icon-name="utility:chevronup" size="xx-small">
+                                                                </lightning-icon>
+                                                            </template>
+                                                            <template if:false={Desc}>
+                                                                <lightning-icon class="right-alignment"
+                                                                    icon-name="utility:chevrondown" size="xx-small">
+                                                                </lightning-icon>
+
+                                                            </template>
+                                                        </template>
+                                                    </div>
+                                                </div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Created Date">
+                                                    <div class="arrowContain">
+                                                        <a class="casenocolor" href="javascript:void(0);"
+                                                            name="CreatedDate" data-id="desc" onclick={Sorttable}>
+                                                            Created Date
+                                                        </a>
+                                                        <template if:true={isCreatedDate}>
+                                                            <template if:true={Desc}>
+
+                                                                <lightning-icon class="right-alignment"
+                                                                    icon-name="utility:chevronup" size="xx-small">
+                                                                </lightning-icon>
+                                                            </template>
+                                                            <template if:false={Desc}>
+                                                                <lightning-icon class="right-alignment"
+                                                                    icon-name="utility:chevrondown" size="xx-small">
+                                                                </lightning-icon>
+
+                                                            </template>
+                                                        </template>
+                                                    </div>
+                                                </div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="font">
+                                        <template if:true={originalCaseList} for:each={originalCaseList}
+                                            for:item="cases">
+                                            <tr key={cases.id} class="bottomBorder">
+                                                <td><a href="javascript:void(0);" data-id={cases.Id}
+                                                        onclick={openDetailPage}>{cases.CaseNumber}</a></td>
+                                                <td>{cases.Status}</td>
+                                                <td class="subjectField">{cases.Subject}</td>
+                                                <td class="priorityField">{cases.Priority}</td>
+                                                <td>{cases.Owner.Name}</td>
+                                                <td>{cases.Resolution__c}</td>
+                                                <template if:true={cases.Cluster__r}>
+                                                    <td><a href="javascript:void(0);" data-id={cases.Cluster__r.Id}
+                                                            onclick={openDetailPage}>{cases.Cluster__r.Name}</a></td>
+                                                </template>
+                                                <template if:false={cases.Cluster__r}>
+                                                    <td><a href="javascript:void(0);" onclick={openDetailPage}></a></td>
+                                                </template>
+                                                <td>
+                                                    <lightning-formatted-date-time value={cases.LastModifiedDate}>
+                                                    </lightning-formatted-date-time>
+                                                </td>
+                                                <td>
+                                                    <lightning-formatted-date-time value={cases.CreatedDate}>
+                                                    </lightning-formatted-date-time>
+                                                </td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </template>
+                        </div>
+                    </div>
+                    <div>
+                        <template if:true={showButton}>
+                            <template if:true={showLess}>
+                                <button onclick={showAllRecords}
+                                    class="showButton slds-button slds-button_icon slds-align_absolute-center"
+                                    tabindex="0" title="Show All">
+                                    Show All
+                                </button>
+                            </template>
+                            <template if:false={showLess}>
+                                <button onclick={showAllRecords}
+                                    class="showButton slds-button slds-button_icon slds-align_absolute-center"
+                                    tabindex="0" title="Show Less">
+                                    Show Less
+                                </button>
+                            </template>
+                        </template>
+                    </div>
+                <!-- </lightning-accordion-section>
+            </lightning-accordion> -->
+        </template>
+        <!--Page Navigation to show All Cases-->
+        <template if:true={showdetail}>
+            <template if:true={SpinnerForCluster}>
+                <div class="slds-spinner_container">
+                    <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                        <span class="slds-assistive-text">Loading</span>
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+            </template>
+            <!--Search Panel using Cluster UUID-->
+            <div class="slds-grid slds-wrap slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12 CRTS_highlightFields"
+                style="height: 20px;">
+                <div class="slds-size_9-of-12 slds-medium-size_8-of-12"
+                    style="text-align:left ;display:inline-block ;font-size:18px;font-weight: 700;">
+                    <H4>Recent Cases</H4>
+                </div>
+
+                <div class="slds-size_12-of-12 slds-medium-size_12-of-12 filterDiv"
+                    style="text-align:right; top: -1rem !important;display:inline-block ">
+                    <span onkeypress={getCasesOnEnter}>
+                        <lightning-input class="labelHide" type="text"
+                            style="display:inline-block;padding-right:10px; width: 260px" data-id="Subject"
+                            accesskey="Subject"></lightning-input>
+                    </span>
+                    <div style="font-size: 11px;position: absolute;right: 250px;">Filter by cluster UUID</div>
+                    <lightning-button variant="brand" class="supportBtn btnPosition" onclick={getCases}
+                        label="Find Cases"></lightning-button>
+                </div>
+                <!--Show errors-->
+                <template if:true={showError}>
+                    <div class="slds-size_12-of-12 slds-m-bottom_x-small errorMsgDiv">
+                        <span style="font-size:14px;font-weight:bold;"></span>
+                        <div> {errorMessage} </div>
+                    </div>
+                </template>
+            </div>
+            <div class="slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12 tableDiv "
+                style="margin-top: 62px;">
+                <div class="slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12 tableDiv1">
+                    <template if:true={showCases}>
+                        <table
+                            class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered tableBorder">
+                            <thead class="font">
+                                <tr class="slds-line-height_reset">
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Case Number">
+                                            <div class="arrowContain">
+                                                <a class="casenocolor" href="javascript:void(0);" name="CaseNumber"
+                                                    data-id="desc" onclick={Sorttable}>
+                                                    Case Number
+                                                </a>
+                                                <template if:true={isCNumber}>
+                                                    <template if:true={Desc}>
+
+                                                        <lightning-icon class="right-alignment"
+                                                            icon-name="utility:chevronup" size="xx-small">
+                                                        </lightning-icon>
+                                                    </template>
+                                                    <template if:false={Desc}>
+                                                        <lightning-icon class="right-alignment"
+                                                            icon-name="utility:chevrondown" size="xx-small">
+                                                        </lightning-icon>
+
+                                                    </template>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Status">
+                                            <div class="arrowContain">
+                                                <a class="casenocolor" href="javascript:void(0);" name="Status"
+                                                    data-id="desc" onclick={Sorttable}>
+                                                    Status
+                                                </a>
+                                                <template if:true={isStatus}>
+                                                    <template if:true={Desc}>
+
+                                                        <lightning-icon class="right-alignment"
+                                                            icon-name="utility:chevronup" size="xx-small">
+                                                        </lightning-icon>
+                                                    </template>
+                                                    <template if:false={Desc}>
+                                                        <lightning-icon class="right-alignment"
+                                                            icon-name="utility:chevrondown" size="xx-small">
+                                                        </lightning-icon>
+
+                                                    </template>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th class="subjectField" scope="col">
+                                        <div class="slds-truncate" title="Subject">
+                                            <div class="arrowContain">
+                                                <a class="casenocolor" href="javascript:void(0);" name="Subject"
+                                                    data-id="desc" onclick={Sorttable}>
+                                                    Subject
+                                                </a>
+                                                <template if:true={isSubject}>
+                                                    <template if:true={Desc}>
+
+                                                        <lightning-icon class="right-alignment"
+                                                            icon-name="utility:chevronup" size="xx-small">
+                                                        </lightning-icon>
+                                                    </template>
+                                                    <template if:false={Desc}>
+                                                        <lightning-icon class="right-alignment"
+                                                            icon-name="utility:chevrondown" size="xx-small">
+                                                        </lightning-icon>
+
+                                                    </template>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th class="priorityField" scope="col">
+                                        <div class="slds-truncate" title="Priority">
+                                            <div class="arrowContain">
+                                                <a class="casenocolor" href="javascript:void(0);" name="Priority"
+                                                    data-id="desc" onclick={Sorttable}>
+                                                    Priority
+                                                </a>
+                                                <template if:true={isPriority}>
+                                                    <template if:true={Desc}>
+
+                                                        <lightning-icon class="right-alignment"
+                                                            icon-name="utility:chevronup" size="xx-small">
+                                                        </lightning-icon>
+                                                    </template>
+                                                    <template if:false={Desc}>
+                                                        <lightning-icon class="right-alignment"
+                                                            icon-name="utility:chevrondown" size="xx-small">
+                                                        </lightning-icon>
+
+                                                    </template>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Owner Name">
+                                            <div class="arrowContain">
+                                                <a class="casenocolor" href="javascript:void(0);" name="Owner.Name"
+                                                    data-id="desc" onclick={Sorttable}>
+                                                    Owner Name
+                                                </a>
+                                                <template if:true={isOwner}>
+                                                    <template if:true={Desc}>
+
+                                                        <lightning-icon class="right-alignment"
+                                                            icon-name="utility:chevronup" size="xx-small">
+                                                        </lightning-icon>
+                                                    </template>
+                                                    <template if:false={Desc}>
+                                                        <lightning-icon class="right-alignment"
+                                                            icon-name="utility:chevrondown" size="xx-small">
+                                                        </lightning-icon>
+
+                                                    </template>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Resolution">
+                                            <div class="arrowContain">
+                                                <a class="casenocolor" href="javascript:void(0);" name="Resolution__c"
+                                                    data-id="desc" onclick={Sorttable}>
+                                                    Resolution
+                                                </a>
+                                                <template if:true={isResolution}>
+                                                    <template if:true={Desc}>
+
+                                                        <lightning-icon class="right-alignment"
+                                                            icon-name="utility:chevronup" size="xx-small">
+                                                        </lightning-icon>
+                                                    </template>
+                                                    <template if:false={Desc}>
+                                                        <lightning-icon class="right-alignment"
+                                                            icon-name="utility:chevrondown" size="xx-small">
+                                                        </lightning-icon>
+
+                                                    </template>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Cluster UUID">
+                                            <div class="arrowContain">
+                                                <a class="casenocolor" href="javascript:void(0);" name="Cluster__c"
+                                                    data-id="desc" onclick={Sorttable}>
+                                                    Cluster UUID
+                                                </a>
+                                                <template if:true={isCluster}>
+                                                    <template if:true={Desc}>
+
+                                                        <lightning-icon class="right-alignment"
+                                                            icon-name="utility:chevronup" size="xx-small">
+                                                        </lightning-icon>
+                                                    </template>
+                                                    <template if:false={Desc}>
+                                                        <lightning-icon class="right-alignment"
+                                                            icon-name="utility:chevrondown" size="xx-small">
+                                                        </lightning-icon>
+
+                                                    </template>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Last Modified">
+                                            <div class="arrowContain">
+                                                <a class="casenocolor" href="javascript:void(0);"
+                                                    name="LastModifiedDate" data-id="desc" onclick={Sorttable}>
+                                                    Last Modified
+                                                </a>
+                                                <template if:true={isLastModified}>
+                                                    <template if:true={Desc}>
+
+                                                        <lightning-icon class="right-alignment"
+                                                            icon-name="utility:chevronup" size="xx-small">
+                                                        </lightning-icon>
+                                                    </template>
+                                                    <template if:false={Desc}>
+                                                        <lightning-icon class="right-alignment"
+                                                            icon-name="utility:chevrondown" size="xx-small">
+                                                        </lightning-icon>
+
+                                                    </template>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Created Date">
+                                            <div class="arrowContain">
+                                                <a class="casenocolor" href="javascript:void(0);" name="CreatedDate"
+                                                    data-id="desc" onclick={Sorttable}>
+                                                    Created Date
+                                                </a>
+                                                <template if:true={isCreatedDate}>
+                                                    <template if:true={Desc}>
+
+                                                        <lightning-icon class="right-alignment"
+                                                            icon-name="utility:chevronup" size="xx-small">
+                                                        </lightning-icon>
+                                                    </template>
+                                                    <template if:false={Desc}>
+                                                        <lightning-icon class="right-alignment"
+                                                            icon-name="utility:chevrondown" size="xx-small">
+                                                        </lightning-icon>
+
+                                                    </template>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="font">
+                                <template if:true={originalCaseList} for:each={originalCaseList} for:item="cases">
+                                    <tr key={cases.id} class="bottomBorder">
+                                        <td><a href="javascript:void(0);" data-id={cases.Id}
+                                                onclick={openDetailPage}>{cases.CaseNumber}</a></td>
+                                        <td>{cases.Status}</td>
+                                        <td class="subjectField">{cases.Subject}</td>
+                                        <td class="priorityField">{cases.Priority}</td>
+                                        <td>{cases.Owner.Name}</td>
+                                        <td>{cases.Resolution__c}</td>
+                                        <template if:true={cases.Cluster__r}>
+                                            <td><a href="javascript:void(0);" data-id={cases.Cluster__r.Id}
+                                                    onclick={openDetailPage}>{cases.Cluster__r.Name}</a></td>
+                                        </template>
+                                        <template if:false={cases.Cluster__r}>
+                                            <td><a href="javascript:void(0);" onclick={openDetailPage}></a></td>
+                                        </template>
+                                        <td>
+                                            <lightning-formatted-date-time value={cases.LastModifiedDate}>
+                                            </lightning-formatted-date-time>
+                                        </td>
+                                        <td>
+                                            <lightning-formatted-date-time value={cases.CreatedDate}>
+                                            </lightning-formatted-date-time>
+                                        </td>
+                                    </tr>
+                                </template>
+
+                            </tbody>
+                        </table>
+                    </template>
+                </div>
+            </div>
+            <div>
+                <!--template if:true={showButton}>
+                <template if:true={showLess}>
+                    <button onclick={showAllRecords} class="showButton slds-button slds-button_icon slds-align_absolute-center" tabindex="0" title="Show All">
+                        Show All
+                    </button>
+                </template>
+                <template if:false={showLess}>
+                    <button onclick={showAllRecords} class="showButton slds-button slds-button_icon slds-align_absolute-center" tabindex="0" title="Show Less">
+                        Show Less
+                    </button>
+                </template>
+            </template-->
+            </div>
+        </template>
+    </lightning-card>
+
+</template>

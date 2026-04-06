@@ -1,0 +1,23 @@
+<template>
+    <lightning-button variant="brand" label="PS Escalation" title="PS Escalation" disabled={isDisabled} onclick={openModal} class="slds-m-left_large" id="psEscalation"></lightning-button>
+    <template if:true={showPSEsclationForm}>
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_medium" onkeydown={handleKeyDown}>
+            <lightning-spinner if:true={loadSpinner} alternative-text="Loading..." size="medium" variant="brand"></lightning-spinner>
+            <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                            <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse" size="small" ></lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Partner Sourced Manual Escalation</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium modal-custom" id="modal-content-id-1">
+                            <lightning-flow flow-api-name='DR_PS_Escalation_Form' flow-input-variables={inputVariables}
+                            onstatuschange={handleStatusChange}>
+                            </lightning-flow>
+                    </div>
+            </div>
+            </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

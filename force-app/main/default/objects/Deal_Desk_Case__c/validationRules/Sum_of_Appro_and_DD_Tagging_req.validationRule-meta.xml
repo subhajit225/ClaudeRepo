@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Sum_of_Appro_and_DD_Tagging_req</fullName>
+    <active>true</active>
+    <description>SAL26-481 while closing the case summary of approval and Deal desk tagging is required</description>
+    <errorConditionFormula>AND(
+				NOT($Setup.ShGl_DisableBusinessLogic__c.Disable_Deal_Desk_Case_Validation_Rules__c),
+    ISPICKVAL(Case_Status__c,&apos;Closed&apos;),
+    OR(
+				    ISBLANK(Summary_of_Approval__c),
+								ISBLANK(Deal_Desk_Tagging__c )
+			 )
+)</errorConditionFormula>
+    <errorDisplayField>Case_Status__c</errorDisplayField>
+    <errorMessage>You can&apos;t close the Case without providing Summary of Approval and Deal Desk Tagging</errorMessage>
+</ValidationRule>

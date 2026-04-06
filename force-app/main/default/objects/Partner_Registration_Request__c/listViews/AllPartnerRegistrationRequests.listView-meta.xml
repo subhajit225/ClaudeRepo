@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>AllPartnerRegistrationRequests</fullName>
+    <columns>Partner_Registration_Status__c</columns>
+    <columns>OWNER.LAST_NAME</columns>
+    <columns>NAME</columns>
+    <columns>First_Name__c</columns>
+    <columns>Last_Name__c</columns>
+    <columns>Company_Name__c</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>State__c</columns>
+    <columns>Country__c</columns>
+    <columns>Email__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>CREATED_DATE</field>
+        <operation>greaterThan</operation>
+        <value>10/16/2016 12:00 AM</value>
+    </filters>
+    <filters>
+        <field>Partner_Registration_Status__c</field>
+        <operation>equals</operation>
+        <value>Submitted</value>
+    </filters>
+    <filters>
+        <field>Country_Picklist__c</field>
+        <operation>equals</operation>
+        <value>Ireland,United Kingdom</value>
+    </filters>
+    <label>All Partner Registration Requests</label>
+    <sharedTo>
+        <allInternalUsers></allInternalUsers>
+    </sharedTo>
+</ListView>

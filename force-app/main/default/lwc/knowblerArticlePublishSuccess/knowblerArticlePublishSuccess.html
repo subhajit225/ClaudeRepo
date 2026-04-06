@@ -1,0 +1,71 @@
+<template>
+  <template if:false={publish}>
+    <div class="slds-m-around_medium">
+      <img class="imgCenter" src={articleSuccessful} />
+    </div>
+    <div class="modal-content">
+      <div class="contentMsg">
+        <!-- message for publish and attached success -->
+        <template if:true={articleattach}>
+          <p class="messageSuccess publish">{attachedSuccessMessage}</p>
+        </template>
+        <!-- message for publish success -->
+        <template if:true={ispublishnow}>
+          <p class="messageSuccess publish">{publishSuccessMessage}</p>
+        </template>
+      </div>
+    </div>
+  </template>
+
+  <!-- attach and detach successfully -->
+  <template if:true={attacharticle}>
+    <template if:true={articleattachpublished}>
+      <div class="slds-m-around_medium">
+        <img class="imgCenter" src={attachSuccessful} />
+      </div>
+    </template>
+    <template if:true={articledetach}>
+      <div class="slds-m-around_medium">
+        <img class="imgCenter" src={detachsuccessful} />
+      </div>
+    </template>
+    <div class="modal-content">
+      <div class="contentMsg">
+        <!-- message for attached success -->
+        <template if:true={articleattachpublished}>
+          <p class="messageSuccess">{attachSuccessMessage}</p>
+        </template>
+        <!-- message for detach success -->
+        <template if:true={articledetach}>
+          <p class="messageSuccess">{detachSuccessMessage}</p>
+        </template>
+      </div>
+    </div>
+  </template>
+
+  <!-- link copied -->
+  <template if:true={linkcopied}>
+    <div class="slds-m-around_medium">
+      <img class="imgCenter" src={linkcopiedimg} />
+    </div>
+    <div class="modal-content">
+      <div class="contentMsg">
+        <p class="messageSuccess">{copymessage}</p>
+      </div>
+    </div>
+  </template>
+  <template if:true={wait}>
+    <div class="modal-content">
+      <div class="contentMsg">
+        <lightning-icon
+          class="predictedScoreArrowIcon spinner"
+          icon-name="utility:spinner"
+          alternative-text="Chat"
+          title="Chat"
+          size="xx-small"
+        ></lightning-icon>
+        <span class="messageSuccess">{waitmessage}</span>
+      </div>
+    </div>
+  </template>
+</template>

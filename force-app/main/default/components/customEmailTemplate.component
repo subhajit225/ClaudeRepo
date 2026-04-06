@@ -1,0 +1,35 @@
+<apex:component access="global" controller="CustomEmailTemplateController">
+    <apex:attribute name="value" type="Id" assignTo="{!quoteId}" description="Quote Record Id from the Email Template"/>
+    <table width="100%" class="table-bordered"> 
+        <thead>
+            <tr>
+                <th> Product Name</th>
+                <th> Subscription Term </th>
+                <th> Quantity </th>
+                <th> List Unit Price </th>
+                <th> List Total </th>
+                <th> Promo Disc % </th>
+                <th> Additional Disc. (%) </th>
+                <th> Total Discount (%) </th>
+                <th> Additional Disc. </th>
+                <th> Net Total </th>
+            </tr>
+        </thead> 
+        <tbody>
+            <apex:repeat var="li" value="{!Lines}" >
+                <tr>
+                    <td>{!li.SBQQ__ProductName__c}</td>
+                    <td>{!li.SBQQ__SubscriptionTerm__c}</td>
+                    <td>{!li.SBQQ__Quantity__c}</td>
+                    <td>${!li.SBQQ__ListPrice__c}</td>
+                    <td>${!li.SBQQ__ListTotal__c}</td>
+                    <td>{!li.Promo_Disc__c}</td>
+                    <td>{!li.SBQQ__Discount__c}</td>
+                    <td>{!li.SBQQ__TotalDiscountRate__c}%</td>
+                    <td>${!li.SBQQ__AdditionalDiscount__c}</td>
+                    <td>${!li.SBQQ__NetTotal__c}</td>
+                </tr>
+            </apex:repeat>
+        </tbody>
+    </table>    
+</apex:component>

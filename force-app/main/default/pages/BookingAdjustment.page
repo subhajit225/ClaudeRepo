@@ -1,0 +1,213 @@
+<apex:page controller="BookingAdjustmentController" sidebar="false" docType="html-5.0" id="page" lightningStylesheets="true">
+    <apex:includeLightning />
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+
+<style>   
+.btnProp {
+padding: 5px;
+width: 50px;
+margin: 23px;
+}
+.labelCol {
+ text-align: left !important;
+}
+.TotalBanner{
+margin-top: 10px;
+margin-bottom: 25px;
+width: 100%;
+background-color: #53a24ab3;
+padding: 11px;
+text-align: center;
+color: black;
+font-size: 15px;
+font-weight: 550;
+}
+.spinner {
+display: none; /* Hidden by default */
+position: fixed;
+z-index: 9999;
+height: 100%;
+width: 100%;
+top: 0;
+left: 0;
+background-color: rgba(0, 0, 0, 0.4);
+}
+.spinner:after {
+content: '';
+display: block;
+position: absolute;
+left: 50%;
+top: 50%;
+width: 50px;
+height: 50px;
+margin: -25px 0 0 -25px;
+border: 8px solid #f3f3f3;
+border-radius: 50%;
+border-top: 8px solid #3498db;
+-webkit-animation: spin 2s linear infinite;
+animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+0% { -webkit-transform: rotate(0deg); }
+100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+0% { transform: rotate(0deg); }
+100% { transform: rotate(360deg); }
+}
+</style>
+
+<script type="text/javascript"> 
+function setval(date) {
+setDate(date);
+}
+function showSpinner() {
+    document.getElementById('loadingSpinner').style.display = 'block';
+}
+function hideSpinner() {
+    document.getElementById('loadingSpinner').style.display = 'none';   
+}
+</script>
+
+<apex:form style="margin:10px;" id="form">
+
+<apex:actionFunction action="{!setDate}" name="setDate" rerender="none" immediate="true">
+    <apex:param id="effDate" name="effDate" value=""/>
+</apex:actionFunction>
+<div id="loadingSpinner" class="spinner"></div>
+<apex:pageBlock title="Select Adjustment type" id="pgblock">
+    <apex:pageBlockSection id="section"> 
+    <apex:pageBlockSectionItem > 
+    <apex:outputLabel value="Type" for="Type"/>
+             <apex:actionRegion >   
+            <apex:selectList label="Type" size="1" value="{!selectedAType}" onchange="selectedType()" disabled="{!updateadjustments}">
+                <apex:selectOptions value="{!adjustmentType}"/>
+                 <apex:actionFunction action="{!typeSelected}" name="selectedType" reRender="pgblock,LineItm,formbtn,adjAmount" />
+            </apex:selectList>
+			
+             </apex:actionRegion>
+               </apex:pageBlockSectionItem>   
+                 <apex:pageBlockSectionItem rendered="{! AND(selectedAType!=$Label.PartnerReferrals,selectedAType!='--None--')}">
+                   <apex:outputLabel value="{!$ObjectType.CCR__c.Fields.Customer_Returns_Type__c.Label}" />           
+              <apex:actionRegion >   
+             <apex:selectList label="Returns Type" size="1" value="{!selectedReturnType}" onchange="selectedReturnType()" disabled="{!updateadjustments}">
+                <apex:selectOptions value="{!returnsType}"></apex:selectoptions>
+                <apex:actionFunction action="{!returnTypeSelected}" name="selectedReturnType" reRender="LineItm,formbtn,adjAmount,pgblock" />
+            </apex:selectList>
+             </apex:actionRegion> 
+             </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem helpText="Effective date of negative adjustment">
+              <apex:outputLabel value="{!$ObjectType.CCR__c.Fields.Effective_Date__c.Label}" />
+              <input type="date" placeholder="dd/mm/yy" value="{!effectivedate}"  onchange="setval(this.value)" id="dtPicker"/>
+               <script>
+                 dtPicker.max = new Date().toISOString().split("T")[0];
+               </script> 
+           </apex:pageBlockSectionItem>
+           <!--Start PRDOPS26-21-->
+           <apex:pageBlockSectionItem helpText="Debook Amount Type" rendered="{!displayLineItem}">
+            <apex:outputLabel value="{!$ObjectType.CCR__c.Fields.Return_Amount_Type__c.Label}"/>
+            <apex:actionRegion >
+                <apex:selectList label="Return Amount Type" size="1" value="{!selectedReturnAmountType}" onchange="selectedReturnAmountType()">
+                    <apex:selectOptions value="{!returnsAmountType}"></apex:selectoptions>
+                    <apex:actionFunction action="{!returnAmountTypeSelected}" name="selectedReturnAmountType" reRender="LineItm,formbtn,adjAmount" />
+                </apex:selectList>
+            </apex:actionRegion>
+        </apex:pageBlockSectionItem> 
+        <!--End PRDOPS26-21-->
+           <apex:inputField value="{!CCR.Impacts_Commission__c}" rendered="{!selectedAType ==$Label.BookingPolicyOrDe_RiskDecision || selectedAType ==$Label.IncorrectOrder_MisQuote}"/> 
+           <apex:outputField value="{!CCR.Impacts_Commission__c}" rendered="{!selectedAType !=$Label.BookingPolicyOrDe_RiskDecision && selectedAType !=$Label.IncorrectOrder_MisQuote}"/>     
+           <apex:inputField value="{!CCR.Comment__c}" required="true" rendered="{!selectedAType!=$Label.PartnerReferrals}" html-maxlength="255" html-placeholder="Please enter justification for Customer Returns/Refunds..." style="height: 50px;width:200px"/> 
+           <apex:inputField value="{!CCR.Return_Reasons__c}" required="true" rendered="{!selectedAType!=$Label.PartnerReferrals}" html-maxlength="255"/>
+           <apex:outputPanel id="Comment" ></apex:outputPanel> 
+    </apex:pageBlockSection>
+</apex:pageblock>
+
+<apex:outputPanel id="adjAmount" rendered="{!updateadjustments==false}">
+    <apex:pageBlock title="Please enter the amount" rendered="{!IF(AND(selectedAType != $Label.PartnerReferrals,selectedReturnType=='LineItem Based'), FALSE, TRUE)}">
+        <apex:pageBlockSection >
+            <apex:outputText value="{!ord.TotalAmount}" label="Order Total Amount"></apex:outputText>
+            <apex:input title="Amount" value="{!CRRAmount}" type="number" html-step="any" label="Amount">
+            </apex:input>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+</apex:outputPanel>
+
+
+<apex:outputPanel id="LineItm"> 
+    <apex:pageMessages />
+    
+    <apex:pageBlock title="Select LineItems to be Adjusted/Removed" mode="maindetail" rendered="{!displayLineItem}">
+        <apex:variable var="index" value="{!-1}" />
+        <div style="overflow: scroll; width: 100%; max-height: 500px;">
+        <apex:pageBlockTable value="{!orderLineItems}" var="LI" columnsWidth="10px;2px;2px;" >      
+            <apex:column > 
+                <apex:facet name="header"></apex:facet>
+                <apex:inputCheckbox value="{!LI.selected}" disabled="{!LI.selectDisabled}">
+                    <apex:actionSupport event="onchange" action="{!calculateTotalPrice}" rerender="LineItm,TotalBar"/>
+                </apex:inputCheckbox>
+            </apex:column> 
+            <apex:column value="{!LI.prodName}" > 
+                <apex:facet name="header">ProductName</apex:facet>
+                
+            </apex:column> 
+            
+            <apex:column > 
+                <apex:facet name="header">Quantity</apex:facet>
+                <apex:outputText value="{!LI.quantity}"> 
+                    <apex:actionSupport event="onchange" action="{!checkQuantity}" rerender="LineItm,TotalBar">
+                        <apex:variable var="index" value="{!index + 1}" /> 
+                        <apex:param name="indexVal" value="{!index}" assignTo="{!selectedRowIndex}" /> 
+                    </apex:actionSupport>
+                </apex:outputText>
+            </apex:column> 
+            <apex:column > 
+                <apex:facet name="header">Unit Price</apex:facet>
+                <apex:outputText value="{0, number, currency}">
+                    <apex:param value="{!LI.totalUnitPrice}" />
+                </apex:outputText>
+            </apex:column>
+            <apex:column > 
+                <apex:facet name="header">Total</apex:facet>
+                <apex:outputText value="{0, number, currency}">
+                    <apex:param value="{!LI.totalPrice}" />
+                </apex:outputText>
+            </apex:column>
+            <!--Start PRDOPS26-21-->
+            <apex:column rendered="{!(selectedReturnAmountType == 'Partial')}"> 
+                <apex:facet name="header">Remaining Debook Amount</apex:facet>
+                <apex:outputText value="{0, number, currency}">
+                    <apex:param value="{!LI.remainingDebookAmount}" />
+                </apex:outputText>
+            </apex:column>
+            <apex:column rendered="{!(selectedReturnAmountType == 'Partial')}"> 
+                <apex:facet name="header">Debook Amount</apex:facet>
+                <apex:input value="{!LI.debookAmount}" type="number" rendered="{!(LI.partialDebook == true)}">
+                    <apex:actionSupport event="onchange" action="{!calculateTotalPrice}" rerender="theGrid"/>
+                </apex:input>
+            </apex:column>
+            <!--End PRDOPS26-21-->
+        </apex:pageblockTable>
+             </div>              
+        <apex:panelGrid columns="1" id="theGrid" styleClass="TotalBanner">
+            <apex:outputText value="{0, number, currency}" > Total amount to be adjusted :&nbsp;
+                <apex:param value="{!adjustmentTotalPrice}"/>
+            </apex:outputText>
+        </apex:panelGrid> 
+    </apex:pageBlock> 
+     
+</apex:outputPanel> 
+
+<apex:outputPanel id="formbtn">
+    <apex:pageBlock mode="maindetail">
+        <apex:pageblockButtons location="top"> 
+        <apex:commandButton value="Submit" rendered="{!showSubmit}" action="{!createUpdateCCR}" status="submitStatus" reRender="LineItm"/> <!--{!IF(showSubmit && error==false,true,false)} -->
+        <apex:commandButton action="{!cancel}" value="Cancel" immediate="true"
+                    html-formnovalidate="formnovalidate"/>
+        </apex:pageblockButtons>
+    </apex:pageBlock>  
+</apex:outputPanel>
+<apex:actionStatus id="submitStatus" onstart="showSpinner();" onstop="hideSpinner();"></apex:actionStatus>
+</apex:form>
+</apex:page>

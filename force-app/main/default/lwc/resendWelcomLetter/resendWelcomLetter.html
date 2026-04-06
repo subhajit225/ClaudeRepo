@@ -1,0 +1,166 @@
+<template>
+    <lightning-card>
+        <div class="slds-is-relative">
+            <!-- Loader -->
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
+            </template>
+
+            <!-- Title -->
+            <div class="slds-p-vertical_medium slds-align_absolute-center slds-border_bottom">
+                <lightning-icon icon-name="standard:order" alternative-text="Order" size="small" class="slds-m-right_small"></lightning-icon>
+                <h2 class="slds-text-heading_medium">Resend Welcome Letter Email</h2>
+            </div>
+
+            <template if:false={isLoading}>
+                <div class="slds-card__body slds-p-around_medium">
+
+                    <!-- No Access Message -->
+                    <template if:false={isValidUser}>
+                        <div class="slds-text-color_error slds-text-align_center">
+                            <p class="slds-text-heading_small slds-var-m-bottom_x-small">
+                                <b>You do not have the necessary permissions or the Order does not meet the resend criteria.</b>
+                            </p>
+                    
+                            <p if:false={isValidOrderType} class="slds-var-m-vertical_xx-small">This Order's Type must be 'Revenue' or 'POC'.</p>
+                            <p if:false={isOrderStatusShipped} class="slds-var-m-vertical_xx-small">This Order's Status must be 'Shipped'.</p>
+                            <p if:false={isUserRBACAuthorized} class="slds-var-m-vertical_xx-small">Only users with 'IT Prod Ops Support' or 'Order - Management' can resend Welcome Letters.</p>
+                        </div>
+                    </template>
+
+                    <!-- Main Content -->
+                    <template if:true={isValidUser}>
+                        <!-- Step 1 -->
+                        <template if:true={isFirst}>
+                            <template if:true={isAspenOrder}>
+                                <!-- WL Type -->
+                                <lightning-combobox
+                                    data-id="welcomeletterType"
+                                    name="welcomeletterType"
+                                    label="Welcome Letter Type"
+                                    value={objWrapper.welcomeletterType}
+                                    placeholder="Select a letter type"
+                                    options={letterTypeOptions}
+                                    onchange={handleInputChange}
+                                    class="slds-p-around_x-small"
+                                ></lightning-combobox>
+                            </template>
+
+                            <div class="slds-p-around_x-small">
+                                <!-- Resend Reason -->
+                                <c-ce-multi-select-pick-list 
+                                    options={resendReasonOptions} 
+                                    label="Resend Reason"
+                                    multi-select="true"
+                                    name="resendReason"
+                                    onselectoption={handleSelectOptionList}
+                                    selected-values={objWrapper.selectedResendReasons}>
+                                </c-ce-multi-select-pick-list>
+
+                                <!-- Resend Reason Validation -->
+                                <template if:true={isResendReasonRequired}>
+                                    <div class="slds-form-element__help slds-text-color_error">
+                                        Please select at least one resend reason
+                                    </div>
+                                </template>
+
+                                <!-- Resend Reasons Badges -->
+                                <template if:true={objWrapper.selectedResendReasons}>
+                                    <div class="slds-m-top_small">
+                                        <template for:each={objWrapper.selectedResendReasons} for:item="reason">
+                                            <span key={reason} class="slds-badge slds-m-right_x-small slds-m-bottom_x-small">
+                                                {reason}
+                                            </span>
+                                        </template>
+                                    </div>
+                                </template>
+                            </div>
+
+                            <!-- Resend Comments -->
+                            <lightning-textarea
+                                name="resendComment"
+                                label="Resend Comments"
+                                value={objWrapper.resendComment}
+                                onchange={handleInputChange}
+                                class="slds-p-around_x-small"
+                                max-length="255"
+                                required={isCommentsRequired}
+                            ></lightning-textarea>
+                        </template>
+
+                        <!-- Screen 2 -->
+                        <template if:true={isSecond}>
+                            <p class="slds-text-title_bold slds-m-bottom_small">
+                                <b>When confirmed, the order’s email addresses will be replaced with those from the opportunity.</b>
+                                <br/>
+                                Please verify the Welcome letter email(s):
+                            </p>
+                            <table border="1">
+                                <thead>
+                                    <tr class="slds-text-title_caps">
+                                        <th class="slds-p-around_medium slds-text-align_center" scope="col">Order</th>
+                                        <th class="slds-p-around_medium slds-text-align_center" scope="col">Opportunity</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="slds-p-around_medium slds-text-align_center"><b>WL Contact: </b> {parentOrder.Welcome_Letter_Contact_Email__c}</td>
+                                        <td class="slds-p-around_medium slds-text-align_center"><b>Primary OCR: </b> {objWrapper.primaryOCREmail}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="slds-p-around_medium slds-text-align_center"><b>RSC Contact: </b>{parentOrder.Polaris_Contact_Email__c}</td>
+                                        <td class="slds-p-around_medium slds-text-align_center"><b>RSC Owner: </b>{objWrapper.oppConEmail}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </template>
+
+                        <!-- Step 3 -->
+                        <template if:true={isThird}>
+                            <template if:true={parentOrder.hasEmails}>
+                                <p class="slds-text-title_bold slds-m-bottom_small">
+                                    Welcome letter will be sent to the following email(s):
+                                </p>
+                                <ul class="slds-list_dotted slds-m-left_medium">
+                                    <template for:each={parentOrder.emailAddresses} for:item="emailAddress">
+                                        <li key={emailAddress}>{emailAddress}</li>
+                                    </template>
+                                </ul>
+                            </template>
+                            <template if:false={parentOrder.hasEmails}>
+                                <p class="slds-text-color_error slds-text-align_center">
+                                    No emails found to send Welcome Letter.
+                                </p>
+                            </template>
+                        </template>
+                    </template>
+                </div>
+            </template>
+
+            <!-- Footer Buttons (Always Centered) -->
+            <footer class="slds-card__footer slds-border_top slds-var-p-around_medium" if:true={isValidUser}>
+                <div class="slds-grid slds-grid_align-center slds-grid_vertical-align-center slds-gap_x-small">
+                    <lightning-button 
+                        class="slds-m-right_x-small" 
+                        variant="destructive" 
+                        label="Cancel" 
+                        onclick={handleClose}>
+                    </lightning-button>
+                    <lightning-button 
+                        class="slds-m-right_x-small" 
+                        variant="brand-outline" 
+                        label="Previous" 
+                        onclick={handlePrevious}
+                        if:false={isFirst}>
+                    </lightning-button>
+                    <lightning-button 
+                        variant="brand" 
+                        label={nextButtonLabel} 
+                        onclick={handleNext}
+                        disabled={disableNext}>
+                    </lightning-button>
+                </div>
+            </footer>
+        </div>
+    </lightning-card>
+</template>

@@ -1,0 +1,508 @@
+<!--
+// ********************Change Logs ******************************************************************************************************************************************************
+ * 
+ * Modified By          Date        Description 
+ * Shiva Sharma         23-05-18    Added Modal for Notification.
+ * Shiva Sharma         23-05-18    Changed Controller from SiteLoginController to RubrikCommunityLoginController.
+ // ********************Change Logs Ends**************************************************************************************************************************************************
+-->
+
+<apex:page controller="RubrikCommunityLoginController" readOnly="false" cache="false" standardStylesheets="false" sidebar="false" showheader="false"  title="Rubrik Community" applyBodyTag="false">
+    <link rel="shortcut icon" href="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/favicon.ico')}" type="image/x-icon" />
+    <link rel="icon" href="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/favicon1.png')}" type="image/png" />
+    <style>
+        .row{margin:0px!important;}
+        body{margin:0px!important;}
+        .loginBlock{margin:70px 0px 50px;}
+        .login-form-group{padding-bottom:31px !important;margin-bottom:0px !important;}
+        .rubrik-btn{margin: 28px 0 0 3px;background-color: #009dac !important;color: #fff;padding: 13px 20px !important;box-shadow: 0 2px 2px 0 hsla(0,9%,4%,.2);border-radius: 2px;font-size: 12px;font-weight: 500;text-transform: uppercase;-webkit-transition: background-color .2s ease-in-out;transition: background-color .2s ease-in-out;cursor: pointer;letter-spacing: -.5px;}
+        .rubrik-btn:hover{background-color: #3fb5c0!important;}
+        .rubrikcheckbox{padding-bottom: 10px;display: block;}
+        label {display: inline-block;color: #4A4A4A;font-family: Gotham-Light;font-size: 15px !important;line-height: 14px;margin-bottom:0px !important;}
+        .inputrubrik {box-shadow: inset 0 1px 3px 0 rgba(0,0,0,0.06);border: 1px solid #E6E6E6;border-radius: 2px;}   
+        .t1 {font-size: 21px;line-height: 25px;color: #17232E;}   
+        .paragraphHeading{font-size: 44px;line-height: 60px;letter-spacing: -1.2px;font-weight: 200;color:white;}
+        .Paragraph{font-size: 16px;line-height: 30px;letter-spacing: -.42px;margin-top: 8px;font-weight: 200;color:white}        
+        .formLabel{display: block;text-align: left;font-size: 15px;font-weight: 300 !important;letter-spacing: -.5px;word-spacing: .5px;}
+        .inputrubrik{margin-top: 12px !important;height: 40px !important;padding: 10px 14px !important;border-radius:2px !important;}
+        .loginHeading{font-size:26px !important;padding-bottom:28px;line-height: 34px;margin:0px !important;}
+        .nopad{padding:0px}
+        .rubrikFirstGradientButton{position:relative;bottom:-40px;}
+        .leftBlockLogin{padding-top:90px;}
+        .rightBlockLogin{background-color:#fafafa;padding:46px 29px 0px 29px;width:37% !important;float:right}
+        .containerCustomerService{background-color: #283d50;padding:90px 0px;}
+        .customerServiceHeading{color:#ffffff !important;font-size:44px !important;line-height:60px !important;}
+        .customerServiceParagraph{font-size: 16px;line-height: 30px;letter-spacing: -.42px;color:#fff;width:60%;}
+        .imageHeading{padding-bottom: 5px;font-size: 15px !important;font-weight: 400;line-height: 1.4;letter-spacing: -.4px;word-spacing: .4px;padding-top: 4px;text-align:left;margin:0px !important;}
+        .imagePara{padding-bottom: 0;text-align: left;line-height: 19px;font-size: 13px;font-weight: 200;letter-spacing: -.4px;word-spacing: .4px;color: #4a4a4a;}
+        .imageBox{padding: 24px 10px 20px 16px;border-radius: 4px;background-color: #fff;width: 31% !important;margin-top:32px}
+        .globalSupportBlock{padding-top: 86px;padding-bottom: 100px;background-color: #fafafa;}
+        .imageWrapper{margin-bottom:30px;height: 122px;}
+        .imageWrapperHeading{font-size:26px !important;margin-top:30px !important;line-height:26px !important;}
+        .imageWrapperDescription{width:82%;margin-top: 11px !important;word-spacing: .4px;margin-bottom: 0 !important;font-size: 16px;font-weight: 200;letter-spacing: -.5px;line-height: 30px;}
+        .serviceBlock{padding: 82px 0 100px;background-color: #f7f7f7}
+        .plan-card{position:absolute}
+        .serviceBlockImage{position:relative;top: 4px;z-index: 12;left: 47px;}
+        .serviceBlockHeading{font-size: 44px !important;font-weight: 300 !important;line-height: 60px !important;text-align:center;color:#4a4a4a}
+        .gradientBox{height: 332px;width:30.58% !important;padding: 0 20px 32px;margin-top: 16px;text-align: center;border-radius: 8px;box-shadow: 0 6px 16px 4px rgba(0,0,0,.1);}
+        .gradientHeading{padding-top: 21px;margin:0px !important;font-size: 15px !important;font-weight: 500 !important;line-height: 22px !important;color: #fff !important;text-align: center;}
+        .gradientPara{padding-top: 8px;max-width: 240px;font-size: 14px;font-weight: 300;line-height: 20px;color: #fff;text-align: center;opacity: .9;}
+        .rubrikbtn{position: relative;z-index: 10;margin-top: 30px;background: #fff;color: #009dac;}
+        .getInTouchBlock{background-coloe:#fff;padding-top:82px}
+        .getInTouchHeading{line-height: 60px !Important;letter-spacing: -1.2px;margin-left: auto;margin-right: auto;font-size: 40px !Important;}
+        .getInTouchPara{margin: 7px auto 96px !important;color:#4a4a4a !important}
+        .countryBlockHeading{margin-top: 10px !important;font-size: 26px !important;color: #4a4a4a;font-weight: 300 !important;letter-spacing: -.75px;word-spacing: .75px;}
+        .countryPH,.countryPH:hover{font-family:gotham-light;color:#009DAC !important;}
+        .countryFlag{width: 28px;height: 20px}
+        .countryBlock{margin-bottom: 56px;}
+        .lastBlock{padding-top: 100px;padding-bottom: 100px;}
+        .lastBlockHeading{max-width: none;font-size: 44px !important;line-height: 44px !important;letter-spacing: -1.5px;margin:0 auto !important;}
+        .lastBlockPara{max-width: none;margin-top: 15px !important;font-size: 16px;letter-spacing: -.6px;}
+        .rubrik-btn:active,.rubrik-btn:focus,.countryPH:focus,.countryPH:active{text-decoration:none!important;}
+        .gradientBox>center>.rubrik-btn{background-color:#fff !important;color: #009dac !important;font-weight:500!important}
+        .gradientBox>center> #middleButton:hover{color: #fff !important;background-color: #009dac !important;}
+        .gradientBox>center>.rubrik-btn:hover{color: #fff !important;background-color: #283d50 !important;}
+        .topToGradient{position:relative;top:-16px;left:-47px;}
+        @media only screen and (min-device-width : 768px) and (max-device-width : 1024px) {
+        .rightBlockLogin{width:100% !important}
+        .imageBox{width: 29% !important;height:150px}
+        .globalSupportBlock>.container>div{margin-top:50px;}
+        .container>.gradientBox{width:29%!important;}
+        .rubrikFirstGradientButton{position:relative;bottom:-10px;}
+        .gradientPara+a{padding: 8px!important;margin-top:0px!important;}
+        .rightBlockLogin{margin-top:50px}
+        }
+        @media only screen and (min-device-width : 480px) and (max-device-width : 767px) {
+        .rightBlockLogin{width:100% !important}
+        .imageBox{width: 100% !important;}
+        .globalSupportBlock>.container>div{margin-top:50px;}
+        .container>.gradientBox{width:100%!important;}
+        .rubrikFirstGradientButton{position:relative;bottom:-10px;}
+        .gradientPara+a{padding: 8px!important;margin-top:0px!important;}
+        .customerServiceHeading+center+.imageBox{margin-left:19px !important;}
+        .rightBlockLogin{margin-top:50px}
+        }
+        @media only screen and (min-device-width : 320px) and (max-device-width : 479px) {
+        .gradientBox{margin-top:30px;}
+        .rightBlockLogin{width:100% !important}
+        .imageBox{width: 100% !important;}
+        .globalSupportBlock>.container>div{margin-top:50px;}
+        .container>.gradientBox{width:29%!important;}
+        .rubrikFirstGradientButton{position:relative;bottom:-10px;}
+        .gradientPara+a{padding: 8px!important;margin-top:0px!important;}
+        .customerServiceHeading+center+.imageBox{margin-left:19px !important;}
+        .rightBlockLogin{margin-top:50px}
+        }
+        @media only screen and (min-device-width : 480px) and (max-device-width : 767px) and (orientation : landscape){
+        .gradientBox{margin-top:60px;}
+        .rightBlockLogin{margin-top:50px}
+        }
+    </style>
+    <!--Shiva Change-->
+    <script>
+    function callModal(){
+        console.log(document.getElementById('modalPress').click());
+        document.getElementById('modalBox').style.top ="30%";
+        //return false;
+    }
+    </script>
+    <button type="button" id="modalPress" class="btn btn-primary"  data-backdrop="static" data-keyboard="false" data-toggle="modal" style="display:none;" data-target="#modalBox">
+    </button>
+    <!--Shiva Change END-->
+    <c:importbs />
+    <c:communitystyle />
+    <c:visualstrapblock >
+        <!--Shiva Change-->
+        <apex:outputPanel id="finalBlock">
+            <div id="modalBox" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        
+                        <div class="modal-body">
+                            {!msgInfo}<br/>
+                            <br />
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="window.location.href ='/';">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </apex:outputPanel>
+         <!--Shiva Change END-->
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad" style="background-color: #2E4E52">
+            <div class="container">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="Padding:20px 15px;">
+                        <span class="block"><a href="{!URLFOR($Page.CommunityHome)}"><apex:image url="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/logo.png')}" styleClass="headerlogo text-left" /></a></span>           
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad" style="background-image: url('{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/banner.png')}');background-repeat: no-repeat;background-size: cover;">
+            <div class="container">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 loginBlock">
+                        <div class="col-lg-7 col-md-12 col-sm-12 col-xs-12 nopad leftBlockLogin">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad">
+                                <p class="paragraphHeading">World-Class 24/7 Support Committed to Your Success</p>
+                                <p class="Paragraph">
+                                    Rubrik provides around-the-clock support and customized support to deliver the best customer experience. Our highly experienced Support Engineers deliver proactive, real-time professional services 24/7 to increase your stability, efficiency, and effectiveness. If you have a question, we have an answer.                                
+                                </p>
+                                <a class="rubrik-btn rubrik-btn--main  " target="_blank" href="https://www.rubrik.com/wp-content/uploads/2018/03/DATA-SHEET-Rubrik-Premium-Support.pdf" title="Download Data Sheet"> Download Data Sheet </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-5 col-md-12 col-sm-12 col-xs-12 nopad rightBlockLogin" style="">  
+                            <div class="Absolute-Center is-Responsive text-center">
+                                <apex:form id="loginForm" forceSSL="true">
+                                    <div class="container-fluid center">
+                                        <div class="row text-left">
+                                            <h2 Class="loginHeading">
+                                                Log In to Support Portal
+                                            </h2>
+                                            <div class="form-group login-form-group">
+                                                <label class="formLabel" for="username">
+                                                    Username
+                                                </label>
+                                                <apex:inputtext id="username" value="{!username}" styleClass="form-control block inputrubrik"/>
+                                            </div>
+                                            <div class="form-group login-form-group">
+                                                <label Class="formLabel" style="width:100%" for="pword">
+                                                    Password <a class="countryPH" style="float:right" href="https://support.rubrik.com/LightningForgotPassword" >Forgot Password?</a>
+                                                </label>
+                                                <apex:inputSecret id="pword" value="{!password}"  styleClass="form-control block inputrubrik"/>
+                                            </div>
+                                            <div class="rubrikcheckbox"> <input type="checkbox" style="width: 18px;height: 18px;-webkit-tap-highlight-color: transparent;}" name="hasRememberUn" id="hasRememberUn" /> <label for="hasRememberUn">Remember me</label></div>
+                                            <apex:commandlink action="{!login}" target="_top">
+                                                <apex:commandButton value="{!$Label.site.login_button}" style="width:100%;margin-top: 20px;" styleClass="btn rubrik-btn" id="loginButton"/>
+                                            </apex:commandLink>
+                                            <!--<apex:outputlink title="Cancel" value="{!$Page.ForgotPassword}" style="font-size:12px;line-height:40px;">Forgot Password?</apex:outputlink>-->                                   
+                                            <div class="form-group" style="padding:32px 0px;text-align:center;margin-bottom:0px">
+                                                <a href="https://support.rubrik.com/s/login/SelfRegister" class="countryPH"> Register for a login &nbsp;<apex:image url="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/SVG/arrow-link-right.svg')}" /></a>
+                                                <!--a href="mailto:support@rubrik.com?subject=Portal+Access+Request" class="countryPH" target="_blank"> Request account &nbsp;<apex:image url="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/SVG/arrow-link-right.svg')}" /></a-->
+                                            </div>
+                                        <!--<div class="form-group">
+                                            <hr style="noshade"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <apex:outputtext value="Need an Account?" styleclass="t1"/>&nbsp;&nbsp;&nbsp;
+                                            <apex:commandButton action="{!IF(CONTAINS($CurrentPage.URL, 'support.rubrik.com'), 'mailto:'&$Label.requestaccessemail,'https://rubrikpartnerregistration.secure.force.com/PartnerRegistrationForm')} " value="Request Access" style="width:143px; height:43px;" styleClass="btn rubrik-btn--transparent" id="request"/>                            
+                                        </div>-->
+                                        </div>
+                                    </div>   
+                                </apex:form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad containerCustomerService">
+            <div class="container">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+                    <h1 class="customerServiceHeading">
+                        Award-winning Customer Service
+                    </h1>
+                    <center>
+                        <p class="customerServiceParagraph">
+                            Rubrik is a recognized leader in customer satisfaction. Rubrik support professionals carry industry certifications in relevant enterprise applications with several years of highly trained experience. Along with our support portal, we deliver a comprehensive set of resources to ensure mutual success. 
+                        </p>
+                    </center>
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 nopad imageBox" style="margin-right:19px">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 nopad" style="padding-right: 15px;">
+                            <apex:image url="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/logo-support.jpg')}" styleClass="img-responsive text-left" />
+                        </div>
+                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 nopad">
+                            <h3 class="imageHeading">
+                                NorthFace ScoreBoard Award
+                            </h3>
+                            <p class="imagePara">
+                                Awarded excellence in customer service award.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 imageBox" style="margin-right:19px;margin-left:19px">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 nopad" style="padding-right: 15px;">
+                            <apex:image url="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/logo-the-association.jpg')}" styleClass="img-responsive text-left" />
+                        </div>
+                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 nopad">
+                            <h3 class="imageHeading">
+                                Association of Support Professionals
+                            </h3>
+                            <p class="imagePara">
+                                One of the ten best web support sites in 2017.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 imageBox" style="margin-left:19px">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 nopad" style="padding-right: 15px;">
+                            <apex:image url="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/CEMPRO_Logo.jpg')}" styleClass="img-responsive text-left" />
+                        </div>
+                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 nopad">
+                            <h3 class="imageHeading">
+                                CEMPRO
+                            </h3>
+                            <p class="imagePara">
+                                Certified customer experience management professional (CEMPROSM)
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad globalSupportBlock">
+            <div class="container">
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 nopad">
+                    <center>
+                        <div class="imageWrapper">
+                            <apex:image url="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/SVG/Icon_24hourService.svg')}" styleClass="img-responsive text-left" />                                                                                                
+                        </div>
+                        <h3 class="imageWrapperHeading" >
+                            24/7 Service
+                        </h3>
+                        <p class="imageWrapperDescription">
+                            Enterprise-class technical support provided 24/7, every day of the year.
+                        </p>
+                    </center>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 nopad">
+                    <center>
+                        <div class="imageWrapper">
+                            <apex:image url="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/SVG/Icon-globalsupport.svg')}" styleClass="img-responsive text-left" />                                                                                                
+                        </div>
+                        <h3 class="imageWrapperHeading" >
+                            Global Support
+                        </h3>
+                        <p class="imageWrapperDescription">
+                            Employee-based support engineers trained to meet the needs of any organization.
+                        </p>
+                    </center>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 nopad">
+                    <center>
+                        <div class="imageWrapper">
+                            <apex:image url="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/SVG/icon-real-time-monitoring.svg')}" styleClass="img-responsive text-left" />                                                                                                 
+                        </div>
+                        <h3 class="imageWrapperHeading" >
+                            Real-Time Monitoring
+                        </h3>
+                        <p class="imageWrapperDescription">
+                            Proactive monitoring of events and alerts to ensure high performance of your Rubrik. 
+                        </p>
+                    </center>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad serviceBlock">
+            <div class="container" style="max-width: 952px;">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" Style="padding-bottom:42px;">
+                    <h2 class="serviceBlockHeading" >
+                        Maximize Your Return with Add-On Services
+                    </h2>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 gradientBox" style="margin-right:19px;background-image: linear-gradient(213deg, #00cbde, #00b2c2);">
+                    <center>
+                        <div class="topToGradient">
+                            <svg class="plan-card" width="94px" height="101px" viewBox="0 0 94 101"> <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(-337.000000, -1988.000000)"> <g transform="translate(0.000000, 1737.000000)"> <g transform="translate(244.000000, 251.000000)"> <g transform="translate(93.000000, 0.000000)"> <path d="M9,1 L85,1 C89.418278,1 93,4.581722 93,9 L93,62.9649742 C93,65.5027277 91.7959293,67.8899653 89.7551285,69.3983833 L51.7551285,97.4853398 C48.9291214,99.5741276 45.0708786,99.5741276 42.2448715,97.4853398 L4.24487151,69.3983833 C2.2040707,67.8899653 1,65.5027277 1,62.9649742 L1,9 C1,4.581722 4.581722,1 9,1 Z" fill="#FFFFFF"></path> <path fill="#00b2c2" d="M8,-2.76101317e-30 L86,-3.55271368e-15 C90.418278,-4.36433818e-15 94,3.581722 94,8 L94,63.9134264 C94,66.4800689 92.7685148,68.8908617 90.6889583,70.3952217 L51.6889583,98.6079876 C48.8906986,100.632261 45.1093014,100.632261 42.3110417,98.6079876 L3.31104171,70.3952217 C1.23148524,68.8908617 2.16306051e-14,66.4800689 2.13162821e-14,63.9134264 L0,8 C-5.41083001e-16,3.581722 3.581722,-7.65539184e-17 8,-2.76101317e-30 Z M8,4 C5.790861,4 4,5.790861 4,8 L4,63.9134264 C4,65.1967477 4.61574262,66.402144 5.65552085,67.154324 L44.6555209,95.36709 C46.0546507,96.3792265 47.9453493,96.3792265 49.3444791,95.36709 L88.3444791,67.154324 C89.3842574,66.402144 90,65.1967477 90,63.9134264 L90,8 C90,5.790861 88.209139,4 86,4 L8,4 Z" id="crest-border" fill-rule="nonzero"></path> </g> </g> </g> </g> </svg>
+                            <apex:image url="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/SVG/1_icon.svg')}" styleClass="img-responsive serviceBlockImage text-left" />
+                        </div>
+                        <h3 class="gradientHeading">
+                            Proactive Add-On Support
+                        </h3>
+                        <p class="gradientPara">
+                            Proactive health monitoring and a designated point of contact to call on top of your premium support.
+                        </p>
+                        <a class="rubrikbtn rubrik-btn rubrik-btn--main rubrikFirstGradientButton" target="_blank" href="https://www.rubrik.com/wp-content/uploads/2018/03/DATA-SHEET-Rubrik-Proactive-Add-On-Support-Program.pdf" title="DOWNLOAD DATA SHEET"> DOWNLOAD DATA SHEET </a>
+                    </center>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 gradientBox" style="margin-left:19px;margin-right:19px;background-image: linear-gradient(213deg, #517088, #283d50);">
+                    <center>
+                        <div class="topToGradient">
+                            <svg class="plan-card" width="94px" height="101px" viewBox="0 0 94 101"> <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(-337.000000, -1988.000000)"> <g transform="translate(0.000000, 1737.000000)"> <g transform="translate(244.000000, 251.000000)"> <g transform="translate(93.000000, 0.000000)"> <path d="M9,1 L85,1 C89.418278,1 93,4.581722 93,9 L93,62.9649742 C93,65.5027277 91.7959293,67.8899653 89.7551285,69.3983833 L51.7551285,97.4853398 C48.9291214,99.5741276 45.0708786,99.5741276 42.2448715,97.4853398 L4.24487151,69.3983833 C2.2040707,67.8899653 1,65.5027277 1,62.9649742 L1,9 C1,4.581722 4.581722,1 9,1 Z" fill="#FFFFFF"></path> <path fill="#283d50" d="M8,-2.76101317e-30 L86,-3.55271368e-15 C90.418278,-4.36433818e-15 94,3.581722 94,8 L94,63.9134264 C94,66.4800689 92.7685148,68.8908617 90.6889583,70.3952217 L51.6889583,98.6079876 C48.8906986,100.632261 45.1093014,100.632261 42.3110417,98.6079876 L3.31104171,70.3952217 C1.23148524,68.8908617 2.16306051e-14,66.4800689 2.13162821e-14,63.9134264 L0,8 C-5.41083001e-16,3.581722 3.581722,-7.65539184e-17 8,-2.76101317e-30 Z M8,4 C5.790861,4 4,5.790861 4,8 L4,63.9134264 C4,65.1967477 4.61574262,66.402144 5.65552085,67.154324 L44.6555209,95.36709 C46.0546507,96.3792265 47.9453493,96.3792265 49.3444791,95.36709 L88.3444791,67.154324 C89.3842574,66.402144 90,65.1967477 90,63.9134264 L90,8 C90,5.790861 88.209139,4 86,4 L8,4 Z" id="crest-border" fill-rule="nonzero"></path> </g> </g> </g> </g> </svg>
+                            <apex:image url="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/SVG/2_icon.svg')}" styleClass="img-responsive serviceBlockImage text-left" />
+                        </div>
+                        <h3 class="gradientHeading">
+                            Enterprise Add-On Support
+                        </h3>
+                        <p class="gradientPara">
+                            All of the benefits of Proactive add-on support plus your own dedicated senior support engineer with an in-depth knowledge of your environment.
+                        </p>
+                        <a class="rubrik--btn rubrik-btn rubrik-btn--main " id="middleButton" target="_blank" href="https://www.rubrik.com/wp-content/uploads/2018/03/DATA-SHEET-Rubrik-Enterprise-Add-On-Support-Program.pdf" title="DOWNLOAD DATA SHEET"> DOWNLOAD DATA SHEET </a>
+                    </center>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 gradientBox" style="margin-left:19px;background-image: linear-gradient(213deg, #1898cd, #1487b4);">
+                    <center>
+                        <div class="topToGradient">
+                            <svg class="plan-card" width="94px" height="101px" viewBox="0 0 94 101"> <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(-337.000000, -1988.000000)"> <g transform="translate(0.000000, 1737.000000)"> <g transform="translate(244.000000, 251.000000)"> <g transform="translate(93.000000, 0.000000)"> <path d="M9,1 L85,1 C89.418278,1 93,4.581722 93,9 L93,62.9649742 C93,65.5027277 91.7959293,67.8899653 89.7551285,69.3983833 L51.7551285,97.4853398 C48.9291214,99.5741276 45.0708786,99.5741276 42.2448715,97.4853398 L4.24487151,69.3983833 C2.2040707,67.8899653 1,65.5027277 1,62.9649742 L1,9 C1,4.581722 4.581722,1 9,1 Z" fill="#FFFFFF"></path> <path fill="#1487b4" d="M8,-2.76101317e-30 L86,-3.55271368e-15 C90.418278,-4.36433818e-15 94,3.581722 94,8 L94,63.9134264 C94,66.4800689 92.7685148,68.8908617 90.6889583,70.3952217 L51.6889583,98.6079876 C48.8906986,100.632261 45.1093014,100.632261 42.3110417,98.6079876 L3.31104171,70.3952217 C1.23148524,68.8908617 2.16306051e-14,66.4800689 2.13162821e-14,63.9134264 L0,8 C-5.41083001e-16,3.581722 3.581722,-7.65539184e-17 8,-2.76101317e-30 Z M8,4 C5.790861,4 4,5.790861 4,8 L4,63.9134264 C4,65.1967477 4.61574262,66.402144 5.65552085,67.154324 L44.6555209,95.36709 C46.0546507,96.3792265 47.9453493,96.3792265 49.3444791,95.36709 L88.3444791,67.154324 C89.3842574,66.402144 90,65.1967477 90,63.9134264 L90,8 C90,5.790861 88.209139,4 86,4 L8,4 Z" id="crest-border" fill-rule="nonzero"></path> </g> </g> </g> </g> </svg>
+                            <apex:image url="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/SVG/3_icon.svg')}" styleClass="img-responsive serviceBlockImage text-left" />
+                        </div>
+                        <h3 class="gradientHeading">
+                            Consulting Services 
+                        </h3>
+                        <p class="gradientPara">
+                            Comprehensive portfolio of installation services to help your organization optimize deployment and realize full benefits of API integrations.
+                        </p>
+                        <a class="rubrikbtn rubrik-btn rubrik-btn--main" style="padding: 15px 20px;" target="_blank" href="https://www.rubrik.com/wp-content/uploads/2018/03/DATA-SHEET-Rubrik-and-Certified-Partners-Consulting-Services.pdf" title="DOWNLOAD DATA SHEET"> DOWNLOAD DATA SHEET </a>
+                    </center>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad getInTouchBlock">
+            <div class="container">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <center>
+                        <h2 class="getInTouchHeading">
+                            Get In Touch
+                        </h2>
+                        <p Class="getInTouchPara">Call us by dialing any of the numbers below, or email us at <a class="countryPH" style="font-family:gotham-Light;color: #009DAC;" href="mailto:support@rubrik.com">support@rubrik.com</a></p>
+                    </center>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 countryBlock">
+                    <center>
+                        <apex:image url="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/SVG/fed.svg')}" styleClass="img-responsive countryFlag" />
+                        <h4 class="countryBlockHeading">U.S. Federal Team</h4>
+                        <p>
+                            <a class="countryPH" href="tel:0018552675053">+1 855-267-5053</a>
+                        </p>
+                    </center>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 countryBlock">
+                    <center>
+                        <apex:image url="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/SVG/flag-w-w.svg')}" styleClass="img-responsive countryFlag" />
+                        <h4 class="countryBlockHeading">International</h4>
+                        <p>
+                            <a class="countryPH" href="tel:1-650-300-4199">+1-650-300-4199</a>
+                        </p>
+                    </center>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 countryBlock">
+                    <center>
+                        <apex:image url="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/SVG/u-s.svg')}" styleClass="img-responsive countryFlag" />
+                        <h4 class="countryBlockHeading">United States</h4>
+                        <p>
+                            <a class="countryPH" href="tel:855-910-8820">+1-855-910-8820</a>
+                        </p>
+                    </center>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 countryBlock">
+                    <center>
+                        <apex:image url="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/SVG/g-b.svg')}" styleClass="img-responsive countryFlag" />
+                        <h4 class="countryBlockHeading">United Kingdom</h4>
+                        <p>
+                            <a class="countryPH" href="tel:00442891042392">+44 28 9104 2392</a>
+                        </p>
+                    </center>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 countryBlock">
+                    <center>
+                        <apex:image url="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/SVG/j-p.svg')}" styleClass="img-responsive countryFlag" />
+                        <h4 class="countryBlockHeading">Japan</h4>
+                        <p>
+                            <a class="countryPH" href="tel:0081345100505">+81 3-4510-0505</a>
+                        </p>
+                    </center>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 countryBlock">
+                    <center>
+                        <apex:image url="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/SVG/n-l.svg')}" styleClass="img-responsive countryFlag" />
+                        <h4 class="countryBlockHeading">Netherlands</h4>
+                        <p>
+                            <a class="countryPH" href="tel:0031852083018">+31 85 208 3018</a>
+                        </p>
+                    </center>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 countryBlock">
+                    <center>
+                        <apex:image url="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/SVG/a-u.svg')}" styleClass="img-responsive countryFlag" />
+                        <h4 class="countryBlockHeading">Australia</h4>
+                        <p>
+                            <a class="countryPH" href="tel:0061285039970">+61 2 8503 9970</a>
+                        </p>
+                    </center>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 countryBlock">
+                    <center>
+                        <apex:image url="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/SVG/France_Flag.png')}" styleClass="img-responsive countryFlag" />
+                        <h4 class="countryBlockHeading">France</h4>
+                        <p>
+                            <a class="countryPH" href="tel:0033974595559">+33 9 74 59 55 59</a>
+                        </p>
+                    </center>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 countryBlock">
+                    <center>
+                        <apex:image url="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/SVG/n-z.svg')}" styleClass="img-responsive countryFlag" />
+                        <h4 class="countryBlockHeading">New Zealand</h4>
+                        <p>
+                            <a class="countryPH" href="tel:006498880790">+64 9-888 0790</a>
+                        </p>
+                    </center>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 countryBlock">
+                    <center>
+                        <apex:image url="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/SVG/s-g.svg')}" styleClass="img-responsive countryFlag" />
+                        <h4 class="countryBlockHeading">Singapore</h4>
+                        <p>
+                            <a class="countryPH" href="tel:006531639306">+65 3163 9306</a>
+                        </p>
+                    </center>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 countryBlock">
+                    <center>
+                        <apex:image url="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/SVG/br.svg')}" styleClass="img-responsive countryFlag" />
+                        <h4 class="countryBlockHeading">Brazil</h4>
+                        <p>
+                            <a class="countryPH" href="tel:551149330478">+55 11 4933-0478</a>
+                        </p>
+                    </center>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 countryBlock">
+                    <center>
+                        <apex:image url="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/SVG/mx.svg')}" styleClass="img-responsive countryFlag" />
+                        <h4 class="countryBlockHeading">Mexico</h4>
+                        <p>
+                            <a class="countryPH" href="tel:525541637230">+52 55 4163 7230</a>
+                        </p>
+                    </center>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 countryBlock">
+                    <center>
+                        <apex:image url="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/SVG/cl.svg')}" styleClass="img-responsive countryFlag" />
+                        <h4 class="countryBlockHeading">Chile</h4>
+                        <p>
+                            <a class="countryPH" href="tel:56226665899">+56 2 2666 5899</a>
+                        </p>
+                    </center>
+                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 countryBlock">
+                    <center>
+                        <apex:image url="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/SVG/flag-w-w.svg')}" styleClass="img-responsive countryFlag" />
+                        <h4 class="countryBlockHeading">United Arab Emirates</h4>
+                        <p>
+                            <a class="countryPH" href="tel:9718000320565">+971 800 0320565</a>
+                        </p>
+                    </center>
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center" >
+                    <p>
+                        View our <a class="countryPH" href="https://www.rubrik.com/wp-content/uploads/2018/03/Rubrik-Support-Services-Policy.pdf" target="_blank">Software Support Services Policy</a>, <br/><a class="countryPH" href="https://www.rubrik.com/wp-content/uploads/2019/02/Rubrik-Hardware-Warranty-and-Product-Support-Services-Policy.pdf" target="_blank">Hardware Warranty and Product Support Services Policy</a>, <br/><a class="countryPH" href="https://www.rubrik.com/wp-content/uploads/2018/04/Rubrik-Privacy-Statement-Polaris-April-26-2018.pdf" target="_blank">Rubrik Polaris Privacy Policy</a>, and our <a class="countryPH" href="https://www.rubrik.com/wp-content/uploads/2018/06/Rubrik-EULA.pdf" target="_blank">EULA</a>. 
+                    </p>
+                    <hr style="margin-top:40px;"/>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad lastBlock">
+            <div class="container text-center">
+                <h2 class="lastBlockHeading">Don’t Backup. <strong>Go Forward.</strong></h2>
+                <p class="lastBlockPara">
+                    All Your Apps. Instantly Available.
+                </p>
+                <a class="rubrik-btn rubrik-btn--main" target="_blank" href="http://pages.rubrik.com/Web-Evaluate-Rubrik-Request.html" title=""> Try Rubrik </a>
+            </div>
+        </div>
+        <!--Shiva Change-->
+        <apex:outputText value="{!jsScript}" escape="false"/>
+        <!--Shiva Change END-->
+        <c:sitefooter />
+    </c:visualstrapblock>
+</apex:page>

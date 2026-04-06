@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Create_Case</fullName>
+    <availability>online</availability>
+    <displayType>button</displayType>
+    <linkType>javascript</linkType>
+    <masterLabel>Create Case</masterLabel>
+    <openType>onClickJavaScript</openType>
+    <protected>false</protected>
+    <url>{!REQUIRESCRIPT(&quot;/support/console/48.0/integration.js&quot;)}
+
+var currentTabId = &apos;&apos;;
+if (sforce.console.isInConsole()) {
+    console.log(&quot;inside isinconsole&quot;);
+    sforce.console.getEnclosingPrimaryTabId(openSubtab);
+}
+else {
+    window.open(&quot;/apex/CreateCaseOrOpportunityPage?id={!Cluster_Issue__c.Id}&amp;object=Case&quot;, &apos;_blank&apos;);
+}
+
+function openSubtab(result) {
+    console.log(&quot;inside openSubtab&quot;);
+    //Now that we have the primary tab ID, we can open a new subtab in it
+    var primaryTabId = result.id;
+    sforce.console.getEnclosingTabId(getCurrentTabId);
+    sforce.console.openSubtab(primaryTabId, &quot;/apex/CreateCaseOrOpportunityPage?id={!Cluster_Issue__c.Id}&amp;object=Case&amp;tabId=&quot; + currentTabId, true,
+        &apos;Case&apos;, null, setOpenedTabIcon, &apos;salesforceSubtab&apos;);
+}
+
+function getCurrentTabId(result) {
+    currentTabId = result.id;
+}
+
+function setOpenedTabIcon(result) {
+    console.log(&quot;inside setOpenedTabIcon&quot;);
+    if (result.success) {
+        sforce.console.setTabIcon(&apos;/resource/Case_Tab_Icon&apos;, result.id, null);
+    } else {
+        //alert(&apos;Tab icon cannot be set!&apos;);
+    }
+}</url>
+</WebLink>

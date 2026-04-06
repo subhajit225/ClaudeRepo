@@ -1,0 +1,17 @@
+<aura:component extends="c:PC_UtilityCmp" implements="forceCommunity:availableForAllPageTypes" access="global" controller="PC_TilesController">
+    <aura:attribute name="helpLinks" type="object"/>
+    <aura:attribute name="imageType" type="string" default="HelpLink"/>
+    <aura:attribute name="helpLinkHeader" type="string"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <div class="slds-grid slds-grid_vertical">
+        <div class="slds-align_absolute-center slds-text-title_bold slds-m-top_small">{!v.helpLinkHeader}</div>
+        <aura:iteration items="{!v.helpLinks}" var="links">
+            <div class="slds-col slds-align_absolute-center slds-p-top_medium">
+                <p>
+                    <a id="{!links.Id}" aura:id="helpLabelId" onclick="{!c.handleClick}">{!links.Name}</a>
+                </p>          
+            </div>
+        </aura:iteration>
+    </div>
+</aura:component>

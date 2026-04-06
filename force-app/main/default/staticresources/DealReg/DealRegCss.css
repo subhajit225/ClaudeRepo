@@ -1,0 +1,124 @@
+.form {
+    background-color: #fff;
+    line-height: 1.5em;
+    color: #000;
+    border: 1px solid #aeb0b6;
+    -webkit-border-radius: 7px;
+    -moz-border-radius: 7px;
+    border-radius: 7px;
+    padding: 0.2em 0.3em;
+    box-shadow: inset 1px 1px 4px 1px #ddd;
+    min-height: 0.9em;
+    width: 150px;
+    resize:none;
+    z-index: 1;
+}
+.title {
+	color: #0000ff;
+	font-size: 18px;
+	font-weight: bold;
+	font-family: inherit;
+	padding-left: 7px;
+	padding-top: 0px;
+	height: 2em;
+}
+.requiredMark {
+	color: #F00;
+	width: 10px;
+	vertical-align: top;
+	text-align: right;
+	display: block !important;
+}
+.button {
+    color: #fff;
+    border: 1px solid #a3bee2;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    background-color: #779dd5;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#779dd5), to(#5186cb));
+    background-image: -webkit-linear-gradient(top, #779dd5, #5186cb);
+    background-image: -moz-linear-gradient(top, #779dd5, #5186cb);
+    background-image: linear-gradient(to bottom, #779dd5, #5186cb);
+    padding: 0.4em 1em;
+    font-size: 1em;
+    margin-left: 0px;
+}
+.dealRErrorArrowWrap {
+width: 16px;
+height: 8px;
+overflow: hidden;
+position: inherit;
+background: transparent url("callout-arrow-up-red.png") top center no-repeat;
+top: 0;
+left: 5px;
+z-index: 100;
+margin-left: 5px;
+}
+.dealRErrorArrowWrap {
+top: -8px;
+}
+.dealRErrorArrow {
+background-color: #e51b00;
+border: 1px solid #9f1300;
+border-right: none;
+border-bottom: none;
+display: inline-block;
+height: 16px;
+-webkit-transform: rotate(45deg);
+-moz-transform: rotate(45deg);
+transform: rotate(45deg);
+-ms-transform: rotate(45deg);
+width: 16px;
+margin-top: 5px;
+}
+/** These two styles are for browsers that dont support css transforms */
+.dealRArrowImage {
+background: transparent url("callout-arrow-up-red.png")top center no-repeat;
+bottom: -7px;
+}
+.dealRErrorArrow {
+display: none;
+}
+.dealRErrorMsg {
+display: block;
+// margin-top: 7px;
+background-color: #e51b00;
+background-image: -webkit-linear-gradient(#e51b00 43%, #ba1600 100%);
+background-image: -moz-linear-gradient(#e51b00 43%, #ba1600 100%);
+background-image: linear-gradient(#e51b00 43%, #ba1600 100%);
+background-image: -ms-linear-gradient(#e51b00 43%, #ba1600 100%);
+border: 1px solid #9f1300;
+-webkit-border-radius: 6px;
+border-radius: 6px;
+-webkit-box-shadow: rgba(0,0,0,0.65) 0 2px 7px, inset #ff3c3c 0 1px 0px;
+box-shadow: rgba(0,0,0,0.65) 0 2px 7px, inset #ff3c3c 0 1px 0px;
+color: #f3f3f3;
+font-size: 1em;
+line-height: 1.2em;
+max-width: 16em;
+padding: 0.4em 0.6em;
+text-shadow: #901100 0 -1px 0;
+}
+input:focus {
+    outline: none;
+}
+select:focus {
+    outline: none;
+}
+textarea:focus {
+    outline: none;
+}
+button:focus {
+    outline: none;
+}
+th, td {
+    vertical-align: top;
+}
+.label {
+    width: 50;
+    vertical-align: top;
+    padding-left: 10px;
+    padding-bottom: 10px;
+    
+}

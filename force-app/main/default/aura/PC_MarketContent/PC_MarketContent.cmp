@@ -1,0 +1,30 @@
+<aura:component extends="c:PC_UtilityCmp" implements="forceCommunity:availableForAllPageTypes" access="global" controller="PC_MarketContentDetails">
+    
+     <aura:attribute name="Contents" type="Object"/>
+     <aura:attribute name="name" type="string"/>
+     <aura:attribute name="selectedTag" type="string"/>
+    <aura:attribute name="url" type="string" default="contentdetails"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doinit}"/>
+    
+    
+    <lightning:card title="{!v.selectedTag}" class="slds-m-top_medium">
+        <lightning:layout multipleRows="true">            
+            <aura:iteration items="{!v.Contents}" var="Content" start="0" end="4">
+                <lightning:layoutItem size="12"  smallDeviceSize="6" mediumDeviceSize="3" largeDeviceSize="3" padding="around-small">
+                    <c:PC_ContentView id="{!Content.Id}"></c:PC_ContentView>
+                </lightning:layoutItem>
+            </aura:iteration>
+            <aura:if isTrue="{!not(empty(v.Contents))}">
+                <lightning:layoutItem size="12"  smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" padding="around-small">
+                    <div class="slds-text-title_caps"><b>More Content..</b></div>
+                </lightning:layoutItem>                
+                <aura:iteration items="{!v.Contents}" var="Content" start="4" >
+                    <lightning:layoutItem size="12"  smallDeviceSize="6" mediumDeviceSize="3" largeDeviceSize="3" padding="around-small">
+                        <a id="{!Content.Id}" aura:id="contentId" onclick="{!c.PreviewContent}">{!Content.Title} </a>
+                    </lightning:layoutItem>
+                </aura:iteration> 
+            </aura:if>
+        </lightning:layout>
+    </lightning:card>
+</aura:component>

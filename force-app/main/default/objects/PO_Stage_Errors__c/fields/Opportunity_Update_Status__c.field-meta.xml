@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Opportunity_Update_Status__c</fullName>
+    <label>Opportunity Update Status</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Opportunity Update Not Required</fullName>
+                <default>false</default>
+                <label>Opportunity Update Not Required</label>
+            </value>
+            <value>
+                <fullName>Opportunity Update Completed</fullName>
+                <default>false</default>
+                <label>Opportunity Update Completed</label>
+            </value>
+            <value>
+                <fullName>Opportunity Update Failed</fullName>
+                <default>false</default>
+                <label>Opportunity Update Failed</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

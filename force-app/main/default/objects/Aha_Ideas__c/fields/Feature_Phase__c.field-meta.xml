@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Feature_Phase__c</fullName>
+    <description>CS21-3714: Aha - Salesforce Discrepancies in tracking ideas/RFEs</description>
+    <label>Feature Phase</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>GA</fullName>
+                <default>false</default>
+                <label>GA</label>
+            </value>
+            <value>
+                <fullName>Discovery</fullName>
+                <default>false</default>
+                <label>Discovery</label>
+            </value>
+            <value>
+                <fullName>Requirements (PRD, Mock, Eng Reviews)</fullName>
+                <default>false</default>
+                <label>Requirements (PRD, Mock, Eng Reviews)</label>
+            </value>
+            <value>
+                <fullName>Execution (Eng Dev, Test)</fullName>
+                <default>false</default>
+                <label>Execution (Eng Dev, Test)</label>
+            </value>
+            <value>
+                <fullName>Beta</fullName>
+                <default>false</default>
+                <label>Beta</label>
+            </value>
+            <value>
+                <fullName>Rollout (Optional Phase)</fullName>
+                <default>false</default>
+                <label>Rollout (Optional Phase)</label>
+            </value>
+            <value>
+                <fullName>Cancelled</fullName>
+                <default>false</default>
+                <label>Cancelled</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

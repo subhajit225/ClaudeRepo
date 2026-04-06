@@ -1,0 +1,219 @@
+<!-- This page overrides the new record button for the customer object Case Attachment
+Objective: creates a new case attachment record, makes the callout to s3, bring back the record url
+-->
+
+<apex:page controller="AC_S3_Case_Attachment2"
+           cache="false" standardStylesheets="false" sidebar="false"
+           showheader="false" title="Upload File - Rubrik Community" applyBodyTag="false">
+    
+    <script type="text/javascript" src="https://sdk.amazonaws.com/js/aws-sdk-2.7.20.min.js"></script>
+
+    <script type="text/javascript">
+
+        var FileBucketName  = 'support-case-attachments';
+    var bucketRegion = 'us-west-1';
+    var bucketDomain = 'https://s3-us-west-1.amazonaws.com/';
+    var creds = new AWS.Credentials('{!$Setup.Customer_Support_Secrets__c.AWS_Key__c}','{!$Setup.Customer_Support_Secrets__c.AWS_Token__c}', '');          
+    var CaseFolderName = '{!caseNumber}';
+    var securityNum = Math.floor((Math.random() * 1000000) + 1);
+      
+      AWS.config.update({
+          region: bucketRegion,
+          credentials: creds              
+      });
+      
+      AWS.config.credentials.get(function(err) {
+          if (err) {
+              console.log(err);
+              alert('Error Connecting to File Services');
+              }
+          
+          else console.log(AWS.config.credentials);
+      });
+        
+      var s3 = new AWS.S3({
+          apiVersion: '2006-03-01',
+          params: {Bucket: FileBucketName }
+      });                   
+
+    function uploadtoS3() {
+        //alert('upload call');
+        //document.getElementById('result_nav').innerHTML = "test";
+        var files = document.getElementById('fileuploadinput').files;        
+        
+        if (!files.length) {
+            return alert('Please choose a file to upload first.');
+        }
+        
+        document.getElementById('result_nav').innerHTML = "Upload Status: Attempting"; 
+        var file = files[0];
+        var fileSize=file.size;
+        var fileName = file.name;
+                
+        fileSize = fileSize.toString();        
+        
+        var caseid = '{!caseid}';
+        //alert(caseid);
+        
+        var FolderKey = encodeURIComponent(CaseFolderName) + '/';
+        
+        var fileKey = FolderKey + securityNum +'/' + fileName;
+        var uploadStatus = "unknown";
+        var fullPath = bucketDomain + FileBucketName+"/"+fileKey;
+        var options = {partSize: 5 * 1024 * 1024, queueSize: 4};
+        var request = s3.upload({
+            Key: fileKey,
+            Body: file,
+            ACL: 'public-read'
+        },options, function(err, data) {
+            //call back if uploaded really fast, not very useful
+            if (err) {
+
+                //return alert('There was an error uploading: ', err.message);
+            }else{
+            //alert('Success.');
+
+                }
+        });
+        request.on('httpUploadProgress', function (progress) {
+            //console.log(progress.loaded + " of " + progress.total + " bytes");
+            //document.getElementById('result_nav').innerHTML = "Upload Status: "+ ((progress.loaded / progress.total)*100).toFixed(4)+"% <br/><button onclick='request.abort();'>Abort</button><br/>Uploads are in 40 mb chunks, Abort will trigger on the next chucnk)"; 
+            document.getElementById('result_nav').innerHTML = "Upload Status: "+ ((progress.loaded / progress.total)*100).toFixed(4)+"%";
+            document.getElementById('result_nav').innerHTML = "Upload Status: "+ ((progress.loaded / progress.total)*100).toFixed(4)+"%";
+            document.getElementById('progressbar1').style.width = ((progress.loaded / progress.total)*100).toFixed(4)+"%";
+
+
+        });
+        request.send(function(err, data) {
+            if (err) {
+                uploadStatus = "Upload Failed";
+                passFileSizeToController2(caseid, fileSize, fileName, fullPath, uploadStatus); 
+                //alert('call from error');
+                document.getElementById('result_nav').innerHTML = "Upload Status: Failed"; 
+                //return alert('There was an error uploading: ', err.message);
+            }else{
+                //alert('Success.');
+                
+                //insert record into SFDC
+                uploadStatus = "Upload Successful";
+                //alert('call from success');
+                passFileSizeToController2(caseid, fileSize, fileName, fullPath, uploadStatus);
+               document.getElementById('result_nav').innerHTML = "Upload Status: Successful. You will be redirected to the Case in 5 seconds. | <a href=/"+caseid+"?attach=new"+">Back to Support Case"; 
+               // document.getElementById('result_nav').innerHTML = "Upload Status: Successful | <a href=/"+caseid +">Back to Support Case"; 
+            
+              //setTimeout(redirect, 5000); //uncomment here to set a 5 second redirect
+            }
+        });                    
+    
+    }    
+    
+    
+            function redirect(){
+            window.location.href = '/customers/'+'{!$CurrentPage.parameters.id}';
+        }
+
+
+    
+        
+        function passFileSizeToController2(caseid, fileSize, fileName, fullPath, uploadStatus) {
+            Visualforce.remoting.timeout = 120000;
+        
+            Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.AC_S3_Case_Attachment2.Customer_Case_Attach2}', 
+                caseid, fileSize, fileName, fullPath, uploadStatus,
+                function(result, event){
+                    if (event.status) {
+                        //success
+                        console.log('invoke success');
+                    } else if (event.type === 'exception') {
+                        console.log('exception: '+ event.message);
+                        
+                    } else {
+                        console.log('exception: '+ event.message);                        
+                    }
+                }, 
+                {escape: true}
+            );
+        
+        }        
+        
+    </script>
+    <c:visualstrapblock >
+
+        <!--start header-->
+        <c:siteheader ></c:siteheader>
+        
+        <!--end Header-->
+
+        <!--start tabs-->
+        <!--<c:tabs ></c:tabs>-->
+        <!--end tabs-->
+        <style>
+            .minheight{
+             min-height: 450px !important;
+            }
+        </style>
+            
+        
+         <!--<apex:form >-->
+
+        <!--start the Container-->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 minheight">
+
+                 <h3>Upload a File to Case {!caseNumber}</h3> 
+                    <div class="col-md-6">
+                        <apex:pageBlock >
+                            <apex:pageMessages escape="false"></apex:pageMessages><br/>              
+                        <div id='upload_control'>                
+                            <input id="fileuploadinput" type="file" />
+                            <br/>
+                            <div class="progress">
+                          <div id="progressbar1" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="40"
+                          aria-valuemin="0" aria-valuemax="100" style="width:0%">
+                          </div>
+                        </div> 
+                            <div id="result_nav" style="font-size:11px;">&nbsp;Upload Status: Select File</div>
+                          <br/>
+                                                                <button Class="btn rubrik-btn" onclick="uploadtoS3()">Upload</button>&nbsp;
+                                                                <button Class="btn rubrik-btn" onclick="location.href='{!URLFOR($Page.CaseView)}?id={!$CurrentPage.parameters.id}'">Return to Case</button>
+
+                                    
+                                     
+                            <br/>                     
+                        </div>
+                        <script type="text/javascript">
+                        var div = document.getElementById('upload_control');
+                        var divcontrol = '{!caseNumber}';
+                        
+                        if (divcontrol!='') {
+                            div.style.display = 'block';
+                        }
+                        else {
+                            div.style.display = 'none';
+                        }
+                        </script>
+                        <br/>
+                        
+                        
+                        </apex:pageBlock>
+                        
+
+                        
+                </div>
+        
+        </div>
+      
+
+
+            </div>
+        </div>
+        <!--End the Container-->
+         <!--</apex:form>-->
+        <!--start the footer-->
+        <c:sitefooter ></c:sitefooter>
+        
+    </c:visualstrapblock>           
+                
+</apex:page>

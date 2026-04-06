@@ -1,0 +1,65 @@
+<template>
+	<template if:true={hasAccess}>
+	<div class="cardContainer">
+		<lightning-card variant="narrow">
+					<div class="slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12">
+					<div class="header" onclick={toggleSection}>
+						<lightning-icon size="xx-small" icon-name={iconName}></lightning-icon>
+						<span class="headerfont" >Heads Up to Support</span>
+					</div>
+					<template if:true={CaseDetailsSectionHide}>
+					<template if:true={accountId}>
+					<div class="cardContent">
+						<hr class="horizontalLine" />
+					</div>
+						<div class="iconSection">
+							<template for:each={imageData} for:item="image">
+								<div key={image.id} class="tooltip-container">
+									<img key={image.name} data-name={image.name} data-id={image.id} onclick={handleExpandAllClick} src={image.url} alt={image.name}   />
+									<div key={image.name} data-id={image.id} class="tooltip slds-nubbin_bottom-left">
+										<lightning-formatted-rich-text value={image.tooltipdata}>
+										</lightning-formatted-rich-text>
+									</div>
+									<div class='iconName' key={image.name}>{image.name}</div>
+								</div>
+							</template>
+						</div>
+						<template if:true={isLoading}>
+							<lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+						</template>
+						<lightning-accordion allow-multiple-sections-open={allowMultipleSectionsOpen}
+							active-section-name={activeSections}>
+							<template for:each={categoryMessageList} for:item="categoryMessage">
+								<lightning-accordion-section key={categoryMessage} name={categoryMessage.category}
+									label={categoryMessage.category} class="accordionSection"
+									onsectiontoggle={handleSectionToggle}>
+									<ul class="message-list">
+										<template for:each={categoryMessage.messages} for:item="message">
+											<li class="message-list-items" key={message.message}>
+												<div class="slds-grid">
+													<lightning-formatted-rich-text class="rich-text" value={message.message}>
+													</lightning-formatted-rich-text>
+													<div class="dropdown">
+														<lightning-button-menu icon-size="x-small" variant="Container"
+															class="dropMenu" alternative-text="Show menu"
+															onselect={handleMenuSelect}>
+															<lightning-menu-item value={message.id}
+																label="Request Manual Review"></lightning-menu-item>
+														</lightning-button-menu>
+													</div>
+												</div>
+											</li>
+										</template>
+									</ul>
+								</lightning-accordion-section>
+							</template>
+						</lightning-accordion>
+					</template>
+					<template if:false={accountId}>
+					</template>
+					</template>
+					</div>
+		</lightning-card>
+	</div>
+	</template>
+</template>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ExpiringthisQuarter__c</fullName>
+    <formula>IF(
+AND(
+  CASE(
+    MONTH(End_Date__c),
+      1,&quot;Q4&quot;,
+      2,&quot;Q1&quot;,
+      3,&quot;Q1&quot;,
+      4,&quot;Q1&quot;,
+      5,&quot;Q2&quot;,
+      6,&quot;Q2&quot;,
+      7,&quot;Q2&quot;,
+      8,&quot;Q3&quot;,
+      9,&quot;Q3&quot;,
+      10,&quot;Q3&quot;,
+      11,&quot;Q4&quot;,
+      12,&quot;Q4&quot;,&quot;ERROR&quot;)
+=
+  CASE(
+      MONTH(Today()),
+        1,&quot;Q4&quot;,
+        2,&quot;Q1&quot;,
+        3,&quot;Q1&quot;,
+        4,&quot;Q1&quot;,
+        5,&quot;Q2&quot;,
+        6,&quot;Q2&quot;,
+        7,&quot;Q2&quot;,
+        8,&quot;Q3&quot;,
+        9,&quot;Q3&quot;,
+        10,&quot;Q3&quot;,
+        11,&quot;Q4&quot;,
+        12,&quot;Q4&quot;,&quot;ERROR&quot;),
+IF(MONTH(End_Date__c)=12,YEAR(End_Date__c)+1,YEAR(End_Date__c)) 
+= 
+IF(MONTH(Today())=12,YEAR(Today())+1,YEAR(Today()))),
+TRUE,FALSE)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Expiring this Quarter</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

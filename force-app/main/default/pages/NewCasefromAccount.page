@@ -1,0 +1,76 @@
+<apex:page standardController="Case" extensions="NewCasefromAccountClass" docType="html-5.0" lightningStylesheets="true">        
+     <apex:includeLightning />
+    <apex:includeScript value="/support/console/46.0/integration.js"/>
+
+    <div id="CaseContainer" />
+    
+    <script>
+    $Lightning.use("c:LGT_CaseApp", function() {
+       $Lightning.createComponent("c:LGT_NewCase",
+                                  { 
+                                      recordId : "{!recordId}",
+                                      isClassic: true,
+                                      vfpUITheme: "{!$User.UIThemeDisplayed}",
+                                      currentUserId : "{!$User.Id}"
+                                  },
+                                  "CaseContainer",
+                                  function(component) {
+
+                                  });
+    });
+
+    function receiveMessage(event){
+        var primaryId ; 
+        // alert('receiveMessage:: '+event.data);
+        if (event.data.startsWith('500')){
+            let recordId = event.data;
+            let isSubtab = false;
+            if(event.data.includes('subtab')){
+                isSubtab = true;
+                recordId = recordId.split('-')[0];
+            }
+            if (sforce.console.isInConsole()) {
+                //debugger;
+                // sforce.console.getEnclosingTabId(closeSubtab);
+                // sforce.one.navigateToSObject(event.data, "detail");
+                
+                // From primary tab
+                sforce.console.getEnclosingTabId(function(enclosingResult){
+                    let currentTabId = enclosingResult.id;
+                    sforce.console.getEnclosingPrimaryTabId(function(primaryResult){
+                        if(isSubtab){
+                            // SUBTAB View: When New Case Created from Parent (Account/Contact) Record detail + Clone Case from Case record
+                            sforce.console.openSubtab(primaryResult.id, '/'+recordId, true, '', currentTabId, '', '');
+                        }else{
+                            // PRIMARY Tab view: When New Case Created from Case Tab
+                            sforce.console.openPrimaryTab(primaryResult.id, '/'+recordId, true, '', '', '');
+                        }
+                    });
+                });
+            } 
+            // Classic Non-Console View
+            else {
+                // sforce.one.navigateToSObject(recordId, "detail");
+                window.location = '/'+recordId;
+            }
+            return;
+        }
+        
+        if (event.data == "close"){
+            sforce.console.getEnclosingTabId(function(result2){
+                    var tabId = result2.id;
+                    sforce.console.closeTab(tabId);
+                });
+            return;
+        }   
+        var openSuccess = function openSuccess(result) {
+            //Report whether opening the new tab was successful
+        };
+    }
+    var closeSubtab = function closeSubtab(result) {
+        var tabId = result.id;
+        sforce.console.closeTab(tabId);
+    };
+    window.addEventListener("message", receiveMessage, false);
+    </script>
+</apex:page>

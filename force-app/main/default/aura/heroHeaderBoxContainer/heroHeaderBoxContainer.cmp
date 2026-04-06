@@ -1,0 +1,173 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes"  controller="Util" access="global">
+    <aura:attribute name="showTraining" type="boolean" default="false"/>
+    <aura:attribute name="showMenu" type="boolean" default="false"/>
+    <aura:attribute name="showForums" type="boolean" default="false"/>
+    <aura:attribute name="showCalendly" type="boolean" default="false"/>
+    <aura:attribute name="calendlyURl" type="String"/>
+    <aura:attribute name="UserRecord" type="Object"/>
+    <force:recordData aura:id="recordLoader"
+                      recordId="{!$SObjectType.CurrentUser.Id}"
+                      fields="Account.Tabs_Visibility__c,Name,ProfileId,Email,Account.Name"
+                      targetFields="{!v.UserRecord}"
+                      />
+    <aura:handler name="change" value="{!v.UserRecord}" action="{!c.TabsVisible}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doinit}"/>
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <div class="slds-grid containersize  slds-align_absolute-center ">
+        <div class="slds-grid slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12  slds-size--12-of-12 slds-wrap nopad ">
+            <aura:if isTrue="{!v.showMenu}">
+                        <aura:if isTrue="{!v.UserRecord.ProfileId != $Label.c.Trial_Edge_Profile}">
+                            <aura:if isTrue="{!v.showForums}">
+                                <div class='slds-grid slds-large-size_3-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12  slds-size--12-of-12 ContainerBox' id='casesBlock'>
+                                    <div class="slds-medium-size_3-of-12 slds-small-size_5-of-12 imageBlock1 block slds-size--5-of-12 "> <img  src="{!$Resource.RubrikCustomerCommunity + '/RubrikCommunity/Images/my_cases.png'}" Class=" imageIcon"/></div>
+                                    <div class="slds-medium-size_3-of-12 slds-small-size_5-of-12 imageBlock2 block slds-size--5-of-12 "><img  src="{!$Resource.RubrikCustomerCommunity + '/RubrikCommunity/Images/my_cases_hover.png'}" Class=" imageIcon"/></div>
+                                    <div class="slds-medium-size_9-of-12 slds-small-size_7-of-12 slds-size--7-of-12 Icontext mycasescls  block">
+                                        <div class="herogroups"><a class="underlinenone" href="topiccatalog">Forums</a></div>
+                                        <a href="topiccatalog" class="herolinks">View topics &#8250;</a><br/>
+                                        <!-- Updated above line and commented below line by Shiva-->
+                                        <!--a href="{!URLFOR($Action.Case.NewCase,null,null,false)}" class="herolinks">Create New Case &#8250;</a><br/-->
+                                        <a href="topiccatalog" class="herolinks">Submit topic &#8250;</a>
+                                    </div>
+                                </div>
+                            </aura:if>
+                            <div class="{!if(v.showForums,'slds-grid slds-large-size_3-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12  slds-size--12-of-12 ContainerBox','slds-grid slds-large-size_4-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12  slds-size--12-of-12 ContainerBox')}" id='casesBlock'>
+                                <div class="slds-medium-size_3-of-12 slds-small-size_5-of-12 imageBlock1 block slds-size--5-of-12 "> <img  src="{!$Resource.RubrikCustomerCommunity + '/RubrikCommunity/Images/my_cases.png'}" Class=" imageIcon"/></div>
+                                <div class="slds-medium-size_3-of-12 slds-small-size_5-of-12 imageBlock2 block slds-size--5-of-12 "><img  src="{!$Resource.RubrikCustomerCommunity + '/RubrikCommunity/Images/my_cases_hover.png'}" Class=" imageIcon"/></div>
+                                <div class="slds-medium-size_9-of-12 slds-small-size_7-of-12 slds-size--7-of-12 Icontext mycasescls  block">
+                                <div class="herogroups"><a class="underlinenone" href="knowledgecategoryhome">Knowledge base</a></div>
+                                <a href="search-results-page" class="herolinks">Search KB &#8250;</a><br/>
+                                    <!-- Updated above line and commented below line by Shiva-->
+                                    <!--a href="{!URLFOR($Action.Case.NewCase,null,null,false)}" class="herolinks">Create New Case &#8250;</a><br/-->
+                                <a href="knowledgecategoryhome" class="herolinks">Manage subscriptions &#8250;</a>
+                                </div>
+                            </div>
+
+                            <div class="{!if(v.showForums,'slds-grid slds-large-size_3-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12  slds-size--12-of-12 ContainerBox','slds-grid slds-large-size_4-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12  slds-size--12-of-12 ContainerBox')}" id='casesBlock'>
+                                <div class="slds-medium-size_3-of-12 slds-small-size_5-of-12 imageBlock1 block slds-size--5-of-12 "> <img  src="{!$Resource.RubrikCustomerCommunity + '/RubrikCommunity/Images/my_cases.png'}" Class=" imageIcon"/></div>
+                                <div class="slds-medium-size_3-of-12 slds-small-size_5-of-12 imageBlock2 block slds-size--5-of-12 "><img  src="{!$Resource.RubrikCustomerCommunity + '/RubrikCommunity/Images/my_cases_hover.png'}" Class=" imageIcon"/></div>
+                                <div class="slds-medium-size_9-of-12 slds-small-size_7-of-12 slds-size--7-of-12 Icontext mycasescls  block">
+                                    <div class="herogroups"><a class="underlinenone" href="my-cases">My Cases</a></div>
+                                    <div class="{!v.UserRecord.ProfileId != $Label.c.Support_Portal_Read_only_user_profileId ? 'slds-show' : 'slds-hide'}">
+                                    <a href="newcases" class="herolinks">Create New Case &#8250;</a><br/>
+                                    </div>
+                                    <!-- Updated above line and commented below line by Shiva-->
+                                    <!--a href="{!URLFOR($Action.Case.NewCase,null,null,false)}" class="herolinks">Create New Case &#8250;</a><br/-->
+                                    <a href="my-cases" class="herolinks">Manage My Cases &#8250;</a>
+                                </div>
+                            </div>
+
+                            <div class="{!if(v.showForums,'slds-grid slds-large-size_3-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12  slds-size--12-of-12 ContainerBox','slds-grid slds-large-size_4-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12  slds-size--12-of-12 ContainerBox')}" id='ideasBlock'>
+                                <div class="slds-medium-size_3-of-12 slds-small-size_5-of-12 slds-size--5-of-12 imageBlock1 block "><img  src="{!$Resource.RubrikCustomerCommunity + '/RubrikCommunity/Images/ideas.png'}" Class="imageIcon"/></div>
+                                <div class="slds-medium-size_3-of-12 slds-small-size_5-of-12 slds-size--5-of-12 imageBlock2 block "><img  src="{!$Resource.RubrikCustomerCommunity + '/RubrikCommunity/Images/ideas_hover.png'}" Class="imageIcon"/></div>
+                                <div class="slds-medium-size_9-of-12 slds-small-size_6-of-12 slds-size--7-of-12 Icontext  herolinks block"><div class="herogroups"><a class="underlinenone" href="idealist">Ideas</a></div>
+                                    <a href="idealist?newIdea=true" Class="herolinks">Submit an Idea &#8250;</a><br/>
+                                    <a href="idealist" Class="herolinks ">View Ideas &#8250;</a>
+                                </div>
+                            </div>
+                            <aura:if isTrue="{!v.showTraining}">
+
+                                <div class='slds-grid slds-large-size_3-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12  slds-size--12-of-12 ContainerBox' id='casesBlock'>
+                                    <div class="slds-medium-size_3-of-12 slds-small-size_5-of-12 imageBlock1 block slds-size--5-of-12 "> <img  src="{!$Resource.RubrikCustomerCommunity + '/RubrikCommunity/Images/my_cases.png'}" Class=" imageIcon"/></div>
+                                    <div class="slds-medium-size_3-of-12 slds-small-size_5-of-12 imageBlock2 block slds-size--5-of-12 "><img  src="{!$Resource.RubrikCustomerCommunity + '/RubrikCommunity/Images/my_cases_hover.png'}" Class=" imageIcon"/></div>
+                                    <div class="slds-medium-size_9-of-12 slds-small-size_7-of-12 slds-size--7-of-12 Icontext mycasescls  block">
+                                        <div class="herogroups"><a class="underlinenone" href="{!$Label.c.Docebo_Customer_URL}" target="_blank">Training</a></div>
+                                        <!-- Updated above line and commented below line by Shiva-->
+                                        <!--a href="{!URLFOR($Action.Case.NewCase,null,null,false)}" class="herolinks">Create New Case &#8250;</a><br/-->
+                                        <a href="{!$Label.c.Docebo_Customer_URL}" target="_blank" class="herolinks">View Trainings &#8250;</a>
+                                    </div>
+                                </div>
+                            </aura:if>
+                            <div class="{!if(v.showTraining,'slds-grid slds-large-size_3-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12  slds-size--12-of-12 ContainerBox','slds-grid slds-large-size_4-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12  slds-size--12-of-12 ContainerBox')}" id='casesBlock'>
+                                <div class="slds-medium-size_3-of-12 slds-small-size_5-of-12 imageBlock1 block slds-size--5-of-12 "> <img  src="{!$Resource.RubrikCustomerCommunity + '/RubrikCommunity/Images/my_cases.png'}" Class=" imageIcon"/></div>
+                                <div class="slds-medium-size_3-of-12 slds-small-size_5-of-12 imageBlock2 block slds-size--5-of-12 "><img  src="{!$Resource.RubrikCustomerCommunity + '/RubrikCommunity/Images/my_cases_hover.png'}" Class=" imageIcon"/></div>
+                                <div class="slds-medium-size_9-of-12 slds-small-size_7-of-12 slds-size--7-of-12 Icontext mycasescls  block">
+                                <div class="herogroups"><a class="underlinenone" href="myproducts">My Products</a></div>
+                                    <a href="myproducts" class="herolinks">View Clusters &#8250;</a><br/>
+                                    <!-- Updated above line and commented below line by Shiva-->
+                                    <!--a href="{!URLFOR($Action.Case.NewCase,null,null,false)}" class="herolinks">Create New Case &#8250;</a><br/-->
+                                    <!-- CS21-1071: Support Portal: Read only user profile -->
+                                    <aura:if isTrue="{!v.UserRecord.ProfileId != $Label.c.Support_Portal_Read_only_user_profileId}">
+                                        <a href="registerproduct" class="herolinks">Register product &#8250;</a>
+                                    </aura:if>
+                                </div>
+                            </div>
+                            <div class="{!if(v.showTraining,'slds-grid slds-large-size_3-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12  slds-size--12-of-12 ContainerBox','slds-grid slds-large-size_4-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12  slds-size--12-of-12 ContainerBox')}" id='videosBlock'>
+                                <div class="slds-medium-size_3-of-12 slds-small-size_5-of-12 slds-size--5-of-12 imageBlock1 block "><img  src="{!$Resource.RubrikCustomerCommunity + '/RubrikCommunity/Images/video.png'}" styleClass="imageIcon"/></div>
+                                <div class="slds-medium-size_3-of-12 slds-small-size_5-of-12 slds-size--5-of-12 imageBlock2 block "><img  src="{!$Resource.RubrikCustomerCommunity + '/RubrikCommunity/Images/video_hover.png'}" styleClass="imageIcon"/></div>
+                                <div class="slds-medium-size_9-of-12 slds-small-size_6-of-12 slds-size--7-of-12 Icontext  block"><div class="herogroups"><a class="underlinenone" href="kblistpage?categoryType_Article=Videos">Videos</a></div>
+                                    <a href="kblistpage?categoryType_Article=Videos" Class="herolinks">View Videos &#8250;</a><br/>
+                                    <a value=""  Class="herolinks"></a>
+                                    <!-- <a href="/customers/Knowledge?categoryType_Article=All" Class="herolinks ">View New Articles &#8250;</a> -->
+                                </div>
+                            </div>
+                            <div class="{!if(v.showTraining,'slds-grid slds-large-size_3-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12  slds-size--12-of-12 ContainerBox','slds-grid slds-large-size_4-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12  slds-size--12-of-12 ContainerBox')}" id='dowloadsBlock'>
+                                <div class="slds-medium-size_3-of-12 slds-small-size_5-of-12 slds-size--5-of-12 imageBlock1 block "><img  src="{!$Resource.RubrikCustomerCommunity + '/RubrikCommunity/Images/download.png'}" styleClass="imageIcon"/></div>
+                                <div class="slds-medium-size_3-of-12 slds-small-size_5-of-12 slds-size--5-of-12 imageBlock2 block "><img  src="{!$Resource.RubrikCustomerCommunity + '/RubrikCommunity/Images/download_hover.png'}" styleClass="imageIcon"/></div>
+                                <div class="slds-medium-size_9-of-12 slds-small-size_6-of-12 slds-size--7-of-12 Icontext block"><div class="herogroups"><a class="underlinenone" href="documentation">Docs &amp; Downloads</a></div>
+                                    <a href="documentation" Class="herolinks">View Downloads &#8250;</a><br/>
+                                    <a href="documentation" Class="herolinks">View Documentation &#8250;</a><br/>
+                                </div>
+                            </div>
+                            <aura:set attribute="else">
+                                <div class="slds-grid slds-large-size_12-of-12 slds-medium-size_8-of-12 slds-small-size_12-of-12  slds-size--12-of-12 slds-wrap nopad ">
+                                    <div class="slds-grid slds-large-size_3-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12  slds-size--12-of-12 ContainerBox" id='casesBlock'>
+                                        <div class="slds-medium-size_3-of-12 slds-small-size_5-of-12 imageBlock1 block slds-size--5-of-12 "> <img  src="{!$Resource.RubrikCustomerCommunity + '/RubrikCommunity/Images/my_cases.png'}" Class=" imageIcon"/></div>
+                                        <div class="slds-medium-size_3-of-12 slds-small-size_5-of-12 imageBlock2 block slds-size--5-of-12 "><img  src="{!$Resource.RubrikCustomerCommunity + '/RubrikCommunity/Images/my_cases_hover.png'}" Class=" imageIcon"/></div>
+                                        <div class="slds-medium-size_9-of-12 slds-small-size_7-of-12 slds-size--7-of-12 Icontext mycasescls  block">
+                                        <div class="herogroups"><a class="underlinenone" href="knowledgecategoryhome">Knowledge base</a></div>
+                                            <a href="search-results-page" class="herolinks">Search KB &#8250;</a><br/>
+                                            <!-- Updated above line and commented below line by Shiva-->
+                                            <!--a href="{!URLFOR($Action.Case.NewCase,null,null,false)}" class="herolinks">Create New Case &#8250;</a><br/-->
+                                            <a href="knowledgecategoryhome" class="herolinks">Manage subscriptions &#8250;</a>
+                                        </div>
+                                    </div>
+                                    <div class='slds-grid slds-large-size_3-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12  slds-size--12-of-12 ContainerBox' id='videosBlock'>
+                                        <div class="slds-medium-size_3-of-12 slds-small-size_5-of-12 slds-size--5-of-12 imageBlock1 block "><img  src="{!$Resource.RubrikCustomerCommunity + '/RubrikCommunity/Images/video.png'}" styleClass="imageIcon"/></div>
+                                        <div class="slds-medium-size_3-of-12 slds-small-size_5-of-12 slds-size--5-of-12 imageBlock2 block "><img  src="{!$Resource.RubrikCustomerCommunity + '/RubrikCommunity/Images/video_hover.png'}" styleClass="imageIcon"/></div>
+                                        <div class="slds-medium-size_9-of-12 slds-small-size_6-of-12 slds-size--7-of-12 Icontext  block"><div class="herogroups"><a class="underlinenone" href="kblistpage?categoryType_Article=Videos">Videos</a></div>
+                                            <a href="kblistpage?categoryType_Article=Videos" Class="herolinks">View Videos &#8250;</a><br/>
+                                            <a value=""  Class="herolinks"></a>
+                                            <!-- <a href="/customers/Knowledge?categoryType_Article=All" Class="herolinks ">View New Articles &#8250;</a> -->
+                                        </div>
+                                    </div>
+                                    <div class='slds-grid slds-large-size_3-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12  slds-size--12-of-12 ContainerBox' id='dowloadsBlock'>
+                                        <div class="slds-medium-size_3-of-12 slds-small-size_5-of-12 slds-size--5-of-12 imageBlock1 block "><img  src="{!$Resource.RubrikCustomerCommunity + '/RubrikCommunity/Images/download.png'}" styleClass="imageIcon"/></div>
+                                        <div class="slds-medium-size_3-of-12 slds-small-size_5-of-12 slds-size--5-of-12 imageBlock2 block "><img  src="{!$Resource.RubrikCustomerCommunity + '/RubrikCommunity/Images/download_hover.png'}" styleClass="imageIcon"/></div>
+                                        <div class="slds-medium-size_9-of-12 slds-small-size_6-of-12 slds-size--7-of-12 Icontext block"><div class="herogroups"><a class="underlinenone" href="documentation">Downloads</a></div>
+                                            <a href="documentation" Class="herolinks">View Downloads &#8250;</a><br/>
+                                            <a value=""  Class="herolinks"></a>
+                                        </div>
+                                    </div>
+                                    <div class='slds-grid slds-large-size_3-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12  slds-size--9-of-12 ContainerBox' id='documentationsBlock'>
+                                        <div class="slds-medium-size_3-of-12 slds-small-size_5-of-12 slds-size--5-of-12 imageBlock1 block"><img  src="{!$Resource.RubrikCustomerCommunity + '/RubrikCommunity/Images/documentations.png'}" styleClass="imageIcon" /></div>
+                                        <div class="slds-medium-size_3-of-12 slds-small-size_5-of-12 slds-size--5-of-12 imageBlock2 block"><img  src="{!$Resource.RubrikCustomerCommunity + '/RubrikCommunity/Images/docmentation_hover.png'}" styleClass="imageIcon" /></div>
+                                        <div class="slds-medium-size_9-of-12 slds-small-size_6-of-12 slds-size--7-of-12 Icontext block"><div class="herogroups"><a class="underlinenone" href="documentation">Documentation</a></div>
+                                            <a href="documentation" Class="herolinks">View Documentation &#8250;</a><br/>
+                                        </div>
+                                    </div>
+                                </div>
+                    </aura:set>
+                </aura:if>
+            </aura:if>
+        </div>
+    </div>
+   
+    <aura:if isTrue="{!v.showCalendly}">
+        <br/><br/>
+        <center>
+            <div class="slds-box " style="width:80%; border-radius: 50px;text-align: left;margin-top:2rem;border-width:3px; padding:2rem;">
+                <b class="calendlyHeading" style="font-size:20px;">Get to know Rubrik with personal setup</b><br/>
+                <p Class="calendlyBody">We’re excited to help you get started with your deployment. To ensure a smooth and personalized experience, we invite you to schedule an 
+                online, one-on-one session with our Customer Success Management (CSM) team. We’ll guide you through the initial setup process, answer
+                any questions you may have, and help you maximize your investment in Rubrik. We look forward to connecting with you soon.</p>
+                                   <br/>
+                <center>
+                    <a href="{!v.calendlyURl}" style="padding: 5px 10px; font-size: 16px; text-align: center; text-decoration: none; background-color: #009dac; color: white; border-radius: 50px; border: 2px solid #009dac; transition: background-color 0.3s, border-color 0.3s;">
+                        Schedule your session
+                    </a>
+                </center><br/>
+                <p Class="calendlyBody"><b class="calendlyHeading">Note: </b>Rubrik uses Calendly to schedule meetings with our CSM team. Please reference the <a href="https://calendly.com/legal/privacy-notice" Class="herolinks"  style="color: #009dac !important;">Calendly privacy policy.</a></p>
+            </div>
+        </center>
+    </aura:if>
+</aura:component>

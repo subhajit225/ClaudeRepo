@@ -1,0 +1,161 @@
+<template>
+ <template if:true={showGptWidget}>
+    <div class="gptSection su__loading-view" data-id="gpt">
+        <div class={DeviceInfo}>
+            <div class={suSnippet}>
+                <div class="su__w-100 su__typing-animation su__position-relative">
+                    <span class={scrollableAreaStyles} data-id="myElement">
+                        <template if:true={gptLoader}>
+                            <div class="su__d-flex">
+                                <svg class="su__align_loading_svg" id="Group_18641" data-name="Group 18641" xmlns="http://www.w3.org/2000/svg"
+                                   width="16.422" height="17.243" viewBox="0 0 16.422 17.243">
+                                   <g id="Group_18524" data-name="Group 18524">
+                                       <path id="Path_18304" data-name="Path 18304"
+                                           d="M16.5,6.978l.653-1.466L18.6,4.851a.421.421,0,0,0,0-.762L17.15,3.427,16.5,1.953a.411.411,0,0,0-.752,0l-.653,1.466-1.454.662a.421.421,0,0,0,0,.762l1.446.662.653,1.474A.417.417,0,0,0,16.5,6.978ZM9.921,8.235,8.607,5.3a.822.822,0,0,0-1.5,0L5.79,8.235,2.9,9.567a.843.843,0,0,0,0,1.525L5.79,12.423,7.1,15.355a.822.822,0,0,0,1.5,0l1.314-2.932,2.892-1.332a.843.843,0,0,0,0-1.525Zm5.816,5.445-.653,1.466-1.446.662a.421.421,0,0,0,0,.762l1.446.662.653,1.474a.411.411,0,0,0,.752,0l.653-1.466,1.454-.662a.421.421,0,0,0,0-.762l-1.446-.662L16.5,13.68A.417.417,0,0,0,15.737,13.68Z"
+                                           transform="translate(-2.415 -1.707)" fill="#1770d4" />
+                                   </g>
+                                </svg>                               
+                                    
+                                <div class="gen-text">Generating...</div>
+                            </div>
+                            <main>
+                                <ul class="o-vertical-spacing o-vertical-spacing--l">
+                                    <li class="blog-post o-media">
+                                        <div class="o-media__body">
+                                            <div class="o-vertical-spacing">
+                                                <p>
+                                                    <span class="skeleton-box" style="width:100%;"></span>
+                                                    <span class="skeleton-box" style="width:100%;"></span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </main>
+                        </template>
+                        <template if:false={errorObject.show}>
+                            <template if:true={suGPTSaysBoolean}>
+                                <template if:false={gptLoader}>
+                                    <div class={getErrorClass}>
+                                        <span class={isError} data-id="gptString" onmouseover={handleHoverStates}>
+                                            <!-- {suGPTSays}                                    -->
+                                        </span>
+                                            <template if:true={getFeedbackIcons}>
+                                                <div class={feedbackIconsCss}>
+                                                    <template if:true={textCopied}>
+                                                        <span class="su__copy_text">Copied</span>
+                                                        <span class="su__align_copyIcon">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="14.848" height="11.37"
+                                                                viewBox="0 0 14.848 11.37">
+                                                                <path id="Icon_ionic-ios-checkmark" data-name="Icon ionic-ios-checkmark"
+                                                                    d="M25.2,13.537l-1.214-1.248a.261.261,0,0,0-.193-.083h0a.25.25,0,0,0-.193.083l-8.412,8.474L12.131,17.7a.267.267,0,0,0-.386,0l-1.227,1.227a.275.275,0,0,0,0,.393l3.861,3.861a1.221,1.221,0,0,0,.807.393,1.28,1.28,0,0,0,.8-.379h.007l9.219-9.267A.3.3,0,0,0,25.2,13.537Z"
+                                                                    transform="translate(-10.434 -12.206)" fill="#206b05" />
+                                                            </svg>
+                                                        </span>
+                                                    </template>
+                                                    <template if:false={textCopied}>
+                                                        <div class="su__align_copyIcon su-cursor-pointer su__position-relative">
+                                                            <div class="su__copy_tooltip">
+                                                            <span>Copy to clipboard</span>
+                                                            </div>
+                                                            <svg data-sub={suGPTSays} class="su__copy_icon_svg su__gpt-feedback"
+                                                                onclick={copyFeedbackContent} xmlns="http://www.w3.org/2000/svg" width="12.603"
+                                                                height="15.754" viewBox="0 0 12.603 15.754">
+                                                                <path id="svgexport-11"
+                                                                    d="M10.3,3.575A1.575,1.575,0,0,0,8.726,5.151h3.151A1.575,1.575,0,0,0,10.3,3.575Zm-2.729,0a3.152,3.152,0,0,1,5.459,0H14.24A2.363,2.363,0,0,1,16.6,5.939v9.453a2.363,2.363,0,0,1-2.363,2.363H6.363A2.363,2.363,0,0,1,4,15.391V5.939A2.363,2.363,0,0,1,6.363,3.575ZM7.151,5.151H6.363a.788.788,0,0,0-.788.788v9.453a.788.788,0,0,0,.788.788H14.24a.788.788,0,0,0,.788-.788V5.939a.788.788,0,0,0-.788-.788h-.788a1.575,1.575,0,0,1-1.575,1.575H8.726A1.575,1.575,0,0,1,7.151,5.151Z"
+                                                                    transform="translate(-4 -2)" fill="#b7b7b7" fill-rule="evenodd" />
+                                                            </svg></div>
+                                                        
+                                                    </template>
+                                                    <c-s-u_-Feedback-Modal feedback-modal={feedbackModal}
+                                                        thumbs-up-feedback-button-one={thumbsUpFeedbackButtonOne}
+                                                        thumbs-up-feedback-button-two={thumbsUpFeedbackButtonTwo}
+                                                        thumbs-up-image={thumbsUpImage} thumbs-down-image={thumbsDownImage}
+                                                        event-code={eventCode}></c-s-u_-Feedback-Modal>
+                                                    <template if:false={hideThumbsUpButton}>
+                                                        <span class={isthumbsUpActive} onclick={openFeedbackModalThumbsUp}>
+                                                            <svg class="su__thumbsup_icon_svg su__gpt-feedback"
+                                                                xmlns="http://www.w3.org/2000/svg" width="13.17" height="14.573"
+                                                                viewBox="0 0 13.17 14.573">
+                                                                <path
+                                                                    d="M6.654.367A.729.729,0,0,1,7.377.006l.331.041A2.915,2.915,0,0,1,10.131,3.8l-.4,1.3h.523a2.915,2.915,0,0,1,2.812,3.681l-.994,3.643A2.915,2.915,0,0,1,9.26,14.573H2.186A2.186,2.186,0,0,1,0,12.387v-5.1A2.186,2.186,0,0,1,2.186,5.1H3.643A.527.527,0,0,0,4.1,4.835ZM5.1,13.115H9.26a1.457,1.457,0,0,0,1.406-1.074L11.659,8.4a1.457,1.457,0,0,0-1.406-1.841H8.744a.729.729,0,0,1-.7-.943l.691-2.247A1.458,1.458,0,0,0,7.674,1.519L5.366,5.558a1.984,1.984,0,0,1-.994.861v5.968A.729.729,0,0,0,5.1,13.115ZM2.915,6.558v5.829a2.182,2.182,0,0,0,.124.729H2.186a.729.729,0,0,1-.729-.729v-5.1a.729.729,0,0,1,.729-.729Z"
+                                                                    transform="translate(0 0)" fill={isthumbsUpActiveSvgFill}
+                                                                    fill-rule="evenodd" />
+                                                            </svg>
+                                                        </span>
+                                                    </template>
+                                                    <template if:false={hideThumbsDownButton}>
+                                                        <span class={isthumbsDownActive} onclick={openFeedbackModalThumbsDown}>
+                                                            <svg class="su__thumbsdown_icon_svg su__gpt-feedback"
+                                                                xmlns="http://www.w3.org/2000/svg" width="13.17" height="14.573"
+                                                                viewBox="0 0 13.17 14.573">
+                                                                <path id="svgexport-12"
+                                                                    d="M6.654.367A.729.729,0,0,1,7.377.006l.331.041A2.915,2.915,0,0,1,10.131,3.8l-.4,1.3h.523a2.915,2.915,0,0,1,2.812,3.681l-.994,3.643A2.915,2.915,0,0,1,9.26,14.573H2.186A2.186,2.186,0,0,1,0,12.387v-5.1A2.186,2.186,0,0,1,2.186,5.1H3.643A.527.527,0,0,0,4.1,4.835ZM5.1,13.115H9.26a1.457,1.457,0,0,0,1.406-1.074L11.659,8.4a1.457,1.457,0,0,0-1.406-1.841H8.744a.729.729,0,0,1-.7-.943l.691-2.247A1.458,1.458,0,0,0,7.674,1.519L5.366,5.558a1.984,1.984,0,0,1-.994.861v5.968A.729.729,0,0,0,5.1,13.115ZM2.915,6.558v5.829a2.182,2.182,0,0,0,.124.729H2.186a.729.729,0,0,1-.729-.729v-5.1a.729.729,0,0,1,.729-.729Z"
+                                                                    transform="translate(13.17 14.573) rotate(180)"
+                                                                    fill={isthumbsDownActiveSvgFill} fill-rule="evenodd" />
+                                                            </svg>
+                                                        </span>
+                                                    </template>
+                                                </div>
+                                            </template>
+                                    </div>
+                                    <template if:true={showMore}>
+                                        <div class="su__show_more_container su__show-more-bg">
+                                            <span class="su__show-more-gpt su__padding_bottom-5" onclick={expandGPTWidget}>
+                                                Show More
+                                            </span>
+                                            <span class="su__arrow-down su__margin-bottom-6" onclick={expandGPTWidget}></span>
+                                        </div>
+                                    </template>
+                                </template>
+                           </template>
+                        </template>
+                       <template if:false={gptLoader}>
+                            <template if:true={errorObject.show}>
+                                <div class="retry-section">
+                                    <p class="su__gpt-ErrorMsgs">
+                                        {errorObject.message}
+                                    </p>
+                                    <template if:true={errorObject.showRetry}>
+                                        <button class="retry-btn su__cursor" onclick={gptRoutine}>
+                                            Retry
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 12.001 12">
+                                                <path id="refresh_FILL0_wght300_GRAD0_opsz24"
+                                                    d="M187.572-768a5.838,5.838,0,0,1-4.279-1.743A5.774,5.774,0,0,1,181.54-774a5.778,5.778,0,0,1,1.753-4.257A5.836,5.836,0,0,1,187.572-780a5.933,5.933,0,0,1,2.669.624,5.707,5.707,0,0,1,2.094,1.761V-779.4a.579.579,0,0,1,.174-.427.586.586,0,0,1,.43-.172.585.585,0,0,1,.43.172.579.579,0,0,1,.173.427v3.569a.7.7,0,0,1-.209.515.705.705,0,0,1-.518.208h-3.588a.585.585,0,0,1-.43-.173.579.579,0,0,1-.173-.428.578.578,0,0,1,.173-.427.586.586,0,0,1,.43-.172H191.8a4.719,4.719,0,0,0-1.763-1.825,4.754,4.754,0,0,0-2.465-.667,4.666,4.666,0,0,0-3.418,1.4,4.617,4.617,0,0,0-1.407,3.4,4.617,4.617,0,0,0,1.407,3.4,4.666,4.666,0,0,0,3.418,1.4,4.727,4.727,0,0,0,2.567-.732,4.733,4.733,0,0,0,1.765-1.954.63.63,0,0,1,.336-.305.645.645,0,0,1,.452-.01.524.524,0,0,1,.344.32.526.526,0,0,1-.016.462,5.969,5.969,0,0,1-2.205,2.487,5.893,5.893,0,0,1-3.243.933Z"
+                                                    transform="translate(-181.54 779.999)" fill="#fff" />
+                                            </svg>
+                                        </button>
+                                    </template>
+                                </div>
+                            </template>
+                        </template>
+                   </span>
+                               
+                               <!-- <template if:true={showArticleLinks}>
+                                                       <div class="separator"></div>
+                                                   </template> -->
+                    <!-- <div class={getArticlesStyles}>           
+                           <span class="article_source">Sources:</span>
+                           <template for:each={articleListPreview} for:item="article">
+                               <span class="gpt_article tooltip" key={article.title}>
+                                   <a href={article.href} data-href={article.href} target="_blank" title={article.title}>{article.title}</a>
+                                   <span class="tooltiptext">{article.hoverTitle}</span>  
+                               </span>
+                           </template>
+                           
+                           <template if:true={showTogglerButton}>
+                               <div class="show-more-less" onclick={toggleArticles}>{toggleArticleText}</div>
+                           </template>
+                   </div> -->
+               </div>
+               </div>
+               <div class={getSnippetHeadingStyles}>
+                   <span class="snippet-container">
+                       SearchUnifyGPT
+                       <span class="snippet-sub-text">TM</span>
+                   </span>
+               </div>
+           </div>
+       </div>
+    </template>
+   </template>

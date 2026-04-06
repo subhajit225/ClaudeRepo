@@ -1,0 +1,39 @@
+<apex:page controller="BatchRunController" action="{!messages}" lightningStylesheets="true">
+    <apex:slds rendered="{!$User.UITheme != 'Theme3'}"/>
+<style>
+.detailList{
+margin: 10px;
+}
+</style>
+<apex:form >
+<apex:actionPoller rerender="msg,last,next" interval="5" action="{!messages}"/>
+<apex:pageBlock mode="edit">
+    <apex:pageblocksection title="Booking Batch" columns="1"> 
+    <apex:commandButton action="{!process}" value="Run Batch" rerender="msg" id="btn" style="margin: 11px;" status="loading"/>
+    <apex:actionStatus id="loading">
+    <apex:facet name="start" > Loading..
+                <img src="/img/loading.gif" />                    
+            </apex:facet>
+        </apex:actionStatus>
+        <apex:outputText value="{!message}" id="msg" label="Booking job execution status : "/>
+        <apex:outputText value="{!LastRunDetails}" id="last" label="Job last run at :"/>
+        <apex:outputText value="{!nextRunDetails}" id="next" label="Job next run scheduled at :"/> 
+    </apex:pageblockSection>      
+</apex:pageBlock>
+
+<apex:actionPoller rerender="msgSn,lastSn,nextSn" interval="5" action="{!messagesSync}"/>
+<apex:pageBlock mode="edit">
+    <apex:pageblocksection title="Booking Sync Batch" columns="1"> 
+    <apex:commandButton action="{!processSync}" value="Run Sync Batch" rerender="msgSn" id="btnSn" style="margin: 11px;" status="loading" rendered="{!$Profile.Name == 'System Administrator'}"/>
+    <apex:actionStatus id="loading">
+    <apex:facet name="start" > Loading..
+                <img src="/img/loading.gif" />                    
+            </apex:facet>
+        </apex:actionStatus>
+        <apex:outputText value="{!messageSync}" id="msgSn" label="Sync job execution status : "/>
+        <apex:outputText value="{!LastRunDetailsSync}" id="lastSn" label="Job last run at :"/>
+        <apex:outputText value="{!nextRunDetailsSync}" id="nextSn" label="Job next run scheduled at :"/> 
+    </apex:pageblockSection>      
+</apex:pageBlock>
+</apex:form>
+</apex:page>

@@ -1,0 +1,17 @@
+<!--
+    Name: csCaseTransferRequest
+    JIRA : CS21-482 - Transfer Request Button - Automation
+    Created By : Veera Gandi
+-->
+<template>
+    <p class="title">Case# {caseNumber} - Transfer Request Form </p>
+    <!--<div if:true={showDecision}>-->
+        <c-cs-case-transfer-request-decision record-id={recordId} decision={decision} transfer-status={transferStatus}
+            show-submitted-screens={showSubmittedScreens} show-transfer-screens={showTransferScreens}
+            customer-communication-frequency-value={customerCommunicationFrequencyValue}>
+        </c-cs-case-transfer-request-decision>
+   <!--</div>-->
+   <!-- <div if:true={showSuccess}>
+        <c-cs-case-transfer-request-success message={message}></c-cs-case-transfer-request-success>
+    </div>-->
+</template>

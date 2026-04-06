@@ -1,0 +1,74 @@
+<apex:page standardController="Cluster_Issue__c" extensions="CreateCaseOrOpportunityController">
+    <apex:includeScript value="/support/console/48.0/integration.js"/>
+    <script type="text/javascript">
+        var primaryTabId = '';
+        var recordId = '';
+        var currentTabId = '';
+
+        window.onload = function() {
+            createCaseOrOpportunityRecord();
+        };
+
+        function refreshSubTab(tabId, createdRecordId) {
+            recordId = createdRecordId;
+
+            //For any theme other than Lightning Console
+            if('{!$User.UIThemeDisplayed}' != 'Theme4u') {
+                if (sforce.console.isInConsole()) {
+                    refreshSourceTab(tabId);
+                }
+                else {
+                    redirectToRecord();
+                }
+            }
+            //For Lightning console theme
+            else {
+                //Find the enclosing Primary tab id to open the subtab in
+                sforce.console.getEnclosingPrimaryTabId(openRecordInSubtab);
+            }
+        }
+
+        //Once primary tab id is fetched, fetch the current tab id to close it later
+        function openRecordInSubtab(result) {
+            primaryTabId = result.id;
+            sforce.console.getEnclosingTabId(openSubTab);
+        }
+
+        //Once current tab id is fetched, open a new sub tab with the created record id
+        function openSubTab(result) {
+            currentTabId = result.id;
+            sforce.console.openSubtab(primaryTabId, "/" + recordId, true, '', null, closeTab);
+        }
+
+        //Once a new sub tab is opened, close the old tab which contains this VF page
+        function closeTab(result) {
+            sforce.console.closeTab(currentTabId);
+        }
+
+        //This method is for Classic console. Once the record is created and redirected to, refresh the source tab of Cluster issue record
+        function refreshSourceTab(tabId) {
+            if(tabId.includes('-pt-')) {
+                sforce.console.refreshPrimaryTabById(tabId, false);
+            } else {
+                sforce.console.refreshSubtabById(tabId, false);
+            }
+
+            //Once the source tab is refreshed, redirect to the newly created record
+            redirectToRecord();
+        }
+    </script>
+    <apex:form >
+        <apex:actionFunction name="createCaseOrOpportunityRecord" action="{!createCaseOrOpportunity}" oncomplete="refreshSubTab('{!tabId}', '{!recordId}')" status="status"/>
+        <apex:actionFunction name="redirectToRecord" action="{!redirectToCreatedRecord}"/>
+        <apex:actionStatus id="status">
+            <apex:facet name="start">
+            <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.75; z-index: 1000; background-color: black;">
+                &nbsp;
+            </div>
+            <div style="position: fixed; left: 0; top: 0; bottom: 0; right: 0; z-index: 1001; margin: 30% 50%">
+                <img src="http://upload.wikimedia.org/wikipedia/commons/e/ed/Cursor_Windows_Vista.gif" />
+            </div>
+            </apex:facet>
+        </apex:actionStatus>
+    </apex:form>
+</apex:page>

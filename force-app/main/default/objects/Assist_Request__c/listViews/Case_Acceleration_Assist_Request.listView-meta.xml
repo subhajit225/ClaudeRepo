@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Case_Acceleration_Assist_Request</fullName>
+    <columns>Created_Date__c</columns>
+    <columns>Closed_Date__c</columns>
+    <columns>NAME</columns>
+    <columns>Type__c</columns>
+    <columns>Priority__c</columns>
+    <columns>Account__c</columns>
+    <columns>Case_Owner__c</columns>
+    <columns>What_is_the_Ask__c</columns>
+    <columns>CREATEDBY_USER</columns>
+    <columns>Customer_Temperature__c</columns>
+    <filterScope>Queue</filterScope>
+    <filters>
+        <field>Status__c</field>
+        <operation>notEqual</operation>
+        <value>Closed</value>
+    </filters>
+    <filters>
+        <field>RECORDTYPE</field>
+        <operation>notEqual</operation>
+        <value>Assist_Request__c.Customer_Success</value>
+    </filters>
+    <label>Case Acceleration</label>
+    <queue>Case_Acceleration</queue>
+    <sharedTo>
+        <allInternalUsers></allInternalUsers>
+    </sharedTo>
+</ListView>

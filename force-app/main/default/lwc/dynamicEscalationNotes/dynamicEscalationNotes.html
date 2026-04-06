@@ -1,0 +1,76 @@
+<template>
+    <div class="">
+        <lightning-spinner if:true={showSpinner} alternative-text="Loading" size="medium"></lightning-spinner>
+
+        <!-- header -->
+        <header class="slds-modal__header">
+            <h2 class="slds-text-heading_medium slds-hyphenate">{notesLabel}</h2>
+        </header>
+        
+        <!-- form -->
+        <div class="slds-p-around--medium">
+            <!-- <lightning-record-edit-form object-api-name="Note__c" onsuccess={handleSuccess} onsubmit={handleSubmit} record-id={draftrecordId}> -->
+
+                <!-- Areas of Improvement & Action Items Section -->
+                <template if:true={renderAreaOfImpSection}>
+                    <!-- <lightning-input-field field-name="Action_Items_Notes__c" required value={draftrecord.Action_Items_Notes__c}> </lightning-input-field>
+                    <lightning-input-field field-name="Area_Of_Improvement__c" required value={draftrecord.Area_Of_Improvement__c}> </lightning-input-field>
+                    <lightning-input-field field-name="Owner_s__c" required value={draftrecord.Owner_s__c}> </lightning-input-field>
+                    <lightning-input-field field-name="Due_Date__c" required value={draftrecord.Due_Date__c}> </lightning-input-field>
+                    <lightning-input-field field-name="Outcome__c" required value={draftrecord.Outcome__c}> </lightning-input-field> -->
+                    <!-- replacing input fields with below fields since onblur will not work for lightning-input-field-->
+                    <label for="actionItem">Action Items(s) / Notes Font</label>
+                    <lightning-input-rich-text name="actionItems"
+                                                id="actionItem" 
+                                                label="Action Items(s) / Notes Font"
+                                                required 
+                                                value={draftrecord.Action_Items_Notes__c}
+                                                formats={allowedFormats}
+                                                onblur={handleAutoSave}> </lightning-input-rich-text>
+                    <lightning-textarea label="Area Of Improvement" name="aoi" value={draftrecord.Area_Of_Improvement__c} onblur={handleAutoSave}> </lightning-textarea>
+                    <lightning-input type="text" label="Owner(s)" name="owner" value={draftrecord.Owner_s__c} max-length="255" onblur={handleAutoSave}></lightning-input>
+                    <lightning-input type="date" name="duedate" label="Due Date" value={draftrecord.Due_Date__c} onblur={handleAutoSave}></lightning-input>
+                    <span if:true={isInValidDate} style="color:red;">* Date should be in future</span>
+                    <lightning-textarea value={draftrecord.Outcome__c} name="outcome" label="Outcome(s)" onblur={handleAutoSave}> </lightning-textarea>
+                    <lightning-combobox name="status" label="Status" options={llStatus} value={draftrecord.Status__c} onblur={handleAutoSave}></lightning-combobox>
+                </template> 
+                <!-- Next Steps / RRT Closing Questions & Feedback Notes / Issue(s) Summary / Background & Timeline -->
+                <template if:false={renderAreaOfImpSection}>
+                    <label for="fieldid">{notesLabel}</label>
+                    <lightning-input-rich-text id="fieldid" 
+                                                name="nextStep"  
+                                                required variant="label-hidden" 
+                                                value={draftrecord.Body__c}
+                                                formats={allowedFormats}
+                                                onblur={handleAutoSave}> </lightning-input-rich-text>
+                </template>
+
+                <!-- footer buttons -->
+                <footer class="slds-modal__footer">
+                    <div class="slds-align_absolute-center">
+                        <lightning-button variant="brand"
+                                            title="Save"
+                                            type="submit"
+                                            onclick={handleSubmit}
+                                            name="Save"
+                                            disabled={isInValidDate}
+                                            label="Save"></lightning-button>
+                        <lightning-button class="slds-m-right_medium slds-p-left--small"
+                                            title="Cancel"
+                                            name="Cancel"
+                                            label="Cancel"
+                                            disabled={isInValidDate}
+                                            onclick={handleCancel}></lightning-button>
+                        <span if:true={draftLastModifiedDate}> Draft last saved <lightning-formatted-date-time value={draftLastModifiedDate} 
+                                                                        year="2-digit" 
+                                                                        month="short" 
+                                                                        day="2-digit" 
+                                                                        hour="numeric"
+                                                                        weekday="short" 
+                                                                        minute="2-digit"></lightning-formatted-date-time></span>
+                    </div>
+                </footer>
+            <!-- </lightning-record-edit-form> -->
+        </div>
+    </div>
+</template>

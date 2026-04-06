@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Planned_Installation_Date_and_POC_type</fullName>
+    <active>true</active>
+    <errorConditionFormula>(ISCHANGED( Planned_Installation_Date__c ) ||  ISCHANGED( POC_Type__c ) )  &amp;&amp; $Profile.Name !=&apos;Sales Operations&apos; &amp;&amp; 
+ $Profile.Name !=&apos;Rubrik Light Administrator&apos;</errorConditionFormula>
+    <errorMessage>You don&apos;t have permission to update the Planned Installation Date and POC Type.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,93 @@
+<template>
+    <!-- <lightning-quick-action-panel header="Update User Fields"> -->
+    <lightning-card>
+        <!-- Body -->
+        <div class="spinner">
+            <template if:true={showSpinner}>
+                <lightning-spinner alternative-text="Loading" variant="brand" size="medium">
+                </lightning-spinner>
+            </template>
+        </div>
+        <div>
+            <header class="slds-modal__header custom-header">
+                <h2 class="slds-text-heading_medium">Update User Fields</h2>
+            </header>
+        </div>
+        <div if:true={showMainButtons} class="slds-grid slds-grid_align-center slds-p-around_medium">
+            <lightning-button variant="brand" label="Update User Calendar Booking link" data-id="updateUrl"
+                onclick={checkAction}>
+            </lightning-button>
+            <lightning-button class="slds-m-left_small" variant="brand" label="Update User Queue" data-id="updateQueue"
+                onclick={checkAction}></lightning-button>
+        </div>
+        <template if:true={updateUserUrl}>
+            <lightning-card>
+                <div class="slds-grid slds-m-around_x-small">
+                    <div class="slds-col slds-size_1-of-8 "></div>
+                    <div class="slds-col slds-size_3-of-8 ">
+                        <label class="slds-form-element__label">User</label>
+                    </div>
+                    <div class="slds-col slds-size_3-of-8 slds-p-horizontal_x-small">
+                        <label class="slds-form-element__label">Calendar booking URL</label>
+                    </div>
+                    <div if:true={isManager} class="slds-col slds-size_1-of-8">
+                        <label class="slds-form-element__label">Action</label>
+                    </div>
+                </div>
+                <template for:each={rows} for:item="row">
+                    <div key={row.id} class="slds-grid slds-m-around_x-small">
+                        <div class="slds-col slds-size_1-of-8 "></div>
+                        <div class="slds-col slds-size_3-of-8">
+                            <c-user-lookup lookup-object-name={objectName} object-field-api-name={objectFieldApiName}
+                                data-id={row.id} value={row.userId} onuserselect={handleUserChange}
+                                onlookupready={handleLookupReady}>
+                            </c-user-lookup>
+                        </div>
+                        <div class="slds-col slds-size_3-of-8 slds-p-horizontal_x-small">
+                            <lightning-input type="text" variant="label-hidden" value={row.url} data-id={row.id}
+                                onchange={handleUrlChange}>
+                            </lightning-input>
+                        </div>
+                        <div if:true={isManager} class="slds-col slds-size_1-of-8">
+                            <lightning-button-icon icon-name="utility:add" alternative-text="Add Row" onclick={addRow}>
+                            </lightning-button-icon>
+                            <template if:true={row.removable}>
+                                <lightning-button-icon icon-name="utility:delete" alternative-text="Remove Row"
+                                    data-id={row.id} onclick={removeRow} class="slds-p-left_x-small">
+                                </lightning-button-icon>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+
+            </lightning-card>
+        </template>
+        <!-- Update Queue -->
+        <template if:true={updateQueue}>
+            <lightning-record-edit-form object-api-name="User" record-id={currentUserId} onload={handleOnLoad}>
+                <lightning-input-field class="custom-padding slds-m-top_x-small" field-name="Automated_time_off_case_routing__c"
+                    data-field-name="Automated_time_off_case_routing__c" onchange={handleFieldChange}>
+                </lightning-input-field>
+                <lightning-input-field class="custom-padding" field-name="Destination_queue_for_automated_time_off__c"
+                    data-field-name="Destination_queue_for_automated_time_off__c" onchange={handleFieldChange}>
+                </lightning-input-field>
+            </lightning-record-edit-form>
+        </template>
+        <!-- Update Queue Ends -->
+
+        <div slot="footer" class="slds-grid slds-grid_align-spread">
+            <template if:true={showBackButton}>
+                <div>
+                    <lightning-button variant="brand" label="Back" data-id="backButton" onclick={checkAction}>
+                    </lightning-button>
+                </div>
+                <div>
+                    <lightning-button variant="neutral" label="Cancel" onclick={handleClose}></lightning-button>
+                    <lightning-button variant="brand" class="slds-m-left_small" onclick={handleSave} label="Save">
+                    </lightning-button>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+    <!-- </lightning-quick-action-panel> -->
+</template>

@@ -1,0 +1,18 @@
+<apex:page standardController="Case">
+    <apex:includeLightning />
+   
+    <div id="renewalDocs"></div> 
+    
+ <script>
+    $Lightning.use("c:createRenewalDocsApp", function() {
+    $Lightning.createComponent("c:renewalDocumentation",
+    { 
+       
+    },
+   "renewalDocs",
+    function(component) {
+         component.set("v.recordId" , '{!Case.id}');
+    });
+ });
+ </script>
+</apex:page>

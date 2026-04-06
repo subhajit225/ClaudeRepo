@@ -1,0 +1,10 @@
+<template>
+    <lightning-record-edit-form object-api-name={lookupObjectName} record-id={recId}>
+        <lightning-input-field field-name={objectFieldApiName}
+            onchange={handleChange}
+            variant="label-hidden"
+            value = {value}
+            >
+        </lightning-input-field>
+    </lightning-record-edit-form>
+</template>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PSNL_Bookings_Payout__c</fullName>
+    <label>PSNL Bookings</label>
+    <summarizedField>MIP_Element__c.Contract_Period_Bookings__c</summarizedField>
+    <summaryFilterItems>
+        <field>MIP_Element__c.Element_Type__c</field>
+        <operation>equals</operation>
+        <value>PSNL Bookings</value>
+    </summaryFilterItems>
+    <summaryFilterItems>
+        <field>MIP_Element__c.RecordTypeId</field>
+        <operation>equals</operation>
+        <value>Bookings Element</value>
+    </summaryFilterItems>
+    <summaryForeignKey>MIP_Element__c.MIP_Contract__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

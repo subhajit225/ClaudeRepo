@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CCR_Type_Concession_Request_Returns</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(ISPICKVAL(CCR_Type__c ,&apos;Concession Request - Returns&apos;), 
+ OR(ISBLANK(Opportunity__c), ISBLANK(Asset__c), ISBLANK(Account_Name__c),ISBLANK(  Return_Reasons__c)))</errorConditionFormula>
+    <errorMessage>Account, Opportunity, Asset # &amp; Debook Reason fields are required for CCR type &quot;Concession Request - Returns&quot;</errorMessage>
+</ValidationRule>

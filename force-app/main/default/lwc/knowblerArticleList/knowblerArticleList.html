@@ -1,0 +1,180 @@
+<template>
+    <template if:false={articleListData.showEditDetailPage}>
+      <template if:false={noLoading}>
+        <template if:false={articleListData.showConfiguration}>
+          <div class={flexipageregionwidth}>
+            <div class="searchbar_mobile_view">
+              <div class="article-search-create-wrapper">
+                <c-knowbler-article-searchbar
+                  searchtext={articleListData.searchText}
+                  class="article_searchbar"
+                  onsearchvaluechange={searchvaluechange}
+                  flexipageregionwidth={flexipageregionwidth}
+                >
+                </c-knowbler-article-searchbar>
+                <template if:true={isCasePresent}>
+                  <c-knowbler-create-article-button
+                    class="create-article-btn-sm"
+                    flexipageregionwidth={flexipageregionwidth}
+                    oncreatearticle={createArticle}
+                  ></c-knowbler-create-article-button>
+                </template>
+              </div>
+              <div class="side">
+                <c-knowbler-language-dropdown
+                  currentuserlanguage={articleListData.userLanguage}
+                  picklistvalues={pickListValues}
+                  onlanguagevaluechange={languagevaluechange}
+                  flexipageregionwidth={flexipageregionwidth}
+                ></c-knowbler-language-dropdown>
+              </div>
+            </div>
+            <div class="slds-grid slds-grid_align-spread searchbar_desktop_view">
+              <div class="searchbox">
+                <c-knowbler-article-searchbar
+                  class="slds-col article_searchbar_deskotp_view"
+                  searchtext={articleListData.searchText}
+                  onsearchvaluechange={searchvaluechange}
+                  flexipageregionwidth={flexipageregionwidth}
+                ></c-knowbler-article-searchbar>
+  
+                <template if:true={isCasePresent}>
+                  <c-knowbler-create-article-button
+                    class="slds-col"
+                    oncreatearticle={createArticle}
+                  >
+                  </c-knowbler-create-article-button>
+                </template>
+              </div>
+              <c-knowbler-language-dropdown
+                currentuserlanguage={articleListData.userLanguage}
+                picklistvalues={pickListValues}
+                onlanguagevaluechange={languagevaluechange}
+                flexipageregionwidth={flexipageregionwidth}
+                class="slds-col"
+              ></c-knowbler-language-dropdown>
+            </div>
+            <div class="show_med">
+              <template if:false={showLoader}>
+                <c-knowbler-article-tab
+                  fromtab={fromTab}
+                  query={articleListData.query}
+                  tabs={tabs}
+                  draftarticlemode={draftarticlemode}
+                  onhanldevaluechange={hanldevaluechange}
+                  activevalue={activevalue}
+                ></c-knowbler-article-tab>
+              </template>
+            </div>
+            <template if:true={articleListData.showArticlesScreen}>
+              <template if:false={showLoader}>
+                <div class="article_card" onscroll={onChange}>
+                  <c-knowbler-article-cards
+                    alldatacategories={alldatacategories}
+                    client-settings={clientSettings}
+                    destobj={destobj}
+                    showdropdown={showdropdown}
+                    flexipageregionwidth={flexipageregionwidth}
+                    query={articleListData.query}
+                    currentuserlanguage={articleListData.userLanguage}
+                    articles={articles}
+                    onupdatelist={updatePageHandler}
+                    onmanagearticle={managearticle}
+                    newnumber={newnumber}
+                    ispublisharticletab={ispublisharticletab}
+                    casedata={caseid}
+                    caseclosed={caseclosed}
+                    casenumber={casenumber}
+                    jwttoken={jwttoken}
+                    endpoint={endpoint}
+                    ongotohome={gotohome}
+                    draftarticlemode={draftarticlemode}
+                  >
+                  </c-knowbler-article-cards>
+                </div>
+              </template>
+              <template if:true={showLoader}>
+                <c-knowbler-loader
+                  showloader
+                  kcsheight={kcsheight}
+                  loadingcard={loadingcard}
+                  flexipageregionwidth={flexipageregionwidth}
+                ></c-knowbler-loader>
+              </template>
+            </template>
+            <template if:false={articleListData.showArticlesScreen}>
+              <c-knowbler-no-article></c-knowbler-no-article>
+            </template>
+          </div>
+        </template>
+        <template if:true={articleListData.showConfiguration}>
+          <c-knowbler-configuration-check></c-knowbler-configuration-check>
+        </template>
+      </template>
+      <template if:true={noLoading}>
+        <c-knowbler-loader fromarticle kcsheight={kcsheight} loadingcard={loadingcard}
+            flexipageregionwidth={flexipageregionwidth}></c-knowbler-loader>
+      </template>
+    </template>
+    <template if:true={articleListData.showEditDetailPage}>
+      <template if:true={articleListData.showDetailPage}>
+        <c-knowbler-manage-article
+          destobj={destobj}
+          alldatacategories={alldatacategories}
+          namerecordtype={recordt}
+          norecordtype={articleListData.flagForm}
+          kcsheight={kcsheight}
+          draftarticlemode={draftarticlemode}
+          currentuserlanguage={articleListData.userLanguage}
+          detailarticle={articleListData.detailArticle}
+          currentid={articleListData.currentId}
+          configrecord={articleListData.configRecord}
+          mappingfields={articleListData.mappingFields}
+          onshoweditpage={hideScreen}
+          flexipageregionwidth={flexipageregionwidth}
+          onmanagearticle={managearticle}
+        ></c-knowbler-manage-article>
+      </template>
+      <template if:true={articleListData.showEditPage}>
+        <c-knowbler-article-creation
+          author={author}
+          llm-status={llmStatus}
+          destobj={destobj}
+          alldatacategories={alldatacategories}
+          client-settings={clientSettings}
+          createartclemapping={articleListData.createArtcleMapping}
+          norecordflag={articleListData.flagForm}
+          loadingcard={loadingcard}
+          kcsheight={kcsheight}
+          iseditarticle
+          currentid={articleListData.currentId}
+          mappingfields={articleListData.mappingFields}
+          kcssupport={kcssupport}
+          newnumber={newnumber}
+          draftarticlemode={draftarticlemode}
+          flexipageregionwidth={flexipageregionwidth}
+          recordtype={recordt}
+          onleave={handleCreateArticleLeave}
+          onback={handleCreateArticleBack}
+          onfromcreatearticle={getArticleData}
+          caseid={caseid}
+          casedata={casedata}
+          casenumber={casenumber}
+          jwttoken={jwttoken}
+          endpoint={endpoint}
+          unique-number={uniqueNumber}
+          content-health-settings={contentHealthSettings}
+          remove-feed-content-list={removeFeedContentList}
+          oncreatearticle={clickRegenrateArticle}
+          display-title-loader={displayTitleLoader}
+          display-summary-loader={displaySummaryLoader}
+          generate-summary-fields={generateSummaryFields}
+        ></c-knowbler-article-creation>
+      </template>
+    </template>
+    <c-knowbler-modal-component
+      draftarticlemode={draftarticlemode}
+      client-settings={clientSettings}
+      unique-number={uniqueNumber}
+    ></c-knowbler-modal-component>
+  </template>

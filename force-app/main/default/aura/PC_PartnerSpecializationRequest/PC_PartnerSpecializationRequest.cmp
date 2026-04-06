@@ -1,0 +1,170 @@
+<aura:component controller="PC_PartnerSpecializationRequestCtrlr" extends="c:PC_UtilityCmp" implements="force:appHostable,forceCommunity:availableForAllPageTypes,force:hasRecordId,lightning:actionOverride,lightning:isUrlAddressable,flexipage:availableForRecordHome,flexipage:availableForAllPageTypes" access="global">
+    <ltng:require styles="/resource/PartnerCommunityResource/Stylesheets/PartnerCommunityCSS.css"/>    
+    <aura:attribute name="iframeheight" type="Integer" default="700px"/>
+    <aura:attribute name="accountRecords" type="Object[]" />
+    <aura:attribute name="userRecord" type="Object" />
+    <aura:attribute name="showSpinner" type="boolean" default="true" />
+    <aura:attribute name="isOpenAgreement" type="boolean" default="false"/>
+    <aura:attribute name="isAddressEditable" type="boolean" default="false"/>
+    <aura:attribute name="vfHost" type="String" default="devsb-rubrik.cs67.force.com/partnersnew"/>
+    <aura:attribute name="agreementCheckValue" type="boolean" default="false"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <aura:if isTrue="{!v.isOpenAgreement}">
+        <!--###### MODAL BOX Start######--> 
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <!-- ###### MODAL BOX HEADER Start ######-->
+                <header class="slds-modal__header">
+                    <lightning:buttonIcon iconName="utility:close" onclick="{! c.closeAgreementModel }"
+                                          alternativeText="close"
+                                          variant="bare-inverse"
+                                          class="slds-modal__close"/>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate"> Terms and Condition</h2></header>
+                <!--###### MODAL BOX BODY Part Start######-->
+                <div class="slds-modal__content slds-p-around_medium" style="height:50vh;" id="modal-content-id-1">
+                    <iframe aura:id="vfFrame" src="{!v.vfHost + '/apex/Pactsafe?groupType=RUBRIK_PROFESSIONAL_SERVICES_PARTNER&amp;email='+v.userRecord.Email}" width="100%" height="100%" style="padding-left : 10px"/>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+    
+    <lightning:recordEditForm aura:id="recordEditForm"
+                              objectApiName="Partner_Specialization_Request__c" onsubmit="{!c.handleOnSubmit}">
+        <lightning:messages />
+        <div class="slds-section__title slds-m-top_large heading-22 deep-blue">Company Information</div>
+        <div class="c-container">
+            <lightning:layout multipleRows="true">
+                <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="4" padding="around-small">
+                    
+                    <div class="slds-form-element slds-form-element_readonly">
+                        <span class="slds-form-element__label">Partner Company Name</span>
+                        <div class="slds-form-element__control">
+                            <div class="slds-form-element__static">{!v.accountRecords[0].Name}</div>
+                        </div>
+                    </div>
+                </lightning:layoutItem>
+            </lightning:layout>
+        </div>
+        
+        <div class="slds-section__title slds-m-top_large heading-22 deep-blue">Partner Company HQ Address:</div>
+        <aura:if isTrue="{!!v.isAddressEditable}">
+            <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-hint-parent slds-p-around_small">
+                <div class="slds-form-element__control">
+                    <div class="slds-form-element__static text-17 .gray">{!v.accountRecords[0].BillingStreet}</div>
+                    <div class="slds-form-element__static text-17 .gray">{!v.accountRecords[0].BillingCity}{!and(!empty(v.accountRecords[0].BillingCity),!empty(v.accountRecords[0].BillingState)) ? ',':''}{!v.accountRecords[0].BillingState}</div>
+                    <div class="slds-form-element__static text-17 .gray">{!v.accountRecords[0].BillingCountry}{!and(!empty(v.accountRecords[0].BillingCountry),!empty(v.accountRecords[0].BillingPostalCode)) ? ',':''}{!v.accountRecords[0].BillingPostalCode}</div>
+                    <lightning:buttonIcon iconName="utility:edit" variant="bare" onclick="{! c.editAddress }" alternativeText="Settings" title="Settings" />
+                </div>
+            </div>
+        </aura:if>
+        <aura:if isTrue="{!v.isAddressEditable}">
+            <div class="c-container">
+                <lightning:layout multipleRows="true">
+                    <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="4" padding="around-small">
+                        <lightning:inputField fieldName="Street__c" required="true" value="{!v.accountRecords[0].BillingStreet}"/>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="4" padding="around-small">
+                        <lightning:inputField fieldName="City__c" required="true" value="{!v.accountRecords[0].BillingCity}"/>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="4" padding="around-small">
+                        <lightning:inputField fieldName="Country__c" required="true" value="{!v.accountRecords[0].BillingCountry}"/>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="4" padding="around-small">
+                        <lightning:inputField fieldName="State__c" required="true" value="{!v.accountRecords[0].BillingStateCode}"/>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="4" padding="around-small">
+                        <lightning:inputField fieldName="Postal_Code__c" required="true"  value="{!v.accountRecords[0].BillingPostalCode}"/>
+                    </lightning:layoutItem>
+                </lightning:layout>
+            </div>
+        </aura:if>
+        <div class="slds-section__title slds-m-top_large slds-m-bottom_large heading-22 deep-blue">Other Information:</div>
+        <lightning:layout multipleRows="true" class="slds-p-left_small slds-m-bottom_small">
+            <lightning:layoutItem class="slds-p-right_small flex" size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" padding="right-small">
+                
+                <label lightning-textarea_textarea="" for="input-40" class="slds-form-element__label" >
+                    <abbr lightning-input_input="" title="required" class="slds-required">*</abbr>
+                    Primary Specialization Contact </label>
+                <lightning:helptext content="Can't find the correct team contact? Reach out to Goforward@rubrik.com" class="customIcon"/> 
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" class="hideIcon slds-m-bottom_x-small" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" >
+                
+                <lightning:inputField fieldName="Specialization_contact__c" variant="label-hidden" required="true"/>
+            </lightning:layoutItem>
+        </lightning:layout>
+        <lightning:layout multipleRows="true" class="slds-p-left_small slds-m-bottom_small">
+            <lightning:layoutItem class="slds-p-right_small" size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" padding="right-small">
+                
+                <label lightning-textarea_textarea="" for="input-40" class="slds-form-element__label" >
+                    <abbr lightning-input_input="" title="required" class="slds-required">*</abbr>
+                    Current Professional Services offerings (indicate your company’s top 2-3 technology vendor professional services offerings)</label>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" >
+                
+                <lightning:inputField fieldName="Current_PS_offerings__c" variant="label-hidden" required="true"/>
+            </lightning:layoutItem>
+        </lightning:layout>
+        <lightning:layout multipleRows="true" class="slds-p-left_small slds-m-bottom_small">
+            <lightning:layoutItem class="slds-p-right_small" size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" padding="right-small">
+                <label lightning-textarea_textarea="" for="input-40" class="slds-form-element__label" >
+                    <abbr lightning-input_input="" title="required" class="slds-required">*</abbr>
+                    Rubrik demo lab environment (indicate what, if any Rubrik lab equipment your company currently has set up) </label>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" >
+                
+                <lightning:inputField fieldName="Rubrik_demo_lab__c" variant="label-hidden" required="true"/>
+            </lightning:layoutItem>
+        </lightning:layout>
+        <lightning:layout multipleRows="true" class="slds-p-left_small slds-m-bottom_small">
+            <lightning:layoutItem class="slds-p-right_small" size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" padding="right-small">
+                
+                <label lightning-textarea_textarea="" for="input-40" class="slds-form-element__label" >
+                    <abbr lightning-input_input="" title="required" class="slds-required">*</abbr>
+                    Number of months your organization has been delivering Rubrik Professional Services?</label>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" >
+                
+                <lightning:inputField fieldName="Rubrik_PS_experience__c" variant="label-hidden" required="true"/> 
+            </lightning:layoutItem>
+        </lightning:layout>
+        <lightning:layout multipleRows="true" class="slds-p-left_small slds-m-bottom_small">
+            <lightning:layoutItem class="slds-p-right_small" size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" padding="right-small">
+                
+                <label lightning-textarea_textarea="" for="input-40" class="slds-form-element__label" >
+                    <abbr lightning-input_input="" title="required" class="slds-required">*</abbr>
+                    Approximately quantity of Rubrik implementations conducted by your organization?</label>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" >
+                
+                <lightning:inputField fieldName="Approx_implementations__c" variant="label-hidden" required="true"/> 
+            </lightning:layoutItem>
+        </lightning:layout>
+        <lightning:layout multipleRows="true" class="slds-p-left_small slds-m-bottom_large">
+            <lightning:layoutItem class="slds-p-right_small flex" size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" padding="right-small">
+                
+                <label lightning-textarea_textarea="" for="input-40" class="slds-form-element__label" >
+                    <abbr lightning-input_input="" title="required" class="slds-required">*</abbr>
+                    Post sales service engineer – provide the name of the employee that has already, or will complete the required Rubrik RCIE accreditation and service delivery assessment</label>
+                <lightning:helptext content="Can't find the correct team contact? Reach out to Goforward@rubrik.com" class="customIcon"/> 
+                
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" >
+                
+                <lightning:inputField fieldName="Post_sales_service_engineer__c" variant="label-hidden" required="true" /> 
+            </lightning:layoutItem>
+        </lightning:layout>
+        
+        <lightning:layoutItem size="12" class="slds-m-top_small slds-p-left_small">
+            <ui:outputCheckbox value="{!v.agreementCheckValue}"/>
+            <a class="slds-m-left_xx-small link-text" href="javascript:void(0)" onclick="{!c.openAgreementModel}">Master Terms and Conditions</a>&nbsp;
+            <div role="alert" aura:id="agreementCheckValue_help" style="color: var(--lwc-colorTextError,rgb(194, 57, 52));" class="form-element__helpError none">Please Agree Terms and Conditions</div>	     
+        </lightning:layoutItem>
+        <div style="text-align:center">  
+            <lightning:button variant="brand" class="slds-m-top_small exploreButton" type="submit" label="Submit Application" />
+        </div>
+    </lightning:recordEditForm>
+    <lightning:spinner alternativeText="Loading" class="{!v.showSpinner? '':'slds-hide'}" />
+</aura:component>

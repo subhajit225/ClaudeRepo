@@ -1,0 +1,93 @@
+<template>
+    <div class="slds-card">
+        <lightning-layout multiple-rows="true" horizontal-align="spread">
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+                <!-- <div class="slds-p-around_large">
+                    <span class="heading-36">
+                        Transform Claim Highlight Report
+                    </span>
+                    <div class="disclaimer">
+                        <span>
+                            <lightning-button variant="brand" label="Claim Form" title="Claim Form" onclick={handleClick} class="slds-p-top_medium slds-float_right"></lightning-button>
+                        </span>
+                    </div>
+                </div> -->
+                <div class="slds-p-around_large form-heading">
+                    <div class="heading-36">
+                        Transform Claim Highlight Report
+                    </div>
+                            <lightning-button variant="brand" label="Claim Form" title="Claim Form" onclick={handleClick} class="slds-float_right"></lightning-button>
+                       
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="4" small-device-size="12" medium-device-size="4" large-device-size="4" class="slds-p-around_medium">
+                <div class="pipelineReportCard">
+                    <span class="pipelineCardNumber">
+                        {submitted}
+                    </span>
+                    <span class="pipelineCardText">
+                        <p>Submitted</p>
+                    </span>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="4" small-device-size="12" medium-device-size="4" large-device-size="4" class="slds-p-around_medium">
+                <div class="pipelineReportCard">
+                    <span class="pipelineCardNumber">
+                        {approved}
+                    </span>
+                    <span class="pipelineCardText">
+                        <p>Approved</p>
+                    </span>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="4" small-device-size="12" medium-device-size="4" large-device-size="4" class="slds-p-around_medium">
+                <div class="pipelineReportCard">
+                    <span class="pipelineCardNumber">
+                        {rejected}
+                    </span>
+                    <span class="pipelineCardText">
+                        <p>Rejected</p>
+                    </span>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12" class="slds-p-around_medium">
+                <table class="slds-table slds-table_cell-buffer" aria-labelledby="element-with-table-label other-element-with-table-label">
+                    <thead class="">
+                        <tr>
+                            <th class="account-header-col" scope="col">
+                                <div title="Name">TYPE</div>
+                            </th>
+                            <th class="status-header-col" scope="col">
+                                <div title="Status">STATUS</div>
+                            </th>
+                            <th scope="col">
+                                <div title="End Date">SUBMISSION DATE</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <template for:each={claimList} for:item="claim">
+                        <tbody key={claim.Id}>
+                            <tr>
+                                <td data-label="Name">
+                                    <div class="account-body-col">
+                                        {claim.Type__c}
+                                    </div>
+                                </td>
+                                <td class="status-body-col" data-label="Status">
+                                    <div>
+                                        {claim.Status__c}
+                                    </div>
+                                </td>
+                                <td data-label="End Date">
+                                    <div>
+                                        {claim.Start__c}
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </template>
+                </table>
+            </lightning-layout-item>
+        </lightning-layout>
+    </div>
+</template>

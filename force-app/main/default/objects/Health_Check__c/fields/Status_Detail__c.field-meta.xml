@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Status_Detail__c</fullName>
+    <label>Status Detail</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>Status__c</controllingField>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Unable to Connect with Customer</fullName>
+                <default>false</default>
+                <label>Unable to Connect with Customer</label>
+            </value>
+            <value>
+                <fullName>Customer Not Interested</fullName>
+                <default>false</default>
+                <label>Customer Not Interested</label>
+            </value>
+            <value>
+                <fullName>Recommendation Does Not Apply</fullName>
+                <default>false</default>
+                <label>Recommendation Does Not Apply</label>
+            </value>
+            <value>
+                <fullName>Interested but no Immediate Opportunity</fullName>
+                <default>false</default>
+                <label>Interested but no Immediate Opportunity</label>
+            </value>
+            <value>
+                <fullName>Opportunity Generated</fullName>
+                <default>false</default>
+                <label>Opportunity Generated</label>
+            </value>
+            <value>
+                <fullName>Interest but product cannot support usecase</fullName>
+                <default>false</default>
+                <label>Interest but product cannot support usecase</label>
+            </value>
+            <value>
+                <fullName>Not My Account</fullName>
+                <default>false</default>
+                <label>Not My Account</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Completed</controllingFieldValue>
+            <controllingFieldValue>Not Applicable</controllingFieldValue>
+            <valueName>Customer Not Interested</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Completed</controllingFieldValue>
+            <controllingFieldValue>Not Applicable</controllingFieldValue>
+            <valueName>Recommendation Does Not Apply</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Completed</controllingFieldValue>
+            <valueName>Interested but no Immediate Opportunity</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Completed</controllingFieldValue>
+            <valueName>Opportunity Generated</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Completed</controllingFieldValue>
+            <controllingFieldValue>Not Applicable</controllingFieldValue>
+            <valueName>Interest but product cannot support usecase</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Not Applicable</controllingFieldValue>
+            <valueName>Unable to Connect with Customer</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Not Applicable</controllingFieldValue>
+            <valueName>Not My Account</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

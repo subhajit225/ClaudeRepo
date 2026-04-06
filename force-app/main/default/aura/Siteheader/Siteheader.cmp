@@ -1,0 +1,111 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes"  controller="Util" access="global">
+    <aura:attribute name="searchString" type="String"/>
+    <aura:attribute name="showloader" type="boolean" default="true"/>
+    <aura:attribute name="showTraining" type="boolean" default="false"/>
+    <aura:attribute name="showMenu" type="boolean" default="false"/>
+    <aura:attribute name="showForums" type="boolean" default="false"/>
+    <aura:attribute name="UserRecord" type="Object"/>
+    <aura:attribute name="isHome" type="Boolean" default="false"/>
+    <force:recordData aura:id="recordLoader"
+                      recordId="{!$SObjectType.CurrentUser.Id}"
+                      fields="Account.Tabs_Visibility__c,Name,ProfileId"
+                      targetFields="{!v.UserRecord}"
+                      />
+    <aura:handler name="init" value="this" action="{!c.doInit}"/>
+    <aura:handler name="change" value="{!v.UserRecord}" action="{!c.TabsVisible}"/>
+
+    <aura:if isTrue="{!v.showloader}">
+        <div class="exampleHolder">
+            <lightning:spinner aura:id="mySpinner" />
+        </div>
+    </aura:if>
+
+    <div class="headerbacktop">
+        <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--10-of-12 slds-max-small-size--12-of-12  slds-size--12-of-12 headerls">
+            <div  style="margin-left: 1rem;">
+                <forceCommunity:notifications />
+            </div>
+        </div>
+        <div class="slds-grid backgroundcolor slds-wrap">
+            <div class="slds-large-size--2-of-12 slds-Medium-size--10-of-12 slds-small-size--10-of-12 slds-max-small-size--10-of-12  slds-size_10-of-12">
+                <a href="{!$Label.c.Community_Base_URL}">
+                    <img class="imgcls" src="{!$Resource.RubrikCustomerCommunity +  '/RubrikCommunity/Images/logo.png'}"/></a>
+            </div>
+            <div class="slds-large-size--10-of-12 slds-Medium-size--10-of-12 slds-small-size--2-of-12 slds-max-small-size--2-of-12   slds-wrap navigatebar">
+                <div class="headerTabs slds-large-show">
+                    <ul class="slds-list_horizontal slds-has-block-links_space   hidenavbar" >
+                        <aura:if isTrue="{!v.showMenu}">
+                            <li class="active"><a class="navbarcolor" href="{!$Label.c.Community_Base_URL+'announcements?type=All'}">Announcements</a></li>
+
+                            <aura:if isTrue="{!v.showForums}">
+                                <li><a class="navbarcolor" href="{!$Label.c.Community_Base_URL+'topiccatalog'}">Forums</a></li>
+                            </aura:if>
+
+                            <aura:if isTrue="{!v.showTraining}">
+                                <li><a class="navbarcolor" href="{!$Label.c.Docebo_Customer_URL}" target="_blank">Training</a></li>
+                            </aura:if>
+                            <li class="active"><a class="navbarcolor" href="{!$Label.c.Community_Base_URL+'knowledgecategoryhome'}">Knowledge base</a></li>
+                            <aura:if isTrue="{!v.UserRecord.ProfileId != $Label.c.Trial_Edge_Profile}">
+                                <li><a class="navbarcolor" href="{!$Label.c.Community_Base_URL+'my-cases'}">My Cases</a></li>
+                                <li><a class="navbarcolor" href="{!$Label.c.Community_Base_URL+'idealist'}">Ideas</a></li>
+                                <li><a class="navbarcolor" href="{!$Label.c.Community_Base_URL+'myproducts'}">My Products</a></li>
+                            </aura:if>
+                            <li><a class="navbarcolor" href="{!$Label.c.Community_Base_URL+'kblistpage?categoryType_Article=Videos'}">Videos</a></li>
+                            <li><a class="navbarcolor" href="{!$Label.c.Community_Base_URL+'documentation'}">Docs &amp; Downloads</a></li>
+
+                            <li><a class="navbarcolor" href="{!$Label.c.Community_Base_URL+'about'}">About</a></li>
+                            <li><a class="navbarcolor ContactNum" href="https://www.rubrik.com/support/#contact-numbers" target="_blank">CALL SUPPORT</a></li>
+                            <li><a  href="" class="navbarcolor1" ></a></li>
+                            <aura:if isTrue="{!!v.isHome}">
+                                <li class="slds-large-show hidecls">
+                                    <div class="slds-form-element">
+                                        <div class="slds-form-element__control">
+                                            <ui:inputText class="slds-input sldssearch" value='{!v.searchString}' placeholder="search..." keyup="{!c.redirect}" />
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="padtopicon"><lightning:icon class="searchiconcls" iconName="utility:search" alternativeText="Connected" onclick="{!c.redirect}"/>
+                                </li>
+                            </aura:if>
+                        </aura:if>
+                    </ul>
+                </div>
+                <div  class="slds-small-show containercls ">
+                    <div class=".slds-max-x-small-hide mobview" >
+                        <div accessKey='mobile_menu'  onclick="{!c.Toggle1}">
+                            <lightning:icon aura:id="myDIV1" id="row_icon" class="rowIcon" iconName="utility:rows" alternativeText="Connected"  >
+                            </lightning:icon>
+                        </div>
+                    </div>
+                    <div>
+                        <ul id="mobile_menus" accessKey='123' class="mobile-menu slds-hide" aura:id ="mobile_menu">
+                            <aura:if isTrue="{!v.showMenu}">
+
+                                <aura:if isTrue="{!v.showForums}">
+                                    <li  accessKey='123'><a class="navbarcolor" href="{!$Label.c.Community_Base_URL+'topiccatalog'}">Forums</a></li>
+                                </aura:if>
+
+                                <aura:if isTrue="{!v.showTraining}">
+                                    <li><a class="navbarcolor" href="{!$Label.c.Docebo_Customer_URL}" target="_blank">Training</a></li>
+                                </aura:if>
+                                <li class="active"  accessKey='123'><a class="navbarcolor" href="{!$Label.c.Community_Base_URL+'knowledgecategoryhome'}">Knowledge base</a></li>
+                                <aura:if isTrue="{!v.UserRecord.ProfileId != $Label.c.Trial_Edge_Profile}">
+                                    <li  accessKey='123'><a class="navbarcolor" href="{!$Label.c.Community_Base_URL+'my-cases'}">My Cases</a></li>
+                                    <li  accessKey='123'><a class="navbarcolor" href="{!$Label.c.Community_Base_URL+'idealist'}">Ideas</a></li>
+                                    <li accessKey='123' ><a class="navbarcolor" href="{!$Label.c.Community_Base_URL+'myproducts'}">My Products</a></li>
+                                </aura:if>
+                                <li accessKey='123'><a class="navbarcolor" href="{!$Label.c.Community_Base_URL+'kblistpage?categoryType_Article=Videos'}">Videos</a></li>
+                                <li accessKey='123'><a class="navbarcolor" href="{!$Label.c.Community_Base_URL+'documentation'}">Docs &amp; Downloads</a></li>
+
+                                <li accessKey='123'><a class="navbarcolor" href="{!$Label.c.Community_Base_URL+'about'}">About</a></li>
+                                <li accessKey='123'><a class="navbarcolor" href="https://www.rubrik.com/support/#contact-numbers">CONTACT SUPPORT</a></li>
+                                <li accessKey='123'><a href="javascript:void(0);" class="navbarcolor" onclick="{!c.redirectMobile}">Search</a></li>
+                            </aura:if>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slds-large-size_1-of-12"></div>
+    </div>
+</aura:component>

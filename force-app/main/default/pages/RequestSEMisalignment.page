@@ -1,0 +1,43 @@
+<apex:page id="pageId" showHeader="true" sidebar="true" standardController="Opportunity" extensions="RequestSEMisalignmentController" lightningStylesheets="true" >
+    <apex:slds rendered="{!$User.UITheme != 'Theme3'}"/> 
+    <script>
+    	function disbaleButton(){
+            if({!$User.UITheme != 'Theme3'}){
+                document.getElementById('pageId:formId:pbId:pbbId:saveId').disabled = true;
+            }else{
+                document.getElementById('pageId:formId:pbId:pbbId:saveId').disabled = true;
+            	document.getElementById('pageId:formId:pbId:pbbId:saveId').classList.add('btnDisabled');
+            }
+        }
+    	function enableButton(){
+            if({!$User.UITheme != 'Theme3'}){
+                document.getElementById('pageId:formId:pbId:pbbId:saveId').disabled = false;
+            }else{
+                document.getElementById('pageId:formId:pbId:pbbId:saveId').disabled = false;
+            	document.getElementById('pageId:formId:pbId:pbbId:saveId').classList.remove('btnDisabled');
+            }
+        }
+    </script>
+    <apex:sectionHeader title="Request SE Misalignment"/>
+    
+    <apex:form id="formId">
+        <apex:pageBlock title="Opportunity Details" id="pbId">
+            <apex:pageMessages id="pmId"/>
+            <apex:pageBlockButtons location="top" id="pbbId">
+                <apex:commandButton value="Save" onclick="disbaleButton()" id="saveId" action="{!save}" reRender="pmId" oncomplete="enableButton()"/>
+                <apex:commandButton value="Cancel" action="{!cancel}" immediate="true"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection columns="1" id="section1" rendered="{!Opportunity.SE_Misaligned__c == TRUE}">
+                <apex:outputText style="font-size:19px;" value="A SE Misaligment has already been submitted on this Opportunity. Are you sure you want to submit another?"/>
+           </apex:pageBlockSection>
+            <apex:pageBlockSection columns="1">
+                <apex:outputField value="{!Opportunity.Name}" label="Opportunity Name"/>
+                <apex:outputField value="{!Opportunity.Rubrik_Sales_Engineer__c}" label="Rubrik Sales Engineer"/>
+                <apex:inputField value="{!Opportunity.SE_Misalignment_User__c}" label="New SE" required="true"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection columns="1">
+                <apex:inputField value="{!Opportunity.SE_Misalignment_Comments__c}" required="true" style="width:45%"/>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Controlling_Product_Lines__c</fullName>
+    <description>Select Product Lines on which this Software version should be dependent to be visible on Case records. If not selected any, the value will not be visible for any Product Line</description>
+    <inlineHelpText>Select Product Lines on which this Software version should be dependent to be visible on Case records. If not selected any, the value will not be visible for any Product Line</inlineHelpText>
+    <label>Controlling Product Lines</label>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <controllingField>Field__c</controllingField>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>CDM</fullName>
+                <default>false</default>
+                <label>CDM</label>
+            </value>
+            <value>
+                <fullName>Polaris</fullName>
+                <default>false</default>
+                <label>Polaris</label>
+            </value>
+            <value>
+                <fullName>DatosIO</fullName>
+                <default>false</default>
+                <label>Mosaic/DatosIO</label>
+            </value>
+            <value>
+                <fullName>Other</fullName>
+                <default>false</default>
+                <label>Other</label>
+            </value>
+            <value>
+                <fullName>Spam/Junk</fullName>
+                <default>false</default>
+                <label>Spam/Junk</label>
+            </value>
+            <value>
+                <fullName>Duplicate</fullName>
+                <default>false</default>
+                <label>Duplicate</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Software Version</controllingFieldValue>
+            <valueName>CDM</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Software Version</controllingFieldValue>
+            <valueName>Polaris</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Software Version</controllingFieldValue>
+            <valueName>DatosIO</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Software Version</controllingFieldValue>
+            <valueName>Other</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Software Version</controllingFieldValue>
+            <valueName>Spam/Junk</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Software Version</controllingFieldValue>
+            <valueName>Duplicate</valueName>
+        </valueSettings>
+    </valueSet>
+    <visibleLines>4</visibleLines>
+</CustomField>

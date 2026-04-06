@@ -1,0 +1,189 @@
+<apex:page id="pageid" showHeader="false" showChat="false" sidebar="false" controller="PC_PartnerFundClaimController">
+    
+    <script src="/soap/ajax/39.0/connection.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        
+        var sid;
+    window.onload = function(){
+        sforce.connection.sessionId = "{!$Api.Session_ID}"; //Used for Session out
+        sid = sforce.connection.sessionId;
+        sforce.connection.serverUrl = '{!$Site.Prefix}/services/Soap/u/40.0';    
+        //alert(sid);
+    }
+    var AttList;
+    var errorMsg = '';
+    var vforgin = '';
+    var attLength;
+    var count = 0;
+    var recId = '';
+    var Description = '';
+    var claimname = '';   
+    var amount = '';       
+    var contentVersionIds = '';
+    var rec = '';
+    var flag = 0;
+    //prit26-12
+    var fiscalQuarter = '';
+    var measurementOfSuccess1 = '';
+    var measurementOfSuccess2 = '';
+    var measurementOfSuccess3 = '';
+    var measurementOfSuccess4 = '';
+    //prit26-12
+    window.addEventListener("message", function(event) {
+        count++;
+        console.log('event.data');
+        console.log(event.data);
+        if(count%2 != 0){
+            //Setting the Values of Attchments coming from Lightning Component
+            AttList = event.data;
+            attLength = AttList.length;
+        }else if(count%2 == 0){
+            //Setting the Values coming from Lightning Component
+            vforgin = event.origin;
+            recId = event.data.recId;
+            Description = event.data.Description;
+            amount = event.data.amount;
+            //prit26-12
+            fiscalQuarter = event.data.fiscalQuarter;
+            measurementOfSuccess1 = event.data.measurementOfSuccess1;
+            measurementOfSuccess2 = event.data.measurementOfSuccess2;
+            measurementOfSuccess3 = event.data.measurementOfSuccess3;
+            measurementOfSuccess4 = event.data.measurementOfSuccess4;
+            //prit26-12
+            for(var i = 0; i < AttList.length; i++){
+                var singleFile = AttList[i];
+                if(errorMsg != ''){
+                    //Alerting if any Error occurs while uploading
+                    alert('Attachment upload got failed due to '+errorMsg);
+                    var lexOrigin;
+                    if(vforgin.search('--c') > 0){
+                        var urlArr = vforgin.split('--c');
+                        if(urlArr != null){
+                            lexOrigin = urlArr[0]+'.lightning.force.com';
+                            window.parent.postMessage({"status":"Failed"}, lexOrigin); //Sending response back to Lightning Component
+                            break;
+                        }
+                    }else{
+                        //If Lightning Component Origin is from Salesforce
+                        lexOrigin  = vforgin;
+                        window.parent.postMessage({"status":"Failed"}, lexOrigin); //Sending response back to Lightning Component
+                        break;
+                        
+                    }
+                }
+                //File Reader method - reads single file at a time
+                setupReader(singleFile,i);
+            }
+            //If Attachments are not present while creating a Message Template
+            if(AttList.length == 0){
+                sendMessageTemplateAF(amount,recId,Description,fiscalQuarter,measurementOfSuccess1,measurementOfSuccess2,measurementOfSuccess3,measurementOfSuccess4,contentVersionIds);
+                var lexOrigin;
+                // If vforgin contains VisulaForce page url path
+                if(vforgin.search('--c') > 0){
+                    var urlArr = vforgin.split('--c');
+                    if(urlArr != null){
+                        lexOrigin = urlArr[0]+'.lightning.force.com'; 
+                    }
+                }else{
+                    lexOrigin  = vforgin;
+                }
+                window.parent.postMessage({"status":"SUCCESS"}, lexOrigin);
+            }
+        }
+        
+        function setupReader(f,i){
+            var reader = new FileReader();
+            reader.file = f;
+            // File Reader to create ContentVersion
+            reader.onload = function(e){
+                var cv = new sforce.SObject("ContentVersion");   
+                cv.ContentLocation = 'S';
+                var fileContents = reader.result;            
+                var base64Mark = 'base64,';
+                var fileName = this.file.name;
+                var dataStart = fileContents.indexOf(base64Mark) + base64Mark.length;
+                fileContents = fileContents.substring(dataStart);
+                cv.VersionData = fileContents;
+                cv.Title = this.file.name;
+                cv.PathOnClient = this.file.name;
+                var createResult = sforce.connection.create([cv]); //Creation of ContentVersion
+                   
+                if(createResult[0].getBoolean("success")){
+                    contentVersionIds = contentVersionIds+createResult[0].id+';';
+                    flag++;
+                    if(flag == attLength){
+                        hasAttachments = true; //Setting hasAttachments boolean value to true
+                        
+                        //calling sendMessageTemplateAF for Sending MessageTemplate 
+                        sendMessageTemplateAF(amount,recId,Description,fiscalQuarter,measurementOfSuccess1,measurementOfSuccess2,measurementOfSuccess3,measurementOfSuccess4,contentVersionIds);
+                        var lexOrigin;
+                        // If vforgin contains VisulaForce page url path
+                        if(vforgin.search('--c') > 0){
+                            var urlArr = vforgin.split('--c');
+                            if(urlArr != null){
+                                lexOrigin = urlArr[0]+'.lightning.force.com'; 
+                            }
+                        }else{
+                            lexOrigin  = vforgin;
+                        }
+                        console.log('@@@ lexOrigin '+lexOrigin);
+                        window.parent.postMessage({"status":"SUCCESS"}, lexOrigin);
+                        
+                    }
+                }
+                
+                
+            };   
+            reader.readAsDataURL(f);  
+            
+        }
+        
+        
+    }, false);
+    
+    //Sends Status back to Lightning Component
+    function templateupsertComplete(){
+        var statusVar = '';
+        statusVar = document.getElementById("pageid:formid:statusId").value;
+        var lexOrigin;
+        if(vforgin.search('--c') > 0){
+            var urlArr = vforgin.split('--c');
+            if(urlArr != null){
+                lexOrigin = urlArr[0]+'.lightning.force.com'; 
+            }
+        }else{
+            lexOrigin  = vforgin;
+        }
+        window.parent.postMessage({"contentVersionIds":contentVersionIds,"status":statusVar}, lexOrigin);
+    }
+    </script>
+    <apex:form id="formid">  
+        <!-- Calling Backend  saveTemplatesAction to create/edit Templates -->
+        <apex:actionFunction name="sendMessageTemplateAF" action="{!saveFilesAction}" rerender="dummy,opId,status" >
+            
+            <apex:param value="" name="amount" assignto="{!amount}"/>
+            
+            <apex:param value="" name="recId" assignto="{!recId}"/>
+            
+            <apex:param value="" name="Description" assignto="{!Description}"/>
+            
+            <apex:param value="" name="fiscalQuarter" assignto="{!fiscalQuarter}"/>
+            
+            <apex:param value="" name="measurementOfSuccess1" assignto="{!measurementOfSuccess1}"/>
+            
+            <apex:param value="" name="measurementOfSuccess2" assignto="{!measurementOfSuccess2}"/>
+            
+            <apex:param value="" name="measurementOfSuccess3" assignto="{!measurementOfSuccess3}"/>
+            
+            <apex:param value="" name="measurementOfSuccess4" assignto="{!measurementOfSuccess4}"/>
+            
+            <apex:param value="" name="contentVersionIds" assignto="{!contentVersionIds}"/>
+            
+        </apex:actionFunction>
+        <apex:outputPanel id="opId">
+            <apex:inputHidden id="statusId" value="{!status}"/>
+        </apex:outputPanel>
+        
+    </apex:form>
+    
+</apex:page>

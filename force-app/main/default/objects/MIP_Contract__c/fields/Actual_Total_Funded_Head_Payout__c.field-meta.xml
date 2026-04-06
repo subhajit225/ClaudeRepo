@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Actual_Total_Funded_Head_Payout__c</fullName>
+    <label>Actual Total Funded Head Payout</label>
+    <summarizedField>MIP_Element__c.Actual_Funded_Head_Payout__c</summarizedField>
+    <summaryFilterItems>
+        <field>MIP_Element__c.RecordTypeId</field>
+        <operation>equals</operation>
+        <value>Funded Head</value>
+    </summaryFilterItems>
+    <summaryForeignKey>MIP_Element__c.MIP_Contract__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

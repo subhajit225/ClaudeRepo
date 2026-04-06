@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Task_Expired__c</fullName>
+    <formula>IF( !ISBLANK(Extended_End_date__c), Extended_End_date__c &lt; TODAY(),Task_End_date__c &lt; TODAY()) &amp;&amp; Billable_Hours_Approved__c &lt; Billable_Hours_Expected__c</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Task Expired</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

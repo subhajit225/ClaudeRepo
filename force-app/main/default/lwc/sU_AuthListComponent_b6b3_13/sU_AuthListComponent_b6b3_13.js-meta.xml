@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+<apiVersion>52.0</apiVersion>
+<isExposed>true</isExposed>
+<masterLabel>sU_AuthListComponent_b6b3_13</masterLabel>
+<targets>
+<target>lightning__RecordPage</target>
+<target>lightning__AppPage</target>
+<target>lightning__HomePage</target>
+<target>lightning__Tab</target>
+<target>lightningCommunity__Page</target>
+<target>lightningCommunity__Default</target>
+<target>lightning__UtilityBar</target>
+</targets>
+<targetConfigs><targetConfig targets="lightning__HomePage,lightning__RecordPage, lightningCommunity__Default">
+    <property name="pagesize" type="integer" default="10" label="Enter default page size" />
+    <property name="pageheadertitle" type="string" default="View suggested articles"
+        label="Enter Page Header Title" />
+    <property name="gotosearchpagemsg" type="string" default="Go to search result page"
+        label="Enter here message to redirect on global search page" />
+    <property name="noresultfoundmsg" type="string" default="Sorry, no results found."
+        label="Enter here message to show when no matching results found" />
+    <property name="sourcename" type="string" default="" label="Content source type" />
+    <property name="sourcevalue" type="string" default="" label="Content source value" />
+    <property name="showmetadata" type="Boolean" default="false"
+        label="Show metadata in the list results" />
+    <property name="showbody" type="Boolean" default="false" label="Show body in results" />
+    <property name="opennewtab" type="Boolean" default="false"
+        label="Open search result page in a new tab." />
+        </targetConfig></targetConfigs>
+</LightningComponentBundle>

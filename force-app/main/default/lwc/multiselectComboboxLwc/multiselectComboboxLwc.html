@@ -1,0 +1,106 @@
+<template>
+
+  <!-- Start Header Label Passed from Parent -->
+  <template if:true={label}>
+    <label class="slds-form-element__label">{label}</label>
+  </template>
+  <!-- End Header Label Passed from Parent -->
+  <div class="slds-combobox_container">
+    <div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open" aria-expanded="true"
+      aria-haspopup="listbox" role="combobox">
+      <!-- Search Input -->
+      <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right" role="none">
+        <lightning-input disabled={disabled} class="inputBox" placeholder={placeholder} onblur={handleBlur}
+          onclick={showOptions} onkeyup={filterOptionsHandler} variant="label-hidden"
+          id="combobox-id-1"></lightning-input>
+          <!-- value={searchString} -->
+        <lightning-icon class="slds-input__icon" icon-name="utility:down" size="x-small"
+          alternative-text="downicon"></lightning-icon>
+      </div>
+      <!-- Dropdown List -->
+      <template if:true={showDropdown}>
+        <div id="listbox-id-1" class="slds-dropdown slds-dropdown_length-5 slds-dropdown_fluid" onmousedown={handleDropdownClick}>
+          <ul class="slds-listbox slds-listbox_vertical recordListBox" role="presentation" >
+            <template if:false={noResultMessage}>
+              <template if:true={enableSelectAll}>
+                <li data-id='select_all' onmousedown={selectItem} style="cursor: pointer;"
+                    class="slds-listbox__item eachItem listBoxItem">
+                    Select All
+                </li>
+              </template>
+              <template for:each={optionData} for:item="option">
+                <template if:true={option.isVisible}>
+                  <li key={option.value} data-id={option.value} onmousedown={selectItem} style="cursor: pointer;"
+                    class="slds-listbox__item eachItem listBoxItem">
+                    <template if:true={option.selected}>
+                      <lightning-icon icon-name="utility:check" size="x-small" alternative-text="icon"></lightning-icon>
+                    </template>
+                    <span  class="slds-media slds-listbox__option_entity verticalAlign slds-truncate">{option.label}</span>
+                  </li>
+                </template>
+              </template>
+            </template>
+            <template if:true={noResultMessage}>
+              <li class="slds-listbox__item">
+                <span
+                  class="slds-media slds-listbox__option_entity verticalAlign slds-truncate">{noResultMessage}</span>
+              </li>
+            </template>
+          </ul>
+        </div>
+      </template>
+    </div>
+  </div> 
+  <!-- Multi Select Pills -->
+    <!--<div class="slds-grid slds-wrap" style="width: 21rem;">--> <!-- wrapped pills -->
+    <template lwc:if={multiAdd}>
+      <template for:each={selectedMultiAdd} for:item="option" for:index="index">
+        <div key={option.key} class="slds-m-right_x-small slds-m-top_x-small">
+          <template if:true={option.disabled}>
+            <lightning-pill label={option.label} name={option.value} data-index={index} class="hide-remove">
+            </lightning-pill>
+          </template>
+          <template if:false={option.disabled}>
+            <lightning-pill label={option.label} name={option.value} onremove={closePill} data-index={index} class="slds-m-right_x-small"> 
+            </lightning-pill>
+            <!--FY25SR-2244 start-->
+            <span class="slds-form-element__control">
+              <button class="slds-button slds-button_icon slds-button_icon-small slds-input__button_decrement" data-index={index} onclick={handleDecrement}>
+                <lightning-button-icon icon-name="utility:ban" variant="bare"></lightning-button-icon>
+              </button>
+              <input type="number" id="qtyCounter" name={option.value} value={option.quantity} data-index={index} class="slds-input slds-input_counter"
+              style="width: 7em; padding:1px;"/>
+              <button class="slds-button slds-button_icon slds-button_icon-small slds-input__button_increment" data-index={index} onclick={handleIncrement}>
+                <lightning-button-icon icon-name="utility:new" variant="bare"></lightning-button-icon>
+              </button>
+            </span>
+            <!--FY25SR-2244 end-->
+          </template>
+        </div>
+      </template>
+    </template>
+    <template lwc:else>
+      <template for:each={optionData} for:item="option">
+        <template if:true={option.disabled}>
+          <template if:true={option.selected}>
+            <div key={option.value} class="slds-m-right_x-small slds-m-top_x-small">
+              <lightning-pill label={option.label} name={option.value} class="hide-remove">
+              </lightning-pill>
+            </div>
+          </template>
+        </template>
+        <template if:false={option.disabled}>
+        <template if:true={option.selected}>
+          <div key={option.value} class="slds-m-right_x-small slds-m-top_x-small">
+            <lightning-pill label={option.label} name={option.value} onremove={closePill}>
+            </lightning-pill>
+          </div>
+        </template>
+        </template>
+        
+      </template>
+    </template>
+    
+  <!--</div>-->
+
+</template>

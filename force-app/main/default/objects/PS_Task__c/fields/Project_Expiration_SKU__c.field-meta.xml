@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Project_Expiration_SKU__c</fullName>
+    <description>DO NOT ADD TO PAGE LAYOUT</description>
+    <formula>Order_Product__c = &apos;RBK-INSTALL&apos; || Order_Product__c = &apos;RBK-CONSULT&apos; || CONTAINS(Order_Product__c , &apos;_PD&apos;) || CONTAINS(Order_Product__c , &apos;-PD&apos;)</formula>
+    <inlineHelpText>DO NOT ADD TO PAGE LAYOUT</inlineHelpText>
+    <label>Hidden Project Expiration SKU</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

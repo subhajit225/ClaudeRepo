@@ -1,0 +1,43 @@
+<template>
+    <template if:true={loadingData}>
+        <lightning-spinner class="spinnerClass" variant="brand" alternative-text="Loading"
+            size="medium"></lightning-spinner>
+    </template>
+    <div class="mainDiv">
+        <template if:false={loadingData}>
+           <div class="c-container">
+               <!-- Row Filters Component-->
+                <template if:true={showRowFilter}>
+                    <c-heat-map-row-filters row-filter-options={rowFilterOptions} section-style-account-filter={sectionStyleAccountFilter} onselectedfilteroptions={handleFilterSelection} onselectedfilteraccounts={handleFilterSelection} onresetfilterevent={handleResetRowFilter} onapplyfilterevent={handleApplyRowFilter} onfilterbuttonclicked={handleFilterClick} onselectorclearalloptions={handleSelectAndClearAll}></c-heat-map-row-filters>
+                </template>
+           </div>
+           <div>
+           		<!-- Header Section Component -->
+                <c-heat-map-header-section account-details={dataAccounts}></c-heat-map-header-section>
+           </div>
+
+            <!-- Verbiage Section -->
+            <div class="verbiage-container" lwc:if={showWarningVerbiage}>
+                <span class="slds-alert_warning verbiageClass">
+                    <lightning-icon icon-name="utility:warning" alternative-text="Warning!" title="Warning" class="warningClass slds-m-right_small" size="x-small"></lightning-icon>
+                    Only the first 1,000 records are displayed based on the applied filters. Please refine your filters for more precise results.
+                    <lightning-icon icon-name="utility:close" alternative-text="Close" title="Close" class="closeBannerClass " style="margin-left: 0.5rem;" size="xx-small" onclick={handleCloseBanner}></lightning-icon>
+                </span>
+            </div>
+            
+           <div class="container">
+               <!-- Column Filters Component-->
+                <template if:true={showColumnFilter}>
+                    <c-heat-map-column-filters column-filter-options={columnFilterOptions} oncolumnfiltersetunset={handleColumnFilterChange}></c-heat-map-column-filters>
+                </template>
+            
+                <!-- Data table component -->
+                <div class="content">
+                    <template if:true={showDatatable}>
+                        <c-heat-map-data-table ongetaccountdetails={handleGetAccDetails} preferred-filters={selectedFilters} ongetaccountrowfilters={handleAccountRowFilters} preferred-accounts={preferredAccounts} onisheatmapreadonly={handlePageLoad}></c-heat-map-data-table>
+                    </template>
+                </div>
+            </div>
+        </template>
+    </div>
+</template>

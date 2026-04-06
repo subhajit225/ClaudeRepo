@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>expirationDays__c</fullName>
+    <description>This field is used to calculate the expiration days for the record.</description>
+    <externalId>false</externalId>
+    <formula>IF(
+    AND(
+        NOT(ISBLANK(Valid_Until__c)),
+        NOT(ISBLANK(Manual_Review_Requested_On__c))
+    ),
+    IF(
+        Valid_Until__c &lt; Manual_Review_Requested_On__c,
+        TODAY() - Valid_Until__c,
+        TODAY() - Manual_Review_Requested_On__c
+    ),
+    IF(
+          NOT(ISBLANK(Valid_Until__c)),
+          TODAY() - Valid_Until__c,
+          IF(
+             NOT(ISBLANK(Manual_Review_Requested_On__c )),
+             TODAY() - Manual_Review_Requested_On__c ,
+             0
+          )
+    )
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Expiration Days</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

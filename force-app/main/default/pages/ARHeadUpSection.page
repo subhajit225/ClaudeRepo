@@ -1,0 +1,28 @@
+<apex:page standardController="Assist_Request__c">
+    <apex:slds />
+    <apex:includeLightning />
+    <apex:includeScript value="/support/console/42.0/integration.js"/>
+    <div id="lightning" /> 
+    
+    <script type="text/javascript">
+    if(sforce.console.isInConsole()) {
+        
+    }
+    $Lightning.use("c:fedBanner", function() {
+        $Lightning.createComponent(
+            "c:CaseEntitlement",
+            {"recordId" : "{!Assist_Request__c.Case__c}"},
+            "lightning",
+            function(cmp) {
+                // do some stuff
+            });
+        $Lightning.createComponent(
+            "c:lWC_CaseSpecialHandling",
+            {"recordId" : "{!Assist_Request__c.Case__c}"},
+            "lightning",
+            function(cmp) {
+                // do some stuff
+            });
+    });
+    </script>
+</apex:page>

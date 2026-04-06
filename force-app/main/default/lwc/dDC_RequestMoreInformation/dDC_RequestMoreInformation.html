@@ -1,0 +1,27 @@
+<template>
+    <lightning-card  title="Request More Information" icon-name="standard:account">
+       <div class="slds-p-horizontal_small">
+        <template if:false={isLoaded}>
+              <lightning-spinner alternative-text="Loading..." variant="brand">
+              </lightning-spinner>
+           </template>
+           <lightning-record-edit-form if:true={isLoaded}
+                       object-api-name={objectName} onsubmit={handleObjectCreated} onsuccess={handleSuccess}>
+               <lightning-input-field field-name="Approval__c" disabled value={recordId}></lightning-input-field>
+               <lightning-input-field field-name="Deal_Desk_Case__c" disabled value={DealDeskCaseId}></lightning-input-field>
+                <lightning-input-field field-name="Feedback_Groups__c" required="true"></lightning-input-field>
+               <lightning-input-field field-name="Requestor_Comments__c" required="true"></lightning-input-field>
+               <!-- <lightning-input-field field-name="Assignee__c" required="true"></lightning-input-field> -->
+               <!-- <lightning-input-field field-name="Requestor__c" disabled value={DealDeskCaseId}></lightning-input-field> -->
+               <center>
+
+               <!-- submit -->
+               <lightning-button class="slds-m-around_small" variant="brand" type="submit" label="Save"></lightning-button>
+               <lightning-button class="slds-m-around_small" variant="brand-outline" label="Cancel" onclick={closeAction}></lightning-button>
+               </center>
+           </lightning-record-edit-form>
+       </div>
+
+    </lightning-card>
+
+</template>

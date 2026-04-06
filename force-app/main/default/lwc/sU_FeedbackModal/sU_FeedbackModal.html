@@ -1,0 +1,105 @@
+<template>
+    <template if:true={feedbackModal}>
+        <div class="su__overlay" onclick={closefeedbackmodal}></div>
+        <div class="su__feedback-Container">
+            <div class="su__feedback-subContainer">
+                <div class="su__d-flex su__justify-content-between">
+                    <div class="su__flex-column">
+                        <div class="su__feedback_heading">Additional Feedback</div>
+                        <div class="su__feedback_subheading">How is your search experience with SearchUnifyGPT?</div>
+                    </div>
+                    <template if:true={thumbsUpImage}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="59" height="59" viewBox="0 0 59 59">
+                            <g id="Group_19862" data-name="Group 19862" transform="translate(-6284.408 -1206.407)">
+                                <g id="Group_19788" data-name="Group 19788" transform="translate(6284.36 1206.359)"
+                                    opacity="0.06">
+                                    <circle id="Ellipse_6" data-name="Ellipse 6" cx="29.5" cy="29.5" r="29.5"
+                                        transform="translate(0.048 0.048)" fill="#919bb0" />
+                                </g>
+                                <path id="svgexport-12"
+                                    d="M20.169,39.431a1.92,1.92,0,0,1-1.9.953l-.871-.109A7.68,7.68,0,0,1,11.005,30.4l1.057-3.437H10.684a7.68,7.68,0,0,1-7.409-9.7l2.618-9.6A7.68,7.68,0,0,1,13.3,2h18.64A5.76,5.76,0,0,1,37.7,7.76V21.2a5.76,5.76,0,0,1-5.76,5.76H28.1a1.388,1.388,0,0,0-1.206.7ZM24.262,5.84H13.3a3.84,3.84,0,0,0-3.7,2.83l-2.618,9.6a3.84,3.84,0,0,0,3.7,4.85h3.978A1.92,1.92,0,0,1,16.5,25.6l-1.822,5.921A3.84,3.84,0,0,0,17.481,36.4l6.081-10.642a5.228,5.228,0,0,1,2.62-2.269V7.76A1.92,1.92,0,0,0,24.262,5.84Zm5.76,17.279V7.76a5.75,5.75,0,0,0-.328-1.92h2.248a1.92,1.92,0,0,1,1.92,1.92V21.2a1.92,1.92,0,0,1-1.92,1.92Z"
+                                    transform="translate(6334.109 1256.805) rotate(180)" fill="#919bb0"
+                                    fill-rule="evenodd" opacity="0.35" />
+                            </g>
+                        </svg>
+                    </template>
+                    <template if:true={thumbsDownImage}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="59" height="59" viewBox="0 0 59 59">
+                            <g data-name="Group 19862" transform="translate(-6284.408 -1206.407)">
+                                <g data-name="Group 19788" transform="translate(6284.36 1206.359)" opacity="0.06">
+                                    <circle data-name="Ellipse 6" cx="29.5" cy="29.5" r="29.5"
+                                        transform="translate(0.048 0.048)" fill="#919bb0" />
+                                </g>
+                                <path
+                                    d="M17.169,37.431a1.92,1.92,0,0,1-1.9.953l-.871-.109A7.68,7.68,0,0,1,8.005,28.4l1.057-3.437H7.684a7.68,7.68,0,0,1-7.409-9.7l2.618-9.6A7.68,7.68,0,0,1,10.3,0h18.64A5.76,5.76,0,0,1,34.7,5.76V19.2a5.76,5.76,0,0,1-5.76,5.76H25.1a1.388,1.388,0,0,0-1.206.7ZM21.262,3.84H10.3a3.84,3.84,0,0,0-3.7,2.83l-2.618,9.6a3.84,3.84,0,0,0,3.7,4.85h3.978A1.92,1.92,0,0,1,13.5,23.6l-1.822,5.921A3.841,3.841,0,0,0,14.481,34.4l6.081-10.642a5.228,5.228,0,0,1,2.62-2.269V5.76A1.92,1.92,0,0,0,21.262,3.84Zm5.76,17.279V5.76a5.75,5.75,0,0,0-.328-1.92h2.248a1.92,1.92,0,0,1,1.92,1.92V19.2a1.92,1.92,0,0,1-1.92,1.92Z"
+                                    transform="translate(6296.408 1216.407)" fill="#919bb0" fill-rule="evenodd"
+                                    opacity="0.35" />
+                            </g>
+                        </svg>
+                    </template>
+                </div>
+                <div class="su__feedback_button-container ">
+                    <div role="button" class={feedbackButtonClickStyleOne} data-value={thumbsUpFeedbackButtonOne}
+                        onclick={feedbackButtonClick}>
+                        <span>
+                            {thumbsUpFeedbackButtonOne}
+                        </span>
+                    </div>
+                    <div role="button" class={feedbackButtonClickStyleTwo} data-value={thumbsUpFeedbackButtonTwo}
+                        onclick={feedbackButtonClick}>
+                        <span>
+                            {thumbsUpFeedbackButtonTwo}
+                        </span>
+                    </div>
+                </div>
+                <div class="su__d-flex su__feedback_input_heading su__justify-content-between">
+                    <span class="su__feedback_input_heading_text">Would you like to say more? </span>
+                    <div>
+                        <span class="su__feedback_count">{textFeedback.length} </span>
+                        <span class="su__grey_color">/300</span>
+                    </div>
+                </div>
+                <div class="su__feedtext-area">
+                    <textarea class="custom-input" data-name="temp" placeholder="Share your feedback" data-value="true"
+                        oninput={writeTextFeedback} maxlength="300" id="feedbacktextArea">{textFeedback}</textarea>
+                </div>
+                <div class="su__feedback_button-container su__flex-hcenter">
+                    <div role="button" class={submitButton} label="Accurate" onclick={submitFeedback}>
+                        <span class={submitButtonText}>
+                            Submit
+                        </span>
+                    </div>
+                    <div role="button" class="su__feedback_button su__feedback_action_btn su-cursor-pointer"
+                        label="Comprehensive" onclick={closefeedbackmodal}>
+                        <span class="su__feedback_btn-text su__feedback_action_text">
+                            Cancel
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+    <template if:true={displayThanksModal}>
+        <div class="su__overlay" onclick={closeThankYouModal}></div>
+    </template>
+    <template if:true={displayThanksModal}>
+        <div class="su__thankyou_container">
+            <span class="su__mb-2">
+                <svg xmlns="http://www.w3.org/2000/svg"  width="42" height="42" viewBox="0 0 42 42">
+                    <defs>
+                      <clipPath id="clip-Tick">
+                        <rect width="42" height="42"/>
+                      </clipPath>
+                    </defs>
+                    <g id="Tick" clip-path="url(#clip-Tick)">
+                      <path id="Icon_ionic-ios-checkmark-circle" data-name="Icon ionic-ios-checkmark-circle" d="M22.6,3.375A19.224,19.224,0,1,0,41.823,22.6,19.221,19.221,0,0,0,22.6,3.375Zm9.843,13.91L20.085,29.7h-.009A1.669,1.669,0,0,1,19,30.206a1.618,1.618,0,0,1-1.081-.527L12.747,24.5a.368.368,0,0,1,0-.527l1.645-1.645a.357.357,0,0,1,.518,0l4.1,4.1L30.289,15.076a.365.365,0,0,1,.259-.111h0a.336.336,0,0,1,.259.111l1.617,1.673A.364.364,0,0,1,32.442,17.285Z" transform="translate(-1.375 -1.375)" fill="#5bb543"/>
+                    </g>
+                  </svg>
+            </span>
+            <div class="su__thankyoutext_container">
+                <span class="su__thankyoutext"></span>
+                Thank You! Your feedback helps
+            </div>
+        </div>
+    </template>
+</template>

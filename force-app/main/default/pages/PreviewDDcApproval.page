@@ -1,0 +1,31 @@
+<apex:page standardController="Deal_Desk_Case__c" extensions="DDcApprovalController" sidebar="false" standardStylesheets="false" title="Submit Deal Desk Case for Approval">
+    <apex:stylesheet value="{!$Resource['PreviewApprovalCss']}"/>
+    <style>
+        body .pbBody {
+            background-color: #F8F8F8 !important;
+        }
+    </style>
+    
+    <apex:form rendered="{!Deal_Desk_Case__c.id!= null}">
+        
+          <!--<Apex:messages style="background-color:#ffff66; font-size: 20px;" id="message"></Apex:messages>-->
+        <div id="sbPreviewApprovals" class="sb">
+            <sbaa:pageHeader title="Preview Approvals" subtitle="{!Deal_Desk_Case__c.Name}" formFactor="desktop" iconName="sf-icon-approval">
+                <div class="sbButtons">
+                    <apex:commandButton styleClass="sbBtn" value="Return To Deal Desk Case" action="{!cancel}" immediate="true"/>
+                </div>
+            </sbaa:pageHeader>
+        </div>
+               <div style="background-color:#ffffb3;text-align:center;height: 40px;padding-top: 20px;">
+                WARNING: Additional Approvers May Be Added as Deal Desk Sees Fit Based On Request Complexity
+
+        </div>    
+                
+        <apex:pageBlock mode="maindetail">
+            
+            <apex:pageBlockSection columns="1" showHeader="false">
+                <sbaa:approvalPreview approvals="{!approvals}"/>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

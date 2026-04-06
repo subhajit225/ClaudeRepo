@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Entitle_ProductName_Mismatched__c</fullName>
+    <formula>AND(Name  &lt;&gt;  Order_Service_Item__r.Product_Name__c, OR ( ISBLANK(Product__c),  TEXT(Product__r.License_Type__c) &lt;&gt; &apos;Consumption&apos;) )</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Entitle ProductName Mismatched</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Date_Shipped__c</fullName>
+    <formula>IF(  POC_Sent__c = True, NOW(),
+ IF(  Date_Shipped_hid__c &lt;&gt;NULL, Date_Shipped_hid__c,NULL)
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>Select &quot;POC Sent&quot; to generate Shipping Date</inlineHelpText>
+    <label>(DEPRECATED) Date Shipped_form</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>DateTime</type>
+</CustomField>

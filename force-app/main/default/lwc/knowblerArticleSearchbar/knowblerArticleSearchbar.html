@@ -1,0 +1,20 @@
+<template>
+  <div class={flexipageregionwidth} style="width: 100%">
+    <div class="kcs_searchbar">
+      <img
+        src={searchIcon}
+        class="search_icon su_loading_light"
+        alt="Failed to load"
+      />
+      <lightning-input
+        class="custom-input article_searchbar"
+        placeholder="Search article"
+        type="search"
+        value={searchtext}
+        onblur={clearData}
+        onfocus={changeFocus}
+        onchange={handleInputChange}
+      ></lightning-input>
+    </div>
+  </div>
+</template>

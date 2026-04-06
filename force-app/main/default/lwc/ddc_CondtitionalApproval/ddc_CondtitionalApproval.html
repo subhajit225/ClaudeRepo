@@ -1,0 +1,21 @@
+<template>
+    <template if:true={isLoaded}>
+        <lightning-quick-action-panel header={statusTemp}>
+             <lightning-record-edit-form object-api-name={objectName} onsubmit={handleObjectCreated} onsuccess={handleSuccess}>
+                <!-- <lightning-input-field field-name="Conditional_Amount__c"></lightning-input-field>
+                <lightning-input-field field-name="Conditional_Close_Date__c" date-style="short"></lightning-input-field>
+                <lightning-input-field field-name="Conditional_Primary_Quote__c"></lightning-input-field> -->
+                <lightning-input-field field-name="sbaa__CommentsLong__c" required="true"></lightning-input-field>
+               <center>
+
+               <!-- submit -->
+               <lightning-button class="slds-m-around_small" variant="brand" type="submit" label="Save"></lightning-button>
+               <lightning-button class="slds-m-around_small" variant="brand-outline" label="Cancel" onclick={closeAction}></lightning-button>
+               </center>
+           </lightning-record-edit-form>
+        </lightning-quick-action-panel>
+    </template>
+     <template if:false={isLoaded}>
+             <lightning-spinner alternative-text="Loading"></lightning-spinner>
+    </template>
+</template>

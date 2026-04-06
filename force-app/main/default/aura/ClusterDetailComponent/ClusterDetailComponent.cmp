@@ -1,0 +1,94 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global" controller="ClusterChartController" >
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="noRecord" type="Boolean" default="false"/>
+    <aura:handler name="change" value="{!v.UserRecord}" action="{!c.doInit}"/>
+    <aura:attribute name="UserRecord" type="Object"/>
+    
+    <force:recordData aura:id="recordLoader"
+                      recordId="{!$SObjectType.CurrentUser.Id}"
+                      fields="Account.Tabs_Visibility__c"
+                      targetFields="{!v.UserRecord}"
+                      />
+    <aura:attribute name="record" type="Cluster__c" access="global"/>
+    
+    <ltng:require scripts="{!join(',',$Resource.chartbundle,
+                           $Resource.GoogleCharts,$Resource.jquery_2_1_1
+                           )}"/>
+    <aura:if isTrue="{!!v.noRecord}">
+        <div class="slds-box">
+            <lightning:recordViewForm recordId="{!v.recordId}" objectApiName="Cluster__c">
+                <div class="slds-wrap slds-size_12-of-12 conatainer" style="text-align:center;">
+                    <div class="slds-large-size--12-of-12 ideaTitle">Cluster metrics </div><br/><br/>
+                </div>
+                <div class="slds-large-size_12-of-12 slds-grid slds-wrap">
+                    <div class="slds-large-size--4-of-12 slds-medium-size--6-of-12 slds-small-size--12-of-12 ideaField">
+                        <lightning:outputField fieldName="uuid__c" />
+                    </div>
+                    <div class="slds-large-size--3-of-12 slds-medium-size--6-of-12 slds-small-size--12-of-12 ideaField">
+                        <lightning:outputField fieldName="software_version__c" />
+                    </div>
+                    <div class="slds-large-size--3-of-12 slds-medium-size--6-of-12 slds-small-size--12-of-12 ideaField">
+                        <lightning:outputField fieldName="tag__c" />
+                    </div>
+                    <div class="slds-large-size--2-of-12 slds-medium-size--6-of-12 slds-small-size--12-of-12 ideaField">
+                        <lightning:outputField fieldName="Storage_Usage_TB__c" />
+                    </div>
+                </div>
+                
+            </lightning:recordViewForm>
+        </div>
+        <br/><br/>
+        <div class="slds-grid">
+            <div class="slds-col slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12  slds-size--12-of-12 slds-wrap slds-grid ">
+                
+                <div class="slds-col slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12 slds-size--12-of-12 paddedBox">
+                    <div class="chartHeader">
+                        {!$Label.c.Storage_Header}
+                    </div><br/>
+                    <div class="chartBox">
+                        <canvas aura:id="storageData"  id="storageData"  class="chartBoxCanvas"></canvas><br/>
+                    </div>
+                    <div class="placetext">
+                        {!$Label.c.Storage_Placeholder}     
+                    </div>
+                </div>
+                <div class="slds-col slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12 slds-size--12-of-12 paddedBox">
+                    <div  class="chartHeader">
+                        {!$Label.c.Object_Header}
+                    </div><br/>
+                    <div class="chartBox">
+                        <canvas aura:id="ObjectsData" id="ObjectsData"  class="chartBoxCanvas"></canvas><br/>
+                    </div>
+                    <div  class="placetext">
+                        {!$Label.c.Object_Placeholder}
+                    </div>
+                </div>
+                <div class="slds-col slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12 slds-size--12-of-12 paddedBox topPad">
+                    <div  class="chartHeader">
+                        {!$Label.c.Snapshot_Header}
+                    </div><br/>
+                    <div class="chartBox">
+                        <canvas aura:id="TotalData" id="TotalData" class="chartBoxCanvas"></canvas><br/>
+                    </div>
+                    <div  class="placetext">
+                        {!$Label.c.Snapshot_Placeholder}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="timelineChart" class=" slds-col slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12  slds-size--12-of-12 slds-wrap slds-grid  googleChart">
+            <div  class="placetext" style="width: 100%;padding-bottom: 2rem;">
+                {!$Label.c.Timeline_Chart_Placeholder}
+            </div>
+            <iframe id="timeC" src="{!'https://support.rubrik.com/apex/TimeLineChart?id='+v.recordId}"  width="100%" style="border:none;height:max-content;" onload="{!c.iframeHeight}"/>
+        </div>
+        <aura:set attribute="else">
+            <div class="slds-box">
+                <p class="noCluster">
+                    This cluster is not found
+                </p>
+            </div>
+        </aura:set>
+    </aura:if>
+    <lightning:spinner aura:id="clusSpinner" alternativeText="Loading" size="small" class="slds-hide"/>
+</aura:component>

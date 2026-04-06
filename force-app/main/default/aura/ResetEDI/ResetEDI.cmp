@@ -1,0 +1,13 @@
+<aura:component controller="LCC_ButtonsController" implements="force:hasRecordId,force:lightningQuickActionWithoutHeader" >
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="isInsideVF" type="boolean" default='false'/>
+    
+    <lightning:workspaceAPI aura:id="workspace"/>
+    <div class="slds-p-top_large slds-align_absolute-center">
+        Are you sure, you want to proceed? 
+    </div>
+    <div class="slds-p-top_large slds-align_absolute-center">
+        <lightning:button variant="brand" label="Reset To Reprocess"  onclick="{! c.handleClick }"/>
+        <lightning:button variant="brand" label="Cancel"  onclick="{! c.handleCancel }"/>
+    </div>
+</aura:component>

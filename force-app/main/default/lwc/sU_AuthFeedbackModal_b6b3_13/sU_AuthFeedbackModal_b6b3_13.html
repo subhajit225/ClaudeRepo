@@ -1,0 +1,191 @@
+<template>
+	<!-- Code Starts - Search  feedback modal code  -->
+	<template if:true={isModalContentfound}>
+		<div class={feedbackModalContainer}>
+			<div class={feedbackModalInnerDiv}>
+				<div class="su__w-100">
+					<div class="su__feedback-close su__black-close-icon su__position-absolute su__cursor"
+						onclick={openFeedbackModal}>
+						<svg class="su__close-icon su__cursor" width="20" height="20" viewBox="0 0 329.27 329">
+							<path
+								d="m194.8 164.77 128.21-128.21c8.3438-8.3398 8.3438-21.824 0-30.164-8.3398-8.3398-21.824-8.3398-30.164 0l-128.21 128.21-128.21-128.21c-8.3438-8.3398-21.824-8.3398-30.164 0-8.3438 8.3398-8.3438 21.824 0 30.164l128.21 128.21-128.21 128.21c-8.3438 8.3398-8.3438 21.824 0 30.164 4.1562 4.1602 9.6211 6.25 15.082 6.25 5.4609 0 10.922-2.0898 15.082-6.25l128.21-128.21 128.21 128.21c4.1602 4.1602 9.6211 6.25 15.082 6.25 5.4609 0 10.922-2.0898 15.082-6.25 8.3438-8.3398 8.3438-21.824 0-30.164z"
+								fill="#000000"></path>
+						</svg>
+					</div>
+
+					<!--  Code Starts - This is the Page rating text feedback input box -->
+					<template if:true={displayTextModal}>
+						<div>
+							<div class="su__heading_grey mb-10">
+								{pageRatingCustomization.selectedPageTextFeedback}
+							</div>
+							<div class="su__feedtext-area su__w-100">
+								<textarea
+							  class="custom-input"
+							  data-name="temp"
+							  data-value="true"
+							  onchange={textFeedbackAreaChange}
+								  id="feedbacktextArea"
+									>{textInputFeedbackValue}</textarea>
+							</div>
+						</div>
+					</template>
+					<!-- Code ends - Page rating text feedback input box -->
+
+					<!-- Code Starts - Feedback pop up code -->
+					<template if:true={searchPageRegex}>
+						<div class="su__feedback-row su__bg-white">
+							<template if:true={showSearchFeedbackHeading}>
+								<div class="su__feed-title font-16">{searchFeedbackData.selectedSearchHeader}</div>
+							</template>
+
+							<div class="su__feed-desc su__my-2 su__font-11 su__color-lgray su__heading_grey">
+								{searchFeedbackData.selectedSearchSubHeader}</div>
+							<div class="su__feed-rating su__font-10">
+								<div class="su__star-wrapper">
+									<template if:true={StarsRating}>
+										<div class="su__feed-rating su__flex-vcenter su__font-10 su__mb-2">
+
+											<template for:each={dynamicStarsClass} for:item="item" for:index="index">
+												<div key={item} onclick={setStarEmoticons} onmouseover={hoverButton}
+													onmouseleave={removeHoverButton} class={item.class}
+													data-index={item.id}></div>
+											</template>
+										</div>
+									</template>
+									<template if:true={EmoticonsRating}>
+										<div id="newId" class="su__feed-rating su__flex-vcenter su__font-10 su__mb-2">
+											<template for:each={dynamicEmoticonsClass} for:item="item" for:index="index"
+												for:index-var="indexVar">
+
+												<div key={item} onclick={setStarEmoticons} onmouseover={hoverButton}
+													onmouseleave={removeHoverButton} class={item.class}
+													data-index={item.id}></div>
+											</template>
+										</div>
+									</template>
+								</div>
+							</div>
+							<template if:true={searchFeedbackData.searchFeedbackToggle}>
+								<div class="su__feed-txtarea">
+									<div
+										class="su__feedback-label su__my-2 su__font-11 su__color-lgray su__heading_grey">
+										{searchFeedbackData.selectedTextFeedback}
+									</div>
+									<div class="su__feedtext-area su__w-100">
+										<textarea
+							  class="custom-input"
+							  data-name="temp"
+							  oninput={feedbackAreaChange}
+								  id="feedbacktxArea"
+									>{inputFeedbackValue}</textarea>
+									</div>
+								</div>
+							</template>
+							<template if:true={searchFeedbackData.followUpToggle}>
+								<div class="su__mt-2">
+									<div
+										class="su__feedback-label su__my-2 su__font-11 su__color-lgray su__heading_grey">
+										{searchFeedbackData.selectedSearchFollowUp}</div>
+									<div class="su__feedradio-group">
+
+										<div class="radio-group su__d-flex su__feedback_radio">
+											<div class="su__radio-yes">
+												<input type="radio" class="su__zero_opacity " name="options" value="Yes"  onchange={toggleFollowUpEmail} checked/>
+												<label class=" m-l-8">
+																							 Yes
+																							</label>
+											</div>
+											<div class="su__radio_no">
+												<input type="radio" name="options" class="m-l-8 su__zero_opacity" value="No"  onchange={toggleFollowUpEmail} />
+												<label class="m-l-8 m-r-8">
+																							No
+																							</label>
+											</div>
+										</div>
+
+									</div>
+									<template if:true={showFollowupEmail}>
+										<div class="su__feed-email-boxs su__align_email">
+											<lightning-input disabled={isInputDisabled} onchange={feedbackEmailChange}
+												name="su__feedback-email" id="su__feedback-email" type="email"
+												placeholder="Enter Email Address"
+												class="su__input-feedack su__w-100 su__su__font-14 su__text-black"
+												value={usersEmailValue}>
+											</lightning-input>
+										</div>
+									</template>
+								</div>
+							</template>
+							<!-- Code for Submit button -->
+							<button onclick={submitFeedback} disabled={isSubmitButtonActive}  role="button" class={disableButton}>{searchFeedbackData.submitButton}</button>
+						</div>
+					</template>
+					<!-- Code ends - feedback pop up code  -->
+
+					<!-- Code for Submit Button when search page regex from page rating failed -->
+					<template if:true={textFeedbackSubmitButton}>
+						<button onclick={submitFeedback}  role="button" class="su__bookmark-save su__submit-feedback">{searchFeedbackData.submitButton}</button>
+					</template>
+				</div>
+			</div>
+
+			<!-- Code for overlay -->
+			<div class={displayModalOverlay} onclick={openFeedbackModal} role="button"></div>
+		</div>
+	</template>
+
+	<!-- Code Starts - Thank you feedback modal -->
+	<template if:true={displayThanksModal}>
+		<div class="su__feedback-modal su__zindex-100">
+			<div class={thanksYouModalContainer}>
+				<div class="su__w-100 ">
+					<div class="su__search-fb su__feedback-close su__black-close-icon su__position-absolute su__cursor  "
+						onclick={closeThankYouModal}>
+						<svg class="su__close-icon su__cursor " width="20" height="20" viewBox="0 0 329.27 329">
+							<path
+								d="m194.8 164.77 128.21-128.21c8.3438-8.3398 8.3438-21.824 0-30.164-8.3398-8.3398-21.824-8.3398-30.164 0l-128.21 128.21-128.21-128.21c-8.3438-8.3398-21.824-8.3398-30.164 0-8.3438 8.3398-8.3438 21.824 0 30.164l128.21 128.21-128.21 128.21c-8.3438 8.3398-8.3438 21.824 0 30.164 4.1562 4.1602 9.6211 6.25 15.082 6.25 5.4609 0 10.922-2.0898 15.082-6.25l128.21-128.21 128.21 128.21c4.1602 4.1602 9.6211 6.25 15.082 6.25 5.4609 0 10.922-2.0898 15.082-6.25 8.3438-8.3398 8.3438-21.824 0-30.164z"
+								fill="#000000"></path>
+						</svg>
+					</div>
+					<div class="su__feedback-row su__bg-white">
+						<div
+							class="su__text-success font-12 su__my-3 su__flex-vcenter su__px-1 su__position-relative su__loading-view su__justify-content-center su__d-flex ng-scope">
+							<svg class="ft-green-tick su__animate-zoom su__mr-2" height="20" width="20"
+								viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+								<circle class="su__circle" fill="#5bb543" cx="24" cy="24" r="22"></circle>
+								<path class="su__tick" fill="none" stroke="#FFF" stroke-width="6" stroke-linecap="round"
+									stroke-linejoin="round" stroke-miterlimit="10" d="M14 27l5.917 4.917L34 17"></path>
+							</svg>
+						</div>
+						<div class="su__feednack-thx su__justify-content-center su__d-flex">
+							{thankyouText}
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class={thankyouModalOverlay} onclick={closeThankYouModal} role="button"></div>
+		</div>
+	</template>
+	<!-- Code ends - Thank you modal -->
+	<div class={alreadySubmittedThanksModalClass}>
+		<div class="su__w-100 ">
+			<div class="su__feedback-row su__bg-white">
+				<div
+					class="su__text-success font-12 su__my-3 su__flex-vcenter su__px-1 su__position-relative su__loading-view su__justify-content-center su__d-flex ng-scope">
+					<svg class="ft-green-tick su__animate-zoom su__mr-2" height="20" width="20" viewBox="0 0 48 48"
+						xmlns="http://www.w3.org/2000/svg">
+						<circle class="su__circle" fill="#5bb543" cx="24" cy="24" r="22">
+						</circle>
+						<path class="su__tick" fill="none" stroke="#FFF" stroke-width="6" stroke-linecap="round"
+							stroke-linejoin="round" stroke-miterlimit="10" d="M14 27l5.917 4.917L34 17"></path>
+					</svg>
+
+				</div>
+				<div class="su__feednack-thx su__justify-content-center su__d-flex">
+					{thankyouText}
+				</div>
+			</div>
+		</div>
+	</div>
+</template>

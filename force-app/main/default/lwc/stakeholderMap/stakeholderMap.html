@@ -1,0 +1,146 @@
+<template> 
+    <lightning-card class="lightningCard">
+
+       
+        <div class="table-responsive">
+        <table class="main-table slds-table slds-table_bordered slds-table_cell-buffer" style={mainTableStyle}>
+            <thead>
+                <tr>
+                    <th class="slds-text-align_center">Key CXO Stakeholders</th>
+                    <th class="slds-text-align_center">Additional C-Suite Personas</th>
+                </tr>
+            </thead>
+            <tbody class="main-table-body">
+                <tr>
+                  <td class="key-cxo-td">
+                    <div class="key-cxo-container">
+                        <div class="cxo-title"> Head of IT (CIO) 
+                            
+                            <template if:true={firstCio}>
+                                <a href={firstCio.contactUrl} target="_blank">{firstCio.Name}</a>
+                            </template>
+                        </div>
+
+                        <div class="cxo-title"> Head of Security (CISO) 
+                            <template if:true={firstCiso}>
+                                <a href={firstCiso.contactUrl} target="_blank">{firstCiso.Name}</a>
+                            </template>
+                        </div>
+
+                        <div class="cxo-title"> Head of Infrastructure (CTO) 
+                            <template if:true={firstCto}>
+                                <a href={firstCto.contactUrl} target="_blank">{firstCto.Name}</a>
+                            </template>
+                        </div>
+
+                        <div class="cxo-title">Head of Data 
+                            <template if:true={firstData}>
+                                <a href={firstData.contactUrl} target="_blank">{firstData.Name}</a>
+                            </template>
+                            <template if:false={firstData}>
+                                <br></br>
+                            </template>
+                            <template if:true={cxoHasMoreAny}>
+                                <div  class="anc-tag">
+                                    <a href="javascript:void(0);" data-category="CXO" onclick={handleShowMore}>
+                                        Link for more...
+                                    </a>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="csuite-container">
+                        <template for:each={cSuiteRow} for:item="c">
+                            <div key={c.Id} class="slds-text-align_center table-data">
+                                <a href={c.contactUrl} target="_blank" class="tooltip">{c.Name}
+                                    <span class="tooltiptext"> {c.Title}</span></a>
+                                <template if:true={c.isLast}>
+                                    <template if:true={cSuiteHasMore}>
+                                        <div class="anc-tag">
+                                            <a href="javascript:void(0);" data-category="C-Suite" onclick={handleShowMore}>
+                                                Link for more...
+                                            </a>
+                                        </div>
+                                    </template>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+                  </td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+
+       
+        <h2 class="table-heading slds-text-heading_medium slds-text-align_center">VP/Head Personas</h2>
+        <div class="table-responsive">
+        <table class="vp-table slds-table slds-table_bordered slds-table_cell-buffer" style={vpTableStyle}>
+            <tbody>
+                <tr>
+                    <template for:each={vpHeadBuckets} for:item="bucket">
+                        <td key={bucket.id} class="slds-text-align_center table-data">
+                            <template for:each={bucket.contacts} for:item="c">
+                                <p key={c.Id}><a href={c.contactUrl} target="_blank">{c.Name}</a></p>
+                            </template>
+                            <template if:true={bucket.isLastCol}>
+                                <template if:true={vpHeadHasMore}>
+                                    <div>
+                                        <a href="javascript:void(0);" data-category="VPHead" onclick={handleShowMore}>
+                                            Link for more...
+                                        </a>
+                                    </div>
+                                </template>
+                            </template>
+                        </td>
+                    </template>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+
+       
+        <div class="table-responsive">
+        <table class="product-table slds-table slds-table_bordered slds-table_cell-buffer" style={productTableStyle}>
+            <thead class="product-table-head">
+                <tr class="product-table-head-row">
+                    <th class="slds-text-align_center product-table-th">Infrastructure Technology</th>
+                    <th class="slds-text-align_center product-table-th">Technology Architecture</th>
+                    <th class="slds-text-align_center product-table-th">Cloud Engineering</th>
+                    <th class="slds-text-align_center product-table-th">Security</th>
+                    <th class="slds-text-align_center product-table-th">App Owners</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <template for:each={productBuckets} for:item="bucket">
+                        <td key={bucket.id} class="slds-text-align_center table-data">
+                            <template for:each={bucket.display} for:item="c">
+                                <p key={c.Id}><a href={c.contactUrl} target="_blank">{c.Name}</a></p>
+                            </template>
+                            <template if:true={bucket.hasMore}>
+                                <p>
+                                    <a href="javascript:void(0);" data-category={bucket.name} onclick={handleShowMore}>
+                                        Link for more...
+                                    </a>
+                                </p>
+                            </template>
+                        </td>
+                    </template>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+        
+   
+        <c-contacts-modal
+            show-modal={showModal}
+            modal-title={modalTitle}
+            contacts={modalContacts}
+            onclose={handleModalClose}>
+        </c-contacts-modal>
+    </lightning-card>
+    
+</template>

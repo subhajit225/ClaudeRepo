@@ -1,0 +1,23 @@
+<!--
+* Visualforce Component Name :- UserDetailComponent
+* Controller :- UserDetailController
+* Use :- <c:UserDetailComponent userId="*****************************"/>
+* Author :- Shiva Sharma
+* Created Date :- 14-06-2019
+* Description : This Page is being used in Forum information we can show user information through this component.
+* 
+*************Change Logs***************************************************************************
+* 
+* Modified By          Date        Description 
+* 
+
+*************Change Logs Ends**********************************************************************
+-->
+<apex:component controller="UserDetailController" access="global" >
+    <apex:attribute name="userId" description="This contains userId." assignTo="{!userRecordId}"
+        type="String"/>
+    <apex:repeat value="{!userRecords}" var="i">
+        <b>User Email: </b><apex:outputLink value="https://rubrikinc--supfullsb.cs14.my.salesforce.com//{!i.contactId}">{!i.Email}</apex:outputLink>  <br/>
+        <b>Account Name:</b> {!i.Contact.Account.Name} <br/>
+    </apex:repeat>
+</apex:component>

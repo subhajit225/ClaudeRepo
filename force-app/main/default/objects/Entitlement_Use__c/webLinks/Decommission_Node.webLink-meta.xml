@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Decommission_Node</fullName>
+    <availability>online</availability>
+    <displayType>button</displayType>
+    <linkType>javascript</linkType>
+    <masterLabel>Decommission Node</masterLabel>
+    <openType>onClickJavaScript</openType>
+    <protected>false</protected>
+    <url>{!REQUIRESCRIPT(&quot;/soap/ajax/20.0/connection.js&quot;)}
+var entuse = new sforce.SObject(&quot;Entitlement_Use__c&quot;); 
+entuse.id = &quot;{!Entitlement_Use__c.Id}&quot;; 
+function checkError(result)
+{
+if (!result[0].getBoolean(&apos;success&apos;)) {
+throw(result[0].errors.message);
+}
+}
+try
+{
+var entuseData = sforce.connection.query(&quot;SELECT id,entitlement__r.Id,entitlement__r.Name,entitlement__r.Usage_Quantity__c,entitlement__r.Entitlement_Usage__c,entitlement__c from Entitlement_Use__c WHERE id =&apos;{!Entitlement_Use__c.Id}&apos; limit 1&quot;); 
+records = entuseData.getArray(&quot;records&quot;); 
+
+var ent = new sforce.SObject(&quot;Entitlement&quot;); 
+ent.id = records[0].entitlement__c; 
+ent.Entitlement_Usage__c = null; 
+
+resultofUpdate = sforce.connection.update([ent]); 
+window.location.reload(); 
+
+}
+catch (err)
+{
+alert(err);
+}</url>
+</WebLink>

@@ -1,0 +1,63 @@
+<!--
+* Visualforce Component Name :- EmailTableComponent
+* Controller :- EmailTableController
+* Use :- <c:EmailTableComponent tableValue="Update"/>
+* Author :- Shiva Sharma
+* Created Date :- 27-04-2018
+* Description : This Page is being used in Email template to track change in user record by Authorized User.
+* 
+*************Change Logs***************************************************************************
+* 
+* Modified By          Date        Description 
+* 
+
+*************Change Logs Ends**********************************************************************
+-->
+<apex:component controller="EmailTableController" access="global">
+    <apex:attribute name="tableValue" description="This will contain what kind of table is this." type="String" assignTo="{!tableType}" access="global"/>
+    
+    <div class="container-fluid" style="height:auto;">
+        <table class="m_7201129186906164528MsoTableGrid" border="1" cellspacing="5" cellpadding="7" style="border-collapse:collapse;border:none">
+            <thead>
+                <tr>
+                    <th>
+                        First Name
+                    </th>
+                    <th>
+                        Last Name   
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th>
+                        Title   
+                    </th>
+                    <th>
+                        Phone
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <apex:repeat value="{!TableList}" var="i">
+                    <tr>
+                        <td>
+                            {!i.firstName}
+                        </td>
+                        <td>
+                            {!i.lastName}
+                        </td>
+                        <td>
+                            {!i.email}
+                        </td>
+                        <td>
+                            {!i.title}
+                        </td>
+                        <td>
+                            {!i.phone}
+                        </td>
+                    </tr>
+                </apex:repeat>
+            </tbody>
+        </table>
+    </div> 
+</apex:component>

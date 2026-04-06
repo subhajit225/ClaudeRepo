@@ -1,0 +1,76 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" controller="ControllerCommunityHome" access="global">
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <aura:attribute name="kavList" type="SObject" />
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+    <aura:attribute name="kavList1" type="SObject" />
+    <aura:attribute name="componenttype" type="string" default="new" />
+    <div class="slds-grid  slds-align_absolute-center" style="padding: 4rem 5rem 4rem 0rem;margin-left:-7rem;">
+        <div class="slds-size--1-of-1 ">
+            <div class="slds-grid slds-border_bottom ">
+                <h1 class="artcls ">Popular Articles</h1>
+            </div>
+            <div class="slds-grid slds-wrap paddingtopbottom ">
+                <aura:iteration var="kavList1" items="{!v.kavList1}">
+                    <div class="slds-col articlecls  slds-size_2-of-12 slds-medium-size_2-of-12 slds-large-size_2-of-12 ">
+                        <img class="imgcls1" src="{!$Resource.RubrikCustomerCommunity +  '/RubrikCommunity/Images/article1.png'}" />
+                    </div>
+                    <div class="slds-col articlecls1 slds-border_bottom slds-size_10-of-12 slds-medium-size_10-of-12 slds-large-size_10-of-12">
+                        <p class="artnobgcolor"> Article No: {!kavList1.kV.ArticleNumber}</p>
+                        <p><a class="textdecorate" href="{!'article/'+kavList1.kV.UrlName}"><span class="titlesize "> {!kavList1.kV.Title}</span></a>
+                            <br></br>
+                            <span class="SummaryClass">
+                                
+                                <c:SubsctringComponent ParentString="{!kavList1.kV.Summary!=null ? kavList1.kV.Summary : kavList1.kV.Summary__c}" Strlength="100"/>
+                                
+                            </span><br></br>
+                            <span class="datepadding">
+                                Created: <lightning:formattedDateTime value="{!kavList1.kV.FirstPublishedDate}" year="numeric" day="2-digit" month="short" timeZone="UTC"/>
+                                <span class=""> &bull;
+                                    Last Modified: <lightning:formattedDateTime value="{!kavList1.kV.LastModifiedDate}" year="numeric" day="2-digit" month="short" timeZone="UTC"/>
+                                </span>
+                            <span class=""> &bull;
+                                    Views: {!kavList1.viewCount}
+                                </span>
+                            </span>
+                        </p>
+                    </div>
+                </aura:iteration>
+                <a href="../s/kblistpage?categoryType_Article=All&amp;sortBy=viewCount" class="link">VIEW ALL POPULAR ARTICLES</a>
+            </div>
+            <div class="slds-grid slds-border_bottom ">
+                <h1 class="artcls ">New Articles</h1>
+            </div>
+            <div class="slds-grid slds-wrap paddingtopbottom">
+
+                <aura:iteration var="kavList" items="{!v.kavList}">
+                    <div class="slds-col articlecls slds-size_2-of-12 slds-medium-size_2-of-12 slds-large-size_2-of-12 ">
+                        <img class="imgcls" src="{!$Resource.RubrikCustomerCommunity +  '/RubrikCommunity/Images/article1.png'}" />
+                    </div>
+                    <div class="slds-col articlecls1 slds-size_10-of-12 paddingtopbottom1 slds-border_bottom slds-medium-size_10-of-12 slds-large-size_10-of-12">
+                        <p class="artnobgcolor"> Article No: {!kavList.kV.ArticleNumber}</p>
+                        <p> <a class="textdecorate" href="{!'article/'+kavList.kV.UrlName}"><span class="titlesize">{!kavList.kV.Title}</span></a>
+                            <br></br>
+                            <span class="SummaryClass">
+                                
+                                <c:SubsctringComponent ParentString="{!kavList.kV.Summary!=null ? kavList.kV.Summary : kavList.kV.Summary__c}" Strlength="100"/>
+                                
+                            </span><br></br>
+                            <span class="datepadding">
+                                Created: <lightning:formattedDateTime value="{!kavList.kV.FirstPublishedDate}" year="numeric" day="2-digit" month="short" timeZone="UTC"/>
+                                <span class=""> &bull;
+                                    Last Modified: <lightning:formattedDateTime value="{!kavList.kV.LastModifiedDate}" year="numeric" day="2-digit" month="short" timeZone="UTC"/>
+                                </span>
+                            <span class=""> &bull;
+                                    Views: {!kavList.viewCount}
+                                </span>
+                            </span>
+                        </p>
+                    </div>
+
+                </aura:iteration>
+                <a href="../s/kblistpage?categoryType_Article=All" class="link">VIEW ALL NEW ARTICLES</a>
+            </div>
+        </div>
+
+    </div>
+</aura:component>

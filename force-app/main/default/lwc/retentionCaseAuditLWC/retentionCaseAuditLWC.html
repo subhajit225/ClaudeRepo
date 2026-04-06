@@ -1,0 +1,274 @@
+<template>
+    <div lwc:if={customPermission}>
+            <lightning-record-edit-form
+                    object-api-name={objectApiName}
+                    record-id={recordId}
+                    onsubmit={handleSubmit}
+                    onsuccess={handleSuccess}
+                >
+                    <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open slds-modal_full">
+                        <div class="slds-modal__container" style="width:100%;height:110%;">
+                            <lightning-messages></lightning-messages>
+                    
+                            <div class="slds-modal__header">
+                                <lightning-output-field field-name="OwnerId"> </lightning-output-field>
+                                <lightning-output-field field-name="CaseNumber"> </lightning-output-field>
+                                <lightning-output-field field-name="Retention_Case_Auditor_Name__c"  > </lightning-output-field>
+                                <lightning-output-field field-name="Case_Audit_Timestamp__c"  > </lightning-output-field>
+                                 <br/>
+                                <b>Score </b> {percentage}     <lightning-progress-bar value={percentage} size="large" variant="circular"></lightning-progress-bar>
+                                <h1 class="slds-text-heading_large">
+                                    {formType} Audit Form
+                                </h1>
+                            </div>
+                            <div class="slds-modal__content slds-modal_full-content slds-p-around_medium" id="modal-content-id-1">
+                                
+                               
+                                        <div class="slds-grid slds-gutters">
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <span>1. Account 360 degree review<lightning-helptext content="Did the CSM perform and update the 360 review and capture the ACV at risk ?"></lightning-helptext></span>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <span>
+                                                    <lightning-radio-group 
+                                                    data-name="Account_360_degree_review__c"
+                                                        name="Account_360_degree_review__c"
+                                                        label="Account 360 degree review"
+                                                        options={options}
+                                                        value={Account_360_Degree_Review}
+                                                        onchange={handleChange}
+
+                                                        variant="label-hidden"
+                                                        type="button"></lightning-radio-group>
+                                                </span>
+                                            </div><br/>
+                                            
+                                        </div>
+                                        <br/><br/>
+                                        <div class="slds-grid slds-gutters">
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <span>2. RP Ownership<lightning-helptext content="Ownership of the risk profile and validation of the risk profile and did the CSM review the risk with the risk creator? "></lightning-helptext></span>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <span>
+                                                    <lightning-radio-group 
+                                                    data-name="RP_Ownership__c"
+                                                        name="RP_Ownership__c"
+                                                        label="RP Ownership"
+                                                        options={options}
+                                                        value={RP_Ownership}
+                                                        onchange={handleChange}
+
+                                                        variant="label-hidden"
+                                                        type="button"></lightning-radio-group>
+                                                </span>
+                                            </div><br/>
+                                            
+                                        </div>
+                                        <br/><br/>
+                                        <div class="slds-grid slds-gutters">
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <span>3. RP Validation<lightning-helptext content="Was the risk profile taken on time and CSM completed initial 360 review and validated the case in 48 hours?"></lightning-helptext></span>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <span>
+                                                    <lightning-radio-group 
+                                                    data-name="RP_Validation__c"
+                                                        name="RP_Validation__c"
+                                                        label="Account & Customer Name"
+                                                        options={options}
+                                                        value={RP_Validation}
+                                                        onchange={handleChange}
+
+                                                        variant="label-hidden"
+                                                        type="button"></lightning-radio-group>
+                                                </span>
+                                            </div><br/>
+                                            
+                                        </div>
+
+                                        <br/><br/>
+                                        <div class="slds-grid slds-gutters">
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <span>4. RP Validation Accuracy<lightning-helptext content="Did the retention CSM correctly validate the risk profile created on the account. In situation where risk is marked invalid, did retention CSM properly capture the reason of marking it invalid. "></lightning-helptext></span>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <span>
+                                                    <lightning-radio-group 
+                                                    data-name="RP_Validation_Accuracy__c"
+                                                        name="RP_Validation_Accuracy__c"
+                                                        label="Record Type"
+                                                        options={options}
+                                                        value={RP_Validation_Accuracy}
+                                                        onchange={handleChange}
+
+                                                        variant="label-hidden"
+                                                        type="button"></lightning-radio-group>
+                                                </span>
+                                            </div><br/>
+                                            
+                                        </div>
+
+
+
+                                        <br/><br/>
+                                        <div class="slds-grid slds-gutters">
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <span>5. RP Fields<lightning-helptext content="Did the retention team correctly fill up all the fields required to be updated in risk profile and mitigation case ?"></lightning-helptext></span>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <span>
+                                                    <lightning-radio-group 
+                                                    
+                                                        data-name="RP_Fields__c"
+                                                        name='RP_Fields__c'
+                                                        options={options}
+                                                        value={RP_Fields}
+                                                        onchange={handleChange}
+
+                                                        variant="label-hidden"
+                                                        type="button"
+                                                    
+                                                        ></lightning-radio-group>
+                                                </span>
+                                            </div><br/>
+                                            
+                                        </div>
+
+
+
+                                        <br/><br/>
+                                        <div class="slds-grid slds-gutters">
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <span>6. RP Followup<lightning-helptext content="Follow up and comments : Did the retention member follow up with right stakeholders and updated the private and public comments appropriately "></lightning-helptext></span>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <span>
+                                                    <lightning-radio-group 
+                                                    
+                                                        data-name="RP_Followup__c"
+                                                        name='RP_Followup__c'
+                                                        options={options}
+                                                        value={RP_Followup}
+                                                        onchange={handleChange}
+
+                                                        variant="label-hidden"
+                                                        type="button"></lightning-radio-group>
+                                                </span>
+                                            </div><br/>
+                                            
+                                        </div>
+
+
+
+
+                                        <br/><br/>
+                                        <div class="slds-grid slds-gutters">
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <span>7. RP Action<lightning-helptext content="Did the retention CSM proactively recognize risk on the account and actioned correctly before entitlement expiration date. "></lightning-helptext></span>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <span>
+                                                    <lightning-radio-group 
+                                                    
+                                                        data-name="RP_Action__c"
+                                                        name='RP_Action__c'
+                                                        options={options}
+                                                        value={RP_Action}
+                                                        onchange={handleChange}
+
+                                                        variant="label-hidden"
+                                                        type="button"></lightning-radio-group>
+                                                </span>
+                                            </div><br/>
+                                            
+                                        </div>
+
+
+                                        <br/><br/>
+                                        <div class="slds-grid slds-gutters">
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <span>8. RP Communication<lightning-helptext content=" Communication: Has the CSM contacted the customer using the relevant mode of communication based on risk profile status and mitigation steps ?  "></lightning-helptext></span>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <span>
+                                                    <lightning-radio-group 
+                                                    
+                                                        data-name="RP_Communication__c"
+                                                        name='RP_Communication__c'
+                                                        options={options}
+                                                        value={RP_Communication}
+                                                        onchange={handleChange}
+
+                                                        variant="label-hidden"
+                                                        type="button"></lightning-radio-group>
+                                                </span>
+                                            </div><br/>
+                                            
+                                        </div>
+                                        <br/><br/>
+                                        <div class="slds-grid slds-gutters">
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <span>9. RP Risk status<lightning-helptext content="Did the CSM properly close the risk profile and mitigation case with the correct risk status and ACV saved or lost. "></lightning-helptext></span>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <span>
+                                                    <lightning-radio-group 
+                                                    
+                                                        data-name="RP_Risk_status__c"
+                                                        name='RP_Risk_status__c'
+                                                        options={options}
+                                                        value={RP_Risk_status}
+                                                        onchange={handleChange}
+
+                                                        variant="label-hidden"
+                                                        type="button"></lightning-radio-group>
+                                                </span>
+                                            </div><br/>
+                                            
+                                        </div>
+                                <br/><br/>
+                            <div class="slds-grid slds-gutters">
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <span>10. RP Closure<lightning-helptext content="Closure: Did the CSM fill all the resolution fields accurately during the closure of the risk profile"></lightning-helptext></span>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <span>
+                                            <lightning-radio-group 
+                                            
+                                                data-name="RP_Closure__c"
+                                                name='RP_Closure__c'
+                                                options={options}
+                                                value={RP_Closure}
+                                                onchange={handleChange}
+
+                                                variant="label-hidden"
+                                                type="button"></lightning-radio-group>
+                                        </span>
+                                    </div><br/>
+                                    
+                                </div>
+                                <br/> <lightning-input-field field-name="Other_Feedback_Observations__c"> </lightning-input-field><br/>
+                        </div>
+                        <div class="slds-modal__footer">
+                            <lightning-button variant="Neutral" type="close" label="Close" onclick={handleClose}>
+                            </lightning-button>
+                            <lightning-button variant="brand" type="submit" label="Save">
+                            </lightning-button>
+                        </div>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+            </lightning-record-edit-form>
+       
+    </div>
+    <div lwc:else>
+        <div class="slds-notify slds-notify_alert slds-alert_offline" role="alert">
+            <span class="slds-assistive-text">offline</span>
+            <span class="slds-icon_container slds-icon-utility-offline slds-m-right_x-small" title="Description of icon when needed">
+            </span>
+            <h2>You do not have the necessary permissions to complete the audit form. Please contact the system administrator for assistance.
+            </h2>
+        </div>
+    </div>
+</template>

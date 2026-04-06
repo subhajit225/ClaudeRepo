@@ -1,0 +1,22 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" 
+                controller="RubrikUserQuestionContributorsController"
+                access="global" >
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="contributorDetails" type="Map"/>
+    <aura:attribute name="questionId" type="String" access="global" />
+    
+    <div >
+        <table class="table">
+            <div class="heading slds-m-around_x-small">
+				Contributors
+            </div>
+            <aura:iteration items="{!v.contributorDetails}" var="eachContributor">
+                <div class="slds-m-around_x-small pointer" onclick="{!c.navigateToUserProfile}" data-id="{!eachContributor.UserId}">
+                    <c:RubrikQuestionContributorsItem contributor="{!eachContributor}">
+                    </c:RubrikQuestionContributorsItem>
+                </div>
+            </aura:iteration>
+        </table>
+    </div>
+    
+</aura:component>

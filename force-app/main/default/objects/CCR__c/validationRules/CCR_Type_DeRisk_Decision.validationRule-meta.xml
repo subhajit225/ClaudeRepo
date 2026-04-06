@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CCR_Type_DeRisk_Decision</fullName>
+    <active>true</active>
+    <description>Booking,Amount and Opportunity all must be entered onto the CCR of Type Change in Booking Policy / De-Risk Decision</description>
+    <errorConditionFormula>AND(OR(ISPICKVAL(CCR_Type__c ,&apos;Incorrect Order/Mis-quote&apos;),
+    ISPICKVAL(CCR_Type__c ,&apos;Change in Booking Policy / De-Risk Decision&apos;)), 
+    OR( NOT(Amount__c &gt; 0),
+        ISBLANK( Opportunity__c ),
+        Booking__r.Opportunity__r.Id &lt;&gt; Opportunity__r.Id,
+        Booking__r.RecordType.Name &lt;&gt; &apos;Booking&apos;,
+        Account_Name__c &lt;&gt; Booking__r.Account_Name__c
+     )
+   )</errorConditionFormula>
+    <errorDisplayField>Number_of_Attchments__c</errorDisplayField>
+    <errorMessage>1)Amount, Opportunity and it&apos;s related Original Booking are required 
+2)AccountName should be equal to Account on Booking for CCR type &quot;Change in Booking Policy / De-Risk Decision&quot;</errorMessage>
+</ValidationRule>

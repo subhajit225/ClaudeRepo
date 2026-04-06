@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Report_Link__c</fullName>
+    <description>SAL26-641: Created this field to hold report links useful for CXO team.</description>
+    <externalId>false</externalId>
+    <formula>IF( 
+    OR(ISPICKVAL(CVE_Stage__c, &apos;4-Engagement Completed&apos;),
+       ISPICKVAL(CVE_Stage__c, &apos;5-Stalled / Discontinued&apos;),
+       ISPICKVAL(CVE_Stage__c, &apos;6-CVE Not Required&apos;)
+    ),
+    HYPERLINK(&quot;/lightning/r/Report/&quot;+ $Setup.CXOReport_Ids__c.CXO_Report_Id_at_creation__c +&quot;/view?fv0=&quot;&amp;Account__c, &quot;View CXO Report at creation&quot;) +  
+    BR()+  
+    BR()+ 
+    HYPERLINK(&quot;/lightning/r/Report/&quot;+ $Setup.CXOReport_Ids__c.CXO_Report_Id_at_stage_4_and_above__c +&quot;/view?fv0=&quot;&amp;Account__c, &quot;View CXO Report at stage 4 and above.&quot;), 
+    HYPERLINK(&quot;/lightning/r/Report/&quot;+ $Setup.CXOReport_Ids__c.CXO_Report_Id_at_creation__c +&quot;/view?fv0=&quot;&amp;Account__c, &quot;View CXO Report at creation&quot;)
+)</formula>
+    <label>Report Link</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

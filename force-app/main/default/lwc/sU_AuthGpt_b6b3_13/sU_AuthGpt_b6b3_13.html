@@ -1,0 +1,257 @@
+<template>
+   <template if:true={showGptWidget}>
+    <div class="gptSection su__ml-27 su__loading-view">
+        <div class={DeviceInfo}>
+            <div class={suSnippet}>
+              <template if:false={errorObject.show}>
+                <div data-id="su__gpt-box"  class={suLoaderClass}>
+                    <span class={scrollableAreaStyles} data-id="myElement">
+                        <template if:true={gptLoader}>
+                            <div class="su__d-flex" >
+                                <svg width="20" height="21" viewBox="0 0 22 23"><defs><clipPath id="clip-Generating_icon"><rect width="22" height="23"></rect></clipPath></defs><g id="Generating_icon" data-name="Generating icon" clip-path="url(#clip-Generating_icon)"><g id="Group_19724" data-name="Group 19724" transform="translate(1 1)"><g id="Group_18524" data-name="Group 18524"><path id="Path_18304" data-name="Path 18304" d="M19.565,8.127l.795-1.785,1.761-.806a.513.513,0,0,0,0-.928L20.36,3.8l-.795-1.8a.5.5,0,0,0-.916,0l-.795,1.785L16.084,4.6a.513.513,0,0,0,0,.928l1.761.806.795,1.8A.508.508,0,0,0,19.565,8.127Zm-8.009,1.53-1.6-3.571a1,1,0,0,0-1.831,0l-1.6,3.571L3,11.279a1.026,1.026,0,0,0,0,1.857l3.522,1.622,1.6,3.571a1,1,0,0,0,1.831,0l1.6-3.571,3.522-1.622a1.026,1.026,0,0,0,0-1.857Zm7.083,6.631-.795,1.785-1.761.806a.513.513,0,0,0,0,.928l1.761.806.795,1.8a.5.5,0,0,0,.916,0l.795-1.785,1.771-.806a.513.513,0,0,0,0-.928l-1.761-.806-.795-1.8A.508.508,0,0,0,18.639,16.288Z" transform="translate(-2.415 -1.707)" fill="#1770d4"></path></g></g></g></svg>
+                                <div class="gen-text">Generating...</div>
+                            </div>
+                            
+                            <main>
+                                <ul class="o-vertical-spacing o-vertical-spacing--l">
+                                  <li class="blog-post o-media">
+                                    <div class="o-media__body">
+                                      <div class="o-vertical-spacing">
+                                        <p>
+                                          <span class="skeleton-box" style="width:100%;"></span>
+                                          <span class="skeleton-box" style="width:100%;"></span>
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </li>
+                                </ul>
+                              </main>
+                        </template>
+                        <template if:false={errorObject.show}>
+                            <template if:true={suGPTSays}>
+                                <template if:false={gptLoader}>
+                                    <div class={getErrorClass}>
+                                        <span class={isError} data-id="gptString">
+                                            <!-- {suGPTSays} -->
+                                        </span>
+                                        <template if:true={showFeedbackIcons}>
+                                            <div >
+                                                <div class="su__gptFeedback_Icons">
+                                                    <template if:true={copiedToClipboard}>
+                                                        <div class="su__gptFeedback_copyIconBorder su__gptFeedback_copiedIcon" >
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="18"
+                                                                height="14" viewBox="0 0 17.818 13.644">
+                                                                <path id="Icon_ionic-ios-checkmark"
+                                                                    data-name="Icon ionic-ios-checkmark"
+                                                                    d="M28.158,13.8l-1.456-1.5a.313.313,0,0,0-.232-.1h0a.3.3,0,0,0-.232.1L16.144,22.475,12.47,18.8a.32.32,0,0,0-.463,0l-1.473,1.473a.33.33,0,0,0,0,.472l4.634,4.634a1.465,1.465,0,0,0,.968.472,1.535,1.535,0,0,0,.96-.455H17.1L28.166,14.275A.354.354,0,0,0,28.158,13.8Z"
+                                                                    transform="translate(-10.434 -12.206)"
+                                                                    fill="#206b05" />
+                                                            </svg>
+                                                            <span class="copiedDatatooltip">Copied</span>
+                                                        </div>
+                                                    </template>
+                                                    <template if:false={copiedToClipboard}>
+                                                        <div class={handleCopyToClipboardIconClass}  onmouseover={showToolTip}  onmouseout={closeToolTip}>
+                                                            <div onclick={copyToClipboard} data-sub={suGPTSays} >
+                                                             <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                                                height="20" viewBox="0 0 16 20">
+                                                                <path id="svgexport-11"
+                                                                    d="M12,4a2,2,0,0,0-2,2h4A2,2,0,0,0,12,4ZM8.535,4a4,4,0,0,1,6.93,0H17a3,3,0,0,1,3,3V19a3,3,0,0,1-3,3H7a3,3,0,0,1-3-3V7A3,3,0,0,1,7,4ZM8,6H7A1,1,0,0,0,6,7V19a1,1,0,0,0,1,1H17a1,1,0,0,0,1-1V7a1,1,0,0,0-1-1H16a2,2,0,0,1-2,2H10A2,2,0,0,1,8,6Z"
+                                                                    transform="translate(-4 -2)" fill="#b7b7b7"
+                                                                    fill-rule="evenodd" />
+                                                            </svg>
+                                                            </div>
+                                                          <template if:true={showToolTipCopy}>
+                                                            <span class="datatooltip">Copy to clipboard</span>
+                                                          </template>
+                                                            <span class="datatooltip_Right-edge"></span>
+                                                        </div>
+                                                    </template>
+                                                    <template if:false={thumbsDownNegativeFeedback}>
+                                                        <div class={feedbackThumbsUpIconLighlight} data-id="thumbsUp"
+                                                            onclick={openFeedbackModal}>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" data-id="thumbsUp"
+                                                                width="18" height="20" viewBox="0 0 18.075 20">
+                                                                <path data-id="thumbsUp" id="svgexport-12"
+                                                                    d="M12.132,2.5a1,1,0,0,1,.992-.5l.454.057A4,4,0,0,1,16.9,7.21L16.354,9h.718a4,4,0,0,1,3.859,5.053l-1.364,5A4,4,0,0,1,15.709,22H6a3,3,0,0,1-3-3V12A3,3,0,0,1,6,9H8a.723.723,0,0,0,.628-.364ZM10,20h5.709a2,2,0,0,0,1.929-1.474l1.364-5A2,2,0,0,0,17.072,11H15a1,1,0,0,1-.956-1.294l.949-3.084a2,2,0,0,0-1.461-2.537L10.364,9.628A2.723,2.723,0,0,1,9,10.81V19A1,1,0,0,0,10,20ZM7,11v8a3,3,0,0,0,.171,1H6a1,1,0,0,1-1-1V12a1,1,0,0,1,1-1Z"
+                                                                    transform="translate(-3 -2)" fill="#b7b7b7"
+                                                                    fill-rule="evenodd" />
+                                                            </svg>
+                                                        </div>
+                                                    </template>
+                                                    <template if:false={thumbsUpPositiveFeedback}>
+                                                        <div class={feedbackThumbsDownIconLighlight}
+                                                            data-id="thumbsDown" onclick={openFeedbackModal}>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" data-id="thumbsDown"
+                                                                width="18" height="20" viewBox="0 0 18.075 20">
+                                                                <path data-id="thumbsDown" id="svgexport-13"
+                                                                    d="M11.873,21.5a1,1,0,0,1-.992.5l-.454-.057A4,4,0,0,1,7.1,16.79L7.651,15H6.932A4,4,0,0,1,3.073,9.948l1.364-5A4,4,0,0,1,8.3,2H18a3,3,0,0,1,3,3v7a3,3,0,0,1-3,3H16a.723.723,0,0,0-.628.364ZM14,4H8.3a2,2,0,0,0-1.93,1.474L5,10.474A2,2,0,0,0,6.932,13H9a1,1,0,0,1,.956,1.294l-.949,3.084a2,2,0,0,0,1.461,2.537l3.167-5.543A2.723,2.723,0,0,1,15,13.19V5A1,1,0,0,0,14,4Zm3,9V5a2.994,2.994,0,0,0-.171-1H18a1,1,0,0,1,1,1v7a1,1,0,0,1-1,1Z"
+                                                                    transform="translate(-2.93 -2)" fill="#b7b7b7"
+                                                                    fill-rule="evenodd" />
+                                                            </svg>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </template>
+                            </template>
+                        </template>
+                        </span>
+                   
+                    <!-- <template if:true={showArticleLinks}>
+                        <div class="separator"></div>
+                    </template> -->
+
+                        <!-- <div class={getArticlesStyles}>           
+                            <span class="article_source">Sources:</span>
+                            <template for:each={articleListPreview} for:item="article">
+                                <span class="gpt_article tooltip" key={article.title}>
+                                    <a href={article.href} data-href={article.href} target="_blank" title={article.title}>{article.title}</a>
+                                    <span class="tooltiptext">{article.hoverTitle}</span>  
+                                </span>
+                            </template>
+                            
+                            <template if:true={showTogglerButton}>
+                                <div class="show-more-less" onclick={toggleArticles}>{toggleArticleText}</div>
+                            </template>
+                    </div> -->
+     
+                    <template if:true={gptShowMoreBtn}>
+                        <div
+                            class="su__show-all su__gpt-showMore-Position  su__d-flex su__justify-content-center su__flex-vcenter su__loading-view">
+                            <span  onclick={handleShowMoreClick} class="su__cursor  su__show-more-gpt">
+                                Show More
+                            </span>
+                            <span onclick={handleShowMoreClick} class="su__cursor su__arrow-down"></span>
+                        </div>
+                    </template>
+                </div>
+              </template>
+                <template if:false={gptLoader}>
+                    <template if:true={errorObject.show}>
+                        <div class="retry-section">
+                            <p>
+                                {errorObject.message}
+                            </p>
+                            <template if:true={errorObject.showRetry}>
+                                <button class="retry-btn su__cursor" onclick={gptRoutine}>
+                                    Retry
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12.001" height="12" viewBox="0 0 12.001 12">
+                                        <path id="refresh_FILL0_wght300_GRAD0_opsz24"
+                                            d="M187.572-768a5.838,5.838,0,0,1-4.279-1.743A5.774,5.774,0,0,1,181.54-774a5.778,5.778,0,0,1,1.753-4.257A5.836,5.836,0,0,1,187.572-780a5.933,5.933,0,0,1,2.669.624,5.707,5.707,0,0,1,2.094,1.761V-779.4a.579.579,0,0,1,.174-.427.586.586,0,0,1,.43-.172.585.585,0,0,1,.43.172.579.579,0,0,1,.173.427v3.569a.7.7,0,0,1-.209.515.705.705,0,0,1-.518.208h-3.588a.585.585,0,0,1-.43-.173.579.579,0,0,1-.173-.428.578.578,0,0,1,.173-.427.586.586,0,0,1,.43-.172H191.8a4.719,4.719,0,0,0-1.763-1.825,4.754,4.754,0,0,0-2.465-.667,4.666,4.666,0,0,0-3.418,1.4,4.617,4.617,0,0,0-1.407,3.4,4.617,4.617,0,0,0,1.407,3.4,4.666,4.666,0,0,0,3.418,1.4,4.727,4.727,0,0,0,2.567-.732,4.733,4.733,0,0,0,1.765-1.954.63.63,0,0,1,.336-.305.645.645,0,0,1,.452-.01.524.524,0,0,1,.344.32.526.526,0,0,1-.016.462,5.969,5.969,0,0,1-2.205,2.487,5.893,5.893,0,0,1-3.243.933Z"
+                                            transform="translate(-181.54 779.999)" fill="#fff" />
+                                    </svg>
+                                </button>
+                            </template>
+                        </div>
+                    </template>
+                </template>
+             
+            </div>
+                <div class={getSnippetHeadingStyles}>
+                    <span class={getSnippetHeadingColor}>
+                        SearchUnifyGPT
+                    </span>
+                    <span class="su__snippet_fontStyles">TM</span>
+                </div>
+            </div>
+        <template if:true={showGptFeedbackPopup}>
+            <div class="su__gptFeedbackPopup">
+                <div class="su__gptPopupheader">
+                    <div class="su__gptPopupheading">
+                        Additional Feedback
+                    </div>
+                    <div class="su__gptPopupSubHeading">
+                        How is your search experience with SearchUnifyGPT?
+                    </div>
+                    <template if:true={gptPositiveFeedback}>
+                        <div class="su__gptThumbUpDown">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="61" height="61" viewBox="0 0 61 61">
+                                <g id="Group_19861" data-name="Group 19861" transform="translate(-6311 -1202)">
+                                    <g id="8" data-name="Group 19788" transform="translate(6311.638 1202.639)"
+                                        opacity="0.06">
+                                        <circle id="Ellipse_6" data-name="Ellipse 6" cx="30.5" cy="30.5" r="30.5"
+                                            transform="translate(-0.638 -0.639)" fill="#919bb0" />
+                                    </g>
+                                    <path id="svgexport-122"
+                                        d="M19.237,2.9A1.778,1.778,0,0,1,21,2.014l.807.1a7.112,7.112,0,0,1,5.916,9.149l-.979,3.183h1.277a7.112,7.112,0,0,1,6.862,8.984l-2.425,8.89A7.112,7.112,0,0,1,25.6,37.562H8.334A5.334,5.334,0,0,1,3,32.227V19.781a5.334,5.334,0,0,1,5.334-5.334H11.89a1.286,1.286,0,0,0,1.116-.648Zm-3.791,31.11H25.6a3.556,3.556,0,0,0,3.431-2.621l2.425-8.89A3.556,3.556,0,0,0,28.022,18H24.337a1.778,1.778,0,0,1-1.7-2.3l1.687-5.484a3.557,3.557,0,0,0-2.6-4.511l-5.632,9.856a4.842,4.842,0,0,1-2.426,2.1V32.227A1.778,1.778,0,0,0,15.447,34.006ZM10.112,18V32.227a5.326,5.326,0,0,0,.3,1.778H8.334a1.778,1.778,0,0,1-1.778-1.778V19.781A1.778,1.778,0,0,1,8.334,18Z"
+                                        transform="translate(6322 1213)" fill="#919bb0" fill-rule="evenodd"
+                                        opacity="0.35" />
+                                </g>
+                            </svg>
+                        </div>
+                    </template>
+                    <template if:true={gptNegativeFeedback}>
+                        <div class="su__gptThumbUpDown">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="61" height="61" viewBox="0 0 61 61">
+                                <g id="Group_19860" data-name="Group 19860" transform="translate(-6308 -1205)">
+                                    <g id="Group_197887" data-name="Group 19788"
+                                        transform="translate(6308.638 1205.639)" opacity="0.06">
+                                        <circle id="Ellipse_66" data-name="Ellipse 6" cx="30.5" cy="30.5" r="30.5"
+                                            transform="translate(-0.638 -0.639)" fill="#919bb0" />
+                                    </g>
+                                    <path id="svgexport-1222"
+                                        d="M18.9,36.666a1.778,1.778,0,0,1-1.764.882l-.807-.1A7.112,7.112,0,0,1,10.414,28.3l.979-3.183H10.116a7.112,7.112,0,0,1-6.862-8.984l2.425-8.89A7.112,7.112,0,0,1,12.541,2H29.8a5.334,5.334,0,0,1,5.334,5.334V19.781A5.334,5.334,0,0,1,29.8,25.115H26.248a1.286,1.286,0,0,0-1.116.648Zm3.791-31.11H12.541A3.556,3.556,0,0,0,9.11,8.177l-2.425,8.89a3.556,3.556,0,0,0,3.431,4.492H13.8a1.778,1.778,0,0,1,1.7,2.3l-1.687,5.484a3.557,3.557,0,0,0,2.6,4.511L22.044,24a4.842,4.842,0,0,1,2.426-2.1V7.334A1.778,1.778,0,0,0,22.691,5.556Zm5.334,16V7.334a5.326,5.326,0,0,0-.3-1.778H29.8a1.778,1.778,0,0,1,1.778,1.778V19.781A1.778,1.778,0,0,1,29.8,21.559Z"
+                                        transform="translate(6319 1216)" fill="#919bb0" fill-rule="evenodd"
+                                        opacity="0.35" />
+                                </g>
+                            </svg>
+                        </div>
+                    </template>
+                </div>
+                <template if:true={gptPositiveFeedback}>
+                    <div class="su__gptFeedbackPopupBtns">
+                        <button onclick={selectSearchFeedbackFunc} data-id="Accurate"
+                            class={feedbackSelectedBtn1Class}>Accurate</button>
+                        <button onclick={selectSearchFeedbackFunc} data-id="Comprehensive"
+                            class={feedbackSelectedBtn2Class}>Comprehensive</button>
+                    </div>
+                </template>
+                <template if:true={gptNegativeFeedback}>
+                    <div class="su__gptFeedbackPopupBtns">
+                        <button onclick={selectSearchFeedbackFunc} data-id="Offensive"
+                            class={feedbackSelectedBtn1Class}>Offensive</button>
+                        <button onclick={selectSearchFeedbackFunc} data-id="Incorrect"
+                            class={feedbackSelectedBtn2Class}>Incorrect</button>
+                    </div>
+                </template>
+                <div>
+                    <div class="su__d-flex su__justify-content-between su__gptFeedbackTextareaHeading">
+                        <div>Would you like to say more?</div>
+                        <div>
+                            <span>{characterCount}</span>
+                            <span>/300</span>
+                        </div>
+                    </div>
+                    <lightning-textarea data-id="su__gptFeedbackContent" class="su__gptFeedbackTextarea" maxlength="300"
+                        placeholder="Share your feedback" onchange={suGptFeedbackHandleChange} variant="label-hidden">
+                    </lightning-textarea>
+                </div>
+                <div class="su__d-flex su__gptFeedbackSumbmitBtns">
+                    <button disabled={enableDisableSubmitButton} data-id="submit"
+                        onclick={submitFeedbackModal}>Submit</button>
+                    <button data-id="close" onclick={closeFeedbackModal}>Cancel</button>
+                </div>
+            </div>
+            <div class="su__gptFeedbackPopup-overlay" data-id="close" onclick={closeFeedbackModal}></div>
+        </template>
+        <template if:true={showGptFeedbackThanksPopup}>
+            <div class="su__gptFeedbackPopup su__gptFeedbackCongratsModal">
+                <div class="su__mb-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="38.448" height="38.448" viewBox="0 0 38.448 38.448">
+                        <path id="Icon_ionic-ios-checkmark-circle" data-name="Icon ionic-ios-checkmark-circle"
+                            d="M22.6,3.375A19.224,19.224,0,1,0,41.823,22.6,19.221,19.221,0,0,0,22.6,3.375Zm9.843,13.91L20.085,29.7h-.009A1.669,1.669,0,0,1,19,30.206a1.618,1.618,0,0,1-1.081-.527L12.747,24.5a.368.368,0,0,1,0-.527l1.645-1.645a.357.357,0,0,1,.518,0l4.1,4.1L30.289,15.076a.365.365,0,0,1,.259-.111h0a.336.336,0,0,1,.259.111l1.617,1.673A.364.364,0,0,1,32.442,17.285Z"
+                            transform="translate(-3.375 -3.375)" fill="#5bb543" />
+                    </svg>
+                </div>
+                <span>
+                    Thank You! Your feedback helps
+                </span>
+            </div>
+            <div class="su__gptFeedbackPopup-overlay" data-id="closeThanksModal" onclick={closeFeedbackModal}></div>
+        </template>
+    </div>
+    </template>
+</template>

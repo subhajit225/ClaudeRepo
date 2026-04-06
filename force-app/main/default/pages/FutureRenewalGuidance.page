@@ -1,0 +1,51 @@
+<apex:page showHeader="false" sidebar="false" cache="false" contentType="text/xml" controller="FutureRenewalGuidanceController">
+    <apex:outputPanel layout="none" rendered="{!showFutureRenewalGuidance}">
+        <block font-size="{!template.SBQQ__FontSize__c}" font-family="{!template.SBQQ__FontFamily__c}">
+            <block margin-top="1em" font-weight="bold">
+                Future Renewal Guidance 
+            </block>
+            <block margin-top="1em">
+                <table table-layout="fixed" border-style="solid" border-width="1px">
+                    <table-column></table-column>
+                    <table-column></table-column>
+                    <table-column></table-column>
+                    <table-column></table-column>
+                    <table-column></table-column>
+                    <table-body>
+                        <table-row font-size="0.7em" background-color="#{!template.SBQQ__ShadingColor__c}" color="white">
+                            <table-cell padding-top="0.7em" padding-left="0.7em" border-style="solid" border-width="1px"><block font-weight="bold">New Product</block></table-cell>
+                            <table-cell padding-top="0.7em" padding-left="0.7em" border-style="solid" border-width="1px"><block font-weight="bold">Qty</block></table-cell>
+                            <table-cell padding-top="0.7em" padding-left="0.7em" border-style="solid" border-width="1px"><block font-weight="bold">Term</block></table-cell>
+                            <table-cell padding-top="0.7em" padding-left="0.7em" border-style="solid" border-width="1px"><block font-weight="bold">Initial Renewal Uplift estimate</block></table-cell>
+                            <table-cell padding-top="0.7em" padding-left="0.7em" border-style="solid" border-width="1px"><block font-weight="bold">Subsequent Renewal Uplift estimate</block></table-cell>
+                        </table-row>
+                        <apex:repeat value="{!quoteLines}" var="quoteline">
+                            <table-row font-size="0.7em">
+                                <table-cell padding-top="0.7em" padding-left="0.7em" border-style="solid" border-width="1px"><block>{!quoteline.SBQQ__ProductName__c}</block></table-cell>
+                                <table-cell padding-top="0.7em" padding-left="0.7em" border-style="solid" border-width="1px"><block>{!ROUND(quoteline.SBQQ__Quantity__c, 0)}</block></table-cell>
+                                <table-cell padding-top="0.7em" padding-left="0.7em" border-style="solid" border-width="1px"><block>{!quoteline.SBQQ__SubscriptionTerm__c}</block></table-cell>
+                                <table-cell padding-top="0.7em" padding-left="0.7em" border-style="solid" border-width="1px">
+                                    <block>
+                                        <apex:outputPanel layout="none" rendered="{!quoteline.Renewal_Uplift_Estimate__c!=null}">
+                                            {!quoteline.Renewal_Uplift_Estimate__c}%
+                                        </apex:outputPanel>
+                                    </block>
+                                </table-cell>
+                                <table-cell padding-top="0.7em" padding-left="0.7em" border-style="solid" border-width="1px">
+                                    <block>
+                                        <apex:outputPanel layout="none" rendered="{!quoteline.CPQ_Uplift__c!=null}">
+                                            {!quoteline.CPQ_Uplift__c}%
+                                        </apex:outputPanel>
+                                    </block>
+                                </table-cell>
+                            </table-row>
+                        </apex:repeat>
+                    </table-body>
+                </table>
+            </block>
+            <block margin-top="1em">
+                {!futureRenewalGuidanceStatic}
+            </block>
+        </block>
+    </apex:outputPanel>
+</apex:page>

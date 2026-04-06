@@ -1,0 +1,18 @@
+<template>
+    <lightning-layout multiple-rows>
+        <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+            <h2 class="heading-58 slds-m-bottom_small slds-align_absolute-center">
+                Rubrik Amplify Terms of Use
+            </h2>
+            <p class="slds-p-bottom_large slds-text-align_center cardBodyDescription">
+                Please read and agree to our amplify program terms of use
+            </p>
+        </lightning-layout-item>
+        <template if:false={showSpinner}>
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12"
+             class="terms-of-use-popup">
+                <iframe src={masterUrl} width="100%" height="100%"></iframe>
+            </lightning-layout-item>
+        </template>
+    </lightning-layout>
+</template>

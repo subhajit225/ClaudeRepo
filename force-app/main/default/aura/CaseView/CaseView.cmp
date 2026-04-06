@@ -1,0 +1,841 @@
+<!-- 
+Author : Grazitti
+Changes : CS-270 => Allow request escalation button to be clicked more than once.
+Date  : 10/08/2019	
+Type : Change Request	
+Comment: Added a check of Escalation and a field for Escalation Status -->
+
+<aura:component implements="forceCommunity:availableForAllPageTypes"  controller="CaseApexController" access="global">
+    <aura:attribute name="myCase" type="Case"/>
+    <aura:attribute name="myCase1" type="Case"/>
+    <aura:attribute name="caseattchmnt" type="List"/>
+    <aura:attribute name="AttachedContentDocuments" type="List"/>
+    <aura:attribute name="articleattr" type="List"/>
+    <aura:attribute name="commentText" type="String"/>
+    <aura:attribute name="showcommentBox" type="boolean" default="false"/>
+    <aura:attribute name="addComments" type="boolean" default="false"/>
+    <aura:attribute name="isEscalated" type="boolean" default="false"/>
+    <aura:attribute name="isReopen" type="boolean" default="false"/>
+    <aura:attribute name="isLoaded" type="boolean" default="false"/>
+    <aura:attribute name="caseId" type="String"/>
+    <aura:attribute name="record" type="Case"/>
+    <aura:attribute name="caseStatus" type="String"/>
+    <aura:attribute name="caseId1" type="String" default="{!v.recordId}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="userRecord" type="Object"/>
+    <aura:attribute name="caseEscStatus" type="boolean" default="false"/>
+    <aura:attribute name="isEditAccess" type="Boolean" default="false"/>
+    <aura:attribute name="disableReopenTitle" type="String"/>
+    <aura:attribute name="isDisplayFeedback" type="Boolean" default="false"/>
+    <!-- CS21-3825 -->
+    <aura:attribute name="safeRSCUrl" type="String"/> 
+
+    <force:recordData recordId="{!$SObjectType.CurrentUser.Id}"
+                      fields="Email,FirstName,LastName,Account.Name "
+                      targetFields="{!v.userRecord}" />
+    <aura:attribute name="toggleSpinner" type="Boolean" default="true"/>
+    <aura:if isTrue="{!!empty(v.myCase)}">
+        <div class="slds-grid">
+            <div class="slds-size--1-of-1 ">
+                <div class="slds-grid slds-max-medium-hide"> 
+                    <div class="slds-large-size_1-of-12"> </div>
+                    <div class="slds-large-size_10-of-12"> 
+                        <!-- CS21-1071: Support Portal: Read only user profile -->
+                        <div class="{!v.isEditAccess? 'slds-show slds-grid' : 'slds-hide'}">
+                            <div class="slds-col slds-large-size_12-of-12 slds-align_absolute-center padaround">
+                                <aura:if isTrue="{!!or(v.myCase.IsClosed,v.myCase.Status == 'Customer requested close')}">
+                                    <button class="slds-button slds-button_brand" onclick="{!c.closeCase1}">Close Case</button>
+                                    <a class="sldsclsbtn" href="{!'addcolleagues?id='+v.caseId+'&amp;caseNumber='+ v.myCase.CaseNumber}"> <button class="slds-button slds-button_brand">Manage Colleagues</button></a>
+                                   
+                                        <lightning:button label="Request Escalation" onclick="{!c.addcommentwith}" class="sldsclsbtn slds-button slds-button_brand"/>
+                                    
+                                    <lightning:button label="Add Comment" onclick="{!c.addcommentwithout}" class="sldsclsbtn slds-button slds-button_brand"/>
+                                    <lightning:fileUpload label=""
+                                                          name="fileUploader"
+                                                          multiple="true"
+                                                          disable="false"
+                                                          recordId="{!v.caseId}"
+                                                          onuploadfinished="{!c.handleUploadFinished}" />
+                                    <!--lightning:button label="Upload File" onclick="{!c.uploadFiles}" class="sldsclsbtn slds-button slds-button_brand"/-->
+                                    
+                                    <aura:set attribute="else">
+                                            <lightning:button label="Reopen Case" onclick="{!c.reopenCase}" class="sldsclsbtn slds-button slds-button_brand" disabled='{!if(v.disableReopenTitle!=null,true,false)}' title='{!v.disableReopenTitle}'/>                                        
+                                    </aura:set>
+                                </aura:if>
+                            </div>
+                        </div>
+                        <div class="slds-grid ">
+                            <div class="slds-col slds-large-size_12-of-12">
+                                <p class="parasize">Case Detail</p>
+                            </div>
+                            
+                            <aura:if isTrue="{!v.toggleSpinner}">
+                                <div class="slds-spinner_container" aura:id="uploadSpinner">
+                                    <div class="slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                        <div class="slds-spinner__dot-a"></div>
+                                        <div class="slds-spinner__dot-b"></div>
+                                    </div>
+                                </div>
+                            </aura:if>
+                        </div>
+                       <div class="slds-col slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12 listsize">
+                            <div class="EachTopBorder slds-max-medium-hide"> 
+                                <!-- CS21-3825 --> 
+                                <div class="slds-grid slds-p-vertical_xx-small ">
+                                    <div class="slds-col slds-grid slds-size_1-of-2">
+                                        <div class="slds-col slds-size_1-of-2 ">
+                                            <span class="fontfamilymedium ">RSC Instance</span>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-2">                                            
+                                            <span class="concolor">
+                                                <a class="concolor" href="{!v.safeRSCUrl}" target="_blank">
+                                                  {!if(
+                                                    not(empty(v.myCase.RSCInstance__r.RSCUrl__c)),
+                                                    v.myCase.RSCInstance__r.RSCUrl__c,
+                                                    v.myCase.RSCInstance__r.Name
+                                                )}
+                                                </a>
+                                            </span>
+                                        </div>
+                                    </div>                                    
+                                </div>       
+                                <!-- CS21-3825 -->                       
+                                <div class="slds-grid slds-p-vertical_xx-small ">
+                                    <div class="slds-col slds-grid slds-size_1-of-2">
+                                        <div class="slds-col slds-size_1-of-2 ">
+                                            <span class="fontfamilymedium ">Case Number</span>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-2">
+                                            <span class="fieldValue">{!v.myCase.CaseNumber}  </span>                                            
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-grid slds-size_1-of-2">
+                                        <div class="slds-col slds-size_1-of-2 ">
+                                            <span class="fontfamilymedium ">Escalated</span>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-2">
+                                            <span class="fieldValue">{!v.myCase.IsEscalated == true ? 'Yes' : 'No'}</span>                                  
+                                        </div>
+                                    </div>                                   
+                                </div>                                
+                                <div class="slds-grid slds-p-vertical_xx-small ">
+                                    <div class="slds-col slds-grid slds-size_1-of-2">
+                                        <div class="slds-col slds-size_1-of-2">
+                                            <span class="fontfamilymedium ">Contact Name</span>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-2">
+                                            <span class="concolor">{!v.myCase.Contact.Name}</span>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-grid slds-size_1-of-2">
+                                        <div class="slds-col slds-size_1-of-2  ">
+                                            <span class="fontfamilymedium ">Priority</span>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-2">
+                                            <span class="fieldValue">{!v.myCase.Priority}</span>
+                                        </div>
+                                    </div>                                    
+                                </div>
+                                <div class="slds-grid slds-p-vertical_xx-small ">
+                                    <div class="slds-col slds-grid slds-size_1-of-2">
+                                        <div class="slds-col slds-size_1-of-2 ">
+                                            <span class="fontfamilymedium ">Contact Phone</span>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-2">
+                                            <span class="fieldValue">{!v.myCase.ContactPhone}</span>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-grid slds-size_1-of-2">
+                                        <div class="slds-col slds-size_1-of-2  ">
+                                            <span class="fontfamilymedium ">Type</span>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-2">
+                                            <span class="fieldValue">{!v.myCase.Type}</span>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="slds-grid slds-p-vertical_xx-small ">
+                                    <div class="slds-col slds-grid slds-size_1-of-2">
+                                        <div class="slds-col slds-size_1-of-2 ">
+                                            <span class="fontfamilymedium ">Contact Email</span>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-2">
+                                            <span class="concolor"><a class="concolor" href="{!'mailto:'+v.myCase.ContactEmail}">{!v.myCase.ContactEmail}</a></span>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-grid slds-size_1-of-2">
+                                        <div class="slds-col slds-size_1-of-2  ">
+                                            <span class="fontfamilymedium ">Case Origin</span>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-2">
+                                            <span class="fieldValue">{!v.myCase.Origin}</span>
+                                        </div>
+                                    </div>                                   
+                                </div>                                
+                                <div class="slds-grid slds-p-vertical_xx-small ">
+                                    <div class="slds-col slds-grid slds-size_1-of-2">
+                                        <div class="slds-col slds-size_1-of-2 ">
+                                            <span class="fontfamilymedium ">Date/Time Opened</span>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-2">
+                                            <ui:outputDateTime   value="{!v.myCase.CreatedDate}"/>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-grid slds-size_1-of-2">
+                                        <div class="slds-col slds-size_1-of-2  ">
+                                            <span class="fontfamilymedium ">Contact method</span>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-2">
+                                            <span class="fieldValue">{!v.myCase.Contact_method__c}</span>
+                                        </div>
+                                    </div>                                    
+                                </div>                                
+                                <div class="slds-grid slds-p-vertical_xx-small ">
+                                    <div class="slds-col slds-grid slds-size_1-of-2">
+                                        <div class="slds-col slds-size_1-of-2 ">
+                                            <span class="fontfamilymedium ">Status</span>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-2">
+                                            <span class="fieldValue">{!v.myCase.Status}</span>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-grid slds-size_1-of-2">
+                                        <div class="slds-col slds-size_1-of-2 ">
+                                            <span class="fontfamilymedium ">Cluster UUID</span>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-2">
+                                            <span class="fieldValue">{!v.myCase.Cluster__r.Name}</span>
+                                        </div>
+                                    </div>                                    
+                                </div>	
+                                <div class="slds-grid slds-p-vertical_xx-small ">
+                                    <div class="slds-col slds-grid slds-size_1-of-2">
+                                        <div class="slds-col slds-size_1-of-2 ">
+                                            <span class="fontfamilymedium ">Assigned To</span>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-2">
+                                            <!-- CS21-2108 -->
+                                            <span class="fieldValue">{!if(v.myCase.Owner.Type == 'Queue', 'Queued', v.myCase.Owner.Name)}</span>
+                                            <!-- CS21-2108 -->
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-grid slds-size_1-of-2">
+                                        <div class="slds-col slds-size_1-of-2 ">
+                                            <span class="fontfamilymedium ">CDM End of Support Status</span>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-2">
+                                            <span class="fieldValue">{!v.myCase.Cluster__r.CDM_End_of_Support_Status__c }</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-clearfix slds-p-vertical_xx-small ">
+                                    <div class=" slds-float_right slds-col slds-grid slds-size_1-of-2">
+                                        <div class="slds-col slds-size_1-of-2 ">
+                                            <span class="fontfamilymedium ">Cluster Tag</span>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-2">
+                                            <span class="fieldValue">
+                                                <span class="fieldValue">{!v.myCase.Cluster_Tag__c}</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col  slds-large-size_2-of-12">
+                        </div>
+                        
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-large-size_12-of-12 slds-medium-size_12-of-12">
+                                <p class="parasize1">Description Information</p>
+                            </div>
+                            <div class="slds-col slds-large-size_12-of-12 slds-medium-size_12-of-12">
+                                <div class="slds-grid padbotm">
+                                    <div class="slds-col slds-large-size_2-of-12 slds-medium-size_2-of-12 listsize">   
+                                        <p class="fontfamilymedium">Subject </p>
+                                    </div>       
+                                    <div class="slds-col slds-large-size_10-of-12 slds-medium-size_10-of-12 listsize">
+                                        <p>{!v.myCase.Subject}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-large-size_12-of-12 ">
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-large-size_2-of-12 slds-medium-size_2-of-12 listsize">   
+                                        <p class="fontfamilymedium"> Description </p>
+                                    </div> 
+                                    <!--Updated for CS21-564 - Veera-->
+                                    <div class="slds-col slds-large-size_10-of-12 slds-medium-size_10-of-12 listsize" style="word-break: break-word;">
+                                        <p class="listsize"><lightning:formattedText linkify="true" value="{!v.myCase.Description}"/></p>
+                                    </div>
+                                    <!--
+                                    <div class="slds-col slds-large-size_10-of-12 slds-medium-size_10-of-12 slds-wrap listsize" style="   word-break: break-all;">
+                                        <p>
+                                            <lightning:formattedText value="{!v.myCase.Description}"/>
+                                        </p>
+                                    </div>
+									Updated for CS21-564 - End-->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-large-size_12-of-12 slds-medium-size_12-of-12">
+                                <p class="parasize1">Resolution Details</p>
+                            </div>
+                            <div class="slds-col slds-large-size_12-of-12  slds-medium-size_12-of-12">
+                                <div class="slds-grid padbotm">
+                                    <div class="slds-col slds-large-size_2-of-12 slds-medium-size_2-of-12  listsize">   
+                                        <p class="fontfamilymedium">Date/Time Closed</p>
+                                    </div>       
+                                    <div class="slds-col slds-large-size_10-of-12  listsize">
+                                        <ui:outputDateTime   value="{!v.myCase.ClosedDate}" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-large-size_12-of-12 slds-medium-size_12-of-12">
+                                <div class="slds-grid ">
+                                    <div class="slds-col slds-large-size_2-of-12 slds-medium-size_2-of-12 listsize">   
+                                        <p class="fontfamilymedium">Resolution Details</p>
+                                    </div>       
+                                    <div class="slds-col slds-large-size_6-of-12 slds-medium-size_10-of-12 listsize" style="   word-break: break-all;">
+                                        <p>
+                                            <aura:unescapedHtml value="{!v.myCase.Resolution_Details__c}"/>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-large-size_12-of-12">
+                                <p class="parasize1">Articles</p>
+                                <h1 class=" slds-border_bottom fontfamilymedium"> Article </h1>
+                                <aura:iteration var="test" items="{!v.articleattr}">
+                                    <a class="textdecorate" href="{!'article/'+test.UrlName}"><p class="titlesize">  {!test.Title}</p></a>
+                                </aura:iteration>                      
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-large-size_12-of-12 slds-size_12-of-12 ">
+                                <p class="parasize1">Attachments</p>
+                                <div class=" "> 
+                                    <h1 class=" slds-border_bottom fontfamilymedium"> Name </h1>
+                                    <!--aura:iteration items="{!v.caseattchmnt}" var="eachAttach" indexVar="index">
+                                    <div class=" slds-p-around_small blockPad"> 
+                                        <h1> <a  href="{!eachAttach.Description}" target="_blank" class="attachmntcolor"> {!eachAttach.Name}</a></h1>
+                                    </div>
+                                    <hr class="hrcls"></hr>
+                                </aura:iteration-->
+                                    <aura:iteration items="{!v.AttachedContentDocuments}" var="eachAttach" indexVar="index">
+                                        <div class=" slds-p-around_small blockPad"> 
+                                            <h1> <a href="javascript:void(0)" id="{!eachAttach.ContentDocumentId}" class="attachmntcolor" onclick="{!c.openFiles}"> {!eachAttach.Title}</a></h1>
+                                        </div>
+                                        <hr class="hrcls"></hr>
+                                    </aura:iteration>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-wrap slds-large-size_12-of-12 slds-large-size_12-of-12 slds-size--12-of-12">
+                                <p class="parasize1">Case Comments</p>
+                            </div>
+                            <div class="slds-col slds-large-size_12-of-12 slds-size--12-of-12 slds-border_bottom displayinline1">
+                                <div class="slds-col slds-large-size_9-of-12 slds-size--8-of-12">
+                                    Comment
+                                </div>
+                                <div class="slds-col slds-large-size_2-of-12 slds-size--2-of-12">
+                                    Date 
+                                </div>
+                                <div class="slds-col slds-large-size_1-of-12 slds-size--2-of-12 ">
+                                    Commentor  
+                                </div>
+                            </div>
+                            <div>
+                                <aura:if isTrue="{!v.showcommentBox}">
+                                    <div class="slds-grid slds-wrap slds-size_12-of-12 slds-large-size_12-of-12">
+                                        <div class="slds-size_12-of-12 slds-wrap slds-large-size_12-of-12">
+                                            <lightning:inputRichText value="{!v.commentText}" placeholder="Add Comment..."/>
+                                        </div>
+                                        <div class="slds-size_12-of-12 slds-text-align_center saveandCancel">
+                                            <lightning:button class="commentstyle" label="Add Comment" onclick="{!c.addComment}"/>
+                                            <lightning:button label="Cancel" onclick="{!c.Cancel}"/>
+                                        </div>
+                                    </div>
+                                    <aura:set attribute="else">
+                                        <div class="slds-size_12-of-12 slds-text-align_center addCommentsbtn">
+                                            
+                                        </div>
+                                    </aura:set>
+                                </aura:if>
+                            </div>
+                            <div class="slds-grid casecommentsize">
+                                <div class="slds-large-size_12-of-12  EachTopBorder slds-wrap slds-p-bottom_large">
+                                    <aura:if isTrue="{!v.myCase.CaseComments.length > 0}">
+                                        <aura:iteration items="{!v.myCase.CaseComments}" var="eachComment" indexVar="index">
+                                            <div class="{!if(v.myCase.CaseComments.length == index+1,'slds-border_bottom','  blockPad')}"> 
+                                                
+                                                <div class="slds-col slds-large-size_12-of-12 slds-border_bottom slds-size--12-of-12 displayinline">
+                                                    <div class="slds-col slds-large-size_9-of-12 slds-size--8-of-12">
+                                                        <p class="slds-p-top_xx-small padrightcls">
+                                                            <lightning:formattedText value="{!eachComment.CommentBody}"/>
+                                                        </p>
+                                                    </div>
+                                                    
+                                                    <div class="slds-col slds-large-size_2-of-12 slds-size--2-of-12">
+                                                        <p class="slds-p-top_xx-small">
+                                                            <ui:outputDateTime   value="{!eachComment.CreatedDate}"  />
+                                                        </p>
+                                                    </div>
+                                                    <div class="slds-col slds-large-size_1-of-12 slds-size--2-of-12 ">
+                                                        <h1  class="paddingleft"> {!eachComment.CreatedBy.Name}</h1>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </aura:iteration>
+                                        <aura:set attribute="else">
+                                            <div class="  listsize">No Case Comments</div>
+                                        </aura:set>
+                                    </aura:if>
+                                    
+                                </div>
+                                
+                            </div>
+                            
+                        </div>
+                        
+                        <!-- CS21-1071: Support Portal: Read only user profile -->
+                        <aura:if isTrue="{!and(!v.myCase.IsClosed, v.isEditAccess)}">
+                            <aura:if isTrue="{!v.isDisplayFeedback}">
+                                <div>
+                                    <p style="font-family: Arial; font-size: 12px;"><b>How are we doing on this case?</b></p>
+                                    <div style="font-family: Arial; font-size: 12px; overflow:hidden;">
+                                        <table cellpadding="100" cellspacing="0" border="0" style="border-collapse: separate; border-spacing: 10px 5px; margin: 0 0; width: 320px;">
+                                            
+                                            <tr>
+                                                <td  width="25%" style="vertical-align:bottom; text-align:center;">
+                                                    <a style="text-decoration:none;" href="{!'https://app.customerthermometer.com/?template=log_feedback&amp;hash=3f9e5aeb&amp;embed_data=dGVtcGVyYXR1cmVfaWQ9MSZ0aGVybW9tZXRlcl9pZD0yNTk3Nw==&amp;e='+v.userRecord.Email+'&amp;f='+v.userRecord.FirstName+'&amp;l='+v.userRecord.LastName+'&amp;c='+v.userRecord.Account.Name+'&amp;c1='+v.myCase.CaseNumber+'&amp;c2='+v.myCase.Owner.Name+'&amp;c3='+v.myCase.Case_Thread_ID__c+'&amp;c4=portal&amp;c5=&amp;c6=&amp;c7=&amp;c8=&amp;c9=&amp;c10='}" target="_blank">    
+                                                        <img style="border: none;" src="/resource/feedbackResource/feedback/Gold-1.jpg" alt="Gold Star" title="" class="_temp" /></a>
+                                                </td>
+                                                
+                                                <td  width="25%" style="vertical-align:bottom; text-align:center;">
+                                                    <a style="text-decoration:none;" href="{!'https://app.customerthermometer.com/?template=log_feedback&amp;hash=4b81ee7f&amp;embed_data=dGVtcGVyYXR1cmVfaWQ9MiZ0aGVybW9tZXRlcl9pZD0yNTk3Nw==&amp;e='+v.userRecord.Email+'&amp;f='+v.userRecord.FirstName+'&amp;l='+v.userRecord.LastName+'&amp;c='+v.userRecord.Account.Name+'&amp;c1='+v.myCase.CaseNumber+'&amp;c2='+v.myCase.Owner.Name+'&amp;c3='+v.myCase.Case_Thread_ID__c+'&amp;c4=portal&amp;c5=&amp;c6=&amp;c7=&amp;c8=&amp;c9=&amp;c10='}" target="_blank">
+                                                        <img style="border: none;" src="/resource/feedbackResource/feedback/Green-1.jpg" alt="Gold Star" title="" class="_temp" /></a>
+                                                </td>
+                                                
+                                                <td  width="25%" style="vertical-align:bottom; text-align:center;">
+                                                    <a style="text-decoration:none;" href="{!'https://app.customerthermometer.com/?template=log_feedback&amp;hash=321758f9&amp;embed_data=dGVtcGVyYXR1cmVfaWQ9MyZ0aGVybW9tZXRlcl9pZD0yNTk3Nw==&amp;e='+v.userRecord.Email+'&amp;f='+v.userRecord.FirstName+'&amp;l='+v.userRecord.LastName+'&amp;c='+v.userRecord.Account.Name+'&amp;c1='+v.myCase.CaseNumber+'&amp;c2='+v.myCase.Owner.Name+'&amp;c3='+v.myCase.Case_Thread_ID__c+'&amp;c4=portal&amp;c5=&amp;c6=&amp;c7=&amp;c8=&amp;c9=&amp;c10='}" target="_blank">
+                                                        <img style="border: none;" src="/resource/feedbackResource/feedback/Amber-1.jpg" alt="Gold Star" title=" " class="_temp" /></a>
+                                                </td>
+                                                
+                                                <td  width="25%" style="vertical-align:bottom; text-align:center;">
+                                                    <a style="text-decoration:none;" href="{!'https://app.customerthermometer.com/?template=log_feedback&amp;hash=dcb5229d&amp;embed_data=dGVtcGVyYXR1cmVfaWQ9NCZ0aGVybW9tZXRlcl9pZD0yNTk3Nw==&amp;e='+v.userRecord.Email+'&amp;f='+v.userRecord.FirstName+'&amp;l='+v.userRecord.LastName+'&amp;c='+v.userRecord.Account.Name+'&amp;c1='+v.myCase.CaseNumber+'&amp;c2='+v.myCase.Owner.Name+'&amp;c3='+v.myCase.Case_Thread_ID__c+'&amp;c4=portal&amp;c5=&amp;c6=&amp;c7=&amp;c8=&amp;c9=&amp;c10='}" target="_blank">
+                                                        <img style="border: none;" src="/resource/feedbackResource/feedback/Red-1.jpg" alt="Gold Star" title=" " class="_temp" /></a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:center;"><span style="color:#B17657;">Excellent</span></td><td style="text-align:center;"><span style="color:#66CC33;">Good</span></td><td style="text-align:center;"><span style="color:#FFB40D;">Average</span></td><td style="text-align:center;"><span style="color:#CC3333;">Disappointed</span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    
+                                </div>
+                            </aura:if>
+                        </aura:if>
+                        
+                        <!-- CS21-1071: Support Portal: Read only user profile -->
+                        <div class="{!v.isEditAccess? 'slds-show slds-grid' : 'slds-hide'}">
+                            <div class="slds-col slds-large-size_12-of-12 slds-align_absolute-center padaround">
+                                <aura:if isTrue="{!!or(v.myCase.IsClosed,v.myCase.Status == 'Customer requested close')}">
+                                    <button class="slds-button slds-button_brand" onclick="{!c.closeCase1}">Close Case</button>
+                                    <a class="sldsclsbtn" href="{!'addcolleagues?id='+v.caseId+'&amp;caseNumber='+ v.myCase.CaseNumber}"> <button class="slds-button slds-button_brand">Manage Colleagues</button></a>                                   
+                                        
+                                        <lightning:button label="Request Escalation" onclick="{!c.addcommentwith}" class="sldsclsbtn slds-button slds-button_brand"/>
+                                    
+                                    <lightning:button label="Add Comment" onclick="{!c.addcommentwithout}" class="sldsclsbtn slds-button slds-button_brand"/>
+                                    
+                                    <lightning:fileUpload label=""
+                                                          name="fileUploader"
+                                                          multiple="true"
+                                                          disable="false"
+                                                          recordId="{!v.caseId}"
+                                                          onuploadfinished="{!c.handleUploadFinished}" />                              
+                                    <aura:set attribute="else">
+                                        <lightning:button label="Reopen Case"  disabled='{!if(v.disableReopenTitle!=null,true,false)}'  title='{!v.disableReopenTitle}' onclick="{!c.reopenCase}" class="sldsclsbtn slds-button slds-button_brand"/>
+                                    </aura:set>
+                                </aura:if>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slds-grid slds-medium-show-only">
+                    <div class="slds-col slds-size--12-of-12 slds-wrap slds-align_absolute-center responsivecls">
+                        <aura:if isTrue="{!!or(v.myCase.IsClosed,v.myCase.Status == 'Customer requested close')}">
+                            <div class="slds-col slds-size--12-of-12 ">
+                                <button class="slds-button slds-button_brand" onclick="{!c.closeCase1}">Close Case</button>
+                                <a class="sldsclsbtn" href="{!'addcolleagues?id='+v.caseId+'&amp;caseNumber='+ v.myCase.CaseNumber}"> <button class="slds-button slds-button_brand">Manage Colleagues</button></a>
+                            </div><br></br>
+                                <div class="slds-col slds-size--12-of-12 slds-align_absolute-center responsivecls1">
+                                   <lightning:button label="Request Escalation" onclick="{!c.addcommentwith}" class="sldsclsbtn slds-button slds-button_brand"/>
+                                </div><br></br>
+                            <div class="slds-col slds-size--12-of-12 slds-align_absolute-center">
+                                <lightning:button label="Add Comment" onclick="{!c.addcommentwithout}" class="sldsclsbtn slds-button slds-button_brand"/>
+                                <lightning:fileUpload label=""
+                                                      name="fileUploader"
+                                                      multiple="true"
+                                                      disable="false"
+                                                      recordId="{!v.caseId}"
+                                                      onuploadfinished="{!c.handleUploadFinished}" />
+                            </div><br></br>
+                            <aura:set attribute="else">
+                                <lightning:button label="Reopen Case"  disabled='{!if(v.disableReopenTitle!=null,true,false)}'  title='{!v.disableReopenTitle}' onclick="{!c.reopenCase}" class="sldsclsbtn slds-button slds-button_brand"/>
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                    
+                    <div class=" slds-size--12-of-12 ">
+                        <h2 class="header">Case Detail</h2>
+                    </div>
+                    <!-- CS21-3825 --> 
+                    <div class="displayinline">
+                        <div class="slds-col slds-size--5-of-12 paddingleftdiv">
+                            <span class="Bold ">RSC Instance : </span>
+                        </div>
+                        <div class="slds-col slds-size--7-of-12">
+                            <span class="concolor"><a class="concolor" href="{!v.safeRSCUrl}" target="_blank">{!v.myCase.RSCInstance__r.RSCUrl__c}</a></span>
+                        </div>
+                    </div>
+                    <!-- CS21-3825 --> 
+                    <div class="displayinline">
+                        <div class="slds-col slds-size--5-of-12 paddingleftdiv">
+                            <span class="Bold ">Case Number: </span>
+                        </div>
+                        <div class="slds-col slds-size--7-of-12">
+                            <span class="fieldValue">{!v.myCase.CaseNumber}</span>
+                        </div>
+                    </div>
+                    <div class="displayinline">
+                        <div class="slds-col slds-size--5-of-12 paddingleftdiv">
+                            <span class="Bold ">Escalated: </span>
+                        </div>
+                        <div class="slds-col slds-size--7-of-12">
+                            <span class="fieldValue">{!v.myCase.IsEscalated == true ? 'Yes' : 'No'}</span>
+                        </div>
+                    </div>                 
+                    <div class="displayinline">                    
+                        <div class="slds-col slds-size--5-of-12 paddingleftdiv">
+                            <span class="Bold ">Priority : </span>
+                        </div>
+                        <div class="slds-col slds-size--7-of-12">
+                            <span class="fieldValue">{!v.myCase.Priority}</span>
+                        </div>
+                    </div>
+                    <div class="displayinline">
+                        <div class="slds-col slds-size--5-of-12 paddingleftdiv">
+                            <span class="Bold ">Contact Name: </span>
+                        </div>
+                        <div class="slds-col slds-size--7-of-12">
+                            <span class="concolor">{!v.myCase.Contact.Name}</span>
+                        </div>
+                    </div>
+                    <div class="displayinline">
+                        <div class="slds-col slds-size--5-of-12 paddingleftdiv">
+                            <span class="Bold ">Type : </span>
+                        </div>
+                        <div class="slds-col slds-size--7-of-12">
+                            <span class="fieldValue">{!v.myCase.Type}</span>
+                        </div>
+                    </div>
+                    <div class="displayinline">
+                        <div class="slds-col slds-size--5-of-12 paddingleftdiv">
+                            <span class="Bold ">Contact Phone: </span>
+                        </div>
+                        <div class="slds-col slds-size--7-of-12">
+                            <span class="fieldValue">{!v.myCase.ContactPhone}</span>
+                        </div>
+                    </div>
+                    <div class="displayinline">
+                        <div class="slds-col slds-size--5-of-12 paddingleftdiv">
+                            <span class="Bold ">Case Origin: </span>
+                        </div>
+                        <div class="slds-col slds-size--7-of-12">
+                            <span class="fieldValue">{!v.myCase.Origin}</span>
+                        </div>
+                    </div>
+                    <div class="displayinline">
+                        <div class="slds-col slds-size--5-of-12 paddingleftdiv">
+                            <span class="Bold ">Contact Email: </span>
+                        </div>
+                        <div class="slds-col slds-size--7-of-12">
+                            <span class="concolor"><a class="concolor" href="{!'mailto:'+v.myCase.ContactEmail}">{!v.myCase.ContactEmail}</a></span>
+                        </div>
+                    </div>
+                    <div class="displayinline">
+                        <div class="slds-col slds-size--5-of-12 paddingleftdiv">
+                            <span class="Bold ">Contact method: </span>
+                        </div>
+                        <div class="slds-col slds-size--7-of-12">
+                            <span class="fieldValue">{!v.myCase.Contact_method__c}</span>
+                        </div>
+                    </div>
+                    <div class="displayinline">
+                        <div class="slds-col slds-size--5-of-12 paddingleftdiv">
+                            <span class="Bold ">Date/Time Opened : </span>
+                        </div>
+                        <div class="slds-col slds-size--7-of-12">
+                            <ui:outputDateTime   value="{!v.myCase.CreatedDate}"/>
+                        </div>
+                    </div>
+                    <div class="displayinline">
+                        <div class="slds-col slds-size--5-of-12 paddingleftdiv">
+                            <span class="Bold ">Support Tunnel number: </span>
+                        </div>
+                        <div class="slds-col slds-size--7-of-12">
+                            <span class="fieldValue">{!v.myCase.Support_Tunnel__c}</span>
+                        </div>
+                    </div>
+                    <div class="displayinline">
+                        <div class="slds-col slds-size--5-of-12 paddingleftdiv">
+                            <span class="Bold ">Status : </span>
+                        </div>
+                        <div class="slds-col slds-size--7-of-12">
+                            <span class="fieldValue">{!v.myCase.Status}</span>
+                        </div>
+                    </div>
+                    <div class="displayinline">
+                        <div class="slds-col slds-size--5-of-12 paddingleftdiv">
+                            <span class="Bold ">Cluster : </span>
+                        </div>
+                        <div class="slds-col slds-size--7-of-12">
+                            <span class="fieldValue">{!v.myCase.Cluster__c}</span>
+                        </div>
+                    </div>
+                    <div class="displayinline">
+                        <div class="slds-col slds-size--5-of-12 paddingleftdiv">
+                            <span class="Bold ">Assigned To: </span>
+                        </div>
+                        <div class="slds-col slds-size--7-of-12">
+                            <!-- CS21-2108 -->
+                            <span class="fieldValue">{!if(v.myCase.Owner.Type == 'Queue', 'Queued', v.myCase.Owner.Name)}</span>
+                            <!-- CS21-2108 -->
+                        </div>
+                    </div>
+                    <div class="displayinline">
+                        <div class="slds-col slds-size--5-of-12 paddingleftdiv">
+                            <span class="Bold ">Cluster Tag : </span>
+                        </div>
+                        <div class="slds-col slds-size--7-of-12">
+                            <span class="fieldValue">{!v.myCase.Cluster_Tag__c}</span>
+                        </div>
+                    </div>
+                    
+                    <div class=" slds-size--12-of-12 ">
+                        <h2 class="headerdescinfo">Description Information :</h2>
+                    </div>
+                    <div class="displayinline">
+                        <div class="slds-col slds-size--5-of-12 paddingleftdiv">
+                            <span class="Bold ">Subject : </span>
+                        </div>
+                        <div class="slds-col slds-size--7-of-12">
+                            <span class="fieldValue">{!v.myCase.Subject}</span>
+                        </div>
+                    </div>
+                    <div class="displayinline">
+                        <div class="slds-col slds-size--5-of-12 paddingleftdiv">
+                            <span class="Bold ">Description : </span>
+                        </div>
+                        <!--Updated for CS21-564 - Veera-->
+                        <div class="slds-col slds-size--7-of-12">
+                            <span class="fieldValue"> <lightning:formattedText linkify="true" style="word-break: break-word;" value="{!v.myCase.Description}"/></span>
+                        </div>
+                        <!-- Updated for CS21-564 - End-->
+                    </div>
+                    
+                    <div class=" slds-size--12-of-12 ">
+                        <h2 class="headerdescinfo">Resolution details :</h2>
+                    </div>
+                    <div class="displayinline">
+                        <div class="slds-col slds-size--5-of-12 paddingleftdiv">
+                            <span class="Bold ">Date/Time Closed: </span>
+                        </div>
+                        <div class="slds-col slds-size--7-of-12">
+                            <ui:outputDateTime   value="{!v.myCase.ClosedDate}"/>
+                        </div>
+                    </div>
+                    <div class="displayinline">
+                        <div class="slds-col slds-size--5-of-12 paddingleftdiv">
+                            <span class="Bold ">Resolution Details: </span>
+                        </div>
+                        <div class="slds-col slds-size--7-of-12" style="   word-break: break-all;">
+                            <span class="fieldValue"><aura:unescapedHtml value="{!v.myCase.Resolution_Details__c}"/></span>
+                        </div>
+                    </div>
+                    <div class="displayinline">
+                        <div class="slds-col slds-size--5-of-12 paddingleftdiv">
+                            <span class="Bold ">Web Email : </span>
+                        </div>
+                        <div class="slds-col slds-size--7-of-12">
+                            <span class="fieldValue">{!v.myCase.SuppliedEmail}</span>
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-large-size_12-of-12">
+                            <p class="parasize1">Articles</p>
+                            <h1 class=" slds-border_bottom fontfamilymedium"> Article </h1>
+                            <aura:iteration var="test" items="{!v.articleattr}">
+                                <a class="textdecorate" href="{!'article/'+test.UrlName}">     <p class="titlesize">  {!test.Title}</p></a>
+                            </aura:iteration>                      
+                        </div>
+                    </div>
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-large-size_8-of-12 slds-size_12-of-12 ">
+                            <p class="parasize1">Attachments</p>
+                            
+                            <div class="slds-p-vertical_medium "> 
+                                <h1 class=" slds-border_bottom fontfamilymedium"> NAME </h1>
+                                <!--aura:iteration items="{!v.caseattchmnt}" var="eachAttach" indexVar="index">
+                                <div class=" slds-p-horizontal_large blockPad"> 
+                                    <h1> <a  href="{!eachAttach.Description}" target="_blank" class="attachmntcolor"> {!eachAttach.Name}</a></h1>
+                                    
+                                </div>
+                                <hr  class="hrcls"></hr>
+                            </aura:iteration-->
+                                <aura:iteration items="{!v.AttachedContentDocuments}" var="eachAttach" indexVar="index">
+                                    <div class=" slds-p-horizontal_large blockPad"> 
+                                        <h1> <a href="javascript:void(0)" id="{!eachAttach.ContentDocumentId}" class="attachmntcolor" onclick="{!c.openFiles}"> {!eachAttach.Title}</a></h1>
+                                    </div>
+                                    <hr class="hrcls"></hr>
+                                </aura:iteration>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class=" slds-size--12-of-12 ">
+                        <h2 class="headerdescinfo">Case Comments :</h2>
+                    </div>
+                    <div class="EachTopBorder slds-p-bottom_large">
+                        <aura:if isTrue="{!v.myCase.CaseComments.length > 0}">
+                            <aura:iteration items="{!v.myCase.CaseComments}" var="eachComment" indexVar="index">
+                                <div class="{!if(v.myCase.CaseComments.length == index+1,'slds-p-horizontal_large','slds-border_bottom slds-p-horizontal_large blockPad')}"> 
+                                    <div class="">
+                                        <div class="slds-col slds-size--12-of-12 fieldValue">
+                                            <b>Comment</b> <p class="slds-p-top_xx-small slds-size--12-of-12">
+                                            <aura:unescapedHtml value="{!eachComment.CommentBody}"/>
+                                            </p>
+                                        </div>
+                                        <div class="slds-col slds-size--12-of-12">
+                                            <p>
+                                                <ui:outputDateTime   value="{!eachComment.CreatedDate}" />
+                                            </p>
+                                        </div>
+                                        <div class="slds-col slds-size--12-of-12">
+                                            <h1 class="paddingleft">{!eachComment.CreatedBy.Name}</h1>
+                                        </div>
+                                    </div>
+                                </div>
+                            </aura:iteration>
+                            <aura:set attribute="else">
+                                <div class="slds-p-horizontal_large  listsize">No Case Comments</div>
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                    
+                    
+                    <aura:if isTrue="{!!v.myCase.IsClosed}">
+                        <aura:if isTrue="{!v.isDisplayFeedback}">
+                            <div>
+                                <p style="font-family: Arial; font-size: 12px;"><b>How are we doing on this case?</b></p>
+                                <div style="font-family: Arial; font-size: 12px; overflow:hidden;">
+                                    <table cellpadding="100" cellspacing="0" border="0" style="border-collapse: separate; border-spacing: 10px 5px; margin: 0 0; width: 320px;">
+                                        
+                                        <tr>
+                                            <td  width="25%" style="vertical-align:bottom; text-align:center;">
+                                                <a style="text-decoration:none;" href="{!'https://app.customerthermometer.com/?template=log_feedback&amp;hash=3f9e5aeb&amp;embed_data=dGVtcGVyYXR1cmVfaWQ9MSZ0aGVybW9tZXRlcl9pZD0yNTk3Nw==&amp;e='+v.userRecord.Email+'&amp;f='+v.userRecord.FirstName+'&amp;l='+v.userRecord.LastName+'&amp;c='+v.userRecord.Account.Name+'&amp;c1='+v.myCase.CaseNumber+'&amp;c2='+v.myCase.Owner.Name+'&amp;c3='+v.myCase.Case_Thread_ID__c+'&amp;c4=portal&amp;c5=&amp;c6=&amp;c7=&amp;c8=&amp;c9=&amp;c10='}" target="_blank">    
+                                                    <img style="border: none;" src="/resource/feedbackResource/feedback/Gold-1.jpg" alt="Gold Star" title="" class="_temp" /></a>
+                                            </td>
+                                            
+                                            <td  width="25%" style="vertical-align:bottom; text-align:center;">
+                                                <a style="text-decoration:none;" href="{!'https://app.customerthermometer.com/?template=log_feedback&amp;hash=4b81ee7f&amp;embed_data=dGVtcGVyYXR1cmVfaWQ9MiZ0aGVybW9tZXRlcl9pZD0yNTk3Nw==&amp;e='+v.userRecord.Email+'&amp;f='+v.userRecord.FirstName+'&amp;l='+v.userRecord.LastName+'&amp;c='+v.userRecord.Account.Name+'&amp;c1='+v.myCase.CaseNumber+'&amp;c2='+v.myCase.Owner.Name+'&amp;c3='+v.myCase.Case_Thread_ID__c+'&amp;c4=portal&amp;c5=&amp;c6=&amp;c7=&amp;c8=&amp;c9=&amp;c10='}" target="_blank">
+                                                    <img style="border: none;" src="/resource/feedbackResource/feedback/Green-1.jpg" alt="Gold Star" title="" class="_temp" /></a>
+                                            </td>
+                                            
+                                            <td  width="25%" style="vertical-align:bottom; text-align:center;">
+                                                <a style="text-decoration:none;" href="{!'https://app.customerthermometer.com/?template=log_feedback&amp;hash=321758f9&amp;embed_data=dGVtcGVyYXR1cmVfaWQ9MyZ0aGVybW9tZXRlcl9pZD0yNTk3Nw==&amp;e='+v.userRecord.Email+'&amp;f='+v.userRecord.FirstName+'&amp;l='+v.userRecord.LastName+'&amp;c='+v.userRecord.Account.Name+'&amp;c1='+v.myCase.CaseNumber+'&amp;c2='+v.myCase.Owner.Name+'&amp;c3='+v.myCase.Case_Thread_ID__c+'&amp;c4=portal&amp;c5=&amp;c6=&amp;c7=&amp;c8=&amp;c9=&amp;c10='}" target="_blank">
+                                                    <img style="border: none;" src="/resource/feedbackResource/feedback/Amber-1.jpg" alt="Gold Star" title=" " class="_temp" /></a>
+                                            </td>
+                                            
+                                            <td  width="25%" style="vertical-align:bottom; text-align:center;">
+                                                <a style="text-decoration:none;" href="{!'https://app.customerthermometer.com/?template=log_feedback&amp;hash=dcb5229d&amp;embed_data=dGVtcGVyYXR1cmVfaWQ9NCZ0aGVybW9tZXRlcl9pZD0yNTk3Nw==&amp;e='+v.userRecord.Email+'&amp;f='+v.userRecord.FirstName+'&amp;l='+v.userRecord.LastName+'&amp;c='+v.userRecord.Account.Name+'&amp;c1='+v.myCase.CaseNumber+'&amp;c2='+v.myCase.Owner.Name+'&amp;c3='+v.myCase.Case_Thread_ID__c+'&amp;c4=portal&amp;c5=&amp;c6=&amp;c7=&amp;c8=&amp;c9=&amp;c10='}" target="_blank">
+                                                    <img style="border: none;" src="/resource/feedbackResource/feedback/Red-1.jpg" alt="Gold Star" title=" " class="_temp" /></a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align:center;"><span style="color:#B17657;">Excellent</span></td><td style="text-align:center;"><span style="color:#66CC33;">Good</span></td><td style="text-align:center;"><span style="color:#FFB40D;">Average</span></td><td style="text-align:center;"><span style="color:#CC3333;">Disappointed</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                
+                            </div>
+                        </aura:if>
+                    </aura:if>
+                    
+                    
+                    
+                    
+                    <div class="slds-col slds-size--12-of-12 slds-wrap slds-align_absolute-center ">
+                        <aura:if isTrue="{!!or(v.myCase.IsClosed,v.myCase.Status == 'Customer requested close')}">
+                            <div class="slds-col slds-size--12-of-12 buttonaligncenter">
+                                <button class="slds-button slds-button_brand" onclick="{!c.closeCase1}">Close Case</button>
+                                <a class="sldsclsbtn" href="{!'addcolleagues?id='+v.caseId+'&amp;caseNumber='+ v.myCase.CaseNumber}"> <button class="slds-button slds-button_brand">Manage Colleagues</button></a>
+                            </div><br></br>
+                            <div class="slds-col slds-size--12-of-12 slds-align_absolute-center responsivecls1">
+                               <lightning:button label="Request Escalation" onclick="{!c.addcommentwith}" class="sldsclsbtn slds-button slds-button_brand"/>
+                            </div><br></br>
+                            <div class="slds-col slds-size--12-of-12 slds-align_absolute-center">
+                                <lightning:button label="Add Comment" onclick="{!c.addcommentwithout}" class="sldsclsbtn slds-button slds-button_brand"/>
+                                <lightning:fileUpload label=""
+                                                      name="fileUploader"
+                                                      multiple="false"
+                                                      recordId="{!v.caseId}"
+                                                      onuploadfinished="{!c.handleUploadFinished}" />
+                            </div><br></br>
+                            <aura:set attribute="else">
+                                <lightning:button label="Reopen Case"   disabled='{!if(v.disableReopenTitle!=null,true,false)}'  title='{!v.disableReopenTitle}' onclick="{!c.reopenCase}" class="sldsclsbtn slds-button slds-button_brand"/>
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                </div>
+                
+                <div class="slds-large-size_1-of-12"> </div>
+                <aura:if isTrue="{!v.addComments}"  >
+                    <c:AddComment showEscalationBox = "{!v.isEscalated}" caseId="{!v.caseId}" Casenumber="{!v.myCase.CaseNumber}" showPopup="{!v.addComments}" showReopenBox="{!v.isReopen}" caseEscalationStatus="{!v.caseEscStatus}"/>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                    
+                </aura:if>
+                
+            </div>
+        </div>
+        <aura:set attribute="else">
+            <aura:if isTrue="{!v.isLoaded}">
+                <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning" role="alert" style="padding:5rem 0;">
+                    <span class="slds-assistive-text">error</span>
+                    <span class="slds-icon_container slds-icon-utility-error slds-m-right_x-small" title="Description of icon when needed">
+                        <lightning:icon iconName="utility:error" alternativeText="Error!" variant="inverse"/>
+                    </span>
+                    <h2>You don't have access to the case you are trying to view . Please navigate back to
+                        <a href="my-cases">My Cases</a>
+                    </h2>
+                    <div class="slds-notify__close">
+                        
+                    </div>
+                </div>
+            </aura:if>
+        </aura:set>
+    </aura:if>
+</aura:component>

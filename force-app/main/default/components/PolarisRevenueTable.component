@@ -1,0 +1,448 @@
+<apex:component access="global" controller="PolarisOrderTemplateClass">
+    <apex:attribute name="orderId" description="Receive Order Id" type="Id" required="required" assignTo="{!ordId}" />
+    <apex:variable var="doShow" value="false" />
+    <apex:variable var="hasAWS" value="false" />
+    <apex:variable var="hasCompleteEdition" value="false" />
+    <apex:variable var="CompleteEdition" value="" />
+    <apex:variable var="hasPMC" value="false" />
+    <apex:variable var="hasCodebaseRecoveryProduct" value="false" />
+    <apex:variable var="hasRSCProduct" value="false" />
+    <apex:variable var="hasPredibaseProduct" value="false" />
+
+    <apex:outputPanel rendered="{!hardwarEmailType}">
+        <apex:repeat var="cx" value="{!lineItemsForHardware}">
+            <b>Serial number (Chassis Serial number):</b> {!cx.SerialNumber}
+            <br/>
+            <b>Related software order number(s):</b> {!cx.OrderNumber}
+        </apex:repeat>
+    </apex:outputPanel>
+
+    <apex:outputPanel rendered="{!!hardwarEmailType}">
+        <!-- CS21-3004: this section will be displayed if Order is not Replacement -->
+        <apex:outputPanel rendered="{!!isReplacementOrder}">
+        <hr noshade="1" />
+        <table width="100%" border="0" style="font-size:10px;">
+            <tr>
+                <td bgcolor="#f3f5f6" style="font-weight:bold;">&nbsp;</td>
+                <td bgcolor="#f3f5f6" style="font-weight:bold;">Order Number</td>
+                <td bgcolor="#f3f5f6" style="font-weight:bold;">Product</td>
+                <td bgcolor="#f3f5f6" style="font-weight:bold;word-break: break-word;max-width:200px;min-width: 90px;">
+                    Serial Number</td>
+                <td bgcolor="#f3f5f6" style="font-weight:bold;">Description</td>
+                <td bgcolor="#f3f5f6" style="font-weight:bold;">Total Quantity</td>
+                <td bgcolor="#f3f5f6" style="font-weight:bold;">Fulfilled Quantity</td>
+                <td bgcolor="#f3f5f6" style="font-weight:bold;">Support Start Date</td>
+                <td bgcolor="#f3f5f6" style="font-weight:bold;">Support End Date</td>
+            </tr>
+            <apex:outputPanel rendered="{!!isRevenue}">
+                <apex:repeat var="cx" value="{!lineItems}">
+                    <apex:outputPanel rendered="{!IF(CONTAINS(cx.PricebookEntry.Product2.Bundle_Features__c,'Cloud Cluster'),true,false)}">
+                        <apex:variable var="hasAWS" value="true" />
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!IF(CONTAINS(cx.PricebookEntry.Product2.Release_Product_Types__c,'PMC'),true,false)}">
+                        <apex:variable var="hasPMC" value="true" />
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!AND(hasCodebaseRecoveryProduct != 'true',cx.PricebookEntry.Product2.Product_Type__c != '',  CONTAINS(cx.PricebookEntry.Product2.Product_Type__c, $Label.Codebase_Recovery))}">
+                        <apex:variable var="hasCodebaseRecoveryProduct" value="true" />
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!AND(hasRSCProduct!= 'true', OR(cx.PricebookEntry.Product2.Product_Type__c == null , NOT(CONTAINS(cx.PricebookEntry.Product2.Product_Type__c, $Label.PredibaseProduct))))}">
+                        <apex:variable var="hasRSCProduct" value="true" />
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!AND(hasPredibaseProduct != 'true',cx.PricebookEntry.Product2.Product_Type__c != '',  CONTAINS(cx.PricebookEntry.Product2.Product_Type__c, $Label.PredibaseProduct))}">
+                        <apex:variable var="hasPredibaseProduct" value="true" />
+                    </apex:outputPanel>
+                    <tr>
+                        <td>
+                            <b>
+                                <apex:outputlink value="{!cx.PricebookEntry.Product2.Welcome_Letter_Content__c}" rendered="{!cx.PricebookEntry.Product2.Welcome_Letter_Content__c!=null}">
+                                    <apex:outputtext value=">> Get Started" />
+                                </apex:outputlink>
+                            </b>
+                        </td>
+                        <td>
+                            <apex:outputfield value="{!cx.Order.OrderNumber}" />
+                        </td>
+                        <td>
+                            <apex:outputfield value="{!cx.PricebookEntry.Product2.Name}" />
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                            <apex:outputfield value="{!cx.PricebookEntry.Product2.Description}" />
+                        </td>
+                        <td>
+                            <apex:outputfield value="{!cx.Quantity}" />
+                        </td>
+                        <td>
+                            <apex:outputfield value="{!cx.Quantity}" />
+                        </td>
+                        <td>
+                            <apex:outputfield value="{!cx.Support_Start_Date__c}" />
+                        </td>
+                        <td>
+                            <apex:outputfield value="{!cx.EndDate}" />
+                        </td>
+                    </tr>
+                </apex:repeat>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!isRevenue}">
+                <apex:repeat var="cx" value="{!lineItems}">
+                    <apex:outputPanel rendered="{!IF(CONTAINS(cx.PricebookEntry.Product2.Bundle_Features__c,'Cloud Cluster'),true,false)}">
+                        <apex:variable var="hasAWS" value="true" />
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!IF(CONTAINS(cx.PricebookEntry.Product2.Release_Product_Types__c,'PMC'),true,false)}">
+                        <apex:variable var="hasPMC" value="true" />
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!IF(OR(cx.PricebookEntry.Product2.Name == 'RA-SVC-CE-RMOT',cx.PricebookEntry.Product2.Name ==  'RBK-SVC-CMPLT-RMOT'),true,false)}">
+                        <apex:variable var="hasCompleteEdition" value="true" />
+                        <apex:variable var="CompleteEdition" value="{!cx.PricebookEntry.Product2.Name}" />
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!IF(OR(cx.PricebookEntry.Product2.Name == 'RBK-PS-INST-ONST' , cx.PricebookEntry.Product2.Name == 'RBK-PS-INST-RMOT', cx.PricebookEntry.Product2.Name == 'RA-PS-AS-CON-RMOT',cx.PricebookEntry.Product2.Name == 'RA-PS-INST-ONST', cx.PricebookEntry.Product2.Name ==  'RA-PS-CON-ONST',cx.PricebookEntry.Product2.Name ==  'RA-PS-CON-RMOT', cx.PricebookEntry.Product2.Name =='RA-PS-INT',cx.PricebookEntry.Product2.Name ==  'RBK-PS-CNSLT-ONST',cx.PricebookEntry.Product2.Name ==  'RBK-PS-CNSLT-RMOT', cx.PricebookEntry.Product2.Name =='RBK-PS-INST'),true,false)}">
+                        <apex:variable var="doShow" value="true" />
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!AND(hasCodebaseRecoveryProduct != 'true',cx.PricebookEntry.Product2.Product_Type__c != '',  CONTAINS(cx.PricebookEntry.Product2.Product_Type__c, $Label.Codebase_Recovery))}">
+                        <apex:variable var="hasCodebaseRecoveryProduct" value="true" />
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!AND(hasRSCProduct!= 'true', OR(cx.PricebookEntry.Product2.Product_Type__c == null , NOT(CONTAINS(cx.PricebookEntry.Product2.Product_Type__c, $Label.PredibaseProduct))))}">
+                        <apex:variable var="hasRSCProduct" value="true" />
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!AND(hasPredibaseProduct != 'true',cx.PricebookEntry.Product2.Product_Type__c != '',  CONTAINS(cx.PricebookEntry.Product2.Product_Type__c, $Label.PredibaseProduct))}">
+                        <apex:variable var="hasPredibaseProduct" value="true" />
+                    </apex:outputPanel>
+                    <tr>
+                        <td>
+                            <b>
+                                <apex:outputlink value="{!cx.PricebookEntry.Product2.Welcome_Letter_Content__c}" rendered="{!cx.PricebookEntry.Product2.Welcome_Letter_Content__c!=null}">
+                                    <apex:outputtext value=">> Get Started" />
+                                </apex:outputlink>
+                            </b>
+                        </td>
+                        <td>
+                            <apex:outputfield value="{!cx.Order.OrderNumber}" />
+                        </td>
+                        <td>
+                            <apex:outputfield value="{!cx.PricebookEntry.Product2.Name}" />
+                        </td>
+                        <td style="word-break: break-word;max-width:200px;">
+                            <apex:outputpanel rendered="{!cx.order.ProcessType__c != 'Aspen'}">{!SUBSTITUTE(cx.SerialNumber__c, ',',', ')}</apex:outputpanel>
+                        </td>
+                        <td>
+                            <apex:outputfield value="{!cx.PricebookEntry.Product2.Description}" />
+                        </td>
+                        <td>
+                            <apex:outputfield value="{!cx.Quantity}" />
+                        </td>
+                        <td>
+                            <apex:outputfield value="{!cx.Quantity}" />
+                        </td>
+                        <td>
+                            <apex:outputPanel rendered="{!IF(OR(cx.PricebookEntry.Product2.Name ==  'RA-PS-CON-ONST',cx.PricebookEntry.Product2.Name ==  'RA-PS-CON-RMOT', cx.PricebookEntry.Product2.Name =='RA-PS-INT',cx.PricebookEntry.Product2.Name ==  'RBK-PS-CNSLT-ONST',cx.PricebookEntry.Product2.Name ==  'RBK-PS-CNSLT-RMOT', cx.PricebookEntry.Product2.Name =='RBK-PS-INST'),true,false)}">
+                                <apex:outputfield value="{!cx.Order.Actual_Order_Ship_Date__c}" />
+                            </apex:outputPanel>
+                            <apex:outputPanel rendered="{!IF(OR(cx.PricebookEntry.Product2.Name ==  'RA-PS-CON-ONST',cx.PricebookEntry.Product2.Name ==  'RA-PS-CON-RMOT', cx.PricebookEntry.Product2.Name =='RA-PS-INT',cx.PricebookEntry.Product2.Name ==  'RBK-PS-CNSLT-ONST',cx.PricebookEntry.Product2.Name ==  'RBK-PS-CNSLT-RMOT', cx.PricebookEntry.Product2.Name =='RBK-PS-INST'),false,true)}">
+                                <apex:outputfield value="{!cx.Support_Start_Date__c}" />
+                            </apex:outputPanel>
+                        </td>
+                        <td>
+                            <apex:outputPanel rendered="{!IF(OR(cx.PricebookEntry.Product2.Name ==  'RA-PS-CON-ONST',cx.PricebookEntry.Product2.Name ==  'RA-PS-CON-RMOT', cx.PricebookEntry.Product2.Name =='RA-PS-INT',cx.PricebookEntry.Product2.Name ==  'RBK-PS-CNSLT-ONST',cx.PricebookEntry.Product2.Name ==  'RBK-PS-CNSLT-RMOT', cx.PricebookEntry.Product2.Name =='RBK-PS-INST'),true,false)}">
+                                <apex:outputText value="{0,date,M'/'d'/'yyyy}">
+                                    <apex:param value="{!ADDMONTHS(cx.Order.Actual_Order_Ship_Date__c,6)-1}" />
+                                </apex:outputText>
+                            </apex:outputPanel>
+                            <apex:outputPanel rendered="{!IF(OR(cx.PricebookEntry.Product2.Name ==  'RA-PS-CON-ONST',cx.PricebookEntry.Product2.Name ==  'RA-PS-CON-RMOT', cx.PricebookEntry.Product2.Name =='RA-PS-INT',cx.PricebookEntry.Product2.Name ==  'RBK-PS-CNSLT-ONST',cx.PricebookEntry.Product2.Name ==  'RBK-PS-CNSLT-RMOT', cx.PricebookEntry.Product2.Name =='RBK-PS-INST'),false,true)}">
+                                <apex:outputfield value="{!cx.Support_End_Date__c}" />
+                            </apex:outputPanel>
+                        </td>
+                    </tr>
+                </apex:repeat>
+            </apex:outputPanel>
+
+        </table>
+         </apex:outputPanel>  
+        
+        <!-- CS21-3004: this section will be displayed only for Replacement Orders -->
+        <apex:outputPanel rendered="{!isReplacementOrder}">
+            <apex:repeat var="cx" value="{!lineItems}">
+                <apex:outputPanel rendered="{!IF(CONTAINS(cx.PricebookEntry.Product2.Bundle_Features__c,'Cloud Cluster'),true,false)}">
+                        <apex:variable var="hasAWS" value="true" />
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!IF(CONTAINS(cx.PricebookEntry.Product2.Release_Product_Types__c,'PMC'),true,false)}">
+                        <apex:variable var="hasPMC" value="true" />
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!IF(OR(cx.PricebookEntry.Product2.Name == 'RA-SVC-CE-RMOT',cx.PricebookEntry.Product2.Name ==  'RBK-SVC-CMPLT-RMOT'),true,false)}">
+                        <apex:variable var="hasCompleteEdition" value="true" />
+                        <apex:variable var="CompleteEdition" value="{!cx.PricebookEntry.Product2.Name}" />
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!IF(OR(cx.PricebookEntry.Product2.Name == 'RBK-PS-INST-ONST' , cx.PricebookEntry.Product2.Name == 'RBK-PS-INST-RMOT', cx.PricebookEntry.Product2.Name == 'RA-PS-AS-CON-RMOT',cx.PricebookEntry.Product2.Name == 'RA-PS-INST-ONST', cx.PricebookEntry.Product2.Name ==  'RA-PS-CON-ONST',cx.PricebookEntry.Product2.Name ==  'RA-PS-CON-RMOT', cx.PricebookEntry.Product2.Name =='RA-PS-INT',cx.PricebookEntry.Product2.Name ==  'RBK-PS-CNSLT-ONST',cx.PricebookEntry.Product2.Name ==  'RBK-PS-CNSLT-RMOT', cx.PricebookEntry.Product2.Name =='RBK-PS-INST'),true,false)}">
+                        <apex:variable var="doShow" value="true" />
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!AND(hasCodebaseRecoveryProduct != 'true',cx.PricebookEntry.Product2.Product_Type__c != '',  CONTAINS(cx.PricebookEntry.Product2.Product_Type__c, $Label.Codebase_Recovery))}">
+                        <apex:variable var="hasCodebaseRecoveryProduct" value="true" />
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!AND(hasRSCProduct!= 'true', OR(cx.PricebookEntry.Product2.Product_Type__c == null , NOT(CONTAINS(cx.PricebookEntry.Product2.Product_Type__c, $Label.PredibaseProduct))))}">
+                        <apex:variable var="hasRSCProduct" value="true" />
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!AND(hasPredibaseProduct != 'true',cx.PricebookEntry.Product2.Product_Type__c != '',  CONTAINS(cx.PricebookEntry.Product2.Product_Type__c, $Label.PredibaseProduct))}">
+                        <apex:variable var="hasPredibaseProduct" value="true" />
+                    </apex:outputPanel>
+            </apex:repeat>
+            <c:CustomerWelcomeLetterReplacement orderId="{!ordId}"></c:CustomerWelcomeLetterReplacement>
+            <br />
+        </apex:outputPanel>  
+        <!-- CS21-3004: this section will be displayed only for Replacement Orders -->
+        <br /> In addition, we&#39;ve included helpful information below to get you started with your Rubrik solutions and services.
+        <br/>
+
+        <!-- Added component as per ticket CS21-2607 -->
+        <apex:outputPanel rendered="{!!isRevenue}">
+            <c:WelcomeLetterForSFDataProtection orderId="{!orderId}"></c:WelcomeLetterForSFDataProtection>
+        </apex:outputPanel>
+        <!-- Added component as per ticket CS21-2607 -->
+
+        <!-- CS21-1458 : Updates to welcome email (revenue) for Scale Utility -->
+		<!-- CS21-4007 Removed Scala Utility Line if MSP Pay Go Order -->
+        <apex:outputPanel rendered="{!AND(isScaleUtility == true, !isMspPayGoOrder)}">
+            <br/>For Scale Utility Program customers, please review the
+            <i>Rubrik Licensing Guide</i> on the
+            <a href="https://www.rubrik.com/legal">https://www.rubrik.com/legal</a> webpage.
+            <br/>
+        </apex:outputPanel>
+
+        <apex:outputPanel rendered="{!entitlements.size > 0}">
+            <br/>
+            <b>Third party hardware activation instructions</b>
+            <br /> Your order includes third party hardware support, which enables Rubrik Cloud Data Management on qualified industry-leading
+            hardware platforms. You&#39;ll need the following information to deploy Rubrik CDM on your hardware platform. If
+            you encounter any issues, please contact support@rubrik.com.
+            <br />
+            <apex:repeat value="{!entitlements}" var="ent">
+                <ol>
+                    <li>
+                        <b>Entitlement ID: </b> {!LEFT(ent.Id,15)}
+                    </li>
+                    <li>
+                        <b>Manufacturing users^:
+                        </b>{!ent.Order_Service_Item__r.Order.Opportunity.Initial_Contacts_Name__r.Name}, {!ent.Order_Service_Item__r.Order.Opportunity.Rubrik_Sales_Engineer__r.Name}
+                    </li>
+                </ol>
+            </apex:repeat>
+            ^ The installation process has been activated for these Rubrik Support Portal logins. If additional contacts need to be added,
+            please contact Rubrik Support.
+            <br/>
+        </apex:outputPanel>
+
+        <apex:outputPanel rendered="{!hasAWS == 'true'}">
+            <br/>
+            <b>Getting started with Rubrik Cloud Cluster</b>
+            <br/> Your order includes Rubrik Cloud Cluster, which enables you to run the Rubrik Cloud Data Management software
+            in a public cloud and provide data protection for hosts and applications running in the public cloud. For guidance
+            with deploying a Cloud Cluster instance, reference the
+            <a href="https://support.rubrik.com/s/article/000001857">Getting started - Rubrik Cloud Cluster</a> guide.
+            <br/>
+        </apex:outputPanel>
+        <apex:outputPanel rendered="{!doShow == 'true'}">
+            <br/>
+            <b>Professional Services</b>
+            <br /> Terms and conditions for all professional services can be found at: https://www.rubrik.com/content/dam/rubrik/en/resources/policy/rubrik-ps-supplementary-terms.pdf
+            <br />
+        </apex:outputPanel>
+
+        <apex:outputPanel rendered="{!hasCompleteEdition == 'true'}">
+            <br/>
+            <b>Rubrik Remote Consulting for Complete Edition</b>
+            <br /> Your order includes Rubrik Remote Consulting ({!CompleteEdition}) for Complete Edition, which must be used within
+            6 months of purchase. To assist you with the Complete Edition deployment, Rubrik Support will open a proactive
+            case within 1 business day and schedule a remote session for the initial installation and configuration. In addition,
+            to assist you with the initial hardware installation and racking, please reference the
+            <a href="https://support.rubrik.com/s/announcementdetail?Id=a406f000001rCrpAAE">Getting Started documentation and videos</a> on the Rubrik Support Portal that includes a
+            <a href="https://www.rubrik.com/content/dam/rubrik/en/resources/internal/rubrik-complete-pre-install-worksheet.pdf">Rubrik Complete Pre-Install Worksheet</a>.
+            <br/>
+        </apex:outputPanel>
+
+        <apex:outputPanel rendered="{!hasPMC == 'true'}">
+            <br/>
+            <b>Rubrik Security Cloud - Private</b>
+            <br/> Your order includes
+            <i>Rubrik Security Cloud - Private</i>. Rubrik simplifies backup and recovery for hybrid cloud environments and
+            eliminates legacy backup complexity by integrating data orchestration, catalog management, and continuous data
+            protection into a single software platform. Access the OVA from the
+            <a href="https://support.rubrik.com/s/documentationdetail?id=a5B8Y000001QbyFUAS">Rubrik Security Cloud download</a> page to deploy
+            <i>Rubrik Security Cloud - Private</i>.
+            <br/>
+        </apex:outputPanel>
+        
+        <apex:outputPanel rendered="{!AND(polarisDetails.isFedRAMPAccount,!AND(hasPMC == 'false',hasPolaris, hasCustomerURL))}">
+            <br />
+            <b>Data management built for government – Access your RSC-G instance in the cloud</b>
+            <br />
+            Federal, state, and local government agencies use Rubrik to easily and securely manage all data by delivering backup, replication, and archival in a single solution to meet compliance requirements. We've created your secure <i>Rubrik Security Cloud - Government (RSC-G)</i> instance in the cloud. Access your RSC-G instance by contacting your Rubrik Sales Account team for more details or locating an email from donotreply@rubrikgov.com with the subject, <b><i>Rubrik Security Cloud - Government (RSC-G) order confirmation</i></b>, which includes the details of your RSC-G URL and RSC-G account owner.<br />
+        </apex:outputPanel>
+
+        <apex:outputPanel rendered="{!AND(hasPMC == 'false',hasPolaris, hasCustomerURL)}">
+            <!--For RSC-G customers only-->
+            <apex:outputPanel rendered="{!polarisDetails.isFedRAMPAccount}">
+            <br />
+            <b>Data management built for government – Access your RSC-G instance in the cloud</b>
+            <br />
+                Federal, state, and local government agencies use Rubrik to easily and securely manage all data by delivering backup, replication, and archival in a single solution to meet compliance requirements. We've created your secure <i>Rubrik Security Cloud - Government (RSC-G)</i> instance in the cloud. Access your RSC-G instance by contacting your Rubrik Sales Account team for more details or locating an email from donotreply@rubrikgov.com with the subject, <b><i>Rubrik Security Cloud - Government (RSC-G) order confirmation</i></b>, which includes the details of your RSC-G URL and RSC-G account owner.<br />
+                <!-- Added content as per ticket CS21-2322 -->
+                <apex:outputPanel rendered="{!OrderItemDetails}">
+                    <br /><b>Access your Rubrik instance in the cloud</b>
+                    <br />
+                    Rubrik simplifies backup and recovery for hybrid cloud environments and eliminates legacy backup complexity by integrating data orchestration, catalog management, and continuous data protection into a single software platform. We've created your Rubrik instance in the cloud and enabled the following Rubrik Security Cloud owner(s). Access your RSC instance with the following information.
+                    <br /><br />
+                    <table style="border-collapse: collapse; border: 1px solid lightgrey; width: 95%;">
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid lightgrey; width: 12%;"><b>RSC URL</b></td>
+                            <td style="padding: 8px; border: 1px solid lightgrey;">{!polarisDetails.polarisURL}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid lightgrey; width: 12%;"><b>RSC owner</b></td>
+                            <td style="padding: 8px; border: 1px solid lightgrey;">{!polarisDetails.polarisContactDetails}</td>
+                        </tr>
+                    </table>
+                    <br />
+                    Use the <b><i>Forgot Password</i></b> link to configure your login if you’re accessing your RSC instance for the first time. Additional users must be created by the RSC owner(s).
+                    <br />
+                </apex:outputPanel>
+                <!-- CS21-2322 End -->
+                <!-- Added content as per ticket CS21-2268 -->
+                    <br /><b>RSC-G Support Portal</b><br />
+                    A Rubrik RSC-G Support Portal login will be created for you with <a href="https://support.rubrik.com/s/article/000005566">Admin Panel</a> privileges to manage technical cases, access documentation, knowledge base, technical reference guides, and much more. All RSC-G Support Portal logins for your organization are managed in the <a href="https://support.rubrik.com/s/article/000005566">Admin Panel</a>, and you must create new RSC-G Support Portal users from the Admin Panel.
+                    <br />
+                    <br /><b>Important: </b>The <a href="https://support.rubrikgov.com">RSC-G Support Portal</a> (https://support.rubrikgov.com) and commercial <a href="https://support.rubrik.com">Rubrik Support Portal</a> (https://support.rubrik.com) use separate login credentials.
+                    <br />
+                    <!-- Added content as per ticket CS21-2268 -->
+            </apex:outputPanel>
+        </apex:outputPanel>
+
+        <apex:outputPanel rendered="{!OR(hasCodebaseRecoveryProduct == 'true', hasRSCProduct == 'true')}">
+        <apex:outputPanel rendered="{!AND(!isRSCPurchased,isRevenue)}">
+                <br />
+                <b>Get to know Rubrik with personal setup</b><br />
+                We’re excited to help you get started with your deployment. To ensure a smooth and personalized experience, we invite you to schedule an online, one-on-one session with our Customer Success Management (CSM) team. We’ll guide you through the initial setup process, answer any questions you may have, and help you maximize your investment in Rubrik. We look forward to connecting with you soon.<br/><br/>
+                <a href="{!$Label.Calendly_Link}" style="display: inline-block; padding: 10px 20px;  text-align: center; text-decoration: none; background-color: #009dac; color: white; border-radius: 50px; border: 2px solid #009dac; transition: background-color 0.3s, border-color 0.3s;">
+                    Schedule your session
+                </a><br /><br />
+                <b>Note</b>: Rubrik uses Calendly to schedule meetings with our CSM team. Please reference the <a href="https://calendly.com/legal/privacy-notice">Calendly privacy policy</a>.<br />
+            </apex:outputPanel>
+        </apex:outputPanel>
+            <!--For Non RSC-G customers only-->
+            <apex:outputPanel rendered="{!AND(!polarisDetails.isFedRAMPAccount, hasRSCProduct == 'true' , hasCustomerURL , hasPMC == 'false', hasPolaris, polarisDetails.orderType != 'Revenue')}">
+                <br /><b>Access your Rubrik instance in the cloud</b> <br />
+                Rubrik simplifies backup and recovery for hybrid cloud environments and eliminates legacy backup complexity by integrating data orchestration, catalog management, and continuous data protection into a single software platform. We&#39;ve created your Rubrik instance in the cloud and enabled the following Rubrik Security Cloud owner(s). Access your RSC instance with the following information.
+                <br /><br />
+                <table style="border-collapse: collapse; border: 1px solid lightgrey; width: 95%;">
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid lightgrey; width: 12%;"><b>RSC URL</b></td>
+                        <td style="padding: 8px; border: 1px solid lightgrey;">{!polarisDetails.polarisURL}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid lightgrey; width: 12%;"><b>RSC owner</b></td>
+                        <td style="padding: 8px; border: 1px solid lightgrey;">{!polarisDetails.polarisContactDetails}</td>
+                    </tr>
+                </table>
+                <br />
+                Use the <b><i>Forgot Password</i></b> link to configure your login if you’re accessing your RSC instance for the first time. Additional users must be created by the RSC owner(s).
+                <br />
+            </apex:outputPanel>
+            <!-- CS21-3822 -->
+            <apex:outputPanel rendered="{!AND(!polarisDetails.isFedRAMPAccount, hasRSCProduct == 'true', polarisDetails.orderType == 'Revenue')}">
+                <apex:outputPanel rendered="{!polarisDetails.rscInstances.size > 0}">
+                    <br /><b>Rubrik Security Cloud (RSC)</b> <br />       
+                    <!-- <div style="font-size: 13px; margin-bottom: 20px;"> -->
+                        Rubrik Security Cloud is a comprehensive data security platform that delivers complete cyber resilience with both cyber posture and cyber recovery. RSC is built on a modern, zero trust architecture powered by machine learning and was designed to keep data secure, monitor data risks, and quickly recover data, wherever it lives. Access RSC using the following information.
+                    <!-- </div> -->
+                    <br /> 
+                    <br /> 
+                    <div style="width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;">       
+                        <table style="width: 100%; border-collapse: collapse; table-layout: fixed; border: 1px solid #e0e0e0;">
+                            <thead>
+                                <tr style="background-color: #f9f9f9; text-align: left; font-size: 12px;">
+                                    <th bgcolor="#f3f5f6" style="padding: 6px; border: 1px solid #e0e0e0; width: 36%; white-space: normal; word-wrap: break-word; overflow-wrap: break-word;">RSC URL</th>
+                                    <th bgcolor="#f3f5f6" style="padding: 6px; border: 1px solid #e0e0e0; width: 25%; white-space: normal; word-wrap: break-word; overflow-wrap: break-word;">RSC owner</th>
+                                    <th bgcolor="#f3f5f6" style="padding: 6px; border: 1px solid #e0e0e0; width: 12%; white-space: normal; word-wrap: break-word; overflow-wrap: break-word;">Region</th>
+                                    <th bgcolor="#f3f5f6" style="padding: 6px; border: 1px solid #e0e0e0; width: 15%; white-space: normal; word-wrap: break-word; overflow-wrap: break-word;">Deployment</th>
+                                    <th bgcolor="#f3f5f6" style="padding: 6px; border: 1px solid #e0e0e0; width: 12%; white-space: normal; word-wrap: break-word; overflow-wrap: break-word;">Hosted site</th>
+                                </tr>
+                            </thead>
+                            <tbody style="font-size: 12px;">          
+                                <apex:repeat value="{!polarisDetails.rscInstances}" var="rsc">
+                                    <tr>
+                                        <td style="padding: 6px; border: 1px solid #e0e0e0; vertical-align: top; word-break: break-all;">
+                                            {!rsc.RSCUrl__c}                                        
+                                        </td>
+                                        
+                                        <td style="padding: 6px; border: 1px solid #e0e0e0; vertical-align: top; word-wrap: break-word;">
+                                            {!rsc.RSCOwnerEmails__c}
+                                        </td>
+                                        
+                                        <td style="padding: 6px; border: 1px solid #e0e0e0; vertical-align: top;">
+                                            {!rsc.RSCRegion__c}
+                                        </td>
+                                        
+                                        <td style="padding: 6px; border: 1px solid #e0e0e0; vertical-align: top;">
+                                            {!rsc.RSCDeployment__c}
+                                        </td>
+                                        
+                                        <td style="padding: 6px; border: 1px solid #e0e0e0; vertical-align: top;">
+                                            {!rsc.RSCHostSite__c}
+                                        </td>
+                                    </tr>
+                                </apex:repeat>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div >
+                        <br />
+                        Use the <b><i>Forgot Password</i></b> link to configure your login for the first time. Additional users must be created by an RSC owner.
+                    </div>
+                </apex:outputPanel>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!hasRSCProduct == 'true'}">
+                
+                <br /><b>Rubrik Security Cloud (RSC) service status:</b>
+                View the current status of the RSC platform including service incidents and subscribe to maintenance notifications by accessing the <a href="https://status.rubrik.com/">RSC status</a> page.
+                <br />
+                
+            </apex:outputPanel>
+
+        <!-- Added content as per ticket CS21-3477: I am displayed if the order contains a Predibase product -->
+        <apex:outputPanel rendered="{!hasPredibaseProduct == 'true'}">
+            <br /><strong>Access Predibase</strong>
+            <br />Predibase simplifies enterprise AI by enabling fast, cost-effective fine-tuning, and deployment of open-source Large Language Models (LLM). Use the following instructions to access and deploy Predibase.
+            <ol style ="padding-left: 0;margin-bottom: 0px;">
+                <li>A Predibase cloud instance has been created for you. Please locate an email with the following information that includes a unique URL for your organization. <br/>
+                &#x2022; <strong>From:</strong> support@predibase.com<br />
+                &#x2022; <strong>Subject:</strong> Welcome to your Predibase environment<br />
+                </li>
+                <li>Update your profile after accessing your Predibase environment.</li>
+                <li>For Virtual Private Cloud (VPC) deployments, reference the <a href="https://docs.predibase.com/admin/vpc/overview">VPC Provisioning documentation</a> to provision the desired cloud type.</li>
+            </ol>
+        </apex:outputPanel>
+        <!-- Added content as per ticket CS21-3477 -->
+
+        <apex:outputPanel rendered="{!hasRansomware}">
+            <br/>
+            <b>Ransomware Recovery Warranty</b>
+            <br />
+            Based on your order, you are eligible to enroll in the Rubrik Ransomware Recovery Warranty Program, which is available to customers running Enterprise Edition and working with a Customer Experience Manager (CEM) throughout the applicable warranty period to ensure security best practices are in place.
+            <br/><br/>
+            <b>Note:</b> To complete the enrollment process for the Rubrik Ransomware Recovery Warranty Program, you must submit the enrollment form and accept the terms and conditions of the Ransomware Recovery Warranty Agreement, available at: https://www.rubrik.com/ransomware-recovery-warranty-program.
+            The applicable warranty period will not start until: (i) the enrollment process is complete, and (ii) the initial CEM health check is performed and the resulting health check recommendations are implemented.
+            <br />
+        </apex:outputPanel>
+
+        <apex:outputPanel rendered="{!If(OR(hasCloud, hasCloudType, hasRSCProduct=='true', hasCodebaseRecoveryProduct=='true'),true,false)}">
+            <br />
+            <b>Microsoft Support Services</b>
+            <br /> From time to time, Microsoft may provide additional support services relating to Azure Government Cloud. By
+            accepting such services, you confirm that Rubrik is authorized to provide your name and contact information to
+            Microsoft, and that Microsoft is authorized to contact you directly regarding the services, if necessary. Microsoft
+            Premier Support Services are performed only by Microsoft Corporation, its affiliates, and any person or third
+            party delivering support as directed by Microsoft (including but not limited to full-time employees, subcontractors,
+            and outsourced service providers).
+            <br/>
+        </apex:outputPanel>
+    </apex:outputPanel>
+</apex:component>

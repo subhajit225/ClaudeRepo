@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Validation_Code__c</fullName>
+    <description>SF-1734 - Specialist Request - Validation Code</description>
+    <label>Validation Code</label>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Closed</fullName>
+                <default>false</default>
+                <label>Closed</label>
+            </value>
+            <value>
+                <fullName>Canceled</fullName>
+                <default>false</default>
+                <label>Canceled</label>
+            </value>
+            <value>
+                <fullName>Appropriate</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Appropriate</label>
+            </value>
+            <value>
+                <fullName>Lack of Preparation</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Lack of Preparation</label>
+            </value>
+            <value>
+                <fullName>No Customer Commitment</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>No Customer Commitment</label>
+            </value>
+            <value>
+                <fullName>SE Education</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>SE Education</label>
+            </value>
+            <value>
+                <fullName>Wrong Audience</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Wrong Audience</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

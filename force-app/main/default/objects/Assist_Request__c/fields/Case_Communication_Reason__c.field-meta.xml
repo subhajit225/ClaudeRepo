@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Case_Communication_Reason__c</fullName>
+    <description>CS21-2561 AR Feedback Rewamp Fields</description>
+    <label>Case Communication Reason</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>Case_Communication_Category__c</controllingField>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Update Frequency</fullName>
+                <default>false</default>
+                <label>Update Frequency</label>
+            </value>
+            <value>
+                <fullName>Case driven by AR engineer</fullName>
+                <default>false</default>
+                <label>Case driven by AR engineer</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>No</controllingFieldValue>
+            <valueName>Update Frequency</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>No</controllingFieldValue>
+            <valueName>Case driven by AR engineer</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

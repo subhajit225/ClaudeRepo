@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Product_Family_r5281</fullName>
+    <active>true</active>
+    <description>r528_ ordered more than QTY of 1</description>
+    <errorConditionFormula>AND(
+ISPICKVAL(Product_Family_for_PoC__c, &quot;r528, 2-node, 96TB (FIPS 140-2 level 2 self-encrypting), dual-port SFP+&quot;)||
+ISPICKVAL(Product_Family_for_PoC__c, &quot;r528, 2-node, 96TB (FIPS 140-2 level 2 self-encrypting), dual-port 10GBase-T NIC&quot;),
+VALUE(TEXT(POC_Qty__c)) &lt;= 1)</errorConditionFormula>
+    <errorDisplayField>POC_Qty__c</errorDisplayField>
+    <errorMessage>More than 1 quantity needed</errorMessage>
+</ValidationRule>

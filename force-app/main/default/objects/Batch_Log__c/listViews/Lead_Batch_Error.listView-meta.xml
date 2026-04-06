@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Lead_Batch_Error</fullName>
+    <columns>NAME</columns>
+    <columns>Related_Object__c</columns>
+    <columns>Related_Record_ID__c</columns>
+    <columns>Description__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Related_Object__c</field>
+        <operation>equals</operation>
+        <value>Lead</value>
+    </filters>
+    <label>Lead Batch Error</label>
+</ListView>

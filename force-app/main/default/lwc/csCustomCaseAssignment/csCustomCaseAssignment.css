@@ -1,0 +1,60 @@
+.slds-modal__container{
+	max-width: 90rem !important;
+	width:100% !important;
+}
+.pagination-container {
+    text-align: center;
+    margin: 1rem 0;
+}
+
+.info-text {
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: #444;
+}
+
+.pagination {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.page-btn {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    background: #fff;
+    cursor: pointer;
+    border-radius: 4px;
+    min-width: 32px;
+    font-size: 14px;
+}
+
+.page-btn:hover:not(.active):not(:disabled) {
+    background-color: #f4f4f4;
+}
+
+.page-btn:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+.page-btn.active {
+    background-color: #0070d2;
+    color: #fff;
+    border-color: #0070d2;
+    font-weight: bold;
+}
+
+.ellipsis {
+    padding: 5px 10px;
+    color: #777;
+    font-size: 14px;
+}
+.custom-footer.slds-modal__footer{
+    box-shadow: none;
+    background-color: white;
+}
+.custom-header.slds-modal__header{
+    padding-top: 0px;
+    font-weight: 600;
+}

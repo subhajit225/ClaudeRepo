@@ -1,0 +1,53 @@
+<template>
+    <template if:true={spinnerLoad}>
+        <lightning-spinner variant="brand" size="large"> </lightning-spinner>
+    </template>
+    <template if:false={spinnerLoad}>
+        <template if:true={showForm}>
+            <div class="slds-card two-col-img" >
+                <div class="slds-p-around_xxx-small">
+                    <h1 class="heading-36">{formTitle}</h1>
+                </div>
+                <lightning-layout multiple-rows>
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+                        <div class="slds-p-around_small">
+                            <span class="cardBodyTag">Program Description</span>
+                        </div>
+                        <div class="slds-p-around_small">
+                            <lightning-formatted-rich-text class="agreement-label" value={descriptionText}></lightning-formatted-rich-text>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+                        <lightning-input type="text" label="Partner Account" value={partnerAccountName} disabled="true"
+                            class="slds-p-around_small inputClass cmpInfo"></lightning-input>
+                        <lightning-input type="text" label="Rubrik Channel Development Manager" value={cdmName} disabled="true"
+                            class="slds-p-around_small inputClass cmpInfo"></lightning-input>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+                        <div class="slds-p-around_small">
+                            <label class="slds-form-element__label" for="lookupCmp">Designated Partner Contact</label>
+                            <c-custom-look-up-l-w-c objectname="Contact" accid={partnerAccountId} placeholder="Enter Contact Name..."
+                                                    onselected={handleSelectedContact} onclear={handleClearSelection}></c-custom-look-up-l-w-c>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+                        <div class="slds-p-around_small">
+                            <span class="cardBodyTag">Agreement</span>
+                        </div>
+                        <div class="slds-p-around_small">
+                            <lightning-formatted-rich-text class="agreement-label" value={agreementText}></lightning-formatted-rich-text>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item>
+                        <div class="slds-p-vertical_small">
+                            <lightning-button variant="brand" label="Submit" title="Submit"
+                                            onclick={handleSubmit} class="slds-p-left_small">
+                            </lightning-button>
+                        </div>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </div>
+        </template>
+    </template>
+</template>

@@ -1,0 +1,52 @@
+.containerDateCaseModal{
+    border: 1px solid black;
+    border-radius: 4px;
+    position: absolute;
+    margin-left: auto;
+    top:0;
+    right:0;
+    z-index: 9;
+    background-color: #ffffff;
+    height: 105px;
+    width: 280px;   
+}
+.parent{
+    /* position: relative; */
+    margin: 10px 0px 10px 0px;
+    height: calc(100% - 140px)!important;
+    overflow: auto;
+}
+.containerTabHead{
+    background-color:#fafffc;
+    border:1px solid grey;
+    border-radius:8px;
+    display:flex;
+    align-items:center;
+    width:fit-content;
+}
+.topButtons{
+    /* display:flex;
+    justify-content:end;
+    align-items: end; */
+    padding: 6px 0px;
+    text-align: right;
+}
+.tabTitle{
+    display:flex;
+    justify-content:space-between;
+    align-items: center;
+}
+.caseExpert{
+    background-color: #f5f7f8;
+    width:110px;
+    border-radius:14px;
+}
+.OnlineIcon{
+    --lwc-colorTextIconDefault: green;
+}
+.OfflineIcon{
+    --lwc-colorTextIconDefault: red;
+}
+.topButtons span.slds-form-element__label {
+    float: left;
+}

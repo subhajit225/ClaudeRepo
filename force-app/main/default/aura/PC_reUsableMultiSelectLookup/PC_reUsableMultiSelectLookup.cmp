@@ -1,0 +1,71 @@
+<aura:component >
+    
+    <!--declare attributes--> 
+    <aura:attribute name="lstSelectedRecords" type="List" default="[]" description="Use,for store SELECTED sObject Records"/>
+    <aura:attribute name="listOfSearchRecords" type="List" description="Use,for store the list of search records which returns from apex class"/>
+    <aura:attribute name="SearchKeyWord" type="string"/>
+    <aura:attribute name="objectAPIName" type="string" default=""/>
+    <aura:attribute name="IconName" type="string" default=""/>
+    <aura:attribute name="label" type="string" default=""/>
+    
+    <!--declare events hendlers-->  
+    <aura:handler name="oSelectedRecordEvent" event="c:PC_selectedsObjectRecordsEvent" action="{!c.handleComponentEvent}"/>
+    <aura:attribute name="Message" type="String" default=""/>
+    
+    <!-- https://www.lightningdesignsystem.com/components/lookups/ -->     
+    <div class="slds-form-element">
+        <label class="slds-form-element__label" for="combobox-id-3">{!v.label}</label>
+        <div class="slds-form-element__control">
+            <div class="slds-combobox_container">
+                <div onmouseleave="{!c.onblur}" aura:id="searchRes" class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click slds-is-close" aria-expanded="true" aria-haspopup="listbox" role="combobox">
+                    <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right" role="none">
+                        <ui:inputText click="{!c.keyPressController}"
+                                      updateOn="keyup"
+                                      keyup="{!c.keyPressController}"
+                                      class="slds-lookup__search-input slds-input inputSize"
+                                      value="{!v.SearchKeyWord}"
+                                      placeholder="select.."/>
+                        <span class="slds-icon_container slds-icon-utility-down slds-input__icon slds-input__icon_right">
+                            <lightning:icon iconName="utility:down" class="slds-icon_x-small slds-icon-text-default" aria-hidden="true" size="x-small" alternativeText="icon"/>
+                        </span> 
+                        
+                    </div>
+                    <!--Selected Records Pills Section-->
+                    <div>
+                        <ul class="slds-listbox slds-listbox_horizontal" role="listbox" aria-label="Selected Options:" aria-orientation="horizontal">
+                            <aura:iteration items="{!v.lstSelectedRecords}" var="sr">
+                                <li class="slds-listbox-item" role="presentation">
+                                    <lightning:pill label="{!sr}" name="{!sr}" onremove="{! c.clear }">
+                                    </lightning:pill>
+                                </li>
+                            </aura:iteration> 
+                        </ul>
+                    </div>
+                    <div id="listbox-id-4" class="slds-dropdown slds-dropdown_length-5 slds-dropdown_fluid" role="listbox">
+                        <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+                            <aura:iteration items="{!v.listOfSearchRecords}" var="singleRec">
+                                <!--Child Component--> 
+                                <c:PC_reUsableMultiSelectLookupResult oRecord="{!singleRec}" IconName="{!v.IconName}"/>
+                            </aura:iteration>    
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="slds-listbox_selection-group">
+                <ul class="slds-listbox slds-listbox_horizontal" role="listbox" aria-label="Selected Options:" aria-orientation="horizontal">
+                    <aura:iteration items="{!v.lstSelectedRecords}" var="sr">
+                        <li class="slds-listbox-item" role="presentation">
+                           <span class="slds-pill" role="option" tabindex="0" aria-selected="false">
+                                <span class="slds-pill__label" title="{!sr}">{!sr}</span>
+                                <span class="slds-icon_container slds-pill__remove" title="Remove" onclick="{!c.clear}">
+                                    <lightning:icon iconName="utility:close" size="x-small" alternativeText="icon"/>
+                                    <span class="slds-assistive-text">Press delete or backspace to remove</span>
+                                </span>
+                            </span>
+                        </li>
+                    </aura:iteration>                    
+                </ul>
+            </div>-->
+        </div>
+    </div>
+</aura:component>

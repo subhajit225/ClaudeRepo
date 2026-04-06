@@ -1,0 +1,203 @@
+<apex:page title="Resource Search - Rubrik Community" cache="false" controller="SearchController" standardStylesheets="false" sidebar="false" showheader="false" applyBodyTag="false" 
+action="{!doSearchOnload}">
+
+   
+
+ <c:visualstrapblock >
+     
+     <!--start header-->
+        <c:siteheader ></c:siteheader>
+        <!--end Header-->
+
+        <!--end tabs-->
+        <c:processing />       
+        <!--start the Container-->
+        <div class="container">
+            <div class="row rowcontainer" >
+                <div class="col-md-12">
+                  <c:pageTitle name="Search" ></c:pageTitle>
+ 
+
+ 
+ 
+         <apex:form id="searchform">
+         <apex:pageBlock id="theblock" >
+             <div class="col-md-10">
+               <apex:inputText value="{!searchstring}" id="theSearchstring" maxlength="100" size="110" styleClass="form-control" html-autocomplete="off" onkeypress="return noenter();">
+                &nbsp;
+                </apex:inputText>
+              </div><br/>
+               <div class="col-md-2">
+               <apex:commandButton value="Go" id="submitButton" styleClass="btn rubrik-btn block" style="width:30" status="busyStatus" action="{!doSearch}" reRender="theSearchResults,searchform,karesults"  immediate="false" />
+                  
+              </div> 
+          </apex:pageBlock>  
+          <div class="col-md-10">
+          <apex:messages />
+
+          </div>
+         
+          <apex:pageBlock > 
+          
+          <apex:panelGroup id="theSearchResults" >
+   
+                 <knowledge:articleList articleVar="article" pageNumber="{!currentPageNumber}" Keyword="{!searchstring}" hasMoreVar="false" pageSize="1" rendered="{!searchstring!=null}">
+
+           <!--knowledge articles-->
+          <apex:outputpanel rendered="{!AND(searchstring!=null,searchstring!='',usertype!='partner',article!=null)}" id="karesults">
+                      <div class="col-md-12"><h3>Articles</h3></div>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Type</th>
+                </tr>
+              </thead>
+              <knowledge:articleList articleVar="article" pageNumber="{!currentPageNumber}" Keyword="{!searchstring}" hasMoreVar="false" pageSize="10" rendered="{!searchstring!=null}">
+  
+
+              <tbody>
+                <tr>
+                  <td><apex:outputLink value="{!URLFOR($Action.KnowledgeArticle.View, article.id,['popup' = 'false'])}">{!article.title}</apex:outputLink></td>
+                  <td> <apex:outputText >{!article.articleTypeLabel}</apex:outputText></td>
+                </tr>
+              </tbody>
+                    </knowledge:articleList>
+                  </table>    
+          </apex:outputpanel>
+ </knowledge:articleList>
+
+             
+               <!--cases-->
+                 <apex:outputText rendered="{!searchstring!=null&&csize>0}"><div class="col-md-12"><h3>Cases</h3></div></apex:outputText>
+                 <apex:datatable var="c" value="{!cresults}" id="caseresults" styleClass="table" rendered="{!searchstring!=null&&csize>0}">
+                    <apex:column headervalue="Case Number">
+                     <a href="{!URLFOR($Action.Case.View, c.Id)}">{!c.CaseNumber}</a>
+                    </apex:column>
+                    <apex:column headervalue="Status">
+                     {!c.Status}
+                    </apex:column>                    
+                    <apex:column headervalue="Subject">
+                     <apex:outputfield value="{!c.Subject}"/>
+                    </apex:column> 
+                    <apex:column headervalue="Priority">
+                     <apex:outputfield value="{!c.Priority}"/>
+                    </apex:column> 
+                    <apex:column headervalue="Opened Date">
+                     <apex:outputfield value="{!c.CreatedDate}"/>
+                    </apex:column> 
+                    </apex:datatable>
+
+               <!--Ideas-->
+                 <apex:outputText rendered="{!searchstring!=null&&isize>0}"><div class="col-md-12"><h3>Ideas</h3></div></apex:outputText>
+                 <apex:datatable var="i" value="{!iresults}" id="idearesults" styleClass="table" rendered="{!searchstring!=null&&iSize>0}">
+                    <apex:column headervalue="Idea">
+                     <a href="{!URLFOR($Page.IdeaView)}?id={!i.Id}">{!i.Title}</a>
+                    </apex:column>
+                    <apex:column headervalue="Status">
+                     {!i.Status}
+                    </apex:column>                    
+                    <apex:column headervalue="Submitted Date">
+                     <apex:outputfield value="{!i.createddate}"/>
+                    </apex:column> 
+                    </apex:datatable>
+
+
+               <!--Releases-->
+                 <apex:outputText rendered="{!searchstring!=null&&rsize>0}"><div class="col-md-12"><h3>Downloads</h3></div></apex:outputText>
+                 <apex:datatable var="r" value="{!rresults}" id="releaseresults" styleClass="table" rendered="{!searchstring!=null&&rSize>0}">
+                    <apex:column headervalue="Release">
+                     <a href="{!URLFOR($Page.Downloads)}#{!r.Version__c}">{!r.Name}</a>
+                    </apex:column>
+                    <apex:column headervalue="Release Date">
+                     <apex:outputfield value="{!r.Release_Date__c}"/>
+                    </apex:column>                    
+                    </apex:datatable>
+
+
+               <!--Products-->
+                 <apex:outputText rendered="{!searchstring!=null&&nsize>0}"><div class="col-md-12"><h3>Products</h3></div></apex:outputText>
+                 <apex:datatable var="n" value="{!nresults}" id="productresults" styleClass="table" rendered="{!searchstring!=null&&nSize>0}">
+                    <apex:column headervalue="Node">
+                     <a href="{!URLFOR($Page.Products)}#{!n.Name}">{!n.Name}</a>
+                    </apex:column>                   
+                    <apex:column headervalue="Cluster" value="{!n.Cluster__r.Name}"/>
+                    <apex:column headervalue="Version" value="{!n.Cluster__r.software_version__c}"/>
+                    </apex:datatable>
+
+            <apex:outputText rendered="{!contentSize>0}">
+             <div class="col-md-12"><h3>Resources</h3></div></apex:outputText>
+                     <apex:datatable var="c" value="{!contentdocs}" id="resourceresults" styleClass="table" rendered="{!contentSize>0}">
+                        <apex:column headervalue="Title">
+                         <a href="{!$Page.ContentView}?id={!c.id}">{!c.title}</a>
+                        </apex:column>                 
+                        <apex:column headervalue="File Type" value="{!c.FileType}"/>
+                        <apex:column headervalue="Publish Date" value="{!c.CreatedDate}"/>
+                </apex:datatable>
+
+      <apex:outputText rendered="{!leadsize>0}">
+             <div class="col-md-12"><h3>Deal Registrations</h3></div></apex:outputText>
+                     <apex:datatable var="l" value="{!lresults}" id="featuredresults" styleClass="table" rendered="{!leadsize>0}">
+                        <apex:column headervalue="Name">
+                         <a href="{!l.id}">{!l.Name}</a>
+                        </apex:column>                 
+                        <apex:column headervalue="Status" value="{!l.Status}"/>
+                        <apex:column headervalue="Submission Date" value="{!l.CreatedDate}"/>
+                </apex:datatable> 
+                
+           <apex:outputText rendered="{!incentsize>0}">
+             <div class="col-md-12"><h3>Incentives</h3></div></apex:outputText>
+                     <apex:datatable var="i" value="{!incents}" id="incentiveresults" styleClass="table" rendered="{!incentsize>0}">
+                        <apex:column headervalue="Name">
+                         <a href="{!i.id}">{!i.Name}</a>
+                        </apex:column>                 
+
+                </apex:datatable>                 
+ 
+
+           <apex:panelGrid columns="2">
+           <!--<apex:commandLink action="{!previous}" value="Previous" style="{!IF(prevRequired = true,'display:block','display:none')}" reRender="theSearchResults"/> 
+           <apex:commandLink action="{!next}" value="Next"  style="{!IF(nextRequired = true,'display:block','display:none')}" reRender="theSearchResults"/>  -->
+         </apex:panelGrid>
+          </apex:panelGroup>
+          </apex:pageBlock>
+         </apex:form>
+          </div>
+            </div>
+        </div>
+        <!--End the Container-->
+
+
+
+       <!--start the footer-->
+        <c:sitefooter rendered="{!NOT(ISPICKVAL($User.UserType,'PowerPartner'))}"/>
+        <c:psitefooter rendered="{!ISPICKVAL($User.UserType,'PowerPartner')}"/>
+    </c:visualstrapblock>
+    
+
+    
+     <script>
+       function noenter() 
+       {
+          if (window.event && window.event.keyCode == 13)
+          {
+             var ele=document.getElementById('j_id0:j_id1:j_id2:searchform:theblock:submitButton'); 
+             ele.click();
+             return false;
+          }
+          else
+          {
+             return true;
+          }
+       }
+    </script>
+    
+   
+    <script>
+        window.onload=function()
+        {
+
+         document.getElementById(theSearchstring).value = "{!$CurrentPage.parameters.Search}";
+        };
+    </script>
+</apex:page>

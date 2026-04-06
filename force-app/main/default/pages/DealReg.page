@@ -1,0 +1,375 @@
+<apex:page StandardController="Deal_Registration__c" extensions="DealRegExtension" standardStylesheets="false"  sidebar="false" showheader="false" applyBodyTag="false"   >
+
+<c:visualstrapblock >
+    
+    
+    <!--hide the action column from Community users-->
+    <style>
+    .actionColumn{
+    display:none;
+    }
+    
+    .pbBody{
+    padding: 5px;
+    }
+    
+    .visualstrap td, th {
+    padding: 5px !important;
+    }
+    
+    .rolodex {
+      padding: 4px !important;  
+   }
+   
+   .btnpad{
+    padding: 15px;
+    }
+    
+   .row {
+   padding: 10px;
+   }
+   
+   .textbox{
+   padding: 0px 1px 1px 1px;
+   }
+   
+       .control-label:after {
+      content: "*";
+      color:red;
+    }
+        
+    </style>
+    
+        <!--start header-->
+        <c:siteheader ></c:siteheader>
+        <!--end Header-->
+   
+
+      <!--start the Container-->
+        <div class="container">
+        <!--action status overlay-->
+        <c:processing />
+            <div class="row rowcontainer" >
+                <div class="col-md-12">
+                                         <c:pageTitle name="Deal Registration Form"></c:pageTitle> 
+
+                      <div class="row" >
+                      <div class="col-md-12">
+                    
+                    <!--<apex:outputPanel layout="block" styleClass="alert alert-danger" rendered="{!errordr}" >
+                    
+                    <apex:pageMessages >
+                   
+                    </apex:pageMessages>
+                    </apex:outputPanel>
+                    
+                   -->
+    
+       
+       <!--start old form-->
+    <apex:form id="form" html-data-toggle="validator">
+       <!-- <apex:actionFunction name="stateMandatory" action="{!makeStateMandatory}" immediate="true" />
+        <apex:actionFunction name="stateNotMandatory" action="{!makeStateNotMandatory}" immediate="true" />-->
+       
+        <div class="col-md-12">
+        <h3>Deal Registration Information</h3>
+
+        <div class="row">
+        <div class="col-md-4">
+        <apex:outputLabel styleclass="control-label">First Name</apex:outputLabel>
+        <apex:inputField value="{!Deal_Registration__c.FirstName__c}" styleClass="form-control block inputrubrik required" required="true"  />
+        </div>
+        <div class="col-md-4">
+        <apex:outputLabel styleclass="control-label">Last Name</apex:outputLabel>
+        <apex:inputField value="{!Deal_Registration__c.LastName__c}" styleClass="form-control block inputrubrik required" required="true"  />
+        </div>
+        <div class="col-md-4">
+        <apex:outputLabel styleclass="control-label">Company Name</apex:outputLabel>
+        <apex:inputField value="{!Deal_Registration__c.Company__c}" styleClass="form-control block inputrubrik required"  required="true" />
+        </div>
+        </div>
+        
+        <!--row 2-->
+        <div class="row">       
+        <div class="col-md-4">
+        <apex:outputLabel styleclass="control-label">Email</apex:outputLabel>
+        <apex:inputField value="{!Deal_Registration__c.Email__c}" styleClass="form-control block inputrubrik required" required="true"  />
+        </div>      
+        <div class="col-md-4">
+        <apex:outputLabel styleclass="control-label">Customer Category</apex:outputLabel>
+        <apex:inputField value="{!Deal_Registration__c.Customer_Category__c}" styleClass="form-control block inputrubrik required"  required="true" />
+        </div>
+        <div class="col-md-4">
+        <apex:outputLabel styleclass="control-label">Phone Number</apex:outputLabel>
+        <apex:inputField value="{!Deal_Registration__c.Phone__c}" styleClass="form-control block inputrubrik required"  required="true" />
+        </div>
+        </div>
+        
+        <!--row 3-->
+        <div class="row">       
+        <div class="col-md-4">
+        <apex:outputLabel styleclass="control-label">Job Title</apex:outputLabel>
+        <apex:inputField value="{!Deal_Registration__c.Title__c}" styleClass="form-control block inputrubrik required"  />
+        </div>
+        <div class="col-md-4">
+        <apex:outputLabel styleclass="control-label">Purchase Timeframe</apex:outputLabel>
+        <apex:inputField value="{!Deal_Registration__c.Purchase_Timeframe__c}" styleClass="form-control block inputrubrik required" required="true"  />
+        </div>
+        <div class="col-md-4">
+        <apex:outputLabel styleclass="control-label">Address</apex:outputLabel>
+        <apex:inputField value="{!Deal_Registration__c.Street__c}" styleClass="form-control block inputrubrik required" />
+        </div>        
+        </div>
+        
+        <!--row 4-->
+        <div class="row">
+        <div class="col-md-4">
+        <apex:outputLabel styleclass="control-label">City</apex:outputLabel>
+        <apex:inputField value="{!Deal_Registration__c.City__c}" styleClass="form-control block inputrubrik required" required="true"  />
+        </div>
+
+        <div class="col-md-4">
+        <apex:outputLabel styleclass="control-label">Country</apex:outputLabel>
+ 
+        <apex:actionRegion >
+        <apex:inputField value="{!Deal_Registration__c.Country__c}" styleClass="form-control block inputrubrik required" required="true"  >
+        <apex:actionSupport event="onchange" action="{!isItRequired}" reRender="zipPanel,zip1,statePanel"/>
+        </apex:inputField>
+        </apex:actionRegion>
+        </div>  
+
+        <div class="col-md-4">
+        <apex:outputPanel id="statePanel"> 
+        <apex:outputLabel styleClass="{!IF(isRequired,'control-label','')}">State</apex:outputLabel>
+        <apex:inputField value="{!Deal_Registration__c.StateCode__c}" required="{!isRequired}" styleClass="form-control block inputrubrik" />  
+        </apex:outputPanel>   
+        </div>
+        </div>
+        
+        <!--zip added 3-30-3017-->
+        <div class="row">
+        <div class="col-md-4">
+        <apex:outputPanel id="zipPanel">
+        <apex:outputLabel styleClass="{!IF(isRequired,'control-label','')}">Zip Code</apex:outputLabel>
+        <apex:inputField value="{!Deal_Registration__c.PostalCode__c}" id="zip1" required="{!isRequired}"  styleClass="form-control block inputrubrik" />
+        <!--{!isRequired}-->
+        </apex:outputPanel>
+        </div>
+        
+        <!--deal reg opp field added 4-4-17-->
+        <!--<div class="col-md-8">
+        <apex:pageBlock >
+        <apex:outputLabel styleclass="control-label" >Opportunity Details (environment size, incumbent solution, business drivers, etc.)</apex:outputLabel>
+        <apex:inputfield value="{!Deal_Registration__c.Opportunity_Details__c}" style="height:85px; rows: 3 !important; resize: vertical;" styleClass="textbox1 form-control block inputrubrik required" label="required details" required="true" />
+        </apex:pageBlock>
+        </div>-->
+        </div>
+        
+        
+        
+        </div>
+        
+        
+        <!--end top-->
+        
+        <!--start environment section-->
+       <div class="col-md-12">
+       <h3>Environment Information</h3>
+           <apex:outputPanel id="errorPanelEnvironment">
+                    </apex:outputPanel>
+                    
+        <div class="row">
+        
+        
+        
+        <div class="col-md-4">
+        <apex:outputLabel >Number of protected machines?</apex:outputLabel>
+        <apex:inputField value="{!Deal_Registration__c.Number_of_protected_machines__c}" styleClass="form-control block inputrubrik"/>
+        </div>
+        <div class="col-md-4">
+        <apex:outputLabel styleclass="control-label">Current Backup Vendor?</apex:outputLabel>
+        <apex:inputField value="{!Deal_Registration__c.Current_Backup_Vendor__c}" styleClass="form-control block inputrubrik required" required="true"  />
+        </div>        
+        <div class="col-md-4">
+        <apex:outputLabel styleclass="control-label">Current Storage Vendor ?</apex:outputLabel>
+        <apex:inputField value="{!Deal_Registration__c.Current_Storage_Vendor__c}" styleClass="form-control block inputrubrik"  />
+        </div>
+        </div>
+        
+        <!--row 2-->
+        <div class="row">           
+        
+        <div class="col-md-4">
+        <apex:outputLabel styleclass="control-label">Budget </apex:outputLabel>
+        <apex:inputField value="{!Deal_Registration__c.Budget__c}" id="budget" styleClass="form-control block inputrubrik required"  required="true" />
+        
+        </div>
+        
+        <div class="col-md-4">
+        <apex:outputLabel styleclass="control-label">Authority</apex:outputLabel>
+        <apex:inputField value="{!Deal_Registration__c.Authority__c}"  styleClass="form-control block inputrubrik required" required="true"  />
+        </div>
+        <div class="col-md-4">
+        <apex:outputLabel styleclass="control-label">Need</apex:outputLabel>
+        <apex:inputField value="{!Deal_Registration__c.Need__c}" styleClass="form-control block inputrubrik required" required="true"  />
+        </div>
+                      
+            
+        </div>
+        
+        
+        <!--row 3-->
+        <div class="row">   
+        
+        <div class="col-md-4">
+        <apex:outputLabel styleclass="control-label">Timeframe</apex:outputLabel>
+        <apex:inputField value="{!Deal_Registration__c.Purchase_Timeframe__c}" styleClass="form-control block inputrubrik required" required="true"/>
+        </div>
+        </div>
+        </div>
+      <!--end Environment section-->   
+        
+        
+       <!--start partner section-->
+       <div class="col-md-12">
+       <h3>Partner Information</h3>
+           <apex:outputPanel id="errorPanel">
+                    <apex:outputPanel layout="block" styleClass="alert alert-danger" rendered="{!errordrpartner}" >
+                    
+                    <apex:pageMessages >
+                   
+                    </apex:pageMessages>
+                    </apex:outputPanel>
+                    </apex:outputPanel>
+        <div class="row">
+        <div class="col-md-4">
+        <apex:outputLabel styleclass="control-label">Partner Company Name </apex:outputLabel>
+        <apex:inputText value="{!Deal_Registration__c.Partner__c}" id="partnername" styleClass="form-control block inputrubrik required"  required="true" disabled="true"  />
+        </div>
+        <div class="col-md-4">
+        <apex:outputLabel styleclass="control-label">Partner Rep Name</apex:outputLabel>
+        <apex:inputField value="{!Deal_Registration__c.Partner_Rep__c}" styleClass="form-control block inputrubrik required" required="true"  />
+        </div>
+        <div class="col-md-4">
+        <apex:outputLabel styleclass="control-label">Partner Rep Phone Number</apex:outputLabel>
+        <apex:inputField value="{!Deal_Registration__c.Partner_Rep_Phone_Number__c}" styleClass="form-control block inputrubrik required" required="true"  />
+        </div>
+        </div>
+  
+        
+        <!--row 2-->
+        <div class="row">           
+        
+        <div class="col-md-4">
+        <apex:outputLabel styleclass="control-label">Partner Rep Email Address</apex:outputLabel>
+        <apex:actionRegion >
+        <apex:inputText value="{!Deal_Registration__c.Partner_Rep_Email_Address__c}" styleClass="form-control block inputrubrik required" required="true"  disabled="{!IF(isDisty==true,false,true)}" >
+            <apex:actionSupport rendered="{!isDisty}" event="onblur" action="{!fetchPartnerAccount}" reRender="partnername,errorPanel"  />
+        </apex:inputText>
+        <!--<apex:inputText rendered="{!isDisty}" value="{!Deal_Registration__c.Partner_Rep_Email_Address__c}" styleClass="form-control block inputrubrik required" required="true"  disabled="true" >
+         </apex:inputText>-->
+        </apex:actionRegion>
+        </div>
+        <div class="col-md-4">
+        <apex:outputLabel >Secondary Email Address to Receive Confirmation</apex:outputLabel>
+        <apex:inputField value="{!Deal_Registration__c.Secondary_Email_for_Deal_Reg__c}" styleClass="form-control block inputrubrik"/>
+        </div>
+        <div class="col-md-4">
+        <apex:outputLabel styleclass="control-label">Partner Rep Title</apex:outputLabel>
+        <apex:inputField value="{!Deal_Registration__c.Partner_Rep_Title__c}" styleClass="form-control block inputrubrik required" required="true"  />
+        </div>        
+        
+        </div>
+        
+        <!--row 3-->
+        <div class="row">   
+        <div class="col-md-4">
+        <apex:outputLabel styleclass="control-label">Partner SE Name</apex:outputLabel>
+        <apex:inputField value="{!Deal_Registration__c.Partner_SE_Name__c}" styleClass="form-control block inputrubrik" required="true" />
+        </div>              
+        <div class="col-md-4">
+        <apex:outputLabel styleclass="control-label">Partner SE Email</apex:outputLabel>
+        <apex:inputField value="{!Deal_Registration__c.Partner_SE_Email__c}" styleClass="form-control block inputrubrik" required="true" />
+        </div>  
+        <div class="col-md-4">
+        <apex:outputLabel styleclass="control-label">Partner SE Phone</apex:outputLabel>
+        <apex:inputField value="{!Deal_Registration__c.Partner_SE_Phone__c}" styleClass="form-control block inputrubrik" required="true" />
+        </div>      
+        </div>
+        
+        </div>
+      <!--end partner section-->    
+        
+        
+            
+<!--start distributor section-->
+<div class="col-md-12">
+       <h3>Distributor Information</h3>
+
+    <div class="row">
+        <div class="col-md-4">
+        <apex:outputLabel >Distributor Company Name </apex:outputLabel>
+        <apex:inputtext value="{!Deal_Registration__c.Distributor_Company_Name__c}" styleClass="form-control block inputrubrik" disabled="true" />
+        <apex:inputHidden value="{!Deal_Registration__c.Distributor__c}" />
+        </div>
+        <!--<div class="col-md-4">
+        <apex:outputLabel >Distributor Rep Name</apex:outputLabel>
+        <apex:inputField value="{!Deal_Registration__c.Distributor_Rep_Name__c}" styleClass="form-control block inputrubrik"  />
+        </div>
+        <!--<div class="col-md-4">
+        <apex:outputLabel >Distributor Rep Phone Number</apex:outputLabel>
+        <apex:inputField value="{!Deal_Registration__c.Distributor_Rep_Phone_Number__c}"  styleClass="form-control block inputrubrik"  />
+        </div>
+        </div>
+        
+       
+        <div class="row">       
+        <div class="col-md-4">
+        <apex:outputLabel >Distributor Rep Email</apex:outputLabel>
+        <apex:inputField value="{!Deal_Registration__c.Distributor_Rep_Email__c}" styleClass="form-control block inputrubrik"  />
+        </div>      
+        <div class="col-md-4">
+        <apex:outputLabel >Distributor Secondary Email Address to Receive confirmation:</apex:outputLabel>
+        <apex:inputField value="{!Deal_Registration__c.Distributor_Secondary_Email_Address__c}" styleClass="form-control block inputrubrik"  />
+        </div>-->
+        <div class="col-md-4">
+        <apex:outputLabel >Alliance Partner Name</apex:outputLabel>
+        <apex:inputField value="{!Deal_Registration__c.Alliance_Partner_Name__c}" styleClass="form-control block inputrubrik"  />
+        </div>
+        </div>
+
+</div>
+
+   <!-- <!--row 2 end distributor section-->     
+   <br/>
+          <center><!--<apex:commandButton action="{!save}" onclick="SubmitOnClick"  styleclass="btn rubrik-btn text-center" title="Submit" on value="Submit" ></apex:commandbutton>-->
+            <apex:commandButton value="Submit" action="{!Save}" styleclass="btn rubrik-btn text-center" title="Submit" id="Submit" onClick="this.value = 'Submitting...'" disabled="{!disable}" />
+             
+              <!--<apex:actionFunction name="saveDeal" action="{!Save}" />-->
+            
+             
+               <script language="Javascript">
+              /* function SubmitOnClick (objSubmitBtn) {
+                objSubmitBtn.disabled = true;
+                objSubmitBtn.value = 'Submitting...';
+                saveDeal();
+              }
+            </script>
+      </center>
+    </apex:form>
+  
+       
+                   </div>  <!--end colmd12-->          
+                   </div> <!--end row-->
+                  
+                </div><!--end outer colmd12-->  
+            </div><!--end outter row-->  
+            </div>
+        <!--End the Container-->
+
+       <!--start the footer-->
+        <c:sitefooter rendered="{!NOT(ISPICKVAL($User.UserType,'PowerPartner'))}"/>
+        <c:psitefooter rendered="{!ISPICKVAL($User.UserType,'PowerPartner')}"/>
+        
+    </c:visualstrapblock>
+</apex:page>

@@ -1,0 +1,21 @@
+<aura:component controller="SubscribePostController" implements="forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="dataString" type="String" />
+    <aura:attribute name="catMAp" type="Map" />
+    <aura:attribute name="dataCategList" type="List" />
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/> 
+     <aura:attribute name="networkId" type="String" default="0DB1W00000001vMWAQ"/>
+
+    <aura:iteration items="{!v.dataCategList}" var="dc" indexVar="key">
+        <div class ="slds-large-size--12-of-12 slds-Medium-size--9-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 articles">
+            <div class="container slds-grid slds-wrap" >
+                <div class ="slds-large-size--11-of-12 slds-Medium-size--9-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 subscribeName"  >
+                    <a class ="" href="{!'question/'+dc.KB_ID__c}">{!dc.Title__c}</a>
+                </div>
+                <div class ="slds-large-size--1-of-12 slds-Medium-size--9-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 subscribeName">
+                    <a class ="subscribeName" data-index="{!dc.KB_ID__c}" onclick="{!c.Unsubscribepost}">Unsubscribe</a>
+                </div>
+                
+            </div>
+        </div>
+    </aura:iteration> 
+</aura:component>

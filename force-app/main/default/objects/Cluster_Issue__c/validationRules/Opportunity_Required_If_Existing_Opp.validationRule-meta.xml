@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Opportunity_Required_If_Existing_Opp</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+TEXT(Close_Reason__c) = &apos;Existing Opportunity&apos;,
+ISBLANK(Opportunity__c)
+)</errorConditionFormula>
+    <errorDisplayField>Opportunity__c</errorDisplayField>
+    <errorMessage>Please fill in the existing opportunity</errorMessage>
+</ValidationRule>

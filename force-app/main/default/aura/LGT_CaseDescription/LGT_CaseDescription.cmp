@@ -1,0 +1,107 @@
+<aura:component controller="CaseDetailController" implements="force:hasRecordId,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes" access="global"  >
+    <aura:attribute name="caseRecord" type="Object"/>
+    <aura:attribute name="recordLoadError" type="String"/>
+    <aura:attribute name="CaseDescriptionSectionHide" type="Boolean" default="false"/>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="WebsiteEditMode" type="boolean" default="false" />
+    <aura:attribute name="isOpen" type="boolean" default="false"/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="errorMessage" type="String"/>
+    <aura:attribute name="showError" type="boolean" default="false"/>
+    
+    <aura:handler event="aura:waiting" action="{!c.showSpinner}"/>
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <div class="slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12" aura:id="CD_Div">
+        <div class="slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12">
+            <lightning:card>
+                <div class="slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12">
+                    <div class="slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12 slds-section slds-p-horizontal_x-small" style="font-size: 1rem;">
+                        <lightning:icon aura:id= "CD_downArrow" iconName="utility:chevrondown" class="downArrow slds-show slds-icon_container slds-p-left_xx-small slds-float_left" size="xx-small" onclick="{!c.hideCaseDescription}" style="padding:3px 3px 0 0;"></lightning:icon>
+                        <lightning:icon aura:id= "CD_rightArrow" iconName="utility:chevronright" class="rightArrow slds-hide slds-icon_container slds-p-left_xx-small slds-float_left" size="xx-small" onclick="{!c.showCaseDescription}" style="padding:3px 3px 0 0;"></lightning:icon>
+                        <span class="slds-truncate" style="font-weight:bold;"> Case Description </span>
+                    </div>
+                    <aura:if isTrue="{!!v.CaseDescriptionSectionHide}">
+                        <div class="slds-grid slds-wrap slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12">
+                            <div class="slds-p-horizontal--small slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12 CD_highlightFields">
+                                <label class="font">Subject:</label>
+                                <button title="Origin" onclick="{!c.openEditModalForCaseDescription}" class="slds-button slds-button_icon slds-cell-edit__button slds-m-left_x-small" tabindex="0">
+                                    <lightning:icon title="EditIcon" iconName="utility:edit" size="xx-small" alternativeText="edit"/>
+                                </button>
+                                <div>
+                                    <span class="subjectField font">{!v.caseRecord.Subject}</span>
+                                </div>
+                            </div>
+                            <div class="slds-p-horizontal--small slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12 CD_highlightFields">
+                                <label class="font">Description:</label>
+                                <button title="Origin" onclick="{!c.openEditModalForCaseDescription}" class="slds-button slds-button_icon slds-cell-edit__button slds-m-left_x-small" tabindex="0">
+                                    <lightning:icon title="EditIcon" iconName="utility:edit" size="xx-small" alternativeText="edit"/>
+                                </button>
+                                <div >
+                                    <!--<span class="descriptionField">{!v.caseRecord.Description}</span>-->
+                                    <!--<aura:unescapedHtml aura:id="spclHandlingField" value="{!v.caseRecord.Description}" />-->
+                                    <ui:inputTextArea aura:id="comments__id" class="{!v.caseRecord.Description.trim.length > 575 ? 'caseDescription slds-textarea font' : 'caseDescription temp font' }" rows="{!v.caseRecord.Description.trim.length > 200 ? '5' : ' ' }" value="{!v.caseRecord.Description}"  readonly="true" />
+                                    <!--<textArea id="comments__id" class="{!v.caseRecord.Description.trim.length > 200 ? 'caseDescription slds-textarea' : 'caseDescription temp' }" rows="{!v.caseRecord.Description.trim.length > 200 ? '5' : ' ' }" value="{!v.caseRecord.Description}"  disabled="true" />-->
+                                </div>
+                            </div>
+                        </div>
+                    </aura:if>
+                </div>
+            </lightning:card>
+        </div>
+        <div class="" aura:id="">
+            <aura:if isTrue="{!v.isOpen}">
+                <!--###### MODAL BOX Start######--> 
+                <section id="CD_modal-back" role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open" aura:id="CD_BackgroundBlur">
+                    <div class="slds-modal__container">
+                        <aura:if isTrue="{!v.Spinner}">
+                            <div aura:id="spinnerId" class="slds-spinner_container spinnerDiv">
+                                <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                                    <span class="slds-assistive-text">Loading</span>
+                                    <div class="slds-spinner__dot-a"></div>
+                                    <div class="slds-spinner__dot-b"></div>
+                                </div>
+                            </div>
+                        </aura:if>
+                        <!-- ###### MODAL BOX HEADER Start ######-->
+                        <header class="slds-modal__header">
+                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Case Description</h2>
+                        </header>
+                        
+                        <!--###### MODAL BOX BODY Part Start######-->
+                        <lightning:recordEditForm recordId="{!v.recordId}" objectApiName="Case"  onsuccess="{!c.handleSuccess}">
+                            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id">
+                                <!--Show errors-->
+                                <aura:if isTrue="{!v.showError}">
+                                    <div class="slds-size_12-of-12 slds-m-bottom_x-small errorMsgDiv">
+                                        <span style="font-size:14px;font-weight:bold;">Errors</span>
+                                        <div> {!v.errorMessage} </div>
+                                    </div>
+                                </aura:if>
+                                <lightning:messages />
+                                <lightning:inputField aura:id="CD_SubjectId" fieldName="Subject" required="true"/>
+                                <lightning:inputField aura:id="CD_DescriptionId" fieldName="Description" class="EditWindowDescriptionFiled" required="true"/>
+                            </div>
+                            <footer class="slds-modal__footer">
+                                <lightning:button variant="brand" 
+                                                  label="Update"
+                                                  title="Update"
+                                                  type="submit"/>
+                                <lightning:button variant="neutral" 
+                                                  label="Cancel"
+                                                  title="Cancel"
+                                                  onclick="{!c.closeModal}"/>
+                                
+                            </footer>
+                        </lightning:recordEditForm>
+                        
+                        <!--###### MODAL BOX FOOTER Part Start ######-->
+                        
+                    </div>
+                </section>
+            </aura:if>
+        </div>
+    </div>
+</aura:component>

@@ -1,0 +1,27 @@
+<aura:component implements="force:lightningQuickAction,force:hasRecordId,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes">
+    <aura:attribute type="String" name="recordId"/>
+    <aura:attribute type="String" name="contactId"/>
+    <aura:attribute name="caseRecord" type="Object"/>
+    <aura:attribute name="contactRecord" type="Object"/>
+    
+    <force:recordData aura:id="reloadRecord"
+                      recordId="{!v.recordId}"
+                      fields="ContactId" targetFields="{!v.caseRecord}"/>
+    
+    <lightning:recordEditForm recordId="{!v.caseRecord.ContactId}" objectApiName="Contact" onsuccess="{!c.handleSuccess}" >
+        <lightning:messages />
+        <lightning:inputField fieldName="Email"></lightning:inputField>
+        <div class="slds-grid slds-wrap slds-size_12-of-12 primaryPhoneField">
+            <div class="slds-size_4-of-12">
+                <label class="PrimaryLabel">Primary Phone</label>
+            </div>
+            <div class="slds-size_8-of-12">
+                <lightning:inputField fieldName="Phone" variant="label-hidden"></lightning:inputField>
+            </div>
+        </div>
+        <lightning:inputField fieldName="Secondary_Phone__c" label="Secondary Phone"></lightning:inputField>
+        <lightning:button variant="neutral" type="button" name="Cancel" label="Cancel" />
+        <lightning:button  variant="brand" type="submit" name="save" label="Save"/>
+        
+    </lightning:recordEditForm>
+</aura:component>

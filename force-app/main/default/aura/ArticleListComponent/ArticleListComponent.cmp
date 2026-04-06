@@ -1,0 +1,165 @@
+<aura:component controller ="LtngArticleListController" implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="kavlist" type="List"/>
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+    <aura:attribute name="selectedcateg" type="string" default="All"/>
+    <aura:attribute name="pageSize" type="String" default="10" access="global"/>
+    <aura:attribute name="pageNum" type="Integer" default="1"/>
+    <aura:attribute name="fromPage" type="Integer" />
+    <aura:attribute name="toPage" type="Integer" />
+    <aura:attribute name="lastPage" type="String"/>
+    <aura:attribute name="sortBy" type="String" default="kav.FirstPublishedDate"/>
+    <aura:attribute name="isSubscribed" type="Boolean" default="false"/>
+	<aura:attribute name="subLabel" type="String"/>
+    <aura:attribute name="RecordStart" type="integer"/>
+    <aura:attribute name="RecordEnd" type="integer"/>
+    <aura:attribute name="selectedCAt"  type="string" />
+    <aura:attribute name="allData" type="List"/>
+    <aura:attribute name="currentPageNumber" type="Integer" default="1"/>
+    <aura:attribute name="totalPages" type="Integer" default="false"/>
+    <aura:attribute name="totalCount" type="Integer"/>
+    
+    <aura:attribute name="totalResults" type="integer"/>
+    <aura:attribute name="openDiv" type="boolean" default="false"/>
+    
+    <aura:attribute name="categoryType_Article"  type="string" />
+    
+    <aura:attribute name="ModalOpen" type="boolean" default="false"/>
+    
+    <aura:handler event="c:CategFilterEvent" action="{!c.getCategFilter}"/>
+    <ltng:require styles="{!$Resource.Gotham+'/Gotham/stylesheet.css'}"></ltng:require>
+    
+     <div>
+        
+        <div class ="slds-large-size--12-of-12 slds-Medium-size--9-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 articleList">
+            <div class="slds-grid slds-wrap">
+                
+                <div class ="slds-large-size--3-of-12 slds-Medium-size--3-of-12 slds-small-size--3-of-12 slds-max-small-size--12-of-12 slds-max-x-small-hide dataCategoryDiv">
+                    <c:CategFilterComponent clickedCateg="{!v.categoryType_Article}" parentCategory="{!v.selectedCAt}"/>           
+                    <!--<c:CategFilterComponent clickedCateg="Cloud/Archive"/>-->
+                </div>
+                
+                <div class = "slds-large-size--9-of-12 slds-Medium-size--9-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 outerListDiv" >
+                    <div class ="artListDiv">
+                        <div class ="slds-large-size--12-of-12 slds-Medium-size--9-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 articleHeading">
+                            <div class="slds-grid slds-wrap">
+                                <div class ="slds-large-size--8-of-12 slds-Medium-size--10-of-12 slds-small-size--9-of-12 slds-max-small-size--6-of-12 artHeading">
+                                    {!v.selectedCAt} Articles
+                                </div>
+                                <div class ="slds-large-size--4-of-12 slds-Medium-size--2-of-12 slds-small-size--3-of-12 slds-max-small-size--6-of-12 " style="display:-webkit-inline-box;float:right">
+                                    <lightning:select name="select1" value="{!v.sortBy}" onchange="{!c.getSorted}" class="setWidth" label="Sort by">
+                                        <option value="kav.FirstPublishedDate">Created Date</option>
+                                        <option value="kav.LastModifiedDate">Modified Date</option>
+                                        <option value="viewCount">Most Viewed</option>
+                                    </lightning:select>
+                                    <lightning:buttonStateful class="padLeft"
+                                                              state="{! v.isSubscribed }"
+                                                              variant="brand"
+                                                              labelWhenOff="Subscribe"
+                                                              labelWhenOn="Unsubscribe"
+                                                              onclick="{! c.manageSubscription }"
+                                                              />
+                                    <div class="tooltip1"> 
+                                        <img style="width: 20px;     margin-left: 5px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAANOSURBVGhD7dlJyE1xHMbx15wMKcPCwspQosRCiR0bhOxQWIgdkQVhgQUZVpRiYSjTwsJYEtmQZAoRC0IiMhTKzPdZ3Hq7Pe85/+Hce6X3qc+C/r9z733vPf/hd9o6859nOOZjMw7jJC7gLI5jO5ZgArrhn8pE7MIL/InwHscwAz3QknTFXNyAe5Ox9EdYjt5oWsbhKtwbyvUMs9HQ6FtYjx9wb6JKur/6o/L0xTm4F22Ux9DkUVkG4TrcizXaa4xHdvRNXIN7kWZ5g6xvRvfEebiLx/qNl0i9vzQJDERS1sFdNNY+1N5EL6zGN7ixRc6gC6KiKfYn3AVjnIDLWrjxZZYhOPrUVa0TWrVdhsCNL/MOgxEUrdjuIimmwmUA3PgQOxGUqrYdshcuS+HGh/gELQmF0QbQFefYgJ6oZR4+w40NtQqF2Q1XmOsjtKi+avd/OW6jMLFb8VYaBhutnq7gX7UYNgvgCmL8gk6EOltMwhhMx0bo5+VqUu2BzSa4glA7MBQdZSS0DrjaFJdgcwiuIIR2AaMwB5qVtOC56Dzj6lM8gc0puIIQ+iD6WdX+fQcu09C+LscH2FyEK0ihRctlJtz4FPrj2Wh36QpSPISLJgE3PoUmD5ujcAUpDsIl5z6spzXPZhtcQYqFqI921TpcufEptEO3UQfQFcTSTe9mLZ1x3PhUB2CjNqYriHUTLmvgxqfS/WajXqzamK4ohvq+Lpfhxqcaiw6jXqwrijEZ9VE35jvc+BTPUXh+z53nv8I1pKtcCGULCtMd+rSuOMRduFS5fmgyGYHSrIC7QIiONnI60bnxKfScJShq7ash5i5S5h5ctCvWzuE+TiN1X6f7bDSCo12su1CIKSjLfrjaMlq0o3ME7mJl3mIW6mcVtYDUPUntmT1AH0SnHx7BXTSEPtAV6PnhLeQ8V/kCnTaTo3O8uuHu4s2i7bq+4ezo+USrPoy+xUWoLDrGPoV7sUZRE08LdOXRo4EqD19FdDDLuifKoplIrf0quyHt6aekKTZpdkqJmsjqiuf2cGu07dCGNWqxqzL6ua2EuibuDZbRDmIrgvZOzYp6sZph1AFUR0Z9J51v9NdWo0BnbD1Y1aqu/ZzOE4Vb8c50puVpa/sLVe+J6OGq49MAAAAASUVORK5CYII="/>
+                                        <span class="tooltiptext">{!$Label.c.S_R_knowledge_subscribe_info_label}</span>
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
+                        
+                         <aura:if isTrue="{!v.ModalOpen}">
+                             <!--###### MODAL BOX Start From Here ######-->
+                             <div class="demo-only" style="height: 640px;">
+                                 <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                                     <div class="slds-modal__container">
+                                         <header class="slds-modal__header">
+                                             <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">You have {!if( v.isSubscribed,'subscribed','unsubscribed')} to this category.</h2>
+                                         </header>
+                                         <footer class="slds-modal__footer">
+                                             <button class="slds-button slds-button--brand" onclick="{!c.closeBttn}">Ok</button>
+                                         </footer>
+                                     </div>
+                                 </section>
+                                 <div class="slds-backdrop slds-backdrop_open"></div>
+                             </div>
+                             
+                             <div class="slds-backdrop slds-backdrop--open"></div>
+                             <!--###### MODAL BOX Part END Here ######-->
+                        </aura:if>
+                        
+                        
+                        
+                        
+                        <aura:iteration items="{!v.kavlist}" var="kavlist" >
+                            <div class="slds-grid slds-wrap eachBlock">
+                                <div class ="slds-large-size--1-of-12 slds-Medium-size--1-of-12 slds-small-size--1-of-12 slds-max-small-size--2-of-12 imgDiv">
+                                    <span class ="imgsection">
+                                        <img src="{!$Resource.RubrikCommunityAssets +'/images/Article.png'}"/>
+                                    </span>
+                                </div>
+                                
+                                <div class="slds-large-size--11-of-12 slds-Medium-size--11-of-12 slds-small-size--11-of-12 slds-max-small-size--10-of-12 articlesDiv">
+                                    
+                                    
+                                    
+                                    <div class ="titlebody">
+                                        <a class="artTitle"  href="{!'article/'+kavlist.kav.UrlName}">{!kavlist.kav.Title}</a>
+                                    </div>
+                                    <div class="artDesc">
+                                        {!kavlist.kav.Summary}
+                                    </div>
+                                    <div class ="artNumber">
+                                        <span class="artPublishDate">Article No:{!kavlist.kav.ArticleNumber}</span>
+                                        <span class="artPublishDate">  &#x25cf; Created: </span> <ui:outputDate class ="dateFormat" value="{!kavlist.kav.FirstPublishedDate}"/> 
+                                        <span class="artPublishDate"> &#x25cf; Last modified: </span>
+                                        <ui:outputDate class ="dateFormat" value="{!kavlist.kav.LastModifiedDate}"/>
+                                        <span class="artPublishDate"> &#x25cf; Views: {!kavlist.viewCount}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </aura:iteration>
+                    </div>
+                    <!-- Pagination Code-->
+                    <div class ="paginatinSection">
+                        <ul class="pagination">   
+                            <li class="{!if(v.currentPageNumber == 1, 'disabled', 'ntDistabled')}">
+                                <lightning:button variant="base" label="Previous" title="Prev" onclick="{! c.pageChange }" disabled="{!if(v.currentPageNumber == 1, true,false)}" class="{!if(v.currentPageNumber == 1, 'hidden-xs privious disabled', 'hidden-xs privious ntDistabled')}" />
+                            </li>
+                            <span class ="NxtBtn" >
+                                <li>
+                                    <lightning:button variant="base" label="Next" title="Prev" onclick="{! c.nextPage }" disabled="{!if(v.totalCount == 0,true,if(v.totalResults le v.pageSize*v.currentPageNumber, true, false))}" class="{!if(v.totalResults le v.pageSize*v.pageNum, 'hidden-xs nxt disabled', 'hidden-xs nxt ntDistabled')}" />
+                                </li>
+                            </span>
+                            
+                        </ul>
+                    </div>
+                    
+                    <!-- End here -->
+                    
+                    <!-- Mobile View-->
+                    <div class ="mobileFilterDiv  slds-hide_large">
+                        
+                        <div id="myCategbar" class="categFilters">
+                            <div class ="closebtn">
+                                <button class=" test"  onclick ="{!c.closeCateg}">
+                                    X
+                                </button>
+                            </div>
+                            
+                            <a>
+                                <c:CategFilterComponent clickedCateg="{!v.categoryType_Article}" parentCategory="{!v.selectedCAt}"/>
+                            </a>
+                            
+                        </div>
+                        <button class="navbar-toggle myMobileCategory"  onclick ="{!c.openCateg}" data-target="#knowledgeCategory" data-toggle="collapse" type="button" aria-expanded="true">
+                            <img src="{!$Resource.RubrikCommunityAssets +'/images/categFilter.png'}"/>
+                        </button>
+                    </div>
+                    <!-- End Here-->
+                    
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <lightning:spinner alternativeText="Loading" size="small" aura:id="mySpinner" class="slds-hide"/>
+</aura:component>

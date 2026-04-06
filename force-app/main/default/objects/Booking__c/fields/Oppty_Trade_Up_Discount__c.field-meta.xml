@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Oppty_Trade_Up_Discount__c</fullName>
+    <description>FY25SR-556 : to store opportunity trade up discount.</description>
+    <label>Trade-up Credit TCV</label>
+    <summarizedField>Booking_Line_Item__c.Oppty_Trade_Up_Discount__c</summarizedField>
+    <summaryFilterItems>
+        <field>Booking_Line_Item__c.Type__c</field>
+        <operation>equals</operation>
+        <value>Revenue, Partner Referral Fee</value>
+    </summaryFilterItems>
+    <summaryForeignKey>Booking_Line_Item__c.Booking__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

@@ -1,0 +1,199 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes" controller="PSTimeEntryAppController" access="global" >
+    
+    <aura:attribute name="currentUserName" type="String"/>
+    <aura:attribute name="TimecardList" type ="list"/>
+    <aura:attribute name="today" type="Date" />
+    <aura:attribute name="nextWeek" type="Date"/>
+     <aura:attribute name="PreviousWeek" type="Date"/>
+    <aura:attribute name="CheckPermission" type="boolean" default="false"/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler event="aura:waiting" action="{!c.showSpinner}"/>
+    <aura:attribute name="myMap" type="String[]"/>
+    <aura:attribute name="IsModelOpen" type="boolean" default="false"/>
+    <aura:attribute name="GetTimeCardID" type="String"/>
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/>
+    <aura:registerEvent name="PSTimeCardShowProject" type="c:PSTimeCardShowProject"/>
+    <aura:handler event="c:PSRefreshTabsEvent" action="{!c.handleRefreshTab}"/>
+    <lightning:workspaceAPI aura:id="workspace"/>
+    <aura:attribute name="isConsoleApplication" type="boolean" default="false"/>
+    <div class="slds-theme_default">
+        <aura:if isTrue="{!v.Spinner}">
+            <div aura:id="spinnerId" class="slds-spinner_container">
+                <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </aura:if>
+         <aura:if isTrue="{!v.IsModelOpen}">
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <header class="slds-modal__header">
+                            <lightning:buttonIcon iconName="utility:close"
+                                                  onclick="{!c.closeModel}"
+                                                  alternativeText="close"
+                                                  variant="bare-inverse"
+                                                  class="slds-modal__close"/>
+                           <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Confirm!</h2> 
+                        </header>
+                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                            <p>Please use this option in case you want to make changes to your approved or pending approval timecard
+                                
+                            </p>
+                        </div>
+                       
+                        <footer class="slds-modal__footer">
+                            <lightning:button variant="neutral" 
+                                              label="Cancel"
+                                              title="Cancel"
+                                              onclick="{!c.closeModel}"/>
+                            <lightning:button variant="brand" 
+                                              label="Recall Timecard"
+                                              title="Recall Timecard"
+                                              onclick="{!c.UnlockRecord}"/>
+                        </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </aura:if>
+        <c:PSTimeEntryHeader/>
+        
+        <div class="slds-clearfix slds-float_right slds-var-p-around_small" >
+            <lightning:button label="Go to Current Week Timecard" variant = "brand" title="Timecards" onclick="{! c.Timecards}" />
+        </div>
+        <div class=" slds-m-left_xx-small slds-text-heading_large slds-var-p-around_small">
+            Recent Timecards  
+        </div>
+        <table class="slds-table_cell-buffer slds-table_bordered slds-table_col-bordered">        
+            <thead class="Mainheader"> 
+                <tr class="BlackHeader">
+                    <th class="FirstColWidth" scope="col">
+                        <div class="slds-truncate slds-align_absolute-center" title="Timecard" >
+                            Timecard
+                        </div>
+                    </th>
+                    <th class="ColWidth" scope="col">
+                        <div class="slds-truncate slds-align_absolute-center" title="Start Date">
+                            Start Date
+                        </div>
+                    </th>
+                    <th class="ColWidth" scope="col">
+                        <div class="slds-truncate slds-align_absolute-center" title="End Date">
+                            End Date
+                        </div>
+                    </th>
+                    <!-- CHANGES EGN-170 START -->
+                    <th class="ColWidth" scope="col">
+                        <div class="slds-truncate slds-align_absolute-center" title="Total Billable Hours">
+                            Total Billable Hours
+                        </div>
+                    </th>
+                    <th class="ColWidth" scope="col">
+                        <div class="slds-truncate slds-align_absolute-center" title="Total Hours">
+                            Total Hours
+                        </div>
+                    </th>
+                    <!-- CHANGES EGN-170 END -->
+                    <th class="ColWidth" scope="col">
+                        <div class="slds-truncate slds-align_absolute-center" title="Status">
+                            Status
+                        </div>
+                    </th>
+                    <th class="ColWidth" style="padding: 5px;" scope="col">
+                        <div class="slds-truncate slds-align_absolute-center" title="Status">
+                            Timecard Link
+                        </div>
+                    </th>
+                    <th class="ColWidth" scope="col">
+                        <div class=" unlockClass slds-truncate slds-align_absolute-center" title="Status">
+                            Recall Timecard
+                        </div>
+                    </th>
+                </tr>
+                
+            </thead>
+            
+            <tbody>
+                <aura:iteration items="{!v.TimecardList}" var="tim" >
+                    <tr class="slds-hint-parent BlackHeader">
+                        <th data-label="Timecard" scope="row">
+                            <aura:if isTrue="{!tim.PermissionCheck}">
+                                <div class="slds-truncate slds-align_absolute-center" title="Timecard">
+                                    <aura:if isTrue="{!v.isConsoleApplication}">
+                                        <a href="javascript:void(0)" data-recid="{!tim.TimeCard.Id}" onclick="{!c.openPrimaryTab}">{!tim.TimeCard.Name} </a>
+                                        <aura:set attribute="else">
+                                            <a href="{!'/'+tim.TimeCard.Id}" target="_blank">{!tim.TimeCard.Name} </a>
+                                        </aura:set>
+                                    </aura:if>
+                                </div>
+                                
+                                <aura:set attribute="else">
+                                    <div class="slds-truncate slds-align_absolute-center" title="Timecard">
+                                        {!tim.TimeCard.Name}
+                                    </div>
+                                </aura:set>
+                            </aura:if>
+                        </th>
+                        <td data-label="Start Date">
+                            <div class="slds-truncate slds-align_absolute-center" title="Start Date">
+                                {!tim.TimeCard.Time_Card_Start_Date__c}
+                            </div>
+                        </td>
+                        <td data-label="End Date">
+                            <div class="slds-truncate slds-align_absolute-center" title="End Date">
+                                {!tim.TimeCard.Time_Card_End_Date__c}
+                            </div>
+                        </td>
+                        <!-- CHANGES EGN-170 START -->
+                        <td data-label="Total Billable Hours">
+                            <div class="slds-truncate slds-align_absolute-center" title="Total Billable Hours">
+                                {!tim.TimeCard.Total_Billable_Hours__c}
+                            </div>
+                        </td>
+                        <td data-label="Total Hours">
+                            <aura:if isTrue="{!tim.hasAdminProject}">
+                                <div class="slds-truncate slds-align_absolute-center" title="Total Hours">
+                                    {!and(tim.TimeCard.Total_Admin_Hours__c==null,tim.TimeCard.Total_Billable_Hours__c==null,tim.Total_Non_Billable_Hours__c==null)?0:(and(tim.TimeCard.Total_Admin_Hours__c==null,tim.TimeCard.Total_Non_Billable_Hours__c == null)?tim.TimeCard.Total_Billable_Hours__c:(and(tim.TimeCard.Total_Billable_Hours__c==null,tim.TimeCard.Total_Non_Billable_Hours__c == null)?tim.TimeCard.Total_Admin_Hours__c:(and(tim.TimeCard.Total_Billable_Hours__c==null,tim.TimeCard.Total_Admin_Hours__c == null)?tim.TimeCard.Total_Non_Billable_Hours__c:(tim.TimeCard.Total_Admin_Hours__c == null?tim.TimeCard.Total_Billable_Hours__c+tim.TimeCard.Total_Non_Billable_Hours__c:(tim.TimeCard.Total_Billable_Hours__c == null?tim.TimeCard.Total_Non_Billable_Hours__c:(tim.TimeCard.Total_Non_Billable_Hours__c == null?tim.TimeCard.Total_Billable_Hours__c+tim.TimeCard.Total_Admin_Hours__c:tim.TimeCard.Total_Billable_Hours__c+tim.TimeCard.Total_Non_Billable_Hours__c))))))}
+                                </div>
+                                <aura:set attribute="else">
+                                    <div class="slds-truncate slds-align_absolute-center" title="Total Hours">
+                                      {!and(tim.TimeCard.Total_Admin_Hours__c==null,tim.TimeCard.Total_Billable_Hours__c==null,tim.Total_Non_Billable_Hours__c==null)?0:(and(tim.TimeCard.Total_Admin_Hours__c==null,tim.TimeCard.Total_Non_Billable_Hours__c == null)?tim.TimeCard.Total_Billable_Hours__c:(and(tim.TimeCard.Total_Billable_Hours__c==null,tim.TimeCard.Total_Non_Billable_Hours__c == null)?tim.TimeCard.Total_Admin_Hours__c:(and(tim.TimeCard.Total_Billable_Hours__c==null,tim.TimeCard.Total_Admin_Hours__c == null)?tim.TimeCard.Total_Non_Billable_Hours__c:(tim.TimeCard.Total_Admin_Hours__c == null?tim.TimeCard.Total_Billable_Hours__c+tim.TimeCard.Total_Non_Billable_Hours__c:(tim.TimeCard.Total_Billable_Hours__c == null?tim.TimeCard.Total_Non_Billable_Hours__c+tim.TimeCard.Total_Admin_Hours__c :(tim.TimeCard.Total_Non_Billable_Hours__c == null?tim.TimeCard.Total_Billable_Hours__c+tim.TimeCard.Total_Admin_Hours__c:tim.TimeCard.Total_Admin_Hours__c+tim.TimeCard.Total_Billable_Hours__c+tim.TimeCard.Total_Non_Billable_Hours__c))))))}
+                                    </div>
+                                </aura:set>
+                            </aura:if>
+                            
+                        </td>
+                        <!-- CHANGES EGN-170 END -->
+                        <td data-label="Status">
+                            <div class="slds-truncate slds-align_absolute-center" title="Status">
+                                {!tim.TimeCard.Status__c}
+                            </div>
+                        </td>
+                        <th data-label="Timecard" scope="row">
+                            <div class="slds-truncate slds-align_absolute-center" title="Timecard">
+                                <aura:if isTrue="{!v.isConsoleApplication}">
+                                    <a href="javascript:void(0)" data-dt="{!tim.TimeCard.Time_Card_Start_Date__c}" onclick="{!c.openTimeEntriesTab}">View </a>
+                                    <aura:set attribute="else">
+                                        <a href="{!'/c/PSTimeEntries.app?StartDate='+tim.TimeCard.Time_Card_Start_Date__c}" target="_self">View</a>
+                                    </aura:set>
+                                </aura:if>
+                            </div>
+                        </th>
+                        <th data-label="Timecard" scope="row">
+                            <aura:if isTrue="{!tim.enableUnlock}">                            
+                                <div class="slds-truncate slds-align_absolute-center" title="Unlock" onclick ="{!c.openModel}" id="{!tim.TimeCard.Id}">
+                                    <lightning:icon alternativeText="Success" iconName="utility:lock" size="small"
+                                                    class="buttonColor1 slds-m-right_small" />            
+                                </div>
+                            </aura:if>
+                           
+                        </th>
+                    </tr>
+                </aura:iteration>
+            </tbody>
+            
+        </table>
+    </div>
+</aura:component>

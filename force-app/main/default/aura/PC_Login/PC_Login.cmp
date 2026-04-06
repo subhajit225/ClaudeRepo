@@ -1,0 +1,167 @@
+<aura:component controller="LightningLoginFormController" implements="forceCommunity:availableForAllPageTypes">
+    <ltng:require styles="/resource/PartnerCommunityResource/Stylesheets/PartnerCommunityCSS.css"/>
+    <!-- Aura Attributes -->
+    <aura:attribute name="showError" type="Boolean" required="true" description="" default="false" access="private"/>
+    <aura:attribute name="errorMessage" type="String" required="false" description="" access="private"/>
+    <aura:attribute name="startUrl" type="String" required="false" description="The url you go to after a successful login" />
+    <aura:attribute name="usernameLabel" type="String" required="false" default="Username"/>
+    <aura:attribute name="passwordLabel" type="String" required="false" default="Password"/>
+    <aura:attribute name="loginButtonLabel" type="String" required="false" default="LOGIN"/>
+
+    <aura:attribute name="disableSync" type="Boolean" required="true" description="" default="false" access="private"/>
+    <aura:attribute name="loginWithSSO" type="String" required="false" default="LOGIN WITH SSO "/>
+    <aura:attribute name="forgotPasswordLink" type="String" required="false" default=""/>
+    <aura:attribute name="loginPortalUrl" type="String" required="false" default=""/>
+    <aura:attribute name="baseUrl" type="String" required="false" default=""/>
+    <aura:attribute name="openModal" type="Boolean" required="true" description="" default="false" access="private"/>
+    
+    <aura:attribute name="forgotPasswordLabel" type="String" required="false" default="Forgot your password?"/>
+    <aura:attribute name="selfRegisterLabel" type="String" required="false" default="Not a member?"/>
+    <aura:attribute name="forgotPasswordUrl" type="String" required="false" default="/ForgotPassword"/>
+    <aura:attribute name="selfRegisterUrl" type="String" required="false" default="/SelfRegister"/>
+    
+    <aura:attribute name="isUsernamePasswordEnabled" type="Boolean" access="private"/>
+    <aura:attribute name="isSelfRegistrationEnabled" type="Boolean" access="private"/>
+    <aura:attribute name="communityForgotPasswordUrl" type="String" access="private"/>
+    <aura:attribute name="communitySelfRegisterUrl" type="String" access="private"/>
+    
+    <aura:attribute name="selectedDocumentId" type="string"/>
+    <aura:attribute name="doc" type="sobject" />
+    
+    <aura:attribute name="username" type="string" access="private" />
+    <aura:attribute name="password" type="string" access="private" />
+    <aura:attribute name="showTerms" type="string" access="private" default=""/>
+    <aura:attribute name="optIn" type="Boolean" access="private" default="false"/>
+    <aura:attribute name="conductCheck" type="Boolean" access="private" default="false"/>
+    <aura:attribute name="partnerAccessURL" type="string" access="private" default="useraccess"/>
+    <aura:attribute name="partnerAccessLabel" type="string" access="private" default ="Need an Account?"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.initialize}"/>
+    
+    <div> 
+        <div id="loginDiv" aura:id="loginDiv" class="slds-show">
+           <div class="container slds-align_absolute-center login-parent">    
+            <lightning:layout multipleRows="true" horizontalAlign="spread">
+                <aura:if isTrue="{!v.disableSync}">
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" padding="around-small">
+                        <aura:if isTrue="{!v.showError}">
+                            <div id="error" class="error slds-p-top_large">
+                                <ui:outputRichText value="{!v.errorMessage}"/>
+                            </div>
+                        </aura:if>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" padding="around-small">
+                        <div class="slds-box">
+                            <lightning:icon iconName="action:user" size="x-small" title="" />
+                            <input type="text" id="username" value="{!v.username}" placeholder="{!v.usernameLabel}" class="slds-input width80" onkeyup="{!c.onKeyUp}"/>
+                        </div>
+                    </lightning:layoutItem>
+                    
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" padding="around-small">
+                        <div class="slds-box">
+                            <lightning:icon iconName="action:password_unlock" size="x-small" title="" />
+                            <input type="password" id="password" value="{!v.password}" placeholder="{!v.passwordLabel}" class="slds-input width80" onkeyup="{!c.onKeyUp}"/>
+                        </div>
+                    </lightning:layoutItem>
+                
+                    <div class="flex-box">
+                        <lightning:layoutItem  padding="around-small">
+                            <lightning:button aura:id="submitButton" variant="brand" label="{!v.loginButtonLabel}" onclick="{! c.handleLogin }" class="submit-button"/> 
+                        </lightning:layoutItem>
+                        <lightning:layoutItem  padding="around-small" class="no-padding">
+                            <a href="{!if(v.communityForgotPasswordUrl == null, v.forgotPasswordUrl, v.communityForgotPasswordUrl)}" class="link">{!v.forgotPasswordLabel}</a> 
+                        </lightning:layoutItem>
+                    </div>
+                </aura:if>
+                <aura:if isTrue="{!!v.disableSync}">
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" padding="around-small">
+                        <div class="slds-box slds-text-align_center">
+                            <a  href="{!v.loginPortalUrl}" class="login-btn" target="_self">{!v.loginWithSSO}</a>
+                            
+                        </div>
+                       
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" padding="around-small">
+                        <div class="slds-box slds-text-align_center">
+                            <a href="{!v.forgotPasswordLink}" class="link">{!v.forgotPasswordLabel}</a> 
+                        </div>   
+                    </lightning:layoutItem>
+                </aura:if>    
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12" padding="around-small">
+                        <div class="slds-border_top slds-text-align_center">
+                            <div class="slds-m-top_medium" >
+                                <span class="slds-m-right_small text-17">{!v.partnerAccessLabel}
+                                </span> 
+                                <lightning:button variant="brand" label="Request Access" onclick="{! c.navigateToPartnerAccess }" class="req-access"/>
+                            </div>
+                        </div>
+                    </lightning:layoutItem>
+                </lightning:layout>
+            </div> 
+        </div>
+        <div id="conductDiv" aura:id="conductDiv" class="slds-hide">
+            <div>
+            Rubrik has recently updated its third party code of conduct. Please review and accept the updated code of conduct located 
+                at <a href="https://www.rubrik.com/en/legal/third-party-code-of-conduct" target="_blank">https://www.rubrik.com/en/legal/third-party-code-of-conduct.</a>
+            </div>
+            <div class="slds-m-top_small">
+            In order to remain an authorized Partner for Rubrik, all Partners must agree to and comply with the terms and conditions set forth in the updated code of conduct.
+            </div>
+            <div class="slds-m-top_small">
+            By clicking "Accept" below, you represent that you (1) understand and agree to the terms in the code of conduct on behalf of your employer and (2) have the legal authority to accept the code of conduct on behalf of your employer.
+            </div>
+            <div class="slds-m-top_small">
+                <a onclick="{!c.getSelected}" data-Id="{!v.doc.Id}">{!v.doc.Name}</a>
+            </div>
+            <div class="slds-m-top_small">
+              <b>	<lightning:input type="checkbox" aura:id="conductCheck" label="I acknowledge and accept the Rubrik Code of Conduct" class="slds-p-vertical_small"   checked="{!v.conductCheck}" />
+              </b>
+             </div>
+            <div  class="slds-m-top_medium slds-m-bottom_medium">
+                <lightning:button aura:id="btnId1" variant="brand" label="Accept" disabled="{!!v.conductCheck}"  onclick="{! c.handleConductClick }" />  
+            </div>
+        </div>
+        <div id="termsDiv" aura:id="termsDiv" class="slds-hide"> 
+            <div class="slds-text-heading_small slds-align_absolute-center slds-size_3-of-4">
+                <b>
+                    IMPORTANT: THIS IS A LEGAL DOCUMENT.  PLEASE READ IT CAREFULLY.
+                </b>
+            </div>
+            <div class="slds-text-title slds-text-color_default slds-align_absolute-center slds-m-top_large">
+                <b>
+                    THIS ADDENDUM TO YOUR CHANNEL PARTNER AGREEMENT (THIS “ADDENDUM”) FORMS A BINDING CONTRACT ADDING ADDITIONAL TERMS TO THE CHANNEL PARTNER AGREEMENT (THE “AGREEMENT”) BETWEEN RUBRIK, INC. (“RUBRIK”) AND YOU (“RESELLER”).  IF YOU DO NOT WISH TO ACCEPT THIS ADDENDUM, THEN DO NOT CLICK ACCEPT, IN WHICH CASE THE AGREEMENT WILL BE TERMINATED IN ACCORDANCE WITH ITS TERMS AND CONDITIONS.
+                </b></div>
+            <div class="slds-text-color_default  slds-m-top_large">NOW, THEREFORE, FOR VALUABLE CONSIDERATION, THE RECEIPT AND SUFFICIENCY OF WHICH ARE HEREBY ACKNOWLEDGED, THE PARTIES HERETO HEREBY AGREE TO ADD THE FOLLOWING NEW PROVISION TO THE AGREEMENT AS FOLLOWS:</div>
+            <h5>
+                <div class="slds-text-color_default  slds-m-top_large"> 
+                    <b>End User Data.</b> If Reseller provides Rubrik with personal information concerning its customers, prospects or employees, Rubrik will only use the information in connection with the purposes outlined in the Agreement, or as otherwise indicated at the time Rubrik receives such information (the 
+                    <b>“Intended Purposes”</b>).  Reseller will not deliver, disclose or otherwise make such personal information available to Rubrik, except as required for the Intended Purposes.  The information may be maintained by Rubrik in data centers in the United States or in other parts of the world and the information may be accessed by Rubrik’s global personnel and authorized third parties as required for its business purposes.  Reseller agrees to comply with all applicable laws, including but not limited to privacy and data protection laws, provide all relevant notices, and obtain any consents required to share the information with Rubrik and its authorized third parties for the Intended Purposes.
+                    In the event Reseller is authorized to and provides a proof-of-concept unit  (<b>“POC unit”</b>) to an End User or prospective customer for evaluation or other temporary purposes (an 
+                    <b>“Evaluation Period”</b>), Reseller agrees to enable encryption of the POC unit where technically possible and to ensure that such encryption remains enabled during the Evaluation Period.  Reseller shall require each recipient of a POC unit to comply with the following: 
+                    <br/>
+                    <p class="slds-m-left_medium"> (1)   The POC unit is not for production use and may not be used with production data;</p>
+                    <p class="slds-m-left_medium">(2) Personal data and other data regulated by GDPR or other data privacy laws may not be entered into or stored on the POC unit and shall not be shared with Reseller or Rubrik other than as required for its evaluation of the POC unit and then only in compliance with all applicable privacy laws and regulations; and
+                    </p>
+                    <p class="slds-m-left_medium">(3)  All data entered into or stored on the POC unit during the Evaluation Period must be removed prior to the return of any POC unit.</p>
+                </div>
+                <div class="slds-text-color_default  slds-m-top_large">Reseller represents and warrants that it shall verify the above three requirements prior to any subsequent use of any POC unit. </div>
+            </h5>
+            <div class="slds-text-color_default  slds-m-top_large">In the event of any inconsistency or conflict between the Agreement and this Addendum, the terms and conditions of this Addendum shall control. Capitalized terms used but not defined herein shall have the meanings ascribed them in the Agreement.
+            </div>
+            <div class="slds-text-color_default  slds-m-top_large">
+                <b>RESELLER ACCEPTS THIS ADDENDUM BY: (1) INDICATING ACCEPTANCE OF THESE TERMS; OR (2) ACCESSING ANY PROGRAM BENEFIT (INCLUDING EXERCISING OR PURPORTING TO EXERCISE ANY OF THE RIGHTS GRANTED TO RESELLER UNDER THE AGREEMENT).  THE INDIVIDUAL ACCEPTING THIS ADDENDUM ON BEHALF OF RESELLER REPRESENTS THAT HE OR SHE: (1) HAS THE AUTHORITY TO REPRESENT RESELLER; AND (2) HAS READ AND UNDERSTANDS ALL THE PROVISIONS OF THIS ADDENDUM.  
+                </b>
+            </div>
+            
+            <lightning:input type="checkbox" label=" I Agree" aura:id="optInCheck" class="slds-p-vertical_small"   checked="{!v.optIn}" />
+            <lightning:button aura:id="btnId" variant="brand" label="Continue" onclick="{! c.handleGDPRAction }" disabled="{!!v.optIn}"/>  
+            <br/>                    
+            <aura:if isTrue="{!v.showError}">
+                <div id="error" class="termserror">
+                    <ui:outputRichText value="{!v.errorMessage}"/>
+                </div>
+            </aura:if>
+        </div>
+        
+    </div>
+</aura:component>

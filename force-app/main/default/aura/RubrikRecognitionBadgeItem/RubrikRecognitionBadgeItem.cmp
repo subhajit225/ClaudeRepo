@@ -1,0 +1,12 @@
+<aura:component>
+    <aura:attribute name="badge" type="object" />
+
+    <div class="slds-col slds-size_1-of-2">
+        <div class="slds-text-align_center slds-text-align_center badge-items">
+            <span class="slds-m-top_small">
+                <img alt="" src="{!v.badge.imageurl}" title="{!v.badge.name}" class="{!if(v.badge.isAwarded, 'image','image inactive')}"/>
+            </span>
+            <span class="{!if(v.badge.isAwarded, 'points activePoints slds-m-top_small','points inactivepoints slds-m-top_small')}">{!v.badge.name}</span>
+        </div>
+    </div>
+</aura:component>

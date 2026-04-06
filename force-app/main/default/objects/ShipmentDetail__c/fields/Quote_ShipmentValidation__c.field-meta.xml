@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Quote_ShipmentValidation__c</fullName>
+    <label>Quote Shipment Validation</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>NA</fullName>
+                <default>true</default>
+                <label>NA</label>
+            </value>
+            <value>
+                <fullName>Required</fullName>
+                <default>false</default>
+                <label>Required</label>
+            </value>
+            <value>
+                <fullName>Complete</fullName>
+                <default>false</default>
+                <label>Complete</label>
+            </value>
+            <value>
+                <fullName>Failed</fullName>
+                <default>false</default>
+                <label>Failed</label>
+            </value>
+            <value>
+                <fullName>Internal Failure</fullName>
+                <default>false</default>
+                <label>Internal Failure</label>
+            </value>
+            <value>
+                <fullName>Start</fullName>
+                <default>false</default>
+                <label>Start (Without Email)</label>
+            </value>
+            <value>
+                <fullName>Start with Email</fullName>
+                <default>false</default>
+                <label>Start and send Email</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

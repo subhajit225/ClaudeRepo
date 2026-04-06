@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Hidden_Task_Completion_25_Non_TE__c</fullName>
+    <formula>IF(
+	AND(ISBLANK(Actual_End_date__c), CONTAINS(TEXT(Task_Type__c), &apos;Resident Engineer&apos;)), 
+	0,
+	IF(  Today() &gt; Actual_End_date__c || ISPICKVAL(Task_Status__c, &apos;Cancelled&apos;),
+		IF( (ISPICKVAL( Revenue_Type__c, &apos;Paid Upon Delivery&apos; ) &amp;&amp; Line_Value__c != 0 )|| ISPICKVAL(Task_Status__c, &apos;Cancelled&apos;), 
+			IF( CONTAINS(TEXT(Task_Type__c), &apos;Resident Engineer&apos;), 
+				IF(Hidden_Resident_Engineer_Hrs_25__c &gt; 1, 1, Hidden_Resident_Engineer_Hrs_25__c) , IF( NOT(ISPICKVAL(Task_Type__c,&apos;Migration&apos;)), Hours_Consumed_Locked__c, IF( ISBLANK(End_Date__c), 0, 1 ) )
+			)
+		,1),
+		IF( (ISPICKVAL(Task_Status__c, &apos;Completed&apos;)|| ISPICKVAL(Task_Status__c, &apos;Closed Short&apos;)) &amp;&amp; (NOT(ISPICKVAL(Revenue_Type__c, &apos;Paid Upon Delivery&apos;)) || (ISPICKVAL(Revenue_Type__c, &apos;Paid Upon Delivery&apos;) &amp;&amp; Line_Value__c = 0 )) &amp;&amp; NOT(Hidden_Task_Completed_After_25__c), 
+		IF( AND(ISPICKVAL(Task_Type__c,&apos;Migration&apos;),ISPICKVAL(Task_Status__c,&apos;Closed Short&apos;)),0,1),
+			IF(
+				CONTAINS(TEXT(Task_Type__c), &apos;Resident Engineer&apos;), 
+				IF(Hidden_Resident_Engineer_Hrs_25__c &gt; 1, 1, Hidden_Resident_Engineer_Hrs_25__c),
+				IF( NOT(ISPICKVAL(Task_Type__c,&apos;Migration&apos;)), 
+					Hours_Consumed_Locked__c,
+					IF( AND(ISPICKVAL(Task_Type__c,&apos;Migration&apos;),ISPICKVAL(Task_Status__c,&apos;Completed&apos;)),1,0)
+				)
+			)	
+		)
+	)  
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Hidden Task Completion 25 Non TE</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Percent</type>
+</CustomField>

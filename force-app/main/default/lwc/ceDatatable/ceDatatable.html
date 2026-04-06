@@ -1,0 +1,37 @@
+<template>
+	<template lwc:if={error}>
+		<div class="slds-align_absolute-center  slds-has-error slds-box">{error}</div>
+	</template>
+	<template lwc:else>
+		<template lwc:if={totalRecountCount}>
+			<template lwc:if={enableInfinteLoading}>
+				<div class="slds-scrollable_x" style={styleInfinteLoading}>
+					<c-my-custom-datatable data={displayData} columns={columns} key-field="Id" wrap-text-max-lines="3"
+						min-column-width="150" max-column-width="4000" onloadmore={handleLoadMore}
+						enable-infinite-loading load-more-offset="20" hide-checkbox-column show-row-number-column
+						sorted-by={sortedBy} sorted-direction={sortedDirection} onsort={handleColumnSorting}
+						onrowaction={handleRowAction}>
+					</c-my-custom-datatable>
+				</div>
+			</template>
+			<template lwc:else>
+				<div class="scroll" style={style}>
+					<c-my-custom-datatable data={dtData} columns={columns} key-field="Id" wrap-text-max-lines="3"
+						min-column-width="150" load-more-offset="20" hide-checkbox-column show-row-number-column
+						sorted-by={sortedBy} sorted-direction={sortedDirection} onsort={handleColumnSorting}
+						onrowaction={handleRowAction}>
+					</c-my-custom-datatable>
+				</div>
+			</template>
+			<template lwc:if={loadMoreStatus}>
+				<div class="slds-align_absolute-center">
+					<p>{loadMoreStatus}</p>
+				</div>
+			</template>
+		</template>
+		<template lwc:else>
+			<div class="slds-align_absolute-center  slds-has-error slds-box">No Data Found</div>
+		</template>
+	</template>
+
+</template>

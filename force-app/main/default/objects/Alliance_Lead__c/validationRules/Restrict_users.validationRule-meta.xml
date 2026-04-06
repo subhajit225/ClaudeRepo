@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Restrict_users</fullName>
+    <active>true</active>
+    <description>Restrict Users from editing record when it is converted</description>
+    <errorConditionFormula>AND(
+   NOT(ISNEW()),
+   PRIORVALUE( isConverted__c ) = TRUE
+)</errorConditionFormula>
+    <errorMessage>Cannot edit the record once it is converted</errorMessage>
+</ValidationRule>

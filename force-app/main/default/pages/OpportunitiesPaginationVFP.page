@@ -1,0 +1,114 @@
+<apex:page controller="OpportunitiesPaginationController" sidebar="false">
+    <style>
+        .search-text {
+        border: 1px solid #BAA994;
+        width: 222px;      
+        height: 38px;
+        box-shadow: inset -2px 1px 1px #D5D5D5, 1px 1px #EDE7DF;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+        padding-left: 36px;
+        padding-right: 36px;
+        font-size: 16px;
+        background: #fff url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAaBAMAAABWeiG6AAAAA3NCSVQICAjb4U/gAAAAD1BMVEXe3t7////m5ub39/fv7+9d3/qMAAAACXBIWXMAAAsSAAALEgHS3X78AAAAFnRFWHRDcmVhdGlvbiBUaW1lADAxLzExLzEyymPybAAAABh0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzT7MfTgAAAJJJREFUGJVVkOsRwyAMgxXCAKFmAHpZoLlkgKTdf6cK23lYP4DvBLINShD68kX63biDep/4gmpxbMjr1jAaViTuFTCccPTDRzcwSEMqBsWWvYahZTBxNBwiRvd6a7inkOx1J69b0W/L2RV7notwKnN5zZR93uZ8GAp5FrWtf1n6SLRx/ZraN9JOTxR+3wPLVgJSfwffF4JRS32lAAAAAElFTkSuQmCC) no-repeat 5px;
+        }
+        
+        .search-button {
+        margin-left: -1px !important;
+        border: 1px solid #7DA07E !important;
+        border-radius: 0 5px 5px 0 !important;
+        padding-right: 13px !important;
+        padding-left: 13px !important;
+        height: 40px !important;
+        background-color: #BDD3BE !important;
+        background-image: -ms-linear-gradient(top, #BDD3BE 0%, #93B894 80%) !important;
+        background-image: -moz-linear-gradient(top, #BDD3BE 0%, #93B894 80%) !important;
+        background-image: -webkit-linear-gradient(top, #BDD3BE 0%, #93B894 80%) !important;
+        background-image: linear-gradient(top, #BDD3BE 0%, #93B894 80%) !important;
+        box-shadow: inset 0 1px 1px #DCE7DC, 0 1px #EDE7DF !important;
+        color: #557B56 !important;
+        font-weight: bold !important;
+        font-size: 16px !important;
+        text-shadow: 0 1px #DCE7DC !important;
+        }
+        
+        .search-div {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        display: inline-block;
+        margin: 0;
+        padding: 9px;
+        border: 1px solid #BAA994;
+        border-radius: 5px;
+        background-color: #EDE5DB;
+        background-image: -ms-linear-gradient(top, #EDE5DB 0%, #DCD0C2 80%);
+        background-image: -moz-linear-gradient(top, #EDE5DB 0%, #DCD0C2 80%);
+        background-image: -webkit-linear-gradient(top, #EDE5DB 0%, #DCD0C2 80%);
+        background-image: linear-gradient(top, #EDE5DB 0%, #DCD0C2 8a0%);
+        box-shadow: inset 0 1px #F6F2EC, 0 3px 2px #E5E5E5;
+        }
+        .alert-warning {
+        color: #8a6d3b;
+        background-color: #fcf8e3;
+        border-color: #faebcc;
+        }
+        .alert {
+        padding: 15px !important;
+        margin-bottom: 20px !important;
+        border: 1px solid transparent !important;
+        border-radius: 4px !important;
+        }
+    </style>
+    <apex:outputPanel rendered="{!originalId == null}">
+        <div class="alert alert-warning">
+            <strong>Warning!</strong>  Page can only be accessible by Merge Button on the opportunity page layout.
+        </div>
+        
+    </apex:outputPanel>
+    <apex:form rendered="{!originalId != null}">
+        <apex:pageBlock >
+            <apex:pageMessages ></apex:pageMessages>
+            
+            
+            <div class="search-div">
+                <apex:inputText value="{!opp.Name}" label="Opportunity Name" html-placeholder="Search By Opportunity Name" styleclass="search-text"/> 
+                <apex:commandButton action="{!Search}" value="Search" styleClass="search-button" />
+            </div>
+            
+        </apex:pageBlock>
+        <apex:pageBlock rendered="{!if((lstOpportunity == null || lstOpportunity.size == 0) && searchClick, true,false )}">
+        	<div class="alert alert-warning">
+               <b>No Result found. </b> 
+            </div>
+        </apex:pageBlock>
+        <apex:pageBlock id="resultId" rendered="{!if(lstOpportunity != null && lstOpportunity.size > 0, true,false )}">
+            <apex:pageBlockButtons >
+                <div style="text-align:right"> 
+                    Total Records Found: {!Con.resultSize}  
+                    <apex:image url="/img/search_prevarrow_disabled.gif" styleClass="prevArrow" rendered="{!NOT(Con.HasPrevious)}"/>  
+                    <apex:image url="/img/search_prevarrow.gif" title="Previous Page" styleClass="prevArrow" rendered="{!Con.HasPrevious}"/>  
+                    <apex:commandLink action="{!Previous}" title="Previous Page" value="Previous Page" rendered="{!Con.HasPrevious}"/>  
+                    <apex:outputPanel styleClass="pShowLess noLink" style="color:grey" rendered="{!NOT(Con.HasPrevious)}">Previous Page</apex:outputPanel>           
+                    <apex:outputPanel styleClass="pShowLess noLink" style="color:grey" rendered="{!NOT(Con.HasNext)}">Next Page</apex:outputPanel>           
+                    <apex:commandLink title="Next Page" value="Next Page" rendered="{!Con.HasNext}" action="{!Next}"/>&nbsp;  
+                    <apex:image url="/img/search_nextarrow.gif" title="Next Page" styleClass="nextArrow" rendered="{!Con.HasNext}"/>  
+                    <apex:image url="/img/search_nextarrow_disabled.gif" rendered="{!NOT(Con.HasNext)}"/> 
+                    <img src="/s.gif" title="Last Page" alt="Last Page" class="last"/>         
+                </div>
+            </apex:pageBlockButtons>                
+            <apex:pageBlockSection columns="1">
+                <apex:pageBlockTable value="{!lstOpportunity}" var="opp" >
+                    
+                    <apex:column headerValue="Opportunity Name">
+                        <apex:outputLink value="OpportunityMergeVFP?Id={!originalId}&oppId={!opp.Id}"> 
+                            <apex:outputField value="{!opp.Name}"/>
+                        </apex:outputLink>
+                    </apex:column>
+                    <apex:column value="{!opp.Account.Name}"/>
+                    <apex:column value="{!opp.Amount}"/>
+                    <apex:column value="{!opp.StageName}"/>
+                </apex:PageblockTable>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

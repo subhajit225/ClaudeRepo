@@ -1,0 +1,38 @@
+<template>
+    <div if:true={modal}>
+        <section class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">	            
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Confirmation</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <template lwc:if={stagemoving}>
+                    Please confirm the Partners named on this Opportunity. If (Partner Lookup and Distributor Lookup) are correct, please agree and proceed. If incorrect, please update the named Partner(s).
+                    </template>
+                    <template lwc:elseif={isAspen}>
+                        {labels.disti_changes_from_Non_Aspen_to_Aspen_Error_message}<br/>
+                    </template>
+                        <!-- SAL24-651 -->
+                    <template lwc:elseif={isRubrik_TBD}>
+                        {labels.distri_alert_if_Rubrik_TBD_Error_Message}<br/>
+                     </template>
+                        <!--SAL24-652  -->
+                    <template lwc:elseif={isMarketplace}>
+                        {labels.distri_alert_if_Marketplace_Error_message}<br/>
+                    </template>
+                    <template lwc:elseif={isStage4to5}>
+                        {labels.unapproved_Countries_Notify}<br/>
+                    </template>
+                    <template lwc:elseif={isStageSkippedTo6}>
+                        {labels.unapproved_Countries_Notify}<br/>
+                    </template>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick={hideModal}>Cancel</button>                    
+                    <lightning-button variant="brand" label="I Agree" title="Save" onclick={save} disabled={disableSave} class="slds-m-left_small"></lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </div>
+</template>

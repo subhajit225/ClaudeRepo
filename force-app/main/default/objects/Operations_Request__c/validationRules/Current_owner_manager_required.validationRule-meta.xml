@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Current_owner_manager_required</fullName>
+    <active>true</active>
+    <description>When Issue =&apos;Account transfer&apos; then the Current account owner should have their manager</description>
+    <errorConditionFormula>AND(
+    NOT($Setup.ShGl_DisableBusinessLogic__c.Disable_Operation_Request_VRs__c),
+    ISPICKVAL( Issue__c , &apos;Account Transfer&apos;) ,
+    NOT(ISBLANK( Current_account_owner__c )) ,
+    NOT(ISBLANK(Future_account_owner__c )) ,
+    ISBLANK( Current_account_owner__r.ManagerId  )
+    )</errorConditionFormula>
+    <errorDisplayField>Current_account_owner__c</errorDisplayField>
+    <errorMessage>This Current account owner&apos;s manager does not exist, You can&apos;t create an Admin queue with this Current account owner</errorMessage>
+</ValidationRule>

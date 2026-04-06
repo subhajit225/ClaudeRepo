@@ -1,0 +1,20 @@
+<template>
+    <lightning-card title="">
+    <lightning-tabset active-tab-value={activeTab} variant="scoped">
+      <div class="slds-m-around_x-small">
+        <lightning-tab label="Missing Entitlement Script" value="1" onactive={handleActive}>
+          <c-missing-entitlement-script></c-missing-entitlement-script>
+        </lightning-tab>
+        <lightning-tab label="Execute Batch" value="2" onactive={handleActive}>
+          <c-batch-execution-l-w-c></c-batch-execution-l-w-c>
+        </lightning-tab>
+        <lightning-tab label="Renewal CLIs Quantity Mismatch" value="3" onactive={handleActive}>
+          <c-renewal-c-l-is-quantity-mismatch></c-renewal-c-l-is-quantity-mismatch>
+        </lightning-tab>
+        <lightning-tab label="Missing Entitlement Links" value="4" onactive={handleActive}>
+          <c-missing-entitlement-links></c-missing-entitlement-links>
+        </lightning-tab>
+      </div>
+    </lightning-tabset>
+    </lightning-card>
+</template>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Reason_for_alerts_snooze_required</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+ ISCHANGED(Snooze_Alerts_Until__c) ,
+ ISPICKVAL(Reason_for_alerts_snooze__c,&apos;&apos;) ,
+  NOT(ISBLANK(Snooze_Alerts_Until__c))  ,
+Snooze_Alerts_Until__c &gt;= TODAY()
+)</errorConditionFormula>
+    <errorDisplayField>Reason_for_alerts_snooze__c</errorDisplayField>
+    <errorMessage>&quot;Reason for alerts snooze&quot; field is required when the alerts are snoozed by &quot;Snooze Alerts Until&quot;</errorMessage>
+</ValidationRule>

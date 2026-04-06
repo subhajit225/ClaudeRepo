@@ -1,0 +1,26 @@
+<apex:component controller="CaseSubHistoryController" access="global">
+<apex:attribute name="thecaseId" assignTo="{!cseId}" type="String" description="Id of the case"/>  
+<apex:attribute name="privatecomment" assignTo="{!isPrivate}" type="boolean" description="If the comment to filter on is private or not"/>  
+
+<apex:repeat value="{!LastComment}" var="cc">
+{!cc.CreatedBy.Name} wrote: 
+<apex:outputField value="{!cc.CommentBody}"></apex:outputField>
+</apex:repeat>
+<hr />
+<br />
+  <b>Created date/time:</b> {!caseDetail.CreatedDate} <br />
+  <b>Account name:</b> {!caseDetail.Account.Name} <br />
+  <b>Contact name:</b> {!caseDetail.Contact.Name} <br />
+  <b>Contact email:</b> {!caseDetail.Contact.Email} <br />
+  <b>Contact phone:</b> {!caseDetail.Contact.Phone} <br />
+  <b>Priority:</b> {!caseDetail.Priority} <br />
+  <b>Software version:</b> {!caseDetail.Software_Version__c} <br />
+  <b>Product area:</b> {!caseDetail.Product_Area__c} <br />
+  <b>Problem type:</b> {!caseDetail.Type} <br />
+  <b>Assigned to:</b> {!caseDetail.Owner.Name} <br />
+  <b>Previous status:</b> {!caseDetail.Last_Case_Status__c}<br />
+  <b>Current status:</b> {!caseDetail.Status}<br />
+  <b>Case origin:</b> {!caseDetail.Origin}<br />
+  <b>Desired contact method:</b> {!caseDetail.Contact_method__c}<br />
+<br />
+</apex:component>

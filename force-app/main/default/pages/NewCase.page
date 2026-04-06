@@ -1,0 +1,229 @@
+<apex:page standardController="Case" extensions="CommunityCaseExtension" cache="false" applyBodyTag="false" standardStylesheets="false" showHeader="false" sidebar="false" action="{!case($User.UserType,
+    "Standard",urlFor($Action.Case.NewCase, $ObjectType.Case, null, true),
+    "PowerPartner",urlFor($Action.Case.NewCase, $ObjectType.Case, null, true),
+    "CSPLitePortal",null,
+    "CustomerSuccess",null,
+    "PowerCustomerSuccess",null,
+    "CsnOnly",null,
+    null)}" 
+    >
+<link rel="shortcut icon" href="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/favicon.ico')}" type="image/x-icon" />
+<link rel="icon" href="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/favicon1.png')}" type="image/png" />
+<style>
+.pbSubsection, pbBody {
+padding: 25px;
+}
+table {
+padding: 5px;
+}
+td.labelCol {
+font-size: 16px;
+font-family: Gotham-Medium;
+padding-left: 10px
+}
+td.dataCol {
+padding: 5px;
+padding-right: 15px;
+}
+
+td.data2Col {
+padding: 5px;
+padding-left: 15px;
+}
+td {
+padding: 15px;
+}
+wrapper{
+padding-bottom: 5px;
+}
+
+.btnpad{
+padding: 15px;
+}
+.Su_analytics_id{
+visibility:hidden;
+}
+</style>
+<style>
+/**
+* Tooltip Styles
+*/
+
+/* Add this attribute to the element that needs a tooltip */
+[data-tooltip] {
+position: relative;
+z-index: 2;
+cursor: pointer;
+}
+
+/* Hide the tooltip content by default */
+[data-tooltip]:before,
+[data-tooltip]:after {
+visibility: hidden;
+-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=0);
+opacity: 0;
+pointer-events: none;
+}
+
+/* Position tooltip above the element */
+[data-tooltip]:before {
+position: absolute;
+bottom: 150%;
+left: 50%;
+margin-bottom: 5px;
+margin-left: -80px;
+padding: 7px;
+width: 260px;
+-webkit-border-radius: 3px;
+-moz-border-radius: 3px;
+border-radius: 3px;
+background-color: #000;
+background-color: hsla(0, 0%, 20%, 0.9);
+color: #fff;
+content: attr(data-tooltip);
+text-align: center;
+font-size: 11px;
+line-height: 1.2;
+}
+
+
+
+/* Triangle hack to make tooltip look like a speech bubble */
+[data-tooltip]:after {
+position: absolute;
+bottom: 150%;
+left: 50%;
+margin-left: -5px;
+width: 0;
+border-top: 5px solid #000;
+border-top: 5px solid hsla(0, 0%, 20%, 0.9);
+border-right: 5px solid transparent;
+border-left: 5px solid transparent;
+content: " ";
+font-size: 0;
+line-height: 0;
+}
+
+/* Show tooltip content on hover */
+[data-tooltip]:hover:before,
+[data-tooltip]:hover:after {
+visibility: visible;
+-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=100);
+opacity: 1;
+}
+
+</style>
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css" rel="stylesheet" />
+<c:visualstrapblock >
+<!--start header-->
+<c:siteheader ></c:siteheader>
+<!--end Header-->
+<!--start the Container-->
+<div class="container">
+<div class="row">
+<div class="col-md-12">
+<apex:pagemessages >
+</apex:pagemessages>
+<style>
+.su-filters-section,.su-filters-hide, .su-advanced-search-opener{display:none !important;}
+.su-p-input-header{display:none;}
+.su-results-section .pagination, #goToTopBtn{display:none !important;}
+.su-result-icon{display:none;}
+.su-summary-section{display:none;}
+.s{display:none;}
+#su-suggestedHead{text-align:center;}
+.su-page-number-section ng-binding{display:none;}
+.su-page-number-section{display:none;}
+@media (min-width: 1200px){
+div#searchUnifyContainer .col-lg-9 {
+width: 100% !important;
+}
+}
+.su-result-wrapper{ border: 1px solid #d3d3d3; padding: 0 !important;}
+.page-load-time, .switchview, .mobile-view .ribbon, .su-filters{ display: none !important;}
+.su-result-wrapper>div:not(.switchview) { margin: 0 !important; padding-bottom: 0 !important; border: none !important; border-radius: 0 !important; border-bottom: 1px solid #ededed !important; width: 100% !important;}
+.su-table-cell-img { display: none !important;}
+.su-search-title{ font-size: 14px !important;}
+.pagination-style{ display: none !important;}
+.ResultSection { width: 100% !important;}
+div#searchUnifyContainer img{vertical-align:top !important;}
+</style>
+<script type="text/javascript">
+function showResults(){
+//window.location.hash = '#/search?searchString='+document.getElementsByClassName('subject')[0].value;
+window.location.hash ="#!/search?searchString="+encodeURIComponent(document.getElementsByClassName('subject')[0].value) +"&from=0&sortby=_score&orderBy=desc&pageNo=1"
+
+}
+</script>
+<apex:form id="theForm">
+<apex:pageblock id="theBlock">
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+<div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+<apex:pageblocksection columns="1" id="theSection" title="New Case Details">
+    <div class="col-md-6">
+        <apex:inputfield id="subject" onChange="showResults()" styleclass="subject form-control input-sm" value="{!Case.Subject}">
+        </apex:inputfield>
+        <apex:repeat value="{!$ObjectType.Case.FieldSets.NewCommunityCase}" var="field">
+            <apex:inputfield styleclass="form-control input-sm" value="{!Case[field]}" />
+        </apex:repeat>
+        <b>
+            For Priority 1 (P1) issues with critical business impact, please call Rubrik Support after
+            your case is submitted using the phone numbers listed on the
+            <a href="https://www.rubrik.com/support/#contact-numbers" target="_blank"> Support page</a>. For a list of case priorities and response times, reference the <a href="https://www.rubrik.com/wp-content/uploads/2018/03/Rubrik-Support-Services-Policy.pdf" target="_blank">Support Services Policy</a>.
+        </b>
+        <br/>
+        <apex:inputfield id="contactmethod" styleclass="form-control input-sm" value="{!Case.Contact_method__c}" />
+        <apex:pageBlockSectionItem >
+            <apex:outputLabel value="" for="supportTunnel">Support Tunnel Number &nbsp;<a href="#" data-tooltip="{!$ObjectType.Case.fields.Support_Tunnel__c.inlineHelpText}" ><i class="fa fa-question-circle-o"  style="color:#005fb2;"  aria-hidden="true"></i></a>&nbsp;</apex:outputLabel>
+            <apex:inputField value="{!Case.Support_Tunnel__c}" styleclass="form-control input-sm"  id="supportTunnel"/>
+        </apex:pageBlockSectionItem>
+    </div>
+    <div class="col-md-12" id="analytics_div">
+        <apex:inputtextarea style="height:200px;width:400px" styleclass="form-control input-sm" value="{!Case.Description}">
+        </apex:inputtextarea>
+        <apex:inputText id="Su_analytics_id" label="" styleClass="Su_analytics_id" value="{!Case.su_vf_community__SearchUnifySessionId__c}" />
+    </div>
+</apex:pageblocksection>
+</div>
+<div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+<h3 id="su-suggestedHead">
+    Suggested Results
+</h3>
+<su_vf_community:SU_Vf_CommunityComponent />
+</div>
+</div>
+<div class="container col-lg-12 col-md-12 col-sm-12 col-xs-12">
+<div class="row text-center btnpad">
+  <div>
+      <apex:commandbutton action="{!Save}" onclick="return caseCreateCalling();" styleclass="btn rubrik-btn" value="Save" />&nbsp;
+      <apex:commandbutton action="{!saveAndUpload}" onclick="return caseCreateCalling();" styleclass="btn rubrik-btn" value="Save & Attach File" />&nbsp;
+      <apex:commandbutton action="{!URLFOR($Page.CaseHome)}" styleclass="btn rubrik-btn" value="Cancel" />
+  </div>
+</div>
+</div>
+</apex:pageblock>
+<script type="text/javascript">
+function guid() { 
+function s4() { return Math.floor((1 + Math.random()) * 0x10000) .toString(16) .substring(1); }
+return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4(); 
+} 
+function caseCreateCalling(){
+var sessionId = guid();
+//trackCaseCreation(sessionId);                      
+gza('caseCreated',{'caseUid': sessionId});        
+document.getElementsByClassName('Su_analytics_id')[0].value = sessionId;
+}
+</script>
+</apex:form>
+</div>
+</div>
+</div>
+<!--End the Container-->
+<!--start the footer-->
+<c:sitefooter ></c:sitefooter>
+<!--End the footer-->
+</c:visualstrapblock>
+</apex:page>

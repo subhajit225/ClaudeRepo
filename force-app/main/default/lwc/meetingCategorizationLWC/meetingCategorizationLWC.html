@@ -1,0 +1,206 @@
+<template>
+    <div if:true={mainFilterList}>
+        <div class="c-container">
+            <template for:each={mainFilterList} for:item="rowFilter">
+                <lightning-layout horizontal-align="start" key={rowFilter}>
+                    <template for:each={rowFilter.data} for:item="item">
+                        <lightning-layout-item size="12" key={item} small-device-size="2" medium-device-size="2"
+                            large-device-size="2" padding="horizontal-medium" class="left-align">
+
+                            <template lwc:if={item.isMultiselect}>
+                                <c-meeting-category-multi-select data-id={item.DeveloperName} onselectoption={handleSelectedMeetingCategory}  meetingoptions={meetingCategoryOptions} label="Meeting Category"></c-meeting-category-multi-select>
+                            </template>
+                            <template lwc:else>
+                                <lightning-combobox name={item.DeveloperName} label={item.MasterLabel}
+                                    data-id={item.DeveloperName} value={item.defaultValue} options={item.optionsValues}
+                                    onchange={handleChange} field-level-help={item.Help_Text__c}>
+                                </lightning-combobox>   
+                            </template>
+
+                        </lightning-layout-item>
+                    </template>
+                    <lightning-layout-item if:true={rowFilter.isFirstRow} size="12" small-device-size="2" medium-device-size="2" large-device-size="2" padding="horizontal-medium" class="left-align">
+                        <c-meeting-category-account-search account-link-list={accountLinkList} onuploadevent={handleUpload}></c-meeting-category-account-search>
+                    </lightning-layout-item>
+                </lightning-layout>
+                <!-- // -->
+            </template>
+            <div class="slds-col slds-text-align_left slds-p-around_small">
+                <lightning-button variant="brand" label="Apply Filters" title="Applies filters to meetings" onclick={filterSubmit} class="slds-m-left_x-small"></lightning-button>
+                <lightning-button variant="brand" label="Reset Filters" title="Reset filters to default" onclick={resetSubmit} class="slds-m-left_x-small"></lightning-button>
+            </div>
+        </div>
+    <c-meeting-console-header record-list={resultItems} headertitles={headerTitles} dashboard={dashboard}></c-meeting-console-header>
+    </div>
+    <div class="insufficientAccessBanner" role="alert"><lightning-icon icon-name="standard:lead" size="x-small" style="margin-right: 0.5%;"></lightning-icon> Related To feature cannot be used when a Meeting with a Lead is selected. Please convert to a Contact to Relate To an Opportunity.</div>
+    <div class="insufficientAccessBanner" role="alert">Meetings highlighted in grey cannot be selected. Please reach out to salesintel@rubrik.com for assistance.</div>
+    <lightning-layout  horizontal-align="spread" class="slds-p-around_medium">
+        <lightning-layout-item size="6" small-device-size="12" medium-device-size="6" large-device-size="6">
+            <h1><b>My Meetings</b></h1>
+        </lightning-layout-item>
+        <lightning-layout-item size="6" small-device-size="12" medium-device-size="6" large-device-size="6" class="slds-text-align_right">
+            <div class="slds-col">
+                <lightning-button variant="brand" label="Leader Attended" title="Update Leader Attended for selected meetings" disabled={isTaggingDisabled} onclick={LeaderAttendedHandler} ></lightning-button>
+                <lightning-button variant="brand" label="Related To" title="Update Related To for selected meetings" disabled={isTaggingDisabled} onclick={relatedToHandler} class="slds-m-left_x-small"></lightning-button>
+                <lightning-button variant="brand" label="Quick Tag" title="Quick Categorization of selected meetings" disabled={isTaggingDisabled} onclick={quickTaggingHandler} class="slds-m-left_x-small"></lightning-button>
+            </div>
+        </lightning-layout-item>
+   </lightning-layout>
+
+   <div class="c-container">
+
+   </div>
+
+    <div if:true={data}>
+        <div class="slds-p-horizontal_small">
+                <lightning-datatable
+                    data-id="datarow"
+                    data={data} 
+                    columns={columns} 
+                    key-field="meetingLink"
+                    sorted-by={sortBy}
+                    sorted-direction={sortDirection}
+                    onsort={doSorting}
+                    selected-rows={selection}
+                    onrowselection={rowSelection}>
+                </lightning-datatable>
+                    </div>
+        <!--  Pagination Buttons Start -->
+        <div class="slds-align_absolute-center" style="margin-top:5px;">
+            <lightning-button label="Previous" icon-name="utility:chevronleft" onclick={previousHandler}
+                disabled={isPreviousDisable}>
+            </lightning-button>
+            <span class="slds-badge slds-badge_lightest"
+                        style="margin-right: 10px;margin-left: 10px;">
+                       Page {page} of {totalPage}
+            </span>
+            <lightning-button label="Next" icon-name="utility:chevronright" icon-position="right" onclick={nextHandler}
+                disabled={isNextDisable}>
+            </lightning-button>
+        </div>
+        <!--  Pagination Buttons End -->
+    </div>
+    <div class="spinner">
+        <template if:true={isLoading}>
+             <lightning-spinner alternative-text="Loading" variant="brand" size="large">
+             </lightning-spinner>
+        </template>
+    </div>
+    <!-- modal start -->      
+   <template if:true={isShowModal}>
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+       <div class="slds-modal__container">
+           <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={hideModalBox}>
+               <lightning-icon icon-name="utility:close"
+                   alternative-text="close"
+                   variant="inverse"
+                   size="small" ></lightning-icon>
+                <span class="slds-assistive-text">Close</span>
+            </button>
+        
+          <!-- modal body start -->
+          <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                
+                <lightning-layout vertical-align="center">
+                    <lightning-layout-item flexibility="auto" padding="around-small">
+                        <lightning-combobox
+                            name="Meeting Category"
+                            label="Meeting Category"
+                            value="None"
+                            options={selectedRowsOption}
+                            onchange={meetingCategoryHandler} >
+                            >
+                        </lightning-combobox>
+                    </lightning-layout-item>
+                </lightning-layout>
+                                
+          </div>
+
+          <!-- modal footer start-->
+          <footer class="slds-modal__footer"> 
+             <button class="slds-button slds-button_neutral" onclick={submitQuickTagging}>Save</button>
+          </footer>
+       
+       </div>
+    </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    <!-- modal end -->
+
+    <!-- modal start -->      
+   <template if:true={isShowRelatedToModal}>
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-2" class="slds-modal slds-fade-in-open">
+       <div class="slds-modal__container relatedToOpportunity">
+           <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={cancelRelatedTo}>
+               <lightning-icon icon-name="utility:close"
+                   alternative-text="close"
+                   variant="inverse"
+                   size="small" ></lightning-icon>
+                <span class="slds-assistive-text">Close</span>
+            </button>
+        
+            <!-- modal body start -->
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+
+                    <lightning-layout vertical-align="center">
+                        <lightning-layout-item flexibility="auto" padding="around-small">
+                             <!-- <c-meeting-category-account-search label={relatedToLabelForFilter} icon-name={relatedToIconName} s-object-api-name={sObjectApiName} account-link-list={accountListForRelatedTo} onuploadrelatedtoevent={handleRelatedToUpload}></c-meeting-category-account-search> -->
+                             <c-meeting-categorization-search label={relatedToLabelForFilter} icon-name={relatedToIconName} s-object-api-name={sObjectApiName} account-link-list={accountListForRelatedTo} onuploadrelatedtoevent={handleRelatedToUpload} is-leave-blank={isLeaveBlank} onuploadisblank={handleIsLeaveBlank}></c-meeting-categorization-search>
+                        </lightning-layout-item>
+                    </lightning-layout>                 
+                </div>
+            <!-- </div>   -->
+
+          <!-- modal footer start-->
+          <footer class="slds-modal__footer">
+
+             <button class="slds-button slds-button_neutral" onclick={submitRelatedTo}>Save</button>
+          </footer>
+       
+       </div>
+    </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    <!-- modal end -->
+
+
+    <!-- modal start -->      
+   <template if:true={isShowLeaderAttendedModal}>
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+       <div class="slds-modal__container">
+           <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={cancelLeaderAttended}>
+               <lightning-icon icon-name="utility:close"
+                   alternative-text="close"
+                   variant="inverse"
+                   size="small" ></lightning-icon>
+                <span class="slds-assistive-text">Close</span>
+            </button>
+        
+          <!-- modal body start -->
+          <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-3">
+            <lightning-layout vertical-align="center">
+                <lightning-layout-item flexibility="auto" padding="around-small">
+                    <lightning-combobox
+                        name="Leader Attended ?"
+                        label="Leader Attended"
+                        value="none"
+                        options={leaderAttendedOption}
+                        onchange={leaderAttendedHandler} >
+                        >
+                    </lightning-combobox>
+                </lightning-layout-item>
+            </lightning-layout>
+                                  
+          </div>
+
+          <!-- modal footer start-->
+          <footer class="slds-modal__footer"> 
+             <button class="slds-button slds-button_neutral" onclick={submitLeaderAttended}>Save</button>
+          </footer>
+       
+       </div>
+    </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    <!-- modal end -->
+</template>

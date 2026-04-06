@@ -1,0 +1,128 @@
+<!--
+*******************************************************************************     
+* @description       : Show Entitlements whose Entitlement Capaity is not matching with Linked Assets combined Usable capacity 
+* @author            : Nitin
+* @last modified on  : 24-08-2021
+* Ver   Date          Author        Modification 
+* 1.0   23-08-2022   Nitin        Initial Version  
+*******************************************************************************
+-->
+<template>
+  <!-- <lightning-card title="Entitlements with missing linked Assets"> -->
+  <template if:false={showTable}>
+    <div class="slds-align_absolute-center slds-theme--shade" style="margin: 10px;height:3rem;border: 2px solid rgb(20, 95, 133);border-radius: 10px;">
+      No Records Found
+    </div>
+  </template>
+  <template if:true={showTable}>
+<!--	<div class="datatable-wrapper">
+        <lightning-datatable
+                key-field="id"
+                data={consData}
+                hide-checkbox-column="true"
+                columns={columns}>
+        </lightning-datatable>
+      </div>-->
+
+      <div class="slds-grid slds-gutters slds-p-around_small">
+          <div class="slds-col slds-size_1-of-5 ">
+            <lightning-input label="Filter" value={filterText} onchange={handleFilterChange}  field-level-help="For filtering Non Aspen processes enter @"> </lightning-helptext></lightning-input>
+          </div>
+          <div class="slds-col slds-size_1-of-6 slds-p-top_large ">
+            <lightning-button label="Download Report" variant="brand" onclick={handleDownload} disabled={disableFilterBTN}></lightning-button>
+         </div>
+          </div>
+          <div class = "slds-p-around_small">
+              <p><b>Total Record Count</b> : {consData.length}</p>
+          </div>
+      <div style="width: 100%; overflow:auto;">
+        <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered" aria-label="Example table of Opportunities with vertical borders">
+   <thead>
+     <tr class="slds-line-height_reset">
+       <th class="" scope="col" onclick={handleSort} data-field="Name">
+         <div class="slds-truncate" > Name</div>
+       </th>
+       <template if:false={isMissingAsset}>
+       <th class="" scope="col" onclick={handleSort} data-field="Quantity__c">
+         <div class="slds-truncate" >Entitlement Quantity</div>
+       </th>
+       <th class="" scope="col" onclick={handleSort} data-field="DiffOLIAndAssetQuntity">
+         <div class="slds-truncate" >Diff B/W OLI Quantity</div>
+       </th>
+      </template>
+       <th class="" scope="col" onclick={handleSort} data-field="Order_Number__c">
+         <div class="slds-truncate" >Order Number</div>
+       </th>
+       <th class="" scope="col" onclick={handleSort} data-field="BillToName">
+        <div class="slds-truncate" >Bill To Name</div>
+      </th>
+      <template if:false={isMissingAsset}>
+       <th class="" scope="col" onclick={handleSort} data-field="Order_Product_Name__c">
+         <div class="slds-truncate" >Order Product Name</div>
+       </th>
+       </template>
+       <th class="" scope="col" onclick={handleSort} data-field="OrderServiceItem" >
+         <div class="slds-truncate" >Order Product Number</div>
+       </th>
+       
+       <th class="" scope="col" onclick={handleSort} data-field="OrderProcessType">
+        <div class="slds-truncate" >Order Process Type</div>
+      </th>
+      
+       <template if:false={isMissingAsset}>
+       <th class="" scope="col">
+         <div class="slds-truncate" >Asset Serial Number | Product Name | Usable Capacity</div>
+       </th>
+      </template>
+      <th class="" scope="col" onclick={handleSort} data-field="OrderShipmentType">
+        <div class="slds-truncate" >Shipment Status</div>
+      </th>
+      <th class="" scope="col" onclick={handleSort} data-field="Notes">
+        <div class="slds-truncate" >Notes</div>
+      </th>
+     </tr>
+   </thead>
+         <tbody>
+         <template for:each={consData} for:item="rec">
+             <tr key={rec.Id}> 
+                 
+                 <td> <lightning-formatted-url value={rec.EntitlementURL} label={rec.Name} target="_blank"></lightning-formatted-url></td>
+                 <template if:false={isMissingAsset}>
+                 <td>{rec.Order_Quantity__c} </td>
+                 <td>{rec.DiffOLIAndAssetQuntity}</td>
+                 </template>
+                 <td><lightning-formatted-url value={rec.OrderURL} label={rec.Order_Number__c} target="_blank"></lightning-formatted-url></td>
+                 <td><lightning-formatted-url value={rec.BillToNameURL} label={rec.BillToName} target="_blank"></lightning-formatted-url></td>
+                <template if:false={isMissingAsset}>
+                 <td> <lightning-formatted-url value={rec.ProductURL} label={rec.Order_Product_Name__c} target="_blank"></lightning-formatted-url></td>
+                </template>
+                 <td><lightning-formatted-url value={rec.OrderServiceItemURL} label={rec.OrderServiceItem} target="_blank"></lightning-formatted-url></td>
+                 <td>{rec.OrderProcessType} </td>
+                 <template if:false={isMissingAsset}>
+                   <td>
+                     <template for:each={rec.Scale_Entitlements__r} for:item="linkedRec">
+                     <tr key={rec.Id}> 
+                         
+                         <td>{linkedRec.Asset__r.Name}</td>
+                         <td>{linkedRec.Asset__r.Product2.Name}</td>
+                        <td>{linkedRec.Asset__r.Product2.Usable_Capacity__c}</td>
+                         
+                     </tr>
+                   </template>
+         </td>
+      </template> 
+      <td>{rec.OrderShipmentType}</td>
+      <td>{rec.Notes}</td>                   
+             </tr>
+         </template>
+         </tbody>
+     </table>
+      </div>
+  </template>
+  <template if:true={showSpinner}>
+    <div class="slds-spinner_container">
+        <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+    </div>
+</template>
+<!-- </lightning-card> -->
+</template>

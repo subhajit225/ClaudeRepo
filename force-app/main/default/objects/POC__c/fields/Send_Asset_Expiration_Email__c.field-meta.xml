@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Send_Asset_Expiration_Email__c</fullName>
+    <formula>AND(
+	IF(
+		ISNULL(Last_Expiration_Notification_Sent__c),
+		(POC_completion_date__c + 7) &lt;= TODAY(),
+		(Last_Expiration_Notification_Sent__c + 7) &lt;= TODAY()
+	),
+	Order_Fulfilled__c,
+	!POC_Asset_Returned__c,
+        !POC_Returned__c
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Send Asset Expiration Email</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

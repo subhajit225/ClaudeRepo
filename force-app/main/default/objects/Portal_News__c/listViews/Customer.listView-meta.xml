@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Customer</fullName>
+    <columns>Audience__c</columns>
+    <columns>Alert__c</columns>
+    <columns>Type__c</columns>
+    <columns>NAME</columns>
+    <columns>Publish_Date__c</columns>
+    <columns>Expiration_Date__c</columns>
+    <columns>Summary__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Audience__c</field>
+        <operation>equals</operation>
+        <value>Customer,Edge Trial</value>
+    </filters>
+    <label>Customer</label>
+</ListView>

@@ -1,0 +1,37 @@
+<aura:component extends="c:LCC_GenericLightningComponent" controller="LCC_ButtonsController">
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="record" type="Object"/>
+    <aura:attribute name="recordError" type="String"/>
+    <aura:attribute name="recordUserFields" type="Object"/>
+    <aura:attribute name="recordUserData" type="Object"/>
+    <aura:attribute name="recordErrorUser" type="String"/>
+    <aura:attribute name="content" type="string"/>
+    <aura:attribute name="showok" type="boolean" default ="false"/>
+    <aura:attribute name="showcancel" type="boolean" default ="false"/>
+    <aura:attribute name="updateholdoverReq" type="boolean" default ="false"/>
+    <aura:attribute name="updateholdoverExtn" type="boolean" default ="false"/>
+    <aura:handler event="c:LCC_GenericApplicationEvent" action="{!c.execute}"/>
+    <div class="slds-p-top_large slds-align_absolute-center">
+        {!v.content}
+    </div>
+    <aura:if isTrue="{!v.showok}">
+        <div class="slds-p-top_large slds-align_absolute-center">
+            <lightning:button variant="brand" label="Ok"  onclick="{! c.handleClick }"/>
+            <aura:if isTrue="{!v.showcancel}">
+                <lightning:button variant="brand" label="Cancel"  onclick="{! c.handleCancel }"/>
+    		</aura:if>
+        </div>  
+    </aura:if>   
+   <aura:if isTrue="{!!empty(v.sObjectInfo.OwnerId)}"> 
+    <force:recordData aura:id="recordLoader2"
+          recordId="{!v.sObjectInfo.OwnerId}"
+          fields=  "Id,Holdover_Count__c"
+          targetRecord="{!v.recordUserData}"                
+          targetFields="{!v.recordUserFields}"
+          targetError="{!v.recordErrorUser}"
+          recordUpdated="{!c.handleRecordUpdated1}"   
+                      mode="VIEW"
+          />
+    </aura:if>
+	
+</aura:component>

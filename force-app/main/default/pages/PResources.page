@@ -1,0 +1,121 @@
+<apex:page standardStylesheets="false" readOnly="true" controller="ResourceSearchController" sidebar="false" showheader="false"  title="Resources - Rubrik Partner Community" applyBodyTag="false">
+ <c:visualstrapblock >
+    
+    
+    <!--hide the action column from Community users-->
+    <style>
+    .actionColumn{
+    display:none;
+    }
+    
+    .pbBody{
+    padding: 5px;
+    }
+    
+    .visualstrap td, th {
+    padding: 5px !important;
+    }
+    
+    .rolodex {
+      padding: 4px !important;  
+   }
+   
+   .btnpad{
+    padding: 15px;
+    }
+    
+    h3 {
+    margin-left:-11px;
+    }
+    
+    </style>
+    
+        <!--start header-->
+        <c:siteheader ></c:siteheader>
+        <!--end Header-->
+
+   
+      <c:presourceheader ></c:presourceheader>
+
+      <!--start the Container-->
+        <div class="container">
+        <!--action status overlay-->
+        <c:processing />
+            <div class="row rowcontainer" >
+                <div class="col-md-12">
+                  <c:pageTitle name="Resources" rendered="{!$CurrentPage.parameters.scope==null}"></c:pageTitle> 
+              <div class="row" >
+              <div class="col-md-12">
+                     <!--start-->
+                     
+                     <!--main resource page with no scope-->
+                      <apex:outputPanel rendered="{!$CurrentPage.parameters.scope==null}">
+
+                                     
+                      <div class="row">
+                      <div class="col-md-1 block hidden-sm hidden-xs"><apex:image value="{!$Resource.resource_technical}" style="width: 58px;"/></div>
+                      <div class="col-md-2 block">
+                      <div class="pherogroups">Technical</div>
+                      <a href="{!URLFOR($Page.PResources, null, [scope='Technical'])}" Class="pherolinks">View All</a>
+                
+                      </div>
+                      <div class="col-md-1 block"><!--empty--></div>
+                      <div class="col-md-1 block hidden-sm hidpden-xs"><apex:image value="{!$Resource.resource_sales}" style="width: 58px; "/></div>
+                      <div class="col-md-2 block">
+                      <div class="pherogroups">Sales</div>
+                      <a href="{!URLFOR($Page.PResources, null, [scope='Sales'])}" Class="pherolinks">View All</a>
+                      </div>
+                      <div class="col-md-1 block"><!--empty--></div>
+                      <div class="col-md-1 block hidden-sm hidden-xs"><apex:image value="{!$Resource.resource_marketing}" style="width: 58px;"/></div>
+                      <div class="col-md-2 block"><div class="pherogroups">Marketing</div>
+                      <a href="{!URLFOR($Page.PResources, null, [scope='Marketing'])}" Class="pherolinks">View All</a>
+                      </div>
+                      <div class="col-md-1"><!--empty--></div>
+                      </div>
+                     
+          
+                          <div class="row">
+                      <div class="col-md-4 block">
+                        <c:pfeatured thescope="Technical"/>
+                      </div>
+                      <div class="col-md-4 block">
+                        <c:pfeatured thescope="Sales"/><br/>
+                        <c:pwebinars />
+                      </div>
+                      <div class="col-md-4 block">
+                       <c:pfeatured thescope="Marketing"/>
+                        <c:pcampaigns />
+                      </div>
+                      </div>
+                      
+                       <!--end main resource page with no scope-->
+                      </apex:outputPanel>
+                      
+                      
+                      
+                      <!--main resource page with scope-->
+                      <apex:outputPanel rendered="{!$CurrentPage.parameters.scope!=null}">
+                      <c:pageTitle name="{!$CurrentPage.parameters.scope} Resources"></c:pageTitle>
+                      <!-- <c:prcampaigns rendered="{!$CurrentPage.parameters.scope=='Marketing'}"/>
+                       <c:prwebinars rendered="{!$CurrentPage.parameters.scope=='Sales'}"/>
+                       <c:pfeaturedresc />
+                       <c:precent />-->
+                       <c:pall />
+                                             
+                      <!--end main resource page with scope-->
+                      </apex:outputPanel>
+                      
+                     <!--end-->
+                                      <apex:outputPanel rendered="{!$CurrentPage.parameters.scope!=''}">  <center> <a href="{!URLFOR($Page.PResources, null, null)}"><button type="button" class="btn rubrik-btn" >Back</button></a></center></apex:outputPanel> 
+                </div>          
+                </div>
+                </div>
+            </div>
+            </div>
+        <!--End the Container-->
+
+       <!--start the footer-->
+        <c:psitefooter ></c:psitefooter>
+        
+    </c:visualstrapblock>
+</apex:page>

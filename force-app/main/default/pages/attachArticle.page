@@ -1,0 +1,44 @@
+<apex:page standardController="Case" showHeader="false" sidebar="false" rendered="{!$User.UITheme == 'Theme3'}">
+    <apex:includeLightning />
+    <apex:includeScript value="/support/console/41.0/integration.js"/>
+    <div id="lightning" />
+    <script type="text/javascript">
+    if(sforce.console.isInConsole()) {
+
+    }
+    $Lightning.use("c:articleSearchApp", function() {
+        $Lightning.createComponent(
+            "c:articleSearch",
+            {"recordId" : "{!Case.Id}",
+            "type" : "{!$CurrentPage.parameters.type}",
+            "theme" : "{!$User.UIThemeDisplayed}"},
+            "lightning",
+            function(cmp) {
+                // do some stuff
+            });
+    });
+
+    function receiveMessage(event){
+        if (event.data == "refresh"){
+            //Check if the page opened in console application
+            if(sforce.console.isInConsole()){
+                sforce.console.getFocusedPrimaryTabId(refreshTab);
+            }
+            else {
+                window.top.location='{!"/"+Case.Id}';
+            }
+            return;
+        }
+        if (event.data == "close"){
+            window.history.back();
+            return;
+    }
+    }
+
+    function refreshTab(result) {
+        sforce.console.refreshPrimaryTabById(result.id, true);
+    }
+
+    window.addEventListener("message", receiveMessage, false);
+    </script>
+</apex:page>

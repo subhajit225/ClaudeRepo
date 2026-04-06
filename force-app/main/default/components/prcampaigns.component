@@ -1,0 +1,14 @@
+<apex:component controller="PartnerCommunityHomeController">
+
+         <!--render if follow on page-->
+         <apex:outputText rendered="{!Campaigns!=null}">
+         <div class="col-md-12"><h3>Marketing Campaigns</h3></div></apex:outputText>
+                 <apex:datatable var="r" value="{!Campaigns}" id="featuredresults" styleClass="table" rendered="{!Campaigns!=null}">
+                    <apex:column headervalue="Title">
+                     <a href="{!$Page.ContentView}?id={!r.id}">{!r.title}</a>
+                    </apex:column>                   
+                    <apex:column headervalue="Author" value="{!r.CreatedBy.Name}"/>
+                    <apex:column headervalue="Date" value="{!r.CreatedDate}"/>
+            </apex:datatable>
+   
+</apex:component>

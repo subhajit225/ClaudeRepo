@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Justification_reqd_if_IgnoreFromNPS_True</fullName>
+    <active>true</active>
+    <description>This field is required If you are ignoring this survey.</description>
+    <errorConditionFormula>AND(Ignore_from_NPS__c = TRUE,ISBLANK(TRIM(Justification__c )))</errorConditionFormula>
+    <errorMessage>Justification field should not be blank if Ignore from NPS is set to True</errorMessage>
+</ValidationRule>

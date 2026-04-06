@@ -1,0 +1,102 @@
+<!--
+Author  : Grazitti
+Changes : CS-270 => Allow request escalation button to be clicked more than once.
+Date    : 10/08/2019	
+Type    : Change Request	
+Comment : Added a text change on opening  Escalation Popup
+added 32k support-->
+
+<aura:component implements="forceCommunity:availableForAllPageTypes" controller="CaseApexController" access="global">
+    <aura:attribute name="myCase" type="Case"/>
+    <aura:attribute name="myCase1" type="Case"/>
+    <aura:attribute name="commentText" type="String"  default=""/>
+    <aura:attribute name="Casenumber" type="string"/>
+    <aura:attribute name="showCommentBox" type="boolean" default="false"/>
+    <aura:attribute name="showEscalationBox" type="boolean" default="false"/>
+    <aura:attribute name="showReopenBox" type="boolean" default="false"/>
+    <aura:attribute name="hasError" type="boolean" default="false"/>
+    <aura:attribute name="caseId" type="String"/>
+    <aura:attribute name="record" type="Case"/>
+    <aura:attribute name="caseStatus" type="String"/>
+    <aura:attribute name="caseId1" type="String" default="{!v.recordId}"/>
+    <aura:attribute name="toggleSpinner" type="Boolean" default="true"/>
+    <aura:attribute name="validatedB" type="Boolean" default="true"/>
+    <aura:attribute name="showPopup" type="Boolean" default="false"/>
+    <aura:attribute name="errorMessage" type="String" default="You haven't composed anything yet."/>
+    <aura:attribute name="caseEscalationStatus" type="Boolean" default="false"/>
+    <aura:attribute name="textLimit" type="Integer" default="{!if(v.showEscalationBox,31900,32000)}"/>
+
+    
+    <div class="demo-only" style="height: 640px;">
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+            <div class="slds-modal__container mContainer">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.Cancel}">
+                        <lightning:icon iconName="action:remove" alternativeText="Approved" size="xx-small"/>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate" style="font-size:1.5rem;"> Add a Comment to Case {!v.Casenumber}</h2>
+                    <br/>
+                    <aura:if isTrue="{!v.hasError}">
+                        <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert">
+                            <span class="slds-assistive-text">error</span>
+                            <span class="slds-icon_container slds-icon-utility-error slds-m-right_x-small" title="Description of icon when needed">
+                                <lightning:icon iconName="utility:error" alternativeText="Error!" variant="inverse" size="xxSmall"/>
+                            </span>
+                            <h2>
+                                Comment is required.
+                            </h2>
+                            
+                        </div>
+                    </aura:if>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    
+                     <div class="slds-grid slds-wrap slds-size_12-of-12 slds-large-size_12-of-12" style="text-align:center;">
+                        <aura:if isTrue="{!v.showEscalationBox}">                       
+                          <aura:if isTrue="{!(!v.caseEscalationStatus)}">                         	
+                                <div class="demo-only alertcls slds-align_absolute-center" > 
+                                    <div class="slds-text-color_inverse alertpara">
+                                        Once your comment is submitted, it will also submit a request to escalate this case.
+                                    </div>
+                                    <br/> 
+                                </div>
+                              <aura:set attribute="else">
+                                 <div class="demo-only alertcls slds-align_absolute-center" > 
+                                    <div class="slds-text-color_inverse alertpara">
+                                        This case was previously escalated. To escalate the case again, please add a comment and click the Request Escalation button.
+                                    </div>
+                                    <br/> 
+                                </div>
+                              </aura:set> 
+                          </aura:if>
+                        </aura:if>
+                       <br/> 
+                         <div class="slds-size_12-of-12 slds-wrap slds-large-size_12-of-12">
+                             <lightning:textarea aura:id="commentBody" name="input1" value="{!v.commentText}" maxlength="{!v.textLimit}" class="inputtextarea" label=""  messageWhenBadInput="{!v.errorMessage}" valid="{!v.validatedB}"/>
+                             
+                        </div>
+                        {!v.commentText.length} of {!v.textLimit}
+                    </div>
+                </div>
+                <footer class="slds-modal__footer">
+                    <aura:if isTrue="{!v.showEscalationBox}">
+                        <lightning:button class="commentstyle" label="Request Escalation" onclick="{!c.addescalate}"/>
+                        <aura:set attribute="else">
+                            <aura:if isTrue="{!v.showReopenBox}">
+                                <lightning:button class="commentstyle" label="Add Comment" onclick="{!c.addReopen}"/>
+                                <aura:set attribute="else">
+                                    <lightning:button class="commentstyle" label="Add Comment" onclick="{!c.addComment}"/>
+                                </aura:set>
+                            </aura:if>
+                        </aura:set>
+                    </aura:if>
+                    
+                    <lightning:button class="commentstyle" label="Cancel" onclick="{!c.Cancel}"/>
+                </footer>
+            </div>
+        </section>
+    </div>
+       <lightning:spinner aura:id="spinner" alternativeText="Loading" size="medium" class="slds-hide" />
+    
+</aura:component>

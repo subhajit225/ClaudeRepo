@@ -1,0 +1,17 @@
+<template>
+    <lightning-card  title="Linking Orders">
+        
+    <template if:true={error}>
+        <p class="buttonCenter" style="color: #ff1200;">{error}</p>
+        <div class="buttonCenter">
+            <lightning-button  class="slds-m-top_small" variant="brand"  name="update" label="OK" onclick ={handleCancel}>  </lightning-button>
+        </div>
+    </template>
+    
+    <div if:false={hideSpinner} class="">
+        <lightning-spinner
+            alternative-text="Loading..." variant="brand">
+        </lightning-spinner>
+    </div>
+    </lightning-card> 
+</template>

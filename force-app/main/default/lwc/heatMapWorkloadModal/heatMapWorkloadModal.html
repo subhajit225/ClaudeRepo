@@ -1,0 +1,69 @@
+<template>
+    <section role="dialog" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="modal" onkeydown={handleKeyDown}>
+        <!--workload picklist values element / rightClick-->
+        <div if:true={showSelectionModal} class="workload-box">
+            <template for:each={workloadPicklistVals} for:item="ele">
+                <div key={ele.label} class="workload-ele" data-item={ele.value} onclick={handleModalOnClick}>{ele.label}</div>
+            </template>
+        </div>
+        <!--workload values details element / doubleClick-->
+        <div if:true={showWorkloadEntryModal} class="workload-entry-box" onclick={handleInsideClick}>
+            <div class="workload-entry-header">
+                <div class="slds-float_left">{workload.accountName}</div>
+                <div class="slds-float_right workload-entry-close-icon">
+                    <lightning-icon icon-name="utility:close" size="xx-small" alternative-text="close" onclick={handleCloseIconOnClick}></lightning-icon>
+                </div>
+            </div>
+            <div class="workload-entry-content">
+                <table>
+                    <tr class="workload-entry-row workload-entry-row-header">
+                        <th>{workload.columnName}</th>
+                        <th class="workload-entry-header">SE Data</th>
+                        <th class="workload-entry-header">Telemetry</th>
+                    </tr>
+                    <tr class="workload-entry-row">
+                        <td>Value</td>
+                        <td><lightning-combobox name="" data-id='worloadValue' label="" lwc:ref="focusCombobox" placeholder="" value={workloadSelVal} disabled={disableModal} options={workloadPicklistVals} class="workload-entry-dropdown" onchange={handleWorkloadDropdownChange}></lightning-combobox></td>
+                        <td class="workload-entry-cell">{workload.automatedWorkloadVal}</td>
+                    </tr>
+                    <tr class="workload-entry-row">
+                        <td>Object Count</td>
+                        <td><lightning-input type="number" label="" placeholder="0" max="999999999999999999" value={manualCount} disabled={disableDataValue}  class="workload-entry-input objectInput" onchange={handleManualCountChange}></lightning-input></td>
+                        <td class="workload-entry-cell">{workload.automatedObjCount}</td>
+                    </tr>
+                    <tr class="workload-entry-row">
+                        <td>Object Capacity(FETB)</td>
+                        <td><lightning-input type="number" label="" placeholder="0" formatter="decimal" step="0.01" max="9999999999999999" value={manualCapacity} disabled={disableDataValue} class="workload-entry-input objectCapacity" onchange={handleManualCapacityChange}></lightning-input></td>
+                        <td class="workload-entry-cell">{workload.automatedObjCapacity}</td>
+                    </tr>
+                    <tr class="workload-entry-row">
+                        <td>Incumbent</td>
+                        <td><lightning-combobox name="" label="" placeholder="" value={incumbentSelVal} disabled={disableDataValue} options={incumbentPicklistVals} class="workload-entry-dropdown" onchange={handleIncumbentDropdownChange} dropdown-alignment="auto"></lightning-combobox></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="slds-float_right workload-entry-button"><lightning-button label="Save" title="Save" disabled={disableDataValue} onclick={handleSaveButtonClick}></lightning-button></div>
+        </div>
+        <!--Account Information element / doubleClick-->
+        <div if:true={showAccountInfoModal} class="workload-entry-box" onclick={handleInsideClick}>
+            <div class="workload-entry-header">
+                <div class="slds-float_left">{workload.accountName} - {workload.columnName}</div>
+                <div class="slds-float_right workload-entry-close-icon">
+                    <lightning-icon icon-name="utility:close" size="xx-small" alternative-text="close" onclick={handleCloseIconOnClick}></lightning-icon>
+                </div>
+            </div>
+            <div class="slds-form-element boxStyle">
+                <div class="slds-form-element__control">
+                    <textarea id="textarea-id-01" lwc:ref="focusTextArea" style={maxScroll} class="slds-textarea scrollable-textarea"  onkeyup={handleTextArea} onmouseout={handleTextArea} onmousemove={getTextAreaBoundry}>{workload.value}</textarea>
+                    <template if:true={showError}>
+                        <div style="color: red;">
+                            {errorMsg}
+                        </div>
+                    </template>
+                </div>
+            </div>
+            <div class="slds-float_right workload-entry-button"><lightning-button label="Save" title="Save" onclick={handleSaveButtonClick}></lightning-button></div>
+        </div>
+    </section>
+</template>

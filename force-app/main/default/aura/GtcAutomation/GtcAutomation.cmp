@@ -1,0 +1,43 @@
+<aura:component>
+    <aura:attribute name="portalAccess" type="Boolean" default="false"/>
+    <aura:attribute name="enableHeader" type="Boolean" default="false"/>
+    
+    <aura:if isTrue="{!v.enableHeader}">
+        <div class="slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12  nopad" style="background-color: #2E4E52">
+            <div class="container">
+                <div class="slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12 ">
+                    <div class="slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12 " style="Padding:20px 15px;">
+                        <span class="block">
+                            <img src="{!$Resource.RubrikCustomerCommunity+'/RubrikCommunity/Images/logo.png'}" styleClass="headerlogo text-left" />
+                        </span>           
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.portalAccess}">
+        <div class="demo-only" style="height: 640px;">
+            <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <div class="">
+                            <div class="">
+                                <span style="color:red;">Access Blocked:</span> Your Rubrik Support Portal access is denied since your account is non-compliant with Global Trade Compliance regulations.
+                            </div>
+                        </div>  
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning:button label="Logout" title="Logout" onclick="{! c.handleLogout }"/>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.enableHeader}">
+        <c:sitefooter/>
+    </aura:if>
+    
+</aura:component>

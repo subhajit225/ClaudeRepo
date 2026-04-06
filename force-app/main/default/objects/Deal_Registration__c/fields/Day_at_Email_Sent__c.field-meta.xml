@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Day_at_Email_Sent__c</fullName>
+    <externalId>false</externalId>
+    <formula>If(!ISNULL(Deal_Registration_Expiration__c) &amp;&amp; (Deal_Registration_Expiration__c) - TODAY()  &lt;= 0,&apos;0&apos;,If(!ISNULL(Deal_Registration_Expiration__c ) &amp;&amp; ( Deal_Registration_Expiration__c) - TODAY() &gt;= 29,&apos;30&apos;,&apos;&apos;))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Day at Email Sent</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

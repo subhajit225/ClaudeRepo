@@ -1,0 +1,29 @@
+<template>
+  <div data-id="alertModal" class={displayModal}>
+    <div class={geTClass}>
+      <iframe
+        src={siteURL}
+        height={frameheight}
+        width="100%"
+        style="border: none !important"
+        id={fieldname}
+        title="editor"
+      ></iframe>
+    </div>
+  </div>
+  <c-knowbler-modal-component
+    stayleave={stayleaveflag}
+    createsuccess={createflag}
+    saveprog={progressflag}
+    onleave={handleBackLeave}
+    onhandlesave={handleVideo}
+  ></c-knowbler-modal-component>
+  <c-knowbler-image-rte-modal
+    onimagesave={handleSave}
+  ></c-knowbler-image-rte-modal>
+  <c-knowbler-smart-link-rte-modal
+    destobj={destobj}
+    exp={exp}
+    onlinksave={handleSmartLink}
+  ></c-knowbler-smart-link-rte-modal>
+</template>

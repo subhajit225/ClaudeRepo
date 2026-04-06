@@ -1,0 +1,45 @@
+<apex:page showHeader="false" controller="SupportLoginFlowController" action="{!SupportLoginFlowControllerAction}">
+  
+    <script>
+    
+    function myFunction(){
+        var actualUrl = "{!$Label.Community_Base_URL}";
+        var actualUrl = actualUrl.replace('/s/','')
+        window.open(actualUrl+"/secur/logout.jsp?startURL=/s/&retUrl="+actualUrl,'_self');
+    }
+    
+    function redirectToLoginpage(){
+          window.open("{!$Label.Community_Base_URL}",'_self');
+    }
+    </script>
+    
+    <apex:form style="background-color:#b1bac1">
+        <apex:actionFunction name="finish" action="{!FinishLoginFlowHome}"  />
+        
+        <apex:outputPanel rendered="{!showerror}">
+            <div style="height:100vh">
+                 <div style="display: flex; height: 70%;justify-content: center;align-items: center; flex-direction:column;">
+                <div>
+                    <apex:image url="/resource/1629267236000/RubrikCustomerCommunity/RubrikCommunity/Images/logo.png" styleClass="imageStyle"/>
+                </div>
+                <div style="padding-top:1rem; font-size:14px; width:28rem; text-align:end;">
+                    <span>{!$User.Username}</span>
+                    <span style="color:blue;">
+                        <apex:CommandLink style="color:blue;" value="Log Out" onclick="myFunction()" onComplete="redirectToLoginpage()"/>   
+                    </span>
+                </div>
+                <div style="padding-top:1rem; width:28rem; text-align:justify;">
+                        {!LoginErrorMessage}
+                </div>
+            </div>            
+            </div>
+        </apex:outputPanel>
+        
+        <apex:outputPanel rendered="{!finishflow}">   
+            <script>
+           window.setTimeout(finish,1000)
+            </script>
+        </apex:outputPanel>
+     
+  </apex:form>
+</apex:page>

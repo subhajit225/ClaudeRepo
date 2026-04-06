@@ -1,0 +1,686 @@
+<template>
+	<!-- Header - Start-->
+	<!-- <template if:true={showHeader}>
+		<div class="slds-align_absolute-center slds-text-heading_large" style="height:6rem;font-size: xx-large;">
+			SUBSCRIPTION MANAGEMENT
+		</div>
+	</template> -->
+	<!-- Header - End-->
+
+	<!-- Error Message Section - Start-->
+	<template if:true={showmsg}>
+		<div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+			<span class="slds-assistive-text">error</span>
+			<span class="slds-icon_container slds-icon-utility-error slds-m-right_x-small"
+				title="Description of icon when needed"></span>
+			<h2>
+				<p>
+					<span class="bolded">
+						<label>{message}</label>
+					</span>
+				</p>
+			</h2>
+		</div>
+	</template>
+	<!-- Error Message Section - End-->
+
+	<!-- Spinner Section - Start-->
+	<template if:true={showSpinner}>
+		<!-- Added By Shivani for spinner issue -->
+		<div id="spinnerDiv" class="spinner-container">
+			<div class="slds-spinner_container">
+				<div role="status" class="slds-spinner slds-spinner_medium">
+					<span class="slds-assistive-text">Loading</span>
+					<div class="slds-spinner__dot-a"></div>
+					<div class="slds-spinner__dot-b"></div>
+				</div>
+			</div>
+		</div>
+	</template>
+	<!-- Spinner Section - End-->
+
+	<template if:false={showDisposition}>
+
+		<!-- IBM Screen Section - Start -->
+		<!-- IBM Screen Filters Section - Start -->
+	
+		<div class="slds-grid slds-align_absolute-center slds-p-horizontal_medium slds-p-vertical_small" style="position: relative;">
+		<div class="slds-align_absolute-center" style="height:4rem;font-size: x-large;">
+			SUBSCRIPTION MANAGEMENT
+		</div>
+			<!-- CPQ22-6072 Right-aligned bordered box showing quote name, account name, and credit calculation date-->
+			<div class="slds-p-horizontal_small slds-p-vertical_xx-small slds-border_left slds-border_right slds-border_top slds-border_bottom slds-radius_small slds-theme_default" style="position:absolute; left: 1rem; top: 50%; transform: translateY(-50%);">
+				{qtName} | {accName} | Credit Calculation Start Date : {credCalcDate}
+			</div> 
+		</div>
+		<lightning-layout multiple-rows="true">
+			<lightning-layout-item size="12">
+					<lightning-layout>
+							<lightning-layout-item  size="8">
+		<lightning-layout multiple-rows horizontal-align="start" class="slds-wrap slds-m-around_none">
+									<lightning-layout-item class="slds-p-horizontal_xx-small" size="12" medium-device-size="6" large-device-size="3">
+				<lightning-input label="Enter Product Name" type="search"
+					value={entitlementSearchString} onchange={handleSearchEntitlement}>
+				</lightning-input>
+			</lightning-layout-item>
+
+							<lightning-layout-item class="slds-p-horizontal_xx-small" size="12" medium-device-size="6" large-device-size="3">
+				<lightning-input label="Enter Asset Name" type="search"
+					value={entitlementAssetSearchString} onchange={handleAssetName}>
+				</lightning-input>
+			</lightning-layout-item>
+
+							<lightning-layout-item class="slds-p-horizontal_xx-small" size="12" medium-device-size="6" large-device-size="3">
+				<lightning-input label="Enter Order Number" type="text"
+					value={entitlementOrderNumberSearchString} onchange={handleSearchOrder}>
+				</lightning-input>
+			</lightning-layout-item>
+							<lightning-layout-item class="slds-p-horizontal_xx-small" size="12" medium-device-size="6" large-device-size="3">
+								<lightning-combobox name="entitlementFilter" label="Entitlement Filter" value={entitlementFilter} options={entitlementFilterOptions}
+								onchange={handleEntitlementFilterChange} placeholder="Select Entitlement Filter">
+							</lightning-combobox>
+							</lightning-layout-item>
+							<lightning-layout-item class="slds-p-horizontal_xx-small" size="12" medium-device-size="6" large-device-size="3">
+				<lightning-input label="Min Ent End Date" type="date"
+					value={startDate} onchange={handleStartDate}>
+				</lightning-input>
+			</lightning-layout-item>
+							<lightning-layout-item class="slds-p-horizontal_xx-small" size="12" medium-device-size="6" large-device-size="3">
+				<lightning-input label="Max Ent End Date" type="date"
+					value={endDate} onchange={handleEndDate}>
+				</lightning-input>
+			</lightning-layout-item>
+
+							
+							<lightning-layout-item class="slds-p-horizontal_xx-small" size="12" medium-device-size="6" large-device-size="3">
+				<template if:true={exceptionMessages}>
+					<c-multiselect-combobox-lwc-parent options={exceptionMessages} label={exceptionlabel}
+						onselectoptionparent={handleexceptionoptionparet}>
+					</c-multiselect-combobox-lwc-parent>
+				</template>
+			</lightning-layout-item>
+
+							<lightning-layout-item class="slds-p-horizontal_xx-small" size="12" medium-device-size="6" large-device-size="3">
+				<template if:true={exceptionMessages}>
+					<lightning-textarea label="Business Justification" value={exceptionComments}
+						placeholder="Type here..." onchange={handleExceptionCommentsChange}>
+					</lightning-textarea>
+				</template>
+			</lightning-layout-item>
+						</lightning-layout>
+					</lightning-layout-item>
+
+					<!-- Bulk Actions -->
+					<lightning-layout-item class="slds-p-left_small" size="4">
+						<lightning-layout multiple-rows horizontal-align="start" class="slds-wrap slds-m-around_none outlined-block">
+							<lightning-layout-item class="slds-p-horizontal_xx-small" size="12" medium-device-size="6" large-device-size="6">
+								<lightning-combobox label="Bulk Update Disposition Reason" value={massDispositionValue}
+									placeholder="Select Disposition Reason" options={dispositionpicklistoptions}
+									onchange={handleDispositionChangeMultiple}>
+								</lightning-combobox>
+							</lightning-layout-item>
+							<lightning-layout-item class="slds-p-horizontal_xx-small" size="12" medium-device-size="6" large-device-size="6">
+								<lightning-input label="Bulk Update Subscription Term"
+									placeholder="Enter Term" data-id="termInput" type="number" onblur={handleTermChangeMultiple} value={numberValue}>
+								</lightning-input>
+							</lightning-layout-item>
+							<lightning-layout-item class="slds-p-horizontal_xx-small" size="12" medium-device-size="6" large-device-size="6">
+								<lightning-input label="Bulk Update Renewal End Date"
+									placeholder="Enter Renewal End Date" data-id="dateInput" type="date" value={selectedDate} onchange={handleEndDateChangeMultiple}>
+								</lightning-input>
+							</lightning-layout-item>
+							<lightning-layout-item class="slds-p-horizontal_xx-small slds-p-top_large" size="12" medium-device-size="6" large-device-size="6">
+								<lightning-button variant="brand" label="Apply" title="Apply Bulk Actions" onclick={handleApplyBulkActions}></lightning-button>
+							</lightning-layout-item>	
+						</lightning-layout>
+					</lightning-layout-item>
+					
+				</lightning-layout>
+			</lightning-layout-item>    
+		</lightning-layout><br/>
+
+
+		<!-- IBM Screen Filters Section - End -->
+		<!-- IBM Screen Data Section - Start -->
+		<template if:true={dataModified}>
+
+			<table class="slds-table slds-table_bordered slds-table_cell-buffer"
+				style="width: 120rem;table-layout: fixed;" key={data.entitlementId}>
+				<thead class="freezeRow">
+					<tr class="slds-line-height_reset">
+						<th scope="col" style="width:2%;">
+						</th>
+						<th scope="col" style="width:3%;padding-left: 9px;"> <!-- style="width: 5%;" -->
+							<!-- <span data-field-id="srcheck" lwc:dom="manual"></span> -->
+							<lightning-input type="checkbox" label=""
+								onchange={handleSelectAll} checked={fullSelected}></lightning-input> <!-- class="slds-p-left_x-large" 	-->
+						</th>
+						<th scope="col" style="width: 2.25%;padding-left: 0px;" data-field-name="srnum" onclick={handleSort}>
+							<!-- width: 3%; -->
+							<span data-field-id="srnum" lwc:dom="manual"></span>
+							<div class="slds-truncate" title="Number">Sr No</div>
+						</th>
+						<th scope="col" style="width: 9%;padding-left: 1px;" data-field-name="entitlementName" onclick={handleSort}><!--width 7%-->
+							<!-- width: 11%; -->
+							<span data-field-id="entitlementName" lwc:dom="manual"></span>
+							<div class="slds-truncate" title="Number">Product Name</div>
+						</th>
+						<th scope="col" style="width: 4%;padding-left: 0px;">
+							<!-- width: 5%; -->
+							<div class="slds-truncate" title="Number">Add/Delete<br/>Partial</div>
+						</th>
+						<th scope="col" style="width: 5.88%; padding: 0px; height: 10%; white-space: normal;padding-left: 19px;"><!--width 7.88%-->
+							<!-- width: 9%; height: 10%; white-space: normal; -->
+							<div class="slds-truncate" title="Service Contract">Service<br/>Contract</div>
+						</th>
+						<th scope="col" style="width: 3.5%;padding-left: 7px;">
+							<!-- width: 4%; -->
+							<div class="slds-truncate" title="OrderNumber">Order<br/>No.</div>
+						</th>
+						<th scope="col" style="width: 4%;padding-left: 9px;" data-field-name="StartDate" onclick={handleSort}>
+							<!-- width: 8%; -->
+							<span data-field-id="StartDate" lwc:dom="manual"></span>
+							<div class="slds-truncate" title="StartDate">Start <br/> Date</div>
+						</th>
+						<th scope="col" style="width: 3.5%;padding-left: 8px;" data-field-name="EndDate" onclick={handleSort}>
+							<!-- width: 5%; -->
+							<span data-field-id="EndDate" lwc:dom="manual"></span>
+							<div class="slds-truncate" title="EndDate">End <br/> Date</div>
+						</th>
+						<th scope="col" style="width: 4.5%;padding-left: 19px;">
+							<!-- width: 4%; -->
+							<!-- Renamed column as part of FY25SR-1542 -->
+							<div title="Available Qty">Existing <br/> Quantity</div>
+							<!-- <div title="Available Qty">Available <br/> Qty</div> -->
+						</th>
+						<th scope="col" style="width: 4%;padding-left: 8px;">
+							<!-- width: 5%; -->
+							<!-- Renamed column as part of FY25SR-1542 -->
+							<div title="Replacement Qty">New  <br/> Quantity</div>
+							<!-- <div title="Replacement Qty">Replacement <br/> Qty</div> -->
+						</th>
+						<th scope="col" style="width: 13%; height: 10%;padding-left:17px;">
+							<!-- width: 18%; height: 10%; -->
+							<div class="slds-truncate" title="Lookup">Assets</div>
+						</th>
+						<th scope="col" style="width: 9%; height: 10%;padding-left: 44px;">
+							<!-- width: 10%; height: 10%; -->
+							<div class="slds-truncate" title="Lookup">Replacement SKU</div>
+						</th>
+						<th scope="col" style="width: 4%;padding-left: 42px;">
+							<!-- width: 6%; -->
+							<!-- Renamed column as part of FY25SR-1542 -->
+							<div class="slds-truncate" title="Term Selected">Term</div>
+							<!-- <div class="slds-truncate" title="Term Selected">Replacement<br/> Term</div> -->
+						</th>
+						<th scope="col" style="width: 10%; height: 10%;padding-left: 42px;">
+							<!-- width: 11%; height: 10%; -->
+							<div class="slds-truncate" title="Disposition Reason">Disposition Reason</div>
+						</th>
+						<th scope="col" style="width: 6.3%; height: 10%;padding-left: 0px;">
+							<!-- width: 6%; height: 10%; -->
+							<div class="slds-truncate" title="Renewal End Date">Renewal<br/> End Date</div>
+						</th>
+						
+					</tr>
+				</thead>
+				<tbody>
+					<template for:each={currentPageData} for:item="asset" for:index="indexdata">
+						<!-- <template for:each={dataModified} for:item="asset" for:index="indexdata"> -->
+						<!-- StandAlone Products -->
+						<template if:true={asset.customIndex}>
+							<template if:false={asset.showmapAssetEntitlements}>
+								<tr key={asset.customIndex} style={asset.setRowColor}>
+									<td data-label="#">
+										<div class="slds-truncate" title="">
+											<template if:true={asset.showSelectCheckBox}>
+												<lightning-input class="slds-p-left_x-large" type="checkbox" label=""
+													data-index={indexdata} data-entid={asset.entitlementId}
+													onchange={handleCheckBoxSelectionChange}
+													data-custom-index={asset.customIndex} checked={asset.rowSelected}></lightning-input>
+												
+											</template>
+										</div>
+									</td>
+									<td data-label="#">
+										<div class="slds-truncate" title="">{asset.customIndex}</div>
+									</td>
+									<td data-label="#">
+										<div class="slds-truncate" title="">
+											{asset.entitlementName}		
+										</div>
+										<div style="color:red;">
+														{asset.errors}
+											</div>
+									</td>
+									<td data-label="#">
+										<div class="slds-truncate" title="">
+											<template if:true={asset.showAdd}>
+												<lightning-button variant="base" title="Add" icon-name="utility:add"
+													class="slds-m-left_x-small" data-index={indexdata}
+													data-custom-index={asset.customIndex} onclick={addRows}></lightning-button>
+											</template>
+											<template if:true={asset.showDelete}>
+												<lightning-button variant="base" title="Delete" icon-name="utility:delete"
+													class="slds-m-left_x-small" onclick={deleteRows} data-index={indexdata}
+													data-entid={asset.entitlementId} data-record-id={asset.selectedAssetId}
+													data-custom-index={asset.customIndex}></lightning-button>
+											</template>
+										</div>
+									</td>
+									<td data-label="Service Contract">
+										<div class="slds-truncate">
+											<a target="_blank" onclick={handleServiceContract} data-custom-index={asset.customIndex} 
+												data-service-id={asset.serviceContractId}>{asset.serviceContractNumber}</a>
+										</div>
+									</td>
+									<td data-label="OrderNumber">
+										<div class="slds-truncate" title=""> {asset.entitlementOrderNumber} </div>
+									</td>
+									<td data-label="StartDate">
+										<div class="slds-truncate" title="">
+											<lightning-formatted-date-time value={asset.StartDate} 
+												year="numeric" month="2-digit" day="2-digit"
+												time-zone="UTC"></lightning-formatted-date-time>
+										</div>
+									</td>
+									<td data-label="EndDate">
+										<div class="slds-truncate" title="">
+											<lightning-formatted-date-time value={asset.EndDate} 
+												year="numeric" month="2-digit" day="2-digit"
+												time-zone="UTC"></lightning-formatted-date-time>
+										</div>
+									</td>
+									<td data-label="Available Qty">
+										<template if:true={asset.showSelectCheckBox}>
+											<div class="slds-truncate" title="">{asset.selectedMaxquantity}</div>
+										</template>
+									</td>
+									<td data-label="Selected Quantity">
+										<div class="slds-grid slds-wrap" title="">
+											<template if:false={asset.quantityAssetType}>
+												<lightning-input class="quantityInput" type="number" 
+												value={asset.selectedquantity} data-index={indexdata}
+												data-entid={asset.entitlementId} data-record-id={asset.selectedAssetId}
+												data-custom-index={asset.customIndex} onchange={handleQuanChange}
+													disabled></lightning-input>
+											</template>
+											<template if:true={asset.quantityAssetType}>
+												<lightning-input class="quantityInput" type="number" 
+												value={asset.selectedquantity} data-index={indexdata}
+												data-entid={asset.entitlementId} data-record-id={asset.selectedAssetId}
+												data-custom-index={asset.customIndex} onchange={handleQuanChange}
+												></lightning-input> 
+
+											</template>
+										</div>
+									</td>
+									
+									<td data-label="Assets to Replace" style="width:  18%;">
+										<template if:false={asset.quantityAssetType}>
+											<c-multiselect-combobox-lwc-parent options={asset.assetsAvailable}
+												onselectoptionparent={handleselectoptionparent}
+												data-custom-index={asset.customIndex} data-index={indexdata}>
+											</c-multiselect-combobox-lwc-parent>
+										</template>
+									</td>
+									<td data-label="Replacement SKU" style="width:  10.3%;">
+										<lightning-input type="search" data-index={indexdata}
+										data-custom-index={asset.customIndex} value={asset.skuProdName}
+										onclick={handleSKUClick} onchange={handleSKUchange} disabled={asset.isReplaceableProduct}>
+										</lightning-input>
+									</td> 
+									<td data-label="Term Selected">
+										<div class="slds-truncate" title="">
+											<lightning-input type="number" class="customInput" value={asset.ReplacementTerm}
+												data-index={indexdata} data-entid={asset.entitlementId}
+												data-record-id={asset.selectedAssetId} data-custom-index={asset.customIndex}
+												onchange={handleTermChange} disabled={asset.disableTerm}></lightning-input>
+										</div>
+									</td> 
+									<td data-label="Disposition Reason">
+										<template if:true={asset.disableDisposition}>
+											<lightning-combobox name="Disposition" value={asset.selecteddisposition}
+												placeholder="Select Disposition Reason" options={asset.autoDisposition}
+												onchange={handleDisposition} data-index={indexdata}
+												data-custom-index={asset.customIndex} disabled></lightning-combobox>
+										</template>
+										<template if:false={asset.disableDisposition}>
+											<lightning-combobox name="Disposition" value={asset.selecteddisposition}
+												placeholder="Select Disposition Reason" options={asset.manualDisposition}
+												onchange={handleDisposition} data-index={indexdata}
+												data-custom-index={asset.customIndex}></lightning-combobox>
+										</template>
+									</td>
+									<td data-label="Renewal End Date">
+										<lightning-input type="date" name="input1" label="" disabled></lightning-input>
+									</td>
+								</tr>
+							</template>
+						</template>
+
+						<!--Added as part of FY25SR-1207 - Start - Refresh Future Transactions -->
+						<template if:true={asset.showmapAssetEntitlements}>
+							<!-- <template  for:each={asset.mapAssetEntitlements} for:item="mapAssetEntitlements" for:index="indexmapAssetEntitlements"> -->
+								<tr  key={asset.customIndex} class="slds-line-height_reset">
+									<td colspan="16" style="border: none !important; padding:0px !important;">
+										<c-new-replacement-future-transactions key = {asset.customIndex} main-index = {asset.customIndex}
+											quotedetails = {quoteDetails} disable-validations = {disableValidations}
+											displayeddatawrapper = {asset}
+											onaddrows = {addRows}
+											ondeleterows = {deleteRows}
+											onquantitychange = {handleQuanChange}
+											onassetchange = {handleselectoptionparent}
+											errorscustometadata = {errorMessagesValues}
+											replaceanytoany = {replaceAnyToAnyUI}
+											onskuclick = {handleSKUClick}
+											onskuchange = {handleSKUChange}
+											ontermchange = {handleTermChange}
+											ondispositionchange = {handleDisposition}
+											onrenewaldatechange = {handleRenewalDateChange}
+											oncheckoxselection = {handleCheckBoxSelectionChange}>
+										</c-new-replacement-future-transactions>
+									</td>
+								</tr>
+							<!-- </template> -->
+						</template>
+						<!--Added as part of FY25SR-1207 - End - Refresh Future Transactions -->
+
+						<!-- Base License lines -->
+						<template if:true={asset.showwrapBaseLicense}>
+							<template  for:each={asset.wrapBaseLicense} for:item="wrapBaseLicense" for:index="indexwrapBaseLicense">
+								<tr key={wrapBaseLicense.customIndex} class="slds-line-height_reset"> 
+									<!--  style={wrapBaseLicense.setRowColor}  -->
+									<!-- <td> -->
+									<td colspan="16" style="border: none !important; padding:0px !important;">
+										<c-replacement-custom-table key={wrapBaseLicense.customIndex} main-index={wrapBaseLicense.customIndex} 
+										quotedetails={quoteDetails} disable-validations={disableValidations}
+										displayeddata={wrapBaseLicense} oncheckoxselection = {handleCheckBoxSelectionChange}
+										modifieddata={dataModified}
+										ismismatchqty={isMismatchQTY}
+										onaddrows = {addRows}
+										ondeleterows = {deleteRows}
+										errorscustometadata = {errorMessagesValues}
+										replaceanytoany = {replaceAnyToAnyUI}
+										onquantitychange = {handleQuanChange}
+										onassetchange = {handleselectoptionparent}
+										onskuclick = {handleSKUClick}
+										onskuchange = {handleSKUChange}
+										ontermchange = {handleTermChange}
+										ondispositionchange = {handleDisposition}
+										onrenewaldatechange = {handleRenewalDateChange}></c-replacement-custom-table>
+									</td>
+								</tr>
+
+								<template if:true={wrapBaseLicense.wrapInactiveEnt}>
+									<template  for:each={wrapBaseLicense.wrapInactiveEnt} for:item="wrapUpgradeEnt" for:index="indexwrapUpgradeEnt">
+										<tr key={wrapUpgradeEnt.customIndex}> <!--  style={wrapUpgradeEnt.setRowColor} -->
+											<!-- <td> -->
+											<td colspan="16" style="border: none !important; padding:0px !important;">
+												<c-replacement-custom-table key={wrapUpgradeEnt.customIndex} 
+												quotedetails={quoteDetails} disable-validations={disableValidations}
+												modifieddata={dataModified}
+												ismismatchqty={isMismatchQTY}
+												main-index={wrapUpgradeEnt.customIndex} 
+												onaddrows = {addRows}
+												ondeleterows = {deleteRows}
+												errorscustometadata = {errorMessagesValues}
+												replaceanytoany = {replaceAnyToAnyUI}
+												onquantitychange = {handleQuanChange}
+												onassetchange = {handleselectoptionparent}
+												onskuclick = {handleSKUClick}
+												onskuchange = {handleSKUChange}
+												ontermchange = {handleTermChange}
+												ondispositionchange = {handleDisposition}
+												displayeddata={wrapUpgradeEnt}
+												onrenewaldatechange = {handleRenewalDateChange}></c-replacement-custom-table>
+											</td>
+										</tr>
+									</template>
+								</template>
+							</template>
+						</template> 
+
+						<!-- hardware Support lines -->
+						<template if:true={asset.showwrapHWSupportLines}>
+							<template  for:each={asset.wrapHWSupportLines} for:item="wrapHWSupportLines" for:index="indexwrapHWSupportLines">
+								<tr key={wrapHWSupportLines.customIndex} > <!-- style={wrapHWSupportLines.setRowColor} -->
+									<!-- <td> -->
+									<td colspan="16" style="border: none !important; padding:0px !important;">
+										<c-replacement-custom-table key={wrapHWSupportLines.customIndex} main-index={wrapHWSupportLines.customIndex} displayeddata={wrapHWSupportLines}  oncheckoxselection = {handleCheckBoxSelectionChange}
+											quotedetails={quoteDetails} disable-validations={disableValidations}
+											modifieddata={dataModified}
+											ismismatchqty={isMismatchQTY}
+											onaddrows = {addRows}
+											ondeleterows = {deleteRows}
+											errorscustometadata = {errorMessagesValues}
+											replaceanytoany = {replaceAnyToAnyUI}
+											onquantitychange = {handleQuanChange}
+											onassetchange = {handleselectoptionparent}
+											onskuclick = {handleSKUClick}
+											onskuchange = {handleSKUChange}
+											ontermchange = {handleTermChange}
+											ondispositionchange = {handleDisposition}
+											onrenewaldatechange = {handleRenewalDateChange}></c-replacement-custom-table>
+									</td>
+								</tr>
+
+
+								<template if:true={wrapHWSupportLines.wrapInactiveEnt}>
+									<template  for:each={wrapHWSupportLines.wrapInactiveEnt} for:item="inactiveLine" for:index="indexinactiveLine">
+											<tr key={inactiveLine.customIndex}> <!--  style={inactiveLine.setRowColor} -->
+												<td colspan="16" style="border: none !important; padding:0px !important;">
+													<c-replacement-custom-table key={inactiveLine.customIndex} main-index={inactiveLine.customIndex} displayeddata={inactiveLine} oncheckoxselection = {handleCheckBoxSelectionChange}
+													quotedetails={quoteDetails} disable-validations={disableValidations}
+													modifieddata={dataModified}
+													ismismatchqty={isMismatchQTY}
+													onaddrows = {addRows}
+													ondeleterows = {deleteRows}
+													errorscustometadata = {errorMessagesValues}
+													replaceanytoany = {replaceAnyToAnyUI}
+													onquantitychange = {handleQuanChange}
+													onassetchange = {handleselectoptionparent}
+													onskuclick = {handleSKUClick}
+													onskuchange = {handleSKUChange}
+													ontermchange = {handleTermChange}
+													ondispositionchange = {handleDisposition}
+													onrenewaldatechange = {handleRenewalDateChange}></c-replacement-custom-table>
+												</td>
+											</tr>
+									</template>
+								</template>
+							</template>
+						</template>
+
+						<!-- Addon Entitlement lines -->
+						<template if:true={asset.showwrapAddOnSupportLines}>
+							<template  for:each={asset.wrapAddOnSupportLines} for:item="wrapAddOnSupportLine" for:index="indexwrapInactiveEnt">
+								<tr key={wrapAddOnSupportLine.customIndex} > <!-- style={wrapAddOnSupportLine.setRowColor} -->
+									<td colspan="16" style="border: none !important; padding:0px !important;">
+										<c-replacement-custom-table key={wrapAddOnSupportLine.customIndex} main-index={wrapAddOnSupportLine.customIndex} displayeddata={wrapAddOnSupportLine} oncheckoxselection = {handleCheckBoxSelectionChange}
+										quotedetails={quoteDetails} disable-validations={disableValidations}
+										modifieddata={dataModified}
+										ismismatchqty={isMismatchQTY}
+										onaddrows = {addRows}
+										ondeleterows = {deleteRows}
+										errorscustometadata = {errorMessagesValues}
+										replaceanytoany = {replaceAnyToAnyUI}
+										onquantitychange = {handleQuanChange}
+										onassetchange = {handleselectoptionparent}
+										onskuclick = {handleSKUClick}
+										onskuchange = {handleSKUChange}
+										ontermchange = {handleTermChange}
+										ondispositionchange = {handleDisposition}
+										onrenewaldatechange = {handleRenewalDateChange}></c-replacement-custom-table>
+									</td>
+								</tr>
+
+								<template if:true={wrapAddOnSupportLine.wrapInactiveEnt}>
+									<template  for:each={wrapAddOnSupportLine.wrapInactiveEnt} for:item="inactiveLine" for:index="indexinactiveLine">
+										<tr key={inactiveLine.customIndex}> <!--  style={inactiveLine.setRowColor} -->
+											<td colspan="16" style="border: none !important; padding:0px !important;">
+												<c-replacement-custom-table key={inactiveLine.customIndex} main-index={inactiveLine.customIndex} displayeddata={inactiveLine} oncheckoxselection = {handleCheckBoxSelectionChange}
+												quotedetails={quoteDetails} disable-validations={disableValidations}
+												modifieddata={dataModified}
+												ismismatchqty={isMismatchQTY}
+												onaddrows = {addRows}
+												ondeleterows = {deleteRows}
+												errorscustometadata = {errorMessagesValues}
+												replaceanytoany = {replaceAnyToAnyUI}
+												onquantitychange = {handleQuanChange}
+												onassetchange = {handleselectoptionparent}
+												onskuclick = {handleSKUClick}
+												onskuchange = {handleSKUChange}
+												ontermchange = {handleTermChange}
+												ondispositionchange = {handleDisposition}
+												onrenewaldatechange = {handleRenewalDateChange}></c-replacement-custom-table>
+											</td>
+										</tr>
+									</template>
+								</template>
+							</template>
+						</template>
+
+						<!-- Inactive Entitlement lines -->
+						<template if:true={asset.showwrapInactiveEnt}>
+							<template  for:each={asset.wrapInactiveEnt} for:item="inactiveLine" for:index="indexinactiveLine">
+								<tr key={inactiveLine.customIndex}> <!--  style={inactiveLine.setRowColor} -->
+									<td colspan="16" style="border: none !important; padding:0px !important;">
+										<c-replacement-custom-table key={inactiveLine.customIndex} main-index={inactiveLine.customIndex} displayeddata={inactiveLine} oncheckoxselection = {handleCheckBoxSelectionChange}
+										quotedetails={quoteDetails} disable-validations={disableValidations}
+										modifieddata={dataModified}
+										ismismatchqty={isMismatchQTY}
+										onaddrows = {addRows}
+										ondeleterows = {deleteRows}
+										errorscustometadata = {errorMessagesValues}
+										replaceanytoany = {replaceAnyToAnyUI}
+										onquantitychange = {handleQuanChange}
+										onassetchange = {handleselectoptionparent}
+										onskuclick = {handleSKUClick}
+										onskuchange = {handleSKUChange}
+										ontermchange = {handleTermChange}
+										ondispositionchange = {handleDisposition}
+										onrenewaldatechange = {handleRenewalDateChange}></c-replacement-custom-table>
+									</td>
+								</tr>
+
+							</template>
+						</template>
+
+						<!-- upgrade Entitlement lines -->
+						<template if:true={asset.showwrapUpgradeEnt}>
+							<template for:each={asset.wrapUpgradeEnt} for:item="wrapUpgradeEnt" for:index="indexwrapAddOnSupportLines">
+								<tr key={wrapUpgradeEnt.customIndex}> <!--  style={wrapUpgradeEnt.setRowColor} -->
+									<td colspan="16" style="border: none !important; padding:0px !important;">
+										<c-replacement-custom-table key={wrapUpgradeEnt.customIndex} main-index={wrapUpgradeEnt.customIndex} displayeddata={wrapUpgradeEnt} oncheckoxselection = {handleCheckBoxSelectionChange}
+										quotedetails={quoteDetails} disable-validations={disableValidations}
+										modifieddata={dataModified}
+										onaddrows = {addRows}
+										ondeleterows = {deleteRows}
+										ismismatchqty={isMismatchQTY}
+										errorscustometadata = {errorMessagesValues}
+										replaceanytoany = {replaceAnyToAnyUI}
+										onquantitychange = {handleQuanChange}
+										onassetchange = {handleselectoptionparent}
+										onskuclick = {handleSKUClick}
+										onskuchange = {handleSKUChange}
+										ontermchange = {handleTermChange}
+										ondispositionchange = {handleDisposition}
+										onrenewaldatechange = {handleRenewalDateChange}></c-replacement-custom-table> <!--ismismatchqty CPQ22-6157-->
+									</td>
+								</tr>
+
+								<template if:true={wrapUpgradeEnt.wrapInactiveEnt}>
+									<template  for:each={wrapUpgradeEnt.wrapInactiveEnt} for:item="inactiveLine" for:index="indexinactiveLine">
+										<tr key={inactiveLine.customIndex}> <!--  style={inactiveLine.setRowColor} -->
+											<td colspan="16" style="border: none !important; padding:0px !important;">
+												<c-replacement-custom-table key={inactiveLine.customIndex} main-index={inactiveLine.customIndex} displayeddata={inactiveLine} oncheckoxselection = {handleCheckBoxSelectionChange}
+												quotedetails={quoteDetails} disable-validations={disableValidations}
+												modifieddata={dataModified}
+												ismismatchqty={isMismatchQTY}
+												onaddrows = {addRows}
+												ondeleterows = {deleteRows}
+												errorscustometadata = {errorMessagesValues}
+												replaceanytoany = {replaceAnyToAnyUI}
+												onquantitychange = {handleQuanChange}
+												onassetchange = {handleselectoptionparent}
+												onskuclick = {handleSKUClick}
+												onskuchange = {handleSKUChange}
+												ontermchange = {handleTermChange}
+												ondispositionchange = {handleDisposition}
+												onrenewaldatechange = {handleRenewalDateChange}></c-replacement-custom-table> <!--ismismatchqty CPQ22-6157-->
+											</td>
+										</tr>
+									</template>
+								</template>
+							</template>
+						</template>
+						
+					</template>
+				</tbody>
+			</table>
+
+			<br/>
+			<br/>
+			<!-- <lightning-layout multiple-rows="true">
+				<lightning-layout-item size="12">
+					<div class="slds-align_absolute-center">
+						<ul class="slds-button-group-row">
+							<li class="slds-button-group-item">
+								<lightning-button label="First" onclick={navigateToFirstPage}
+									disabled={isFirstPage}></lightning-button>
+							</li>
+							<li class="slds-button-group-item">
+								<lightning-button label="Previous" onclick={navigateToPreviousPage}
+									disabled={isPreviousDisabled}></lightning-button>
+							</li>
+							<template lwc:if={showPageButtons}>
+								<template if:true={pageNumbers.length}>
+									<template for:each={pageNumbers} for:item="pageNumber">
+										<li class="slds-button-group-item" key={pageNumber}>
+											<button data-id={pageNumber} class="slds-button slds-button_neutral"
+												type="button" onclick={navigateToPage}> {pageNumber} </button>
+										</li>
+									</template>
+								</template>
+							</template>
+							<template lwc:else>
+								<li class="slds-button-group-item" style="padding: 5px"> Showing Page {currentPage}
+									of {totalPages} </li>
+							</template>
+							<li class="slds-button-group-item">
+								<lightning-button label="Next" onclick={navigateToNextPage}
+									disabled={isNextDisabled}></lightning-button>
+							</li>
+							<li class="slds-button-group-item">
+								<lightning-button label="Last" onclick={navigateToLastPage}
+									disabled={isLastPage}></lightning-button>
+							</li>
+						</ul>
+					</div>
+				</lightning-layout-item>
+			</lightning-layout> -->
+		</template>
+		<!-- IBM Screen Data Section - End -->
+		<br /><br /><br /><br /><br />
+		<!-- IBM Screen Buttons Section - Start -->
+		 <div class="button-container slds-align_absolute-center">
+			<div class="pagination"> <!-- FY25SR-1374 -->
+				<c-new-rep-pagination page-size={pageSizeFromMetadata} key={pageKey} totalrecords={totalCountForPages} onpagechange={handlePageChange} current-page={currentPage}></c-new-rep-pagination>
+			</div>      <!-- FY25SR-1374 -->
+			<div class="button-group">
+			<lightning-button variant="brand" label="Save to Cart" title="Go To Quote" onclick={handleQuotelineCreation}
+				class="slds-m-left_medium" disabled={disableSaveButton}></lightning-button>
+			<lightning-button variant="brand" label="Cancel" title="Go To Quote" onclick={handleCancel}
+				class="slds-m-left_medium"></lightning-button>
+			<template if:true={isREQuote}>
+				<lightning-button variant="brand" label="Hardware Refresh" title="Go To Refresh" onclick={handleRefresh}
+					class="slds-m-left_medium"></lightning-button>
+			</template>
+			</div>
+		 </div>
+		<br/>
+		<!-- IBM Screen Buttons Section - End -->
+		<!-- IBM Screen Section - End -->
+	</template>
+</template>

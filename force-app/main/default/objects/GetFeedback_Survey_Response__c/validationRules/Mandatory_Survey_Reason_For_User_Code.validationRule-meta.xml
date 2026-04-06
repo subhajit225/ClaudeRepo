@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Mandatory_Survey_Reason_For_User_Code</fullName>
+    <active>true</active>
+    <description>This validation rule works when the user name is Code and the Survey reason field is left empty.</description>
+    <errorConditionFormula>AND(
+    Survey_Owner__r.CommunityNickname = &quot;CodeJunkUser&quot;,
+    ISPICKVAL(Survey_Reason__c, &quot;&quot;)
+)</errorConditionFormula>
+    <errorDisplayField>Survey_Reason__c</errorDisplayField>
+    <errorMessage>This field is mandatory.</errorMessage>
+</ValidationRule>

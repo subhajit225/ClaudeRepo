@@ -1,0 +1,15 @@
+<apex:page standardController="PO_Stage__c" extensions="AcceptPOController" lightningStylesheets="true">
+    <apex:slds rendered="{!$User.UITheme != 'Theme3'}"/> 
+    <apex:form >
+        <apex:pageBlock title="Validations">
+            <apex:pageBlockTable columns="2" value="{!errorMessagesMap}" var="message">
+                <apex:column value="{!message}" headerValue="Validation"></apex:column>
+                <apex:column value="{!errorMessagesMap[message]}" headerValue="Status"></apex:column>
+            </apex:pageBlockTable> 
+            <apex:pageBlockButtons location="{!IF($User.UITheme != 'Theme3', 'bottom', '')}">
+                <apex:commandButton action="{!savePO}" value="Confirm" disabled="{!AND(disableButton,NOT($Setup.ShGl_DisableFunctionalityLogic__c.Override_Manual_PO_Accept_Validations__c))}"/>
+                <apex:commandButton action="{!cancel}" value="Cancel" />
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

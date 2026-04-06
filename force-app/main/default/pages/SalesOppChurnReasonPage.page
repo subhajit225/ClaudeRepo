@@ -1,0 +1,77 @@
+<apex:page controller="SalesOppChurnUtility">
+    <apex:slds />
+    <apex:pageMessages />
+    <div class="slds-scope">
+        <div class="slds-m-around_medium">
+            <div class="slds-m-bottom_medium slds-list_horizontal slds-grid_align-spread">
+                <h2 class="slds-text-heading_medium">{!$Label.ChurnReasonInfo}</h2>
+                <input variant="label-hidden" type="search" placeholder="Type to search..." id="search-input" class="slds-input slds-size_1-of-3" onkeyup="filterTable()" />               
+            </div> 
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered" id="churnReasonTable">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th scope="col">
+                            <span class="slds-resizable__handle slds-resizable__divider"></span>
+                            <div class="slds-th__action" title="Primary Churn">{!$Label.PrimaryChurn}</div>
+                        </th>
+                        <th scope="col">
+                            <span class="slds-resizable__handle slds-resizable__divider"></span>
+                            <div  class="slds-th__action" title="Secondary Churn">{!$Label.SecondaryChurn}</div>
+                        </th>
+                        <th scope="col">
+                            <div  title="Help Text">Help Text</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <apex:repeat value="{!ChurnReasonInfo}" var="mapMatrix">
+                        <tr>
+                            <td data-label="PrimaryInput">
+                                <div class="slds-th__action"  title="{!mapMatrix.PrimaryInput__c}">{!mapMatrix.PrimaryInput__c}</div>
+                            </td>
+                            <td data-label="SecondaryInput">
+                                <div  title="{!mapMatrix.SecondaryInput__c}">{!mapMatrix.SecondaryInput__c}</div>
+                            </td>
+                            <td data-label="OutputMapping">
+                                <div class="slds-cell-wrap" title="{!mapMatrix.OutputMapping__c}">{!mapMatrix.OutputMapping__c}</div>
+                            </td>
+                        </tr>
+                    </apex:repeat>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script>
+    function filterTable() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("search-input");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("churnReasonTable");
+        tr = table.getElementsByTagName("tr");
+        
+        for (i = 0; i < tr.length; i++) {
+            // Skip the header row
+            if (i === 0) continue; 
+            
+            var rowVisible = false;
+            // Loop through all table cells in the current row
+            for (var j = 0; j < tr[i].cells.length; j++) {
+                td = tr[i].cells[j];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        rowVisible = true;
+                        break; // Found a match in this row, no need to check other cells
+                    }
+                }
+            }
+            if (rowVisible) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+    </script>
+</apex:page>

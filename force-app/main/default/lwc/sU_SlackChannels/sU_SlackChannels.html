@@ -1,0 +1,42 @@
+<template>
+    <!-- Share to slack channel button -->
+    <!-- window that displays o click of share to slack button -->
+    <template if:true={showSlackChannels}>
+        <div class="su__scroll-screen" style={scrollChannelsCss}>
+            <div class="slds-grid slds-grid_align-spread slack-block">
+            <!-- back button returns to Top Experts window in Agent Helper component  -->
+                <div class="slds-col ">
+                    <button onclick={showCaseExperts} class="share-slack-button buttonSlack" disabled={noSlackChannelsExist}>Back</button>
+                <!-- <lightning-button-icon icon-name="utility:back" variant="base" onclick={showCaseExperts} alternative-text="Settings" -->
+                        <!-- title="Settings" class="slack-buttons">Back</lightning-button-icon> -->
+                </div>
+                <!-- Button that commits to slack channel  -->
+                <div class="slds-col expert-filter-section su__text-right">
+                    <!-- <lightning-button type="button" variant="brand" name="shareSlack" onclick={shareToSlack}
+                    label="Share on Slack">
+                    </lightning-button> -->
+                    <button onclick={shareToSlack} class="share-slack-button buttonSlack" disabled={noSlackChannelsExist}>
+                        Share
+                    </button>
+                </div>
+            </div>
+            <!-- List of Slack Channels -->
+            <!-- <div class="slack_channel_heading">Slack channels</div> -->
+            <div class="slackChannels radioButtons share-slack-button">
+            
+                <lightning-checkbox-group name="radio" 
+                            options={slackOptions}
+                            value={selectedChannelValue}
+                            onchange={updateChannelValue}>
+                </lightning-checkbox-group>
+                             
+                <template if:true={noSlackChannelsExist}>
+                    <div class="noChannelMessage">
+                        <span>'No Slack channel found! Please create a new one on Slack'</span>
+                    </div>
+                </template>
+                            
+            </div>
+        </div>
+    </template>
+</template>

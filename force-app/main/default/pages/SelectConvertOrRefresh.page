@@ -1,0 +1,86 @@
+<apex:page controller="SelectRefreshAndConvert" lightningStylesheets="true">
+
+    <style> 
+        .customMessage * {
+            color: #fff!important font-size: medium;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .errorSpan {
+            font-size: medium;
+            font-weight: bold;
+            color: red;
+        }
+    </style>
+
+    <script>
+        function navigateToQle() {
+            event.preventDefault();
+            event.stopPropagation();
+            window.top.location.href = '{!$Page.SBQQ__sb}?newid={!quoteId}';
+        }
+    </script>
+
+    <apex:form id="theForm">
+        <apex:pageBlock title="Process Selection" id="out">
+            <apex:pageBlockSection title="Select Convert OR Refresh OR Replace" collapsible="false" columns="3"><!--ARY-1079-->
+
+                <apex:pageblockSectionItem ></apex:pageblockSectionItem>
+
+                <apex:pageBlockSectionItem >
+                    <apex:selectList value="{!selectedRT}" multiselect="false" size="1" style="left:0px;position:relative;" rendered="{!NOT(showAmendValidation)}">
+                        <apex:selectOption itemValue="None" itemLabel="None" />
+                        <apex:selectOption itemValue="Convert" />
+                        <apex:selectOption itemValue="Refresh" />
+                        <apex:selectOption rendered="{!smsUIDisabled}" itemValue="Replace" /> <!--ARY-1079-->
+                        <apex:actionSupport event="onchange" action="{!onChangeFnCall}" reRender="theForm" />
+                    </apex:selectList>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem >
+                    <apex:commandButton onclick="navigateToQle();" value="Cancel" style="float:right;" />
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            
+             <apex:outputPanel rendered="{!showAmendValidation}">
+                <div class="slds-m-vertical_small customMessage">
+                    <p class="errorSpan">
+                        Conversion and refresh programs are not available via amendment. Please follow the expansion process to quote these programs.
+                    </p>
+                </div>
+            </apex:outputPanel>
+        </apex:pageBlock>
+
+        <apex:pageBlock rendered="{!page1Rendered}">
+            <iframe src="{!$Page.ConvertAssetPage}?newid={!quoteId}" height="600px" width="100%" style="border: none"></iframe>
+        </apex:pageBlock>
+
+        <apex:pageBlock rendered="{!page2Rendered}">
+            <iframe src="{!$Page.DisplayAllAssetsClone2_v4}?newid={!quoteId}" height="600px" width="100%" style="border: none"></iframe>
+        </apex:pageBlock>
+
+        <!--ARY-1079 Starts-->        
+        <apex:pageBlock rendered="{!page3Rendered}"> 
+                <apex:includeLightning /> 
+                <div id="lightning" />
+                <script type="text/javascript">
+                var recordId= "{!$CurrentPage.parameters.qid}";
+                var recId = "{!quoteId}";
+                console.log('recordId-',recId);
+                $Lightning.use("c:ReplaceSKUApp", function() {
+                    console.log('called-->');
+                    $Lightning.createComponent("c:ReplaceSKUComponent", {
+                        "recordId" :"{!quoteId}"
+                    }, "lightning",
+                    function(cmp) {
+                        console.log('Component Loaded');
+                });
+            });
+              
+          </script>
+        </apex:pageBlock>
+        <!--ARY-1079 Ends-->
+
+    </apex:form>
+</apex:page>

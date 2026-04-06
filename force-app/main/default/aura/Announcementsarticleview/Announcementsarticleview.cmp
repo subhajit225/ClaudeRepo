@@ -1,0 +1,66 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes"  controller="ControllerCommunityHome" access="global">
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <aura:attribute name="newsList" type="Object"/>
+    <aura:attribute name="portId" type="id"/>
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+    <aura:attribute name="isForums" type="boolean" default="false"/>
+    
+    <div class="slds-grid ">
+        <div class="slds-size--1-of-1 ">
+            <div class="slds-grid  ">
+                <div class=" slds-col slds-large-size_1-of-12  "></div>
+                <div class=" slds-col slds-large-size_10-of-12 slds-size--12-of-12 marginboth">
+                    <div class="slds-grid slds-wrap paddingtopbottom">
+                        <div class="slds-col articlecls  slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12">
+                            <p class="paracls">
+                                <span class="titlesize"> 
+                                    {!v.newsList.Name}
+                                </span>
+                            </p>
+                            <p>
+                                
+                            </p>
+                        </div>
+                        <div class="slds-grid contentparasize">
+                            <div class="slds-col slds-large-size_1-of-12"></div>
+                            <div class="slds-col announcls  slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_10-of-12">
+                                <span class="datepadding"> 
+                                    <p>
+                                        <!--<ui:outputDate value="{!v.newsList.Publish_Date__c}"/>-->
+                                        <p class="parafontsize">Created:
+                                            <lightning:formattedDateTime value="{!v.newsList.Created__c}" year="numeric"
+                                                day="2-digit" month="short" timeZone="UTC" />
+                                            <span class="">
+                                                &bull; Last Modified:
+                                                <lightning:formattedDateTime value="{!v.newsList.Last_Modified__c}"
+                                                    year="numeric" day="2-digit" month="short" timeZone="UTC" />
+                                            </span>
+                                        </p>
+                                    </p>
+                                </span>
+                                <br/>
+                                <span class="contentsize">
+                                    <p class="contentparasize">  <lightning:formattedRichText value="{!v.newsList.Content__c}" /></p>
+                                </span>
+                            </div>
+                            <div class="slds-col slds-large-size_1-of-12"></div>
+                        </div>
+                        <div>
+                            <lightning:button label="Return to Home" class="redirectcls" onclick="{!c.redirect}"/>
+                            |
+                            <aura:if isTrue="{!v.isForums}">
+                                <a href="../s/forum-guidelines?type=All" class="redirectcls">View All Forum Guidelines</a>
+                                <aura:set attribute="else">
+                                    <a href="../s/announcements?type=All" class="redirectcls">View All Announcements</a>
+                                </aura:set>
+                            </aura:if>
+                            
+                        </div>
+                    </div>
+                    
+                </div>  
+                <div class=" slds-col slds-large-size_1-of-12  "></div>
+            </div>
+        </div>
+    </div>
+</aura:component>

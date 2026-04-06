@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Can_not_Close_directly</fullName>
+    <active>false</active>
+    <errorConditionFormula>ISPICKVAL(Status__c ,&apos;Owner Requested Close&apos;) &amp;&amp;  $User.Id !=  Case__r.OwnerId</errorConditionFormula>
+    <errorMessage>You are not owner of the case so you can &quot;request close&quot;. Either select Close or resolve status</errorMessage>
+</ValidationRule>

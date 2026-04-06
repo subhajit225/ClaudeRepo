@@ -1,0 +1,64 @@
+:host {
+    --sds-c-checkbox-toggle-color-background-checked: #009dac;
+    --sds-c-checkbox-toggle-color-background-checked-focus: #009dac;
+    --sds-c-checkbox-toggle-color-background-hover: #009dac;
+    --sds-c-checkbox-toggle-color-border: #009dac;
+    --sds-c-checkbox-toggle-color-border-hover: #009dac;
+}
+.fieldname{
+    font-size:16px;
+    color:#666;
+    font-family:"Gotham-light";
+    margin:0px !important;
+}
+.help {
+    padding-bottom:3px;
+}
+
+.message {
+    font-size:14px;
+    color:#666;
+    font-family: "Gotham-light";
+}
+
+.spin {
+    margin-top: -5px;
+}
+
+svg {
+    width: 100px;
+    max-width: 100%;
+  }
+  
+  svg circle {
+    transform-origin: center;
+    fill: #009dac;
+    transition: ease;
+    animation-timing-function: ease-in-out !important;
+  }
+  
+  
+  /* fade out */
+  
+  svg.fade-out circle:nth-child(1) {
+    animation: fadeIn 0.9s -2.3s infinite reverse;
+  }
+  
+  svg.fade-out circle:nth-child(2) {
+    animation: fadeIn 0.9s -1.3s infinite reverse;
+  }
+  
+  svg.fade-out circle:nth-child(3) {
+    animation: fadeIn 0.9s -0.3s infinite reverse;
+  }
+  
+  
+  /* keyframes */
+  @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }

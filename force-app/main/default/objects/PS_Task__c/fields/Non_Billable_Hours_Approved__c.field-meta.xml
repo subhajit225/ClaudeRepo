@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Non_Billable_Hours_Approved__c</fullName>
+    <label>Non Billable Hours Approved</label>
+    <summarizedField>PS_Time_Entry__c.Hours_Spent__c</summarizedField>
+    <summaryFilterItems>
+        <field>PS_Time_Entry__c.Billable__c</field>
+        <operation>equals</operation>
+        <value>False</value>
+    </summaryFilterItems>
+    <summaryFilterItems>
+        <field>PS_Time_Entry__c.Status__c</field>
+        <operation>equals</operation>
+        <value>Approved</value>
+    </summaryFilterItems>
+    <summaryForeignKey>PS_Time_Entry__c.PS_Task__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

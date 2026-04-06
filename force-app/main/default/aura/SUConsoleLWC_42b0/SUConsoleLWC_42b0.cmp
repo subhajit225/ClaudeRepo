@@ -1,0 +1,17 @@
+<aura:component controller="su_vf_console.SUVFConsoleController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+	<aura:attribute name="record" type="Case"/>
+    <aura:attribute name="caseSub" type="String"/>
+    <aura:attribute name="caseId" type="String"/>
+    <aura:attribute name="isCaseInBg_AH" type="Boolean"/>
+    <aura:attribute name="isUtility_AH" type="Boolean" />
+    <aura:attribute name="failText" type="String" default="Unable to generate"/>
+    <aura:attribute name="emptySearchString" type="String" default="Run a query to generate a response"/>
+	<aura:attribute name="preSelectedValues" type="Object"/>
+    <aura:attribute name="utilityBarWidth" type="String" default="490"/>
+    <aura:attribute name="utilityBarTop" type="String" default="149"/>
+    <aura:handler name="change" value="{!v.recordId}" action="{!c.doInit}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="change" value="{!v.record.Subject}" action="{!c.handleClick}"/>
+    
+    <c:sU_SearchClientLWCContainer_42b0   aura:id="su__utilityBarId"  class="su__utilityBar" recordIddFromUtility="{!v.recordId}" caseSubjectInUtilityBar="{!v.caseSub}" casePreSelectedValues="{!v.preSelectedValues}" utilityWidth="{!v.utilityBarWidth}" utilityTop="{!v.utilityBarTop}" isCaseInBgFromUtilityForAh="{!v.isCaseInBg_AH}" isUtilityAH="{!v.isUtility_AH}" failText="{!v.failText}" emptySearchString="{!v.emptySearchString}"></c:sU_SearchClientLWCContainer_42b0 >
+</aura:component>

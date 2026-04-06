@@ -1,0 +1,80 @@
+<template>
+     <div class={flexipageregionwidth}>
+          <div class="header-top slds-grid slds-grid_align-spread custom-header su_loading_dark">
+               <div class="kcs-text slds-col kcs__top__text">
+                    <div class="knowbler_logo">
+                         <template if:true={knowbler_logo}>
+                              <img src={knowbler_logo} alt="Knowbler Logo" />
+                         </template>
+                    </div>
+               </div>
+               <div class="knowbler__wrapperSwitchAndViewButton">
+                    <template if:true={isContentHealthActive}>
+                         <div class="knowbler__modeSwitchButton knowbler__switch-tooltip">
+                              <template if:false={showContentHealth}>
+                                   <div class="slds-popover slds-popover_tooltip slds-nubbin_top-right" role="tooltip">
+                                        <div class="article_tooltip">Switch to reviewer mode</div>
+                                   </div>
+                                   <div class="knowbler__switch-mode-btn" onclick={checkArticleCreationFormIsOpen}>
+                                        <svg viewBox="0 0 20 22">
+                                             <g id="Group_14516" data-name="Group 14516" transform="translate(-2 -3)">
+                                                  <g id="Group_14515" data-name="Group 14515">
+                                                       <path id="Path_13811" data-name="Path 13811"
+                                                            d="M20,3H4A2.006,2.006,0,0,0,2,5V19a2.006,2.006,0,0,0,2,2H20a2.006,2.006,0,0,0,2-2V5A2.006,2.006,0,0,0,20,3ZM9,17H6a1,1,0,0,1,0-2H9a1,1,0,0,1,0,2Zm0-4H6a1,1,0,0,1,0-2H9a1,1,0,0,1,0,2ZM9,9H6A1,1,0,0,1,6,7H9A1,1,0,0,1,9,9Zm9.7,2.12-3.17,3.17a1.008,1.008,0,0,1-1.42,0L12.7,12.87a1,1,0,1,1,1.41-1.41l.71.71L17.29,9.7a1,1,0,0,1,1.41,0l.01.01A1,1,0,0,1,18.7,11.12Z"
+                                                            fill="#fff" fill-rule="evenodd" />
+                                                  </g>
+                                             </g>
+                                        </svg>
+                                   </div>
+                              </template>
+                              <template if:true={showContentHealth}>
+                                   <div class="slds-popover slds-popover_tooltip slds-nubbin_top-right" role="tooltip">
+                                        <div class="article_tooltip">Switch to creator mode</div>
+                                   </div>
+                                   <div class="knowbler__switch-mode-btn" onclick={switchKnowblerMode}>
+                                        <svg viewBox="-0.5 0 19 22">
+                                             <path id="text-box-edit"
+                                                  d="M10.053,19.11,12.179,17H7.03V15h7.053v.12L16.219,13H7.03V11H17.106v1.12l1.249-1.23a2.546,2.546,0,0,1,1.814-.75,2.644,2.644,0,0,1,.967.19V5a2.007,2.007,0,0,0-2.015-2H5.015A2,2,0,0,0,3,5V19a2.007,2.007,0,0,0,2.015,2h5.038V19.11M7.03,7H17.106V9H7.03V7m14.811,7.35-1.008,1L18.768,13.3l1.008-1a.556.556,0,0,1,.776,0l1.29,1.28a.546.546,0,0,1,0,.77m-9.773,5.59,6.106-6.06,2.065,2.05L14.144,22H12.068Z"
+                                                  transform="translate(-3 -3)" fill="#fff" />
+                                        </svg>
+                                   </div>
+                              </template>
+                              <template if:true={showSwitchInstructionTooltip}>
+                                   <div class="instruction-tooltip slds-popover slds-popover_tooltip slds-nubbin_top-right"
+                                        style="display: block;">
+                                        <div class="tooltip_text">Switch between <br> creator and reviewer <br> mode.
+                                        </div>
+                                        <div class="tooltip_button" onclick={hideSwitchModeInstructionPopup}>OK</div>
+                                   </div>
+                                   <div class="instruction-tooltip_background"></div>
+                              </template>
+                         </div>
+                    </template>
+                    <template if:false={maxview}>
+                         <div class="slds-col" onclick={openModal}>
+                              <div class="tooltip slds-col">
+                                   <div class="slds-popover slds-popover_tooltip slds-nubbin_right" role="tooltip">
+                                        <div class="slds-popover__body">Maximize</div>
+                                   </div>
+                                   <template if:true={maxScreen}>
+                                        <img class="min_icon" src={maxScreen} alt="maximize icon" />
+                                   </template>
+                              </div>
+                         </div>
+                    </template>
+                    <template if:true={maxview}>
+                         <div class="slds-col" onclick={openModal}>
+                              <div class="tooltip slds-col">
+                                   <div class="slds-popover slds-popover_tooltip slds-nubbin_right" role="tooltip">
+                                        <div class="slds-popover__body">Minimize</div>
+                                   </div>
+                                   <template if:true={minScreen}>
+                                        <img class="max_icon" src={minScreen} alt="minimize icon" />
+                                   </template>
+                              </div>
+                         </div>
+                    </template>
+               </div>
+          </div>
+     </div>
+</template>

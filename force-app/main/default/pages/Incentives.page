@@ -1,0 +1,97 @@
+<apex:page standardStylesheets="false" standardController="Incentives__c" sidebar="false" showheader="false"  title="Incentives - Rubrik Partner Community" applyBodyTag="false"  
+                            recordSetvar="inc"
+                            action="{!case($User.UserType,
+                        "Standard",urlFor($Action.Incentives__c.Tab, $ObjectType.Incentives__c, null, true),
+                        "PowerPartner",null,
+                        "CSPLitePortal",null,
+                        "CustomerSuccess",null,
+                        "PowerCustomerSuccess",null,
+                        "CsnOnly",null,
+                        null)}"
+                            >
+ <c:visualstrapblock >
+    
+    
+    <!--hide the action column from Community users-->
+    <style>
+    .actionColumn{
+    display:none;
+    }
+    
+    .table > tbody > tr:first-child > td {
+    border: none;
+    }
+    
+    .pbBody{
+    padding: 5px;
+    }
+    
+    .visualstrap td, th {
+    padding: 5px !important;
+    }
+    
+    .rolodex {
+      padding: 4px !important;  
+   }
+   
+   .btnpad{
+    padding: 15px;
+    }
+    
+    
+    </style>
+    
+        <!--start header-->
+        <c:siteheader ></c:siteheader>
+        <!--end Header-->
+
+
+      <!--start the Container-->
+        <div class="container">
+        <!--action status overlay-->
+        <c:processing />
+            <div class="row rowcontainer" >
+                <div class="col-md-12">
+                  <c:pageTitle name="Incentives"></c:pageTitle> 
+              <div class="row" >
+              <div class="col-md-12">
+                       
+                     <!--start-->
+                 <apex:form id="theForm">
+                      <div class="row" >
+                      <div class="col-md-12">
+                        <!--  <apex:outputLabel value="View:"/>&nbsp;&nbsp;
+                          <apex:selectList value="{!filterId}" size="1" >
+                            <apex:actionSupport event="onchange" rerender="caselist, list" status="busyStatus"/>
+                            <apex:selectOptions value="{!listviewoptions}"/>
+                          </apex:selectList>-->
+                          </div>
+                        </div>
+                        <br/>
+
+                     <apex:datatable var="c" value="{!inc}" id="incentlist" styleClass="table" >
+                    <apex:column rendered="{!c.Active__c}">
+                      <h3 class="announcementTitle">{!c.Name}</h3>
+                      {!c.Details__c}
+                     <br/><br/>
+                     <a href="{!URLFOR($Action.Incentives__c.View, c.Id)}" class="speciallinks">Claim your Brik Dollars</a>
+                    </apex:column>
+                                     
+                    </apex:datatable>
+                      </apex:form>                     
+                     <!--end-->
+                       
+                                        
+                </div>
+                                  
+                </div>
+                </div>
+            </div>
+            </div>
+        <!--End the Container-->
+
+       <!--start the footer-->
+        <c:psitefooter ></c:psitefooter>
+        
+    </c:visualstrapblock>
+</apex:page>

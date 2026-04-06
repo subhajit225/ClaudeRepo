@@ -1,0 +1,33 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" controller="RubrikLeaderBoardController"
+    access="global">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="leaders" type="Map" />
+    <aura:attribute name="columns" type="integer" default="1" />
+    <aura:attribute name="hideBorder" type="boolean" default="false" />
+    <aura:attribute name="showHeading" type="boolean" default="true" />
+
+
+    <div>
+        <table class="table">
+            <aura:if isTrue="{!v.showHeading}">
+                <div class="heading slds-m-around_x-small">
+                    LEADERBOARD
+                </div>
+            </aura:if>
+            <div class="slds-grid slds-wrap slds-grid_align-center">
+                <aura:iteration items="{!v.leaders}" var="eachLeader" indexVar="rank">
+                    <div
+                        class="{!if(v.columns == 2, 'slds-box slds-box_x-small slds-size_5-of-12 slds-m-around_small','slds-size_12-of-12')}">
+                        <div class="slds-m-around_x-small pointer" onclick="{!c.navigateToUserProfile}"
+                            data-id="{!eachLeader.UserId}">
+                            <c:RubrikQuestionContributorsItem contributor="{!eachLeader}" showRank="true"
+                                rank="{!rank + 1}" hideBorder="{!v.hideBorder}">
+                            </c:RubrikQuestionContributorsItem>
+                        </div>
+                    </div>
+                </aura:iteration>
+            </div>
+        </table>
+    </div>
+
+</aura:component>

@@ -1,0 +1,50 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" controller="SU_Ltng.SULtngController">
+  <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+  <!-- Client Driven Input Variable -->
+  <aura:attribute name="recommendedHeading" type="String" default="Recommended Results" access="global"/>
+  <aura:attribute name="pagesize" type="String" default="10" access="global"/>
+  <!-- Client Driven Input Variable ends here-->
+  <aura:attribute name="recommendedList" type="List" default=""/>
+  <aura:attribute name="endPoint" type="String"/>
+  <aura:attribute name="uid" type="String"/>
+  <aura:attribute name="customSettingErrorMessage" type="String"/>
+  <c:SUSearchUnifyHeaderDynamic aura:id="SuAnalytics" />
+  <aura:if isTrue="{!if(v.customSettingErrorMessage == '',true,false)}">
+  	<aura:if isTrue="{!if(v.recommendedList.length > 0, true,false)}"> 
+			<div class="slds-grid slds-wrap">
+				<div id="su_recommendBox" class="su__col-lg-12 su__col-md-12 su__col-xs-12">
+						<div class="su_recommendContainer">
+							<div class=" su-recommendBoxDiv su__position-relative su__mt-4 su__p-3 su__sm-shadow su__bg-white su-nopad">
+								<div class="su__ribbon-row-block su__w-auto su__clearfix su__loading-view">
+									<div class="su__ribbon-text font-12 su__float-left su__text-center su__text-black su__font-bold su__mb-2 su__radius-3 ng-binding">{!v.recommendedHeading}</div>
+								</div>   
+								<div class=" su-recommendDiv su__p-0 su__mb-3 su__mt-2 su-nopad" id="suRecommendElement">
+									<aura:iteration items="{!v.recommendedList}" var="suRecommendItem" indexVar="indexVar">
+										<aura:if isTrue="{!if(suRecommendItem.highlight.TitleToDisplay,true,false)}">
+											<div class="su-recommend-element su__mb-2 su__px-3 su__py-2 su__d-flex su__listing-border su__align-items-start">
+												<aura:if isTrue="{!if(suRecommendItem.icon, true,false)}">
+													<div class="su_RecommendResult_icon">
+														<img class="su_RecommendResultImage" src="{!suRecommendItem.icon}"/>
+													</div>
+												</aura:if>
+												<div class="su-recommend-title">
+													<h5>
+														<a href="{!suRecommendItem.href}" target="_blank" data-Id="{!suRecommendItem._id}" data-Rank="{!indexVar}" data-Sub="{!suRecommendItem.highlight.TitleToDisplayString[0]}" data-url="{!suRecommendItem.href}" data-Type="{!suRecommendItem.objName}" data-Index="{!suRecommendItem.sourceName}" onclick="{!c.runScriptMethod}">
+															<aura:unescapedHtml value="{!suRecommendItem.highlight.TitleToDisplay[0]}"></aura:unescapedHtml>
+														</a>
+													</h5>
+												</div>
+											</div>
+										</aura:if>
+									</aura:iteration>
+								</div>
+							</div>
+						</div>
+				</div>
+			</div>
+	  </aura:if>
+	  <aura:set attribute="else">
+	    <span class="su-customSettingErrMsg">{!v.customSettingErrorMessage}</span>
+	  </aura:set>
+  </aura:if>
+</aura:component>

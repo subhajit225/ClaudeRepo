@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>License_Type__c</fullName>
+    <description>SAL26-1450 - Specifies the commercial licensing model selected for the deal. Used for billing alignment and downstream integrations.</description>
+    <label>License Type</label>
+    <required>true</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>PayGo - Commit</fullName>
+                <default>false</default>
+                <label>PayGo - Commit</label>
+            </value>
+            <value>
+                <fullName>PayGo - No Commit</fullName>
+                <default>false</default>
+                <label>PayGo - No Commit</label>
+            </value>
+            <value>
+                <fullName>Subscription</fullName>
+                <default>false</default>
+                <label>Subscription</label>
+            </value>
+            <value>
+                <fullName>Utility</fullName>
+                <default>false</default>
+                <label>Utility</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,20 @@
+<apex:page standardController="PS_Task__c" extensions="PSTAskInfoController" showHeader="false" sidebar="false" lightningStylesheets="true">
+    <apex:slds rendered="{!$User.UITheme != 'Theme3'}"/>
+    <apex:form >
+        <script>        
+        function func(){  
+            window.close();
+        }        
+        </script>
+         <apex:pageMessages id="showmsg"></apex:pageMessages>
+        <apex:outputText value="{!callfunc}" escape="false"></apex:outputText>
+    	<apex:pageBlock >
+            <apex:pageBlockSection columns="1">
+                <apex:inputField value="{!psTask.Special_Handling_Instructions__c}" />
+            </apex:pageBlockSection>
+            <apex:pageBlockButtons >
+                <apex:commandButton action="{!saveandClose}"  value="Update" /> 
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

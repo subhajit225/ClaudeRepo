@@ -1,0 +1,96 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,lightning:isUrlAddressable" 
+                access="global" 
+                controller="PSProjectOrderAssignmentController">
+    
+    <aura:attribute name="data" type="Object"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="recordId" type="String"/>
+    
+    <aura:attribute name="pageNumber" type="Integer" default="1"/>
+    <aura:attribute name="pageSize" type="Integer" default="10"/>
+    <aura:attribute name="isLastPage" type="Boolean" default="false"/>
+    <aura:attribute name="dataSize" type="Integer" default="0"/> 
+    <aura:attribute name="resultSize" type="Integer" default="0"/> 
+    <aura:attribute name="projectId" type="String" />
+    <!-- attribute to hold selected all rows -->
+    <aura:attribute name="selection" type="List" />
+    <aura:attribute name="selectMap" type="Map" />
+    <!-- attribute to check if the page has changed or not -->
+    <aura:attribute name="hasPageChanged" type="Boolean" />
+    <!-- attribute to check if it is initialLoad -->
+    <aura:attribute name="initialLoad" type="Boolean" default="true"/>
+    <aura:attribute name="Message" type="Boolean" default="false"/>
+    <aura:attribute name="messageString" type="String"/>
+    <aura:attribute name="sortedBy" type="String" default="Name"/>
+    <aura:attribute name="sortedDirection" type="String" default="asc"/>
+    
+    <!-- This attribute will hold the update records from data table-->
+    <aura:attribute name="updatedRecord" type="Object[]" />
+    
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+    
+    
+    <!-- You must define keyField as 'Id' to save the record back in Salesforce
+ 'onsave' attribute will executed when user clicks on save button -->
+    <div class="slds">
+  
+        <div style="height:100%">
+            
+            <lightning:spinner variant="brand" size="large" aura:id="Id_spinner" class="slds-hide" />
+        <div class="slds-trial-header">
+            <div class="slds-grid">
+                
+                <h1 id="header43" class="slds-m-center_small slds-align--absolute-center slds-m-vertical--medium">PS Project Wizard</h1>
+            </div>
+        </div>
+        <div id="main-section" class="slds-p-around_medium">
+                <div class="slds-m-around_medium">
+                     
+                    <!-- ERROR MESSAGE IF NOT RECORDS FOUND--> 
+                    <aura:if isTrue="{!v.Message}">
+                        <c:showPageMessages messageString="{!v.messageString}"/>
+                    </aura:if>
+                    
+                    <!-- BADGE TABLE CONTENT-->
+                    <div class="container">
+                        <div class="slds-text-heading_large">Orders</div>
+    <lightning:card title="">
+        <lightning:layout multipleRows="true" horizontalAlign="center">
+            <lightning:layoutItem padding="around-small" size="12">
+                <lightning:button label="Add order(s) to Project" class="slds-m-center_small slds-align--absolute-center"  onclick="{!c.makeSelection}"/>
+            </lightning:layoutItem>
+            <lightning:layoutItem padding="around-small" size="12">
+                <!-- onrowselection fires when a new is selected or unselected, or page has changed with new rows in it -->
+                <lightning:datatable Id="tableId"
+                                     aura:id = "accDT"
+                                     columns="{! v.columns }"
+                                     data="{! v.data }"
+                                     keyField="Id"
+                                     hideCheckboxColumn="false"
+                                     selectedRows = "{!v.selection}"
+                                     onrowaction="{! c.handleRowAction }"
+                                     onrowselection ="{!c.onRowSelection}"
+                                     onsort="{!c.updateColumnSorting}"
+                                     sortedBy="{!v.sortedBy}"  
+                                     sortedDirection="{!v.sortedDirection}"/>
+            </lightning:layoutItem>
+            <lightning:layoutItem padding="around-small" flexibility="auto">
+                <lightning:button label="Prev" iconName="utility:chevronleft" iconPosition="left"
+                                  onclick="{!c.onPrev}" disabled="{! v.pageNumber == 1}"/>
+                <span class="slds-p-horizontal_small">
+                    Page {!v.pageNumber} | Showing records from {! ((v.pageNumber-1)*v.pageSize)+' to '+((v.pageNumber-1)*v.pageSize+v.resultSize)}
+                </span>
+                <lightning:button label="Next" iconName="utility:chevronright" iconPosition="right" 
+                                  disabled="{! v.isLastPage}" onclick="{!c.onNext}"/>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </lightning:card>
+    </div>
+                    </div>
+                    
+                </div>
+                
+            </div>
+    </div>
+                   
+</aura:component>

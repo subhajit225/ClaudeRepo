@@ -1,0 +1,20 @@
+<template>
+    <div class="slds-card">
+        <div class="heading-36 slds-text-align_center slds-m-top_medium">
+            <b><p>Managed Service Engagement Request</p> <p>Terms and Conditions</p></b>
+        </div>
+        <br/>
+        <div class="slds-m-top_large">
+            <p class="terms-body-text">The Managed Services Engagement Registration form will allow for AE 
+                awareness of any Managed Service opportunity for accounts on the Managed Services named list;
+                require AE and MSP collaboration on the opportunity; and approval by Rubrik to move forward with the MSP
+                sales process on the requested account.
+                If this form is not actioned within 20 days you will be required to resubmit the request.</p>
+        </div>
+        <br/>
+        <div class="slds-text-align_center deal-action-buttons">
+            <lightning-button label="I ACCEPT THE TERMS AND CONDITIONS" variant="brand" value="Managed_Service_New__c" onclick={handleClick}></lightning-button>
+            <lightning-button label="I DO NOT ACCEPT THE ABOVE TERMS AND CONDITIONS" variant="brand" value="Deal_Reg_List__c" onclick={handleClick} class="slds-p-left_x-small"></lightning-button>
+        </div>
+    </div>
+</template>

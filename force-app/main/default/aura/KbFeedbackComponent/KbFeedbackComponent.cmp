@@ -1,0 +1,106 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,force:hasRecordId" controller="KnowledgeFeedbackController" access="global" >
+    <aura:attribute name="isRequired" type="Boolean" default="false" />
+    <aura:attribute name="maxLength" type="Boolean" default="false" />
+    <aura:attribute name="activeSections" type="List" default="['A','B']" />
+    <aura:attribute name="AttachedContentDocuments" type="List"/>
+    <aura:attribute name="recordId" type="String" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <aura:attribute name="options" type="List" default="[
+                                                        {'label': 'This article resolved my issue.', 'value': 'This article resolved my issue.'},
+                                                        {'label': 'This article did not resolve my issue.', 'value': 'This article did not resolve my issue.'},
+                                                        {'label': 'This article helped but additional information was required to resolve my issue.', 'value': 'This article helped but additional information was required to resolve my issue.'}
+                                                        ]"/>
+    <aura:attribute name="title" type="String"/>
+    <aura:attribute name="body" type="String"/>
+    <div class="containerBlock">
+        <br/>
+        <lightning:accordion aura:id="accordion" class="" activeSectionName="{! v.activeSections }" allowMultipleSectionsOpen="true">
+            <lightning:accordionSection name="B" label="Files" >
+                <fieldset class="slds-form-element slds-form-element_stacked">
+                    <div class="slds-form-element__control paddedInner">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_12-of-12 ">
+                                <div class="slds-p-vertical_medium "> 
+                                    <table class="slds-table" aria-label="Example default base table of Opportunities">
+                                        <thead>
+                                            <tr class="slds-line-height_reset fontfamilymedium">
+                                                <th class="" scope="col">
+                                                    <div class="slds-truncate" title="Name">Name</div>
+                                                </th>
+                                                <th class="" scope="col">
+                                                    <div class="slds-truncate" title="Description">Description</div>
+                                                </th>
+                                                <th class="" scope="col">
+                                                    <div class="slds-truncate" title="Size">Size</div>
+                                                </th>
+                                                <th class="" scope="col">
+                                                    <div class="slds-truncate" title="Uploaded Date">Uploaded Date</div>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <aura:iteration items="{!v.AttachedContentDocuments}" var="eachAttach" indexVar="index"> 
+                                                <tr class="slds-hint-parent blockPad">
+                                                    <th data-label="Name" scope="row">
+                                                        <div class="slds-truncate" title="{!eachAttach.ContentDocument.Title }">
+                                                            <a href="javascript:void(0)" id="{!eachAttach.ContentDocumentId}" class="attachmntcolor" onclick="{!c.openFiles}"> {!eachAttach.ContentDocument.Title }.{!eachAttach.ContentDocument.FileExtension }</a>
+                                                        </div>
+                                                    </th>
+                                                    <td data-label="Description">
+                                                        <div class="slds-truncate" title="{!eachAttach.ContentDocument.Description}">{!eachAttach.ContentDocument.Description}</div>
+                                                    </td>
+                                                    <td data-label="Size">
+                                                        <div class="slds-truncate" title="{!eachAttach.ContentDocument.ContentSize}">
+                                                            <c:FileSizeDisplay fileSizeBytes="{!eachAttach.ContentDocument.ContentSize}"/>
+                                                        </div>
+                                                    </td>
+                                                    <td data-label="Date">
+                                                        <div class="slds-truncate" title="{!eachAttach.ContentDocument.ContentModifiedDate}">           
+                                                            <lightning:formattedDateTime value="{!eachAttach.ContentDocument.ContentModifiedDate}" />
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </aura:iteration>
+                                        </tbody>
+                                    </table>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </lightning:accordionSection>
+            <lightning:accordionSection name="A" label="Feedback" >
+                <fieldset class="slds-form-element slds-form-element_stacked">
+                    <div class="slds-form-element__control paddedInner">
+                        <label class="lblText">Did this article help you? <abbr class="slds-required" title="required">* </abbr></label>
+                        <lightning:radioGroup name="radioGroup"
+                                              options="{! v.options }"
+                                              value="{! v.title }"
+                                              type="radio"/>
+                        <br/>
+                        <label class="lblText">What can we do to improve this information?<abbr class="slds-required" title="required">* </abbr><br/>(4000 or fewer characters)</label>
+                        <lightning:inputRichText aura:id="editor" placeholder="Provide your comments here" value="{!v.body}"/>
+                        <br/>
+                        <div  class="submitClass">
+                            <aura:if isTrue="{!v.isRequired}">
+                                <lightning:icon iconName="utility:warning" alternativeText="Warning!" variant="warning" size="small"/>
+                                Please fill all the required fields&nbsp;&nbsp;
+                            </aura:if>
+                            <aura:if isTrue="{!v.maxLength}">
+                                <lightning:icon iconName="utility:warning" alternativeText="Warning!" variant="warning" size="small"/>
+                                Only 4000 characters allowed&nbsp;&nbsp;
+                            </aura:if>
+                            <lightning:button variant="brand" label="Submit" title="Submit" onclick="{! c.addFeedback }" />
+
+                        </div>
+                       
+                    </div>
+                </fieldset>
+            </lightning:accordionSection>
+        </lightning:accordion>
+    </div><br/>
+    
+    
+</aura:component>

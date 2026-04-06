@@ -1,0 +1,21 @@
+<apex:page standardController="Escalation_Request__c" showHeader="false" sidebar="false">
+    <apex:slds />
+    <apex:includeLightning />
+    <apex:includeScript value="/support/console/42.0/integration.js"/>
+    <div id="lightning" /> 
+    
+    <script type="text/javascript">
+    if(sforce.console.isInConsole()) {
+        
+    }
+    $Lightning.use("c:EscalationApp", function() {
+        $Lightning.createComponent(
+            "c:NewEscalationRequest",
+            {},
+            "lightning",
+            function(cmp) {
+                // do some stuff
+            });
+    });
+    </script>
+</apex:page>

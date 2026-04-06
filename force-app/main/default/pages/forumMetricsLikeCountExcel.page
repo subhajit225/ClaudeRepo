@@ -1,0 +1,44 @@
+<apex:page controller="forumMerticsLikeCountController" standardStylesheets="false" cache="TRUE" readOnly="true" contentType="application/vnd.ms-excel#ForumMetricsLikeCountReport.xls">
+    <table class="myTable" border="1" width="100%">
+        <thead>
+            <tr>
+                <th style="width:100px;">Topic</th>
+                <th style="width:100px;">FeedItem Id</th>
+                <th style="width:100px;">FeedItem Title</th>
+                <th style="width:100px;">Network Scope</th>
+                <th style="width:100px;">Total Likes</th>
+                <th style="width:100px;">FeedLike CreatedBy Id</th>
+                <th style="width:100px;">FeedLike CreatedBy Type</th>
+                <th style="width:100px;">FeedLike CreatedBy Email</th>
+                <th style="width:100px;">FeedLike CreatedDate</th>
+            </tr>
+        </thead>
+        <tbody>
+            <apex:repeat value="{!feedItemLikeWrapList}" var="wrap">
+                <tr>
+                    <td style="text-align:center; width:100px;">{!wrap.TopicName}</td>
+                    <td style="text-align:center; width:100px;">{!wrap.feedItemRecord.Id}</td>
+                    <td style="text-align:center; width:150px;">{!wrap.feedItemRecord.Title}</td>
+                    <td style="text-align:center; width:350px;">{!wrap.NetworkName}</td>
+                    <td style="text-align:center; width:100px;">{!wrap.feedItemRecord.LikeCount}</td>
+                    <td style="text-align:center; width:100px;">
+                        <apex:outputPanel rendered="{!wrap.feedLikeRecord != NULL}">{!wrap.feedLikeRecord.CreatedById}</apex:outputPanel>
+                    </td>
+                    <td style="text-align:center; width:100px;">
+                        <apex:outputPanel rendered="{!wrap.feedLikeRecord != NULL}">{!wrap.feedLikeRecord.CreatedBy.UserType}</apex:outputPanel>
+                    </td>
+                    <td style="text-align:center; width:100px;">
+                        <apex:outputPanel rendered="{!wrap.feedLikeRecord != NULL}">{!wrap.feedLikeRecord.CreatedBy.Email}</apex:outputPanel>
+                    </td>
+                    <td style="text-align:center; width:100px;">
+                        <apex:outputPanel rendered="{!wrap.feedLikeRecord != NULL}">
+                            <apex:outputText rendered="{!wrap.feedLikeRecord != NULL}" value="{0,date,MM/dd/yy}">
+                                <apex:param value="{!wrap.feedLikeRecord.CreatedDate}" />
+                            </apex:outputText>
+                        </apex:outputPanel>
+                    </td>
+                </tr>
+            </apex:repeat>
+        </tbody>
+    </table>
+</apex:page>

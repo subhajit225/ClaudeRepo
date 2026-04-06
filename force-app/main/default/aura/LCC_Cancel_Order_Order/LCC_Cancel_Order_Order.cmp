@@ -1,0 +1,22 @@
+<aura:component  controller="LCC_ButtonsController" implements="force:hasRecordId,force:lightningQuickActionWithoutHeader">
+   <aura:attribute name="recordId" type="Id" />
+	<aura:attribute name="sObjectInfo" type="Object" />
+    <aura:attribute name="simpleRecord" type="Object" access="global"/>
+    <aura:attribute name="recordError" type="String"/>
+    <force:recordData aura:id="recordLoader"
+      recordId="{!v.recordId}"        
+      targetRecord="{!v.simpleRecord}"
+      targetFields="{!v.sObjectInfo}"      
+      targetError="{!v.recordError}"
+      fields = "Id,Status"                          
+      mode="EDIT"
+      recordUpdated="{!c.handleRecordUpdated}"                
+    />
+   <div class="slds-p-top_large slds-align_absolute-center">
+        Do you really want to Cancel this Order?
+    </div>
+    <div class="slds-p-top_large slds-align_absolute-center">
+           <lightning:button variant="brand" label="Ok"  onclick="{! c.handleClick }"/>
+           <lightning:button variant="brand" label="Cancel"  onclick="{! c.handleCancel }"/>
+    </div>
+</aura:component>

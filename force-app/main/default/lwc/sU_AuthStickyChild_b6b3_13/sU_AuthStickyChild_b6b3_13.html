@@ -1,0 +1,50 @@
+<template>
+    <div class="su__sticky-row su__flex-vcenter su__flex-wrap su__align-items-start">
+        <span class="su__sticky__head font-12 su__color-lgray su__font-bold su__mr-2 su__loading-view"
+            data-label={filter.label}>
+            {filter.label}:
+        </span>
+        <template for:each={filter.values} for:item="filterValue" for:index="ind">
+            <span key={filterValue} class="su__flex-vcenter su__radius su__border su__mb-1 su__mr-1 su__sticky su__loading-view">
+                <span
+                    class="su__sticky__filters su__cursor font-12 su__px-1 su__text-black  su__text-nowrap su__loading-view su__close-icon-txt su__text-normal su__flex-vcenter su__position-relative">
+                    <lightning-formatted-rich-text value={filterValue.sticky_name}>
+                    </lightning-formatted-rich-text>
+                </span>
+                <span
+                    class="su__cursor font-10  su__px-1 su__text-black  su__text-nowrap su__loading-view su__close-icon-txt su__text-normal su__flex-vcenter su__position-relative"
+                    data-label={filter.label} data-contentname={filterValue.Contentname} data-type={filter.key}
+                    data-level={filterValue.level} data-immediate-parent={filterValue.immediateParent} data-index={ind}
+                    data-parentindex={index} data-path={filterValue.pathString} onclick={removeStickyFilter}>
+                    X
+                </span>
+            </span>
+        </template>
+        <template if:true={seeMore}>
+            <span class="su__more-icon su__cursor su__loading-view">
+                <svg onclick={seeMoreIconHandler} class="seeMoreIcon" data-val="less" id="round-remove_red_eye-24px"
+                    width="18" height="18" viewBox="0 0 18 18">
+                <path id="Path_1542" data-name="Path 1542" fill="none" d="M0,0H18V18H0Z"></path>
+                <path id="Path_1543" data-name="Path 1543" fill="#919bb0"
+                    d="M9.259,4.5A8.881,8.881,0,0,0,1,10.165a8.853,8.853,0,0,0,16.518,0A8.881,8.881,0,0,0,9.259,4.5Zm0,9.442a3.777,3.777,0,1,1,3.754-3.777A3.767,3.767,0,0,1,9.259,13.942Zm0-6.043a2.266,2.266,0,1,0,2.252,2.266A2.256,2.256,0,0,0,9.259,7.9Z"
+                    transform="translate(-0.259 -1.165)"></path>
+            </svg>
+            <span class="su_see-more su__position-relative su__cursor su__loading-view" data-val="less"
+                data-index={index} onclick={seeMoreHandler}>See More</span>
+            </span>
+        </template>
+        <template if:true={seeLess}>
+            <span class="su__more-icon su__cursor su__loading-view">
+                <svg onclick={seeLessIconHandler} class="seeLessIcon su__more-icon" data-val="more"
+                    id="round-remove_red_eye-23px" width="18" height="18" viewBox="0 0 18 18">
+                    <path data-name="Path 1542" fill="none" d="M0,0H18V18H0Z"></path>
+                    <path data-name="Path 1543" fill="#919bb0"
+                        d="M9.259,4.5A8.881,8.881,0,0,0,1,10.165a8.853,8.853,0,0,0,16.518,0A8.881,8.881,0,0,0,9.259,4.5Zm0,9.442a3.777,3.777,0,1,1,3.754-3.777A3.767,3.767,0,0,1,9.259,13.942Zm0-6.043a2.266,2.266,0,1,0,2.252,2.266A2.256,2.256,0,0,0,9.259,7.9Z"
+                        transform="translate(-0.259 -1.165)"></path>
+                </svg>
+                <span class="su_see-more su__position-relative su__cursor su__loading-view" data-val="more"
+                    data-index={index} onclick={seeMoreHandler}>See Less</span>
+            </span>
+        </template>
+    </div>
+</template>

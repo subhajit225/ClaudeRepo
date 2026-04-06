@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Comment_Required_if_SE_changed_for_NCC</fullName>
+    <active>true</active>
+    <description>CS21-1806
+Comment is required if Support Engineer field is changed for NCC type of Tasks.</description>
+    <errorConditionFormula>ISPICKVAL(Task_Type__c,&apos;NCC Expiry&apos;)  &amp;&amp;  ISCHANGED(Owner_ID__c) &amp;&amp;  PRIORVALUE(Owner_ID__c)!=null &amp;&amp;  ISBLANK(Customer_Comments__c)</errorConditionFormula>
+    <errorDisplayField>Customer_Comments__c</errorDisplayField>
+    <errorMessage>Please specify the reason for changing the Support Engineer in the &quot;Customer Comments&quot; field.</errorMessage>
+</ValidationRule>

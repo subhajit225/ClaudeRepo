@@ -1,0 +1,15 @@
+<apex:page standardController="SBQQ__Quote__c" extensions="GenerateDocumentCustomExt" action="{!init}" showHeader="false" lightningStylesheets="true">
+    <apex:form >
+        <apex:outputPanel id="main">
+            <apex:outputPanel rendered="{!!showError}">
+                Generating Document...
+            </apex:outputPanel>
+            
+            <apex:outputPanel rendered="{!showError}">
+                {!errorMessage}
+            </apex:outputPanel>
+            
+            <apex:actionPoller action="{!checkStatus}" rendered="{!waitPoll}" reRender="main" interval="5" />
+        </apex:outputPanel>
+    </apex:form>
+</apex:page>

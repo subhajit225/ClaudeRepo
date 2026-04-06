@@ -1,0 +1,193 @@
+<template>
+    <lightning-card>
+        <template if:true={toggleSpinner}>
+            <lightning-spinner alternative-text="Loading"></lightning-spinner>
+        </template>
+        <template if:true={isLoaded}>
+            <div class="slds-grid slds-grid_align-end">
+                <div>
+                    <lightning-icon size="x-small" icon-name="action:refresh"
+                                    alternative-text="Refresh" title="Refresh" onclick={handleRefresh}
+                                    class="icon-color" style="margin-top: 20px;">
+                    </lightning-icon>
+                </div>
+                <div class="slds-grid">
+                    <template if:true={isEditAccess}>
+                        <template lwc:if={isCloseCaseStatus}>
+                            <lightning-button class="slds-m-vertical_medium slds-m-horizontal_x-small" variant="brand" label="Reopen Case" onclick={handleCommentBox}></lightning-button>
+                        </template>
+                        <template lwc:else>
+                            <lightning-button class="slds-m-vertical_medium slds-m-horizontal_x-small" variant="brand" label="Add Comment" onclick={handleCommentBox}></lightning-button>
+                            <lightning-button class="slds-m-vertical_medium slds-m-right_x-small" variant="brand" label="Close Case" onclick={handleCloseCase}></lightning-button>
+                            <lightning-file-upload label="" multiple="false" record-id={recordId} onuploadfinished={handleUploadFile}></lightning-file-upload>
+                        </template>
+                    </template>
+                </div>
+            </div>
+            <div style="font-size: 27px;color: #707e8b;padding-left: 12px;">Case Detail</div>
+            <lightning-layout class="slds-p-top_medium slds-p-left_medium" multiple-rows="true">
+                <template for:each={caseDetailData} for:item="caseDetail">
+                    <lightning-layout-item style="align-items: baseline;" key={caseDetail.key} class={caseDetail.columnCSS}>
+                        <div class="field-label">{caseDetail.key}</div>
+                        <lightning-formatted-text class="field-value" value={caseDetail.value}></lightning-formatted-text>
+                    </lightning-layout-item>
+                </template>
+            </lightning-layout>
+
+            <div class="slds-p-top_medium slds-p-left_medium" style="font-size: 27px;color: #707e8b">Contact Information</div>
+            <lightning-layout class="slds-p-top_medium slds-p-left_medium" multiple-rows="true">
+                <template for:each={caseContactData} for:item="caseDetail">
+                    <lightning-layout-item key={caseDetail.key} class="slds-size_1-of-2">
+                        <div class="field-container">
+                            <span class="field-label">{caseDetail.key}</span>
+                            <lightning-formatted-text value={caseDetail.value}></lightning-formatted-text>
+                        </div>
+                    </lightning-layout-item>
+                </template>
+            </lightning-layout>
+
+            <div class="slds-p-top_medium slds-p-left_medium" style="font-size: 27px;color: #707e8b;">Additional Information</div>
+            <lightning-layout class="slds-p-top_medium slds-p-left_medium" multiple-rows="true">
+                <template for:each={caseAdditionalData} for:item="caseDetail">
+                    <lightning-layout-item key={caseDetail.key} class="slds-size_1-of-2">
+                        <div class="field-container">
+                            <span class="field-label">{caseDetail.key}</span>
+                            <lightning-formatted-text value={caseDetail.value}></lightning-formatted-text>
+                        </div>
+                    </lightning-layout-item>
+                </template>
+            </lightning-layout>
+
+            <div class="slds-p-around_medium">
+                <h2 class="slds-p-bottom_x-small heading-style">Attachments</h2>
+                <template lwc:if={attachedContentDocuments.length}>
+                    <template for:each={attachedContentDocuments} for:item="doc">
+                        <div key={doc.Title} class="slds-p-bottom_x-small"> 
+                            <a href="javascript:void(0)" data-id={doc.ContentDocumentId} onclick={handleOpenFile}>{doc.Title}</a>
+                            <hr class="hrcls"></hr>
+                        </div>
+                    </template>
+                </template>
+                <template lwc:else>
+                    <p>No attachments found.</p>
+                </template>
+            </div>
+
+            <div class="slds-p-around_medium">
+                <h2 class="slds-p-bottom_x-small heading-style">Case Comments</h2>
+                <template lwc:if={caseComments.length}>
+                    <div class="slds-p-bottom_large">
+                        <template for:each={caseComments} for:item="comment">
+                            <div key={comment.Id} class="">
+                                <div class="slds-col slds-size--12-of-12">
+                                    <p class="slds-p-top_medium slds-p-bottom_medium">
+                                        <b>Comment #{comment.number}</b>
+                                    </p>
+                                    <p class="slds-p-top_xx-small slds-size--12-of-12">{comment.CommentBody}</p>
+                                </div>
+                                <div class="slds-p-top_small slds-col slds-size--12-of-12">
+                                    <p><lightning-formatted-date-time value={comment.CreatedDate} year="2-digit" month="short" day="2-digit" 
+                                        hour="numeric"></lightning-formatted-date-time></p>
+                                </div>
+                                <div class="slds-p-top_small slds-col slds-size--12-of-12">
+                                    <h1 class="paddingleft">{comment.CreatedBy.Name}</h1>
+                                </div>
+                                <hr class="hrcls"></hr>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+                <template lwc:else>
+                    <p>No comments available.</p>
+                </template>
+            </div>
+            <div class="slds-p-horizontal_medium">
+                <h2 class="slds-p-bottom_x-small heading-style">Email Messages</h2>
+                <template lwc:if={emails.length}>
+                    <div class="slds-p-bottom_large">
+                        <template for:each={emails} for:item="emailMessage">
+                            <div key={emailMessage.Id} class="">
+                                <div class="slds-col slds-size--12-of-12">
+                                    <p class="slds-p-top_medium slds-p-bottom_medium">
+                                        <b>Email #{emailMessage.number}</b>
+                                    </p>
+                                    <p>FROM: {emailMessage.FromAddress}</p>
+                                    <p>To: {emailMessage.ToAddress}</p>
+                                    <p>Subject: {emailMessage.Subject}</p> 
+                                    <div class="slds-p-top_small slds-col slds-size--12-of-12">
+                                        <p>Body</p> 
+                                        <p class="slds-p-top_xx-small slds-size--12-of-12">
+                                            <lightning-formatted-rich-text
+                                                value={emailMessage.HtmlBody}
+                                            ></lightning-formatted-rich-text>
+                                        </p>
+                                    </div>  
+                                </div>
+                                <hr class="hrcls"></hr>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+                <template lwc:else>
+                    <p>No Emails available.</p>
+                </template>
+            </div>
+        </template>
+
+        <template if:false={isLoaded}>
+            <p>You do not have access to this case.</p>
+        </template>
+
+        <template if:true={showPopup}>
+            <div style="height: 640px;">
+                <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+                    <template if:true={popupSpinner}>
+                        <lightning-spinner alternative-text="Loading"></lightning-spinner>
+                    </template>
+                    <div class="slds-modal__container">
+                        <header class="slds-modal__header">
+                            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon"
+                                title="Close" onclick={handleCancel}>
+                                <lightning-icon icon-name="action:remove" alternative-text="Close" size="xx-small"></lightning-icon>
+                                <span class="slds-assistive-text">Close</span>
+                            </button>
+                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate" style="font-size:1.5rem;">
+                                Add a Comment to Case {caseNumber}
+                            </h2>
+                            <br/>
+                            <template if:true={hasError}>
+                                <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert">
+                                    <span class="slds-assistive-text">error</span>
+                                    <span class="slds-icon_container slds-icon-utility-error slds-m-right_x-small" title="Error">
+                                        <lightning-icon icon-name="utility:error" alternative-text="Error!" variant="inverse" size="xx-small"></lightning-icon>
+                                    </span>
+                                    <h2>Comment is required.</h2>
+                                </div>
+                            </template>
+                        </header>
+                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                            <div class="slds-grid slds-wrap slds-size_12-of-12" style="text-align:center;">
+                                <div class="slds-size_12-of-12 slds-wrap slds-large-size_12-of-12">
+                                    <lightning-textarea value={commentText} label="" maxlength={textLimit}
+                                        class="inputtextarea" message-when-bad-input={errorMessage} onchange={handleCommentChange}>
+                                    </lightning-textarea>
+                                </div>
+                                <p>{commentLength} of {textLimit}</p>
+                            </div>
+                        </div>
+                        <footer class="slds-modal__footer">
+                            <template lwc:if={isCloseCaseStatus}>
+                                <lightning-button variant="brand" class="commentstyle" label="Reopen Case" onclick={handleAddReopen}> </lightning-button>
+                            </template>
+                            <template lwc:else>
+                                <lightning-button variant="brand" class="commentstyle" label="Add Comment" onclick={handleAddComment}> </lightning-button>
+                            </template>
+                            <lightning-button variant="brand" class="slds-p-left_xx-small commentstyle" label="Cancel" onclick={handleCancel}></lightning-button>
+                        </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </div>
+        </template>
+    </lightning-card>
+</template>

@@ -1,0 +1,21 @@
+<template>
+  <lightning-card  title="Run Changes" variant="narrow">
+        <template if:true={showLoader}>
+            <lightning-spinner alternative-text="Loading" size="medium" class="spinnerClass"></lightning-spinner>
+        </template>    
+        <div class="slds-align_absolute-center" if:true={started}>
+            <p>{label.startedLabel}</p>
+        </div>
+        <div class="slds-align_absolute-center" if:true={running}>
+            <p>{label.runningLabel}</p>
+        </div>
+        <div class="slds-align_absolute-center" if:true={notEligible}>
+            <p>{label.notEligibleLabel}</p>
+        </div>
+        <div slot="footer">
+            <div class="slds-align_absolute-center slds-p-top_medium slds-p-bottom_medium">
+                <lightning-button variant="neutral" label="Cancel" class="slds-m-left_x-small" onclick={handleCancel}></lightning-button> 
+            </div> 
+        </div>
+    </lightning-card>
+</template>

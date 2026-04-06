@@ -1,0 +1,34 @@
+.THIS {
+}
+
+.THIS .slds-col.slds-size_1-of-6{
+    display: block;
+}
+
+.THIS .slds-col.slds-size_1-of-6 .slds-dropdown-trigger.slds-dropdown-trigger_click{
+        right: 5px;
+        float: right;
+}
+
+.THIS .slds-col.slds-size_1-of-6 button.slds-button.slds-button_icon-border {
+    position: absolute;
+    z-index: 99;
+    top: 66px;
+    width: 18px;
+    height: 18px;
+}
+
+.THIS .slds-dropdown-trigger.slds-dropdown-trigger_click.slds-is-open .slds-dropdown.slds-dropdown_left{
+    top: 85px;
+    text-align : center;
+}
+.THIS .slds-dropdown-trigger.slds-dropdown-trigger_click.slds-is-open .slds-dropdown.slds-dropdown_left ul li a{
+    display: inline-block;
+    padding: 0 0 0 4px;;
+    background-color: white;
+}
+@media only screen and (min-width: 1800px) and (max-width: 2560px) {
+    .THIS .slds-col.slds-size_1-of-6 .slds-dropdown-trigger.slds-dropdown-trigger_click{
+        right: 22px;
+    }
+}

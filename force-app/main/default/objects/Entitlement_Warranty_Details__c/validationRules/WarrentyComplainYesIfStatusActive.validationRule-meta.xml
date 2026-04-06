@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>WarrentyComplainYesIfStatusActive</fullName>
+    <active>true</active>
+    <description>WarrentyComplainYesIfStatusActive</description>
+    <errorConditionFormula>AND( TEXT(Warranty_Compliant__c) == &apos;No&apos;,  Text(Warranty_Status__c ) == &apos;Active&apos;)</errorConditionFormula>
+    <errorDisplayField>Warranty_Compliant__c</errorDisplayField>
+    <errorMessage>Complain should be true if Status is Active</errorMessage>
+</ValidationRule>

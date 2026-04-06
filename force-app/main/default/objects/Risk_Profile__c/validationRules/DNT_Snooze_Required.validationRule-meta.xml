@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>DNT_Snooze_Required</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    ISPICKVAL(DNT_Reason__c, &quot;Snooze&quot;),
+    ISBLANK(DNT_Snooze__c)
+)</errorConditionFormula>
+    <errorDisplayField>DNT_Snooze__c</errorDisplayField>
+    <errorMessage>DNT Snooze is required when DNT Reason is set to &apos;Snooze&apos;</errorMessage>
+</ValidationRule>

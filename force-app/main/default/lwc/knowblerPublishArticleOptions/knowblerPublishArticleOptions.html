@@ -1,0 +1,134 @@
+<template>
+  <template if:true={resolutionchecked}>
+    <!-- publish and schedule popup -->
+    <template if:false={isattach}>
+      <template if:false={publishAndScheduleCondition}>
+        <div class="publishBoxWidth">
+          <div class="publishBox">
+            <lightning-radio-group
+              class="imgCenter publish"
+              name="radioGroup"
+              label="Publish Article"
+              options={options}
+              value={value}
+              type="radio"
+              onchange={handleRadioChange}
+            >
+            </lightning-radio-group>
+
+            <lightning-icon
+              class="iconposition"
+              icon-name="utility:close"
+              size="xx-small"
+              onclick={closePublishModal}
+            >
+            </lightning-icon>
+          </div>
+
+          <div class="contentMsg">
+            <lightning-input
+              class="dateValidation"
+              name="dateValidation"
+              type="date"
+              min={mindate}
+              message-when-range-underflow="Please select a future date."
+              date-style="short"
+              disabled={disabledate}
+              onchange={handleDateChange}
+              message-when-bad-input="Your entry does not match the allowed format mm/dd/yyyy."
+              message-when-value-missing="Required field"
+              variant="label-hidden"
+              required
+            >
+            </lightning-input>
+          </div>
+          <!-- <div> -->
+          <!-- <button class="slds-button_stretch slds-m-left_x-small">OK</button>  -->
+          <button
+            class="buttonCenter disableButton publishokbutton slds-button slds-button_brand slds-slds-p-vertical_x-small slds-grid slds-grid_vertical-align-center slds-button_stretch slds-size_2-of-6"
+            onclick={okhandler}
+            disabled
+          >
+            OK
+          </button>
+        </div>
+      </template>
+
+      <!-- code for publish and attach ui -->
+      <template if:true={publishAndAttach}>
+        <div>
+          <div class="publishAndAttachBox">
+            <lightning-radio-group
+              class="imgCenter publish"
+              name="radioGroup"
+              label="Attach To Case"
+              options={optionsToAttachToCase}
+              value={value}
+              type="radio"
+              onchange={handlePublishAndAttach}
+            >
+            </lightning-radio-group>
+            <lightning-icon
+              class="iconposition"
+              icon-name="utility:close"
+              size="xx-small"
+              onclick={closeattachPublishModal}
+            >
+            </lightning-icon>
+          </div>
+
+          <button
+            class="buttonCenter disableButton okbutton slds-button slds-button_brand slds-slds-p-vertical_x-small slds-grid slds-grid_vertical-align-center slds-button_stretch slds-size_2-of-6"
+            onclick={okattachhandler}
+            disabled
+          >
+            OK
+          </button>
+        </div>
+      </template>
+      <template if:true={publishAndScheduleCondition}>
+        <template if:false={publishAndAttach}>
+          <div class="modal-save-progress-wrapper">
+            <div class="modal-save-progress-img">
+              <img alt="Processing your request" src={saveProgress} />
+            </div>
+            <div class="modal-save-progress-msg">Processing your request</div>
+          </div>
+        </template>
+      </template>
+    </template>
+
+    <!-- code for attach/detach  already published articles -->
+    <template if:true={isattach}>
+      <div>
+        <div class="publishAndAttachBox">
+          <lightning-radio-group
+            class="imgCenter publish"
+            name="radioGroup"
+            label={kcslabel}
+            options={optionsToAttachToCase}
+            value={value}
+            type="radio"
+            onchange={handlePublishAndAttach}
+          >
+          </lightning-radio-group>
+          <lightning-icon
+            class="iconposition"
+            icon-name="utility:close"
+            size="xx-small"
+            onclick={closeattach}
+          >
+          </lightning-icon>
+        </div>
+
+        <button
+          class="buttonCenter okbutton disableButton slds-button slds-button_brand slds-slds-p-vertical_x-small slds-grid slds-grid_vertical-align-center slds-button_stretch slds-size_2-of-6"
+          onclick={attacharticlehandler}
+          disabled
+        >
+          OK
+        </button>
+      </div>
+    </template>
+  </template>
+</template>

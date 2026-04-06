@@ -1,0 +1,58 @@
+<template>
+    <lightning-quick-action-panel header="Update Account">
+        <div if:true={showLoader}>
+            <div class="demo-only" style="height:6rem;position:relative">
+                <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </div>
+        <lightning-record-edit-form record-id={recordId} object-api-name={objectApiName} if:false={showLoader}>
+            <div if:true={showBackButton} class="slds-box slds-text-align_center">
+                <div class="slds-box slds-text-align_center">
+                    You don't have access
+                </div>
+            </div>                  
+            <div if:true={showTable}>
+                <div>
+                    <lightning-layout >
+                        <lightning-layout-item padding="around-small" size="6">
+                            <div class="slds-p-bottom_small">
+                                <span style="color:red;">*</span><label for="acId">Account Name</label>
+                                <lightning-input-field id="acId" variant="label-hidden" field-name="Name" required></lightning-input-field>
+                            </div>
+                            <div class="slds-p-bottom_small">
+                                <label for="bsId">Billing State</label>
+                                <lightning-input-field id="bsId" variant="label-hidden" field-name="BillingStateCode"></lightning-input-field>
+                            </div>
+                            <div class="slds-p-bottom_small">
+                                <span style="color:red;">*</span><label for="bstId">Billing Street</label>
+                                <lightning-input-field id="bstId" variant="label-hidden" field-name="BillingStreet" required></lightning-input-field>
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="6" >
+                            <div class="slds-p-bottom_small">
+                                <span style="color:red;">*</span><label for="bcId">Billing Country</label>
+                                <lightning-input-field id="bcId" variant="label-hidden" field-name="BillingCountryCode" required></lightning-input-field> 
+                            </div>
+                            <div class="slds-p-bottom_small">
+                                <label for="bctId">Billing City</label>
+                                <lightning-input-field id="bctId" variant="label-hidden" field-name="BillingCity"></lightning-input-field>
+                            </div>
+                                <div class="slds-p-bottom_small">
+                                <label for="bpId">Billing Postal code</label>
+                            <lightning-input-field id="bpId" variant="label-hidden" field-name="BillingPostalCode"></lightning-input-field>  
+                            </div>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </div> 
+            </div>        
+        </lightning-record-edit-form>
+        <div slot="footer">
+            <lightning-button variant="neutral" label="Cancel" onclick={handleCancel} disabled={disableButtons}></lightning-button>
+            <lightning-button variant="brand" label="Save" onclick={handleSave} disabled={disableButtons} class="slds-m-left_x-small"></lightning-button>
+        </div>
+    </lightning-quick-action-panel>
+</template>

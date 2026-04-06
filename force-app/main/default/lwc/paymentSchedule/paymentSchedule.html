@@ -1,0 +1,301 @@
+<template>
+  <div>
+    <template if:true={isLoading}>
+      <lightning-spinner variant="brand" size="large"> </lightning-spinner>
+    </template>
+    <template if:false={showModal}>
+      <template if:true={lstQuoteLines}>
+        <lightning-card>
+          <lightning-layout multiple-rows class="slds-grid_vertical-stretch">
+            <lightning-layout-item size="3" class="slds-grid" padding="around-small">
+              Quote Number :    <lightning-record-picker 
+              label="Quote"
+              placeholder="Search Quotes..."
+              object-api-name="SBQQ__Quote__c"
+              onchange = {handleRecordChange}
+              value={quoteId}
+              variant="label-hidden"
+              class="slds-size_4-of-12 slds-m-left_x-small"
+             
+              >
+              </lightning-record-picker>
+              <!--Quote :<lightning-formatted-url value={sQuoteLink} label={sQuoteName} target="_blank"></lightning-formatted-url>-->
+            </lightning-layout-item>
+            <lightning-layout-item size="3" padding="around-small" class="slds-grid">
+              Number of Payments : {invoiceCount}
+              <!---->
+            </lightning-layout-item>
+    
+  <lightning-layout-item size="2" class="slds-grid " padding="around-small">
+              Quote Total: <lightning-formatted-number value={netTotal} format-style="currency"
+                      currency-code="USD"></lightning-formatted-number>
+            </lightning-layout-item>
+            <lightning-layout-item size="4" class="slds-grid" padding="around-small">
+              <table style=" border-collapse: collapse;
+              border: 2px solid rgb(200,200,200);
+              letter-spacing: 1px;
+              font-size: 0.8rem;">
+                <tr>
+
+                  <th class="tableData">Payment 1</th>
+                  <td class="tableData">
+                    <lightning-formatted-number value={paymentObj.paymentOne} format-style="currency"
+                      currency-code="USD"></lightning-formatted-number>
+                  </td>
+
+                </tr>
+                <tr>
+
+
+                  <th class="tableData">{paymentObj.labelTwo}</th>
+                  <td class="tableData">
+                    <lightning-formatted-number value={paymentObj.paymentTwo} format-style="currency"
+                      currency-code="USD"></lightning-formatted-number>
+                  </td>
+
+                </tr>
+                <tr>
+
+
+                  <th class="tableData">Payment 3</th>
+                  <td class="tableData">
+                    <lightning-formatted-number value={paymentObj.paymentThree} format-style="currency"
+                      currency-code="USD"></lightning-formatted-number>
+                  </td>
+
+                </tr>
+                <tr>
+
+
+                  <th class="tableData">Total </th>
+                  <td class="tableData">
+                    <lightning-formatted-number value={paymentObj.totalPayment} format-style="currency"
+                      currency-code="USD"></lightning-formatted-number>
+                  </td>
+
+                </tr>
+              </table>
+            </lightning-layout-item>
+          
+            <lightning-layout-item size="3" padding="around-small"  class="slds-grid ">
+              Payment Frequency: <lightning-combobox disabled={bMakeFormReadonly} variant="label-hidden"
+                value={paymentOption} placeholder="Select Progress" options={options}
+                onchange={handlePaymentOptionChange} class="slds-size_4-of-12 slds-m-left_x-small"
+                style="position:relative;bottom: 10px;">
+              </lightning-combobox>
+            </lightning-layout-item>
+         
+            <lightning-layout-item size="3" class="slds-grid " padding="around-small">
+              Number of Invoice: <lightning-input disabled={bMakeFormReadonly} type="text" onblur={handleInvoiceChange}
+                value={invoiceCount} class="slds-size_4-of-12 slds-m-left_x-small"
+                style="position:relative;bottom: 10px;" variant="label-hidden"></lightning-input>
+              <template if:true={warningMessage}>
+                <span style="position: absolute;bottom: 0px;font-weight: 500;color: red;">
+                  {warningMessage}
+                </span>
+              </template>
+              <lightning-button variant="brand" style="position: relative;bottom: 10px;margin-left: 10px;"
+                onclick={onSave} disabled={bMakeFormReadonly} label="Update"></lightning-button>
+
+            </lightning-layout-item>
+             <lightning-layout-item size="3" padding="around-small" class="slds-grid">
+              Status : <lightning-combobox variant="label-hidden" disabled={bMakeFormReadonly}
+                placeholder="Select Status" options={statusOptions} onchange={handleStatusChange}
+                value={paymentLineStatus} class="slds-size_5-of-12 slds-m-left_x-small statusCombobox"
+                style="position:relative;bottom: 10px;">
+              </lightning-combobox>
+            </lightning-layout-item>
+            </lightning-layout>
+
+            <!---PutHere-->
+
+
+ 
+        
+        <div style="display:flex;justify-content:center;margin:5px;">
+          <lightning-button class="slds-p-around_small" onclick={handleAmountSave} disabled={disableSaveBtn}
+            variant="brand" label="Save">
+          </lightning-button>
+          <lightning-button class="slds-p-around_small" onclick={handleCancelClick} variant="brand" label="cancel">
+          </lightning-button>
+          <lightning-button variant="brand" label="Download Payment Schedule" title="Download action with brand variant"
+            icon-name="utility:download" class="slds-p-around_small" onclick={handleDownload}>
+
+          </lightning-button>
+        </div>
+        <div style="display:flex;flex-wrap:wrap">
+          <!-- <lightning-accordion active-section-name="QL-6566175">-->
+
+          <template for:each={lstQuoteLines} for:item="oQouteLine">
+            <!--  <lightning-accordion-section
+                name={oQouteLine.quoteLine.Name}
+                label={oQouteLine.quoteLine.Name}
+                key={oQouteLine.quoteLine.Id}
+              >-->
+            <!-- <lightning-card  key={oQouteLine.quoteLine.Id}>-->
+            <article class=" slds-size_12-of-12"
+              style="border: 1px #d8c9c9 solid;border-radius:10px;margin-bottom:5px;overflow: hidden;"
+              key={oQouteLine.quoteLine.Id}>
+
+
+              <div class="slds-grid">
+
+                <div class="slds-card__bod slds-card__body_inner slds-size_6-of-12"
+                  style="border: 1px solid rgb(216 212 212);background: #f3f3f3;">
+                  <lightning-layout multiple-rows class="slds-grid_vertical-stretch">
+                    <lightning-layout-item size="3" padding="around-small">
+
+                      Product : <lightning-formatted-url value={oQouteLine.quoteLine.Id}
+                        tooltip="Use https://domain-name" label={oQouteLine.quoteLine.SBQQ__Product__r.Name}
+                        target="_blank"></lightning-formatted-url>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="3" padding="around-small">
+                      <div>
+                        Term : {oQouteLine.quoteLine.SBQQ__SubscriptionTerm__c}
+                      </div>
+
+                      <!-- -->
+                    </lightning-layout-item>
+                    <lightning-layout-item size="3" padding="around-small">
+                      Qty : {oQouteLine.quoteLine.SBQQ__Quantity__c}
+                    </lightning-layout-item>
+                    <lightning-layout-item size="3" padding="around-small">
+                      Unit List : {oQouteLine.quoteLine.SBQQ__ListPrice__c}
+                    </lightning-layout-item>
+                    <lightning-layout-item size="3" padding="around-small">
+                      Discount : {oQouteLine.quoteLine.SBQQ__TotalDiscountRate__c}
+                    </lightning-layout-item>
+                    <lightning-layout-item size="3" padding="around-small">
+                      Net Total : <lightning-formatted-number value={oQouteLine.quoteLine.SBQQ__NetTotal__c}
+                        format-style="currency" currency-code="USD"></lightning-formatted-number>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="4" padding="around-small">
+                      Monthly Amount : <lightning-formatted-number value={oQouteLine.monthlyAmount}
+                        format-style="currency" currency-code="USD"></lightning-formatted-number>
+
+                    </lightning-layout-item>
+                    <lightning-layout-item size="3" padding="around-small"></lightning-layout-item>
+                    <template if:true={oQouteLine.showErrorMessage}>
+                      <lightning-layout-item size="8" padding="around-small" style="color:red;font-weight:500">
+                        <p>*Override Total Amount is greater than the Quote Line Total Amount</p>
+                      </lightning-layout-item>
+                    </template>
+                  </lightning-layout>
+                </div>
+                <div class='slds-size_6-of-12'>
+                  <div class="comparison1" key={oQouteLine.quoteLine.Id}>
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                      <thead>
+                        <tr>
+                          <th class="tl tl2"></th>
+                          <th class="">Billing Term</th>
+                          <th class="">Calculated Payment</th>
+                          <th class="">Override Payment</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <template if:true={oQouteLine.lstPaymentSchedule}>
+                          <template for:each={oQouteLine.lstPaymentSchedule} for:index="index"
+                            for:item="oPaymentSchedule">
+                            <template if:true={oPaymentSchedule.display}>
+                              <tr key={oPaymentSchedule.Id}>
+                                <td>
+
+                                  <lightning-formatted-url value={oPaymentSchedule.redirectUri}
+                                    label={oPaymentSchedule.index} target="_blank"></lightning-formatted-url>
+                                </td>
+                                <td class="col-1">
+
+
+                                  <i class="fa fa-check"></i></br>
+
+                                  <lightning-input disabled={bMakeFormReadonly} type="number" step="0.01"
+                                    data-id={oPaymentSchedule.Id} onchange={handleAmountChange}
+                                    data-qouteline={oPaymentSchedule.Quote_Line__c}
+                                    data-update={oPaymentSchedule.updateAll}
+                                    class={disableCSS}
+                                    style="position:relative;bottom: 10px;" value={oPaymentSchedule.Term__c}
+                                    variant="label-hidden" readonly={oPaymentSchedule.readOnly}></lightning-input>
+
+
+
+                                </td>
+                                <td class="col-4">
+                                  <template if:true={oPaymentSchedule.Payment__c}>
+
+                                    <lightning-formatted-number value={oPaymentSchedule.Payment__c}
+                                      format-style="currency" currency-code="USD"></lightning-formatted-number>
+                                  </template>
+                                  <template if:false={oPaymentSchedule.Payment__c}>
+                                    <i class="fa fa-check"></i></br> -
+                                  </template>
+                                </td>
+                                <td class="col-1">
+
+
+                                  <i class="fa fa-check"></i></br>
+
+                                  <lightning-input type="number" disabled={bMakeFormReadonly} step="0.01"
+                                    data-id={oPaymentSchedule.Id} onchange={handleOverrideAmountChange}
+                                    value={oPaymentSchedule.Override_Amount__c}
+                                    data-qouteline={oPaymentSchedule.Quote_Line__c}
+                                    data-update={oPaymentSchedule.updateAll} readonly={oPaymentSchedule.readOnly}
+                                    class={disableCSS}
+                                    style="position:relative;bottom: 10px;" variant="label-hidden"></lightning-input>
+
+
+
+                                </td>
+                              </tr>
+                            </template>
+                          </template>
+                          <tr>
+                            <td><b>Total </b></td>
+                            <td></td>
+                            <td><b>
+                                <lightning-formatted-number value={oQouteLine.monthlyTotal} format-style="currency"
+                                  currency-code="USD"></lightning-formatted-number>
+                              </b></td>
+
+                            <td>
+                              <b>
+                                <lightning-formatted-number value={oQouteLine.overRideTotal} format-style="currency"
+                                  currency-code="USD"></lightning-formatted-number>
+                              </b>
+                            </td>
+                          </tr>
+                        </template>
+                      </tbody>
+                    </table>
+
+                  </div>
+                </div>
+              </div>
+              <footer class="slds-card__footer">
+
+              </footer>
+            </article>
+          </template>
+        </div>
+      </lightning-card>
+      </template>
+    </template>
+    <template if:true={showModal}>
+
+
+      <lightning-card>
+        <h2 class="slds-align_absolute-center"><Strong>Complete this Action?</Strong></h2>
+        <div class="slds-align_absolute-center slds-p-around_small">This will result on deletion of all the related
+          Payment Schedules and will Create new One</div>
+        <div class="slds-align_absolute-center">
+          <lightning-button variant="neutral" label="Cancel" onclick={closeModal} class="slds-p-around_small">
+          </lightning-button>
+          <lightning-button class="slds-p-around_small" onclick={handleConfirmClick} variant="brand" label="Confirm">
+          </lightning-button>
+        </div>
+      </lightning-card>
+    </template>
+
+  </div>
+
+</template>

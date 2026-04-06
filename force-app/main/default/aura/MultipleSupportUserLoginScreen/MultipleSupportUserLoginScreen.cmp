@@ -1,0 +1,89 @@
+<aura:component controller="CommunityTemplateController">
+    <aura:attribute name="userNameList" type="List"/>
+    <aura:attribute name="selectedUserName" type="String" default=""/>
+    <aura:attribute name="disableBtn" type="Boolean" default="true"/>
+    
+    <aura:attribute name="spinner" type="boolean" default="FALSE"/>
+    <!-- CS21-2428 -->
+    <aura:attribute name="isGtcAccount" type="Boolean" default="false"/>
+    <aura:attribute name="isExpiredEntitlement" type="String" default=""/>
+
+     
+    <!--loading spinner start-->
+    <aura:if isTrue="{!v.spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading...</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    <!-- Loading spinner end-->   
+
+    <div class="slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12  nopad" style="background-color: #2E4E52">
+        <div class="container">
+            <div class="slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12 ">
+                <div class="slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12 " style="Padding:20px 15px;">
+                    <span class="block">
+                        <img src="{!$Resource.RubrikCustomerCommunity+'/RubrikCommunity/Images/logo.png'}" styleClass="headerlogo text-left" />
+                    </span>           
+                </div>
+            </div>
+        </div> 
+    </div>
+
+    <aura:if isTrue="{!v.isGtcAccount}">
+        <c:GtcAutomation portalAccess="true" enableHeader="false"/>
+        <aura:set attribute="else">
+            <div class="slds-p-around_xx-large">
+                <div class="borderalign">
+                    <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 topSection">Rubrik One Passport accounts</div>
+                    <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 detailsInfo">
+                        You've been configured with more than one Rubrik Support Portal login with the same email address. Individual logins are required to manage cases and clusters for unique customer accounts and subsidiaries. Please select the desired username from the following list to manage your cases and clusters.
+                    </div><br/>
+                    <div class="">
+                        <lightning:select aura:id="username" name="select" label="Select a username" onchange="{! c.handleUsernameChange }">
+                            <option value="">choose username</option>
+                            <aura:iteration items="{!v.userNameList}" var="item">
+                                <option value="{!item.Username}">{!item.Username} (Account Name: {!item.Contact.Account.Name})</option>
+                            </aura:iteration>
+                        </lightning:select>
+                    </div><br/>
+                    <div class="">
+                        <lightning:button label="Continue" title="Continue" onclick="{! c.handleLogin }" disabled="{!v.disableBtn}"/>
+                        <lightning:button label="Logout" title="Logout" onclick="{! c.handleLogout }"/>
+                    </div>
+                </div>  
+            </div>
+        </aura:set>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.isExpiredEntitlement}">
+        <div class="demo-only" style="height: 640px;">
+            <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header slds-modal__header_empty">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.closeModal}">
+                            <lightning:icon iconName="action:remove" alternativeText="Approved" size="xx-small"/>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <div class="">
+                            <div class="">
+                                <span style="color:red;">Access Blocked:</span> {!v.isExpiredEntitlement}
+                            </div>
+                        </div>  
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <button class="slds-button slds-button_neutral"  onclick="{!c.closeModal}">Close</button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </aura:if>
+    
+    <c:sitefooter/>
+</aura:component>

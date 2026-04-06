@@ -1,0 +1,106 @@
+<template>
+  <div class={flexipageregionwidth}>
+    <template if:true={fromarticle}>
+      <div class="loading">
+        <div class="inner_loading">
+          <div class="loading_search">
+            <div class="search">
+              <img src={searchLoading} alt="" />
+              <div class="search_text dark"></div>
+            </div>
+          </div>
+          <div class="loading_tab_main">
+            <div class="loading_tab light"></div>
+            <div class="loading_tab light"></div>
+          </div>
+
+          <lightning-layout multiple-rows>
+            <template for:each={loaderCard} for:item="item">
+              <lightning-layout-item key={item} class="loading_layout">
+                <div class="loading_card">
+                  <div class="loading_firstrow">
+                    <div class="loading_img light"></div>
+                    <div class="loading_name light"></div>
+                    <div class="loading_id dark"></div>
+                    <div class="loading_edit dark"></div>
+                    <div class="loading_edit dark"></div>
+                  </div>
+                  <div class="loading_firstrow">
+                    <div class="loading_title light"></div>
+                  </div>
+                  <div class="loading_firstrow">
+                    <div class="loading_summary light"></div>
+                  </div>
+
+                  <div class="loading_thirdrow">
+                    <div class="loading_type dark"></div>
+                    <div class="loading_date dark"></div>
+                  </div>
+                </div>
+              </lightning-layout-item>
+            </template>
+          </lightning-layout>
+        </div>
+      </div>
+    </template>
+
+    <template if:true={fromcreation}>
+      <div class="loading">
+        <div class="artcile_list_loading">
+          <div class="article_list_top_loading">
+            <div class="article_list_top light"></div>
+            <div class="article_list_top_center light"></div>
+            <div class="article_list_top_center light"></div>
+            <div class="article_list_top light"></div>
+          </div>
+
+          <div class="loading_tab_outer">
+            <div class="loading_tab light"></div>
+            <div class="loading_tab light"></div>
+          </div>
+
+          <div class="create_article_loading_outer">
+            <template for:each={loadingcard} for:item="item">
+              <div class="create_article_loading_main" key={item}>
+                <div class="label_loading light"></div>
+                <div class="create_article_load light"></div>
+              </div>
+            </template>
+          </div>
+        </div>
+      </div>
+    </template>
+    <template if:true={showloader}>
+      <div class="loading search_loader">
+        <div class="inner_loading">
+          <lightning-layout multiple-rows>
+            <template for:each={loaderCard} for:item="item">
+              <lightning-layout-item key={item} class="loading_layout">
+                <div class="loading_card">
+                  <div class="loading_firstrow">
+                    <div class="loading_img light"></div>
+                    <div class="loading_name light"></div>
+                    <div class="loading_id dark"></div>
+                    <div class="loading_edit dark"></div>
+                    <div class="loading_edit dark"></div>
+                  </div>
+                  <div class="loading_firstrow">
+                    <div class="loading_title light"></div>
+                  </div>
+                  <div class="loading_firstrow">
+                    <div class="loading_summary light"></div>
+                  </div>
+
+                  <div class="loading_thirdrow">
+                    <div class="loading_type dark"></div>
+                    <div class="loading_date dark"></div>
+                  </div>
+                </div>
+              </lightning-layout-item>
+            </template>
+          </lightning-layout>
+        </div>
+      </div>
+    </template>
+  </div>
+</template>

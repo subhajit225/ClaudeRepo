@@ -1,0 +1,15 @@
+<apex:component controller="ResourceSearchController">
+
+<apex:attribute assignTo="{!pagescope}" name="thescope" type="string" description="workspace string to query"/> 
+         <!--render if follow on page-->
+         <apex:outputText rendered="{!Recent!=null}">
+         <div class="col-md-12"><h3>Recent Items</h3></div></apex:outputText>
+                 <apex:datatable var="r" value="{!Recent}" id="featuredresults" styleClass="table" rendered="{!Recent!=null}">
+                    <apex:column headervalue="Title">
+                     <a href="{!$Page.ContentView}?id={!r.id}">{!r.title}</a>
+                    </apex:column>                   
+                    <apex:column headervalue="Author" value="{!r.CreatedBy.Name}"/>
+                    <apex:column headervalue="Date" value="{!r.CreatedDate}"/>
+            </apex:datatable>
+   
+</apex:component>

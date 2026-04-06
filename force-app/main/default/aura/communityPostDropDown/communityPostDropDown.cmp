@@ -1,0 +1,24 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" controller="CommunityPostDropDownController" access="global">
+    <aura:attribute name="ownerId" type="Id" />
+    <aura:attribute name="currentUserId" type="Id" />
+    <aura:attribute name="notContainComments" type="Boolean" default="true" />
+    <aura:attribute name="isModerator" type="Boolean" default="false" />
+    <aura:attribute name="flagged" type="Boolean" default="false" />
+    <aura:attribute name="isDeleted" type="Boolean" default="false" />
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+    <div aura:id="dropdown" class="slds-grid slds-gutters">
+        <aura:if isTrue="{!if(or(v.isModerator,and(v.ownerId == v.currentUserId,v.notContainComments,not(v.isDeleted))),true,false)}">
+            <div class="slds-col slds-size_1-of-6">
+                <lightning:buttonMenu alternativeText="Menu">
+                    <lightning:menuItem label="Delete" value="Delete" onactive="{!c.handleDelete}" />
+                    <aura:if isTrue="{!if(and(v.isModerator,not(v.flagged)),true,false)}">
+                        <lightning:menuItem label="Flag" value="Flag" onactive="{!c.handleFlag}" />
+                    </aura:if>
+                    <aura:if isTrue="{!if(and(v.isModerator,v.flagged),true,false)}">
+                        <lightning:menuItem label="Unflag" value="Unflag" onactive="{!c.handleUnflag}" />
+                    </aura:if>
+                </lightning:buttonMenu>
+            </div>
+        </aura:if>
+    </div>
+</aura:component>

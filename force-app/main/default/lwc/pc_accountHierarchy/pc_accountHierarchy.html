@@ -1,0 +1,12 @@
+<template>
+    <template lwc:if={isAdminOrExec}>
+        <div class="slds-p-raound_xx-small">
+            <lightning-combobox name="Account" label="Account" value={selectedValue} options={options} onchange={handleChange}></lightning-combobox>
+        </div>
+        <div class="slds-p-raound_xx-small">
+            <template for:each={allValues} for:item="val">
+                <lightning-pill key={val} name={val.value} label={val.label} onremove={handleRemove}></lightning-pill>
+            </template>
+        </div>
+    </template>
+</template>

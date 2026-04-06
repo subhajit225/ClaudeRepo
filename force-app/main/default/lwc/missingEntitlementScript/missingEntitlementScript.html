@@ -1,0 +1,89 @@
+<template>
+    <div class="slds-card">
+        <div class="">
+            <template if:false={loaded}>
+                <lightning-spinner alternative-text="Loading"></lightning-spinner>
+            </template>
+        </div>
+        <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-p-around_x-small">
+                <lightning-input type="date" label="Start Date" value={startDate}
+                    onchange={validateDates}></lightning-input>
+            </div>
+            <div class="slds-col slds-p-around_x-small">
+                <lightning-input type="date" label="End Date" value={endDate}
+                    onchange={validateDates}></lightning-input>
+                <p class="error" style="color:red; display:inline-block">{endDateError}</p>
+            </div>
+            <div class="slds-col slds-align-middle slds-p-around_x-small"
+                style="display: flex; align-items: center; margin-top: 4px; ">
+                <lightning-button label="Filter" variant="brand" onclick={handleFilterClick} disabled={disableFilterBTN}></lightning-button>
+            </div>
+        </div>
+        <div class="slds-m-top_small slds-m-bottom_medium">
+            <lightning-card title="">
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered" aria-labelledby="element-with-table-label other-element-with-table-label">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th data-id="info" data-type="String"  class="" scope="col" onclick={sortCategory}>
+                                <a href="javascript:void(0);" class="slds-th__action slds-text-link--reset">
+                                    <span class="slds-assistive-text">Sort</span>
+                                    <span class="slds-truncate" title="Issue Category">Issue Category</span>
+                                    <div if:true={isCategorySort}>
+                                        <div if:true={isAsc}>
+                                           &nbsp; &#9650;
+                                        </div>
+                                        <div if:true={isDsc}>
+                                           &nbsp; &#9660;
+                                        </div>
+                                    </div>
+                                </a>
+                            </th>
+                            <th data-id="recordCount" data-type="number" class="" scope="col" onclick={sortRecordCount}>
+                                <a href="javascript:void(0);" class="slds-th__action slds-text-link--reset">
+                                    <span class="slds-assistive-text">Sort</span>
+                                    <span class="slds-truncate" title="Record Count">Record Count</span>
+                                    <div if:true={isRecordCountSort}>
+                                        <div if:true={isAsc}>
+                                           &nbsp; &#9650;
+                                        </div>
+                                        <div if:true={isDsc}>
+                                           &nbsp; &#9660;
+                                        </div>
+                                    </div>
+                                </a>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate">Quote Line Ids</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <template if:true={classDebugs}>
+                        <template for:each={classDebugs} for:item="log">
+                            <tr key={deb} class="slds-hint-parent">
+                                <td class="first_td">
+                                    <div class="slds-truncate text_wrapping">{log.info}</div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate text_wrapping">{log.recordCount}</div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate text_wrapping">{log.qliIds}</div>
+                                </td>
+                            </tr>
+                        </template>
+                    </template>
+                    <template if:false={classDebugs}>
+                        <tr class="slds-hint-parent">
+                            <td colspan="3">
+                                <div class="slds-truncate" style="text-align: center">No records found</div>
+                            </td>
+                        </tr>
+                    </template>
+                    </tbody>
+                </table>
+            </lightning-card>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,235 @@
+<apex:component >
+    <style>
+        @font-face{
+        font-family: Gotham-Light;
+        src: url("{!URLFOR($Resource.gothamfonts, '/Gotham/Gotham-Light.otf')}");
+        }
+        
+        @font-face{
+        font-family: Gotham-Medium;
+        src: url("{!URLFOR($Resource.gothamfonts, '/Gotham/Gotham-Medium.otf')}");
+        }
+        
+        body {
+        font-family: Gotham-Light !important;
+        color: #4A4A4A;
+        }
+        
+        .navbar, .navbar-nav, .navbar-default, .navbar-collapse, navbar-collapse {margin-bottom: 0 !important;border: 0px !important;}
+        .navbar:after {display: none !important;content: none !important;}
+        .row-fluid {text-align: center;}
+        h2.sectionHeaders {height: 35px;font-size: 32px;line-height: 38px;color: #17232E !important;}
+        h3.announcementHeaders {box-sizing: border-box;font-size: 24px;line-height: 29px;color: #009DAC;}
+        h3.announcementTitle {font-size: 24px;line-height: 29px;color: #009DAC;}
+        h5.footerTitle {height: 24px;font-family: Gotham-Medium;font-size: 14px;line-height: 24px;color: #FFFFFF;
+        }
+        
+        .tabnavlinks {max-width: 960px;}
+        
+        .visualstrap a {color: #009DAC;text-decoration: none;}
+        
+        a.speciallinks:before {padding: 0;content: "\00BB \0020";}
+        a {color: #009DAC;text-decoration: none;font-family: Gotham-Medium;}
+        a:hover {color: #009DAC;text-decoration: none !important;font-family: Gotham-Medium;}
+        a.lightlink, a.lightlink:hover {
+        color: #009DAC;
+        text-decoration: none;
+        font-family: Gotham-Light;
+        font-size: 18px;
+        line-height: 26px;       
+        }
+        
+        
+        a.headerlinks, a.headerlinks:hover {
+        color: #b1bcc0;
+        opacity: 0.8;
+        text-decoration: none;
+        font-family: Gotham-Light;
+        font-size: 14px;
+        line-height: 40px;
+        }
+        
+        
+        ul.links {
+        list-style: none;
+        padding: 0;
+        }
+        
+        ul.links li.listItems:before {
+        padding: 0;
+        content: "\00BB \0020";
+        }
+        
+        
+        li.listItems {
+        box-sizing: border-box;
+        font-size: 18px;
+        line-height: 32px;
+        color: #009DAC;
+        }
+        
+        .maingradient {
+        min-height: 299px;
+        }
+        .siteheader{
+        height: 112px;
+        background-color: #FFFFFF;
+        }
+        
+        .tabs {
+        background-color: #2E4E52;
+        }
+        
+        
+        
+        .rowcontainer {
+        padding-top:48px; 
+        padding-bottom:48px;
+        }
+        
+        
+        .topsearch {
+        width: 380px;
+        height: 32px;
+        background-color: #FFFFFF;
+        border: 1px solid #D5D5D5;
+        border-radius: 2px;
+        }
+        
+        .container-fluid {
+        height: 100%;
+        }
+        
+        h3.footerCR {
+        font-size: 14px;
+        line-height: 24px;
+        color: #FFFFFF;
+        text-align:center;
+        
+        }
+        
+        .footlinks li a{
+        text-align:left;
+        margin-left:5px ;
+        }
+        
+        .footerlogo {
+        top-margin:39px;
+        text-align: center !important;
+        height:44px;
+        }
+        
+        .container-fluid-right {
+        margin-right: 15px !important;  
+        }
+        
+        
+        .rubrik-btn {
+        display: inline-block;
+        padding: 13px 35px;
+        box-shadow: 0 2px 2px 0 hsla(0,9%,4%,.2);
+        border-radius: 2px !important;
+        font-size: 12px ;
+        font-weight: 500 !important;
+        text-transform: uppercase !important;
+        -webkit-transition: .2s ease-in-out;
+        transition: .2s ease-in-out;
+        letter-spacing: -.5px;
+        background-color: #009dac;
+        font-family: Gotham-Light !important;
+        color: #ffffff !important;
+        }
+        
+        .rubrik-btn:hover {
+        background-color: #3fb5c0;
+        }
+        
+        
+        .rubrik-btn--transparent {
+        display: inline-block;
+        padding: 13px 35px;
+        box-shadow: none;
+        border-radius: 2px !important;
+        border: 1px solid #3fb5c0 !important;
+        font-size: 12px !important;
+        font-weight: 500 !important;
+        text-transform: uppercase !important;
+        -webkit-transition: .2s ease-in-out;
+        transition: .2s ease-in-out;
+        letter-spacing: -.5px;
+        background-color: transparent;
+        font-family: Gotham-Light !important;
+        color: #3fb5c0 !important;
+        } 
+        
+        .rubrik-btn--transparent:hover {
+        background-color:#3fb5c0 !important;
+        color: #ffffff !important;
+        }
+        
+        .headerbacktop {
+        background-color: #20404A;
+        } 
+        
+        .errorMsg{
+        color: #cc0000;
+        }   
+        
+        
+        
+    </style>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    
+    
+    <!--datatables-->
+    
+    <style>
+        .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+        cursor: default;
+        color: #009DAC !important;
+        border: 1px solid transparent;
+        background: transparent;
+        box-shadow: none;
+        }
+        
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+        
+        background: #009DAC !important;
+        background: #009DAC !important;
+        background: #009DAC !important;
+        background: #009DAC !important;
+        color: #FFFFFF !important;
+        border: none;
+        }
+        
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+        box-sizing: border-box;
+        display: inline-block;
+        min-width: 1.5em;
+        padding: 0.5em 1em;
+        margin-left: 2px;
+        text-align: center;
+        text-decoration: none !important;
+        cursor: pointer;
+        color: #009DAC !important;
+        border: none;
+        }
+        
+        .dataTables_wrapper .dataTables_paginate .paginate_button:active {
+        outline: none;
+        background-color:  #009DAC !important;
+        background: #009DAC !important;
+        border: none;
+        }
+        
+        .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+        outline: none;
+        background-color:  #009DAC !important;
+        background: #009DAC !important;
+        border: none;
+        color: #FFFFFF;
+        }
+        
+        
+    </style>  
+</apex:component>

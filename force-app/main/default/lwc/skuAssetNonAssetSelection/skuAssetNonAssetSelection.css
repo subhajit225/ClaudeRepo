@@ -1,0 +1,42 @@
+.custom-container{
+	color : black;
+}
+.combo-wrapper {
+    max-width: 40%;
+    margin-bottom: 1rem;
+    background-color: white; /* Ensures white background for wrapper */
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+}
+.custom-combobox {
+    width: 100%;
+
+    /* Background & Border */
+    --slds-c-input-radius-border: 6px;
+    --slds-c-input-color-border: black;
+    --slds-c-input-color-border-hover: black;
+    --slds-c-input-color-border-focus: black;
+    --slds-c-input-shadow-focus: 0 0 0 1px black;
+
+    /* Text Styling */
+    --slds-c-input-color-text: black;     /* Makes all text inside black */
+    font-weight: bold;                    /* Makes text bold */
+
+    /* Background Color */
+    --slds-c-input-color-background: white;
+    --slds-c-input-color-background-focus: white;
+
+    /* Padding */
+    --slds-c-input-spacing-block-start: 0.6rem;
+    --slds-c-input-spacing-block-end: 0.6rem;
+
+    font-size: 0.875rem;
+}
+.custom-error {
+    display: block;
+    color: black;
+    font-size: 0.75rem;
+    margin-bottom: 0.25rem;
+    letter-spacing: 0.5px;
+    padding-left: 1.5%;
+}

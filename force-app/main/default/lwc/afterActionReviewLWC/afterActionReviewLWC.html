@@ -1,0 +1,19 @@
+<template>
+    <div style="display:none">
+    <lightning-card>AAR Test Card {recordId} </lightning-card>
+    </div>
+
+    <template if:true={showMessage}>
+        <div class="slds-notify slds-notify_alert slds-alert_warning" role="alert">
+            <span class="slds-assistive-text">warning</span>
+            <h2>
+                <div class="slds-size_12-of-12">
+                    <lightning-formatted-rich-text
+                        value={message} >
+                    </lightning-formatted-rich-text>
+                </div>
+            </h2>
+          </div>
+    </template>
+
+</template>

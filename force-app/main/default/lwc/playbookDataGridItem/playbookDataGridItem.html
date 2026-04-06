@@ -1,0 +1,129 @@
+<template>
+
+	<template if:true={isChecklistDeletionModalOpen}>
+		<section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+			class="slds-modal slds-fade-in-open">
+			<div class="slds-modal__container">
+				<button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick={handleAction} data-action="closeChecklistDeletionModal">
+					<svg class="slds-button__icon slds-button__icon_large" aria-hidden="true">
+						<use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+					</svg>
+					<span class="slds-assistive-text">Cancel and close</span>
+				</button>
+				<div class="slds-modal__header">
+					<h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Delete Checklist</h1>
+				</div>
+				<div class="slds-modal__content slds-p-around_medium slds-text-align_center" id="modal-content-id-1">
+					<p>Are you sure you want to delete <b>{checklistToDeleteName} </b> checklist?</p>
+
+				</div>
+
+				<div class="slds-modal__footer">
+					<button class="slds-button slds-button_neutral" onclick={handleAction} data-action="closeChecklistDeletionModal"> Cancel
+					</button>
+					<button class="slds-button slds-button_destructive" onclick={handleAction} data-action="delete"> Delete
+					</button>
+				</div>
+			</div>
+		</section>
+		<div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+	</template>
+
+	<div class="slds-grid ">
+		<div class="slds-col slds-size_1-of-6 th th-heading">
+			<p class="">Subtask	
+
+				<lightning-button-icon style="float:right" class="slds-m-left_x-small" size="x-small" onclick={handleAction}
+					icon-name="utility:add" alternative-text="Add" title="Add" data-action="new_subtask">
+				</lightning-button-icon>
+			</p>
+		</div>
+		<div class="slds-col slds-size_5-of-6 th th-heading">
+			<p class="">Checklists</p>
+		</div>
+	</div>
+
+	<template if:true={hasSubTasks}>
+                    
+	<template for:each={subtasks} for:item="st" key={st.Id}>
+		<div key={st.Id} class="slds-grid slds-wrap slds-grid_vertical-stretch">
+			<div class="slds-col slds-size_1-of-6 th" key={st.Id}>
+				<div class="slds-m-bottom_medium">
+					<a href="javascript:void(0);" onclick={handleAction} data-action="navigateToRecordDetailPage"
+						data-id={st.Id}>{st.Name}</a>
+				</div>
+				<div>
+						<p>{st.completion_percentage__c}% Completed<br /><br />
+							<lightning-progress-bar variant="circular" value={st.completion_percentage__c}>
+							</lightning-progress-bar>
+							
+						</p>
+						<p class="slds-m-top_small">
+							<lightning-button variant="base" 
+							onclick={handleAction}
+							label="New Checklist" title="New Checklist" 
+							data-id={st.Id}
+							data-action="new_checklist"
+							icon-name="utility:add" ></lightning-button>
+						</p>
+				</div>
+			</div>
+			<div class="slds-col slds-size_5-of-6" key={st.Id}>
+				<template lwc:if={st.Checklists__r}>
+					<table
+						class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered slds-table_fixed-layout th-nopad">
+						<thead>
+							<tr class="slds-text-title_caps">
+								<th scope="col">Title</th>
+								<th scope="col">Due Date</th>
+								<th scope="col">Completed</th>
+								<th scope="col">Description</th>
+								<th scope="col" style="width: 100px;">Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							<template for:each={st.Checklists__r} for:item="task">
+								<tr key={task.Id}>
+									<td data-label="Subject" class="slds-truncate" title={task.Name}><a href="javascript:void(0);" onclick={handleAction}
+											data-action="navigateToRecordDetailPage"
+											data-id={task.Id}>{task.Name}</a>
+									</td>
+									<td data-label="Due Date" class="slds-truncate" title={task.Due_Date__c}>{task.Due_Date__c}</td>
+									<td data-label="Completed">
+										<lightning-input type="checkbox" name="input2" checked={task.Completed__c} disabled>
+										</lightning-input>
+									</td>
+									<td data-label="Description">
+										<div class="slds-truncate" title={task.Description}>{task.Description__c}</div>
+									</td>
+									<td data-label="Actions"
+										class="slds-grid slds-grid_align-center slds-p-horizontal_none">
+										<div class="slds-col">
+											<lightning-button-icon icon-name="utility:edit" alternative-text="Edit"
+												title="Edit" onclick={handleAction} data-action="edit"
+												data-id={task.Id}>
+											</lightning-button-icon>
+											<lightning-button-icon class="slds-m-left_x-small"
+												icon-name="utility:delete" alternative-text="delete" title="delete"
+												onclick={handleAction} data-action="deleteconfirmation"
+												data-id={task.Id} data-name={task.Subject}>
+											</lightning-button-icon>
+										</div>
+									</td>
+								</tr>
+							</template>
+						</tbody>
+
+					</table>
+				</template>
+				<template lwc:else>
+					<div class="slds-align_absolute-center th h-100">
+						No Records found
+					</div>
+				</template>
+			</div>
+		</div>
+	</template>
+	</template>
+
+</template>

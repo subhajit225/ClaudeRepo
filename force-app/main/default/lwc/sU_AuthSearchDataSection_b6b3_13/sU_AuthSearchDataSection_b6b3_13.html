@@ -1,0 +1,718 @@
+<template>
+    <!-- Contain Tab set -->
+    <div class="mainSUContainer">
+        <template if:true={showhideTotalResultsText}>
+            <div class="filterSectionClass">
+                <div class="section2 su__d-flex su__w-100 su__line-height-n su__mb-2">
+                    <template if:true={totalresults}>
+                        <template if:false={mergedresults}>
+                            <div
+                                class="su__showing-results-heading su__align-self-center su__mb-1 su__margin-auto-auto-auto-0 su__text-truncate-custom font-12 su__loading-view">
+                                {translationObject.Showing_page} {pagenum} {translationObject.of} {totalPages}
+                                {translationObject.of} {totalresults} {translationObject.results} ‌({searchresultime}‌
+                                {translationObject.seconds}).
+                            </div>
+                        </template>
+                    </template>
+                </div>
+            </div>
+        </template>
+        <div class="smallfilterSectionClass">
+            <div class="section2 su__d-flex su__w-100 su__line-height-n su__py-2">
+                <template if:true={totalresults}>
+                    <template if:false={mergedresults}>
+                        <div
+                            class="su__showing-results-heading su__align-self-center su__margin-auto-auto-auto-0 su__text-truncate-custom font-12 su__loading-view">
+                            {translationObject.Showing_page} {pagenum} {translationObject.of} {totalPages}
+                            {translationObject.of} {totalresults} {translationObject.results} ‌({searchresultime}‌
+                            {translationObject.seconds}).
+                        </div>
+                    </template>
+                </template>
+            </div>
+        </div>
+        <template if:true={totalresults}>
+            <template if:true={gptActive}>
+                <c-s-u_-auth-gpt_b6b3_13  translation-object={translationObject} fail-text={failText} loading={loading} empty-search-string={emptySearchString} uid={uid} total-results={totalResults} search-string={searchString} gpt-context={gptContext} gpt-links={gptLinks} page-num={pageNum} current-user-email={currentUserEmail} is-device-mobile={isDeviceMobile}></c-s-u_-auth-gpt_b6b3_13 >
+                <c-s-u_-auth-sandbox-gpt-feedback_b6b3_13   end-point={endPoint} bearer={bearer} uid={uid} search-string={searchString} gpt-context={gptContext}  > </c-s-u_-auth-sandbox-gpt-feedback_b6b3_13 >
+            </template> 
+       </template>
+        <!-- added advertisement component -->
+        <template if:true={showAdvertisement}>
+            <c-s-u_-auth-advertisement_b6b3_13  end-point-adv={endPoint} uid-adv={uid}
+                page-number={pagenum}></c-s-u_-auth-advertisement_b6b3_13 >
+        </template>
+        <!-- Clear All -->
+        <template if:true={showClearFiltersButton1}>
+            <div data-id="divblock" class="slds-col slds-size_4-of-12 su__rtl-clear-all">
+                <div class="slds-clearfix">
+                    <div class="slds-float_left">
+                        <template if:true={showClearFiltersButton1}>
+                            <div onclick={clearFilterForSlider1} class={clearAllClass}>
+                                {translationObject.Clear_all_filters}
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <!-- Result Set -->
+        <div class="Section3">
+            <template if:true={stickyFacets}>
+                <c-s-u_-auth-sticky_b6b3_13  loading={loading} selected-sticky-filter={selectedStickyFilter}
+                    totalresults={totalresults} toshow={stickyFacets} resizing={resizing}></c-s-u_-auth-sticky_b6b3_13 >
+            </template>
+            
+            <!-- featured snippts start  -->
+            <template if:true={featureSnippet}>
+                <c-s-u_-auth-feature-snippet_b6b3_13  translation-object={translationObject} feature-snippet={featureSnippet} feature-snippet-data={featureSnippetData} 
+                featured-response-recorded={featuredResponseRecorded} search-query-data={searchQueryData} > </c-s-u_-auth-feature-snippet_b6b3_13 >
+            </template>
+            <!-- featured snippts ends  -->
+
+            <template if:true={mergedresults}>
+                <ul class="su__d-flex su__flex-wrap su__grid-contentView su__customizeScView">
+                    <template for:each={responselistdata} for:item="data" for:index="indexVar">
+                        <div class="su__bg-white su__mb-3 su__word-break su__customizeScViewWidth su__sm-shadow"
+                            key={data.Id}>
+                            <div class="su__list-items su__radius-1 su__margin-bottom-10px ">
+                                <template for:each={data.hits} for:item="mergedResults" for:index="index">
+                                    <div key={mergedResults.Id}
+                                        class="su__d-flex su__customizeScViewHeader su__customise-sc-head su__align-items-center">
+                                        <div data-name={data.indexORobject}
+                                            class="su__position-relative su__bg-dark-gray su__customizeScContentTag">
+                                            <lightning-formatted-rich-text value={data.indexORobject}
+                                                class="su__loading-view su__mx-1 su__color-blue font-14 su__font-bold su__text-truncate-custom su__w-100 su__text-left">
+                                            </lightning-formatted-rich-text>
+                                        </div>
+                                        <div 
+                                            class="su__color-black su__loading-view su__float-right su__cursor "
+                                            onclick={tabClicked} data-val={mergedResults.displayName}
+                                            data-merged={mergedResults.merged}
+                                            data-selected={mergedResults.selected}
+                                            data-objname={mergedResults.objName}
+                                            data-name={mergedResults.sourceName} data-ind={ind}
+                                            data-max={mergedResults.level} data-step={mergedResults.parent}>
+                                            More Results...
+                                        </div>
+                                    </div>
+                                    <div key={mergedResults.Id} class="su__merged-results su__pt-10 su su__px-3">
+                                            <div class="su__d-flex">
+                                                <div class="su__flex-vcenter">
+                                                    <div class="su_search-link su__loading-view">
+                                                        <template if:false={hideTitle}>
+                                                            <a class="getHref su__text-decoration su__text-black font-14 su__font-regular su__cursor su__font-bold su__loading-view linkadd su__text-black su__mr-1"
+                                                                href={mergedResults.href} target="_blank"
+                                                                name={mergedResults.highlight.TitleToDisplay}
+                                                                onclick={runScriptMethod} data-id="titleToDisplay"
+                                                                oncontextmenu={runScriptMethod}
+                                                                onmousedown={runScriptMethod}
+                                                                data-rank={index}
+                                                                data-sub={mergedResults.highlight.TitleToDisplayString}
+                                                                data-url={mergedResults.href}
+                                                                data-track={mergedResults.trackAnalytics}
+                                                                data-type={mergedResults.objName}
+                                                                data-index={mergedResults.sourceName}
+                                                                data-autotuned={mergedResults.autotuned}
+                                                                data-recordid={mergedResults._id}>
+                                                                <template
+                                                                    if:true={mergedResults.highlightTitleToDisplayString}>
+                                                                    <lightning-formatted-rich-text
+                                                                        value={mergedResults.highlight.TitleToDisplay}
+                                                                        name={mergedResults} data-id={mergedResults.Id}
+                                                                        data-recordid={mergedResults._id}
+                                                                        class="underline"
+                                                                        style={mergedResults.styleColor}
+                                                                        data-showmodal="showmodal">
+                                                                    </lightning-formatted-rich-text>
+                                                                </template>
+                                                                <template
+                                                                    if:false={mergedResults.highlightTitleToDisplayString}>
+                                                                    <lightning-formatted-rich-text
+                                                                        value={mergedResults.href} name={mergedResults}
+                                                                        data-id={mergedResults.Id}
+                                                                        data-recordid={mergedResults._id}
+                                                                        class="underline"
+                                                                        style={mergedResults.styleColor}
+                                                                        data-showmodal="showmodal">
+                                                                    </lightning-formatted-rich-text>
+                                                                </template>
+                                                            </a>
+                                                        </template>
+                                                        <template if:true={mergedResults.bypass_filter}>
+                                                            <span class="su__auto-tuning su__loading-view"
+                                                                title="Boosted">
+                                                                <svg title="Boosted" xmlns="http://www.w3.org/2000/svg"
+                                                                    width="18" height="13.561"
+                                                                    viewBox="0 0 22.505 13.561">
+                                                                    <g data-name="Component 69 – 3"
+                                                                        transform="translate(1.414 1.414)">
+                                                                        <path data-name="Path 13515"
+                                                                            d="M21.177,9l-8.5,8.5L8.208,13.025,1.5,19.733"
+                                                                            transform="translate(-1.5 -9)" fill="none"
+                                                                            stroke="#1770d4" stroke-linecap="round"
+                                                                            stroke-linejoin="round" stroke-width="2" />
+                                                                        <path data-name="Path 13516"
+                                                                            d="M25.5,9h7.415v7.415"
+                                                                            transform="translate(-13.238 -9)"
+                                                                            fill="none" stroke="#1770d4"
+                                                                            stroke-linecap="round"
+                                                                            stroke-linejoin="round" stroke-width="2" />
+                                                                    </g>
+                                                                </svg>
+                                                            </span>
+                                                        </template>
+                                                        <template if:true={mergedResults.autotuned}>
+                                                            <span class="su__auto-tuning su__loading-view"
+                                                                title="Auto tuned">
+                                                                <svg width="14" height="14" viewBox="0 0 16 16">
+                                                                    <defs>
+                                                                        <clipPath>
+                                                                            <rect width="14" height="14" />
+                                                                        </clipPath>
+                                                                    </defs>
+                                                                    <g clip-path="url(#clip-Tunning)">
+                                                                        <path data-name="Path 1567"
+                                                                            d="M3,15.444v1.778H8.333V15.444ZM3,4.778V6.556h8.889V4.778ZM11.889,19V17.222H19V15.444H11.889V13.667H10.111V19ZM6.556,8.333v1.778H3v1.778H6.556v1.778H8.333V8.333ZM19,11.889V10.111H10.111v1.778ZM13.667,8.333h1.778V6.556H19V4.778H15.444V3H13.667Z"
+                                                                            transform="translate(-3 -3)"
+                                                                            fill="#8b8b8b" />
+                                                                    </g>
+                                                                </svg>
+                                                            </span>
+                                                        </template>
+
+                                                    </div>
+                                                </div>
+                                                <!-- <div class="su__d-flex-margin-custom su__loading-view actionIconClass">
+                                                    <div class="su__d-flex">
+                                                        <div class="">
+                                                            <template if:true={mergedResults.showPreview}>
+                                                                <lightning-button-icon icon-name="utility:preview"
+                                                                    size="x-small" alternative-text="preview"
+                                                                    data-value={mergedResults.href}
+                                                                    class="slds-m-left_xx-small"
+                                                                    data-title={mergedResults.highlight.TitleToDisplayString}
+                                                                    data-type={mergedResults.objName}
+                                                                    data-contentTag={mergedResults.contentTag}
+                                                                    data-index={mergedResults.sourceName}
+                                                                    data-autotuned={mergedResults.autotuned}
+                                                                    data-recordid={mergedResults._id}
+                                                                    name={mergedResults.highlight.TitleToDisplay}
+                                                                    data-id={mergedResults.Id} data-rank={indexVar}
+                                                                    data-sub={mergedResults.highlight.TitleToDisplayString}
+                                                                    data-url={mergedResults.href}
+                                                                    onclick={openPreviewModal}></lightning-button-icon>
+                                                            </template>
+                                                        </div>
+                                                    </div>
+                                                </div> -->
+                                            </div>
+                                            <div class="su__divider su__d-md-none su__d-xs-block"></div>
+                                            <template if:false={hideUrl}>
+                                                <template if:true={mergedResults.href}>
+                                                    <div class="su__loading-view">
+                                                        <p class="su__close-btn su__w-100  font-12 su__loading-view">
+                                                            <span class="su__text-decoration su__color-non-link  su__font-italic ">
+                                                                {data.href} </span>
+                                                        </p>
+                                                    </div>
+                                                </template>
+                                            </template>
+                                            <template if:false={hideSummary}>
+                                                <div class="su__loading-view su__close-btn">
+                                                    <div class="su__d-flex su__flex-column">
+                                                        <template for:each={mergedResults.highlight.SummaryToDisplay}
+                                                            for:item="SummaryToDisplay">
+                                                            <lightning-formatted-rich-text
+                                                                class="su__my-1 su__mb-1 su__list-item-desc su__font-regular"
+                                                                key={SummaryToDisplay} value={mergedResults.highlight.SummaryToDisplayMax}>
+                                                            </lightning-formatted-rich-text>
+                                                        </template>
+                                                    </div>
+
+                                                    <!-- <span
+                                                        class="su__list-item-desc su__font-regular font-12 su__word-break su__loading-view su__text-normal su__d-block">
+                                                        <template if:true={mergedResults.showMore}>
+                                                            <lightning-formatted-rich-text
+                                                                value={mergedResults.highlight.SummaryToDisplay}>
+                                                            </lightning-formatted-rich-text>
+                                                        </template>
+                                                        <template if:true={mergedResults.showMore}>
+                                                            ...
+                                                        </template>
+                                                        <template if:false={mergedResults.showMore}>
+                                                            <lightning-formatted-rich-text
+                                                                value={mergedResults.highlight.SummaryToDisplayMax}>
+                                                            </lightning-formatted-rich-text>
+                                                        </template>
+                                                        <template if:true={mergedResults.showMore}><span
+                                                                onclick={collapseSummary} data-index={indexVar}
+                                                                data-collapse=0
+                                                                class="font-12 su__text-nowrap su__color-blue su__cursor su__loading-view">
+                                                                Show More</span></template>
+                                                        <template if:true={mergedResults.showLess}><span
+                                                                onclick={collapseSummary} data-index={indexVar}
+                                                                data-collapse=1
+                                                                class="font-12 su__text-nowrap su__color-blue su__cursor su__loading-view">Show
+                                                                Less</span></template>
+                                                    </span> -->
+
+                                                </div>
+                                            </template>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </template>
+                </ul>
+                <div class={recommendAndSimiliarSearchFlex}>
+                    <template if:true={recommendationsEnable}>
+                            <div class={showRecommendationDivClass}>
+                                <c-s-u_-auth-recommendations_b6b3_13  knowledge-graph={knowledgeGraph}
+                                    search-strings={searchString}
+                                    search-query-data={searchQueryData} class="su__w-100"> </c-s-u_-auth-recommendations_b6b3_13 >
+                            </div>
+                    </template>
+                    <template if:true={similarSearches}>
+                        <div class="su__col similiarSearchPadding-0">
+                            <c-s-u_-auth-similiar-search_b6b3_13  similar-searches={similarSearches} similiar-search-data={similiarSearchData}>
+                            </c-s-u_-auth-similiar-search_b6b3_13 >
+                        </div>
+                    </template>
+                </div>
+            </template>
+            <div class={dataSearchedResultWidthClass}>
+                <template if:false={mergedresults}>
+                    <div class={searchedResultTilesWidth}>
+                        <ul class={activeScViewClass}>
+                            <template for:each={responselistdata} for:item="data" for:index="indexVar">
+                                <div class="su__bg-white su__d-flex su__width-100 su__px-3 su__py-3 su__word-break su__mb-3 su__sm-shadow su__mobile-view-width"
+                                    style={gridElement} key={data.Id}>
+                                    <template if:true={data.imageSource}>
+                                        <div class="su__listview-thumbnail">
+                                            <div class="su__m-thumbnail-img su__loading-view su__mr-2 su__rtlmx-2">
+                                                <img class="su-thumb" src={data.imageSource} />
+                                            </div>
+                                        </div>
+                                    </template>
+                                    <template if:false={hideIcon}>
+                                        <template if:true={data.iconPresent}>
+                                            <div key={data.Id}
+                                                class="su__grid-none su__mr-2 su__rtlml-2 su__pt-1 su__rtlmr-0 su__loading-view">
+                                                <img class="su__left-item-img su__w-100 su__loading-view su__doc-icon"
+                                                    src={data.icon} alt={data.icon} />
+                                            </div>
+                                        </template>
+                                    </template>
+                                    <div class="su__width-100">
+                                        <div class="su__d-flex">
+                                            <div class="su__flex-vcenter su__width_full">
+                                                <div class="su_search-link su__loading-view su__width_full"
+                                                    style={gridElementAlignment}>
+                                                    <template if:false={hideTitle}>
+                                                        <span 
+                                                            class="getTitleClick">
+                                                            <a class="getHref searchDataSectiontitle su__text-decoration su__text-black font-14 su__font-regular su__text-black su__font-bold su__cursor su__loading-view linkadd su__mr-1"
+                                                                href={data.href} target="_blank"
+                                                                name={data.highlight.TitleToDisplay}
+                                                                onclick={runScriptMethod} data-id={data.Id}
+                                                                oncontextmenu={runScriptMethod}
+                                                                onmousedown={runScriptMethod}
+                                                                data-rank={indexVar}
+                                                                data-sub={data.highlight.TitleToDisplayString}
+                                                                data-url={data.href} data-track={data.trackAnalytics}
+                                                                data-type={data.objName} data-index={data.sourceName}
+                                                                data-autotuned={data.autotuned}
+                                                                data-recordid={data._id}>
+                                                                <template if:true={data.highlightTitleToDisplayString}>
+                                                                    <lightning-formatted-rich-text
+                                                                        oncontextmenu={getSelectedTitle}
+                                                                        onclick={getSelectedTitle} data-rating={indexVar}
+                                                                        value={data.highlight.TitleToDisplay}
+                                                                        name={data} data-id={data.Id}
+                                                                        data-recordid={data._id} class="underline"
+                                                                        style={data.styleColor}
+                                                                        data-showmodal="showmodal">
+                                                                    </lightning-formatted-rich-text>
+                                                                </template>
+                                                                <template if:false={data.highlightTitleToDisplayString}>
+                                                                    <lightning-formatted-rich-text value={data.href}
+                                                                        oncontextmenu={getSelectedTitle}
+                                                                        onclick={getSelectedTitle} data-rating={indexVar}
+                                                                        name={data} data-id={data.Id}
+                                                                        data-recordid={data._id} class="underline"
+                                                                        style={data.styleColor}
+                                                                        data-showmodal="showmodal">
+                                                                    </lightning-formatted-rich-text>
+                                                                </template>
+                                                            </a>
+                                                        </span>
+                                                    </template>
+                                                    <div
+                                                        class={mainClass}>
+                                                        <template if:false={hideTag}>
+                                                            <template if:true={data.contentTag}>
+                                                                <lightning-formatted-rich-text value={data.contentTag}
+                                                                    class="font-12 su__font-regular su__content-name su__loading-view su__content-tag-padding">
+                                                                </lightning-formatted-rich-text>
+                                                            </template>
+                                                        </template>
+                                                        <!-- Code Starts - This contains three dots conversion svg when user clicks on search results then this svg is visible according to corresponding result clicked  -->
+                                                        <template if:true={showConversionButton}>
+                                                            <template if:true={data.isConversionSelected}>
+                                                                <span title="Give Feedback"
+                                                                    class="su__moreClick su__bg-white  su__d-inline-block grid"
+                                                                    onclick={feedbackOnResult} data-href={data.href}
+                                                                    data-title={data.highlight.TitleToDisplayString}>
+                                                                    <svg  width="22" height="22"
+                                                                        viewBox="0 0 24 24">
+                                                                        <path class="su__cursor"
+                                                                            d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
+                                                                            fill="#919bb0"></path>
+                                                                    </svg>
+                                                                </span>
+                                                            </template>
+                                                        </template>
+                                                        <!-- Code ends here of three dots conversion svg -->
+                                                        <template if:true={data.showPreview}>
+                                                            <span class={previewClassGrid}>
+                                                                <lightning-button-icon icon-name="utility:preview"
+                                                                    size="x-small" alternative-text="preview"
+                                                                    data-value={data.href} class="slds-m-left_xx-small"
+                                                                    data-title={data.highlight.TitleToDisplayString}
+                                                                    data-tag={data.contentTag}
+                                                                    data-type={data.objName}
+                                                                    data-index={data.sourceName}
+                                                                    data-autotuned={data.autotuned}
+                                                                    data-recordid={data._id}
+                                                                    name={data.highlight.TitleToDisplay}
+                                                                    data-id={data.Id} data-rank={indexVar}
+                                                                    data-sub={data.highlight.TitleToDisplayString}
+                                                                    data-url={data.href} onclick={openPreviewModal}>
+                                                                </lightning-button-icon>
+                                                            </span>
+                                                        </template>
+                                                        <template if:true={data.bypass_filter}>
+                                                            <span class="su__auto-tuning su__loading-view"
+                                                                title="Boosted">
+                                                                <svg title="Boosted" xmlns="http://www.w3.org/2000/svg"
+                                                                    width="18" height="13.561"
+                                                                    viewBox="0 0 22.505 13.561">
+                                                                    <g id="Component_69_3" data-name="Component 69 – 3"
+                                                                        transform="translate(1.414 1.414)">
+                                                                        <path id="Path_13515" data-name="Path 13515"
+                                                                            d="M21.177,9l-8.5,8.5L8.208,13.025,1.5,19.733"
+                                                                            transform="translate(-1.5 -9)" fill="none"
+                                                                            stroke="#1770d4" stroke-linecap="round"
+                                                                            stroke-linejoin="round" stroke-width="2" />
+                                                                        <path id="Path_13516" data-name="Path 13516"
+                                                                            d="M25.5,9h7.415v7.415"
+                                                                            transform="translate(-13.238 -9)"
+                                                                            fill="none" stroke="#1770d4"
+                                                                            stroke-linecap="round"
+                                                                            stroke-linejoin="round" stroke-width="2" />
+                                                                    </g>
+                                                                </svg>
+                                                            </span>
+                                                        </template>
+                                                        <template if:true={data.autotuned}>
+                                                            <span class="su__auto-tuning su__loading-view"
+                                                                title="Auto tuned">
+                                                                <svg width="14" height="14" viewBox="0 0 16 16">
+                                                                    <defs>
+                                                                        <clipPath id="clip-Tunning">
+                                                                            <rect width="14" height="14" />
+                                                                        </clipPath>
+                                                                    </defs>
+                                                                    <g id="Tunning" clip-path="url(#clip-Tunning)">
+                                                                        <path id="Path_1567" data-name="Path 1567"
+                                                                            d="M3,15.444v1.778H8.333V15.444ZM3,4.778V6.556h8.889V4.778ZM11.889,19V17.222H19V15.444H11.889V13.667H10.111V19ZM6.556,8.333v1.778H3v1.778H6.556v1.778H8.333V8.333ZM19,11.889V10.111H10.111v1.778ZM13.667,8.333h1.778V6.556H19V4.778H15.444V3H13.667Z"
+                                                                            transform="translate(-3 -3)"
+                                                                            fill="#8b8b8b" />
+                                                                    </g>
+                                                                </svg>
+                                                            </span>
+                                                        </template>
+                                                        
+                                                                <div class={mergeVersionClassGrid}> 
+                                                                    <template if:true={data.multipleVersions}>
+                                                                        <template if:true={data.version}>
+                                                                        <div class="su__d-flex mergeVersionData  su__loading-view su__position-relative">
+                                                                            <div class="version-field-name su__text-truncate-custom-field su__loading-view">{data.versionFieldName}
+                                                                            </div>
+                                                                            <template if:true={data.version}>
+                                                                                <div class="multiversion-main-box">
+                                                                                    <div class={data.showMRClass} data-id={data._id}
+                                                                                        data-rank={indexVar}
+                                                                                        onclick={handleInsideFilters}>
+                                                                                        <span>{data.version}</span>
+                                                                                        <div
+                                                                                            class="su__filter-arows merge-result-icon su__outline-none su__position-absolute">
+                                                                                            <i class="su__arrow-down"></i>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <template if:true={data.showMR}>
+                                                                                        <div class="merge-result-data"
+                                                                                            data-id="mergeVersion"
+                                                                                            onmouseleave={mergeResultOutsideClick}>
+                                                                                            <template
+                                                                                                if:true={responselistdata.length}>
+                                                                                                <template for:each={data.hits}
+                                                                                                    for:item="mergeListItem"
+                                                                                                    for:index="indexVar">
+                                                                                                    <template if:true ={mergeListItem.version}>
+                                                                                                    <div key={mergeListItem.Id}>
+                                                                                                        <div
+                                                                                                            class="merge-result-content ">
+                                                                                                            <a href={mergeListItem.href}
+                                                                                                                target="_blank"
+                                                                                                                name={mergeListItem.highlight.TitleToDisplay}
+                                                                                                                onclick={runScriptMethod}
+                                                                                                                onmousedown={runScriptMethod}
+                                                                                                                oncontextmenu={runScriptMethod}
+                                                                                                                data-track={data.trackAnalytics}
+                                                                                                                data-id={mergeListItem.Id}
+                                                                                                                data-rank={indexVar}
+                                                                                                                data-sub={mergeListItem.highlight.TitleToDisplayString}
+                                                                                                                data-url={mergeListItem.href}
+                                                                                                                data-type={mergeListItem.objName}
+                                                                                                                data-index={mergeListItem.sourceName}
+                                                                                                                data-autotuned={mergeListItem.autotuned}
+                                                                                                                data-recordid={mergeListItem._id}
+                                                                                                                class="su__text-truncate-custom su__d-block mergeVersionData-decoration">
+                                                                                                                <lightning-formatted-rich-text
+                                                                                                                    value={mergeListItem.version}>
+                                                                                                                </lightning-formatted-rich-text>
+                                                                                                            </a>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </template>
+                                                                                                </template>
+                                                                                            </template>
+            
+                                                                                        </div>
+            
+                                                                                    </template>
+                                                                                </div>
+                                                                            </template>
+                                                                        </div>
+                                                                    </template>
+                                                                    </template>
+                                                                </div>
+                                                             </div> 
+                                                        <!-- </div> -->
+                                                    
+                                                    <!-- </div> -->
+                                                </div>
+                                            </div>
+                                             <div class="su__d-flex-margin-custom su__loading-view actionIconClass">
+                                                <div class="su__d-flex">
+                                                    <div class={mergeVersionClassList}>
+                                                        <template if:true={data.multipleVersions}>
+                                                            <template if:true={data.version}>
+                                                            <div class="su__d-flex mergeVersionData  su__loading-view">
+                                                                <div class="version-field-name su__text-truncate-custom-field su__loading-view">{data.versionFieldName}
+                                                                </div>
+                                                                <template if:true={data.version}>
+                                                                    <div class="multiversion-main-box">
+                                                                        <div class={data.showMRClass} data-id={data._id}
+                                                                            data-rank={indexVar}
+                                                                            onclick={handleInsideFilters}>
+                                                                            <span>{data.version}</span>
+                                                                            <div
+                                                                                class="su__filter-arows merge-result-icon su__outline-none su__position-absolute">
+                                                                                <i class="su__arrow-down"></i>
+                                                                            </div>
+                                                                        </div>
+                                                                        <template if:true={data.showMR}>
+                                                                            <div class="merge-result-data"
+                                                                                data-id="mergeVersion"
+                                                                                onmouseleave={mergeResultOutsideClick}>
+                                                                                <template
+                                                                                    if:true={responselistdata.length}>
+                                                                                    <template for:each={data.hits}
+                                                                                        for:item="mergeListItem"
+                                                                                        for:index="indexVar">
+                                                                                        <template if:true ={mergeListItem.version}>
+                                                                                        <div key={mergeListItem.Id}>
+                                                                                            <div
+                                                                                                class="merge-result-content ">
+                                                                                                <a href={mergeListItem.href}
+                                                                                                    target="_blank"
+                                                                                                    name={mergeListItem.highlight.TitleToDisplay}
+                                                                                                    onclick={runScriptMethod}
+                                                                                                    onmousedown={runScriptMethod}
+                                                                                                    oncontextmenu={runScriptMethod}
+                                                                                                    data-track={data.trackAnalytics}
+                                                                                                    data-id={mergeListItem.Id}
+                                                                                                    data-rank={indexVar}
+                                                                                                    data-sub={mergeListItem.highlight.TitleToDisplayString}
+                                                                                                    data-url={mergeListItem.href}
+                                                                                                    data-type={mergeListItem.objName}
+                                                                                                    data-index={mergeListItem.sourceName}
+                                                                                                    data-autotuned={mergeListItem.autotuned}
+                                                                                                    data-recordid={mergeListItem._id}
+                                                                                                    class="su__text-truncate-custom su__d-block mergeVersionData-decoration">
+                                                                                                    <lightning-formatted-rich-text
+                                                                                                        value={mergeListItem.version}>
+                                                                                                    </lightning-formatted-rich-text>
+                                                                                                </a>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </template>
+                                                                                    </template>
+                                                                                </template>
+
+                                                                            </div>
+
+                                                                        </template>
+                                                                    </div>
+                                                                </template>
+                                                            </div>
+                                                        </template>
+                                                        </template>
+                                                    </div>
+                                                    <template if:true={data.showPreview}>
+                                                        <span class={previewClassList}>
+                                                            <lightning-button-icon icon-name="utility:preview"
+                                                                size="x-small" alternative-text="preview"
+                                                                data-value={data.href} class="slds-m-left_xx-small"
+                                                                data-title={data.highlight.TitleToDisplayString}
+                                                                data-tag={data.contentTag}
+                                                                data-type={data.objName} data-index={data.sourceName}
+                                                                data-autotuned={data.autotuned} data-recordid={data._id}
+                                                                name={data.highlight.TitleToDisplay} data-id={data.Id}
+                                                                data-rank={indexVar}
+                                                                data-sub={data.highlight.TitleToDisplayString}
+                                                                data-url={data.href} onclick={openPreviewModal}>
+                                                            </lightning-button-icon>
+                                                        </span>
+                                                    </template>
+                                                </div>
+                                            </div> 
+                                        </div>
+                                        <div class="su__divider su__d-md-none su__d-xs-block"></div>
+                                        <template if:false={hideUrl}>
+                                            <template if:true={data.href}>
+                                                <div class="su__loading-view">
+                                                    <p class="  su__w-100  font-12 su__loading-view">
+                                                        <span class="su__text-decoration su__color-non-link su__font-italic ">
+                                                            {data.href} </span>
+                                                    </p>
+                                                </div>
+                                            </template>
+                                        </template>
+                                        <div class="su__loading-view">
+                                            <template if:false={hideSummary}>
+                                                <template if:false={summaryCollapsible}>
+                                                    <div class="su__d-flex su__flex-column">
+                                                        <template for:each={data.highlight.SummaryToDisplay}
+                                                            for:item="SummaryToDisplay">
+                                                            <lightning-formatted-rich-text
+                                                                class="su__my-1 su__mb-1 su__list-item-desc su__font-regular su__SummaryToDisplay"
+                                                                key={SummaryToDisplay} value={SummaryToDisplay}>
+                                                            </lightning-formatted-rich-text>
+                                                        </template>
+                                                    </div>
+                                                </template>
+                                                <template if:true={summaryCollapsible}>
+                                                    <span
+                                                        class="su__list-item-desc su__font-regular font-12 su__word-break su__loading-view su__text-normal su__d-block">
+                                                        <template if:true={data.showMore}>
+                                                            <lightning-formatted-rich-text disable-linkify
+                                                                value={data.highlight.SummaryToDisplay}>
+                                                            </lightning-formatted-rich-text>
+                                                        </template>
+                                                        <template if:true={data.showMore}>
+                                                            ...
+                                                        </template>
+                                                        <template if:false={data.showMore}>
+                                                            <lightning-formatted-rich-text disable-linkify
+                                                                value={data.highlight.SummaryToDisplayMax}>
+                                                            </lightning-formatted-rich-text>
+                                                        </template>
+                                                        <template if:true={data.showMore}><span
+                                                                onclick={collapseSummary} data-index={indexVar}
+                                                                data-collapse=0
+                                                                class="font-12 su__text-nowrap su__color-blue su__cursor su__loading-view">
+                                                                {translationObject.Show_more}</span></template>
+                                                        <template if:true={data.showLess}><span
+                                                                onclick={collapseSummary} data-index={indexVar}
+                                                                data-collapse=1
+                                                                class="font-12 su__text-nowrap su__color-blue su__cursor su__loading-view su__ml-5">{translationObject.Show_less}</span></template>
+                                                    </span>
+                                                </template>
+                                            </template>
+                                        </div>
+                                        <template if:false={hideMetadata}>
+                                            <div
+                                                class="su__meta-item su__d-flex su__flex-wrap su__align-content-between su__mt-1 font-12">
+                                                <template for:each={data.metadata} for:item="metadata">
+                                                    <template if:false={metadata.noMetadataValue}>
+                                                        <div key={metadata.key} class={gridElementMetaData}>
+                                                            <template if:true={metadata.value}>
+                                                                <span
+                                                                    class="metaDataKey su__font-bold su__color-blue su__rtlmr-0 su__rtlml-2 su__loading-view">
+                                                                    {metadata.key}:
+                                                                </span>
+                                                                <lightning-formatted-rich-text value={metadata.value}
+                                                                    name={metadata.value} data-id={metadata.value} class="su__custom-metadata su__loading-view su__ml-1  su__font-regular su__loading-view">
+                                                                </lightning-formatted-rich-text>
+                                                            </template>
+                                                        </div>
+                                                    </template>
+                                                </template>
+                                            </div>
+                                        </template>
+                                    </div>
+
+                                </div>
+                            </template>
+                        </ul>
+                        <div class={recommendAndSimiliarSearchFlex}>
+                            <template if:true={recommendationsEnable}>
+                                    <div class={showRecommendationDivClass}>
+                                        <c-s-u_-auth-recommendations_b6b3_13  knowledge-graph={knowledgeGraph}
+                                            get-recommendations-enable={getRecommendationsEnable} search-query-data={searchQueryData}
+                                            class="su__w-100">
+                                        </c-s-u_-auth-recommendations_b6b3_13 >
+                                    </div>
+                            </template>
+                            <template if:true={similarSearches}>
+                                <div class="su__col similiarSearchPadding-0">
+                                    <c-s-u_-auth-similiar-search_b6b3_13  similar-searches={similarSearches}
+                                        similiar-search-data={similiarSearchData}> </c-s-u_-auth-similiar-search_b6b3_13 >
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+                <template if:true={knowledgeGraph}>
+                    <c-s-u_-auth-knowledge-Graph_b6b3_13 
+                        class="su__knowledgeGraphWidth su__knowledgeGraphStyling su__sm-shadow su__p-3"
+                        knowledge-graph={knowledgeGraph} knowledge-graph-meta-graph={knowledgeGraphMetaGraph}
+                        knowledge-graph-related-tiles={knowledgeGraphRelatedTiles} meta-graph={metaGraph}
+                        translation-object={translationObject}
+                        knowledge-graph-response-recorded={knowledgeGraphResponseRecorded} related-tiles={relatedTiles}
+                        search-query-data={searchQueryData}> </c-s-u_-auth-knowledge-Graph_b6b3_13 >
+                </template>
+            </div>
+            <div class="body-section">
+                <div class="div footerSection">
+                    <template if:true={showPagination}>
+                        <c-s-u_-auth-pagination_b6b3_13  pagenum={pageNum}
+                            latesturlval={latestUrlVal} pagesize={pageSize}
+                            totalresults={totalResults} totalpages={totalPages}
+                            counter={counter} endpointpagination={endPointPagination}
+                            paginationlist={paginationList}
+                            responselistdata={responseListData}
+                            mergedresults={mergedresults}
+                            translation-object={translationObject}
+                            resultsectioncontainer={resultSectionContainer}></c-s-u_-auth-pagination_b6b3_13 >
+                    </template>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

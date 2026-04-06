@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Warnings__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(
+  AND( TEXT(POC_Type__c) &lt;&gt; &quot;Virtual Lab&quot;, Agreed_to_POC_terms__c = FALSE, Online_Agreement_Signed__c = FALSE, OR(ISBLANK(TEXT(Partner_Disty_Signed_POC_Addendum__c)), TEXT(Partner_Disty_Signed_POC_Addendum__c) = &apos;No&apos;), Manual_POC_Agreement__c = FALSE),
+  IMAGE(&quot;/img/msg_icons/error16.png&quot;, &quot;red&quot;, 15, 15) + &quot; Unable to submit this POC Request. The following agreements are required:&quot;+ IF(Agreed_to_POC_terms__c = FALSE,&apos; Agreed to POC terms &apos;,&apos;&apos;) + IF(Online_Agreement_Signed__c = FALSE,&apos;, Online Agreement Signed &apos;,&apos;&apos;) + IF(OR(ISBLANK(TEXT(Partner_Disty_Signed_POC_Addendum__c)) , TEXT(Partner_Disty_Signed_POC_Addendum__c) = &apos;No&apos;),&apos;, Partner/Disty Signed POC Addendum &apos;,&apos;&apos;)+ IF(Manual_POC_Agreement__c = FALSE,&apos;, Manual POC Agreement &apos;,&apos;&apos;),
+  IMAGE(&quot;/img/msg_icons/confirm16.png&quot;, &quot;green&quot;, 15, 15)
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Warnings</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

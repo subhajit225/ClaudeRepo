@@ -1,0 +1,43 @@
+<template>
+    <!-- cusotom-slds-model is the new custom class used to create spacings and averriding unwantd styles -->
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header>
+                    <button class="slds-button slds-modal__close slds-float_right slds-align_absolute-center" title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse" size="small" ></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                </header>
+                <div class="slds-modal__content slds-p-around_x-large position-relative" id="modal-content-id-1">
+                    <template if:true={showSpinner}>
+                            <lightning-spinner alternative-text="Loading..." size="large"></lightning-spinner>
+                    </template>
+                    <lightning-layout multiple-rows>
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+                        <div class="slds-card no-style-slds-card">
+                            <span class="slds-p-vertical_xx-large slds-p-horizontal_small cardBodyHeadline">Add New User</span>
+                            <lightning-input type="email" label="Business Email" required value={businessEmail} name={fieldNames.email} onchange={handleChangeEvent} class="slds-p-around_small inputClass emailClass">
+                            </lightning-input>
+                            <lightning-input type="text" label="First Name" required value={firstName} name={fieldNames.firstName} onchange={handleChangeEvent} class="slds-p-around_small inputClass">
+                            </lightning-input>
+                            <lightning-input type="text" label="Last Name" required value={lastName} name={fieldNames.lastName} onchange={handleChangeEvent} class="slds-p-around_small inputClass">
+                            </lightning-input>
+                            <lightning-input type="text" label="Job Title" required value={jobTitle} name={fieldNames.jobTitle} onchange={handleChangeEvent} class="slds-p-around_small inputClass">
+                            </lightning-input>
+                            <lightning-input type="text" label="Phone Number" value={phoneNumber} name={fieldNames.phone} pattern="(\+\d{1,3}\s?)?((\(\d{3}\)\s?)|(\d{3})(\s|-?))(\d{3}(\s|-?))(\d{4})(\s?(([E|e]xt[:|.|]?)|x|X)(\s?\d+))?" message-when-pattern-mismatch="Please enter a valid phone" onchange={handleChangeEvent} class="slds-p-around_small inputClass">
+                            </lightning-input>
+                            <lightning-input type="checkbox" label="Activate Partner Portal User Access" onchange={handleCheck} name="input1" checked={activateUser} class="slds-p-around_small inputClass">
+                            </lightning-input>
+                            <hr />
+                            <lightning-button variant="brand" label="Save" title="Save" onclick={handleSubmit} disabled={disableButton} class="slds-p-around_small">
+                            </lightning-button>
+                            <lightning-button variant="brand" label="Cancel" title="Cancel" onclick={closeModal} disabled={disableButton} class="slds-p-around_small">
+                            </lightning-button>
+                        </div>
+                    </lightning-layout-item>
+                    </lightning-layout>
+                </div>
+            </div>
+        </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+</template>

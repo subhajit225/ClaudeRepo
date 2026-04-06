@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RMA_ValidateSmartHandService_Checkbox</fullName>
+    <active>true</active>
+    <description>Once the &quot;Send Smart Hands Service?&quot; checkbox checked then user can not mark it as false.</description>
+    <errorConditionFormula>AND(PRIORVALUE(Send_Smart_Hands_Service__c), TRUE,
+ISCHANGED(Send_Smart_Hands_Service__c))</errorConditionFormula>
+    <errorDisplayField>Send_Smart_Hands_Service__c</errorDisplayField>
+    <errorMessage>This can not be marked as unchecked.</errorMessage>
+</ValidationRule>

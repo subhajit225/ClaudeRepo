@@ -1,0 +1,763 @@
+<template>
+    <lightning-record-edit-form columns="2" record-id={recordId} object-api-name="Deal_Desk_Case__c" 
+                                onsuccess={handleSuccess} onerror={handleError} onsubmit={handleSubmit} >
+        <!-- View Mode Start-->
+        <template if:false = {isEditable}>
+            <h3 class="slds-section__title slds-theme_shade" style="background-color: #f3f2f2;">
+                <lightning-icon class="slds-button__icon_left slds-p-left_x-small slds-p-left_x-small" size="x-small" icon-name="utility:chevrondown" alternative-text="chevrondown" title="chevrondown"></lightning-icon><span class="slds-truncate" title="Section Title" style="font-weight: 400;">Deal Desk Request Details</span>
+            </h3>
+            <div class="slds-m-around_small">
+                <div class="slds-form__row">
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <div class="slds-form-element__static">
+                                  <lightning-output-field field-name="Deal_Desk_Team__c"> </lightning-output-field>
+                            </div>
+  
+                        </div>
+                     </div>
+                      <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <div class="slds-form-element__static">
+                                <lightning-output-field field-name="OwnerId"> </lightning-output-field>
+                            </div>
+                            <template if:true={isDDCUser}>
+                            <lightning-button-icon class="slds-float_right" icon-name="utility:edit" alternative-text="Edit" title="Edit" variant="bare" size="medium" onclick={handleEdit} style="opacity: 0.4;"></lightning-button-icon>
+                            </template>
+                          <template if:false={isDDCUser}>
+                              <template if:true={isDraft}>
+                                  <lightning-button-icon class="slds-float_right" icon-name="utility:edit" alternative-text="Edit" title="Edit" variant="bare" size="medium" onclick={handleEdit} style="opacity: 0.4;"></lightning-button-icon>
+                              </template>
+                          </template>
+                        </div>
+                    </div>
+                  </div>
+            </div>
+            <div class="slds-m-around_small">
+                <div class="slds-form__row">
+                    
+                  <div class="slds-form__item" role="listitem">
+                      <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                          <div class="slds-form-element__static">
+                              <lightning-output-field field-name="Request_Type__c"> </lightning-output-field>
+                    </div>      
+                          <template if:true={isDDCUser}>
+                              <lightning-button-icon class="slds-float_right" icon-name="utility:edit" alternative-text="Edit" title="Edit" variant="bare" size="medium" onclick={handleEdit} style="opacity: 0.4;"></lightning-button-icon>
+                          </template>
+                          <template if:false={isDDCUser}>
+                              <template if:true={isDraft}>
+                                  <lightning-button-icon class="slds-float_right" icon-name="utility:edit" alternative-text="Edit" title="Edit" variant="bare" size="medium" onclick={handleEdit} style="opacity: 0.4;"></lightning-button-icon>
+                              </template>
+                          </template>
+                </div>
+            </div>
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <div class="slds-form-element__static">
+                                <lightning-output-field field-name="Secondary_owner__c"> </lightning-output-field>
+                            </div>
+                            <template if:true={isDDCUser}>
+                            <lightning-button-icon class="slds-float_right" icon-name="utility:edit" alternative-text="Edit" title="Edit" variant="bare" size="medium" onclick={handleEdit} style="opacity: 0.4;"></lightning-button-icon>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+              
+            
+           
+            
+            <div class="slds-m-around_small">
+                <div class="slds-form__row">
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <div class="slds-form-element__static">
+                                <lightning-output-field field-name="SubmittedDate__c"> </lightning-output-field>
+                            </div>
+                            <template if:true={isDDCUser}>
+                            <lightning-button-icon class="slds-float_right" icon-name="utility:edit" alternative-text="Edit" title="Edit" variant="bare" size="medium" onclick={handleEdit} style="opacity: 0.3;"></lightning-button-icon>
+                          </template>
+                          <template if:false={isDDCUser}>
+                              <template if:true={isDraft}>
+                              <lightning-button-icon class="slds-float_right" icon-name="utility:edit" alternative-text="Edit" title="Edit" variant="bare" size="medium" onclick={handleEdit} style="opacity: 0.4;"></lightning-button-icon>
+                              </template>
+                              </template>
+                          </div>
+                    </div>  
+                    <div class="slds-form__item" role="listitem">
+                      <template if:true={isDDCUser}>
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <div class="slds-form-element__static">
+                              <lightning-output-field field-name="SubmittedUser__c"> </lightning-output-field>
+                            </div>
+                            <template if:true={isDDCUser}>
+                            <lightning-button-icon class="slds-float_right" icon-name="utility:edit" alternative-text="Edit" title="Edit" variant="bare" size="medium" onclick={handleEdit} style="opacity: 0.3;"></lightning-button-icon>
+                          </template>
+                          <template if:false={isDDCUser}>
+                              <template if:true={isDraft}>
+                              <lightning-button-icon class="slds-float_right" icon-name="utility:edit" alternative-text="Edit" title="Edit" variant="bare" size="medium" onclick={handleEdit} style="opacity: 0.4;"></lightning-button-icon>
+                              </template>
+                              </template>
+                        </div>
+                      </template>
+                    </div>      
+                </div>
+            </div>
+            
+            <template if:true={isDDCUser}>
+            <div class="slds-m-around_small">
+                <div class="slds-form__row">
+                   
+                </div>
+            </div>
+          </template>
+            <div class="slds-m-around_small">
+                <div class="slds-form__row">
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <div class="slds-form-element__static">
+                                <lightning-output-field field-name="Requestor__c"> </lightning-output-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <div class="slds-form-element__static">
+                                  <lightning-output-field field-name="Urgent__c"> </lightning-output-field> <!--DD25-5-->
+                            </div>
+                              <lightning-button-icon class="slds-float_right" icon-name="utility:edit" alternative-text="Edit" title="Edit" variant="bare" size="medium" onclick={handleEdit} style="opacity: 0.3;"></lightning-button-icon>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-m-around_small">
+              <div class="slds-form__row">
+                <div class="slds-form__item" role="listitem">
+                    <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                        <div class="slds-form-element__static">
+                                <lightning-output-field field-name="Quote__c"> </lightning-output-field> <!--DD25-5-->
+                        </div>
+                            <template if:true={isDDCUser}>
+                              <lightning-button-icon class="slds-float_right" icon-name="utility:edit" alternative-text="Edit" title="Edit" variant="bare" size="medium" onclick={handleEdit} style="opacity: 0.3;"></lightning-button-icon>
+                          </template>
+                       </div>
+                </div>
+                  <div class="slds-form__item" role="listitem">
+                      <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                          <div class="slds-form-element__static">
+                              <lightning-output-field field-name="Case_Status__c"> </lightning-output-field>
+                          </div>
+                          <template if:true={isDDCUser}>
+                          <lightning-button-icon class="slds-float_right" icon-name="utility:edit" alternative-text="Edit" title="Edit" variant="bare" size="medium" onclick={handleEdit} style="opacity: 0.3;"></lightning-button-icon>
+                      </template>
+                      </div>
+                  </div>
+               </div>
+          </div>
+          <h3 class="slds-section__title slds-theme_shade" style="background-color: #f3f2f2;">
+              <lightning-icon class="slds-button__icon_left slds-p-left_x-small slds-p-left_x-small" size="x-small" icon-name="utility:chevrondown" alternative-text="chevrondown" title="chevrondown"></lightning-icon><span class="slds-truncate" title="Section Title" style="font-weight: 400;">Questionnaire</span>
+          </h3>
+          <div class="slds-m-around_small">
+              <div class="slds-form__row">
+                  
+                  <div class="slds-form__item" role="listitem">
+                       <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            </div>
+                  </div>
+                <div class="slds-form__item" role="listitem">
+                  <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <div class="slds-form-element__static">
+                              <lightning-output-field field-name="Case_Subject__c"> </lightning-output-field>
+                            </div>
+                            <template if:true={isDDCUser}>
+                          <lightning-button-icon class="slds-float_right" icon-name="utility:edit" alternative-text="Edit" title="Edit" variant="bare" size="medium" onclick={handleEdit} style="opacity: 0.4;"></lightning-button-icon>
+                              </template>
+                        </div>
+                </div>
+              </div>
+                  
+              <div class="slds-form__row">
+                  <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <div class="slds-form-element__static">
+                              <lightning-output-field field-name="Business_Justification_Questions__c"> </lightning-output-field>
+                            </div>
+                      </div>
+                  </div>
+                  <div class="slds-form__item" role="listitem">
+                      <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                          <div class="slds-form-element__static">
+                              <lightning-output-field field-name="Business_Justification__c"> </lightning-output-field>
+                          </div>
+                          <template if:true={isDraft}>
+                            <lightning-button-icon class="slds-float_right" icon-name="utility:edit" alternative-text="Edit" title="Edit" variant="bare" size="medium" onclick={handleEdit} style="opacity: 0.3;"></lightning-button-icon>
+                        </template>
+                        </div>
+                    </div>
+               </div>
+              <div class="slds-form__row">
+                  <div class="slds-form__item" role="listitem">
+            
+                  </div>
+                   <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <div class="slds-form-element__static">
+                                <lightning-output-field field-name="Comments__c"> </lightning-output-field>
+                            </div>
+                             <template if:true={isDDCUser}>
+                            <lightning-button-icon class="slds-float_right" icon-name="utility:edit" alternative-text="Edit" title="Edit" variant="bare" size="medium" onclick={handleEdit} style="opacity: 0.3;"></lightning-button-icon>
+                             </template>
+                        </div>
+                  </div>
+              </div>
+          </div>
+          <h3 class="slds-section__title slds-theme_shade" style="background-color: #f3f2f2;">
+                <lightning-icon class="slds-button__icon_left slds-p-left_x-small slds-p-left_x-small" size="x-small" icon-name="utility:chevrondown" alternative-text="chevrondown" title="chevrondown"></lightning-icon><span class="slds-truncate" title="Section Title" style="font-weight: 400;">Deal Desk Info</span>
+            </h3>
+            <div class="slds-m-around_small">
+              <div class="slds-form__row">
+                  <div class="slds-form__item" role="listitem">
+                       <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                          <div class="slds-form-element__static">
+                              <lightning-output-field field-name="Summary_of_Approval__c"> </lightning-output-field>
+                          </div>
+                          <lightning-button-icon class="slds-float_right" icon-name="utility:edit" alternative-text="Edit" title="Edit" variant="bare" size="medium" onclick={handleEdit} style="opacity: 0.3;"></lightning-button-icon>
+                      </div>
+                  </div>
+                  <div class="slds-form__item" role="listitem">
+                      <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                          <div class="slds-form-element__static">
+                              <lightning-output-field field-name="Additional_Notes__c"> </lightning-output-field>
+                          </div>
+                          <lightning-button-icon class="slds-float_right" icon-name="utility:edit" alternative-text="Edit" title="Edit" variant="bare" size="medium" onclick={handleEdit} style="opacity: 0.3;"></lightning-button-icon>
+                      </div>
+                  </div> 
+              </div>
+              <div class="slds-form__row">
+                  <div class="slds-form__item" role="listitem">
+                     <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                          <div class="slds-form-element__static">
+                              <lightning-output-field field-name="Deal_Desk_Tagging__c"> </lightning-output-field>
+                          </div>
+                          <lightning-button-icon class="slds-float_right" icon-name="utility:edit" alternative-text="Edit" title="Edit" variant="bare" size="medium" onclick={handleEdit} style="opacity: 0.3;"></lightning-button-icon>
+                      </div>
+                  </div>
+                  <div class="slds-form__item" role="listitem">
+                  </div>
+              </div>
+              <div class="slds-form__row">
+                  <div class="slds-form__item" role="listitem">
+                     <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                          <div class="slds-form-element__static">
+                              <lightning-output-field field-name="Tagging_Context__c"> </lightning-output-field>
+                          </div>
+                          <lightning-button-icon class="slds-float_right" icon-name="utility:edit" alternative-text="Edit" title="Edit" variant="bare" size="medium" onclick={handleEdit} style="opacity: 0.3;"></lightning-button-icon>
+                      </div>
+                  </div>
+                  <div class="slds-form__item" role="listitem">
+                  </div>
+              </div>
+              <div class="slds-form__row">
+                  <div class="slds-form__item" role="listitem">
+                      <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                          <div class="slds-form-element__static">
+                              <lightning-output-field field-name="Internal_Approval_Notes__c"> </lightning-output-field>
+                          </div>
+                          <lightning-button-icon class="slds-float_right" icon-name="utility:edit" alternative-text="Edit" title="Edit" variant="bare" size="medium" onclick={handleEdit} style="opacity: 0.3;"></lightning-button-icon>
+                      </div>
+                    </div>    
+                    <div class="slds-form__item" role="listitem">
+                  </div> 
+              </div>
+            </div>
+            <h3 class="slds-section__title slds-theme_shade" style="background-color: #f3f2f2;">
+                <lightning-icon class="slds-button__icon_left slds-p-left_x-small slds-p-left_x-small" size="x-small" icon-name="utility:chevrondown" alternative-text="chevrondown" title="chevrondown"></lightning-icon><span class="slds-truncate" title="Section Title" style="font-weight: 400;">Opportunity Details</span>
+            </h3>
+            <div class="slds-m-around_small">
+              <div class="slds-form__row">
+                  <div class="slds-form__item" role="listitem">
+                      <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                          <div class="slds-form-element__static">
+                              <lightning-output-field field-name="Opportunity__c"> </lightning-output-field>
+                          </div>
+                      </div>
+                  </div>
+                  
+                  <div class="slds-form__item" role="listitem">
+                      <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                          <div class="slds-form-element__static">
+                              <lightning-output-field field-name="Opportunity_Owner__c"> </lightning-output-field>
+                          </div>
+                      </div>
+                  </div>      
+              </div>
+          </div>
+            
+            <div class="slds-m-around_small">
+                <div class="slds-form__row">
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <div class="slds-form-element__static">
+                                <lightning-output-field field-name="Account_Name__c"> </lightning-output-field>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <div class="slds-form-element__static">
+                                <lightning-output-field field-name="Close_Date__c"> </lightning-output-field>
+                            </div>
+                        </div>
+                    </div>      
+                </div>
+            </div>
+            <div class="slds-m-around_small">
+                <div class="slds-form__row">
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <div class="slds-form-element__static">
+                                <lightning-output-field field-name="Amount_TCV__c"> </lightning-output-field>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <div class="slds-form-element__static">
+                                <lightning-output-field field-name="ETM_Theatre__c"> </lightning-output-field>
+                            </div>
+                        </div>
+                    </div>      
+                </div>
+            </div>
+            <div class="slds-m-around_small">
+                <div class="slds-form__row">
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <div class="slds-form-element__static">
+                                <lightning-output-field field-name="Amount_ACV__c"> </lightning-output-field>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <div class="slds-form-element__static">
+                                <lightning-output-field field-name="ETM_Area__c"> </lightning-output-field>
+                            </div>
+                        </div>
+                    </div>      
+                </div>
+            </div>
+            <template if:true={isDDCUser}>
+            <div class="slds-m-around_small">
+                <div class="slds-form__row">
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <div class="slds-form-element__static">
+                                <lightning-output-field field-name="Deal_Structuring_Notes__c"> </lightning-output-field>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <div class="slds-form-element__static">
+                                <lightning-output-field field-name="ETM_Region__c"> </lightning-output-field>
+                            </div>
+                        </div>
+                    </div>      
+                </div>
+            </div>
+          
+            <div class="slds-m-around_small">
+                <div class="slds-form__row">
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <div class="slds-form-element__static">
+                                <lightning-output-field field-name="Primary_Quote__c"> </lightning-output-field>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <div class="slds-form-element__static">
+                                <lightning-output-field field-name="Primary_Quote_Status__c"> </lightning-output-field>
+                            </div>
+                        </div>
+                    </div>      
+                </div>
+            </div>
+            <div class="slds-m-around_small">
+              <div class="slds-form__row">
+                  <div class="slds-form__item" role="listitem">
+                      <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                          <div class="slds-form-element__static">
+                              <lightning-output-field field-name="In_Forecast_GVP__c"> </lightning-output-field>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="slds-form__item" role="listitem">
+                  </div>      
+              </div>
+          </div>
+          </template>
+          <template if:false={isDDCUser}>
+              <div class="slds-m-around_small">
+                  <div class="slds-form__row">
+                      <div class="slds-form__item" role="listitem">
+                          <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                              <div class="slds-form-element__static">
+                                  <lightning-output-field field-name="Primary_Quote__c"> </lightning-output-field>
+                              </div>
+                          </div>
+                      </div>
+                      
+                      <div class="slds-form__item" role="listitem">
+                          <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                              <div class="slds-form-element__static">
+                                  <lightning-output-field field-name="ETM_Region__c"> </lightning-output-field>
+                              </div>
+                          </div>
+                      </div>      
+                  </div>
+              </div>
+            
+              <div class="slds-m-around_small">
+                  <div class="slds-form__row">
+                      <div class="slds-form__item" role="listitem">
+                          <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                              <div class="slds-form-element__static">
+                                  <lightning-output-field field-name="Primary_Quote_Status__c"> </lightning-output-field>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="slds-form__item" role="listitem">
+                      </div>      
+                  </div>
+              </div>
+              
+            </template>
+           
+            <h3 class="slds-section__title slds-theme_shade" style="background-color: #f3f2f2;">
+                <lightning-icon class="slds-button__icon_left slds-p-left_x-small slds-p-left_x-small" size="x-small" icon-name="utility:chevrondown" alternative-text="chevrondown" title="chevrondown"></lightning-icon><span class="slds-truncate" title="Section Title" style="font-weight: 400;">System Information</span>
+            </h3>
+            
+            <div class="slds-m-around_small">
+                <div class="slds-form__row">
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <div class="slds-form-element__static">
+                                <lightning-output-field field-name="CreatedById"> </lightning-output-field>
+                            </div></div>
+                    </div>
+                    
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <div class="slds-form-element__static">
+                                <lightning-output-field field-name="LastModifiedById"> </lightning-output-field>
+                            </div></div>
+                    </div>      
+                </div>
+            </div>  
+            <div class="slds-m-around_small">
+                <div class="slds-form__row">
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <div class="slds-form-element__static">
+                                <lightning-output-field field-name="Created_Date__c"> </lightning-output-field>
+                            </div></div>
+                    </div>
+                    
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <div class="slds-form-element__static">
+                                <lightning-output-field field-name="Last_Modified_Date__c"> </lightning-output-field>
+                            </div></div>
+                    </div>      
+                </div>
+            </div>  
+          <div class="slds-m-around_small">
+           <div class="slds-form__row">
+            <div class="slds-form__item" role="listitem">
+              <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+               <div class="slds-form-element__static">
+                 <!--<lightning-output-field field-name="Time_To_First_Response__c"> </lightning-output-field>-->
+                  <template if:true={recordId}>
+                      <c-deal-desk-case-timer record-id={recordId}></c-deal-desk-case-timer>
+                  </template>
+               </div>
+              </div>
+            </div>
+            <div class="slds-form__item" role="listitem"></div>
+                </div>
+            </div>  
+        </template>
+        
+        <template if:true = {isEditable}>
+            <div class="slds-is-relative">
+                <template if:true={isLoading}>
+                    <lightning-spinner alternative-text="Loading" variant="brand" size="medium"> 
+                    </lightning-spinner>    
+                </template>
+                <h3 class="slds-section__title slds-theme_shade" style="background-color: #f3f2f2;">
+                    <lightning-icon class="slds-button__icon_left slds-p-left_x-small slds-p-left_x-small" size="x-small" icon-name="utility:chevrondown" alternative-text="chevrondown" title="chevrondown"></lightning-icon><span class="slds-truncate" title="Section Title" style="font-weight: 400;">Deal Desk Request Details</span>
+                </h3>
+               
+                <lightning-layout >
+                    <lightning-layout-item padding="around-small" size="6">
+                      <template if:true={isDDCUser}>
+                        <lightning-input-field field-name="Deal_Desk_Team__c" required="true" onchange={handleDDTeamChange}> </lightning-input-field>
+                      </template>
+                      <template if:false={isDDCUser}>
+                          <lightning-output-field field-name="Deal_Desk_Team__c" > </lightning-output-field>
+                      </template>
+                    </lightning-layout-item>
+                   
+                    <lightning-layout-item padding="around-small" size="6">
+                      <template if:true={isDDCUser}>
+                        <lightning-input-field field-name="Secondary_owner__c"> </lightning-input-field>
+                        </template>
+                        <template if:false={isDDCUser}>
+                        <lightning-input-field field-name="Secondary_owner__c"> </lightning-input-field>
+                        </template>
+                    </lightning-layout-item>
+                </lightning-layout>
+                <lightning-layout>
+                    <lightning-layout-item padding="around-small" size="6">
+                      <template if:true={isDDCUser}>
+                        <lightning-input-field field-name="Request_Type__c" required="true" onchange={handlereqTypeChange}> </lightning-input-field>
+                      </template>
+                        <template if:false={isDDCUser}>
+                          <template if:true={isDraft}>
+                          <lightning-input-field field-name="Request_Type__c" required="true" onchange={handlereqTypeChange}> </lightning-input-field>
+                          </template>
+                      </template>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small" size="6">
+                      
+                    </lightning-layout-item>
+                  </lightning-layout>
+                  <lightning-layout >
+                    <lightning-layout-item padding="around-small" size="6">
+                        <lightning-input-field field-name="SubmittedDate__c" disabled="true"> </lightning-input-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small" size="6">
+                        <lightning-input-field field-name="SubmittedUser__c" disabled="true"> </lightning-input-field>
+                    </lightning-layout-item>
+                </lightning-layout>
+                <lightning-layout >
+                  <lightning-layout-item padding="around-small" size="6">
+                      <lightning-output-field field-name="Requestor__c"> </lightning-output-field>
+                  </lightning-layout-item>
+                   <lightning-layout-item padding="around-small" size="6">
+                      <template if:true={isDDCUser}>
+                      <lightning-input-field field-name="Urgent__c"> </lightning-input-field>
+                      </template>
+                          <template if:false={isDDCUser}>
+                      <lightning-output-field field-name="Urgent__c"> </lightning-output-field>
+                      </template>
+                  </lightning-layout-item>
+              </lightning-layout>
+              <lightning-layout >
+                  <lightning-layout-item padding="around-small" size="6">
+                      <!--DD25-5-->
+                      <lightning-input-field field-name="Quote__c"> </lightning-input-field>
+                  </lightning-layout-item>
+                  <!--DD25-5-->
+                   <lightning-layout-item padding="around-small" size="6">
+                      <template if:true={isDDCUser}>
+                      <lightning-input-field field-name="Case_Status__c"> </lightning-input-field>
+                      </template>
+                          <template if:false={isDDCUser}>
+                      <lightning-input-field field-name="Case_Status__c" disabled="true"> </lightning-input-field>
+                      </template>
+                  </lightning-layout-item>
+              </lightning-layout>
+  
+              <h3 class="slds-section__title slds-theme_shade" style="background-color: #f3f2f2;">
+                  <lightning-icon class="slds-button__icon_left slds-p-left_x-small slds-p-left_x-small" size="x-small" icon-name="utility:chevrondown" alternative-text="chevrondown" title="chevrondown"></lightning-icon><span class="slds-truncate" title="Section Title" style="font-weight: 400;">Questionnaire</span>
+              </h3>
+              <lightning-layout >
+                  <lightning-layout-item padding="around-small" size="6">
+                  </lightning-layout-item>
+                  <lightning-layout-item padding="around-small" size="6">
+                      <lightning-input-field field-name="Case_Subject__c"> </lightning-input-field>
+                  </lightning-layout-item>
+                  
+              </lightning-layout>
+              <lightning-layout >
+                  <lightning-layout-item padding="around-small" size="6" >
+                      <lightning-input-field field-name="Business_Justification_Questions__c" value={bizJustQuestVal} disabled="true" class="bizJust"> </lightning-input-field>
+                  </lightning-layout-item>
+                  <lightning-layout-item padding="around-small" size="6">
+                      <template if:true={isDraft}>
+                      <lightning-input-field field-name="Business_Justification__c" class="bizJust"> </lightning-input-field>
+                      </template>
+                      <template if:false={isDraft}>
+                      <lightning-output-field field-name="Business_Justification__c" class="bizJust"> </lightning-output-field>
+                      </template>
+                  </lightning-layout-item>
+              </lightning-layout>
+              <lightning-layout >
+                  <lightning-layout-item padding="around-small" size="6">
+                  </lightning-layout-item>
+                  
+                  <lightning-layout-item padding="around-small" size="6">
+                      <lightning-input-field field-name="Comments__c"> </lightning-input-field>
+                    </lightning-layout-item>
+              </lightning-layout>
+              <h3 class="slds-section__title slds-theme_shade" style="background-color: #f3f2f2;">
+                    <lightning-icon class="slds-button__icon_left slds-p-left_x-small slds-p-left_x-small" size="x-small" icon-name="utility:chevrondown" alternative-text="chevrondown" title="chevrondown"></lightning-icon><span class="slds-truncate" title="Section Title" style="font-weight: 400;">Deal Desk Info</span>
+                </h3>
+                  <template if:true={isDDCUser}>
+                      <lightning-layout >
+                          <lightning-layout-item padding="around-small" size="6">
+                              <lightning-input-field field-name="Summary_of_Approval__c"> </lightning-input-field>
+                          </lightning-layout-item>
+                          <lightning-layout-item padding="around-small" size="6">
+                              <lightning-input-field field-name="Additional_Notes__c"> </lightning-input-field>
+                          </lightning-layout-item>
+                      </lightning-layout>
+                  </template>
+                  <template if:false={isDDCUser}>
+                      <lightning-layout >
+                          <lightning-layout-item padding="around-small" size="6">
+                              <lightning-input-field field-name="Summary_of_Approval__c" disabled="true"> </lightning-input-field>
+                          </lightning-layout-item>
+                          <lightning-layout-item padding="around-small" size="6">
+                              <lightning-input-field field-name="Additional_Notes__c" disabled="true"> </lightning-input-field>
+                          </lightning-layout-item>
+                      </lightning-layout>
+                  </template>
+                  <template if:true={isDDCUser}>
+                      <lightning-layout >
+                          <lightning-layout-item padding="around-small" size="6">
+                              <lightning-input-field field-name="Deal_Desk_Tagging__c" onchange={handlereqTypeChange1}> </lightning-input-field>
+                          </lightning-layout-item>
+                          <lightning-layout-item padding="around-small" size="6">
+                          </lightning-layout-item>
+                      </lightning-layout>
+                      <lightning-layout >
+                          <lightning-layout-item padding="around-small" size="6">
+                          <lightning-input-field field-name="Tagging_Context__c" required= {isDealDeskOther} > </lightning-input-field>
+                      </lightning-layout-item>
+                          <lightning-layout-item padding="around-small" size="6">
+                          </lightning-layout-item>
+                      </lightning-layout>
+                  </template>
+                  <template if:false={isDDCUser}>
+                      <lightning-layout >
+                          <lightning-layout-item padding="around-small" size="6">
+                              <lightning-input-field field-name="Deal_Desk_Tagging__c" onchange={handlereqTypeChange1} disabled="true"> </lightning-input-field>
+                          </lightning-layout-item>
+                          <lightning-layout-item padding="around-small" size="6">
+                          </lightning-layout-item>
+                      </lightning-layout>
+                      <lightning-layout >
+                          <lightning-layout-item padding="around-small" size="6">
+                          <lightning-input-field field-name="Tagging_Context__c" required= {isDealDeskOther}  disabled="true"> </lightning-input-field>
+                      </lightning-layout-item>
+                          <lightning-layout-item padding="around-small" size="6">
+                          </lightning-layout-item>
+                      </lightning-layout>
+                  </template>
+                  <template if:true={isDDCUser}>
+                      <lightning-layout >
+                          <lightning-layout-item padding="around-small" size="6">
+                              <lightning-input-field field-name="Internal_Approval_Notes__c"> </lightning-input-field>
+                          </lightning-layout-item>
+                          <lightning-layout-item padding="around-small" size="6">
+                          </lightning-layout-item>
+                      </lightning-layout>
+                  </template>
+                  <template if:false={isDDCUser}>
+                      <lightning-layout >
+                          <lightning-layout-item padding="around-small" size="6">
+                              <lightning-input-field field-name="Internal_Approval_Notes__c" disabled="true"> </lightning-input-field>
+                          </lightning-layout-item>
+                          <lightning-layout-item padding="around-small" size="6">
+                          </lightning-layout-item>
+                      </lightning-layout>
+                  </template>
+                
+                
+                <h3 class="slds-section__title slds-theme_shade" style="background-color: #f3f2f2;">
+                    <lightning-icon class="slds-button__icon_left slds-p-left_x-small slds-p-left_x-small" size="x-small" icon-name="utility:chevrondown" alternative-text="chevrondown" title="chevrondown"></lightning-icon><span class="slds-truncate" title="Section Title" style="font-weight: 400;">System Information</span>
+                </h3>
+                <div class="slds-m-around_small">
+                    <div class="slds-form__row">
+                        <div class="slds-form__item" role="listitem">
+                            <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                                <div class="slds-form-element__static">
+                                    <lightning-output-field field-name="CreatedById"> </lightning-output-field>
+                                </div></div>
+                        </div>
+                        
+                        <div class="slds-form__item" role="listitem">
+                            <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                                <div class="slds-form-element__static">
+                                    <lightning-output-field field-name="LastModifiedById"> </lightning-output-field>
+                                </div></div>
+                        </div>      
+                    </div>
+                </div>  
+                <div class="slds-m-around_small">
+                    <div class="slds-form__row">
+                        <div class="slds-form__item" role="listitem">
+                            <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                                <div class="slds-form-element__static">
+                                    <lightning-output-field field-name="Created_Date__c"> </lightning-output-field>
+                                </div></div>
+                        </div>
+                        
+                        <div class="slds-form__item" role="listitem">
+                            <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                                <div class="slds-form-element__static">
+                                    <lightning-output-field field-name="Last_Modified_Date__c"> </lightning-output-field>
+                        </div>      
+                    </div>
+                </div> 
+                    </div>
+                </div> 
+                <div class="slds-m-around_small">
+                    <div class="slds-form__row">
+                        <div class="slds-form__item" role="listitem">
+                            <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                                <div class="slds-form-element__static">
+  
+                                     <c-deal-desk-case-timer record-id={recordId}></c-deal-desk-case-timer>
+  
+                                </div></div>
+                        </div>
+                        
+                        <div class="slds-form__item" role="listitem">
+                            <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                                <div class="slds-form-element__static">
+                                    
+                                </div>
+                              </div>
+                        </div>      
+                    </div>
+                </div> 
+            </div>
+            <br/>
+            <div> 
+                <lightning-layout class="slds-clearfix slds-align_absolute-center">
+                    <lightning-layout-item size="1" class="slds-p-right_medium">
+                        <lightning-button variant="nuetral" type="Cancel" label="Cancel" name="Cancel" onclick={handleCancel} >
+                        </lightning-button>
+                    </lightning-layout-item>
+                    
+                    <lightning-layout-item size="1" class="slds-p-left_medium">
+                        <lightning-button variant="brand" type="submit" label="Save" name="Save" >
+                        </lightning-button>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </div> 
+        </template>
+        <!-- Edit Mode End-->
+    </lightning-record-edit-form>
+  </template>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Assigned_To_Must_Be_Admin</fullName>
+    <active>true</active>
+    <description>User task is assigned to must be an Admin</description>
+    <errorConditionFormula>Assigned_To__r.Owner:User.Profile.Name &lt;&gt; &apos;System Administrator&apos;</errorConditionFormula>
+    <errorDisplayField>Assigned_To__c</errorDisplayField>
+    <errorMessage>Admin Queue Tasks may only be Assigned to a System Admin</errorMessage>
+</ValidationRule>

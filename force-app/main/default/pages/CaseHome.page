@@ -1,0 +1,154 @@
+<apex:page standardStylesheets="false" StandardController="Case" sidebar="false" showheader="false"  title="My Cases - Rubrik Community" applyBodyTag="false"  action="{!case($User.UserType,
+                          "Standard",urlFor($Action.Case.Tab, $ObjectType.Case, null, true),
+                          "PowerPartner",urlFor($Action.Case.Tab, $ObjectType.Case, null, true),
+                          "CSPLitePortal",null,
+                          "CustomerSuccess",null,
+                          "PowerCustomerSuccess",null,
+                          "CsnOnly",null,
+                          null)}" recordSetvar="cases">
+ <link rel="shortcut icon" href="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/favicon.ico')}" type="image/x-icon" />
+    <link rel="icon" href="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/favicon1.png')}" type="image/png" />
+    <c:visualstrapblock >
+    
+    
+    <!--hide the action column from Community users-->
+    <style>
+    .actionColumn{
+    display:none;
+    }
+    
+    .pbBody{
+    padding: 5px;
+    }
+    
+    .visualstrap td, th {
+    padding: 5px !important;
+    }
+    
+    .rolodex {
+      padding: 4px !important;  
+   }
+   
+   .btnpad{
+    padding: 15px;
+    }
+    
+    
+    </style>
+    
+        <!--start header-->
+        <c:siteheader ></c:siteheader>
+        <!--end Header-->
+
+   
+
+      <!--start the Container-->
+        <div class="container">
+        <!--action status overlay-->
+        <c:processing />
+            <div class="row rowcontainer" >
+                <div class="col-md-12">
+                  <c:pageTitle name="My Cases"></c:pageTitle> 
+        
+        <!--buttons-->
+            <div id="container">
+                <div class="row btnpad">
+                    <div class="btn-group">
+                            <a href="{!URLFOR($Page.NewCase, null, null)}"><button type="button" class="btn rubrik-btn" >New Case</button></a>
+                    </div>
+                </div>
+            </div>
+         <!--end buttons-->
+              
+                      <apex:form id="theForm">
+                      <div class="row" >
+                      <div class="col-md-12">
+                          <apex:outputLabel value="View:"/>&nbsp;&nbsp;
+                          <apex:selectList value="{!filterId}" size="1" >
+                            <apex:actionSupport event="onchange" rerender="caselist, list,theForm" status="busyStatus"/>
+                            <apex:selectOptions value="{!listviewoptions}"/>
+                          </apex:selectList>
+                          </div>
+                        </div>
+                        <br/>
+
+                     <apex:datatable var="c" value="{!cases}" id="caselist" styleClass="table" >
+                    <apex:column headervalue="Case Number">
+                     <a href="{!URLFOR($Action.Case.View, c.Id)}">{!c.CaseNumber}</a>
+                    </apex:column>
+                    
+                    <apex:column headervalue="Status">
+                     {!c.Status}
+                    </apex:column>                  
+                    <apex:column headervalue="Priority">
+                     <apex:outputfield value="{!c.Priority}"/>
+                    </apex:column> 
+                    <apex:column headervalue="Subject">
+                     <apex:outputfield value="{!c.Subject}"/>
+                    </apex:column>                       
+                    <apex:column headervalue="Type">
+                     <apex:outputfield value="{!c.Type}"/>
+                    </apex:column> 
+                    <apex:column headervalue="Opened Date">
+                     <apex:outputfield value="{!c.CreatedDate}"/>
+                    </apex:column> 
+                    </apex:datatable>
+                    
+                    <!--{!ResultSize}-->
+                    
+                    <!--pagination-->
+                    <!-- Pagination -->
+                    <table style="width: 100%"><tr>
+                    
+                        <td>
+                           Page: <apex:outputText value=" {!PageNumber} of {!CEILING(ResultSize/PageSize)}"/>
+                        </td>            
+                    
+                        <td align="center">
+                            <!-- Previous page -->
+                            <!-- active -->
+                            <apex:commandLink action="{!Previous}" value="« Previous"
+                                 rendered="{!HasPrevious}"/>
+                            <!-- inactive (no earlier pages) -->
+                            <apex:outputText style="color: #ccc;" value="« Previous"
+                                 rendered="{!NOT(HasPrevious)}"/>
+                            
+                            &nbsp;&nbsp;  
+                            
+                            <!-- Next page -->
+                            <!-- active -->
+                            <apex:commandLink action="{!Next}" value="Next »"
+                                 rendered="{!HasNext}"/>
+                            <!-- inactive (no more pages) -->
+                            <apex:outputText style="color: #ccc;" value="Next »"
+                                 rendered="{!NOT(HasNext)}"/>
+                        </td>
+                        
+                        <td align="right">
+                        Records per page:
+                        <apex:selectList value="{!PageSize}" size="1">
+                            <apex:selectOption itemValue="5" itemLabel="5"/>
+                            <apex:selectOption itemValue="20" itemLabel="20"/>
+                            <apex:selectOption itemValue="50" itemLabel="50"/>
+                            <apex:selectOption itemValue="100" itemLabel="100"/>
+
+                            <apex:actionSupport event="onchange" reRender="caselist,theForm" status="busyStatus"/>
+                        </apex:selectList>
+                        </td>
+                    
+                    </tr></table>
+                    
+                      </apex:form> 
+                  
+
+
+              </div>
+            </div>
+        </div>
+        <!--End the Container-->
+
+       <!--start the footer-->
+        <c:sitefooter ></c:sitefooter>
+        
+    </c:visualstrapblock>
+</apex:page>

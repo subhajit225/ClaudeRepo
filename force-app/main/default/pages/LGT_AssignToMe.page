@@ -1,0 +1,54 @@
+<apex:page standardController="Case" lightningStylesheets="true" recordSetVar="caseList" extensions="CaseDetailController" >
+    <!-- List View button -->
+    <apex:includeLightning />
+    <apex:slds />
+    <apex:includeScript value="/support/console/46.0/integration.js"/>
+    <div class="slds-scope">
+        <div id="lightning" />
+        <div class="slds-notify_container slds-is-relative" id="boxError" style="display:none;">
+            <div class="slds-notify slds-notify_toast slds-theme_warning" role="status">
+                <span class="slds-assistive-text">ERROR!</span>
+            
+                <div class="slds-notify__content">
+                    <h2 class="slds-text-heading_small " id="errorBlock"></h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    $Lightning.use("c:LGT_AssignToMeApp", function() {
+        $Lightning.createComponent("c:LGT_AssignToMeComponent",{"caseList":"{!selectedCaseIds}"},"lightning", function(component){
+        });
+    });
+    
+    function receiveMessage(event){
+        // Added by Vijay: 1326: handling VR rules on Owner change
+        if(event.data.includes("dbErr:")){
+            let validationErr = event.data;
+            // If Validation error
+            if(validationErr.includes("FIELD_CUSTOM_VALIDATION_EXCEPTION,")){
+                let error = validationErr.split("FIELD_CUSTOM_VALIDATION_EXCEPTION,")[1];
+                // Classic Console error message
+                if({!$User.UIThemeDisplayed == 'Theme3'}){
+                    document.getElementById("boxError").style.display = "block";
+
+                    document.getElementById("errorBlock").innerHTML= error.split(":")[0];
+                   
+                    var interval = setInterval(function(){ window.history.back();},2000);
+                }
+                // LEX Console toast error message
+                else{
+                    sforce.one.showToast({
+                        "title": "Error!",
+                        "message": error.split(":")[0],
+                        "type": "error"
+                    });
+                    window.history.back();
+                }
+            }
+        }
+    }
+    window.addEventListener("message", receiveMessage, false);
+    </script>
+</apex:page>

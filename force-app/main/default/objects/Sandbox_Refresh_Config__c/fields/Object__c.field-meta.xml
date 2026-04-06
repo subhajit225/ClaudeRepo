@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Object__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(AND(ISPICKVAL(Status__c, &apos;Completed&apos;), LastFailedRecordCount__c &lt; 1), IMAGE(&quot;/img/msg_icons/confirm16.png&quot;,&apos;&apos;),&apos;&apos;) &amp;
+IF(AND(ISPICKVAL(Status__c, &apos;Completed&apos;), LastFailedRecordCount__c &gt; 0), IMAGE(&quot;/img/msg_icons/warning16.png&quot;,&apos;&apos;),&apos;&apos;) &amp;
+IF(ISPICKVAL(Status__c, &apos;Failed&apos;),IMAGE(&quot;/img/msg_icons/error16.png&quot;,&apos;&apos;),&apos;&apos;) &amp;
+IF(ISPICKVAL(Status__c, &apos;Not Started&apos;),IMAGE(&quot;/resource/talkdesk__assets/mood_icons/mood--neutral.png&quot;,&apos;&apos;),&apos;&apos;) &amp;
+IF(ISPICKVAL(Status__c, &apos;Manual&apos;),IMAGE(&quot;/resource/talkdesk__assets/mood_icons/mood--neutral.png&quot;,&apos;&apos;),&apos;&apos;) &amp;
+IF(ISPICKVAL(Status__c, &apos;Manual Step&apos;),IMAGE(&quot;/resource/talkdesk__assets/mood_icons/mood--neutral.png&quot;,&apos;&apos;),&apos;&apos;) &amp;
+IF(ISPICKVAL(Status__c, &apos;Not Required&apos;),IMAGE(&quot;/resource/talkdesk__assets/mood_icons/mood--na.png&quot;,&apos;&apos;),&apos;&apos;) &amp;
+IF(ISPICKVAL(Status__c, &apos;Processing&apos;), IMAGE(&quot;https://app.marketo.com/images/icons16/marketo16.png&quot;,&apos;&apos;),&apos;&apos;)&amp; &apos; &apos; &amp;
+IF(ISBLANK(ObjectCode__c), &apos;&apos;, HYPERLINK(&apos;/&apos; &amp; ObjectCode__c,  ObjectLabel__c, ObjectLabel__c)   )</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Object</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

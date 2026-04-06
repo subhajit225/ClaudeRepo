@@ -1,0 +1,162 @@
+<!--------------------------------------------------
+Purpose : show account and partner information in quote document
+Story : REEN-57
+Created : 4th Dec 23
+---------------------------------------------------->
+
+<apex:page showHeader="false" sidebar="false" cache="false" contentType="text/xml" controller="QuoteDocTopSection2Controller">
+     
+    <apex:outputText >
+        <table table-layout="fixed">
+            <table-column column-width="60%"/> 
+            <table-column/>
+            <table-body>
+                
+                <table-row font-size="0.7em">
+                    <table-cell>
+                        <block>
+                            <table table-layout="fixed">
+                                <table-column/>
+                                <table-body>
+                                    <table-row>
+                                        <table-cell padding-top="0.5em" padding-left="2px" font-size="10px" ><block font-size= "x-small">{!HTMLENCODE(QuoteTemplate.SBQQ__CompanyStreet__c)}</block></table-cell>
+                                    </table-row>
+                                    <table-row>
+                                        <table-cell padding-top="0.5em" padding-left="2px" font-size="10px"><block font-size= "x-small">{!HTMLENCODE(QuoteTemplate.SBQQ__CompanyCity__c)}, {!QuoteTemplate.SBQQ__CompanyState__c} {!QuoteTemplate.SBQQ__CompanyPostalCode__c}</block></table-cell>
+                                    </table-row>
+                                    <table-row>
+                                        <table-cell padding-top="0.5em" padding-left="2px" font-size="10px"><block font-size= "x-small">{!HTMLENCODE(QuoteTemplate.SBQQ__CompanyPhone__c)}</block></table-cell>
+                                    </table-row>
+                                    <table-row>
+                                        <table-cell padding-top="0.5em" padding-left="2px" font-size="10px"><block font-size= "x-small">{!HTMLENCODE(quote.Quote_Template_Company_Email__c)}</block></table-cell>
+                                    </table-row>
+                                    <table-row>
+                                        <table-cell padding-top="0.5em" padding-left="2px" font-size="10px"><block font-size= "x-small">Prepared By: {!HTMLENCODE(quote.SBQQ__SalesRep__r.Name)}</block></table-cell>
+                                    </table-row>
+                                    
+                                </table-body>
+                            </table>
+                        </block>
+                    </table-cell>
+                    <table-cell>
+                        <block>
+                            <table table-layout="fixed">
+                                <table-column column-width="44%"/>
+                                <table-column/>
+                                <table-body>
+                                    <table-row>
+                                        <table-cell padding-top="0.5em" text-align="right" font-size="8px"><block font-weight="bold">Date: </block></table-cell>
+                                        <table-cell padding-top="0.5em" padding-left="0.5em" font-size="8px">
+                                            <block>
+                                            <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                                            <apex:param value="{!quote.MSP_Created_Date_Only__c}" /> 
+                                            </apex:outputText>
+                                            </block>
+                                        </table-cell>
+                                    </table-row>
+                                    <table-row>
+                                        <table-cell padding-top="0.5em" text-align="right" font-size="8px"><block font-weight="bold">Expires On: </block></table-cell>
+                                        <table-cell padding-top="0.5em" padding-left="0.5em" font-size="8px">
+                                            <block>
+                                            <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                                            <apex:param value="{!quote.Expiration_Date__c}" /> 
+                                            </apex:outputText>
+                                            </block>
+                                        </table-cell>
+                                    </table-row>
+                                    <table-row>
+                                        <table-cell padding-top="0.5em" text-align="right" font-size="8px"><block font-weight="bold">Payment Term: </block></table-cell>
+                                        <table-cell padding-top="0.5em" padding-left="0.5em" font-size="8px"><block>{!HTMLENCODE(quote.SBQQ__PaymentTerms__c)}</block></table-cell>
+                                    </table-row>
+                                    <table-row>
+                                        <table-cell padding-top="0.5em" text-align="right" font-size="8px"><block font-weight="bold">Reseller: </block></table-cell>
+                                        <table-cell padding-top="0.5em" padding-left="0.5em" font-size="8px"><block>{!HTMLENCODE(partnerInfo.accountName)}</block></table-cell>
+                                    </table-row>
+                                    <table-row>
+                                        <table-cell padding-top="0.5em" text-align="right" font-size="8px"><block font-weight="bold">Distributor: </block></table-cell>
+                                        <table-cell padding-top="0.5em" padding-left="0.5em" font-size="8px"><block>{!HTMLENCODE(partnerInfo.DistributerName)}</block></table-cell>
+                                    </table-row>
+                                </table-body>
+                            </table>
+                        </block>
+                    </table-cell>
+                  </table-row>
+                
+            </table-body>
+        </table> 
+    </apex:outputText>
+    
+    <apex:outputText rendered="{!quote.ShowSellToPartner__c}">
+        <table table-layout="fixed">
+            <table-body>
+                <table-row font-size="0.7em">
+                    <table-cell>
+                        <block>
+                            <table table-layout="fixed">
+                                <table-column column-width="77.5%"/>
+                                <table-column/>
+                                <table-body>
+                                    <table-row>
+                                        <table-cell padding-top="0.5em" text-align="right" font-size="8px"><block font-weight="bold">Sell to Partner: </block></table-cell>
+                                        <table-cell padding-top="0.5em" padding-left="0.5em" font-size="8px"><block>{!HTMLENCODE(quote.Sell_to_Partner__c)}</block></table-cell>
+                                    </table-row>
+                                </table-body>
+                            </table>
+                        </block>
+                    </table-cell>
+                  </table-row>
+            </table-body>
+        </table> 
+    </apex:outputText>
+
+    <apex:outputText >
+        <table table-layout="fixed">
+            <table-column column-width="66%"/>
+            <table-column/>
+            <table-body>
+                <table-row font-size="0.7em">
+                    <table-cell padding-top="1.0em">
+                        <block>
+                            <table table-layout="fixed">
+                                <table-column column-width="4%"/>
+                                <table-column/>
+                                <table-body>
+                                    <table-row>
+                                        <table-cell padding-top="0.5em"><block font-weight="bold">To:</block></table-cell>
+                                        <table-cell padding-top="0.5em"><block>{!HTMLENCODE(partnerInfo.DistributerName)}</block></table-cell>
+                                    </table-row>
+                                </table-body>
+                            </table>
+                        </block>
+                    </table-cell>
+
+                    <table-cell padding-top="1.0em">
+                        <block>
+                            <table table-layout="fixed">
+                                <table-body>
+                                    <table-row>
+                                        <table-cell padding-top="0.5em" padding-left="0.5em" font-size="8px"><block font-weight="bold">End Customer</block></table-cell>
+                                    </table-row>
+                                    <table-row>
+                                        <table-cell padding-top="0.5em" padding-left="0.5em" font-size="8px"><block>{!HTMLENCODE(quote.SBQQ__BillingName__c)}</block></table-cell>
+                                    </table-row>
+                                    <table-row>
+                                        <table-cell padding-top="0.5em" padding-left="0.5em" font-size="8px"><block>{!HTMLENCODE(quote.SBQQ__BillingStreet__c)}</block></table-cell>
+                                    </table-row>
+                                    <table-row>
+                                        <table-cell padding-top="0.5em" padding-left="0.5em" font-size="8px"><block>{!HTMLENCODE(quote.SBQQ__BillingCity__c)}, {!HTMLENCODE(quote.SBQQ__BillingState__c)} {!HTMLENCODE(quote.SBQQ__BillingPostalCode__c)}</block></table-cell>
+                                    </table-row>
+                                    <table-row>
+                                        <table-cell padding-top="0.5em" padding-left="0.5em" font-size="8px"><block>{!HTMLENCODE(quote.SBQQ__BillingCountry__c)}</block></table-cell>
+                                    </table-row>
+
+                                </table-body>
+                            </table>
+                        </block>
+                    </table-cell>
+                </table-row>
+            </table-body>
+        </table> 
+    </apex:outputText>
+    
+    </apex:page>

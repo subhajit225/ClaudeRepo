@@ -1,0 +1,16 @@
+.datatable-container {
+    border: 1px solid #c9c9c9;   /* darker, crisper border */
+    border-radius: 0.375rem;    /* subtle SF-style rounding */
+    background-color: #ffffff;
+}
+
+/* Remove inner rounding from datatable itself */
+.datatable-container lightning-datatable {
+    border-radius: 0;
+}
+
+/* Make column separators sharper */
+.datatable-container lightning-datatable {
+    --slds-c-table-color-border: #c9c9c9;
+    --slds-c-table-header-color-border: #c9c9c9;
+}

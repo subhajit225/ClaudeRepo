@@ -1,0 +1,42 @@
+<aura:component extends="c:LCC_GenericLightningComponent" implements="force:hasRecordId"  controller="LCC_ButtonsController">
+    <aura:attribute name="content" type="String"/> 
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="spinner" type="boolean" default="FALSE"/>
+    <aura:attribute name="isOpen" type="Boolean" default="false"/>
+    <aura:attribute name="approvedQuotes" type="Quote[]"/>
+    <aura:attribute name="selectedQuoteId" type="String"/>
+    <aura:attribute name="quoteMap" type="Object" />
+    
+    <aura:handler event="c:LCC_GenericApplicationEvent" action="{!c.execute}"/>
+     <!--loading spinner start-->
+    <aura:if isTrue="{!v.spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--medium slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading...</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    <!-- Loading spinner end--> 
+	<div class="slds-p-top_large slds-text-align_center slds-p-bottom_large">
+        {!v.content}
+    <aura:if isTrue="{!v.isOpen}">
+        <!-- Dropdown -->
+         <div class="slds-modal__content slds-p-around_large" id="modal-content-id-1">
+                <strong>Please select the Quote</strong>
+              <lightning:select 
+                          value="{!v.selectedQuoteId}"> 
+              <option value="">--None--</option>
+         <aura:iteration items="{!v.approvedQuotes}" var="q">
+                <option value="{!q.Id}">{!q.Name}</option>
+            </aura:iteration>
+        </lightning:select>
+         </div>
+        <div class="slds-p-top_large">
+            	<lightning:button variant="neutral" label="Proceed"  onclick="{!c.handleQuoteSelect}"/>
+            <lightning:button variant="brand" label="Cancel"  onclick="{!c.handleCancel }"/>
+        </div>
+    </aura:if>        
+    </div>
+</aura:component>

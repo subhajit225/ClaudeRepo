@@ -1,0 +1,16 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+	<aura:attribute access="public" name="recordList" type="Object"/>
+    <aura:attribute access="public" name="qlInScope" type="String"/>
+    <aura:attribute access="public" name="assetInScope" type="String"/>
+    <aura:attribute access="public" name="sectionName" type="String"/>
+      
+    <aura:attribute name="options" type="List" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+     
+    <aura:attribute name="selectedValue" type="String" default="" description="Selected value in single Select" />
+ 
+    <div>
+        <c:MultiSelectCombobox options="{!v.options}" value="{!v.selectedValue}" qlInScope="{!v.qlInScope}" assetInScope = "{!v.assetInScope}" sectionName="{!v.sectionName}"/>
+        <!--<c:MultiSelectCombobox options="{!v.options2}" values="{!v.selectedValues}" multiSelect="true" label="Multi Select Combobox"/>-->
+    </div>
+</aura:component>

@@ -1,0 +1,21 @@
+<apex:page controller="CommunityHomeController" readOnly="true" cache="false" standardStylesheets="false" sidebar="false" showheader="false"  title="Rubrik Community" applyBodyTag="false">
+    <link rel="shortcut icon" href="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/favicon.ico')}" type="image/x-icon" />
+    <link rel="icon" href="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/favicon1.png')}" type="image/png" />
+    <c:visualstrapblock >
+        <c:siteheader />
+        <c:heroheader /> 
+        <c:edgeTrialBoxContainer />
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad">
+            <div class="announcementArticleBlock">
+                <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
+                    <c:announcements />
+                </div>
+                <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+                    <c:NewArticlesBlock />
+                </div>
+            </div>
+        </div>
+        <c:NewVideosBlock />
+        <c:sitefooter />
+    </c:visualstrapblock>
+</apex:page>

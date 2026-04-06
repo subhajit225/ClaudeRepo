@@ -1,0 +1,8 @@
+<aura:component  implements="forceCommunity:availableForAllPageTypes" >
+	<aura:attribute name="ParentString" type="String"/>
+    <aura:attribute name="Strlength" type="Integer"/>
+    <aura:attribute name="SubbedString" type="String" access="global"/>
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+    
+    <lightning:formattedRichText value="{!v.SubbedString}" />
+</aura:component>

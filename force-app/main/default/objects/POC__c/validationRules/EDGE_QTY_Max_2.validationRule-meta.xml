@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>EDGE_QTY_Max_2</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+ISPICKVAL(Product_Family_for_PoC__c, &quot;1-Yr Subscription to Rubrik Edge for 10 VMs, incl support&quot;),
+VALUE(TEXT(POC_Qty__c)) &gt; 2)</errorConditionFormula>
+    <errorDisplayField>Product_Family_for_PoC__c</errorDisplayField>
+    <errorMessage>Max quantity is 2 when selecting EDGE</errorMessage>
+</ValidationRule>

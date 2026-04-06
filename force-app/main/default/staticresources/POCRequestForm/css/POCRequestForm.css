@@ -1,0 +1,193 @@
+/* SLDS Extensions */
+
+/* File Selector */
+.slds-file-selector {
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.slds-file-selector__dropzone {
+  padding: 0.125rem;
+  border: 1px dashed #dddbda;
+  border-radius: 0.25rem;
+}
+
+.slds-file-selector__dropzone.slds-has-drag-over {
+  outline: 0;
+  border-color: #1589ee;
+  box-shadow: 0 0 3px #0070d2;
+  border-style: solid;
+}
+
+.slds-file-selector__input:focus
+  ~ .slds-file-selector__body
+  > .slds-file-selector__button {
+  box-shadow: 0 0 3px #0070d2;
+}
+
+.slds-file-selector__input[disabled] ~ .slds-file-selector__body {
+  color: #dddbda;
+}
+
+.slds-file-selector__input[disabled]
+  ~ .slds-file-selector__body
+  > .slds-file-selector__button {
+  background: #e0e5ee;
+  border-color: transparent;
+  color: white;
+}
+
+.slds-file-selector__input[disabled]
+  ~ .slds-file-selector__body
+  > .slds-file-selector__body-icon {
+  fill: currentColor;
+}
+
+.slds-file-selector__button {
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.slds-file-selector__button .slds-button__icon--left {
+  margin-right: 4px;
+  padding-bottom: 4px;
+}
+
+.slds-file-selector_files,
+.slds-file-selector--files {
+  font-size: 12px;
+}
+
+.slds-file-selector_files .slds-file-selector__body,
+.slds-file-selector--files .slds-file-selector__body {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.slds-file-selector_files .slds-file-selector__button,
+.slds-file-selector--files .slds-file-selector__button {
+  max-height: 1.625rem;
+  line-height: 1.625rem;
+}
+
+.slds-file-selector_files .slds-file-selector__text,
+.slds-file-selector--files .slds-file-selector__text {
+  margin-left: 0.5rem;
+  margin-right: 0.75rem;
+}
+
+/*-/ File Selector */
+
+.slds .slds-form-element__help {
+    text-align: center;
+    color: red;
+}
+/*-/ SLDS Extensions */
+
+
+/* Application */
+.app {}
+
+.app .prf-form-element__label {
+    margin-bottom: 0;
+}
+.app .prf-date-field__control .dateFormat a {
+  color: #000;
+  font-size: 12px;
+}
+.app input.prf-date-field__input {
+  margin-right: 4px;
+}
+.app input.prf-lookup-field {
+  height: 36px;
+  margin-right: 4px;
+  background-color: white;
+  border: 1px solid #dddbda;
+  border-radius: 0.25rem;
+  width: 100%;
+  transition: border 0.1s linear, background-color 0.1s linear;
+  display: inline-block;
+  padding: 0 1rem 0 0.75rem;
+  line-height: 1.875rem;
+  min-height: calc(1.875rem + (1px * 2));
+}
+.app .prf-lookup-field__container .lookupInput {
+  display: flex;
+  align-items: center;
+}
+.app a.prf-lookup-field {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+}
+.app a.prf-lookup-field .lookupIcon {
+  visibility: hidden;
+}
+.app a.prf-lookup-field::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #54698d;
+  background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDQ1MSA0NTEiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDQ1MSA0NTE7IiB4bWw6c3BhY2U9InByZXNlcnZlIiB3aWR0aD0iNTEycHgiIGhlaWdodD0iNTEycHgiPjxnPjxwYXRoIGQ9Ik00NDcuMDUsNDI4bC0xMDkuNi0xMDkuNmMyOS40LTMzLjgsNDcuMi03Ny45LDQ3LjItMTI2LjFDMzg0LjY1LDg2LjIsMjk4LjM1LDAsMTkyLjM1LDBDODYuMjUsMCwwLjA1LDg2LjMsMC4wNSwxOTIuMyAgIHM4Ni4zLDE5Mi4zLDE5Mi4zLDE5Mi4zYzQ4LjIsMCw5Mi4zLTE3LjgsMTI2LjEtNDcuMkw0MjguMDUsNDQ3YzIuNiwyLjYsNi4xLDQsOS41LDRzNi45LTEuMyw5LjUtNCAgIEM0NTIuMjUsNDQxLjgsNDUyLjI1LDQzMy4yLDQ0Ny4wNSw0Mjh6IE0yNi45NSwxOTIuM2MwLTkxLjIsNzQuMi0xNjUuMywxNjUuMy0xNjUuM2M5MS4yLDAsMTY1LjMsNzQuMiwxNjUuMywxNjUuMyAgIHMtNzQuMSwxNjUuNC0xNjUuMywxNjUuNEMxMDEuMTUsMzU3LjcsMjYuOTUsMjgzLjUsMjYuOTUsMTkyLjN6IiBmaWxsPSIjRkZGRkZGIi8+PC9nPjxnPjwvZz48Zz48L2c+PGc+PC9nPjxnPjwvZz48Zz48L2c+PGc+PC9nPjxnPjwvZz48Zz48L2c+PGc+PC9nPjxnPjwvZz48Zz48L2c+PGc+PC9nPjxnPjwvZz48Zz48L2c+PGc+PC9nPjwvc3ZnPg==);
+  background-position: center center;
+  background-size: 45% 45%;
+  background-repeat: no-repeat;
+  border-radius: 50%;
+}
+
+.app input.prf-lookup-field:focus,
+.app input.prf-lookup-field:active {
+  outline: 0;
+  border-color: #1589ee;
+  background-color: white;
+  box-shadow: 0 0 3px #0070D2; }
+
+.app input.prf-lookup-field[disabled],
+.app input.prf-lookup-field.slds-is-disabled {
+  background-color: #ecebea;
+  border-color: #c9c7c5;
+  cursor: not-allowed;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none; }
+
+.app input.prf-lookup-field[disabled]:focus,
+.app input.prf-lookup-field[disabled]:active,
+.app input.prf-lookup-field.slds-is-disabled:focus,
+.app input.prf-lookup-field.slds-is-disabled:active {
+  box-shadow: none; }
+
+.app .colorclass {
+  color: red;
+}
+
+.imageCSS {
+  min-width: 100% !important;
+  height: 100px !important;
+}
+
+.app .show {
+  display: block;
+}
+
+.app .hide {
+  display: none;
+}
+
+.slds abbr[title],
+.slds fieldset,
+.slds hr {
+  text-decoration: none;
+}
+
+/*-/ Application */

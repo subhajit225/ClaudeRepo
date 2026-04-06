@@ -1,0 +1,14 @@
+<apex:component controller="IdeasRelated" access="global">
+<apex:attribute type="String" name="recordid" assignTo="{!ideaId}" description="find this idea in reverse"/>
+<apex:attribute type="String" name="related" assignTo="{!relatedString}" description="the list of related items"/>
+<apex:outputpanel rendered="{!OR(RelatedIdeas.size>0,RelatedIdeas2.size>0)}"><h3>Related Ideas</h3></apex:outputpanel>
+    <apex:repeat value="{!relatedIdeas}" var="ri" rendered="{!RelatedIdeas.size>0}">
+    <a href="{!URLFOR($Page.IdeaView, null, [id=ri.Id])}">{!ri.Title}: {!ri.Votetotal} votes</a><br/>
+    </apex:repeat>
+    
+    <apex:repeat value="{!relatedIdeas2}" var="ri" rendered="{!RelatedIdeas2.size>0}">
+    <a href="{!URLFOR($Page.IdeaView, null, [id=ri.Id])}">{!ri.Title}: {!ri.Votetotal} votes</a><br/>
+    </apex:repeat>
+ 
+
+</apex:component>

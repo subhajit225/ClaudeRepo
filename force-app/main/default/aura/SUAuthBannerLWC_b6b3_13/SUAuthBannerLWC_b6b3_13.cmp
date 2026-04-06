@@ -1,0 +1,17 @@
+<aura:component
+    implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,forceCommunity:searchInterface"
+    access="global" controller="su_vf_console.SUAuthentication">
+
+    <aura:attribute name="searchString" type="String" access="global" default="" />
+    <aura:handler event="forceCommunity:routeChange" action="{!c.handleRouteChange}"></aura:handler>
+    <aura:attribute name="PlaceHolderText" type="String" default="search here" access="global" />
+    <aura:attribute name="advanceFilterData" type="String" access="global" description="This is to provide the type of the content source." default="" />
+    <aura:attribute name="advanceFilterValue" type="String" access="global" description="This is to provide the value of the content source." default="" />
+    <aura:attribute name="isEnableTitleRedirect" type="Boolean" access="global" default="false" />
+    <!-- <aura:attribute name="defaultPageSize" type="String" access="global" default="10" /> -->
+
+    <c:sU_AuthBannerComponent_b6b3_13  class="su__AuthBannerLWC" isEnableTitleRedirect="{!v.isEnableTitleRedirect}"
+        placeHolderText="{!v.PlaceHolderText}" advanceFilterData="{!v.advanceFilterData}" 
+        advanceFilterValue="{!v.advanceFilterValue}"></c:sU_AuthBannerComponent_b6b3_13 >
+	
+</aura:component>

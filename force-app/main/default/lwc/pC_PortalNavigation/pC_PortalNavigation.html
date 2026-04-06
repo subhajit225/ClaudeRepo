@@ -1,0 +1,24 @@
+<!-- sldsValidatorIgnore -->
+<template>
+  <div class="header-menu">
+      <ul class="nav" id="main-nav">
+        <template for:each={menuMap} for:item="menu">
+          <li class="nav-item" key={menu.key}>
+            <a href={menu.value.Navigate_Url__c} class="nav-link" onmouseover={handleMenuMouseOver}
+              data-id={menu.value.Menu_Label__c} target={menu.value.targetWin}>{menu.value.Menu_Label__c}<p if:false={menu.value.Has_Sub_Menu__c} class={menu.value.externalLinkClassName}></p>
+              <span if:true={menu.value.Has_Sub_Menu__c} class={menu.value.dropdownClassName}></span>
+            </a>
+            <ul class="dp-menu" if:true={hasSubMenu}>
+              <template for:each={subMenuMap} for:item="subMenu">
+                <li class="dp-item" key={subMenu.key}>
+                  <a href={subMenu.value.Navigate_Url__c} class="dp-link" target={subMenu.value.targetWin}>{subMenu.value.Menu_Label__c}<p if:false={subMenu.value.Has_Sub_Menu__c} class={subMenu.value.externalLinkClassName}></p>
+                    <span if:true={subMenu.value.Has_Sub_Menu__c} class={subMenu.value.dropdownClassName}></span>
+                  </a>
+                </li>
+              </template>
+            </ul>
+          </li>
+        </template>
+      </ul>
+    </div>
+</template>

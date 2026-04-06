@@ -1,0 +1,120 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,force:hasRecordId" extends="c:PC_UtilityCmp"
+                access="global" controller="PC_IncentiveController">
+    <ltng:require styles="/resource/PartnerCommunityResource/Stylesheets/PartnerCommunityCSS.css" />
+    <!-- Attributes  -->
+    <aura:attribute name="CCR" type="CCR__c" />
+    <aura:attribute name="ccrFields" type="CCR__c" />
+    <aura:attribute name="ccrFieldsClone" type="Object" />
+    <aura:attribute name="newIncentiveError" type="String" />
+    <aura:attribute name="id" type="String" />
+    <aura:attribute name="url" type="string" />
+    <aura:attribute name="UserId" type="string" default="0050n000001wPmu" />
+    <aura:attribute name="Ctype" type="string" default="Channel SPIFF" />
+    <aura:attribute name="user" type="User" />
+    <aura:attribute name="recTypeId" type="string" />
+    <aura:attribute name="recTypeName" type="string" default="Partner_Claim_Form"
+                    description="RecordType Developer Name" />
+    <aura:attribute name="sObjectType" type="string" default="CCR__c" description="object API Name" />
+    <!--Picklist field attributes -->
+    <aura:attribute name="requiredFields" type="List" default="Country__c,StateCode__c,Payee_Role__c" />
+    <aura:attribute name="Country__c" type="List" access="PRIVATE" />
+    <aura:attribute name="StateCode__c" type="List" access="PRIVATE" />
+    <aura:attribute name="requiredStateCountry" type="List"
+                    default="Australia,Canada,United States,United Arab Emirates" />
+    <aura:attribute name="isTechSPIFFForm" type="boolean" default="false" />
+    <!-- Handler -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <force:recordData aura:id="CCRRecordCreator" layoutType="FULL" targetRecord="{!v.CCR}" targetFields="{!v.ccrFields}"
+                      targetError="{!v.newIncentiveError}" />
+    <lightning:recordEditForm aura:id="recordEditForm" recordTypeId="{!v.recTypeId}" objectApiName="CCR__c">
+        <lightning:messages />
+        <lightning:card title="Incentive Claim Form">
+            <aura:if isTrue="{!v.Spinner}">
+                <div aura:id="spinnerId" class="slds-spinner_container">
+                    <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                        <span class="slds-assistive-text">Loading</span>
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+            </aura:if>
+            <br />
+            <div class="slds-p-left_small slds-text-heading_medium slds-text-title_bold heading-22 deep-blue margin-16-0">
+                Incentive Claim Information</div>
+            <div class="c-container">
+                <!--PRIT26-310-->
+                <aura:if isTrue="{!v.isTechSPIFFForm}">
+                    <lightning:layout multipleRows="true">
+                        <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="4"
+                                              padding="around-small">
+                            <lightning:input aura:id="ccrFields" label="Partner Payee Name"
+                                             value="{!v.ccrFields.Partner_Rep_Name__c}" required="true" />
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="4"
+                                              padding="around-small">
+                            <lightning:input aura:id="ccrFields" label="Partner Payee Email"
+                                             value="{!v.ccrFields.Partner_Rep_Email__c}" required="true" type="email"
+                                             pattern="[^@]+@[^\.]+\..+" />
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                    
+                    <aura:set attribute="else">
+                        <lightning:layout multipleRows="true">
+                            <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="4"
+                                                  padding="around-small">
+                                <lightning:input aura:id="ccrFields" label="Customer Company"
+                                                 value="{!v.ccrFields.Customer_Company__c}" required="true" />
+                            </lightning:layoutItem>
+                            
+                            <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="4"
+                                                  padding="around-small">
+                                <lightning:input aura:id="ccrFields" label="Partner Payee Name"
+                                                 value="{!v.ccrFields.Partner_Rep_Name__c}" required="true" />
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="4"
+                                                  padding="around-small">
+                                <lightning:input aura:id="ccrFields" label="Partner Payee Email"
+                                                 value="{!v.ccrFields.Partner_Rep_Email__c}" required="true" type="email"
+                                                 pattern="[^@]+@[^\.]+\..+" />
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="4"
+                                                  padding="around-small">
+                                <lightning:input aura:id="ccrFields" label="Partner SE Name" required="true"
+                                                 value="{!v.ccrFields.Partner_SE_Name__c}"/>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="4"
+                                                  padding="around-small">
+                                <lightning:input aura:id="ccrFields" label="Partner SE Email" required="true"
+                                                 value="{!v.ccrFields.Partner_SE_Email__c}" type="email"
+                                                 pattern="[^@]+@[^\.]+\..+" />
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                        <lightning:layout multipleRows="false">
+                            <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="4"
+                                                  padding="around-small">
+                                <lightning:input aura:id="ccrFields" label="Deal Registration Number" required="true"
+                                                 value="{!v.ccrFields.Deal_Registration_Number__c}" />
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                    </aura:set>
+                </aura:if>
+            </div>
+            <div class="c-container">
+                <lightning:layout multipleRows="false" class="slds-align_absolute-center">
+                    <div>
+                        <lightning:button label="Save" variant="brand" onclick="{!c.handleSaveCcrRecord}"
+                                          class="exploreButton" />
+                        <lightning:button label="Cancel" variant="brand" onclick="{!c.handleCancelCcrRecord}"
+                                          class="secondaryButton" />
+                    </div>
+                    <lightning:spinner aura:id="mySpinner" alternativeText="Loading.." title="Loading.." variant="brand"
+                                       size="large" class="slds-hide" />
+                </lightning:layout>
+            </div>
+        </lightning:card>
+        <aura:if isTrue="{!not(empty(v.newIncentiveError))}">
+            <div class="recordError">
+                {!v.newIncentiveError}</div>
+        </aura:if>
+    </lightning:recordEditForm>
+</aura:component>

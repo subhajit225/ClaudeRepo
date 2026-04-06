@@ -1,0 +1,37 @@
+<!--
+*******************************************************************************     
+* @description       : Shows those entitlements where entitlements links are missing
+* @author            : Ravi Mali
+* Ver   Date          Author        Modification 
+* 1.0   09-08-2023     Ravi        Initial Version 
+*******************************************************************************
+-->
+<template>
+    <div class="slds-grid slds-gutters ">
+        <div class="slds-col slds-p-around_x-small">
+            <lightning-input type="date" label="Start Date" value={startDate}
+                onchange={validateStartEndDates}></lightning-input>
+        </div>
+        <div class="slds-col slds-p-around_x-small">
+            <lightning-input type="date" label="End Date" value={endDate}
+                onchange={validateStartEndDates}></lightning-input>
+            <p class="error" style="color:red;display:inline-block">{endDateError}</p>
+        </div>
+        <div class="slds-col slds-align-middle slds-p-around_x-small"
+            style="display: flex; align-items: center; margin-top: 4px; ">
+            <lightning-button label="Filter" variant="brand" onclick={onFilterClick} disabled={disableFilterBTN}></lightning-button>
+        </div>
+    </div> 
+    <br><br>
+    <template if:false={showTable}>
+        <div class="slds-align_absolute-center slds-theme--shade"
+            style="margin: 10px;height:3rem;border: 2px solid rgb(20, 95, 133);border-radius: 10px;">
+            No Records Found
+        </div>
+    </template>
+    <template if:true={showTable}>
+        <lightning-datatable key-field="id" data={missingEntLinksDataDisplay} hide-checkbox-column="true"
+            columns={columns} wrap-text-max-lines=20>
+        </lightning-datatable>
+    </template>
+</template>

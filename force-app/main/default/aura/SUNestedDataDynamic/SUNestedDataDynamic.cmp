@@ -1,0 +1,46 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+    access="global" controller="su_vf_console.SULtngController">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="scConfigObj" type="Object" />
+    <aura:attribute name="assignNested" type="List" />
+    <aura:attribute name="iterateNested" type="List" />
+    <aura:attribute name="method" type="Aura.action"/>
+    <aura:attribute name="loadingResult" type="Integer" />
+    <aura:attribute name="parent" type="Aura.Component"/>
+    <aura:attribute name="endPoint" type="String" />
+    <aura:handler name="change" value="{!v.assignNested}" action="{!c.doInit}"/>
+    <aura:registerEvent name="searchBoxEvent" type="su_vf_console:fillSearchBox" />
+
+     <aura:iteration items="{!v.iterateNested}" var="nestedChild">
+        <div class="su_main su__py-1 su__flex-vcenter">
+            <aura:if isTrue="{!and(nestedChild.childArray, nestedChild.childArray.length > 0)}">
+                <div class="{! if(!nestedChild.open, 'su__transition-5s su__cursor su__pr-1 su__loading-view  su__nested-arrow-inner', 'su__pr-1 su__transition-5s su__cursor  su__nested-arrow-inner')}" 
+                id="{!'collapseNested-'+nestedChild.Contentname+'_toggleIconOff'}">
+                    <img class="su__arrow-icons su__d-block su__transition-5s" onclick="{!c.toggleCollpase}" id="{!'collapseNested-'+nestedChild.Contentname+'_span'}" src="{!v.scConfigObj.client_url+v.uid+'/Assets/keyright-arrow.svg'}" />
+                </div>
+                <aura:set attribute="else">
+                	<span class="su__pl-24"></span>
+                </aura:set>
+            </aura:if>
+            <div class="{!if(v.loadingResult == 1, 'su__position-relative su__filter-checkbox su__loading-view','')}">
+                <input type="checkbox" accessKey="{!nestedChild.level}" name="{!nestedChild.Contentname}" value="{!nestedChild.Contentname == 'All Time'? 'All':nestedChild.Contentname}" key="{!v.parentKey}" max="{!nestedChild.level}" min="{!nestedChild.immediateParent}" class="{!'su__toggle-input su__position-absolute su__cursor checkType_'+v.parentOrder}" id="{!nestedChild.parent+'_checkType_'+nestedChild.Contentname}" 
+                onclick="{!c.checkCheckbox}" step="{!nestedChild.parent}" checked = "{!nestedChild.selected}" data-name = "{!nestedChild.Contentname}" data-label="{!nestedChild.label}"  data-path = "{!nestedChild.path}"/>
+                <label class="{!'su__toggle-label su__d-inline-flex su__cursor su__loading-view-border su__'+nestedChild.parent}"  
+                for="{!nestedChild.parent+'_checkType_'+nestedChild.Contentname}">
+                    <span class="su__toggle__text"></span>
+                </label>
+            </div>
+            <div class="{!if(v.loadingResult == 1, 'su__filter-label su__text-truncate font-12 su__mr-3 su__rtlml-3 su__rtlmr-0 su__loading-view','')}" title="{!nestedChild.displayName || nestedChild.Contentname}">
+                <label> {!nestedChild.displayName || nestedChild.Contentname} </label>
+            </div>
+            <div class="{!if(v.loadingResult == 1, 'su__filter-badge font-12 su__loading-view','')}">
+                <label class="label-badge su__bg-light-gray su__loading-view ng-binding"> {!nestedChild.value} </label>
+            </div>
+        </div>
+        <aura:if isTrue="{!if(nestedChild.childArray.length > 0, true, false)}">
+            <div id="{!'collapseNested-'+nestedChild.Contentname}" class="{!if( !nestedChild.open, 'slds-hide su__pl-24 su__fadeInDownSmall', 'slds-show su__fadeInDownSmall su__pl-24')}">
+                <c:SUNestedDataDynamic parent="{!v.parent}" endPoint="{!v.endPoint}" aura:id="SUNestedDataDynamic" assignNested="{!nestedChild.childArray}" method="{!v.method}"/>
+            </div>
+        </aura:if>
+    </aura:iteration> 
+</aura:component>

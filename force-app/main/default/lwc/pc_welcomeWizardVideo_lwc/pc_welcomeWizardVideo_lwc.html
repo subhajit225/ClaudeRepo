@@ -1,0 +1,28 @@
+<template>
+    <template if:true={_showVideoModal}>
+        <lightning-layout multiple-rows class="slds-text-align_center">
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12"
+                class="slds-p-vertical_medium">
+                <div>
+                    <c-pc_video-comp_lwc height="340" width="1000"
+                        src={wizardVideoUrl}></c-pc_video-comp_lwc>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+                <div class="heading-58 slds-p-bottom_small">
+                    {wizardHeadline}
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+                <div class="slds-col cardBodyDescription">
+                    {wizardSubHeading}
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+                <lightning-button variant="brand" label={buttonNavigateText} title={buttonNavigateText} onclick={handleExploreClick}
+                    class="slds-p-top_medium slds-p-bottom_large">
+                </lightning-button>
+            </lightning-layout-item>
+        </lightning-layout>
+    </template>
+</template>

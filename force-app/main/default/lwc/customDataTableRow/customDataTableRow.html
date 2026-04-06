@@ -1,0 +1,103 @@
+<template>
+    <span class="slds-cell-wrap">
+    </span>
+
+    <!-- Field Type -->
+    <!-- EMAIl  -->
+    <template if:true={isEmail}>
+        <template if:true={isEdit}>
+            <lightning-input type="email" value={value} onchange={handleChange} onblur={handleBlur}></lightning-input>
+        </template>
+        <template if:false={isEdit}>
+            <lightning-formatted-email value={value}></lightning-formatted-email>
+        </template>
+    </template>
+
+    <!-- STRING -->
+    <template if:true={isString}>
+        <template if:true={isEdit}>
+            <lightning-input type="text" value={value} onchange={handleChange} onblur={handleBlur}></lightning-input>
+        </template>
+        <template if:false={isEdit}>
+            <lightning-formatted-text value={value}>
+            </lightning-formatted-text>
+        </template>
+    </template>
+
+    <!-- PICKLIST -->
+    <template if:true={isPicklist}>
+        <template if:true={isEdit}>
+            <lightning-combobox name="picklist" options={llStatus} value={value} onchange={handleChange} onblur={handleBlur}></lightning-combobox>
+        </template>
+        <template if:false={isEdit}>
+            <lightning-formatted-text value={value}>
+            </lightning-formatted-text>
+        </template>
+    </template>
+
+    <!-- LONG TEXT AREA -->
+    <template if:true={isLongTextArea}>
+        <template if:true={isEdit}>
+            <lightning-textarea value={value} onchange={handleChange} onblur={handleBlur}>
+            </lightning-textarea>
+        </template>
+        <template if:false={isEdit}>
+            <!-- <template if:true={_row.isDraft__c}>
+                <b style="color: red;">DRAFT</b><br/>
+            </template> -->
+            <lightning-formatted-text value={value}>
+            </lightning-formatted-text>
+        </template>
+    </template>
+
+    <!-- RICH TEXT AREA -->
+    <template if:true={isRichTextArea}>
+        <template if:true={isEdit}>
+            <lightning-input-rich-text value={value} onchange={handleChange} onblur={handleBlur} formats={allowedFormats}>
+            </lightning-input-rich-text>
+        </template>
+        <template if:false={isEdit}>
+            <lightning-formatted-rich-text value={value}>
+            </lightning-formatted-rich-text>
+        </template>
+    </template>
+
+    <!-- Reference -->
+    <template if:true={isReference}>
+        <lightning-formatted-rich-text value={value}>
+        </lightning-formatted-rich-text>
+    </template>
+
+    <!-- DATE -->
+    <template if:true={isDate}>
+        <template if:true={isEdit}>
+            <lightning-input type="date" value={value} onchange={handleChange} onblur={handleBlur}></lightning-input>
+        </template>
+        <template if:false={isEdit}>
+            <lightning-formatted-date-time value={value} year="2-digit" month="short" day="2-digit" weekday="long">
+            </lightning-formatted-date-time>
+        </template>
+    </template>
+
+    <!-- DATE TIME -->
+    <template if:true={isDateTime}>
+        <template if:true={isEdit}>
+            <lightning-input type="datetime" value={value} onchange={handleChange} onblur={handleBlur}></lightning-input>
+        </template>
+        <template if:false={isEdit}>
+            <lightning-formatted-date-time value={value} year="2-digit" month="short" day="2-digit" weekday="long">
+            </lightning-formatted-date-time>
+        </template>
+    </template>
+
+    <!-- BOOLEAN -->
+    <template if:true={isBoolean}>
+        <template if:true={isEdit}>
+            <lightning-input type="checkbox" value={value} onchange={handleChange} onblur={handleBlur}></lightning-input>
+        </template>
+        <template if:false={isEdit}>
+            <lightning-input type="checkbox" label="Disabled option" name="input3" value={value} disabled ondblclick={handleOnEditField}></lightning-input>
+        </template>
+    </template>
+    
+</template>

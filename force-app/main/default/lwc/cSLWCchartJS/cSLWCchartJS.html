@@ -1,0 +1,58 @@
+<template>
+    <div >
+        <div class="slds-notify slds-notify_alert" role="alert">
+            <span class="slds-assistive-text">info</span>
+            <h2>
+                Account Health by CX Score - {chartName}
+            </h2>
+        </div><br/>
+    <center>
+        <canvas id={chartId} lwc:dom="manual" ></canvas>
+    </center>
+    </div><br/>
+    <div style="width:100%;    overflow-y: auto;">
+        <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered">
+            <thead>
+                <tr>
+                    <th ></th>
+                    <template for:each={tableColoumn} for:item="header">
+                        <th key={header}>{header}</th>
+                    </template>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td >Overall CX Score</td>
+                    <template for:each={cxScoreObj} for:item="row">
+                        <td key={row.key} style={row.style} >{row.key}<br/>{row.code}</td>
+                    </template>
+                    
+                </tr>
+                <tr>
+                    <td >Onboarding</td>
+                    <template for:each={onboardingScore} for:item="row">
+                        <td key={row}>{row}</td>
+                    </template>
+                </tr>
+                <tr>
+                    <td >Adoption</td>
+                    <template for:each={adoptionScore} for:item="row">
+                        <td key={row}>{row}</td>
+                    </template>
+                </tr>
+                <tr>
+                    <td >Support</td>
+                    <template for:each={supportScore} for:item="row">
+                        <td key={row}>{row}</td>
+                    </template>
+                </tr>
+                <tr>
+                    <td >Product</td>
+                    <template for:each={productScore} for:item="row">
+                        <td key={row}>{row}</td>
+                    </template>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</template>

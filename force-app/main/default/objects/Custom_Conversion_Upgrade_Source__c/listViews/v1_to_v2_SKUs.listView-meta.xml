@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>v1_to_v2_SKUs</fullName>
+    <columns>NAME</columns>
+    <columns>Old_Product__c</columns>
+    <columns>Support_Type__c</columns>
+    <columns>Product_Upgrade_Type__c</columns>
+    <columns>Support_Tier__c</columns>
+    <columns>New_Product__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Program__c</field>
+        <operation>equals</operation>
+    </filters>
+    <filters>
+        <field>Product_Upgrade_Type__c</field>
+        <operation>equals</operation>
+        <value>Hardware,SaaS Bundle,Support,Add-On Node</value>
+    </filters>
+    <label>v1 to v2 SKUs</label>
+</ListView>

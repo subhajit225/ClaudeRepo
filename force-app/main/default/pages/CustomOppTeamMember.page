@@ -1,0 +1,33 @@
+<apex:page controller="CustomOppTeamMemberCntrl" sidebar="false" showHeader="false" lightningStylesheets="true">
+<apex:slds rendered="{!$User.UITheme != 'Theme3'}"/>
+    <apex:outputpanel rendered="{!$User.UITheme != 'Theme3'}">
+        <style>
+            .detailList .dataCol input[type="text"], body .detailList .dataCol input[type="date"], body .detailList .dataCol input[type="password"], body .detailList .dataCol textarea, body .detailList .dataCol select, .slds-vf-scope .detailList .dataCol input[type="text"], .slds-vf-scope .detailList .dataCol input[type="date"], .slds-vf-scope .detailList .dataCol input[type="password"], .slds-vf-scope .detailList .dataCol textarea, .slds-vf-scope .detailList .dataCol select{
+            	min-width: 15rem !important;
+            }
+        </style>
+    </apex:outputpanel>
+    <apex:pagemessages ></apex:pagemessages>
+   <apex:form id="form">
+     <apex:actionFunction action="{!addOppTeamMember}" name="submitToServer"/>
+   
+        <apex:pageBlock id="pgblk" title="Add Opportunity Team Member for {!oppName}">
+            <apex:outputPanel id="outpn" rendered="{!issaved}">
+                <apex:pageBlockSection id="pgblkscn" columns="3">
+                    <apex:inputField id="usrLk" value="{!OppTeamMember.UserId}" required="true"/>
+                    <apex:inputField id="tmRl" value="{!OppTeamMember.TeamMemberRole}" required="true"/>
+                    <apex:inputField id="accLvl" value="{!OppTeamMember.OpportunityAccessLevel}" required="true"/> 
+                </apex:pageBlockSection>
+            </apex:outputPanel>
+            <apex:outputText rendered="{!!issaved}"><div style="color:green;font-weight:bold">Opportunity Team Member added to Opportunity Team.Please Close the window</div></apex:outputText>
+                <apex:pageBlockButtons location="bottom">
+                    <apex:commandButton rendered="{!!issaved}"  value="Close" action="{!close}"/>
+                </apex:pageBlockButtons>
+         
+            <apex:pageBlockButtons location="bottom" rendered="{!issaved}">
+                <apex:commandButton status="checkforprg" value="Add Member" action="{!addOppTeamMember}"/>
+                <apex:commandButton value="Close" action="{!close}" immediate="true" />
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,98 @@
+<apex:component controller="MissingEntitlementsController" access="global">
+    <p>Hello Orders Team,</p>
+    <apex:outputPanel rendered="{!orderItems.size>0}">
+        <p>Following Order Items that were Shipped in last 7 days have missing entitlements.</p>
+        <apex:dataTable value="{!orderItems}" var="item" rules="all" cellpadding="5" style="border: 1px;">
+            <apex:column >
+                <apex:facet name="header">Order Product Id</apex:facet>
+                {!item.Id}
+            </apex:column>
+            <apex:column >
+                <apex:facet name="header">Product Name</apex:facet>
+                {!item.PricebookEntry.Product2.Name}
+            </apex:column>
+            <apex:column >
+                <apex:facet name="header">Product Category</apex:facet>
+                {!item.PricebookEntry.Product2.Category__c}
+            </apex:column>
+            <apex:column >
+                <apex:facet name="header">Order Number</apex:facet>
+                {!item.Order.OrderNumber}
+            </apex:column>
+            <apex:column >
+                <apex:facet name="header">Order Id</apex:facet>
+                {!item.Order.Id}
+            </apex:column>
+            <apex:column >
+                <apex:facet name="header">Order Type</apex:facet>
+                {!item.Order.Type}
+            </apex:column>
+            <apex:column >
+                <apex:facet name="header">Support Start Date</apex:facet>
+                <apex:outputText value="{0, date, MM/dd/yyyy}">
+                    <apex:Param value="{!item.Support_Start_Date__c}" />
+                </apex:outputText>
+            </apex:column>
+            <apex:column >
+                <apex:facet name="header">Support End Date</apex:facet>
+                <apex:outputText value="{0, date, MM/dd/yyyy}">
+                    <apex:Param value="{!item.Support_End_Date__c}" />
+                </apex:outputText>
+            </apex:column>
+            <apex:column >
+                <apex:facet name="header">Actual Order Ship Date</apex:facet>
+                <apex:outputText value="{0, date, MM/dd/yyyy}">
+                    <apex:Param value="{!item.Order.Actual_Order_Ship_Date__c}" />
+                </apex:outputText>
+            </apex:column>
+        </apex:dataTable>
+        <p></p>
+    </apex:outputPanel>
+    <apex:outputPanel rendered="{!missingContractOrderItems.size>0}">
+        <p>Following Order Items that were Shipped in last 7 days have missing contract.</p>
+        <apex:dataTable value="{!missingContractOrderItems}" var="item" rules="all" cellpadding="5" style="border: 1px;">
+            <apex:column >
+                <apex:facet name="header">Order Product Id</apex:facet>
+                {!item.Id}
+            </apex:column>
+            <apex:column >
+                <apex:facet name="header">Product Name</apex:facet>
+                {!item.PricebookEntry.Product2.Name}
+            </apex:column>
+            <apex:column >
+                <apex:facet name="header">Product Category</apex:facet>
+                {!item.PricebookEntry.Product2.Category__c}
+            </apex:column>
+            <apex:column >
+                <apex:facet name="header">Order Number</apex:facet>
+                {!item.Order.OrderNumber}
+            </apex:column>
+            <apex:column >
+                <apex:facet name="header">Order Id</apex:facet>
+                {!item.Order.Id}
+            </apex:column>
+            <apex:column >
+                <apex:facet name="header">Order Type</apex:facet>
+                {!item.Order.Type}
+            </apex:column>
+            <apex:column >
+                <apex:facet name="header">Support Start Date</apex:facet>
+                <apex:outputText value="{0, date, MM/dd/yyyy}">
+                    <apex:Param value="{!item.Support_Start_Date__c}" />
+                </apex:outputText>
+            </apex:column>
+            <apex:column >
+                <apex:facet name="header">Support End Date</apex:facet>
+                <apex:outputText value="{0, date, MM/dd/yyyy}">
+                    <apex:Param value="{!item.Support_End_Date__c}" />
+                </apex:outputText>
+            </apex:column>
+            <apex:column >
+                <apex:facet name="header">Actual Order Ship Date</apex:facet>
+                <apex:outputText value="{0, date, MM/dd/yyyy}">
+                    <apex:Param value="{!item.Order.Actual_Order_Ship_Date__c}" />
+                </apex:outputText>
+            </apex:column>
+        </apex:dataTable>
+    </apex:outputPanel>
+</apex:component>

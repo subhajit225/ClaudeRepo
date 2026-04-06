@@ -1,0 +1,48 @@
+<aura:component controller="LCC_JSMQueryResultService" implements="flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+	<aura:attribute name="AspenHardwareCost" type="currency" default="0.0"/>
+    <aura:attribute name="NonAspenHardwareCost" type="currency" default="0.0"/>
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="quoteLineItemsRecds" type="Object" />
+    <aura:handler name="init" value="{!this}" action="{!c.handleRecordUpdated}"/>
+    <div style="padding-left:32px">
+    <table style="padding-left:30px; border-collapse: collapse;">
+        <!-- Table Header -->
+        <thead>
+            <tr style="background-color: #f4f6f9;">
+                <th colspan="3" style="font-weight: normal;padding: 5px 0; font-size: 14px; text-align: left;">
+                    Hardware Cost 
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="width:20%; vertical-align: top;padding-top:3px;">
+                    <label>Estimated Distributor HW Costs </label>
+                    <lightning:helptext content="This is the estimated cost of the HW listed in the CPQ, for budgetary purposes ONLY. Please see Distributor for accurate pricing as pricing will vary."/>
+                </td>
+                <td style="width:40%; vertical-align: middle;">
+                    ${!v.AspenHardwareCost}
+                </td>
+                <td style="width:40%;"></td>
+            </tr>
+            <tr>
+                <td colspan="3" style="border-top: 1px solid #ccc;"></td>
+            </tr>
+            <tr>
+                <td style="width:20%; vertical-align: top;padding-top:3px;">
+                    <label>Rubrik HW cost </label>
+                    <lightning:helptext content="This is the actual cost of the HW being sent through the Distributor."/>
+                </td>
+                <td style="width:40%; vertical-align: middle;">
+                    ${!v.NonAspenHardwareCost}
+                </td>
+                <td style="width:40%;"></td>
+            </tr>
+            <tr>
+                <td colspan="3" style="border-top: 1px solid #ccc; padding: 5px 0;"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+</aura:component>

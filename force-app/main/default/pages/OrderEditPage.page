@@ -1,0 +1,189 @@
+<!--
+  PAGE NAME:            OrderEditPage
+  RELATED CONTROLLER:   OrderExtensionCntllr
+  RELATED OBJECT:       Order
+  PURPOSE:              To provide UI to Clone Order and Split the quantity for Order items.
+  DEVELOPER:            SHADAB HUSSAIN
+  DATE OF CREATION:     25/11/2016
+  LAST MODIFIED DATE:   26/11/2016
+-->
+<apex:page standardController="Order" extensions="OrderExtensionCntllr" sidebar="true" docType="html-5.0">
+    <!-- <apex:sectionHeader title="New Order" subtitle="{!Order.name}"/>
+    <apex:form >
+    <apex:actionFunction name="renderConName" action="{!updateContactText}" rerender="tstpopup"/>
+        <apex:pageBlock title="Edit Order" id="thePageBlock" mode="edit">
+            <apex:PageMessages id="messages1" />
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Save" action="{!saveOrder}" reRender="messages1"/>
+                <apex:commandButton value="Save & Add Lines" action="{!saveOrderAndAddProducts}" reRender="messages1"/>
+                <apex:commandButton value="Cancel" action="{!cancel}"/>
+            </apex:pageBlockButtons>
+            
+            <apex:pageBlockSection title="Order Information" columns="2">
+                <apex:inputField value="{!Order.AccountId}" required="true"/>
+                <apex:inputField value="{!Order.Status}"/>
+                <apex:inputField value="{!Order.EffectiveDate}"/>
+                <apex:inputField value="{!Order.Cancellation_Reason__c}"/>
+                
+                <apex:inputField value="{!Order.OpportunityId}" rendered="{!order.Type='Revenue'}" required="true"/>
+                <apex:inputField value="{!Order.OpportunityId}" rendered="{!order.Type='RMA'}" required="false"/>
+                <apex:inputField value="{!Order.Change_Needed_Reasons__c}"/>
+                <apex:inputField value="{!Order.Description}"/>
+                <apex:inputField value="{!Order.Integration_Failure__c}"/>
+                <apex:pageBlockSectionItem />
+                <apex:pageBlockSectionItem rendered="{!order.Type='Revenue'}"></apex:pageBlockSectionItem>
+                <apex:inputField value="{!Order.Change_Needed_Reason_Other__c}"/>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection title="Billing Information" columns="2">
+                <apex:inputField value="{!Order.Bill_To_Name__c}" />
+                <apex:pageBlockSectionItem />
+                <apex:inputField value="{!Order.PoNumber}" required="true"/>
+                <apex:pageBlockSectionItem />
+                <apex:inputField value="{!Order.PoDate}"/>
+                <apex:pageBlockSectionItem />
+                <apex:inputField value="{!Order.End_User_PO__c}"/>
+                <apex:pageBlockSectionItem />
+                <apex:inputField value="{!Order.Payment_Terms__c}"/>
+                
+                
+                
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection title="Shipping Information" columns="2">
+                <apex:pageBlockSectionItem rendered="{!order.Type='Revenue'}">
+                    <apex:outputLabel value="{! $ObjectType.Order.fields.Ship_To_Name__c.label }" for="accountLookup" />
+                    <apex:actionRegion >
+                        <apex:inputField value="{! Order.Ship_To_Name__c }" id="accountLookup" required="{!order.Type='Revenue'}" >
+                            <apex:actionSupport event="onchange" action="{! selectShippingAddress }" reRender="contactLookup,darkSite,tstpopup" />
+                        </apex:inputField>
+                    </apex:actionRegion>
+                    
+                </apex:pageBlockSectionItem>
+                <apex:inputField value="{!Order.ShipToName__c}" rendered="{!order.Type='RMA'}" />
+                 <apex:inputField value="{!Order.Shipping_Carrier__c}" />
+                <apex:inputField value="{!Order.ShipToContactName__c}" />
+                
+                
+                <apex:inputField value="{!Order.Service_Level__c}" rendered="{!order.Type=='Revenue'}"/>
+                <apex:inputField value="{!Order.Service_Type__c}" rendered="{!order.Type =='RMA'}"/>
+                
+                
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel >Shipping Address Label</apex:outputLabel>
+                    <apex:selectList id="darkSite" value="{!selectedShippingAddress}" size="1" styleClass="slds-size--1-of-1" title="Select Shipping Address">
+                        <apex:selectOptions value="{!shippingAddressesOptions}"/>
+                        <apex:actionSupport event="onchange" action="{!onSelectShippingAddress}" rerender="shippingCountryId,shippingStreetId,shippingCityId,shippingStateId,shippingPostalId"/>
+                    </apex:selectList>
+                </apex:pageBlockSectionItem>
+                
+                <apex:inputField value="{!Order.Shipping_Method__c}"/>
+                <apex:inputField label="Shipping Country" value="{!Order.ShippingCountryCode}" id="shippingCountryId" required="false" >
+                
+                </apex:InputField>
+                
+                <apex:inputField value="{!Order.Shipping_Account_Number__c}" />
+                <apex:inputField value="{!Order.ShippingStreet}" id="shippingStreetId" required="false"/>
+                <apex:inputField value="{!Order.Deliver_By__c}"/>
+                <apex:inputField value="{!Order.ShippingCity}" id="shippingCityId" required="false"/>
+                <apex:inputField value="{!Order.Ship_to_Email__c}" id="shiptoemail"/>
+                <apex:inputField label="Shipping State/Province" value="{!Order.ShippingStateCode}" id="shippingStateId" required="false"/>
+                
+                <apex:inputField value="{!Order.Ship_To_Phone_Number__c}" id="shiptophone"/>
+                <apex:inputField value="{!Order.ShippingPostalCode}" id="shippingPostalId" required="false"/>
+                <apex:inputField value="{!Order.Est_Ship_Date__c}" />
+                
+                <apex:pageBlockSectionItem />
+                
+                <apex:pageBlockSectionItem />
+                
+                
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Fullfillment Information" columns="2">
+                <apex:inputField value="{!Order.Order_Status__c}"/>
+                
+                
+                <apex:inputField value="{!Order.Actual_Order_Ship_Date__c}"/>
+                <apex:inputField value="{!Order.Tracking_No__c}"/>
+                
+                
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+    <style type="text/css">
+        .custPopup{
+            background-color: white;
+            border-width: 2px;
+            border-style: solid;
+            z-index: 9999;
+            left: 50%;
+            padding:10px;
+            position: absolute;
+            /* These are the 3 css properties you will need to change so the popup 
+            displays in the center of the screen. First set the width. Then set 
+            margin-left to negative half of what the width is. You can add 
+            the height property for a fixed size pop up if you want.*/
+            width: 50%;
+            margin-left: -250px;
+            top:200px;
+        }
+        .popupBackground{
+            background-color:black;
+            opacity: 0.20;
+            filter: alpha(opacity = 20);
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 9998;
+        }
+
+    </style>
+    <apex:form id="ContactForm" styleClass="contactFormClass">
+    <apex:pageMessages ></apex:pageMessages>
+    <script>
+        function showPopup(){
+           var x = document.getElementsByClassName("conPopup")[0];
+           x.style.display='block'; 
+           document.getElementsByClassName('contactFormClass')[0].reset();
+           //document.getElementsByClassName('contactFormClass')[0].reset() inputContact.
+           //callOpenAction();
+        }
+        function hidePopup(){
+           var x = document.getElementsByClassName("conPopup")[0];
+           x.style.display='none'; 
+        }
+        function callSave(){
+            callSaveAction();
+        }
+    </script>
+   
+   <apex:actionRegion >
+  <apex:outputPanel id="page" layout="block" style="margin:5px;padding:10px;padding-top:2px;">
+     <apex:outputPanel styleClass="conPopup" id="tstpopup" style="display:none">
+        <apex:outputPanel styleClass="popupBackground" layout="block" />
+            <apex:outputPanel styleClass="custPopup" layout="block" >
+<apex:pageBlock id="newContact" title="New Contact" >
+
+          <apex:pageBlockButtons >
+            <apex:commandButton action="{!saveContact}" oncomplete="hidePopup();" reRender="contactLookup,contactId" value="Save"/>
+            <button onclick="hidePopup();return false;"> Cancel</button>
+          </apex:pageBlockButtons>
+          <apex:pageMessages id="messages2"/>
+
+          <apex:pageBlockSection columns="2" id="fieldsSet">
+            <apex:repeat value="{!$ObjectType.Contact.FieldSets.ContactFieldsSet}" var="f">
+              
+              <apex:inputField value="{!Contact[f]}"/>
+            </apex:repeat>
+            
+          </apex:pageBlockSection> 
+        </apex:pageBlock>
+         </apex:outputPanel>
+        </apex:outputPanel>
+        
+  </apex:outputPanel>
+  </apex:actionRegion>
+  </apex:form> -->
+</apex:page>

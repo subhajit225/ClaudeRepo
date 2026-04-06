@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Storage_Tier__c</fullName>
+    <label>Storage Tier</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>5 GB</fullName>
+                <default>false</default>
+                <label>5 FEGB per user</label>
+            </value>
+            <value>
+                <fullName>20 GB</fullName>
+                <default>false</default>
+                <label>20 FEGB per user</label>
+            </value>
+            <value>
+                <fullName>50 GB</fullName>
+                <default>false</default>
+                <label>50 FEGB per user</label>
+            </value>
+            <value>
+                <fullName>Unlimited GB</fullName>
+                <default>false</default>
+                <label>Unlimited FEGB per user</label>
+            </value>
+            <value>
+                <fullName>70 GB</fullName>
+                <default>false</default>
+                <label>50 FEGB, 1 user; 5 FEGB, 4 users</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

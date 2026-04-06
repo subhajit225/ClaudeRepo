@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Dark_Site__c</fullName>
+    <description>CS21-1939</description>
+    <label>Dark Site</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Completely Dark - RSC P only</fullName>
+                <default>false</default>
+                <label>Completely Dark - RSC P only</label>
+            </value>
+            <value>
+                <fullName>Tunnel is disabled but using RSC</fullName>
+                <default>false</default>
+                <label>Tunnel is disabled but using RSC</label>
+            </value>
+            <value>
+                <fullName>Telemetry Available but not using RSC</fullName>
+                <default>false</default>
+                <label>Telemetry Available but not using RSC</label>
+            </value>
+            <value>
+                <fullName>Not a Dark site</fullName>
+                <default>false</default>
+                <label>Not a Dark site</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

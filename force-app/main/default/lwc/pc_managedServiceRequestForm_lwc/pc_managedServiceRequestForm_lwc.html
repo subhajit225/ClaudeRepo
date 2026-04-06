@@ -1,0 +1,123 @@
+<template>
+    <template if:true={spinnerLoad}>
+        <lightning-spinner variant="brand" size="large"> </lightning-spinner>
+    </template>
+    <div class="slds-card">
+        <div class="slds-size_1-of-2">
+            <lightning-layout multiple-rows vertical-align="start" class="slds-m-bottom--x-large">
+                <lightning-layout-item size="12" padding="around-small" small-device-size="12" medium-device-size="12" large-device-size="12" >
+                    <div class="heading-58">Managed Service Request Form</div>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" padding="around-small" small-device-size="12" medium-device-size="12" large-device-size="12">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label customRequired" for="lookupCmp">Account Name</label>
+                        <div class="slds-form-element__control">
+                            <c-custom-look-up-l-w-c class="custom-lookup" name="Account Search" objectname="Account" iconname="standard:user" placeholder="Search Account..." 
+                            onselected={handleSelected} onclear={handleClear} msp-restricted-flag={mspRestrictedFlag} onsearch={handleSearchText} acc-id-not-in={selectedAccountId2} ></c-custom-look-up-l-w-c>
+                        </div>
+                        <div role="alert" class="form-element__helpError custom-lookup-error none">
+                            {reqFieldMsg}
+                        </div>
+                    </div>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" padding="around-small" small-device-size="12" medium-device-size="12" large-device-size="12" >
+                    <lightning-input type="text" label="Customer Contact First Name" name={fieldNames.firstName} 
+                                        onchange={handleChangeEvent} required class="input">
+                    </lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" padding="around-small" small-device-size="12" medium-device-size="12" large-device-size="12" >
+                    <lightning-input type="text" label="Customer Contact Last Name" name={fieldNames.lastName} 
+                                        onchange={handleChangeEvent} required class="input">
+                    </lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" padding="around-small" small-device-size="12" medium-device-size="12" large-device-size="12" >
+                    <lightning-input type="text" label="Customer Contact Email" name={fieldNames.email} 
+                                        onchange={handleChangeEvent} required class="input">
+                    </lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" padding="around-small" small-device-size="12" medium-device-size="12" large-device-size="12" >
+                    <lightning-combobox name={fieldNames.engagedWithRubrik} label="Have you engaged with a Rubrik Account Executive on this deal?"
+                                        placeholder="Select" options={engagedWithRubrikOptions} required
+                                        onchange={handleChangeEvent} class="input">
+                    </lightning-combobox>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" padding="around-small" small-device-size="12" medium-device-size="12" large-device-size="12" >
+                    <lightning-combobox name={fieldNames.sourceOfOpportunity} label="Source of the Opportunity"
+                                        placeholder="Select" options={sourceOfOpportunityOptions} required
+                                        onchange={handleChangeEvent} class="input">
+                    </lightning-combobox>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" padding="around-small" small-device-size="12" medium-device-size="12" large-device-size="12">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label" for="lookupCmp">Please name the reseller, if any, that you are currently engaged with on this opportunity</label>
+                        <div class="slds-form-element__control">
+                            <c-custom-look-up-l-w-c class="custom-lookup" name="Account Search" objectname="Account" iconname="standard:user" placeholder="Search Account..." 
+                            onselected={handleSelected2} onclear={handleClear2} acc-types={accTypes} onsearch={handleSearchText} acc-id-not-in={selectedAccountId}></c-custom-look-up-l-w-c>
+                        </div>
+                    </div>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" padding="around-small" small-device-size="12" medium-device-size="12" large-device-size="12" >
+                    <lightning-combobox name={fieldNames.amountOfData} label="Amount of Data (TB)"
+                                        placeholder="Select" options={amountOfDataOptions} required
+                                        onchange={handleChangeEvent} class="input">
+                    </lightning-combobox>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" padding="around-small" small-device-size="12" medium-device-size="12" large-device-size="12" >
+                    <lightning-combobox name={fieldNames.customerBudget} label="Customer Budget"
+                                        placeholder="Select" options={customerBudgetOptions} required
+                                        onchange={handleChangeEvent} class="input">
+                    </lightning-combobox>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" padding="around-small" small-device-size="12" medium-device-size="12" large-device-size="12" >
+                    <lightning-combobox name={fieldNames.timeframe} label="Timeframe"
+                                        placeholder="Select" options={timeframeOptions} required
+                                        onchange={handleChangeEvent} class="input">
+                    </lightning-combobox>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" padding="around-small" small-device-size="12" medium-device-size="12" large-device-size="12" >
+                    <lightning-input type="text" label="Customer Need" name={fieldNames.customerNeeds} 
+                                        onchange={handleChangeEvent}>
+                    </lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" padding="around-small" small-device-size="12" medium-device-size="12" large-device-size="12" >
+                    <lightning-combobox name={fieldNames.scopeOfOpportunity} label="Scope of Opportunity"
+                                        placeholder="Select" options={scopeOfOpportunityOptions} required
+                                        onchange={handleChangeEvent} class="input">
+                    </lightning-combobox>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" padding="around-small" small-device-size="12" medium-device-size="12" large-device-size="12" >
+                    <lightning-input type="text" label="Scope of Opportunity (Additional Details)" name={fieldNames.scopeOfOpportunityAdditionalDetails} 
+                                        onchange={handleChangeEvent}>
+                    </lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" padding="around-small" small-device-size="12" medium-device-size="12" large-device-size="12" >
+                    <lightning-combobox name={fieldNames.utilitySharedLicensing} label="Will utility shared licensing be required?"
+                                        placeholder="Select" options={utilitySharedLicensingOptions} 
+                                        onchange={handleChangeEvent}>
+                    </lightning-combobox>
+                </lightning-layout-item>
+                <template if:true={uslValue}>
+                    <lightning-layout-item size="12" padding="around-small" small-device-size="12" medium-device-size="12" large-device-size="12" >
+                        <lightning-input type="text" label="If Yes - Why?" name={fieldNames.utilitySharedLicensingWhy} 
+                                        onchange={handleChangeEvent} required class="input">
+                        </lightning-input>
+                    </lightning-layout-item>
+                </template>
+                <lightning-layout-item size="12" padding="around-small" small-device-size="12" medium-device-size="12" large-device-size="12" >
+                        <lightning-input type="text" label="Original consumption order detail (PO number)" name={fieldNames.poNumber} 
+                                        onchange={handleChangeEvent}>
+                        </lightning-input>
+                    </lightning-layout-item>
+                <lightning-layout-item size="12" padding="around-small" small-device-size="12" medium-device-size="12" large-device-size="12" >
+                    <lightning-button variant="brand" label="Submit" title="Submit" value="Deal_Reg_List__c" 
+                                      onclick={handleSubmit} class="slds-m-top_small slds-m-around_small">
+                    </lightning-button>
+                    <lightning-button variant="brand" label="Cancel" title="Cancel" value="Deal_Reg_List__c" 
+                                      onclick={handleCancel} class="slds-m-top_small slds-m-around_small">
+                    </lightning-button>
+                </lightning-layout-item>
+
+            </lightning-layout>
+        </div>
+    </div>
+</template>

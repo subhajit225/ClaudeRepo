@@ -1,0 +1,77 @@
+<apex:component access="global" controller="PolarisOrderTemplateClass">
+    <apex:attribute name="orderId" description="Receive Order Id" type="Id" required="required" assignTo="{!ordId}" />
+    
+    <p>
+        <b><i>Your recent order(s) modifies your previous order(s) to replace your product(s) as referenced in the following table.</i></b>
+    </p>
+    
+    <hr noshade="1" />
+    <table width="100%" border="0" style="font-size:10px;">
+        <tr>
+            <td bgcolor="#f3f5f6" style="font-weight:bold;">&nbsp;</td>
+            <td bgcolor="#f3f5f6" style="font-weight:bold;">Order Number</td>
+            <td bgcolor="#f3f5f6" style="font-weight:bold;">Product</td>
+            <td bgcolor="#f3f5f6" style="font-weight:bold;">Description</td>
+            <td bgcolor="#f3f5f6" style="font-weight:bold;">Total Quantity</td>
+            <td bgcolor="#f3f5f6" style="font-weight:bold;">Fulfilled Quantity</td>
+            <td bgcolor="#f3f5f6" style="font-weight:bold;">Support Start Date</td>
+            <td bgcolor="#f3f5f6" style="font-weight:bold;">Support End Date</td>
+            <td bgcolor="#f3f5f6" style="font-weight:bold;">Original Product</td>
+            <td bgcolor="#f3f5f6" style="font-weight:bold;">Original Order</td>
+            <td bgcolor="#f3f5f6" style="font-weight:bold;">Type</td>
+        </tr>
+        <apex:repeat var="cx" value="{!RelacementOrderItemsDetail}">
+            <tr>
+                <td><b>
+                    <apex:outputlink value="{!cx.welcomeLetterContent}"
+                                     rendered="{!cx.welcomeLetterContent!=null}">
+                        <apex:outputtext value=">> Get Started" />
+                    </apex:outputlink>
+                    </b></td>
+                <td>
+                    <apex:outputText value="{!cx.orderNum}" />
+                </td>
+                <td>
+                    <apex:outputText value="{!cx.productName}" />
+                </td>
+                <td>
+                    <apex:outputText value="{!cx.productDescription}" />
+                </td>
+                <td>
+                    <apex:outputText value="{!cx.quantity}" />
+                </td>
+                <td>
+                    <apex:outputText value="{!cx.quantity}" />
+                </td>
+                <td>
+                    <apex:outputPanel rendered="{!IF(OR(cx.productName ==  'RBK-PS-CNSLT-ONST',cx.productName ==  'RBK-PS-CNSLT-RMOT', cx.productName =='RBK-PS-INST'),true,false)}">
+                        <apex:outputText ></apex:outputText>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!IF(OR(cx.productName ==  'RBK-PS-CNSLT-ONST',cx.productName ==  'RBK-PS-CNSLT-RMOT', cx.productName =='RBK-PS-INST'),false,true)}">
+                        <apex:outputText value="{!cx.supportStartDate}" />
+                    </apex:outputPanel>
+                </td>
+                <td>
+                    <apex:outputPanel rendered="{!IF(OR(cx.productName ==  'RBK-PS-CNSLT-ONST',cx.productName ==  'RBK-PS-CNSLT-RMOT', cx.productName =='RBK-PS-INST'),true,false)}">
+                        <apex:outputText ></apex:outputText>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!IF(OR(cx.productName ==  'RBK-PS-CNSLT-ONST',cx.productName ==  'RBK-PS-CNSLT-RMOT', cx.productName =='RBK-PS-INST'),false,true)}">
+                        <apex:outputText value="{!cx.suppportEndDate}" />
+                    </apex:outputPanel>
+                </td>
+                <td>
+                    <apex:outputText value="{!cx.originalProduct}" />
+                </td>
+                <td>
+                    <apex:outputText value="{!cx.originalOrder}" />
+                </td>
+                <td>
+                    <apex:outputText value="{!cx.originalDescription}" rendered="{!cx.originalDescription!= null}" />
+                </td>
+            </tr>
+        </apex:repeat>
+        
+    </table>
+
+
+</apex:component>

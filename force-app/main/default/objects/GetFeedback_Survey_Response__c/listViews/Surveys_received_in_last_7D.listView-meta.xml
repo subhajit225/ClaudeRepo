@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Surveys_received_in_last_7D</fullName>
+    <booleanFilter>1</booleanFilter>
+    <columns>CREATED_DATE</columns>
+    <columns>OBJECT_ID</columns>
+    <columns>Account_Name__c</columns>
+    <columns>Case_ID__c</columns>
+    <columns>Case_Number__c</columns>
+    <columns>Case_Owner__c</columns>
+    <columns>Contact_ID__c</columns>
+    <columns>Contact_Name__c</columns>
+    <columns>CSAT__c</columns>
+    <columns>NPS__c</columns>
+    <columns>survey_comments__c</columns>
+    <columns>NAME</columns>
+    <columns>promoter_score__c</columns>
+    <columns>CSAT_Score__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>CREATED_DATE</field>
+        <operation>equals</operation>
+        <value>LAST_N_DAYS:30</value>
+    </filters>
+    <label>Surveys received in last 30 Days</label>
+</ListView>

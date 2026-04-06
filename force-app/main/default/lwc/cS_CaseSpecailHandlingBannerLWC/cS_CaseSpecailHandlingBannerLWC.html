@@ -1,0 +1,14 @@
+<template>
+    <div class="custom-card">
+        <ul class="message-list">
+			<template for:each={messages} for:item="message">
+				<li class="message-list-items" key={message}>
+					<div >
+						<p><lightning-formatted-rich-text class="rich-text" value={message}>
+					    </lightning-formatted-rich-text></p>
+				    </div>
+				</li>
+			</template>
+		</ul>
+    </div>
+</template>

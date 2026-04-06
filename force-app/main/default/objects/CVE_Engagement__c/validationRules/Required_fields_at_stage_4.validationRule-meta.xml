@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Required_fields_at_stage_4</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+NOT ($Setup.ShGl_DisableBusinessLogic__c.Disable_CVE_Enagement_Validation_Rules__c),
+OR(ISPICKVAL(CVE_Stage__c, &quot;4-Engagement Completed&quot;),
+ISPICKVAL(CVE_Stage__c, &quot;5-Stalled / Discontinued&quot;),
+ISPICKVAL(CVE_Stage__c, &quot;6-CVE Not Required&quot;)),
+OR(ISPICKVAL(Collaboration__c, &apos;&apos;),
+   ISPICKVAL(BVA_Echo_back__c, &apos;&apos;),
+   ISPICKVAL(Timeliness__c, &apos;&apos;))
+)</errorConditionFormula>
+    <errorMessage>Following fields are required at CVE stage 4 and above: Collaboration, BVA Echo-back, Timeliness.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,41 @@
+<template>
+    <lightning-quick-action-panel header="Confirm Order Creation">
+        <template if:true={isLoading}>
+            <lightning-spinner
+                alternative-text="Loading..."
+                size="medium">
+            </lightning-spinner>
+        </template>
+
+        <!-- Error Message -->
+        <template if:true={errorMessage}>
+            <div
+                class="slds-notify slds-notify_alert slds-alert_error"
+                role="alert">
+                <span class="slds-assistive-text">Error</span>
+                <h2>{errorMessage}</h2>
+            </div>
+        </template>
+
+        <template if:true={showConfirmModal}>
+            <p class="slds-align_absolute-center">
+                Are you sure you want to create orders for this opportunity?
+            </p>
+
+            <!-- Modal Footer -->
+            <div slot="footer">
+                <lightning-button
+                    label="Cancel"
+                    onclick={handleCancel}
+                    class="slds-m-right_small">
+                </lightning-button>
+
+                <lightning-button
+                    variant="brand"
+                    label="Confirm"
+                    onclick={handleOrderCreation}>
+                </lightning-button>
+            </div>
+        </template>
+    </lightning-quick-action-panel>
+</template>

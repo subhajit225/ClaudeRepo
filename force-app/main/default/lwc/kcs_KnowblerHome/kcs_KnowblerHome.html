@@ -1,0 +1,363 @@
+<template>
+  <div class="knowbler_main" onclick={changeData}>
+    <div class={flexipageRegionWidth}>
+      <template if:false={showModal}>
+        <div class="displayHeader">
+          <template if:false={tourScreen}>
+            <c-knowbler-common-header
+              onmodalclick={modalClick}
+              currentcaseid={currentcaseid}
+              newnumber={newnumber}
+              is-content-health-active={isContentHealthActive}
+              unique-number={uniqueNumber}
+              show-content-health={showContentHealth}
+              kcsheight={kcsHeight}
+              flexipageregionwidth={flexipageRegionWidth}
+            >
+            </c-knowbler-common-header>
+          </template>
+          <template if:true={tourScreen}>
+            <c-knowbler-common-header
+              onmodalclick={modalClick}
+              currentcaseid={currentcaseid}
+              newnumber={newnumber}
+              is-content-health-active={isContentHealthActive}
+              unique-number={uniqueNumber}
+              display-tour-screen={tourScreen}
+              show-content-health={showContentHealth}
+              kcsheight={kcsHeight}
+              flexipageregionwidth={flexipageRegionWidth}
+            >
+            </c-knowbler-common-header>
+          </template>
+        </div>
+        <template if:false={apierror}>
+          <template if:false={contentactivate}>
+            <template if:false={noarticles}>
+              <div class="layout">
+                <template if:true={tourScreen}>
+                  <div class="layout-header">
+                    <c-kcs-Tour
+                      showmodal={showModal}
+                      onsetstep={stepChange}
+                      step={step}
+                      ontourcompleted={tourCompleted}
+                      flexipageregionwidth={flexipageRegionWidth}
+                      userlanguage={userLanguage}
+                      show-content-health={showContentHealth}
+                    >
+                    </c-kcs-Tour>
+                  </div>
+                </template>
+                <template if:true={isEnableNext}>
+                  <div class="layout-body">
+                    <template if:true={showList}>
+                      <template if:true={noLoading}>
+                        <c-knowbler-loader
+                          fromarticle
+                          kcsheight={kcsHeight}
+                          loadingcard={loadingcard}
+                          flexipageregionwidth={flexipageRegionWidth}
+                        ></c-knowbler-loader>
+                      </template>
+                      <template if:false={noLoading}>
+                        <template if:true={showdetails}>
+                          <div class="details">
+                            <c-kcsknowblercard-details
+                              onclosedetail={closedetail}
+                              mappingfields={mappingFields}
+                              configrecord={configRecord}
+                              predictedscore={predictedscore}
+                              articleid={articleid}
+                              alreadyevaluted={alreadyevaluted}
+                              articlenumber={articlenumber}
+                              destobj={destobj}
+                              ownername={ownername}
+                              articlepredictiondata={articlepredictiondata}
+                              onevaluateopen={evaluateopen}
+                              onevaluateclose={evaluateclose}
+                              waiting={waiting}
+                              contenthealthdata={datafromcard}
+                              languagechanged={languagechanged}
+                              parameters={parameters}
+                              newnumber={newnumber}
+                              full-photo-url={fullPhotoUrl}
+                            ></c-kcsknowblercard-details>
+                          </div>
+                        </template>
+                        <template if:false={showdetails}>
+                          <c-kcsknowblerarticle-list
+                            kcssupport={knoblerSupport}
+                            alldatacategories={dataCategories}
+                            destobj={destobj}
+                            language={language}
+                            articlescreendata={articleScreenData}
+                            contentstandard={contentstandard}
+                            userlanguage={userLanguage}
+                            tabcontentcreate={tabcontent}
+                            createdarticle={createdArticle}
+                            onchangelanguage={changelanguage}
+                            kcsheight={kcsHeight}
+                            showdropdown={showDropdown}
+                            loadingcard={loadingCard}
+                            languagechanged={languagechanged}
+                            noarticles={noarticles}
+                            flexipageregionwidth={flexipageRegionWidth}
+                            oncreatearticlehome={createArticleHome}
+                            contenthealthdata={contenthealthdata}
+                            evaluatedatasuccessfully={evaluatedatasuccessfully}
+                            newid={newid}
+                            newnumber={newnumber}
+                            parameters={parameters}
+                            uid={uid}
+                            endpoint={endpoint}
+                            jwttoken={jwttoken}
+                            onsendfullphotourl={handleFullPhotoUrl}
+                            show-content-health={showContentHealth}
+                            unique-number={uniqueNumber}
+                          >
+                          </c-kcsknowblerarticle-list>
+                        </template>
+                      </template>
+                    </template>
+                    <template if:true={rtflag}>
+                      <!-- <c-kcsknowblerchoose-Template kcssupport={knoblerSupport} kcsheight={kcsHeight}
+                        onrecclick={handleRecTypeClick} flexipageregionwidth={flexipageRegionWidth}>
+                      </c-kcsknowblerchoose-Template> -->
+                    </template>
+                  </div>
+                </template>
+              </div>
+            </template>
+          </template>
+        </template>
+      </template>
+    </div>
+    <template if:true={showModal}>
+      <section aria-modal="true" class="su_modal slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+          <div class="displayHeader">
+            <template if:false={tourScreen}>
+              <c-knowbler-common-header
+                onmodalclick={modalClick}
+                maxview
+                currentcaseid={currentcaseid}
+                newnumber={newnumber}
+                is-content-health-active={isContentHealthActive}
+                unique-number={uniqueNumber}
+                show-content-health={showContentHealth}
+                kcsheight={kcsHeight}
+              ></c-knowbler-common-header>
+            </template>
+            <template if:true={tourScreen}>
+              <c-knowbler-common-header
+                onmodalclick={modalClick}
+                maxview
+                currentcaseid={currentcaseid}
+                newnumber={newnumber}
+                is-content-health-active={isContentHealthActive}
+                unique-number={uniqueNumber}
+                display-tour-screen={tourScreen}
+                show-content-health={showContentHealth}
+                kcsheight={kcsHeight}
+              ></c-knowbler-common-header>
+            </template>
+          </div>
+          <div class="layout">
+            <template if:true={tourScreen}>
+              <div class="layout-header">
+                <c-kcs-Tour
+                  onsetstep={stepChange}
+                  step={step}
+                  ontourcompleted={tourCompleted}
+                  userlanguage={userLanguage}
+                ></c-kcs-Tour>
+              </div>
+            </template>
+            <template if:true={isEnableNext}>
+              <div class="layout-body">
+                <template if:false={showList}>
+                  <template if:true={contentactivate}>
+                    <template if:false={noarticles}>
+                      <div class="errormaincontent">
+                        <div class="errorbox">
+                          <div class="errorcontent" style="height: 100%">
+                            <div
+                              class="slds-m-around_medium"
+                              style="height: 52%"
+                            >
+                              <img
+                                class="errorimg"
+                                style="height: 100%"
+                                src={contenterrorimg}
+                                alt="Content Error"
+                              />
+                            </div>
+                            <div class="errormsg">{contenterrormsg}</div>
+                            <button
+                                class="slds-button knowbler__inactive-health-screen-btn"
+                                onclick={clickOnInactiveScreenBtn}
+                              >
+                                OK
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </template>
+                  </template>
+                </template>
+                <template if:true={showList}>
+                  <template if:true={noLoading}>
+                    <c-knowbler-loader
+                      fromarticle
+                      kcsheight={kcsHeight}
+                      loadingcard={loadingcard}
+                      flexipageregionwidth={flexipageRegionWidth}
+                    ></c-knowbler-loader>
+                  </template>
+                  <template if:false={noLoading}>
+                    <template if:true={showdetails}>
+                      <div class="detailcontainer">
+                        <div class="details largescreen">
+                          <c-kcsknowblercard-details
+                            onclosedetail={closedetail}
+                            predictedscore={predictedscore}
+                            mappingfields={mappingFields}
+                            configrecord={configRecord}
+                            articleid={articleid}
+                            alreadyevaluted={alreadyevaluted}
+                            articlenumber={articlenumber}
+                            destobj={destobj}
+                            ownername={ownername}
+                            articlepredictiondata={articlepredictiondata}
+                            onevaluateopen={evaluateopen}
+                            onevaluateclose={evaluateclose}
+                            waiting={waiting}
+                            contenthealthdata={datafromcard}
+                            languagechanged={languagechanged}
+                            largescreen
+                            parameters={parameters}
+                            newnumber={newnumber}
+                            full-photo-url={fullPhotoUrl}
+                          ></c-kcsknowblercard-details>
+                        </div>
+                      </div>
+                    </template>
+                    <template if:false={showdetails}>
+                      <c-kcsknowblerarticle-list
+                        kcssupport={knoblerSupport}
+                        alldatacategories={dataCategories}
+                        destobj={destobj}
+                        language={language}
+                        articlescreendata={articleScreenData}
+                        userlanguage={userLanguage}
+                        tabcontentcreate={tabcontent}
+                        createdarticle={createdArticle}
+                        onchangelanguage={changelanguage}
+                        kcsheight={kcsHeight}
+                        showdropdown={showDropdown}
+                        loadingcard={loadingCard}
+                        languagechanged={languagechanged}
+                        noarticles={noarticles}
+                        oncreatearticlehome={createArticleHome}
+                        contenthealthdata={contenthealthdata}
+                        contentstandard={contentstandard}
+                        parameters={parameters}
+                        evaluatedatasuccessfully={evaluatedatasuccessfully}
+                        newid={newid}
+                        newnumber={newnumber}
+                        uid={uid}
+                        endpoint={endpoint}
+                        jwttoken={jwttoken}
+                        onsendfullphotourl={handleFullPhotoUrl}
+                        show-content-health={showContentHealth}
+                        unique-number={uniqueNumber}
+                      >
+                      </c-kcsknowblerarticle-list>
+                    </template>
+                  </template>
+                </template>
+                <template if:true={rtflag}>
+                  <!-- <c-kcsknowblerchoose-Template kcssupport={knoblerSupport} onrecclick={handleRecTypeClick}>
+                  </c-kcsknowblerchoose-Template> -->
+                </template>
+                <!-- <template if:true={isTrueCreateArticle}>
+                          <c-knowbler-article-creation alldatacategories={dataCategories} destobj={destobj}
+                            createartclemapping={createArtcleMapping} language={language} casedata={caseData}
+                            loadingcard={loadingCard} kcssupport={knoblerSupport} onback={handleBackCreateArticle}
+                            onleave={handleCreateArticleLeave} recordtype={recordtype} onfromcreatearticle={getArticleData}>
+                          </c-knowbler-article-creation>
+                          </template> -->
+              </div>
+            </template>
+          </div>
+        </div>
+      </section>
+    </template>
+  </div>
+  <template if:true={apierror}>
+    <div class="errormain">
+      <div class="errorbox">
+        <div class="errorcontent">
+          <div class="slds-m-around_medium">
+            <img class="errorimg" src={errorimage} alt="Error"/>
+          </div>
+          <div class="errormsg">{errormsg}</div>
+          <div class="errorsub">{errorsubmsg}</div>
+        </div>
+      </div>
+    </div>
+  </template>
+  <template if:false={apierror}>
+    <template if:true={contentactivate}>
+      <template if:false={noarticles}>
+        <div class="errormaincontent">
+          <div class="errorbox">
+            <div class="errorcontent" style="height: 100%">
+              <div class="slds-m-around_medium" style="height: 52%">
+                <img
+                  class="errorimg"
+                  style="height: 100%"
+                  src={contenterrorimg}
+                  alt="Error"
+                />
+              </div>
+              <div class="errormsg">{contenterrormsg}</div>
+              <button
+                class="slds-button knowbler__inactive-health-screen-btn"
+                onclick={clickOnInactiveScreenBtn}
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      </template>
+    </template>
+  </template>
+  <template if:false={apierror}>
+    <template if:false={contentactivate}>
+      <template if:true={noarticles}>
+        <div class="errormain">
+          <div class="errorbox">
+            <div class="errorcontent">
+              <div class="slds-m-around_medium">
+                <img class="errorimg" src={contenterrorimg} />
+              </div>
+              <div class="errormsg">{noarticlesmess}</div>
+            </div>
+          </div>
+        </div>
+      </template>
+    </template>
+  </template>
+  <c-kcs_knowblermodal-component></c-kcs_knowblermodal-component>
+  <iframe
+    src="/apex/SU_Knowbler__getSessionForCat"
+    height="10px"
+    width="10px"
+    style="border: none !important; visibility: hidden"
+    id="home"
+    title="Knowbler"
+  ></iframe>
+</template>

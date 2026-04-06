@@ -1,0 +1,28 @@
+<template>
+    <!-- <div class="aiq-overview">
+        <c-s-u_-aiq-case-timeline record-id={recordId} event-code={eventCode} end-point={endPoint} token = {token} s3endpoint = {s3endpoint} uid = {uid} ></c-s-u_-aiq-case-timeline>
+        <c-s-u_-aiq-summary record-id={recordId} end-point={endPoint} token = {token} s3endpoint = {s3endpoint} uid = {uid} ></c-s-u_-aiq-summary>
+    </div> -->
+
+
+    <!-- for responsive we add overview-header-590px here -->
+    <div class="aiq-overview"> 
+        <button class="caseTimelineButton" onclick={caseTimeLineModalHandler}>
+				Case Timeline
+				<svg xmlns="http://www.w3.org/2000/svg" width="15.811" height="15.811" viewBox="0 0 15.811 15.811">
+					<g id="Icon_feather-zoom-in1" data-name="Icon feather-zoom-in" transform="translate(0.75 0.75)">
+						<path id="Path_25584" data-name="Path 25584" d="M16.944,10.722A6.222,6.222,0,1,1,10.722,4.5,6.222,6.222,0,0,1,16.944,10.722Z" transform="translate(-4.5 -4.5)" fill="none" stroke="#9a9797" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+						<path id="Path_25585" data-name="Path 25585" d="M28.358,28.358l-3.383-3.383" transform="translate(-14.358 -14.358)" fill="none" stroke="#9a9797" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+						<path id="Path_25586" data-name="Path 25586" d="M16.5,12v4.667" transform="translate(-10.278 -8.111)" fill="none" stroke="#9a9797" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+						<path id="Path_25587" data-namse="Path 25587" d="M12,16.5h4.667" transform="translate(-8.111 -10.278)" fill="none" stroke="#9a9797" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+					</g>
+				</svg>
+		</button>
+        <div class="caseTimeline">
+            <c-s-u_-aiq-case-timeline su-component-height={suComponentHeight} is-utility={isUtility} record-id={recordId} event-code={eventCode} end-point={endPoint} token= {token} s3endpoint = {s3endpoint} uid = {uid} oncallparentmethod={caseTimeLineClose} logged-in-user-data={loggedInUserData} meta-data={metaData}></c-s-u_-aiq-case-timeline>
+        </div>
+        <div class="summary-holder-overview-responsive">
+            <c-s-u_-aiq-summary record-id={recordId} end-point={endPoint} token = {token} s3endpoint = {s3endpoint} uid = {uid} logged-in-user-data={loggedInUserData} meta-data={metaData}></c-s-u_-aiq-summary>
+        </div>
+    </div>
+</template>

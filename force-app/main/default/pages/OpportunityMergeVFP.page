@@ -1,0 +1,125 @@
+<apex:page sidebar="false" controller="OpportunityMergeController">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <style>
+        table
+    {
+        table-layout: fixed;
+        
+    }
+    
+    input[type=checkbox] {
+    	cursor:pointer;
+    }
+    .targetSourceDiv {
+        padding-top: 15px ;
+        padding-bottom: 15px;
+        margin-bottom: 10px;
+        color: inherit;
+        background-color: #eee;
+    }
+    
+    .btn {
+        display: inline-block !important;
+        padding: 6px 12px !important;
+        margin-bottom: 0 !important;
+        font-size: 14px !important;
+        font-weight: 400 !important;
+        line-height: 1.42857143 !important;
+        text-align: center !important;
+        white-space: nowrap !important;
+        vertical-align: middle !important;
+        -ms-touch-action: manipulation !important;
+        touch-action: manipulation !important;
+        cursor: pointer !important;
+        -webkit-user-select: none !important;
+        -moz-user-select: none !important;
+        -ms-user-select: none !important;
+        user-select: none !important;
+        background-image: none !important;
+        border: 1px solid transparent !important;
+        border-radius: 4px !important;    
+    }
+    .btn-primary {
+        color: #fff !important;
+        background-color: #337ab7 !important;
+        border-color: #2e6da4 !important;
+    }
+    </style>
+    <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+    
+    $(document).ready(function(){
+        //alert(2);
+        
+    });
+    
+    function CopyValues(){
+        //alert(3);
+        var yourArray = [];	
+        $("input:checkbox[class=apiClassStyle]:checked").each(function(){
+            yourArray.push($(this).attr("atr"));
+            
+        });
+        var jsonAPI = JSON.stringify(yourArray);
+        $('[id$=jsonHidden]').val(jsonAPI);
+        console.log(yourArray);   
+    }
+    
+    </script>
+    <apex:form >
+        <apex:inputHidden id="jsonHidden" value="{!jsonHidden}"/>
+        <div class="targetSourceDiv text-center">
+            <h3>Target -> Source</h3>
+            <p style="font-weight:bold"><span>{!record2['Name']}</span> <span class="glyphicon glyphicon-copy"></span> <span>{!record['Name']}</span></p> 
+            
+        </div>
+        
+        <div class="container">
+            <div class="row" style="margin-bottom:11px;">
+                
+                <apex:pageMessages id="showmsg"></apex:pageMessages>
+                <center>
+                    <apex:commandButton value="Copy Values" action="{!CopyValues}" onclick="CopyValues()" styleClass="btn btn-primary" />
+                    <apex:commandButton value="Cancel" action="{!Cancel}" />
+                </center>
+                
+            </div>
+            <div class="row">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col" style="width: 10px;">#</th>
+                            <th scope="col" style="width: 100px;">Target Opportunity</th>
+                            <th scope="col" style="width: 100px;border-right:4px solid #EEEEEE">Value</th>
+                            <th scope="col" style="width: 100px;">Source Opportunity</th>
+                            <th scope="col" style="width: 100px">Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <apex:repeat value="{!apiLabel}" var="string" id="theRepeat">
+                            <apex:outputpanel rendered="{!record[string] != null && record2[string]!=null}">
+                            <tr>
+                                
+                                <th scope="row">
+                                <!-- <input type="checkbox" name="{!string}" class="apiClassStyle"/> -->
+                                <apex:inputCheckbox rendered="{!record[string] != null}" html-atr="{!string}" styleclass="apiClassStyle"/>
+								<apex:inputCheckbox rendered="{! IF(record2[string]!=null && record[string]==null,true,false) }" selected="{!tick}" html-atr="{!string}" styleclass="apiClassStyle"/>
+                                </th>
+                                <td>{!apiLabel[string]}</td>
+                                <td style="border-right:4px solid #EEEEEE">{!record2[string]}</td>
+                                <td>{!apiLabel[string]}</td>
+                                <td>{!record[string]}</td>
+                            </tr>
+                            </apex:outputpanel>
+                        </apex:repeat>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </apex:form>
+</apex:page>

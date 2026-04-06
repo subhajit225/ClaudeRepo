@@ -1,0 +1,484 @@
+<template>
+    <!-- Customize Setting Gear starts Icon here -->
+    <template if:true={showGearIconCustomizeSetting}>
+        <template if:false={noResultFound}>
+            <div id="gear" class={settingGearIconClass} role="button" title="Settings" onclick={togglePopup}>
+                <svg class="gear-icon" width="20" height="20" viewBox="0 0 50 50">
+                    <path
+                        d="M47.16,21.221l-5.91-0.966c-0.346-1.186-0.819-2.326-1.411-3.405l3.45-4.917c0.279-0.397,0.231-0.938-0.112-1.282 l-3.889-3.887c-0.347-0.346-0.893-0.391-1.291-0.104l-4.843,3.481c-1.089-0.602-2.239-1.08-3.432-1.427l-1.031-5.886 C28.607,2.35,28.192,2,27.706,2h-5.5c-0.49,0-0.908,0.355-0.987,0.839l-0.956,5.854c-1.2,0.345-2.352,0.818-3.437,1.412l-4.83-3.45 c-0.399-0.285-0.942-0.239-1.289,0.106L6.82,10.648c-0.343,0.343-0.391,0.883-0.112,1.28l3.399,4.863 c-0.605,1.095-1.087,2.254-1.438,3.46l-5.831,0.971c-0.482,0.08-0.836,0.498-0.836,0.986v5.5c0,0.485,0.348,0.9,0.825,0.985 l5.831,1.034c0.349,1.203,0.831,2.362,1.438,3.46l-3.441,4.813c-0.284,0.397-0.239,0.942,0.106,1.289l3.888,3.891 c0.343,0.343,0.884,0.391,1.281,0.112l4.87-3.411c1.093,0.601,2.248,1.078,3.445,1.424l0.976,5.861C21.3,47.647,21.717,48,22.206,48 h5.5c0.485,0,0.9-0.348,0.984-0.825l1.045-5.89c1.199-0.353,2.348-0.833,3.43-1.435l4.905,3.441 c0.398,0.281,0.938,0.232,1.282-0.111l3.888-3.891c0.346-0.347,0.391-0.894,0.104-1.292l-3.498-4.857 c0.593-1.08,1.064-2.222,1.407-3.408l5.918-1.039c0.479-0.084,0.827-0.5,0.827-0.985v-5.5C47.999,21.718,47.644,21.3,47.16,21.221z M25,32c-3.866,0-7-3.134-7-7c0-3.866,3.134-7,7-7s7,3.134,7,7C32,28.866,28.866,32,25,32z"
+                        fill="#fff">
+                    </path>
+                </svg>
+            </div>
+            </template>
+    </template>
+    <!-- Customize Setting Gear ends Icon here -->
+    <!-- Customize Setting different option dropdown starts here -->
+	<div class={customizeSettingGearIconOptions}>
+		<div class="su__side-Search-tips su__facetPreferenceNone su__customized__settings su__side-customized-gear su__zindex-2 viewOptions su__bg-white su__position-fixed su__cursor su__loading-view su__zindex-1 su__d-md-block "
+			role="button">
+			<template if:true={smartFacetsAdmin}>
+				<div class="su__customized__settings-inner">
+					<label class="su__customized_switch su__gear-min-width">
+	                        <input class="su__ml-2" id="auto-learning" type="checkbox" checked={isAutoLearning}
+	                            onclick={toggleAutoLearning} />
+	                        <span class="su__customized_switch_slider round"></span>
+	                    </label>
+					<label for="auto-learning" class="su__font-13 su__pl-2 su__rtlpl-0 su__rtlpr-2">
+	                        {autoLearning}
+	                    </label>
+					<div class="su__ml-10"
+						title="Turn on this option to enable Auto Learning as well as Facet Pre Selection">
+						<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
+							<defs>
+								<clipPath id="clip-Info">
+									<rect width="14" height="14" />
+								</clipPath>
+							</defs>
+							<g id="Info" clip-path="url(#clip-Info)">
+								<g id="info_black_24dp_2_" data-name="info_black_24dp (2)">
+									<path id="Path_10984" data-name="Path 10984" d="M0,0H14V14H0Z" fill="none" />
+									<path id="Path_10985" data-name="Path 10985"
+										d="M7.833,2a5.833,5.833,0,1,0,5.833,5.833A5.835,5.835,0,0,0,7.833,2Zm0,8.75a.585.585,0,0,1-.583-.583V7.833a.583.583,0,0,1,1.167,0v2.333A.585.585,0,0,1,7.833,10.75Zm.583-4.667H7.25V4.917H8.417Z"
+										transform="translate(-0.833 -0.833)" fill="#b2b5b9" />
+								</g>
+							</g>
+						</svg>
+					</div>
+				</div>
+				<hr class="su-customize-hr" />
+			</template>
+	
+			<template if:false={showHideCustomizeButton}>
+				<div onclick={toggleEditMode} class="su__customized__settings-inner" title={translationObject.Customize}>
+					<svg class="su__gear-min-width su__rtl-mr-icon" style="height:25px;" width="24" height="24" viewBox="0 0 24 24">
+						<defs>
+							<clipPath id="clip-Customize">
+								<rect width="24" height="24" />
+							</clipPath>
+						</defs>
+						<g id="Customize" clip-path="url(#clip-Customize)">
+							<g id="edit_note_black_24dp_1_" data-name="edit_note_black_24dp (1)">
+								<rect id="Rectangle_5709" data-name="Rectangle 5709" width="24" height="24" fill="none" />
+								<path id="Path_10983" data-name="Path 10983"
+									d="M14,11a1,1,0,0,1-1,1H4a1,1,0,0,1,0-2h9A1,1,0,0,1,14,11ZM3,7A1,1,0,0,0,4,8h9a1,1,0,0,0,0-2H4A1,1,0,0,0,3,7Zm7,8a1,1,0,0,0-1-1H4a1,1,0,0,0,0,2H9A1,1,0,0,0,10,15Zm8.01-2.13.71-.71a1,1,0,0,1,1.41,0l.71.71a1,1,0,0,1,0,1.41l-.71.71Zm-.71.71-5.16,5.16a.483.483,0,0,0-.14.35V20.5a.5.5,0,0,0,.5.5h1.41a.469.469,0,0,0,.35-.15l5.16-5.16Z"
+									fill="#919bb0" />
+							</g>
+						</g>
+					</svg>
+					<p class="su__font-13 su__pl-2">{translationObject.Customize}</p>
+				</div>
+			</template>
+			<div onclick={toggleSearchTips} class="su__customized__settings-inner" title={translationObject.Search_tips}>
+				<svg class="su__gear-min-width su__rtl-mr-icon " style="height:25px;" width="24" height="24" viewBox="0 0 24 24">
+					<defs>
+						<clipPath id="clip-Tips">
+							<rect width="24" height="24" />
+						</clipPath>
+					</defs>
+					<g id="Tips" clip-path="url(#clip-Tips)">
+						<g id="tips_and_updates_black_24dp" transform="translate(1.816 1.909)">
+							<rect id="Rectangle_5707" data-name="Rectangle 5707" width="20" height="20"
+								transform="translate(0.183 0.183)" fill="none" />
+							<path id="Path_10981" data-name="Path 10981"
+								d="M6.167,16.971H9.561a1.7,1.7,0,1,1-3.394,0Zm-1.7-.849h6.788v-1.7H4.47Zm9.758-8.061a6.394,6.394,0,0,1-3.2,5.516H4.7a6.362,6.362,0,1,1,9.529-5.516Zm4.132-1.807L17.2,6.788l1.163.535L18.9,8.486l.535-1.163,1.163-.535L19.43,6.254,18.9,5.091ZM16.35,5.091l.8-1.748,1.748-.8-1.748-.8L16.35,0l-.8,1.748-1.748.8,1.748.8Z"
+								transform="translate(-0.227)" fill="#919bb0" />
+						</g>
+					</g>
+				</svg>
+				<p class="su__font-13 su__pl-2">{translationObject.Search_Tips}</p>
+			</div>
+		</div>
+		<div class="su-customize_bg-overlay" onclick={togglePopup} role="button" tabindex="0"></div>
+	</div>
+    <!-- Customize Setting different option dropdown ends here -->
+
+    <!-- SearchTips Modal UI -->
+    <div>
+        <div data-id="myElement"
+            class="su__sidebar-desktop su__miniscroll su__right-sidebar su__border su__border-t-none su__radius-1 su_modal_effect su_fade_effect">
+            <div
+                class="su__searchTip-header su__p-3 su__bg-blue-grd su__text-white su__rtltext-left su__position-relative">
+                <h4 class="su__m-0"> {translationObject.Search_Tips}</h4>
+                <div class="su__close-icon su__position-absolute su__cursor" role="button">
+                    <div class="bg-white_close_icon" title={close} onclick={dismiss_modal}>
+                        <svg width="24" height="24" viewBox="0 0 49.722 49.722" xmlns="http://www.w3.org/2000/svg">
+                            <path fill="none" d="M0,0H49.722V49.722H0Z"></path>
+                            <path class="su__fill-white"
+                                d="M32.117,6.034a2.063,2.063,0,0,0-2.921,0L19.065,16.144,8.935,6.013A2.066,2.066,0,0,0,6.013,8.935L16.144,19.065,6.013,29.2a2.066,2.066,0,0,0,2.921,2.921L19.065,21.987,29.2,32.117A2.066,2.066,0,0,0,32.117,29.2L21.987,19.065,32.117,8.935A2.076,2.076,0,0,0,32.117,6.034Z"
+                                transform="translate(5.795 5.795)">
+                            </path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div class="su__searchTip-content su__bg-white _md">
+                <div class="su__search-tipicons su__w-100 su__m-auto su__text-center">
+                    <div class="bg-search_tips" title={close}>
+                        <svg class="su__w-50 su__my-3" version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+                            viewBox="0 0 1000 1000">
+                            <g>
+                                <g transform="translate(0.000000,511.000000) scale(0.100000,-0.100000)">
+                                    <path fill="#FF9800"
+                                        d="M4913.4,4983c-30.8-13.5-75-44.2-96.2-69.2c-36.5-40.4-38.5-73.1-44.2-584.7c-5.8-540.5-5.8-542.4,38.5-607.8c92.3-136.6,284.7-136.6,375.1-1.9c44.2,63.5,44.2,75,44.2,586.6c0,488.6-1.9,525.1-38.5,584.7c-36.6,59.6-138.5,121.2-196.2,119.3C4982.7,5008,4946.1,4996.5,4913.4,4983z">
+                                    </path>
+                                    <path fill="#FF9800"
+                                        d="M1932.1,3752c-82.7-36.5-125-109.6-125-217.4v-90.4l390.5-390.5c384.7-386.6,390.5-390.5,471.2-390.5c111.6,0,184.7,42.3,225,126.9c65.4,136.6,44.2,171.2-350.1,569.3C2124.4,3782.8,2074.4,3813.6,1932.1,3752z">
+                                    </path>
+                                    <path fill="#FF9800"
+                                        d="M7873.6,3748.2c-32.7-15.4-221.2-190.4-417.4-388.5c-394.3-398.2-415.5-432.8-350.1-569.3c40.4-84.6,113.5-126.9,225-126.9c80.8,0,86.6,3.8,471.2,390.5l390.5,390.5v90.4c0,109.6-42.3,182.7-128.9,217.4C7985.2,3786.6,7948.6,3784.7,7873.6,3748.2z">
+                                    </path>
+                                    <path fill="#FF9800"
+                                        d="M4528.8,2855.7c-884.8-177-1592.6-811.7-1863.8-1671.5c-146.2-461.6-144.3-1006,3.8-1444.5c115.4-336.6,242.4-538.6,665.5-1046.4c448.2-542.4,611.7-829,694.4-1227.2c36.5-171.2,40.4-157.7-38.5-186.6c-94.2-32.7-144.3-105.8-144.3-207.7c0-101.9,44.2-175,128.9-209.6c92.3-38.5,1958.1-38.5,2050.4,0c84.6,34.6,128.9,107.7,128.9,209.6c0,103.9-50,175-146.2,209.7c-76.9,26.9-76.9,26.9-13.5,282.7c84.6,348.1,221.2,575.1,679,1136.8c315.4,386.6,380.8,475.1,496.2,677.1c405.9,713.6,357.8,1677.2-117.3,2406.2c-373.2,571.3-925.2,942.5-1596.5,1073.3C5205.8,2905.7,4773,2905.7,4528.8,2855.7z M4430.7,2294c44.2-48.1,51.9-71.2,44.2-125c-15.4-90.4-42.3-119.2-163.5-173.1c-427-188.5-775.2-580.9-925.2-1046.4c-51.9-155.8-94.2-200-198.1-200c-59.6,0-86.6,11.5-123.1,53.9c-61.5,71.2-59.6,150,11.5,342.4c186.6,511.6,552,915.6,1042.5,1154.1C4301.8,2386.4,4346,2386.4,4430.7,2294z">
+                                    </path>
+                                    <path fill="#FF9800"
+                                        d="M641.5,732.2c-51.9-51.9-65.4-80.8-65.4-144.3c0-98.1,30.8-165.4,94.2-207.7c44.2-30.8,109.6-34.6,521.3-40.4c259.7-3.8,509.7,0,555.9,5.8c96.2,15.4,184.7,88.5,205.8,173.1c21.2,82.7-25,198.1-94.2,240.4c-57.7,36.5-100,38.5-605.9,38.5H706.9L641.5,732.2z">
+                                    </path>
+                                    <path fill="#FF9800"
+                                        d="M8141,759.1c-69.2-42.3-115.4-157.7-94.2-240.4c21.2-84.6,109.6-157.7,205.8-173.1c46.2-5.8,296.2-9.6,555.9-5.8c411.6,5.8,477,9.6,521.2,40.4c63.5,42.3,94.3,109.6,94.3,207.7c0,63.5-13.5,92.3-65.4,144.3l-65.4,65.4h-544.3C8241,797.6,8198.7,795.7,8141,759.1z">
+                                    </path>
+                                    <path fill="#FF9800"
+                                        d="M2586.1-1531.7c-61.6-34.6-721.3-694.3-752.1-752.1c-46.2-88.5-34.6-198.1,28.9-269.3c51.9-57.7,67.3-63.5,163.5-63.5h107.7l375.1,375.1c246.2,246.2,382.8,396.2,396.2,436.6c25,78.9-1.9,173.1-69.2,236.6C2782.3-1518.2,2645.7-1497,2586.1-1531.7z">
+                                    </path>
+                                    <path fill="#FF9800"
+                                        d="M7231.2-1524c-53.9-19.2-113.5-88.5-134.6-152c-40.4-117.3-5.8-165.4,394.3-565.5l375.1-375.1h107.7c96.2,0,111.6,5.8,163.5,63.5c59.6,67.3,75,178.9,34.6,259.7c-30.8,59.6-690.5,723.2-752.1,755.9C7367.8-1510.5,7285.1-1504.7,7231.2-1524z">
+                                    </path>
+                                    <path fill="#FF9800"
+                                        d="M3971-3307c-82.7-34.6-125-109.6-125-211.6c0-69.2,11.5-100,55.8-150l55.8-63.5H5000h1042.5l55.8,63.5c100,111.6,65.4,294.3-67.3,357.8c-57.7,26.9-176.9,30.8-1034.8,30.8C4236.4-3282,4015.2-3287.8,3971-3307z">
+                                    </path>
+                                    <path fill="#FF9800"
+                                        d="M3911.3-3941.7c-51.9-51.9-65.4-80.8-65.4-144.3c0-155.8,61.6-209.6,275-250.1c130.8-23.1,205.8-71.2,265.4-171.2c61.5-103.9,150-194.3,238.5-240.4c69.2-38.5,105.8-42.3,375.1-42.3c269.3,0,305.8,3.9,377,42.3c80.8,42.3,171.2,138.5,259.7,269.3c59.6,88.5,152,138.5,292.4,153.9c78.9,9.6,113.5,25,163.5,75c51.9,51.9,61.6,75,61.6,152c0,76.9-9.6,100-65.4,155.8l-65.4,65.4H5000H3976.7L3911.3-3941.7z M5296.2-4284.1c-76.9-132.7-71.2-130.8-296.2-130.8s-219.3-1.9-296.2,130.8c-11.5,17.3,53.9,23.1,296.2,23.1C5242.3-4261,5307.8-4266.8,5296.2-4284.1z">
+                                    </path>
+                                </g>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+                <ul class="su__searchTip-list su__m-0 su__p-3 su__pl-5 su__rtlpr-5 su__rtlpl-3 font-12">
+                    <li>
+                        {translationObject.Enter_just_a_few_key_words_related_to_your_question_or_problem}
+                    </li>
+                    <li>
+                        {translationObject.Add_Key_words_to_refine_your_search_as_necessary}
+                    </li>
+                    <li>
+                        {translationObject.Do_not_use_punctuation}
+                    </li>
+                    <li>
+                        {translationObject.Search_is_not_case_sensitive}
+                    </li>
+                    <li>
+                        {translationObject.Avoid_non_descriptive_filler_words_like__how____the____what___etc_}
+                    </li>
+                    <li>
+                        {translationObject.If_you_do_not_find_what_you_are_looking_for_the_first_time_reduce_the_number_of_key_words_you_enter_and_try_searching_again_}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div data-id="myElementModal" class="su__d-none su-bg-overlay su_SearchTipsMobile su-customize-filters"
+            role="button" onclick={dismiss_modal}></div>
+    </div>
+    <!-- SearchTips Modal UI -->
+
+    <!-- Customize Setting Poppup starts here -->
+    <div class={customizeBoxClass}>
+        <div class="su__editClient font-14 su__p-3 su__md-pd-10 su__bg-white su__radius-1 su__position-fixed">
+            <div class="editDiv">
+                <span class="su-edit su__color-black su__font-regular">
+                    {translationObject.Edit_Page_Layout}
+                </span>
+                <span class="closeCustomizeDiv su__float-right su__cursor" onclick={discardChanges}
+                    style="height:12px;">
+                    <svg class="su__cursor" width="12" height="12" viewBox="0 0 329.27 329">
+                        <path
+                            d="m194.8 164.77 128.21-128.21c8.3438-8.3398 8.3438-21.824 0-30.164-8.3398-8.3398-21.824-8.3398-30.164 0l-128.21 128.21-128.21-128.21c-8.3438-8.3398-21.824-8.3398-30.164 0-8.3438 8.3398-8.3438 21.824 0 30.164l128.21 128.21-128.21 128.21c-8.3438 8.3398-8.3438 21.824 0 30.164 4.1562 4.1602 9.6211 6.25 15.082 6.25 5.4609 0 10.922-2.0898 15.082-6.25l128.21-128.21 128.21 128.21c4.1602 4.1602 9.6211 6.25 15.082 6.25 5.4609 0 10.922-2.0898 15.082-6.25 8.3438-8.3398 8.3438-21.824 0-30.164z"
+                            fill="#333">
+                        </path>
+                    </svg>
+                </span>
+                <div class="su__reset su__float-right su__mr-3">
+                    <span class="apply su-btn-blue su__radius-0 su__cursor su__mr-2 su__p-2 su__ml-rtl-reset"
+                        onclick={toggleConfirmationDialog}>
+                        {translationObject.Reset}
+                    </span>
+                    <span title="You must show atleast one item in the search results tile"
+                        disabled={disbleApplyChangesBtn} class={applyThemeBtnClass} onclick={applyTheme}>
+                        {translationObject.Apply_Changes}
+                    </span>
+                </div>
+            </div>
+            <div class="su__pb-4 su__pt-3">
+                <div class={showFacetInCustomizeBox}>
+                    <div class="resultSection su__font-regular font-14 su__mb-3">
+                        {translationObject.Rearrange_Facets}
+                    </div>
+                    <div id="filterList" class="collapse in su__pr-3 su__overflow-auto su__miniscroll rearrangeFacets">
+                        <div class="droparea" ondragover={cancel} ondragenter={cancel} ondrop={drop}>
+                            <template for:each={checkFacetValues} for:item="filters" for:index="index">
+                                <template if:true={filters.showFacetCustomizeBox}>
+                                    <div key={filters} class="su-row" draggable="true" ondragstart={dragstart}
+                                        data-drag-id={index}>
+                                        <div class="font-md-12 su__w-100 su__flex-vcenter su__justify-content-between" data-drag-id={index}>
+                                            <span class="su__text-truncate-custom su__pr-2" data-drag-id={index}>{filters.label}</span>
+                                            <span key={facetValues} class="toggleDisplay" id="hideContent">
+                                                <div class={filters.hideEyeClass}>
+                                                    <span class="toggleDisplay eyeIcon su__float-right">
+                                                        <div title={filters.label} data-query={filters.label}
+                                                            class="bg-show su-img-hide" onclick={hideFacets}>
+                                                            <svg class="su__cursor" width="18" height="18"
+                                                                viewBox="0 0 18 18">
+                                                                <path
+                                                                    d="M9.259,4.5A8.881,8.881,0,0,0,1,10.165a8.853,8.853,0,0,0,16.518,0A8.881,8.881,0,0,0,9.259,4.5Zm0,9.442a3.777,3.777,0,1,1,3.754-3.777A3.767,3.767,0,0,1,9.259,13.942Zm0-6.043a2.266,2.266,0,1,0,2.252,2.266A2.256,2.256,0,0,0,9.259,7.9Z"
+                                                                    fill="#292929">
+                                                                </path>
+                                                            </svg>
+                                                        </div>
+                                                    </span>
+                                                </div>
+                                                <div class={filters.showEyeClass}>
+                                                    <span class="toggleDisplay eyeIcon su__float-right"
+                                                        id="showContent">
+                                                        <div title={filters.label} data-item={filters.label}
+                                                            class="bg-hide su-img-hide" onclick={showFacets}>
+                                                            <svg class="su__cursor" width="18" height="18"
+                                                                viewBox="0 0 18 18">
+                                                                <path
+                                                                    d="M9.708,5.743a3.91,3.91,0,0,1,3.768,5.114L15.9,13.28a9.343,9.343,0,0,0,2.517-3.586A9.372,9.372,0,0,0,6.827,4.215L8.545,5.933a4.069,4.069,0,0,1,1.164-.19ZM2.354,3.1a.788.788,0,0,0,0,1.116l1.56,1.56A9.415,9.415,0,0,0,1,9.7,9.341,9.341,0,0,0,13.12,14.99l2.153,2.153a.789.789,0,1,0,1.116-1.116L3.478,3.1A.8.8,0,0,0,2.354,3.1ZM9.708,13.66A3.96,3.96,0,0,1,5.75,9.7a3.888,3.888,0,0,1,.388-1.694L7.381,9.25a2.718,2.718,0,0,0-.048.451,2.372,2.372,0,0,0,2.375,2.375,2.133,2.133,0,0,0,.451-.055L11.4,13.264A3.81,3.81,0,0,1,9.708,13.66ZM12.06,9.44A2.351,2.351,0,0,0,9.97,7.35Z"
+                                                                    fill="#292929">
+                                                                </path>
+                                                            </svg>
+                                                        </div>
+                                                    </span>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </template>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+                <div class={showResultArrayCustomizeBox}>
+                    <template if:true ={showHideContentTabs}>
+                    <div>
+                    <template for:each={checkResultValues} for:item="filter" for:index="index">
+                        <template if:true={filter.showResultCustomizeBox}>
+                            <div key={filter} class="resultSection su__font-regular font-14 su__mb-3">
+                                {translationObject.Pre_Select_a_Tab}
+                            </div>
+                            <div key={filter} class="facetsSection su__flex-vcenter">
+                                <template if:true={showArrowIcon}>
+                                <div class="su__cursor su__loading-view su__ltr-icon">
+                                    <svg onclick={previousContentSource} version="1.1" x="0px" y="0px" viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg" fit="" height="24" width="24"
+                                        preserveAspectRatio="xMidYMid meet" focusable="false">
+                                        <g>
+                                            <polygon points="15.4,7.4 14,6 8,12 14,18 15.4,16.6 10.8,12 " fill= "#57575C"></polygon>
+                                        </g>
+                                    </svg>
+                                </div>
+                            </template>
+                            <div class="NavBar su__mx-1 su__flex-vcenter  su__loading-view su__overflow-x-auto su__w-100"
+                                data-id="su__NavbarFacetPreference">
+                                <lightning-button-group class="navbar-filter ">
+                                    <div class="su__tabs su-tabsSection su__flex-vcenter su-tabsSection su__loading-view su__text-nowrap"
+                                        data-name="su__internal__divFacetPreference">
+                                        <div class="yes su-content-tab">
+                                            <div class={getPreSelectedAllContentClass} data-accesskey='all'
+                                                data-order={filter.order} onclick={activeTab} data-id="all">
+                                                {translationObject.All_Content}
+                                            </div>
+                                        </div>
+                                        <template for:each={filter.values} for:item="filterType" for:index="dataIndex">
+                                            <div key={filterType} class="yes su-content-tab">
+                                                <template if:true={filterType.showCustomizeMergedResults}>
+                                                    <div class={filterType.mergedResultClass}>
+                                                        <div class="su__mergedFilter-CS-tab">
+                                                            <div class="su__mergedFilter-CS-button">
+                                                                <span class="su__mergedFilter-CS-svg su__flex-vcenter"
+                                                                    data-accesskey="exceptall" onclick={mergedFacetPreferenceCS}
+                                                                    tabindex={filterType} data-item={filterType.parent}
+                                                                    data-order={filter.order} data-id={filterType.Contentname}>
+                                                                    {filterType.displayName}
+                                                                    <div style="margin-left:8px"
+                                                                        class="bg-keydown_arrow  su__arrow-icons su__d-block su__cursor"
+                                                                        data-accesskey="exceptall" tabindex={filterType}
+                                                                        data-item={filterType.parent} data-order={filter.order}
+                                                                        data-id={filterType.Contentname}>
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="10"
+                                                                            height="10" viewBox="0 0 11.175 6.584">
+                                                                            <path class="su__mergedFilter-CS-svg-path"
+                                                                                d="M9.462.292,5.582,4.172,1.7.292A1,1,0,0,0,.292,1.7l4.59,4.589a1,1,0,0,0,1.41,0L10.882,1.7a1,1,0,0,0,0-1.41A1.017,1.017,0,0,0,9.462.292Z">
+                                                                            </path>
+                                                                        </svg>
+                                                                    </div>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <template if:true={filterType.showFacetPreferenceClickedCS}>
+                                                            <div>
+                                                                <div class="su__merge-options">
+                                                                    <template for:each={filterType.childArray} for:item="child"
+                                                                        for:index="childIndex">
+                                                                        <div key={child} class={child.mergedOptionClass}
+                                                                            data-accesskey="exceptall" tabindex={filterType}
+                                                                            data-item={filterType.parent}
+                                                                            data-order={filter.order}
+                                                                            data-id={child.Contentname}
+                                                                            data-merged-cs={filterType.Contentname}
+                                                                            onclick={activeTab}>
+                                                                            {child.displayNameOrContentname }
+                                                                        </div>
+                                                                    </template>
+                                                                </div>
+                                                                <div class="su__d-block su__advance-overlay su__bg-overlay"
+                                                                    data-order={filter.order} data-close="close" role="button"
+                                                                    onclick={mergedFacetPreferenceCS}></div>
+                                                            </div>
+                                                        </template>
+                                                    </div>
+                                                </template>
+                                                <template if:false={filterType.showCustomizeMergedResults}>
+                                                    <div class={filterType.mergedResultFalseClass} data-accesskey="exceptall"
+                                                        tabindex={filterType} data-item={filterType.parent}
+                                                        data-order={filter.order} data-id={filterType.Contentname}
+                                                        onclick={activeTab}>
+                                                        {filterType.displayName}
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </lightning-button-group>
+                            </div>
+                            <template if:true={showArrowIcon}>
+                                <div class="su__cursor su__loading-view su__ltr-icon">
+                                    <svg onclick={nextContentSource} style="transform: rotate(180deg)" version="1.1" x="0px" y="0px"
+                                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fit="" height="24" width="24"
+                                        preserveAspectRatio="xMidYMid meet" focusable="false">
+                                        <g>
+                                            <polygon points="15.4,7.4 14,6 8,12 14,18 15.4,16.6 10.8,12 " fill= "#57575C"></polygon>
+                                        </g>
+                                    </svg>
+                                </div>
+                            </template>
+                            </div>
+                      
+                        </template>
+                    </template>
+                    </div>
+                    </template>
+                    <!-- search result section starts here -->
+                    <div class={facetsCustom}>
+                        <div class="resultSection su__font-regular font-14 su__mb-3">
+                            {translationObject.Search_Result}
+                        </div>
+                            <template for:each={hiddenKeysData} for:item="item" for:index="hiddenKeyIndex">
+                                <span key={item.key} class={item.resultContentTagClass}>
+                                    <span class="toggleDisplay toggleKey su__font-regular" aura:id="showKeyVal">
+                                        {item.key}
+                                    </span>
+                                    <template if:false={item.hideEye}>
+                                        <span class="toggleDisplay">
+                                        <div data-name={item.hideEye} data-query={item.key} class="bg-show  su__cursor"
+                                            onclick={hideKey}>
+                                                <svg class="su__cursor" width="18" height="18" viewBox="0 0 18 18">
+                                                    <path
+                                                        d="M9.259,4.5A8.881,8.881,0,0,0,1,10.165a8.853,8.853,0,0,0,16.518,0A8.881,8.881,0,0,0,9.259,4.5Zm0,9.442a3.777,3.777,0,1,1,3.754-3.777A3.767,3.767,0,0,1,9.259,13.942Zm0-6.043a2.266,2.266,0,1,0,2.252,2.266A2.256,2.256,0,0,0,9.259,7.9Z"
+                                                        fill="#292929">
+                                                    </path>
+                                                </svg>
+                                            </div>
+                                        </span>
+                                    </template>
+                                    <template if:true={item.hideEye}>
+                                        <span class="toggleDisplay">
+                                        <div data-label={item.hideEye} data-item={item.key} class="bg-hide su__cursor"
+                                            onclick={showKey}>
+                                                <svg class="su__cursor" width="18" height="18" viewBox="0 0 18 18">
+                                                    <path
+                                                        d="M9.708,5.743a3.91,3.91,0,0,1,3.768,5.114L15.9,13.28a9.343,9.343,0,0,0,2.517-3.586A9.372,9.372,0,0,0,6.827,4.215L8.545,5.933a4.069,4.069,0,0,1,1.164-.19ZM2.354,3.1a.788.788,0,0,0,0,1.116l1.56,1.56A9.415,9.415,0,0,0,1,9.7,9.341,9.341,0,0,0,13.12,14.99l2.153,2.153a.789.789,0,1,0,1.116-1.116L3.478,3.1A.8.8,0,0,0,2.354,3.1ZM9.708,13.66A3.96,3.96,0,0,1,5.75,9.7a3.888,3.888,0,0,1,.388-1.694L7.381,9.25a2.718,2.718,0,0,0-.048.451,2.372,2.372,0,0,0,2.375,2.375,2.133,2.133,0,0,0,.451-.055L11.4,13.264A3.81,3.81,0,0,1,9.708,13.66ZM12.06,9.44A2.351,2.351,0,0,0,9.97,7.35Z"
+                                                        fill="#292929">
+                                                    </path>
+                                                </svg>
+                                            </div>
+                                        </span>
+                                    </template>
+                                </span>
+                            </template>
+                        </div>
+                    <div style="min-height:54px"
+                        class="su__list-items su__bg-white su__sm-shadow su__radius-1 su__position-relative su__p-3 su__mb-3">
+                        <div
+                            class="su__list-item-img su-icon su__d-inline-block su__d-xs-none su__mr-2 su__rtlml-2 su__rtlmr-0 su__loading-view">
+                            <template if:true={showHideIcon}>
+                                <div class='savedBookmarks su_ResultImage su__left-item-img'>
+                                    <svg width="24" height="24" viewBox="0 0 24 24">
+                                        <path
+                                            d="M17,20H5a1,1,0,0,1-1-1V7A1,1,0,0,0,2,7V20a2.006,2.006,0,0,0,2,2H17a1,1,0,0,0,0-2ZM20,2H8A2.006,2.006,0,0,0,6,4V16a2.006,2.006,0,0,0,2,2H20a2.006,2.006,0,0,0,2-2V4A2.006,2.006,0,0,0,20,2Zm0,10-2.5-1.5L15,12V4h5Z"
+                                            fill="#0082cacc">
+                                        </path>
+                                    </svg>
+                                </div>
+                            </template>
+                        </div>
+                        <div class="su__list-item-text su__media-body su__overflow-hide su__word-break">
+                            <h5 style="min-width:300px"
+                                class="su__list-item-title su__flex-vcenter su__mw-100 su__m-0 su__text-decoration su__text-black su__text-truncate-custom font-14 su__font-bold">
+                                <template if:true={showHideTitle}>
+                                    What is Lorem Ipsum?
+                                </template>
+                                <template if:true={showHideTag}>
+                                    <span
+                                        class="su__ribbon-title ab-testing-btn su__ribbon-list su__bg-blue font-12 font-m-10 su__px-2 su__ml-1 su__d-inline-block su__radius-3 su__rtlmx-2">Lorem
+                                        text</span>
+                                </template>
+                            </h5>
+                            <template if:true={showHideUrl}>
+                                <div class="su-url-citation-div">
+                                    <cite
+                                        class="su__text-decoration su__color-blue su__font-italic">https://www.lipsum.com/</cite>
+                                </div>
+                            </template>
+                            <template if:true={showHideSummary}>
+                                <span
+                                    class="su__list-item-desc su__w-100 su__my-1 su__font-regular su__mb-2 font-12 su__loading-view su__word-break">
+                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
+                                    Ipsum has been the industry's standard dummy text ever since the 1500s, when an
+                                    unknown printer took a galley of type and scrambled it to make a type specimen book.
+                                </span>
+                            </template>
+                            <template if:true={showHideMetadata}>
+                                <div class="su-other-elements-section'">
+                                    <b class="su-metadataTitle su__color-lgray su__ml-1 su__rtlml-0 su__rtlmr-1">
+                                        Created Date : 4/22/2019 2:13 PM</b>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="su-bg-overlay su-customize-filters" onclick={discardChanges} role="button" tabindex="0"></div>
+    </div>
+    <!-- Customize Setting Poppup ends here -->
+
+    <!-- reset customize setting popup starts here -->
+    <template if:true={confirmReset}>
+        <div style="z-index:102;width: calc(33vw)"
+            class="su__p-3 su__w-100 su__anim-fadeindown su__bookmark-popup su__position-fixed su__shadow-lg su__bg-white su__radius-1 su__mx-auto su__zindex0">
+            <div class="su__pt-2 su__pb-2 ">
+                {translationObject.Are_You_Sure_You_Want_To_Reset_Your_Changes}
+            </div>
+            <div class="su__pt-4 su__text-right">
+                <input type="button" class="su__mr-2 su__full-btn  su__text-secondary" value="Yes" onclick={reset} />
+                <input type="button" class="su__full-btn  su__text-secondary" value="No"
+                    onclick={toggleConfirmationDialog} />
+            </div>
+        </div>
+        <div class="su-bg-overlay-Reset su-bg-overlay su-customize-filters " onclick={toggleConfirmationDialog}
+            role="button" tabindex="0"></div>
+    </template>
+    <!-- reset customize setting popup ends here -->
+</template>

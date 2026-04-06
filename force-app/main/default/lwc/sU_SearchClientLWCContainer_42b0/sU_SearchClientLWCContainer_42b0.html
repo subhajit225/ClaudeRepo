@@ -1,0 +1,261 @@
+<template>
+    <div class="suContainer su__h-100">
+        <div class={eventClass}>
+            <template if:true={showSuLoader}>
+                <div class="su__position-relative su__zindex-3 su__d-flex su__justify-content-center"
+                    style={componentStyleLoad}>
+                    <div class={loaderClasses}>
+                        <div class="loading">
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+            <template if:false={firstLoadContainer}>
+                <div data-id="searchUnifyContainer" class="su__h-100">
+                    <div class="su__d-none">{caseSubjectInUtilityBar}{searchString}</div>
+                    <div class={loading} style={Style}>
+                        <div class={showViewedResults}>
+                            <div class="main-container searchUnifyContainer" style={componentStyle}>
+                                <template if:false={showAgentHelperTab}>
+                                    <template if:true={activeCaseNumber}>
+                                        <div class="number_case">
+                                            <span class="su__active-case" data-id="activeCase">{translationObject.Active_Case}# {currentCaseNumber}</span>
+                                        </div>
+                                    </template>
+                                    <c-s-u_-header-section event-code={eventCode}
+                                        show-clear-filters-button={showClearFiltersButton} search-string={searchString}
+                                        langlist={currentLanguageSelected} advanced-search-selected={advancedSearchSelected} is-wild-card-enabled={isWildCardEnabled}
+                                        selected-type-filter={selectedTypeFilter} record-id={recordId}   case-subject-val={caseSubjectVal}
+                                        aggregations-data={aggregationsData} selected-sticky-filter={selectedStickyFilter}
+                                        show-filter={showFilter} tabs-filter={tabsFilter}  big-screen={bigScreen}
+                                        gototopcontainer={goToTopContainer} uid={uid} end-point={endPoint} bearer={bearer}
+                                        search-query={searchQuery} all-content-hide-facet={allContentHideFacet}
+                                        bookmark-list={bookmarkSearches} language-enabled={languageEnabled}
+                                        merged-array-str={mergedArrayStr} translation-object={translationObject}
+                                        allarehidden={allAreHidden} exactphrase={exactPhrase} 
+                                        withoneormore={withOneOrMore} withoutthewords={withoutTheWords} withwildcardsearches={withWildcardSearch} urlopensinnewtab={urlOpensInNewTab} resultperpage={resultperpageForAutocomplete} ></c-s-u_-header-section>
+    
+                                    <c-s-u_-bookmark event-code={eventCode} uid={uid} bookmark-searches={bookmarkSearches}
+                                        translation-object={translationObject}></c-s-u_-bookmark>
+
+                                    <c-s-u_-saved-bookmark event-code={eventCode} translation-object={translationObject}>
+                                    </c-s-u_-saved-bookmark>
+                                    <div class={resizeclass}>
+                                        <c-s-u_-tabs tabsfilter={tabsFilter} event-code={eventCode}  aggregationsdata={aggregationsData}  ></c-s-u_-tabs>
+                                    </div>
+                                    <div class="su__data-section-block" data-id="searchUnifyContainerResultSection">
+                                            <div class="su__filter-data-section ">
+                                                <div class={resizeclassFilter}>
+                                                    <template if:false={fullWidth}>
+                                                        <div data-name="filterBlock" class="su_margin-right20">
+                                                            <c-s-u_-filter-section event-code={eventCode} show-clear-filters-button={showClearFiltersButton}
+                                                                selected-type-filter={selectedTypeFilter} record-id={recordId}
+                                                                selected-sticky-filter={selectedStickyFilter} show-filter=true tabs-filter={tabsFilter}
+                                                                uid={uid} gototopcontainer={gototopcontainer} end-point={endPoint} bearer={bearer}
+                                                                search-query={searchQuery} merged-array-str={mergedArrayStr}  big-screen={bigScreen}
+                                                                aggregations-data-in={aggregationsData} translation-object={translationObject}>
+                                                            </c-s-u_-filter-section>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                                <div class={dataSectionClass}>
+                                                    <template if:false={hideDataSection}>
+                                                        <c-s-u_-search-data-section event-code={eventCode} show-article={showArticle}
+                                                            case-id-exists={caseIdExists} record-id={recordId} tabsfilter={tabsFilter}
+                                                            response-list-data={responseListData} mergedresults={resultsInAllContentSources}
+                                                            merge-sources-type-index={mergeSourcesTypeIndex} selected-sticky-filter={selectedStickyFilter}
+                                                            aggregationsdata={aggregationsData} pagenum={pageNum} totalpages={totalPages}
+                                                            totalresults={totalResults} containerrightcoordinate={containerRightCoordinate}
+                                                            containerxcoordinate={containerXCoordinate} maincontainerwidth={maincontainerwidth}
+                                                            searchresultime={resultTime} sort-by-check={sortByCheck} resultlabel={result}
+                                                            correctspell={correctspell} loading={loading} summary-collapsible={summaryCollapsible}
+                                                            height={height} urlopensinnewtab={urlOpensInNewTab} current-user-email={currentUserEmail} big-screen={bigScreen}
+                                                            translation-object={translationObject} utility-width={utilityWidth} utility-top={utilityTop} has-wildcard-search={hasWildcardSearch}
+                                                            fail-text={failText} empty-search-string={emptySearchString} 
+                                                            uid={uid} total-results={totalResults} search-string={searchString}   is-utility={recordIddFromUtility}
+                                                            bearer={bearer} end-point={endPoint} case-subject-val={caseSubjectVal} generate-answer-btn={noGpt} check-case-empty={checkCaseEmpty}
+                                                            gpt-context={gptContext} gpt-links={gptLinks} gpt-active={gptActive} page-num={pageNum} search-string-from-banner={searchStringFromBanner}></c-s-u_-search-data-section>
+                                                    </template>
+                                                </div>
+                                                <template if:true={showCitationModal}>
+                                                    <c-s-u_-citations-model show-citation-modal={showCitationModal} pos-x-citation-modal={posXCitationModal}
+                                                        pos-y-citation-modal={posYCitationModal} merge-result-hits={mergeResultHits}  response-list-data={responseListData} citation-url={citationUrl}
+                                                         diamond-position-x={diamondPositionX} diamond-position-y={diamondPositionY} gpt-context={gptContext} event-code={eventCode} visibility={visibilityCitations} button-hover={buttonHovered} ></c-s-u_-citations-model>
+                                                </template>
+                                                
+                                            </div>
+                                        <div class="body-section">
+                                            <div class="div footerSection">
+                                                <template if:true={showPagination}>
+                                                    <c-s-u_-pagination event-code={eventCode} record-id={recordId} pagenum={pageNum} finallang={finalLang}
+                                                        pagesize={pageSize} totalresults={totalResults} totalpages={totalPages} counter={counter}
+                                                        endpointpagination={endPointPagination} paginationlist={paginationList}
+                                                        responselistdata={responseListData} mergedresults={resultsInAllContentSources} big-screen={bigScreen}
+                                                        translation-object={translationObject} resultsectioncontainer={resultSectionContainer}></c-s-u_-pagination>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </template>
+                                <template if:true={showAgentHelperTab}>
+                                    <div class="su-agent-helper-body" >
+                                        <template if:true={loadAgentHelper}>
+                                            <c-s-u_-Agent-Iq case-id-for-utility={caseIdForAh} event-code={eventCode} uid={uid} s3endpoint={s3EndPoint} is-case-in-bg ={isCaseInBgFromUtilityForAh}
+                                                            token={JWTToken} record-id={recordId} is-utility={isUtilityAH} end-point={endPoint} maincontainerwidth={maincontainerwidth} 
+                                                            su-component-height={suComponentHeight} search-uid-a-h={searchUidAH} search-uid-r-a={searchUidRA}>
+                                            </c-s-u_-Agent-Iq>
+                                        </template>
+
+                                        <template if:false={loadAgentHelper}>
+                                            <div class="su__position-relative su__zindex-3 su__d-flex su__justify-content-center"
+                                                style={componentStyleLoad}>
+                                                <div class={loaderClasses}>
+                                                    <div class="loading">
+                                                        <div class="dot"></div>
+                                                        <div class="dot"></div>
+                                                        <div class="dot"></div>
+                                                        <div class="dot"></div>
+                                                        <div class="dot"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                        <!-- <div class="slds-grid slds-wrap su-agent-helper-container">
+                                            <div class="slds-col slds-size_6-of-6 su__h-100p">
+                                                <template if:true={loadAgentHelper}>
+                                                    <c-s-u_-agent-helper event-code={eventCode} uid={uid} end-point={endPoint} s3endpoint={s3EndPoint}
+                                                        token={JWTToken} case-id-for-utility={caseIdForAh} record-id={recordId} height={height}
+                                                        maincontainerwidth={maincontainerwidth} current-case-number ={currentCaseNumberForAh} is-case-in-bg ={isCaseInBgFromUtilityForAh} is-utility={isUtilityAH}
+                                                        ></c-s-u_-agent-helper>
+                                                </template>
+                                            </div>
+                                        </div> -->
+                                    </div>
+                                </template>
+                                <div class={hoverDiv}>
+                                    <div 
+                                        class="su__d-flex su-powered-by su__pt-2 su__pb-2  su__bgcolor-grey su__color-grey-hover">
+                                        <!-- on Click function is commented -->
+                                        <span onclick={showSearchConsole}>
+                                            {translationObject.SearchUnify}<lightning-icon class="tabIcon"
+                                                icon-name="utility:threedots_vertical" size="x-small"></lightning-icon>
+                                        </span>
+                                        <template if:false={showAgentHelperTab}>
+                                            <div
+                                                class="su__wrapper-div su__footer-popup su__position-absolute su__color-gray">
+                                                <ul class="su__position-relative su__arrow_box ">
+                                                    <template if:true={isAgentHelperEnabled}>
+                                                        <div onclick={openAgentHelper}>
+                                                            <li class="slds-p-around_medium su__hover su__hover-white">
+                                                                <lightning-icon class="tabIcon" icon-name="utility:user"
+                                                                    size="xx-small"></lightning-icon>
+                                                                {translationObject.Agent_Helper}
+                                                            </li>
+                                                        </div>
+                                                    </template>
+                                                </ul>
+                                            </div>
+                                        </template>
+                                        <span class="su__poweredBysearchUnifyMedia">
+                                            <svg class="poweredByImgMedia" width="140" height="13" viewBox="0 0 140 13">
+                                                <defs>
+                                                    <clipPath id="clip-Footer_logo">
+                                                        <rect width="140" height="13" />
+                                                    </clipPath>
+                                                </defs>
+                                                <g id="Footer_logo" data-name="Footer logo"
+                                                    clip-path="url(#clip-Footer_logo)">
+                                                    <g id="Group_4491" data-name="Group 4491"
+                                                        transform="translate(-521.1 -627)">
+                                                        <path id="Videos"
+                                                            d="M4.07-7.7a3.3,3.3,0,0,1,2.23.682A2.4,2.4,0,0,1,7.084-5.1a2.542,2.542,0,0,1-.792,2,3.215,3.215,0,0,1-2.222.7H2.156V0H1.1V-7.7ZM4.026-3.355a2.333,2.333,0,0,0,1.518-.434,1.563,1.563,0,0,0,.528-1.282A1.505,1.505,0,0,0,5.544-6.32a2.376,2.376,0,0,0-1.518-.424l-1.87.011v3.377Zm6.776-2.5a3.141,3.141,0,0,1,1.545.374A2.69,2.69,0,0,1,13.4-4.439a3.021,3.021,0,0,1,.38,1.524,3.051,3.051,0,0,1-.38,1.529A2.68,2.68,0,0,1,12.347-.341,3.141,3.141,0,0,1,10.8.033,3.164,3.164,0,0,1,9.246-.341,2.69,2.69,0,0,1,8.19-1.381a3.043,3.043,0,0,1-.38-1.534,3.021,3.021,0,0,1,.379-1.524A2.69,2.69,0,0,1,9.246-5.478,3.164,3.164,0,0,1,10.8-5.852Zm0,.891A1.958,1.958,0,0,0,9.785-4.7a1.825,1.825,0,0,0-.693.731A2.234,2.234,0,0,0,8.844-2.9a2.291,2.291,0,0,0,.248,1.078,1.779,1.779,0,0,0,.693.732A1.99,1.99,0,0,0,10.8-.836a1.968,1.968,0,0,0,1.007-.258,1.779,1.779,0,0,0,.693-.732A2.291,2.291,0,0,0,12.749-2.9,2.234,2.234,0,0,0,12.5-3.966a1.825,1.825,0,0,0-.693-.731A1.937,1.937,0,0,0,10.8-4.961Zm3.245-.858h1.067l1.628,4.807,1.606-4.807h1.067l1.617,4.807,1.606-4.807h1.056L21.549,0H20.482L18.876-4.576,17.27,0H16.2Zm12.738-.033a2.564,2.564,0,0,1,2.046.8,3.269,3.269,0,0,1,.693,2.216q0,.22-.011.33h-4.6a1.983,1.983,0,0,0,.655,1.243A1.937,1.937,0,0,0,26.884-.8a2.461,2.461,0,0,0,.963-.187,2.313,2.313,0,0,0,.775-.528l.561.583a2.939,2.939,0,0,1-1.034.715,3.446,3.446,0,0,1-1.342.253,3.092,3.092,0,0,1-1.523-.369A2.589,2.589,0,0,1,24.25-1.375,3.124,3.124,0,0,1,23.881-2.9a3.092,3.092,0,0,1,.368-1.524,2.683,2.683,0,0,1,1.028-1.045,2.968,2.968,0,0,1,1.508-.383ZM28.6-3.3a1.777,1.777,0,0,0-.528-1.248A1.784,1.784,0,0,0,26.8-5.005a1.84,1.84,0,0,0-1.281.462A1.938,1.938,0,0,0,24.9-3.3Zm3.344-1.265a2.106,2.106,0,0,1,.814-.951,2.42,2.42,0,0,1,1.254-.336v.99a1.957,1.957,0,0,0-1.441.462,1.958,1.958,0,0,0-.627,1.331V0H30.921V-5.819h1.023Zm5.511-1.287a2.564,2.564,0,0,1,2.046.8,3.269,3.269,0,0,1,.693,2.216q0,.22-.011.33h-4.6a1.983,1.983,0,0,0,.654,1.243A1.937,1.937,0,0,0,37.554-.8a2.461,2.461,0,0,0,.963-.187,2.313,2.313,0,0,0,.775-.528l.561.583a2.939,2.939,0,0,1-1.034.715,3.446,3.446,0,0,1-1.342.253,3.092,3.092,0,0,1-1.523-.369A2.589,2.589,0,0,1,34.92-1.375,3.124,3.124,0,0,1,34.551-2.9a3.092,3.092,0,0,1,.368-1.524,2.683,2.683,0,0,1,1.028-1.045A2.968,2.968,0,0,1,37.455-5.852ZM39.27-3.3a1.777,1.777,0,0,0-.528-1.248A1.784,1.784,0,0,0,37.466-5a1.84,1.84,0,0,0-1.282.462,1.938,1.938,0,0,0-.61,1.243Zm7.744-4.862V0H45.991V-1.155a2.313,2.313,0,0,1-.886.9,2.585,2.585,0,0,1-1.292.314,2.778,2.778,0,0,1-1.458-.38,2.607,2.607,0,0,1-.985-1.056,3.3,3.3,0,0,1-.352-1.546,3.209,3.209,0,0,1,.352-1.523,2.587,2.587,0,0,1,.985-1.04A2.788,2.788,0,0,1,43.8-5.863a2.677,2.677,0,0,1,1.309.308,2.191,2.191,0,0,1,.88.891v-3.5ZM44.022-.825a1.958,1.958,0,0,0,1.018-.264,1.854,1.854,0,0,0,.7-.737,2.226,2.226,0,0,0,.253-1.067,2.25,2.25,0,0,0-.253-1.078,1.854,1.854,0,0,0-.7-.737,1.958,1.958,0,0,0-1.018-.264A1.927,1.927,0,0,0,43-4.7a1.893,1.893,0,0,0-.7.743,2.226,2.226,0,0,0-.253,1.067A2.226,2.226,0,0,0,42.3-1.823a1.854,1.854,0,0,0,.7.737,1.958,1.958,0,0,0,1.022.261ZM55.187-5.852a2.817,2.817,0,0,1,1.452.374,2.567,2.567,0,0,1,.99,1.045,3.266,3.266,0,0,1,.352,1.54,3.251,3.251,0,0,1-.347,1.524,2.513,2.513,0,0,1-.979,1.034,2.82,2.82,0,0,1-1.446.369,2.654,2.654,0,0,1-1.3-.308,2.209,2.209,0,0,1-.88-.88V0H52.008V-8.162h1.023v3.5a2.219,2.219,0,0,1,.875-.88A2.6,2.6,0,0,1,55.187-5.852Zm-.2,4.994A1.937,1.937,0,0,0,56-1.122a1.816,1.816,0,0,0,.693-.737,2.266,2.266,0,0,0,.248-1.067,2.2,2.2,0,0,0-.253-1.056A1.866,1.866,0,0,0,56-4.719a1.908,1.908,0,0,0-1-.264,1.937,1.937,0,0,0-1.007.264,1.854,1.854,0,0,0-.7.737,2.2,2.2,0,0,0-.253,1.056,2.218,2.218,0,0,0,.253,1.072,1.863,1.863,0,0,0,.7.732,1.937,1.937,0,0,0,1,.264ZM61.248.825a2.324,2.324,0,0,1-.731,1.012,1.742,1.742,0,0,1-1.073.341,2.016,2.016,0,0,1-.682-.11,2.037,2.037,0,0,1-.594-.341l.44-.8a1.333,1.333,0,0,0,.781.275,1.062,1.062,0,0,0,.99-.748l.22-.517L58.19-5.819h1.078l1.848,4.664,1.749-4.664H63.91Z"
+                                                            transform="translate(520 636.164)" fill="#a4a4a4" />
+                                                        <g id="Group_92" data-name="Group 92"
+                                                            transform="translate(591.002 627)">
+                                                            <g id="Group_2380" data-name="Group 2380">
+                                                                <g id="Group_2378" data-name="Group 2378"
+                                                                    transform="translate(0 1.094)">
+                                                                    <path id="Path_1636" data-name="Path 1636"
+                                                                        d="M3.08,13.469a4.457,4.457,0,0,1-1.657-.3A4.714,4.714,0,0,1,0,12.255l.537-.63a4.434,4.434,0,0,0,1.19.793,3.431,3.431,0,0,0,1.377.257,1.914,1.914,0,0,0,1.214-.35,1.12,1.12,0,0,0,.467-.91h0a1.214,1.214,0,0,0-.093-.467.957.957,0,0,0-.3-.373,2.147,2.147,0,0,0-.607-.3l-.957-.3A7.818,7.818,0,0,1,1.7,9.642,2.8,2.8,0,0,1,.91,9.2a1.61,1.61,0,0,1-.467-.607A2.007,2.007,0,0,1,.3,7.775h0a1.844,1.844,0,0,1,.163-.817A1.914,1.914,0,0,1,.98,6.3a2.52,2.52,0,0,1,.793-.443,3.01,3.01,0,0,1,.98-.163A4.131,4.131,0,0,1,4.2,5.931a4.411,4.411,0,0,1,1.19.7l-.49.653a3.687,3.687,0,0,0-1.05-.63,3.244,3.244,0,0,0-1.1-.187,1.8,1.8,0,0,0-1.167.35,1.073,1.073,0,0,0-.42.863h0a1.26,1.26,0,0,0,.093.49.98.98,0,0,0,.3.4,2.287,2.287,0,0,0,.63.327,7.468,7.468,0,0,0,1.027.28,4.58,4.58,0,0,1,1.867.77A1.657,1.657,0,0,1,5.694,11.3h0a1.984,1.984,0,0,1-.187.887,2.007,2.007,0,0,1-.537.677,2.357,2.357,0,0,1-.817.42,3.384,3.384,0,0,1-1.073.187Z"
+                                                                        transform="translate(0 -5.461)" fill="#fff" />
+                                                                    <path id="Path_1637" data-name="Path 1637"
+                                                                        d="M30.338,17.281a2.217,2.217,0,0,0,.21.793,1.89,1.89,0,0,0,.443.583,1.914,1.914,0,0,0,.607.35,1.983,1.983,0,0,0,.7.117,2.124,2.124,0,0,0,1-.21,2.94,2.94,0,0,0,.747-.56l.513.467a3.407,3.407,0,0,1-.957.77,2.824,2.824,0,0,1-1.33.28,2.777,2.777,0,0,1-1.074-.21,2.66,2.66,0,0,1-.887-.607,2.8,2.8,0,0,1-.607-.91,3.08,3.08,0,0,1-.21-1.19,3.22,3.22,0,0,1,.21-1.143,2.847,2.847,0,0,1,.56-.934,2.59,2.59,0,0,1,.84-.63,2.684,2.684,0,0,1,2.17,0,2.4,2.4,0,0,1,.817.63,2.754,2.754,0,0,1,.513.933,3.757,3.757,0,0,1,.163,1.144v.117a1.585,1.585,0,0,1,0,.163Zm3.594-.677a2.59,2.59,0,0,0-.163-.7,2.007,2.007,0,0,0-.35-.583,1.61,1.61,0,0,0-.537-.42,1.68,1.68,0,0,0-.723-.14,1.61,1.61,0,0,0-.677.14,1.7,1.7,0,0,0-.56.4,2.17,2.17,0,0,0-.373.583,2.38,2.38,0,0,0-.21.747Z"
+                                                                        transform="translate(-22.613 -11.84)" fill="#fff" />
+                                                                    <path id="Path_1638" data-name="Path 1638"
+                                                                        d="M58.5,20.064a2.777,2.777,0,0,1-.77-.117,2.007,2.007,0,0,1-.677-.327,1.7,1.7,0,0,1-.467-.537,1.54,1.54,0,0,1-.187-.747h0a1.727,1.727,0,0,1,.163-.793,1.54,1.54,0,0,1,.49-.56,2.357,2.357,0,0,1,.747-.35,3.664,3.664,0,0,1,.957-.117,5.834,5.834,0,0,1,.933.07l.77.163v-.187a1.4,1.4,0,0,0-.42-1.12,1.774,1.774,0,0,0-1.214-.373,3.477,3.477,0,0,0-.887.117,4.667,4.667,0,0,0-.793.28l-.257-.677a5.858,5.858,0,0,1,.933-.35,4.084,4.084,0,0,1,1.1-.14,2.438,2.438,0,0,1,1.8.607A2.217,2.217,0,0,1,61.3,16.54v3.407H60.5V19.13a2.66,2.66,0,0,1-.77.653A2.4,2.4,0,0,1,58.5,20.064Zm.163-.677a2.334,2.334,0,0,0,.723-.117,1.867,1.867,0,0,0,.583-.3,1.47,1.47,0,0,0,.4-.467,1.26,1.26,0,0,0,.14-.607V17.38l-.7-.163a4.947,4.947,0,0,0-.91-.07,2.03,2.03,0,0,0-1.19.3.957.957,0,0,0-.42.817h0a.957.957,0,0,0,.117.467,1.027,1.027,0,0,0,.3.35,1.47,1.47,0,0,0,.443.21A1.844,1.844,0,0,0,58.66,19.387Z"
+                                                                        transform="translate(-43.235 -12.056)"
+                                                                        fill="#fff" />
+                                                                    <path id="Path_1639" data-name="Path 1639"
+                                                                        d="M85,14.31h.84v1.447a2.964,2.964,0,0,1,.373-.63,2.521,2.521,0,0,1,.513-.513,2.194,2.194,0,0,1,.63-.327,2.263,2.263,0,0,1,.747-.093v.887h-.07a2.287,2.287,0,0,0-.863.163,1.937,1.937,0,0,0-.7.49,2.287,2.287,0,0,0-.467.793,3.244,3.244,0,0,0-.163,1.1v2.217H85Z"
+                                                                        transform="translate(-65.164 -11.973)"
+                                                                        fill="#fff" />
+                                                                    <path id="Path_1640" data-name="Path 1640"
+                                                                        d="M149.7,4.8h.84V8.067a2.613,2.613,0,0,1,.723-.77,2.007,2.007,0,0,1,1.167-.327,2.357,2.357,0,0,1,.91.163,1.867,1.867,0,0,1,.677.467,2.007,2.007,0,0,1,.42.7,2.683,2.683,0,0,1,.14.91v3.454h-.84V9.421a1.774,1.774,0,0,0-.4-1.214,1.447,1.447,0,0,0-1.143-.443,1.75,1.75,0,0,0-.653.117,1.54,1.54,0,0,0-.537.35,1.587,1.587,0,0,0-.35.56,1.96,1.96,0,0,0-.117.7v3.174h-.84Z"
+                                                                        transform="translate(-114.765 -4.773)"
+                                                                        fill="#fff" />
+                                                                    <path id="Path_1641" data-name="Path 1641"
+                                                                        d="M181.426,13.855a3.687,3.687,0,0,1-1.284-.21,2.684,2.684,0,0,1-.98-.63,2.8,2.8,0,0,1-.63-1.027,4.061,4.061,0,0,1-.233-1.4V6.2h.84v4.341a2.68,2.68,0,0,0,.607,1.89,2.194,2.194,0,0,0,1.7.653,2.217,2.217,0,0,0,1.657-.63,2.593,2.593,0,0,0,.607-1.867V6.2h.84v4.317a4.271,4.271,0,0,1-.233,1.447,2.824,2.824,0,0,1-.63,1.05,2.637,2.637,0,0,1-.98.63A3.734,3.734,0,0,1,181.426,13.855Z"
+                                                                        transform="translate(-136.69 -5.847)" fill="#fff" />
+                                                                    <path id="Path_1642" data-name="Path 1642"
+                                                                        d="M213.1,14.236h.84v.957a2.613,2.613,0,0,1,.723-.77,2.007,2.007,0,0,1,1.167-.327,2.357,2.357,0,0,1,.91.163,1.867,1.867,0,0,1,.677.467,2.007,2.007,0,0,1,.42.7,2.684,2.684,0,0,1,.14.91V19.79h-.84V16.547a1.774,1.774,0,0,0-.4-1.214,1.447,1.447,0,0,0-1.144-.443,1.75,1.75,0,0,0-.653.117,1.54,1.54,0,0,0-.537.35,1.587,1.587,0,0,0-.35.56,1.96,1.96,0,0,0-.117.7V19.79h-.84Z"
+                                                                        transform="translate(-163.369 -11.899)"
+                                                                        fill="#fff" />
+                                                                    <path id="Path_1643" data-name="Path 1643"
+                                                                        d="M241.6,5.5h.957v.933H241.6Zm.047,2.124h.84V13.2h-.84Z"
+                                                                        transform="translate(-185.218 -5.31)" fill="#fff" />
+                                                                    <path id="Path_1644" data-name="Path 1644"
+                                                                        d="M252.47,7.746h-.77V7.023h.77v-.49a1.88,1.88,0,0,1,.49-1.424,1.61,1.61,0,0,1,1.19-.42h.49l.42.117v.723l-.42-.093-.4-.047q-.957,0-.957,1.19v.443h1.774v.7h-1.75v4.854h-.84Z"
+                                                                        transform="translate(-192.961 -4.686)"
+                                                                        fill="#fff" />
+                                                                    <path id="Path_1645" data-name="Path 1645"
+                                                                        d="M269.624,22a2.591,2.591,0,0,1-.63-.07l-.56-.21.28-.653.4.163.467.047a.934.934,0,0,0,.63-.233,2.265,2.265,0,0,0,.513-.817L268.2,14.7h.91l2.03,4.644,1.8-4.644h.887l-2.334,5.741a3.057,3.057,0,0,1-.793,1.214A1.634,1.634,0,0,1,269.624,22Z"
+                                                                        transform="translate(-205.61 -12.363)"
+                                                                        fill="#fff" />
+                                                                </g>
+                                                                <g id="Group_2379" data-name="Group 2379"
+                                                                    transform="translate(21.353)">
+                                                                    <path id="Path_1646" data-name="Path 1646"
+                                                                        d="M93.32,39.384,91.5,37.33l5.017-2.73.117.14Z"
+                                                                        transform="translate(-91.5 -26.525)"
+                                                                        fill="#f48b00" />
+                                                                    <rect id="Rectangle_2433" data-name="Rectangle 2433"
+                                                                        width="2.147" height="0.324" rx="0.162"
+                                                                        transform="translate(5.601 3.851)" fill="#fff" />
+                                                                    <rect id="Rectangle_2434" data-name="Rectangle 2434"
+                                                                        width="4.131" height="0.324" rx="0.162"
+                                                                        transform="translate(5.601 5.041)" fill="#fff" />
+                                                                    <rect id="Rectangle_2435" data-name="Rectangle 2435"
+                                                                        width="3.571" height="0.324" rx="0.162"
+                                                                        transform="translate(5.578 6.208)" fill="#fff" />
+                                                                    <path id="Path_1647" data-name="Path 1647"
+                                                                        d="M107.142,0a5.181,5.181,0,1,0,4.714,7.3h-2.1a3.384,3.384,0,1,1,.607-3.127h1.867A5.181,5.181,0,0,0,107.142,0Z"
+                                                                        transform="translate(-99.511 0)" fill="#f48b00" />
+                                                                </g>
+                                                            </g>
+                                                            <path id="Path_1648" data-name="Path 1648"
+                                                                d="M292.556,5.994a.934.934,0,0,1-.373-.07,1.031,1.031,0,0,1-.513-.513.933.933,0,0,1-.07-.373h0a.933.933,0,0,1,.07-.373.969.969,0,0,1,1.774,0,.933.933,0,0,1,.07.373h0a.933.933,0,0,1-.07.373.957.957,0,0,1-.513.513A.933.933,0,0,1,292.556,5.994Zm0-.093a.84.84,0,0,0,.35-.07.887.887,0,0,0,.28-.187.863.863,0,0,0,.257-.607h0a.882.882,0,0,0-.863-.863.84.84,0,0,0-.35.07.887.887,0,0,0-.28.187.864.864,0,0,0-.257.607h0a.882.882,0,0,0,.863.863Zm-.373-1.4h.607l.117.07.07.093a.256.256,0,0,1,.023.117h0a.256.256,0,0,1-.07.187l-.187.093.3.4h-.187l-.28-.373h-.257v.373h-.14Zm.42.49.163-.047a.14.14,0,0,0,.07-.14h0a.14.14,0,0,0-.07-.117l-.163-.047h-.28v.35Z"
+                                                                transform="translate(-223.549 -3.124)" fill="#fff" />
+                                                        </g>
+                                                    </g>
+                                                </g>
+                                            </svg>
+                                        </span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+
+            </template> 
+        </div>
+    </div>
+</template>

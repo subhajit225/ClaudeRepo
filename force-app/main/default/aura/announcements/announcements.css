@@ -1,0 +1,126 @@
+.THIS .artcls {
+    font-size: 30px;
+    color: #333333;
+  font-family: gotham-light;
+    padding-bottom: 10px;
+}
+.THIS .titlesize {
+    color:black;
+    font-family: Gotham-medium;
+    font-size: 20px;
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+.THIS .hrefcolor{
+    color:#4a4a4a !important;
+    text-decoration:none !important;
+}
+.THIS .hrefcolor1{
+      color:black;
+    text-decoration:none !important;
+}
+.THIS .hrefcolor:hover{
+    color: #009DAC !important;
+}
+.THIS .contentsize{
+    font-size: 16px;
+    color: #666666;
+    padding-bottom: 20px;
+    padding-top: 15px;
+    font-family: gotham-light;
+}
+.THIS.cAnnouncements .contentsize{ 
+overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    line-height: 19px;
+    max-height: 71px;
+    font-family: gotham-light;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+}
+.THIS .paracls{
+    border: 1px solid #eee;
+    padding: 15px;
+    font-family: gotham-light;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+.THIS .contentsize{
+    color: #666666;
+    font-family: gotham-light;
+}
+.THIS .padleft{
+    font-family: gotham-light;
+    padding-left: 50px;
+}
+.THIS .parafontsize{
+    font-family: gotham-light;
+    font-size: 14px;
+    color: #4a4a4a;
+}
+.THIS .contentparasize{
+   font-size: 16px;
+   font-family: gotham-light;
+   color: #666666;
+   
+   padding-right: 50px;
+    position:relative;
+}
+.THIS p.contentparasize:after {
+    content: "";
+    position: absolute;
+    top: 5px;
+    width: 11px;
+    height: 11px;
+    border: 2px solid #666666;
+    right: 8px;
+    border-left: 0;
+    border-top: 0;
+    transform: rotate(315deg);
+}
+.THIS .contentparasize:hover:after {
+    border-color: #009dac;
+}
+.THIS p.contentparasize p {
+    
+}
+.THIS .paracls:hover a.hrefcolor, .THIS .paracls:hover p.contentparasize:after {
+    color: #009dac!important;
+}
+.THIS p.contentparasize p > i {
+    font-style: normal !important;
+}
+.THIS p.contentparasize i {
+    font-style: normal;
+}
+@media (max-width:991px) {
+    .THIS h1.artcls {
+        text-align: center !important; 
+        margin:0 auto !important;
+        margin-top: 15px;
+    }
+    .THIS .slds-grid.slds-align_absolute-center.cAnnouncements {
+        width: 100%;
+        margin: 0 auto;
+    }
+    .THIS .slds-col.articlecls.slds-size_12-of-12.slds-medium-size_11-of-12.slds-large-size_11-of-12 {
+        width: 100% !important;
+    }
+    .THIS .paracls {
+        margin-bottom: 20px;
+    }
+}
+@media screen and (max-width:767px){
+   
+    .THIS.mobileCSS{padding:2px !important;}
+}
+
+.THIS .link{
+    font-size: 15px;
+    color: #009dac!important;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-family: Gotham-medium;
+    text-decoration:none;
+}

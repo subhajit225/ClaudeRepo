@@ -1,0 +1,23 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" controller="RubrikRecognitionBadgeController"
+    access="global">
+
+    <aura:attribute name="userId" type="String" access="global" />
+    <aura:attribute name="badges" type="Map" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <div>
+        <table class="table">
+            <div class="heading slds-m-around_x-small">
+                MY RECOGNITION BADGES
+            </div>
+            <div class="slds-grid">
+                <aura:iteration items="{!v.badges}" var="eachbadge">
+                    <c:RubrikRecognitionBadgeItem badge="{!eachbadge}">
+                    </c:RubrikRecognitionBadgeItem>
+                </aura:iteration>
+            </div>
+
+        </table>
+    </div>
+
+</aura:component>

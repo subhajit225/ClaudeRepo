@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Is_Account_Strategic__c</fullName>
+    <description>This Field is used to show the Account strategic value of Case or Opportunity which is linked with the Idea.</description>
+    <formula>IF(
+NOT(ISBLANK(Case_Number__c)),
+Case_Number__r.Account.Strategic_Account__c,
+IF(
+NOT(ISBLANK(Opportunity_Name__c)),
+Opportunity_Name__r.Account.Strategic_Account__c ,
+False
+)
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Is Account Strategic</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

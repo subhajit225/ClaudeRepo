@@ -1,0 +1,73 @@
+<template>
+    
+    <div class={borderClass}>
+    <template if:true={showArrowIcon}>
+                <div class="su__cursor su__loading-view su__ltr-icon">
+            <svg onclick={previousContentSource} version="1.1" x="0px" y="0px" viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg" fit="" height="24" width="24" preserveAspectRatio="xMidYMid meet"
+                focusable="false">
+                <g>
+                            <polygon points="15.4,7.4 14,6 8,12 14,18 15.4,16.6 10.8,12 " fill= "#57575C"></polygon>
+                </g>
+            </svg>
+        </div>
+    </template>
+    <div class="NavBar su__flex-vcenter  su__loading-view su__overflow-x-auto su__w-100 su__border-b" data-id="su__csNavbar">
+        <lightning-button-group class="navbar-filter " data-id="su__overflow-visible">
+            <div class="su__tabs su-tabsSection su__flex-vcenter su-tabsSection su__loading-view su__text-nowrap"
+                data-id="su__overflow-visible" data-name="internal__div">
+                <template for:each={contentTab} for:item="tab" for:index="ind">
+                    <template if:true={tab.showChild}>
+                                <div key={tab} data-id="mergedcs">
+                                    <lightning-button
+                                        class="su__font-regular font-14 su__tabs su__cursor su__text-nowrap "
+                                name={tab.Contentname} data-merge={tab.merged} data-name={tab.Contentname}
+                                onclick={showMergedCs} data-showchild={tab.showChild} data-val={tab.displayName}
+                                data-ind={ind} data-selected={tab.selected} label={tab.displayName}
+                                icon-name="utility:down" icon-position="right">
+                            </lightning-button>
+                            <template if:true={tab.showChild}>
+                                <template if:true={tab.showMergedCSTabs}>
+                                            <div class="su__merge-options"  data-id="optionTabs">
+                                        <template for:each={tab.childArray} for:item="tab1">
+                                            <div class="subTabs" key={tab1}>
+                                                <lightning-menu-item
+                                                    class="su__merged-CS button slds-button_stretch"
+                                                    name={tab.Contentname} data-val={tab.displayName}
+                                                    data-mergedchild="true" data-name={tab1.Contentname}
+                                                    data-selected={tab1.selected} label={tab1.displayName}
+                                                    onclick={tabClicked2}></lightning-menu-item>
+                                            </div>
+                                        </template>
+                                    </div>
+                                    <div class="su-bg-overlay su__bg-transparent" onclick={showMergedCs}
+                                        role="button" tabindex="0"></div>
+                                </template>
+                            </template>
+                        </div>
+                    </template>
+                    <template if:false={tab.showChild}>
+                        <lightning-button class="su__font-regular font-14 su__tabs su__cursor su__text-nowrap"
+                            name={tab.Contentname} onclick={tabClicked} data-val={tab.displayName}
+                            data-merged={tab.merged} data-selected={tab.selected} data-name={tab.Contentname}
+                            key={tab.Contentname} data-ind={ind} label={tab.displayName} data-max={tab.level}
+                            data-step={tab.parent}>
+                        </lightning-button>
+                    </template>
+                </template>
+            </div>
+        </lightning-button-group>
+    </div>
+    <template if:true={showArrowIcon}>
+                <div class="su__cursor su__loading-view su__ltr-icon">
+                    <svg onclick={nextContentSource} style="transform: rotate(180deg)" version="1.1" x="0px" y="0px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fit="" height="24" width="24"
+                preserveAspectRatio="xMidYMid meet" focusable="false">
+                <g>
+                            <polygon points="15.4,7.4 14,6 8,12 14,18 15.4,16.6 10.8,12 " fill= "#57575C"></polygon>
+                </g>
+            </svg>
+        </div>
+    </template>
+</div>
+</template>

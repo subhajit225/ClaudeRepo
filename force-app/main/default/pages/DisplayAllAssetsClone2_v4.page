@@ -1,0 +1,1076 @@
+<apex:page controller="DisplayAllAssetsControllerPaginated2_v4" action="{!fetchAllAssets}" lightningStylesheets="true"
+           sidebar="false" showHeader="false">
+    <apex:slds />
+    <head>
+        <apex:includescript value="//code.jquery.com/jquery-1.11.1.min.js" / >
+            <apex:includescript value="//cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js" />
+            <apex:stylesheet value="//cdn.datatables.net/1.10.4/css/jquery.dataTables.css" />
+            <script>
+            j$ = jQuery.noConflict();
+            var selected = [];
+            var arryGrp = [];
+            var assetSelectedList= [];
+            var MapAssetIdGroupText = new Map();
+            var MapAssetIdLicenseTypeText = new Map();
+            var MapAssetIdRubrikSuiteText = new Map();
+            var MapAssetIdPaymentOptionText = new Map();
+            var MapAssetIdSupportTypeText = new Map();
+            var MapAssetIdGroupNameText = new Map();
+            var MapAssetIdSelectedCheck = new Map();
+            
+            j$(document).ready( function () {
+                var contactTable = j$('[id$="assetTable"]').DataTable({
+                    "columnDefs": [
+                        { 
+                            "targets": [0], //first column / numbering column
+                            "orderable": false, //set not orderable
+                        },
+                    ],
+                        drawCallback: function(){
+                        console.log('drawCallback1');
+                        j$('.paginate_button:not(.disabled)', this.api().table().container())          
+                        .on('click', function(){
+                        console.log('drawCallback2');
+                        toggleMaster();
+                        });       
+                        }
+                        });                        
+                        });
+                        
+                        // check for select all checkbox 
+                        function toggleMaster(){
+                        var krypton = true;
+                        j$('.child-Checkbox').each(function(){
+                        if ( this.checked == false) {
+                        j$("#SelectAll")[0].checked = false ; krypton = false;
+                }         
+                                                                      });
+                if (krypton == true){
+                    j$("#SelectAll")[0].checked = true ;
+                }
+            }
+                               
+                               function populateAssetId(abc){
+                selected=(j$('[id$="resultant"]').val()).split(",");
+                if(selected.indexOf(abc) == -1){
+                    selected.push(abc);
+                } else{
+                    selected = jQuery.grep(selected, function(value) {
+                        return value != abc;
+                    });
+                }
+                
+                console.log('abc1:> ', abc);
+                console.log('strId>>' , selected);
+                
+                var len = abc.length;
+                console.log('len1>>' , len);
+                assetSelectedList.push(abc.substr(0, 18));
+                var regex1='',regex2='',regex3='',regex4='',regex5='',regex6='',regex7='',regex8='';
+                
+                regex1= abc.substr(abc.indexOf(';') + 1); // after_ = str.substring(str.indexOf('_') + 1);
+                console.log('regex1>>' , regex1); //SaaS:Business#Prepay_Premium
+                regex2= regex1.substr(0, regex1.indexOf(':')); // before_ = str.substring(0, str.indexOf('_'));
+                console.log('regex2>>' , regex2);
+                MapAssetIdLicenseTypeText.set(abc.substr(0, 18), regex2);
+                
+                regex3= regex1.substr(regex1.indexOf(':') + 1);
+                console.log('regex3>>' , regex3);
+                regex4= regex3.substr(0, regex3.indexOf('#'));
+                console.log('regex4>>' , regex4);
+                MapAssetIdRubrikSuiteText.set(abc.substr(0, 18), regex4);
+                
+                regex5= regex1.substr(regex1.indexOf('#') + 1);
+                console.log('regex5>>' , regex5);
+                regex6= regex5.substr(0, regex5.indexOf('_'));
+                console.log('regex6>>' , regex6);
+                /*if(MapAssetIdPaymentOptionText.get(abc.substr(0, 18)) != regex6){
+                    MapAssetIdPaymentOptionText.set(abc.substr(0, 18), regex6);
+                }*/
+                MapAssetIdPaymentOptionText.set(abc.substr(0, 18), regex6);
+                
+                regex7= regex1.substr(regex1.indexOf('_') + 1);
+                console.log('regex7>>' , regex7);
+                MapAssetIdSupportTypeText.set(abc.substr(0, 18), regex7);
+                
+                //MapAssetIdLicenseTypeText.put(abc.substr(0, 18), regex2);
+                //MapAssetIdRubrikSuiteText.set(abc.substr(0, 18), regex4);
+                //MapAssetIdPaymentOptionText.set(abc.substr(0, 18), regex6);
+                //MapAssetIdSupportTypeText.set(abc.substr(0, 18), regex7);
+                
+                console.log('MapAssetIdLicenseTypeText: ' , MapAssetIdLicenseTypeText);
+                console.log('MapAssetIdRubrikSuiteText: ' , MapAssetIdRubrikSuiteText);
+                console.log('MapAssetIdPaymentOptionText: ' , MapAssetIdPaymentOptionText);
+                console.log('MapAssetIdSupportTypeText: ' , MapAssetIdSupportTypeText);
+                
+                j$('[id$="resultant"]').val(selected);
+                // dynamic binding of pagination 
+            }
+            
+            
+            function populateSelectedAsset(abc,elementValue){
+                console.log(' ',elementValue.name);
+                var bypasscheck = true;
+                
+                console.log('checkcheck>>>',elementValue);
+                selectedIntial=(j$('[id$="resultantAsset"]').val()).split(","); 
+                
+                var selectedFinal = [];
+                if(selectedIntial.indexOf(abc) == -1){
+                    selectedIntial.push(abc);
+                } else{
+                    selectedIntial = jQuery.grep(selectedIntial, function(value) {
+                        return value != abc;
+                    });
+                }
+                
+                let selected = selectedIntial.filter(el => {
+                    return el != null && el != '';
+                });
+                
+                console.log('abc1:> ', abc);
+                console.log('strId>>' , selected);
+                console.log('strId>>' , selected);
+                console.log('selected::::::start',selected);
+                for(let i = 0; i < selected.length; i++){
+                    console.log('elementValue.value>>',elementValue.checked);
+                    console.log('elementValue.assetid>>',elementValue.assetid);
+                    
+                    if(elementValue.checked == false){
+                        //indexes = elementValue.name.split(':');
+                        //console.log('elementValue.value>>selected[i].substring(0,18',selected[i].substring(0,18));
+                        //console.log('elementValue.assetid.substring(0,18)',abc.substring(0,18));
+                        if(selected[i].substring(0,18) == abc.substring(0,18)){
+                            console.log('i?????',i);
+                            selected.splice(i,1);
+                            console.log('selected;;;;;',selected);
+                            i--;
+                            MapAssetIdSelectedCheck.set(abc.substring(0,18), elementValue.checked);
+                        }
+                    }
+                    else if(elementValue.checked == true){
+                        MapAssetIdSelectedCheck.set(abc.substring(0,18), elementValue.checked);
+                    }
+                        else {
+                            bypasscheck = false;
+                        }
+                }
+                console.log('MapAssetIdSelectedCheck::::::startend',MapAssetIdSelectedCheck);
+                for(let i = 0; i < selected.length; i++){
+                    
+                    if(selected[i].length >18){
+                        console.log('selected list >>',selected[i]);
+                        var len = selected[i].length;
+                        console.log('len1>>' , len);
+                        assetSelectedList.push(selected[i].substr(0, 18)); //02i1W00000QuMBQQA3PaymentOptions;Annual
+                        var regex1='',regex2='',regex3='',regex4='',regex5='',regex6='',regex7='',regex8='';
+                        
+                        regex1= selected[i].substr(selected[i].indexOf(';') + 1); // after_ = str.substring(str.indexOf('_') + 1);
+                        console.log('regex1>>' , regex1); //SaaS:Business#Prepay_Premium
+                        
+                        if(regex1.includes(':')){
+                            regex2= regex1.substr(0, regex1.indexOf(':')); // before_ = str.substring(0, str.indexOf('_'));
+                            console.log('regex2>>' , regex2);
+                            
+                            regex3= regex1.substr(regex1.indexOf(':') + 1);
+                            console.log('regex3>>' , regex3);
+                            
+                            console.log('selected>>>>@@@@',selected);
+                            
+                            
+                            if(regex2 =='PaymentOptions'){
+                                MapAssetIdPaymentOptionText.set(selected[i].substr(0, 18), regex3);                     
+                            }
+                            else if(regex2 =='LicenseType'){
+                                MapAssetIdLicenseTypeText.set(selected[i].substr(0, 18), regex3);
+                            }
+                                else if(regex2 =='RubrikEdition'){
+                                    MapAssetIdRubrikSuiteText.set(selected[i].substr(0, 18), regex3);
+                                }
+                                    else if (regex2 =='SupportType'){
+                                        MapAssetIdSupportTypeText.set(selected[i].substr(0, 18), regex3);
+                                    }
+                                        else if(regex2 =='AssetGroup'){
+                                            if(regex3 != '-- None --'){
+                                                MapAssetIdGroupNameText.set(selected[i].substr(0, 18), regex3);
+                                            }
+                                            else{
+                                                MapAssetIdGroupNameText.set(selected[i].substr(0, 18), '');
+                                            }
+                                        }
+                                            else if(regex2 =='SelectedCheck' && bypasscheck == false){
+                                                MapAssetIdSelectedCheck.set(selected[i].substr(0, 18), elementValue.checked);
+                                            }
+                            
+                        }
+                        else {
+                            console.log('regex1**',regex1);
+                            allvalues = regex1.substr(18,len);
+                            console.log('selected[i].substr(0, 18)**',selected[i].substr(0, 18));
+                            console.log('allvalues',allvalues);
+                            selectedvals = allvalues.split("@"); 
+                            console.log('selectedvals>>'+selectedvals);
+                            console.log('selected[i].substr(0, 18)>>'+selected[i].substr(0, 18));
+                            console.log('selectedvals.length',selectedvals.length);
+                            for(let j = 0; j < selectedvals.length; j++){
+                                console.log('selected[i].substr(0, 18)**##',selected[i].substr(0, 18));
+                                console.log('selectedvals[i]>',selectedvals[i]);
+                                if(selectedvals[j].length > 1){
+                                    indivisualvalues = selectedvals[j].split('##');
+                                    if(indivisualvalues[0] =='PaymentOptions'){
+                                        MapAssetIdPaymentOptionText.set(selected[i].substr(0, 18), indivisualvalues[1]);                     
+                                    }
+                                    else if(indivisualvalues[0] =='LicenseType'){
+                                        MapAssetIdLicenseTypeText.set(selected[i].substr(0, 18), indivisualvalues[1]);
+                                    }
+                                        else if(indivisualvalues[0] =='RubrikEdition'){
+                                            MapAssetIdRubrikSuiteText.set(selected[i].substr(0, 18), indivisualvalues[1]);
+                                        }
+                                            else if (indivisualvalues[0] =='SupportType'){
+                                                MapAssetIdSupportTypeText.set(selected[i].substr(0, 18), indivisualvalues[1]);
+                                            }
+                                                else if(indivisualvalues[0] =='AssetGroup'){
+                                                    MapAssetIdGroupNameText.set(selected[i].substr(0, 18), indivisualvalues[1]);
+                                                    console.log('selected[i].substr(0, 18)&&&',selected[i].substr(0, 18));
+                                                    console.log('indivisualvalues[1]',indivisualvalues[1]);
+                                                }
+                                                    else if(indivisualvalues[0] =='SelectedCheck' ){
+                                                        MapAssetIdSelectedCheck.set(selected[i].substr(0, 18), indivisualvalues[1]);
+                                                    }
+                                    
+                                }
+                                
+                            }
+                        }
+                        
+                    }
+                }
+                
+                
+                console.log('MapAssetIdLicenseTypeText:::',MapAssetIdLicenseTypeText);
+                console.log('MapAssetIdSupportTypeText:::',MapAssetIdSupportTypeText);
+                console.log('MapAssetIdGroupNameText:::',MapAssetIdGroupNameText);
+                console.log('MapAssetIdSelectedCheck:::',MapAssetIdSelectedCheck);
+                
+                for(let i = 0; i < selected.length; i++){
+                    console.log('selected[i].substr(0, 18) 240',selected[i].substr(0, 18));
+                    console.log('MapAssetIdSelectedCheck.get(selected[i].substr(0, 18))',MapAssetIdSelectedCheck.get(selected[i].substr(0, 18)));
+                    if(selected[i].length > 18 && MapAssetIdSelectedCheck.containsKey(selected[i].substr(0, 18)) && MapAssetIdSelectedCheck.get(selected[i].substr(0, 18)) != false && MapAssetIdSelectedCheck.get(selected[i].substr(0, 18)) != undefined){
+                        eachString = selected[i].substr(0, 18);
+                        console.log('selected[i]???',selected[i]);
+                        if(MapAssetIdPaymentOptionText.containsKey(selected[i].substr(0, 18))){
+                            eachString = eachString + 'PaymentOptions' +'##'+MapAssetIdPaymentOptionText.get(selected[i].substr(0, 18))+'@';
+                            console.log('eachStringPO>>',eachString);
+                        }
+                        if(MapAssetIdLicenseTypeText.containsKey(selected[i].substr(0, 18))){
+                            eachString = eachString + 'LicenseType' +'##'+MapAssetIdLicenseTypeText.get(selected[i].substr(0, 18))+'@';
+                        }
+                        if(MapAssetIdRubrikSuiteText.containsKey(selected[i].substr(0, 18))){
+                            eachString = eachString + 'RubrikEdition' +'##'+MapAssetIdRubrikSuiteText.get(selected[i].substr(0, 18))+'@';
+                        }
+                        if(MapAssetIdSupportTypeText.containsKey(selected[i].substr(0, 18))){
+                            
+                            eachString = eachString + 'SupportType' +'##'+MapAssetIdSupportTypeText.get(selected[i].substr(0, 18))+'@';
+                            console.log('eachStringST>>',eachString);
+                        }
+                        if(MapAssetIdGroupNameText.containsKey(selected[i].substr(0, 18))){
+                            eachString = eachString + 'AssetGroup' +'##'+MapAssetIdGroupNameText.get(selected[i].substr(0, 18))+'@';
+                        }
+                        if(MapAssetIdSelectedCheck.containsKey(selected[i].substr(0, 18))){
+                            eachString = eachString + 'SelectedCheck' +'##'+MapAssetIdSelectedCheck.get(selected[i].substr(0, 18))+'@';
+                        }
+                        console.log('eachStringFinal>>',eachString);
+                        if(selectedFinal.includes(eachString) == false){
+                            selectedFinal.push(eachString);
+                        }
+                        eachString = '';
+                    }
+                }
+                
+                
+                console.log('MapAssetIdLicenseTypeText: ' , MapAssetIdLicenseTypeText);
+                console.log('MapAssetIdRubrikSuiteText: ' , MapAssetIdRubrikSuiteText);
+                console.log('MapAssetIdPaymentOptionText: ' , MapAssetIdPaymentOptionText);
+                console.log('MapAssetIdSupportTypeText: ' , MapAssetIdSupportTypeText);
+                console.log('MapAssetIdGroupNameText: ' , MapAssetIdGroupNameText);
+                console.log('MapAssetIdSelectedCheck: ' , MapAssetIdSelectedCheck);
+                
+                
+                
+                
+                //finalString = MapAssetIdLicenseTypeText + MapAssetIdRubrikSuiteText+MapAssetIdPaymentOptionText+MapAssetIdSupportTypeText+MapAssetIdGroupNameText;
+                
+                console.log('sekectedFinal>>',selectedFinal);
+                
+                j$('[id$="resultantAsset"]').val(selectedFinal);
+                
+            }
+            
+            function populateGroupId(abc){
+                selectedGroupId=(j$('[id$="resultantGrp"]').val()).split(",");
+                if(selectedGroupId.indexOf(abc) == -1){
+                    selectedGroupId.push(abc);
+                } else{
+                    selectedGroupId = jQuery.grep(selectedGroupId, function(value) {
+                        return value != abc;
+                    });
+                }
+                
+                var groupTypeValueIndex= j$('[id$="groupTypeInput"]').val().toString;
+                console.log('groupIndex:> ', groupTypeValueIndex);
+                arryGrp.push(groupTypeValueIndex);
+                console.log('arryGrp:> ', arryGrp);
+                console.log('abc2:> ', abc);
+                
+                console.log('strId>>' , selectedGroupId);
+                var len = abc.length;
+                console.log('len2>>' , len);
+                assetSelectedList.push(abc.substr(0, 18));
+                MapAssetIdGroupText.set(abc.substr(0, 18),abc.substr(18, len));
+                console.log('MapAssetIdGroupText: ' , MapAssetIdGroupText);
+                
+                j$('[id$="resultantGrp"]').val(selectedGroupId);
+            }
+            
+            
+            // toggle with master checkbox
+            function mastercheckbox(){
+                console.log('selected456',selected);
+                if (j$("#SelectAll")[0].checked == true){ 
+                    j$('.child-Checkbox').each(function(){
+                        if(selected.indexOf(j$(this).attr("assetid")) == -1){
+                            this.checked = true;
+                            console.log('count of call');
+                            populateSelectedAsset(j$(this).attr("assetid"),this);
+                        }
+                    });
+                }else {
+                    console.log('selected123',selected);
+                    console.log('inside else');
+                    j$('.child-Checkbox').each(function(){
+                        this.checked = false; 
+                        populateSelectedAsset(j$(this).attr("assetid"),this);
+                    });
+                } 
+            }
+            
+            // validation and save of final Save
+            function UpgradeAssetSave(){
+                j$(".slds-button").prop('disabled', true);
+                var names ={};
+                var count = 0;
+                var assetlist = [];
+                var validAsset =[];
+                var populatedAsset =[];
+                var leftovers = '';
+                j$("input[type='radio'].read-option").each(function() {
+                    names[j$(this).attr('name')] = true;
+                    var upgradeSource =  j$(this).attr('name');
+                    if(validAsset.indexOf(upgradeSource) == -1){
+                        validAsset.push(upgradeSource);
+                    }
+                    if(this.checked == true)
+                    {
+                        var newValue = this.id;
+                        console.log(newValue);
+                        populatedAsset.push(upgradeSource);
+                        assetlist.push(newValue);
+                        count++
+                    } 
+                });
+                var namelength = 0
+                j$.each(names, function() { // then count them
+                    namelength++;
+                });
+                for (i=0; i<validAsset.length; i++){
+                    if(populatedAsset.indexOf(validAsset[i]) == -1){
+                        if (leftovers ==''){
+                            leftovers = validAsset[i];
+                        }else {
+                            leftovers = leftovers +', '+ validAsset[i] ;
+                        }    
+                    }
+                }
+                if ( namelength == count){
+                    j$('[id$="optionSelected"]').val(assetlist);
+                    j$('[id$="errorMsg"]').addClass("hideError");
+                    saveQuoteLines();
+                } else {
+                    console.log();
+                    j$('[id$="errorMsg"]').removeClass("hideError");
+                    j$('[id$="errorSpan"]').text("Please select Upgrade for "+leftovers);
+                    console.log("Kill it--> throw error");
+                    j$(".slds-button").prop('disabled', false);
+                }
+            }
+            
+            function isCombinationNotValid(rubrikEdition, payemntOption, supportType){
+                var validAssetFieldCombinations = {!validAssetFieldCombinations};
+                var RUBRIK_SUIT_MAP = {
+                    'Foundation' : 'Foundation Edition',
+                    'Business' : 'Business Edition',
+                    'Complete Pro' : 'Complete Edition Pro',
+                    'Enterprise' : 'Enterprise Edition',
+                      'Proactive' : 'Proactive Edition',
+                    'Complete' : 'Complete Edition',
+                    'Complete Elite' : 'Complete Edition Elite'
+                };
+                var combination = RUBRIK_SUIT_MAP[rubrikEdition]+'_'+payemntOption+'_'+supportType;                
+                return !validAssetFieldCombinations.includes(combination);
+            }
+            
+            // validation for first page 
+            function validateAsset() {
+                j$(".slds-button").prop('disabled', true);
+                var initialCheckValid = true;
+                var isRubrikEditionPopulated = true;
+                var isPaymentOptionPopulated = true;
+                var isSupportTypePopulated = true;
+                //Starts:-> [Shaloo Mishra] Arroyo 2.0 : Variables declared for logic to show validation error messages upon Asset Group Selection
+                var JsonMapValue = JSON.parse('{!JsonMap}');
+                var isAssetGroupPopulated = true;
+                var assetGroupfamilyMap = {};
+                var assetGroupfamilyMapTest ={};// new Map;
+                var showFamilyError = false;
+                var groupAttributeMap = {};
+                var showConfigError = false;
+                //Ends:-> [Shaloo Mishra] Arroyo 2.0 : Variables declared for logic to show validation error messages upon Asset Group Selection
+                if ({!isOldCustomUpgradeSourceActive} == true) {
+                    console.log('** Old Records are Active ** ');
+                    j$.each(j$("input[id$='divsup']:checked"), function() {
+                        var row = j$(this).closest("tr")[0];
+                        console.log('row Value:-> ', row);
+                        var rubrikEditionSelectionIndex = row.cells[7].firstElementChild.childNodes[0].options.selectedIndex;
+                        var rubrikEditionSelectedVal = '';
+                        var rubrikEditionValue = j$('[id$="rubrikEditionInput"]').val();
+                        if(rubrikEditionValue == '') {
+                            initialCheckValid = false;
+                            isRubrikEditionPopulated = false;
+                        } else {
+                            //isRubrikEditionPopulated = true;
+                            rubrikEditionSelectedVal = row.cells[7].firstElementChild.childNodes[0].options[rubrikEditionSelectionIndex].outerText;
+                        }
+                        //Starts:-> [Shaloo Mishra] Arroyo 2.0 : Logic for showcasing error message upon mismatch Product Family & invalid config - Starts]
+                        var assetGroupSelectionIndex = row.cells[8].firstElementChild.childNodes[0].options.selectedIndex;
+                        var assetNameSelectedVal = '';
+                        var assetGroupSelectedVal = '';
+                        if (assetGroupSelectionIndex == 0) {
+                            //showFamilyError = false; //[Removed this line]
+                            isAssetGroupPopulated = false;
+                        } else {
+                            isAssetGroupPopulated = true; //[Re-Added this line]
+                            var assetNameSelectedVal = row.cells[1].outerText;
+                            var assetGroupSelectedVal = row.cells[8].firstElementChild.childNodes[0].options[assetGroupSelectionIndex].outerText;
+                            var familyList = new Set();
+                            if (assetGroupfamilyMap[assetGroupSelectedVal]) {
+                                familyList = assetGroupfamilyMap[assetGroupSelectedVal];
+                            }
+                            familyList.add(JsonMapValue[assetNameSelectedVal]);
+                            assetGroupfamilyMap[assetGroupSelectedVal] = familyList;
+                            if (assetGroupfamilyMap[assetGroupSelectedVal].size > 1) {
+                                console.log('Bad Family !!');
+                                showFamilyError = true;
+                            }
+                            if(isRubrikEditionPopulated){
+                                var groupCombo = rubrikEditionSelectedVal;
+                                var configGroupList = new Set();
+                                if (groupAttributeMap[assetGroupSelectedVal]) {
+                                    configGroupList = groupAttributeMap[assetGroupSelectedVal];
+                                }
+                                configGroupList.add(groupCombo);
+                                groupAttributeMap[assetGroupSelectedVal] = configGroupList;
+                                console.log('configGroupList Final:-> ', configGroupList);
+                                console.log('groupAttributeMap ELSE IF:-> ', groupAttributeMap);
+                                console.log('configGroupList Size :---> ', configGroupList.size);
+                            }
+                            if (groupAttributeMap[assetGroupSelectedVal].size > 1) {
+                                var groupName = assetGroupSelectedVal;
+                                console.log('Bad Configurations !!', groupName);
+                                showConfigError = true;
+                            }
+                        }
+                        if (!isRubrikEditionPopulated) {
+                            j$('[id$="errorMsg"]').removeClass("hideError");
+                            j$('[id$="errorSpan"]').text("Please select value in Rubrik Edition.");
+                            j$(".slds-button").prop('disabled', false);
+                            j$(row).removeClass("validRow");
+                            j$(row).addClass("invalidRow");
+                            initialCheckValid = false;
+                        } 
+                        else if (showFamilyError == true && isAssetGroupPopulated == true) {//a comment1
+                            console.log('Show Error for Bad Family !!');//a comment2
+                            j$('[id$="errorMsg"]').removeClass("hideError");//a comment3
+                            j$('[id$="errorSpan"]').text("Products from different families cannot be grouped together.");//a comment5
+                            j$(".slds-button").prop('disabled', false);//a comment15
+                            j$(row).removeClass("validRow");//a comment17
+                            j$(row).addClass("invalidRow");//a comment14
+                            initialCheckValid = false; //a comment15 
+                        }
+                            else if (showConfigError == true && isAssetGroupPopulated == true && groupName!=null) {//a comment18
+                                console.log('Show Error for Bad Configurations !!');//a comment1e
+                                j$('[id$="errorMsg"]').removeClass("hideError");//a comment11
+                                j$('[id$="errorSpan"]').text("Products under same Group should have similar configurations. Please select correct value for Rubrik Edition.");//a comment1b
+                                j$(".slds-button").prop('disabled', false);//a comment13
+                                j$(row).removeClass("validRow");
+                                j$(row).addClass("invalidRow");
+                                initialCheckValid = false; 
+                            }
+                                else {
+                                    j$(row).removeClass("invalidRow");
+                                    j$(row).addClass("validRow");
+                                }
+                        //Ends:-> [Shaloo Mishra] Arroyo 2.0 : Logic for showcasing error message upon mismatch Product Family & invalid config - Ends]
+                    });
+                }
+                if({!isOldCustomUpgradeSourceActive} == false) {
+                    console.log('** New Records are Active ** ');
+                    j$.each(j$("input[id$='divsup']:checked"), function() 
+                            {
+                                var row = j$(this).closest("tr")[0];
+                                
+                                var licenseTypeSelectionIndex = row.cells[6].firstElementChild.childNodes[0].options.selectedIndex;
+                                console.log('licenseTypeSelectionIndex:-> ', licenseTypeSelectionIndex);
+                                var licenseTypeSelectedVal = '';
+                                var licenseTypeValue = j$('[id$="licenseTypeInput"]').val();
+                                console.log('licenseTypeValue:-> ', licenseTypeValue);
+                                if(licenseTypeValue == '') {
+                                    //initialCheckValid = false;
+                                    //isRubrikEditionPopulated = false;
+                                }else{
+                                    licenseTypeSelectedVal = row.cells[6].firstElementChild.childNodes[0].options[licenseTypeSelectionIndex].outerText;
+                                    console.log('licenseTypeSelectedVal:-> ', licenseTypeSelectedVal);
+                                }
+                                
+                                var rubrikEditionSelectionIndex = row.cells[7].firstElementChild.childNodes[0].options.selectedIndex;
+                                var rubrikEditionSelectedVal = '';
+                                var rubrikEditionValue = j$('[id$="rubrikEditionInput"]').val();
+                                if(rubrikEditionValue == '') {
+                                    initialCheckValid = false;
+                                    isRubrikEditionPopulated = false;
+                                }else{
+                                    rubrikEditionSelectedVal = row.cells[7].firstElementChild.childNodes[0].options[rubrikEditionSelectionIndex].outerText;
+                                }
+                                var paymentOptionsSelectedIndex = row.cells[8].firstElementChild.childNodes[0].options.selectedIndex;
+                                var paymentOptionSelectedVal = '';
+                                var paymentOptionValue = j$('[id$="paymentOptionsInput"]').val();
+                                if(paymentOptionValue == '') {
+                                    initialCheckValid = false;
+                                    isPaymentOptionPopulated = false;
+                                }else{
+                                    paymentOptionSelectedVal = row.cells[8].firstElementChild.childNodes[0].options[paymentOptionsSelectedIndex].outerText;   
+                                }
+                                
+                                var supportTypeSelectedIndex = row.cells[9].firstElementChild.childNodes[0].options.selectedIndex;
+                                var supportTypeSelectedVal = ''
+                                var supportTypeValue = j$('[id$="supportTypeInput"]').val();
+                                if(supportTypeValue == '') {
+                                    initialCheckValid = false;
+                                    isSupportTypePopulated = false;
+                                }else{
+                                    supportTypeSelectedVal = row.cells[9].firstElementChild.childNodes[0].options[supportTypeSelectedIndex].outerText;   
+                                }
+                                console.log('row Value:-> ', row);
+                                
+                                //Starts:-> [Shaloo Mishra] Arroyo 2.0 : Logic for showcasing error message upon mismatch Product Family & invalid config - Starts]
+                                var assetGroupSelectionIndex = row.cells[10].firstElementChild.childNodes[0].options.selectedIndex;
+                                var assetNameSelectedVal = '';
+                                var assetGroupSelectedVal = '';
+                                if (assetGroupSelectionIndex == 0) {
+                                    //showFamilyError = false; //[Removed this line]
+                                    isAssetGroupPopulated = false;
+                                } else 
+                                {
+                                    isAssetGroupPopulated = true; //[Re-Added this line]
+                                    var assetNameSelectedVal = row.cells[1].outerText;
+                                    var assetGroupSelectedVal = row.cells[10].firstElementChild.childNodes[0].options[assetGroupSelectionIndex].outerText;
+                                    var familyList = new Set();
+                                    if (assetGroupfamilyMap[assetGroupSelectedVal]) {
+                                        familyList = assetGroupfamilyMap[assetGroupSelectedVal];
+                                    }
+                                    familyList.add(JsonMapValue[assetNameSelectedVal]);
+                                    assetGroupfamilyMap[assetGroupSelectedVal] = familyList;
+                                    if (assetGroupfamilyMap[assetGroupSelectedVal].size > 1) {
+                                        console.log('Bad Family !!');
+                                        showFamilyError = true;
+                                    }
+                                    //var assetGroupSelectedVal1 = '';
+                                    for(i=0; i<assetSelectedList.length;i++){
+                                        console.log('i !!', assetSelectedList[i]);
+                                        
+                                        var licenseTypeSelectedVal1 = MapAssetIdLicenseTypeText.get(assetSelectedList[i]);
+                                        var rubrikEditionSelectedVal1 = MapAssetIdRubrikSuiteText.get(assetSelectedList[i]);
+                                        var paymentOptionSelectedVal1 = MapAssetIdPaymentOptionText.get(assetSelectedList[i]);
+                                        var supportTypeSelectedVal1 = MapAssetIdSupportTypeText.get(assetSelectedList[i]);
+                                        
+                                        console.log('Count !!', MapAssetIdGroupText);  
+                                        var assetGroupSelectedVal1 = MapAssetIdGroupText.get(assetSelectedList[i]);
+                                        console.log('assetGroupSelectedVal1 : ', assetGroupSelectedVal1);
+                                        var familyList1 = new Set();
+                                        //if (assetGroupfamilyMapTest.has(assetGroupSelectedVal1)) {
+                                        if (assetGroupfamilyMapTest[assetGroupSelectedVal1]) {
+                                            familyList1 = assetGroupfamilyMapTest[assetGroupSelectedVal1];
+                                            //assetGroupfamilyMapTest.set(assetGroupSelectedVal1,familyList1);
+                                            //assetGroupfamilyMapTest.set(assetGroupSelectedVal1,familyList1);
+                                        }
+                                        console.log('JsonMapValue : ', JsonMapValue);
+                                        familyList1.add(JsonMapValue[assetSelectedList[i]]);
+                                        assetGroupfamilyMapTest[assetGroupSelectedVal1] = familyList1;
+                                        //assetGroupfamilyMapTest.set(assetGroupSelectedVal1, familyList);
+                                        //}//forloop
+                                        console.log('familyList1 : ', familyList1 , ' , Size:' , familyList1.size);
+                                        console.log('assetGroupfamilyMapTest : ', assetGroupfamilyMapTest);
+                                        
+                                        //assetGroupfamilyMapTest[assetGroupSelectedVal1].size
+                                        if (familyList1.size > 1) {
+                                            console.log('Bad Familyyyyy !!');
+                                            showFamilyError = true;
+                                        }
+                                        
+                                        console.log('isRubrikEditionPopulated : ', isRubrikEditionPopulated);
+                                        console.log('isPaymentOptionPopulated : ', isPaymentOptionPopulated);
+                                        console.log('isSupportTypePopulated : ', isSupportTypePopulated);
+                                        if(isPaymentOptionPopulated && isRubrikEditionPopulated  && isSupportTypePopulated){
+                                            var groupCombo = rubrikEditionSelectedVal1 + '_' + paymentOptionSelectedVal1 + '_' + supportTypeSelectedVal1;
+                                            console.log('Value of groupCombo:-> ' , groupCombo);
+                                            var configGroupList = new Set();
+                                            if (groupAttributeMap[assetGroupSelectedVal1]) {
+                                                configGroupList = groupAttributeMap[assetGroupSelectedVal1];
+                                            }
+                                            configGroupList.add(groupCombo);
+                                            groupAttributeMap[assetGroupSelectedVal1] = configGroupList;
+                                        }
+                                        console.log('configGroupList Final:-> ', configGroupList);
+                                        //console.log('groupAttributeMap ELSE IF:-> ', groupAttributeMap[assetGroupSelectedVal].size);
+                                        //console.log('groupAttributeMap ELSE IF:-> ', groupAttributeMap[assetGroupSelectedVal].length);
+                                        console.log('configGroupList Size :---> ', configGroupList.size);
+                                        console.log('assetGroupSelectedVal !!', assetGroupSelectedVal);
+                                        if (groupAttributeMap[assetGroupSelectedVal1].size > 1) {
+                                            var groupName = assetGroupSelectedVal1;
+                                            console.log('Bad Configurations !!', groupName);
+                                            showConfigError = true;
+                                        }
+                                    }  
+                                }
+                                if(!isPaymentOptionPopulated || !isRubrikEditionPopulated  || !isSupportTypePopulated) {
+                                    j$('[id$="errorMsg"]').removeClass("hideError");
+                                    j$('[id$="errorSpan"]').text("Rubrik Edition, Payment Options and Support Type Values Are Required!");
+                                    j$(".slds-button").prop('disabled', false);
+                                }else{
+                                    if(isCombinationNotValid(rubrikEditionSelectedVal,paymentOptionSelectedVal,supportTypeSelectedVal)){
+                                        j$('[id$="errorMsg"]').removeClass("hideError");
+                                        j$('[id$="errorSpan"]').text("Rubrik Edition, Payment Options and Support Type Values Are Not Valid!");
+                                        j$(".slds-button").prop('disabled', false);
+                                        j$(row).removeClass("validRow");
+                                        j$(row).addClass("invalidRow");
+                                        initialCheckValid = false;
+                                    }
+                                    else if (showFamilyError == true && isAssetGroupPopulated == true) {//a comment1d
+                                        console.log('Show Error for Bad Family !!');//a comment1d3
+                                        j$('[id$="errorMsg"]').removeClass("hideError");//a comment1d6
+                                        j$('[id$="errorSpan"]').text("Products from different families cannot be grouped together.");//a comment1d7
+                                        j$(".slds-button").prop('disabled', false);//a comment1dt
+                                        j$(row).removeClass("validRow");//a comment1dr
+                                        j$(row).addClass("invalidRow");//a comment1dh
+                                        initialCheckValid = false;//a comment1dq
+                                    }
+                                        else if (showConfigError == true && isAssetGroupPopulated == true && groupName!=null) {//a comment1drx
+                                            console.log('Show Error for Bad Configurations !!');//a comment1d4
+                                            j$('[id$="errorMsg"]').removeClass("hideError");//a comment1dw
+                                            j$('[id$="errorSpan"]').text("Products under same Group should have similar configurations. Please select correct values for Rubrik Edition, Payment Options and Support Type");//a comment1de
+                                            j$(".slds-button").prop('disabled', false);//a comment1df
+                                            j$(row).removeClass("validRow");//a comment1dd
+                                            j$(row).addClass("invalidRow");
+                                            initialCheckValid = false;
+                                        }
+                                            else{
+                                                j$(row).removeClass("invalidRow");
+                                                j$(row).addClass("validRow");                       
+                                            }
+                                }
+                                //Ends:-> [Shaloo Mishra] Arroyo 2.0 : Logic for showcasing error message upon mismatch Product Family & invalid config - Ends]
+                            });
+                }
+                if(initialCheckValid) {
+                    if(j$('[id$="resultantAsset"]').val()== "") { 
+                        j$('[id$="errorMsg"]').removeClass("hideError");
+                        j$('[id$="errorSpan"]').text("Please select assets to upgrade");
+                        j$(".slds-button").prop('disabled', false);   
+                    }
+                    else {
+                        j$('[id$="errorMsg"]').addClass("hideError");
+                        searchUpgradeSource();
+                    }              
+                }
+            }          
+            function navigateToQle() {
+                //event.preventDefault();
+                //event.stopPropagation();
+                //console.log('testing',CurrentPage.Parameters.newid);
+                window.top.location.href = '{!$Page.SBQQ__sb}?id={!$CurrentPage.Parameters.newid}';
+                //window.top.location.href = '/apex/sbqq__sb?id={!$CurrentPage.Parameters.newid}';
+                //window.history.back();
+                
+            }
+            
+            function cancelAndNavigateToQle() {
+                event.preventDefault();
+                event.stopPropagation();
+                navigateToQle();
+            }
+            function alterRubrikEdition(el) {
+                if ({!isOnPremException
+                    } == true && j$(el).closest("tr").find("[id$='licenseTypeInput']").val() == 'On Prem') {
+                    j$(el).closest("tr").find("[id$='rubrikEditionInput']").children("option[value='Foundation']").hide();//a comment1da
+                      j$(el).closest("tr").find("[id$='rubrikEditionInput']").children("option[value='Proactive']").hide();//a comment1das
+                    j$(el).closest("tr").find("[id$='rubrikEditionInput']").val('Enterprise');//a comment1dae
+                }
+                if ({!isOnPremException} == false || j$(el).closest("tr").find("[id$='licenseTypeInput']").val() != 'On Prem') {//a comment1dat
+                    j$(el).closest("tr").find("[id$='rubrikEditionInput']").children("option[value='Foundation']").show();//a comment1dau
+                    j$(el).closest("tr").find("[id$='rubrikEditionInput']").children("option[value='Proactive']").show();//a comment1dao
+                    
+                }
+            } 
+            </script>
+        </head>
+        <style>
+            .hideError{
+            display: none !important;
+            }
+            .slds-input{
+            width:20% !important;
+            }
+            #assetTable_filter {
+            visibility: hidden;
+            }
+            .test {
+            display: none; !important
+            }
+            .customMessage * {
+            color: #fff!important
+            font-size: medium;
+            font-weight: bold;
+            }
+            .errorSpan {
+            font-size: medium;
+            font-weight: bold;
+            }
+            .invalidRow {
+            background-color : #ffcccb !important;
+            }
+            .validRow {
+            background-color : #FFFFFF !important;
+            }
+        </style>
+        <apex:form id="AllAssets">
+            <apex:pagemessages />
+            <div id="errorMsg" class=".slds-notify slds-notify--alert slds-theme--error customMessage slds-theme--alert-texture hideError">
+                <span class="errorSpan" id="errorSpan"> I am the error, resolve me </span>
+            </div>
+            <apex:outputPanel Id="OP_AllAssets" rendered="{!showAssets}">
+                <div class="slds-page-header">
+                    <div class="slds-page-header__row">
+                        <div class="slds-page-header__col-title">
+                            <div class="slds-media">
+                                <div class="slds-media__figure">
+                                    <span class="slds-icon_container slds-icon-standard-opportunity" title="Quote">
+                                        <svg class="slds-icon slds-page-header__icon" aria-hidden="true"></svg>
+                                        <span class="slds-assistive-text">Quotes</span>
+                                    </span>
+                                </div>
+                                <div class="slds-media__body">
+                                    <p class="slds-page-header__name-meta">{!quoteName}</p>
+                                    <div class="slds-page-header__name">
+                                        <div class="slds-page-header__name-title">
+                                            <h1>
+                                                <span class="slds-page-header__title slds-truncate" title="Quote">Asset Selection</span>
+                                            </h1>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <center>
+                        <apex:inputText value="{!searchStr}" id="search1" styleClass="slds-input" />
+                        <apex:commandButton action="{!searchAsset}" value="Search" styleClass="slds-button slds-button--neutral" style="margin-left: .25rem;" />
+                        <apex:commandButton action="{!clear}" value="Clear" styleClass="slds-button slds-button--neutral" />
+                    </center>
+                </div>
+                <br />
+                <center>
+                    <span>Please select an Edition, Payment Option, and Support Type for the Asset(s) you want to refresh. These attributes will determine the software product.</span>
+                </center>
+                <apex:outputPanel id="op_assets">
+                    <table id="assetTable" class="slds-table slds-table_cell-buffer slds-table_bordered">
+                        <thead>
+                            <tr class="slds-line-height_reset">
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Select">
+                                        <input type="checkbox" id="SelectAll" name="SelectAll" onchange="mastercheckbox();" value="SelectAll" />
+                                    </div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Name">Asset Name</div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="ProductCode">Product Code</div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="StartDate">Support Start Date</div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="EndDate">Support End Date</div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Network">Network</div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="LicenseType">License Type</div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="RubrikEdition">Rubrik Edition</div>
+                                </th>
+                                <apex:outputPanel rendered="{!NOT(isOldCustomUpgradeSourceActive)}">
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="PaymentOptions">Payment Options</div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="SupportType">Support Type</div>
+                                    </th>
+                                </apex:outputPanel>
+                                <!-- New Column added: Asset Group -->
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Asset Group">Asset Group</div>
+                                </th>
+                                <!-- New Column added: Asset Group -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <apex:repeat value="{!lstAssetWrapper}" var="assetWrapper" id="theRepeat">
+                                <tr class="slds-hint-parent">
+                                    <td>
+                                        <div class="slds-form-element">
+                                            <div class="slds-form-element__control">
+                                                <span class="slds-checkbox">
+                                                    <apex:inputCheckbox styleClass="child-Checkbox" html-assetid="{!assetWrapper.objAsset.Id}SelectedCheck##{!assetWrapper.selectedAsset}@PaymentOptions##{!assetWrapper.paymentOptionsInput}@SupportType##{!assetWrapper.supportTypeInput}@RubrikEdition##{!assetWrapper.rubrikEditionInput}@AssetGroup##{!assetWrapper.selectedGroup}" html-name="options" onchange="populateSelectedAsset('{!assetWrapper.objAsset.Id}'+'SelectedCheck'+'##'+'{!assetWrapper.selectedAsset}'+'@PaymentOptions'+'##'+'{!assetWrapper.paymentOptionsInput}'+'@SupportType'+'##'+'{!assetWrapper.supportTypeInput}'+'@RubrikEdition'+'##'+'{!assetWrapper.rubrikEditionInput}'+'@LicenseType'+'##'+'{!assetWrapper.licenseType}',this); toggleMaster();" id="divsup" value="{!assetWrapper.selectedAsset}"></apex:inputCheckbox>
+                                                    <apex:outputLabel for="divsup" styleClass="slds-checkbox__label">
+                                                        <span class="slds-checkbox--faux"></span>
+                                                        <span class="slds-form-element__label"></span>
+                                                    </apex:outputLabel>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td data-label="Name" html-assetNameVal="{!assetWrapper.objAsset.Name}">
+                                        <div class="slds-truncate" title="Name">{!assetWrapper.objAsset.Name}</div>
+                                    </td>
+                                    <td data-label="ProductCode">
+                                        <div class="slds-truncate" title="ProductCode">{!assetWrapper.objAsset.ProductCode}</div>
+                                    </td>
+                                    <td data-label="StartDate">
+                                        <div class="slds-truncate" title="StartDate">
+                                            <apex:outputText value="{0, date, MMMM d','  yyyy}">
+                                                <apex:param value="{!assetWrapper.objAsset.Support_Start_Date__c}" />
+                                            </apex:outputText>
+                                        </div>
+                                    </td>
+                                    <td data-label="EndDate">
+                                        <div class="slds-truncate" title="EndDate">
+                                            <apex:outputText value="{0, date, MMMM d','  yyyy}">
+                                                <apex:param value="{!assetWrapper.objAsset.Premium_Support_End_Date__c}" />
+                                            </apex:outputText>
+                                        </div>
+                                    </td>
+                                    <td data-label="Network">
+                                        <div class="slds-truncate" title="network">
+                                            <apex:inputField value="{!assetWrapper.objAsset.Product_Nic_Type__c}" id="theTextInput" />
+                                        </div>
+                                    </td>
+                                    <td data-label="LicenseType"> <!-- Added Div class for checking stamping of value on pagination -->
+                                        <div class="slds-truncate" title="LicenseType">
+                                            <apex:selectList id="licenseTypeInput" value="{!assetWrapper.licenseType}" size="1" onchange="populateSelectedAsset('{!assetWrapper.objAsset.Id}'+';'+'LicenseType'+':'+this.options[this.selectedIndex].text,true);alterRubrikEdition(this);">
+                                                <!-- onchange="populateLicenseTypeId('{!assetWrapper.objAsset.Id}'+this.options[this.selectedIndex].text); toggleMaster();" -->
+                                                <apex:selectOption itemValue="SaaS" itemLabel="SaaS" />
+                                                <apex:selectOption itemValue="On Prem" itemLabel="On Prem" rendered="{!OR(isFederalAccount, isOnPremException)}"/> 
+                                                <!-- rendered="{!(isAccountApproved)}" -->
+                                            </apex:selectList>
+                                        </div>
+                                    </td>
+                                    <td data-label="RubrikEdition">
+                                        <div class="slds-truncate" title="RubrikEdition">
+                                            <apex:selectList id="rubrikEditionInput" value="{!assetWrapper.rubrikEditionInput}" size="1" onchange="populateSelectedAsset('{!assetWrapper.objAsset.Id}'+';'+'RubrikEdition'+':'+this.options[this.selectedIndex].text,true);">
+                                                <!-- objAsset.Rubrik_Suite__c -->
+                                                <!--<apex:selectOption itemValue="Foundation" itemLabel="Foundation" /> -->
+                                                <apex:selectOption itemValue="Foundation" itemLabel="Foundation" rendered="{!OR(!isOnPremException, assetWrapper.licenseType != 'On Prem')}"/>
+                                                <!--<apex:selectOption itemValue="Business" itemLabel="Business" rendered="{!(bEditionAvailable)}"/>
+                                                <apex:selectOption itemValue="Enterprise" itemLabel="Enterprise" rendered="{!(bEditionAvailable)}"/>  -->
+                                                <apex:selectOption itemValue="Business" itemLabel="Business"/> <!--  -->
+                                                <apex:selectOption itemValue="Enterprise" itemLabel="Enterprise"/> <!--  -->
+                                            <apex:selectOption itemValue="Proactive" itemLabel="Proactive"/>
+                                            </apex:selectList>
+                                        </div>
+                                    </td>
+                                    <apex:outputPanel rendered="{!NOT(isOldCustomUpgradeSourceActive)}">
+                                        <td data-label="PaymentOptions">
+                                            <!--div class="slds-truncate" title="PaymentOptions">{!assetWrapper.objAsset.Payment_Options__c}</div-->
+                                            <div class="slds-truncate" title="PaymentOptions">
+                                                <apex:selectList id="paymentOptionsInput" value="{!assetWrapper.paymentOptionsInput}" size="1" onchange="populateSelectedAsset('{!assetWrapper.objAsset.Id}'+';'+'PaymentOptions'+':'+this.options[this.selectedIndex].text,true);">
+                                                    <!-- objAsset.Payment_Options__c -->
+                                                    <apex:selectOption itemValue="Prepay" itemLabel="Prepay"/>
+                                                    <apex:selectOption itemValue="Annual" itemLabel="Annual"/>
+                                                </apex:selectList> 
+                                            </div>
+                                        </td>
+                                        <td data-label="SupportType">
+                                            <!--div class="slds-truncate" title="SupportType">{!assetWrapper.objAsset.Support_Type__c}</div-->
+                                            <div class="slds-truncate" title="SupportType">
+                                                <apex:selectList id="supportTypeInput" value="{!assetWrapper.supportTypeInput}" size="1" onchange="populateSelectedAsset('{!assetWrapper.objAsset.Id}'+';'+'SupportType'+':'+this.options[this.selectedIndex].text,true); ">
+                                                    <!-- objAsset.Support_Type__c -->
+                                                    <apex:selectOption itemValue="Premium" itemLabel="Premium"/>
+                                                    <apex:selectOption itemValue="L3" itemLabel="L3"/>
+                                                </apex:selectList> 
+                                            </div>
+                                        </td>
+                                    </apex:outputPanel>
+                                    <!-- New Column added: Asset Group -->
+                                    <td data-label="AssetGroup">
+                                        <div class="slds-truncate" title="AssetGroup">
+                                            <apex:selectList id="groupTypeInput" label="Group"   value="{!assetWrapper.selectedGroup}" size="1" multiselect="false" onchange="populateSelectedAsset('{!assetWrapper.objAsset.Id}'+';'+'AssetGroup'+':'+this.options[this.selectedIndex].text,'{!assetWrapper.selectedAsset}');">
+                                                <apex:selectOption itemValue="" itemLabel="-- None --" />
+                                                <apex:selectOption itemValue="Group-1" itemLabel="Group-1" />
+                                                <apex:selectOption itemValue="Group-2" itemLabel="Group-2" />
+                                                <apex:selectOption itemValue="Group-3" itemLabel="Group-3" />
+                                                <apex:selectOption itemValue="Group-4" itemLabel="Group-4" />
+                                                <apex:selectOption itemValue="Group-5" itemLabel="Group-5" />
+                                                <apex:selectOption itemValue="Group-6" itemLabel="Group-6" />
+                                                <apex:selectOption itemValue="Group-7" itemLabel="Group-7" />
+                                                <apex:selectOption itemValue="Group-8" itemLabel="Group-8" />
+                                                <apex:selectOption itemValue="Group-9" itemLabel="Group-9" />
+                                                <apex:selectOption itemValue="Group-10" itemLabel="Group-10" />
+                                                <apex:selectOption itemValue="Group-11" itemLabel="Group-11" />
+                                                <apex:selectOption itemValue="Group-12" itemLabel="Group-12" />
+                                            </apex:selectList>
+                                        </div>
+                                    </td>
+                                    <!-- New Column added: Asset Group -->
+                                </tr>
+                            </apex:repeat>
+                        </tbody>
+                    </table>
+                </apex:outputPanel>
+                <br />
+                <apex:inputHidden id="resultant" value="{!selectedID}" />
+                <apex:inputHidden id="resultantGrp" value="{!selectedGroupId}" />
+                <apex:inputHidden id="resultantAsset" value="{!populateSelectedAsset}" />
+                <apex:outputPanel id="op_btn_last">
+                    <center>
+                        <apex:commandButton onclick="validateAsset(); return false;" value="Save" styleClass="slds-button slds-button--neutral" />
+                        <apex:commandButton onclick="cancelAndNavigateToQle();" value="Cancel" styleClass="slds-button slds-button--neutral" /><!--action="{!Cancel}" -->
+                    </center>
+                    <apex:actionFunction action="{!saveAssets}" name="searchUpgradeSource" />
+                </apex:outputPanel>
+            </apex:outputPanel>
+            <!---------------------------------upgrade page---------------------------------------->
+            <apex:outputPanel id="OP_AllUpgradeAssets" rendered="{!showUpgrade}">
+                <div class="slds-page-header" style="width:100%">
+                    <div class="slds-page-header__row">
+                        <div class="slds-page-header__col-title">
+                            <div class="slds-media">
+                                <div class="slds-media__figure">
+                                    <span class="slds-icon_container slds-icon-standard-opportunity" title="Quote">
+                                        <svg class="slds-icon slds-page-header__icon" aria-hidden="true"></svg>
+                                        <span class="slds-assistive-text">Upgrade Selection</span>
+                                    </span>
+                                </div>
+                                <div class="slds-media__body">
+                                    <p class="slds-page-header__name-meta">{!quoteName}</p>
+                                    <div class="slds-page-header__name">
+                                        <div class="slds-page-header__name-title">
+                                            <h1>
+                                                <span class="slds-page-header__title slds-truncate" title="Quote">Asset Upgrades</span>
+                                            </h1>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <center>
+                        <apex:commandButton onclick="UpgradeAssetSave(); return false;" value="Save" styleClass="slds-button slds-button--neutral"/>
+                        <!-- oncomplete="navigateToQle();" -->
+                        <apex:commandButton action="{!backToAssets}" value="Cancel" styleClass="slds-button slds-button--neutral" />
+                    </center>
+                    <br />
+                </div>
+                <br />
+                <div id="#selectUpgrade">
+                    <apex:repeat value="{!selectedAssets}" var="assetWrapper" id="theRepeat2">
+                        <div class="slds-truncate" title="tblHeader" style="color : #080707l;font-size: 1rem; padding: 5px;
+                                                                            background: rgb(243, 242, 242);">
+                            <B> {!assetWrapper.selectedGroup} &nbsp;&nbsp; {!assetWrapper.assetSerialName} </B><!-- Added Group Name & Asset Serial Number -->
+                        </div>
+                        <apex:outputPanel id="blankPanel" rendered="{!assetWrapper.upgradeExists == false}">
+                            <div class=".slds-notify slds-notify--alert slds-theme--warning customMessage slds-theme--alert-texture ">
+                                <span>No Upgrades to display</span>
+                            </div>
+                            <br />
+                            <br />
+                        </apex:outputPanel>
+                        <apex:outputPanel id="dataPanel" rendered="{!assetWrapper.upgradeExists == true }">
+                            <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                <tr class="slds-line-height_reset">
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="AssetId" style="font-size: 1rem; padding: 5px 0px;">
+                                            <B>Upgrade To</B>
+                                        </div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="Name" style="font-size: 1rem; padding: 5px 0px;">
+                                            <B>Upgrade From </B>
+                                        </div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="AssetId" style="font-size: 1rem; padding: 5px 0px;">
+                                            <B>Product Description </B>
+                                        </div>
+                                    </th>
+                                </tr>
+                                <fieldset class="slds-form-element">
+                                    <legend class="slds-form-element__legend slds-form-element__label">
+                                        <abbr class="slds-required" title="required"></abbr>
+                                    </legend>
+                                    <apex:repeat value="{!assetWrapper.lstUS}" var="objOption" id="theRepeat2">
+                                        <tr>
+                                            <td>
+                                                <input type="radio" id="{!objOption.OptionValue}" class="read-option" name="{!assetWrapper.objAsset.Name}" html-assetName="{!assetWrapper.objAsset.Name}" value="{!objOption.OptionLabel}" html-readerTag="SelectedOptions" />
+                                                <label for="other">{!objOption.OptionLabel}</label>
+                                            </td>
+                                            <td>
+                                                <div class="slds-truncate" title="ProductCode">{!objOption.objUs.Source_Product__r.Productcode}</div>
+                                            </td>
+                                            <td>
+                                                <div class="slds-truncate" title="ProductCode">{!objOption.objUs.UpgradeProduct__r.Description}</div>
+                                            </td>
+                                        </tr>
+                                    </apex:repeat>
+                                </fieldset>
+                            </table>
+                        </apex:outputPanel>
+                        <br />
+                        <br />
+                    </apex:repeat>
+                    <apex:inputhidden Id="optionSelected" value="{!selectedoptionsstr}" />
+                </div>
+                <br />
+                <apex:outputPanel id="op_btn_Upgrade">
+                    <center>
+                        <apex:actionFunction action="{!CreateUpgradeAsssets}" name="saveQuoteLines" oncomplete="navigateToQle();"/>
+                        <apex:commandButton onclick="UpgradeAssetSave(); return false;" value="Save" styleClass="slds-button slds-button--neutral"/>
+                        <!-- oncomplete="window.top.location.href = '/apex/sbqq__sb?id={!$CurrentPage.Parameters.newid}'"-->
+                        <apex:commandButton action="{!backToAssets}" value="Cancel" styleClass="slds-button slds-button--neutral" />
+                    </center>
+                </apex:outputPanel>
+            </apex:outputPanel>
+        </apex:form>
+        
+    </apex:page>

@@ -1,0 +1,82 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" >
+    
+    <div style="padding: 3rem;">
+        <lightning:layout multipleRows="true" horizontalAlign="spread" pullToBoundary="small">
+            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="8" largeDeviceSize="8" padding="around-small">
+                <div>
+                    <img src="{!$Resource.communityfooterlogonotext}" width="50" /> <br/>
+                    <span class="opacityText">Rubrik builds beautifully simple products for businesses to meet their most challenging data management needs.</span>
+                    
+                </div>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="4" largeDeviceSize="4" padding="around-small">
+                
+                <ul class="slds-list_horizontal slds-has-block-links_space slds-float_right">            
+                    <li class="slds-item">
+                        <a class="socialcolor" href="https://www.linkedin.com/company/rubrik-inc" target="_blank">
+                            <img src="{!$Resource.RubrikCustomerCommunity + '/RubrikCommunity/Images/linkedin.png'}"/>
+                        </a>
+                    </li>
+                    <li class="slds-item">
+                        <a class="socialcolor" href="https://twitter.com/rubrikInc" target="_blank">
+                            <img src="{!$Resource.RubrikCustomerCommunity + '/RubrikCommunity/Images/twiter.png'}"/>
+                        </a>
+                    </li>
+                    <li class="slds-item">
+                        <a class="socialcolor" href="https://www.facebook.com/rubrikinc/" target="_blank">
+                            <img src="{!$Resource.RubrikCustomerCommunity + '/RubrikCommunity/Images/facebok.png'}"/>
+                        </a>
+                    </li>
+                    <li class="slds-item">
+                        <a class="socialcolor" href="https://www.youtube.com/channel/UCDoKLwlfdfH61rkzD3pu_ZQ" target="_blank">
+                            <img src="{!$Resource.RubrikCustomerCommunity + '/RubrikCommunity/Images/youtube.png'}"/>
+                        </a>
+                    </li>
+                </ul>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12">
+                <div class="slds-border_top footerLine">            
+                </div>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="8" largeDeviceSize="8" padding="around-small">
+                <ul class="slds-list_horizontal slds-has-dividers_left opacityText">
+                    <li class="slds-item ">Built in Palo Alto, CA</li>
+                    <li class="slds-item">
+                        <a class="noLink" href="https://www.rubrik.com/privacy-policy/" target="_blank">
+                            <div aura:id="svg_content">
+                                <![CDATA[
+    <svg width="6" height="6" viewBox="0 0 6 6" xmlns="http://www.w3.org/2000/svg">  <path d="M3.29 5.89c-.145.147-.435.147-.58 0L.11 3.256c-.144-.146-.144-.44 0-.585L2.71.11c.145-.147.435-.147.58 0L5.89 2.744c.144.146.144.44 0 .585L3.29 5.89z" fill="#FFF" fill-rule="evenodd"/>
+</svg>
+]]> &nbsp;Privacy Policy
+                            </div>                        
+                        </a>
+                    </li>
+                    <li class="slds-item">
+                        <a class="noLink" href="https://www.rubrik.com/en/legal/ccpa-compliance" target="_blank">                            
+                            <div aura:id="svg_content">
+                                <![CDATA[
+    <svg width="6" height="6" viewBox="0 0 6 6" xmlns="http://www.w3.org/2000/svg">  <path d="M3.29 5.89c-.145.147-.435.147-.58 0L.11 3.256c-.144-.146-.144-.44 0-.585L2.71.11c.145-.147.435-.147.58 0L5.89 2.744c.144.146.144.44 0 .585L3.29 5.89z" fill="#FFF" fill-rule="evenodd"/>
+</svg>
+]]> &nbsp;CA Residents only: Do not sell my personal information
+                            </div>
+                        </a>
+                    </li>
+                    <li class="slds-item">
+                        <a class="noLink" href="https://www.rubrik.com/contact-us/" target="_blank">                            
+                            <div aura:id="svg_content">
+                                <![CDATA[
+    <svg width="6" height="6" viewBox="0 0 6 6" xmlns="http://www.w3.org/2000/svg">  <path d="M3.29 5.89c-.145.147-.435.147-.58 0L.11 3.256c-.144-.146-.144-.44 0-.585L2.71.11c.145-.147.435-.147.58 0L5.89 2.744c.144.146.144.44 0 .585L3.29 5.89z" fill="#FFF" fill-rule="evenodd"/>
+</svg>
+]]> &nbsp;Contact Us
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="4" largeDeviceSize="4" padding="around-small">
+                <span class="slds-float_right">{!$Label.c.PC_Footer_Label}</span>
+            </lightning:layoutItem>
+        </lightning:layout>        
+    </div>
+    
+</aura:component>

@@ -1,0 +1,136 @@
+<template>
+    <div style="display: none;" >
+        {recordId}
+    </div>
+    <!--div style="max-width: 1100px; "    -->
+        <template if:true = {isRecordId}>            
+            <lightning-card>
+                <div class="slds-scrollable" style="height:20rem;width:100%">
+                    <div>
+                        <div>
+                            <table aria-describedby="conatact-list" class="slds-table slds-table_cell-buffer slds-table_bordered">                            
+                                <!--Header of the table-->
+                                <thead>
+                                    <tr class="slds-line-height_reset">
+                                        <th class="" scope="col">
+                                            <div class="slds-truncate">
+                                                <lightning-input onchange={allSelected} type="checkbox"></lightning-input>
+                                            </div>
+                                        </th>
+                                        <th class="" scope="col">
+                                            <div class="slds-truncate " title="Select Payment Option">Select Payment Option</div>
+                                        </th>
+                                        <th class="" scope="col">
+                                            <div class="slds-truncate " title="Current SKU">Current SKU</div>
+                                        </th>
+                                        <th class="" scope="col">
+                                            <div class="slds-truncate " title="Target SKU">Target SKU</div>
+                                        </th>
+                                        <th class="" scope="col">
+                                            <div class="slds-truncate " title="List Price">List Price</div>
+                                        </th>
+                                        <th class="" scope="col">
+                                            <div class="slds-truncate " title="Target List Price">Target List Price</div>
+                                        </th>
+                                        <th class="" scope="col">
+                                            <div class="slds-truncate " title="Discount">Discount</div>
+                                        </th>
+                                        <th class="" scope="col">
+                                            <div class="slds-truncate " title="Net Total">Net Total</div>
+                                        </th>
+                                        <th class="" scope="col">
+                                            <div class="slds-truncate " title="Target Net Total">Target Net Total</div>
+                                        </th>
+                                        <th class="" scope="col">
+                                            <div class="slds-truncate " title="Asset Serial Number">Asset Serial Number</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+        
+                                <!--Body of the table-->
+                                <tbody>
+                                    <template for:each={quoteLineProductList} for:item="quoteLineWrapper" for:index="indexVar">
+                                        <tr key={quoteLineWrapper.quoteLine.Id} class="slds-hint-parent">
+                                            <td class="">
+                                                <div>
+                                                    <lightning-input type="checkbox" value={quoteLineWrapper.quoteLine.Name} data-id={quoteLineWrapper.quoteLine.Id} data={quoteLineWrapper.quoteLine} disabled={quoteLineWrapper.disableCheckbox}></lightning-input>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <template if:true={quoteLineWrapper.displayComboBox}>
+                                                    <lightning-combobox
+                                                        value={quoteLineWrapper.quoteLine.Product_Payment_Option__c}
+                                                        placeholder="Switch Payment Option"
+                                                        options={paymentOptions}
+                                                        onchange={handlePaymentOptionPickList}
+                                                        name={quoteLineWrapper.quoteLine.Id}>
+                                                    </lightning-combobox>
+                                                </template>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    {quoteLineWrapper.quoteLine.SBQQ__Product__r.Name}
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    {quoteLineWrapper.targetSku}
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    <lightning-formatted-number value={quoteLineWrapper.currentListPrice} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    <lightning-formatted-number value={quoteLineWrapper.targetListPrice} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    {quoteLineWrapper.quoteLine.Approval_Discount__c}%
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    <lightning-formatted-number value={quoteLineWrapper.quoteLine.SBQQ__NetTotal__c} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    <lightning-formatted-number value={quoteLineWrapper.targetNetTotal} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    <!--lightning-textarea name="assetSerialNumber" disabled="true" readonly value={quoteLineWrapper.quoteLine.SBQQ__SubscribedAssetIds__c} label="" ></lightning-textarea-->
+                                                    {quoteLineWrapper.quoteLine.Subscribed_Asset_Name__c}                                                
+                                                </div>
+                                            </td>                                        
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <lightning-card>
+                    <div class="slds-form-element buttons slds-text-align_center">
+                        <lightning-button variant="brand" label="Cancel" title="Primary action" onclick={handleCancel} class="slds-m-left_x-small"></lightning-button>
+                        <lightning-button variant="brand" label="Save" title="Primary action" onclick={handleSave} class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                </lightning-card>
+                <div class="slds-m-around_large">
+                    <div if:true={isShowSpinner}>
+                        <lightning-spinner
+                                style="z-index: 0;"
+                                alternative-text="Loading..." variant="brand">
+                        </lightning-spinner>
+                    </div>
+                </div>
+            </lightning-card>
+        </template>
+    <!--/div-->
+
+</template>

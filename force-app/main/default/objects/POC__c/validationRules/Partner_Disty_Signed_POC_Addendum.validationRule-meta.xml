@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Partner_Disty_Signed_POC_Addendum</fullName>
+    <active>true</active>
+    <description>When POC Agreement is No, Partner/Disty Signed POC Addendum field becomes required</description>
+    <errorConditionFormula>(
+ISPICKVAL( POC_Agreement__c,&apos;No&apos;)
+)
+&amp;&amp;
+ISPICKVAL( Partner_Disty_Signed_POC_Addendum__c,&quot;&quot;)</errorConditionFormula>
+    <errorDisplayField>Partner_Disty_Signed_POC_Addendum__c</errorDisplayField>
+    <errorMessage>Since a POC Agreement not signed, Did Partner/Disty signed POC Addendum?</errorMessage>
+</ValidationRule>

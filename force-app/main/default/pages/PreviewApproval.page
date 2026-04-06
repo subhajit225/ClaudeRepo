@@ -1,0 +1,30 @@
+<apex:page standardController="SBQQ__Quote__c" extensions="QuoteApprovalController" sidebar="false" standardStylesheets="false" title="Submit Quote for Approval">
+    <apex:stylesheet value="{!$Resource['PreviewApprovalCss']}"/>
+    <style>
+        body .pbBody {
+            background-color: #F8F8F8 !important;
+        }
+    </style>
+    <apex:pageMessages />
+    <apex:form rendered="{!SBQQ__Quote__c.id!= null}">
+        
+        <div id="sbPreviewApprovals" class="sb" >
+            <sbaa:pageHeader title="Preview Approvals" subtitle="{!SBQQ__Quote__c.Name}" formFactor="desktop" iconName="sf-icon-approval">
+                <div class="sbButtons">
+                    <apex:commandButton styleClass="sbBtn" value="Return To Quote" action="{!cancel}" immediate="true"/>
+                </div>
+            </sbaa:pageHeader>
+        </div><br/>
+        <div id="sbPreviewApprovals" class="sb" style="height:20px;font-size: larger;" >
+        <!--div id="dealDeskMapping" name="dealDeskMapping" style="height: 30px;font-size: larger;"-->
+            <a id="theLink" name="theLink" href="{!$Label.Deal_Desk_FY25_H2_Mapping}">
+               <!-- href="https://docs.google.com/spreadsheets/d/1P6P38nAWpRx6c_aTvjKLbROCuusN30bC8MvYn_yUT9o/edit?gid=812756108#gid=812756108" -->
+            Deal Desk FY25 H2 Mapping</a>
+        </div><br/>
+        <apex:pageBlock mode="maindetail">
+            <apex:pageBlockSection columns="1" showHeader="false">
+                <sbaa:approvalPreview approvals="{!approvals}"/>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,131 @@
+<template>
+    <template if:true={showHideSandboxFeedback}>
+        <div class="su__loading-view">
+            <template if:true={thanksModalValue}>
+                <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+                    class="slds-modal slds-fade-in-open sandbox-feedbackOverlay">
+                    <div
+                        class="feedbackThanksModal su__d-flex  su__flex-hcenter  su__flex-column su__position-absolute su__shadow-lg su__bg-white su__radius-1 su__mx-auto su__zindex-2">
+                        <div class="su__svg-ok">
+                            <svg class="ft-green-tick su__animate-zoom su__mr-2" height="40" width="40"
+                                viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                                <circle class="su__circle" fill="#5bb543" cx="24" cy="24" r="22"></circle>
+                                <path class="su__tick" fill="none" stroke="#FFF" stroke-width="6" stroke-linecap="round"
+                                    stroke-linejoin="round" stroke-miterlimit="10" d="M14 27l5.917 4.917L34 17"></path>
+                            </svg>
+                        </div>
+                        <div class="su__feed-title su__font-14 su__text-black su__word-break">Thanks for your feedback
+                        </div>
+                    </div>
+                </section>
+            </template>
+            <template if:true={showHideWidgetValue}>
+                <div class="su__w-100 su__bg-white su__p-4 su__my-4 su__sm-shadow su__radius-1">
+                    <div class="su__text-center font-16 su__font-bold">SearchUnifyGPT Feedback</div>
+                    <div class="su__d-flex su__mt-4">
+                        <div class="su__w-40">How relevant was the generated response?</div>
+                        <div class="su__w-60 su__d-flex">
+                            <div class="su__d-flex su__flex-vcenter">
+                                <input type="radio" name="relevantResponseData" value="Relevant"
+                                    class="su__mr-1 su__radius-1 su__border-none su__cursor su__bg-blue"
+                                    onchange={handleOptionClick} /> <label for="Relevant"
+                                    class="su__mr-3">Relevant</label>
+                            </div>
+                            <div class="su__d-flex su__flex-vcenter">
+                                <input type="radio" name="relevantResponseData" value="Irrelevant"
+                                    class="su__mr-1 su__radius-1 su__border-none su__cursor su__bg-blue "
+                                    onchange={handleOptionClick} /> <label for="Irrelevant"
+                                    class="su__mr-3">Irrelevant</label>
+                            </div>
+                            <div class="su__d-flex su__flex-vcenter">
+                                <input type="radio" name="relevantResponseData" value="Misleading"
+                                    class="su__mr-1 su__radius-1 su__border-none su__cursor su__bg-blue "
+                                    onchange={handleOptionClick} /><label for="Misleading"
+                                    class="su__mr-3">Misleading</label>
+                            </div>
+                            <div class="su__d-flex su__flex-vcenter">
+                                <input type="radio" name="relevantResponseData" value="No response generated"
+                                    class="su__mr-1 su__radius-1 su__border-none su__cursor su__bg-blue "
+                                    onchange={handleOptionClick} />
+                                <label for="No response generated">No response generated</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="su__d-flex su__mt-4">
+                        <div class="su__w-40">Issue with the response -</div>
+                        <div class="su__w-60">
+                            <div class="su__d-flex su__flex-vcenter su__pb-1">
+                            <input type="radio" name="issueWithResponse"
+                                value="Generated response was relevant but top 5 search results were irrelevant"
+                                class="su__mr-2 su__radius-1 su__border-none su__cursor su__bg-blue"
+                                onchange={handleRadioChange} /> <label
+                                for="Generated response was relevant but top 5 search results were irrelevant"
+                                class="su__mr-3">Generated response was relevant but top 5 search results were
+                                irrelevant</label> <br>
+                            </div>
+                            <div class="su__d-flex su__flex-vcenter su__py-1">
+                                <input type="radio" name="issueWithResponse"
+                                    value="Both generated response and top 5 search results were irrelevant"
+                                    class="su__mr-2 su__radius-1 su__border-none su__cursor su__bg-blue "
+                                    onchange={handleRadioChange} /> <label
+                                    for="Both generated response and top 5 search results were irrelevant"
+                                    class="su__mr-3"> Both generated response and top 5 search results were
+                                    irrelevant</label>
+                            </div>
+                            <div class="su__d-flex su__flex-vcenter su__py-1">
+                                <input type="radio" name="issueWithResponse"
+                                    value="Generated response was not perfect but close to expectation"
+                                    class="su__mr-2 su__radius-1 su__border-none su__cursor su__bg-blue "
+                                    onchange={handleRadioChange} /><label
+                                    for="Generated response was not perfect but close to expectation" class="su__mr-3">
+                                    Generated response was not perfect but close to expectation</label>
+                            </div>
+                            <div class="su__d-flex su__flex-vcenter su__py-1">
+                                <input type="radio" name="issueWithResponse" value="None of the above"
+                                    class="su__mr-2 su__radius-1 su__border-none su__cursor su__bg-blue "
+                                    onchange={handleRadioChange} />
+                                <label for="None of the above"> None of the above</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="su__d-flex su__mt-4">
+                        <div class="su__w-40">Please share the expected document/response</div>
+                        <div class="su__w-60">
+                            <input class="su__w-100 su__sandbox-feedback" name="documentLink" maxlength="500"
+                                onchange={getGptDocLink} type="text"
+                                placeholder="Enter expected response or paste document link" />
+                        </div>
+                    </div>
+                    <div class="su__d-flex su__mt-4">
+                        <div class="su__w-40">Citations/reference links feedback</div>
+                        <div class="su__w-60 su__d-flex">
+                            <div class="su__d-flex su__flex-vcenter">
+                                <input type="radio" name="expectedDocumentResponse" value="Relevant"
+                                    class="su__mr-1 su__radius-1 su__border-none su__cursor su__bg-blue"
+                                    onchange={handleFeedbackOptionClick} /> <label for="Relevant"
+                                    class="su__mr-3">Relevant</label>
+                            </div>
+                            <div class="su__d-flex su__flex-vcenter">
+                                <input type="radio" name="expectedDocumentResponse" value="Irrelevant"
+                                    class="su__mr-1 su__radius-1 su__border-none su__cursor su__bg-blue "
+                                    onchange={handleFeedbackOptionClick} /> <label for="Irrelevant"
+                                    class="su__mr-3">Irrelevant</label>
+                            </div>
+                            <div class="su__d-flex su__flex-vcenter">
+                                <input type="radio" name="expectedDocumentResponse" value="Some of them were relevant"
+                                    class="su__mr-1 su__radius-1 su__border-none su__cursor su__bg-blue "
+                                    onchange={handleFeedbackOptionClick} /><label for="Some of them were relevant"
+                                    class="su__mr-3">Some of them were relevant</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="su__text-center">
+                        <button onclick={submitSandboxFeedback}
+                            class="su__mt-4 su__bg-black-50 su__bg-blue-grd su__text-white font-12 su__radius-1 su__border-none su__px-3 su__py-2 su__cursor su__d-inline-block">Submit
+                            feedback</button>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </template>
+</template>

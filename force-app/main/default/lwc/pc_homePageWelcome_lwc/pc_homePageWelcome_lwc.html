@@ -1,0 +1,23 @@
+<template>
+    <div class="slds-card border-none custom-welcome-banner no-style-slds-card">
+        <lightning-layout>
+            <lightning-layout-item size="12" small-device-size="6" medium-device-size="8" large-device-size="8">
+                <div class="slds-col slds-p-left_medium slds-p-around_x-large slds-p-horizontal_small">
+                    <span>
+                        <div class="slds-p-around_xxx-small">
+                            <h1 class="heading-58">{welcomeBanner}</h1>
+                        </div>
+                        <div class="slds-p-bottom-x-small">
+                            <p class="cardBodyDescription">{welcomeDescription}</p>
+                        </div>
+                    </span>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" small-device-size="6" medium-device-size="4" large-device-size="4">
+                <div>
+                    <c-pc_video-comp_lwc height="200" width="500" src={videoUrl}></c-pc_video-comp_lwc>
+                </div>
+            </lightning-layout-item>
+        </lightning-layout>
+    </div>
+</template>

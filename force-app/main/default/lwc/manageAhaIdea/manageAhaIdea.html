@@ -1,0 +1,104 @@
+<template>
+	<template lwc:if={showtabset}>
+		<div class="MainDiv">
+			<lightning-card>
+				<lightning-tabset active-tab-value={activeTab}>
+						<lightning-tab label="Search/Create Idea"  value="1" onactive={handleActive}>
+									<div class="InputFieldCss">
+									<lightning-input label="" value={inputValue} placeholder="Please enter an idea name, description, or ID to search for ideas, or write something to create an idea." onchange={handleInputChange}></lightning-input>
+									</div>
+									<br/>
+									<template lwc:if={showdiv}>
+										<div>
+										<lightning-datatable
+											key-field="Id"
+											data={tableData}
+											columns={columns}
+											class="tooltip"
+											onrowaction={getSelectedRowDetail}
+										>
+										</lightning-datatable>
+										</div> <br/>
+										<lightning-button class="buttoncss" variant="brand" label="Link Idea" onclick={linkIdea}></lightning-button>
+										<lightning-button class="buttoncss" variant="brand" label="Not Found Idea Related To Search? Create a New Idea" onclick={createNewIdea}></lightning-button>
+									</template>
+									<template lwc:if={showNoResultModal}>
+										<h2 class="NoResult"> <b>No Records Found... </b></h2> <br/>
+										<lightning-button class="buttoncss" variant="brand" label="Not Found Idea Related To Search? Create a New Idea" onclick={createNewIdea}></lightning-button>
+									</template>
+
+									<div if:true={loadspinner}>
+										<div class="exampleHolder">
+											<lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+										</div>
+									</div>
+						</lightning-tab>
+
+						<lightning-tab label="Unlink Idea"  value="2" onactive={handleActive}>
+							<lightning-card>
+								<template lwc:if={showIdeaDataTableForLinkedAhaIdea}>
+									<div>
+										<lightning-datatable
+											key-field="Id"
+											data={tableData}
+											columns={columns}
+											class="tooltip"
+											onrowaction={getSelectedRowDetail}
+										>
+										</lightning-datatable>
+									</div> <br/> <br/>
+
+									<lightning-button class="buttoncss" variant="brand" label="UnLink Idea" onclick={unlinkedAhaIdeaRecord}></lightning-button>
+								</template>
+
+								<template lwc:else>
+									<h2 class="NoResult"> <b>No records found... </b></h2>
+								</template>
+
+								<div if:true={loadspinner}>
+									<div class="exampleHolder">
+										<lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+									</div>
+								</div>
+							</lightning-card>
+						</lightning-tab>
+				</lightning-tabset>
+			</lightning-card>
+		</div>
+	</template>
+	<template lwc:if={opencreateform}>
+		<lightning-modal-header label="Create Aha Idea"></lightning-modal-header>
+			<lightning-modal-body>
+				<lightning-card>
+					<lightning-record-edit-form object-api-name={objectApiName}
+											onsuccess={handleSuccess}
+											density="Compact">
+						<lightning-messages>
+						</lightning-messages>
+						<div class="slds-grid slds-wrap">
+								<div if:true={loadspinner}>
+									<div class="exampleHolder">
+										<lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+									</div>
+								</div>
+								<!-- <lightning-input-field field-name={ForWorkspace} value={ForWorkspaceval} onchange={ideaRecordChangeVal}> </lightning-input-field> -->
+								<lightning-input-field field-name={name} value ={nameval} required="true" onchange={ideaRecordChangeVal}> </lightning-input-field>
+								<lightning-input-field field-name={IdeaDescription} value ={IdeaDescriptionval} required="true" onchange={ideaRecordChangeVal}> </lightning-input-field>
+								<lightning-input-field field-name={ProblemStatement} required="true" value={ProblemStatementval} onchange={ideaRecordChangeVal}> </lightning-input-field>
+								<lightning-input-field field-name={businessfield} required="true" value ={businessfieldval} onchange={ideaRecordChangeVal}> </lightning-input-field>
+								<lightning-input-field field-name={Proposed_Solution} value={Proposed_Solutionval} onchange={ideaRecordChangeVal}> </lightning-input-field>
+								<lightning-input-field field-name={ProductArea} required="true" value={ProductAreaval} onchange={ideaRecordChangeVal}> </lightning-input-field>
+								<lightning-input-field field-name={Priority} value={Priorityval} onchange={ideaRecordChangeVal}> </lightning-input-field>
+								<!-- <lightning-input-field field-name={ProductComponent} required="true" value={ProductComponentval} onchange={ideaRecordChangeVal}> </lightning-input-field> -->
+								<lightning-input-field field-name={EscalationIdea} value={EscalationIdeaval} onchange={ideaRecordChangeVal}> </lightning-input-field>
+								<lightning-input-field field-name={IdeaTags}  value={IdeaTagsval} onchange={ideaRecordChangeVal}> </lightning-input-field>
+								<lightning-input-field field-name={IdeaCategory}  value={IdeaCategoryval} onchange={ideaRecordChangeVal}> </lightning-input-field>
+						</div>
+					</lightning-record-edit-form>
+				</lightning-card>
+			</lightning-modal-body>
+		<lightning-modal-footer>
+			<lightning-button variant="brand" label="Create" onclick={handleCreateAhaIdea}></lightning-button>
+		</lightning-modal-footer>
+	</template>
+</template>

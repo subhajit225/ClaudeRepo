@@ -1,0 +1,125 @@
+<aura:component controller ="LtngAnnouncementListController" implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="newsList" type="list"/>
+    <aura:attribute name="TypeOptions" type="list"/>
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+    <aura:attribute name="selectedcateg" type="string" default="All"/>
+    <aura:attribute name="pageSize" type="Integer" default="10" access="global"/>
+    <aura:attribute name="pageNum" type="Integer" default="1"/>
+    <aura:attribute name="fromPage" type="Integer" />
+    <aura:attribute name="toPage" type="Integer" />
+    <aura:attribute name="lastPage" type="String"/>
+
+    <aura:attribute name="isSubscribed" type="Boolean"/>
+    <aura:attribute name="subLabel" type="String"/>
+    <aura:attribute name="RecordStart" type="integer"/>
+    <aura:attribute name="RecordEnd" type="integer"/>
+
+    <aura:attribute name="totalResults" type="integer"/>
+    <aura:attribute name="openDiv" type="boolean" default="false"/>
+
+    <aura:attribute name="categoryType_Article"  type="string" />
+    <aura:attribute name="clickedCateg"  type="string" default=""/>
+
+    <aura:attribute name="ModalOpen" type="boolean" default="false"/>
+    <aura:attribute name="isForums" type="boolean" default="false"/>
+
+    <ltng:require styles="{!$Resource.Gotham+'/Gotham/stylesheet.css'}"></ltng:require>
+
+    <div>
+        <div class ="slds-large-size--12-of-12 slds-Medium-size--9-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 articleList">
+            <div class="slds-grid slds-wrap">
+                <div class ="slds-large-size--3-of-12 slds-Medium-size--3-of-12 slds-small-size--3-of-12 slds-max-small-size--12-of-12 slds-max-x-small-hide dataCategoryDiv">
+                    <div class="slds-large-size--12-of-12 slds-Medium-size--9-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 categTitle">Categories</div>
+                    <div class="containter">
+                        <aura:iteration items="{!v.TypeOptions}" var="dc" indexVar="key">
+                            <!--CS21-696 : Using announcement filters on the Support Portal results in "No Records Found" : On click method changed-->
+                            <div onclick="{!c.changeCategWithoutReloading}" id="{!dc}" class="{!if(v.clickedCateg == dc,'dCateg specialEffect','dCateg')}">
+                                <span class="categName" id="{!dc}">{!dc}</span>
+                            </div>
+                        </aura:iteration>
+                    </div>
+                </div>
+                <div class = "slds-large-size--9-of-12 slds-Medium-size--9-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 outerListDiv" >
+                    <div class ="artListDiv">
+                        <div class ="slds-large-size--12-of-12 slds-Medium-size--9-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 articleHeading">
+                            <div class="slds-grid slds-wrap">
+                                <div class ="slds-large-size--9-of-12 slds-Medium-size--11-of-12 slds-small-size--9-of-12 slds-max-small-size--6-of-12 artHeading">
+                                    <aura:if isTrue="{!!v.isForums}">
+                                        {!v.categoryType_Article} Announcements
+                                        <aura:set attribute="else">
+                                            Forums
+                                        </aura:set>
+                                    </aura:if>
+                                </div>
+                            </div>
+                        </div>
+                        <aura:if isTrue="{!and(v.newsList!=null ,v.newsList.length!=0)}">
+                            <aura:iteration items="{!v.newsList}" var="kavlist" >
+                                <p class="paracls"><span class="titlesize">
+                                    <span style="{!if(kavlist.Alert__c == true,'','display:none;')}"><lightning:icon iconName="utility:warning" alternativeText="Warning!" />&nbsp;</span><a href="{!'announcementdetail?Id='+ kavlist.Id}" class="hrefcolor">  {!kavlist.Name}</a>
+                                    </span><br></br>
+                                    <span class="contentsize">
+                                        <a href="{!'announcementdetail?Id='+ kavlist.Id}" class="hrefcolor1"> <p class="contentparasize">  <aura:unescapedHtml value="{!kavlist.Summary__c}"  /></p></a>
+                                    </span><br></br><span class="datepadding">
+                                    <a href="{!'announcementdetail?Id='+ kavlist.Id}" class="hrefcolor1"> <p class="parafontsize">Created: <ui:outputDate value="{!kavlist.Created__c}"/>
+                                        <span class="">
+                                            &bull; Last Modified: <lightning:formattedDateTime value="{!kavlist.Last_Modified__c}" year="numeric" day="2-digit" month="short" timeZone="UTC"/>
+                                        </span>
+                                        </p></a>
+                                    </span>
+                                </p>
+                            </aura:iteration>
+                            <aura:set attribute="else">
+                                <p style="text-align:center;">No Records Found</p>
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                    <!-- Pagination Code-->
+                    <aura:if isTrue="{!and(v.totalResults!=0,v.totalResults>v.pageSize)}">
+                        <div class ="paginatinSection">
+                            <ul class="pagination">
+                                <li class="{!if(v.pageNum == 1, 'disabled', 'ntDistabled')}">
+                                    <lightning:button variant="base" label="Previous" title="Prev" onclick="{! c.pageChange }" disabled="{!if(v.pageNum == 1, true,false)}" class="{!if(v.pageNum == 1, 'hidden-xs privious disabled', 'hidden-xs privious ntDistabled')}" />
+                                </li>
+                                <span class ="NxtBtn">
+                                    <li>
+                                        <lightning:button variant="base" label="Next" title="Prev" onclick="{! c.nextPage }" disabled="{!if(v.totalResults le v.pageSize*v.pageNum, true, false)}" class="{!if(v.totalResults le v.pageSize*v.pageNum, 'hidden-xs nxt disabled', 'hidden-xs nxt ntDistabled')}" />
+                                    </li>
+                                </span>
+
+                            </ul>
+                        </div>
+                    </aura:if>
+
+                    <!-- End here -->
+
+                    <!-- Mobile View-->
+                    <div class ="mobileFilterDiv  slds-hide_large">
+                        <div id="myCategbar" class="categFilters">
+                            <div class ="closebtn">
+                                <button class=" test"  onclick ="{!c.closeCateg}">
+                                    X
+                                </button>
+                            </div>
+                            <a>
+                                <div class="slds-large-size--12-of-12 slds-Medium-size--9-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 categTitle">Categories</div>
+                                <div class="containter">
+                                    <aura:iteration items="{!v.TypeOptions}" var="dc" indexVar="key">
+                                        <div  onclick="{!c.changeCateg}" id="{!dc}" class="{!if(v.clickedCateg == dc,'dCateg specialEffect','dCateg')}">
+                                            <span class="categName" onclick="{!c.changeCateg}" id="{!dc}">{!dc}</span>
+                                        </div>
+                                    </aura:iteration>
+                                </div>
+
+                            </a>
+                        </div>
+                        <button class="navbar-toggle myMobileCategory"  onclick ="{!c.openCateg}" data-target="#knowledgeCategory" data-toggle="collapse" type="button" aria-expanded="true">
+                            <img src="{!$Resource.RubrikCommunityAssets +'/images/categFilter.png'}"/>
+                        </button>
+                    </div>
+                    <!-- End Here-->
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

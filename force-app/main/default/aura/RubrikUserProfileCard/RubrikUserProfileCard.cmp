@@ -1,0 +1,20 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" controller="RubrikUserProfileCardController"
+                access="global">
+    
+    <aura:attribute name="userDetails" type="Map" />
+    <aura:attribute name="userId" type="String" access="global" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <div class="">
+        <p class="name">{!v.userDetails.fullName}</p>
+        <p class="points">
+            {!v.userDetails.reputationName}&nbsp;&#8226;&nbsp;{!v.userDetails.reputationPoints}&nbsp;
+            <aura:if isTrue="{!v.userDetails.reputationPoints > 1}">Points
+            </aura:if>
+            <aura:if isTrue="{!v.userDetails.reputationPoints == 1}">
+                Point
+            </aura:if>
+            <aura:if isTrue="{!v.userDetails.isModerator}">&#8226;&nbsp;Rubrik Moderator</aura:if>
+        </p>
+    </div>
+</aura:component>

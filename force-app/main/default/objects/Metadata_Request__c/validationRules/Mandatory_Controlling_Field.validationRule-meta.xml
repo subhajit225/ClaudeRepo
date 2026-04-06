@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Mandatory_Controlling_Field</fullName>
+    <active>true</active>
+    <description>CS21-2646</description>
+    <errorConditionFormula>AND(
+    INCLUDES(Object__c, &apos;Case&apos;), 
+    ISPICKVAL(Field__c , &apos;Software Version&apos;), 
+    ISBLANK(Controlling_Product_Lines__c)   
+)</errorConditionFormula>
+    <errorDisplayField>Controlling_Product_Lines__c</errorDisplayField>
+    <errorMessage>Kindly select at least one controlling product line if the Case object is chosen.</errorMessage>
+</ValidationRule>

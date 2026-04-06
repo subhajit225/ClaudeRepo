@@ -1,0 +1,343 @@
+<template>
+    <!--FILTER WINDOW  -->
+    <div class="filter-section">
+
+        <div data-id="divblockTest" class="divblockTest">
+            <div class={filterscroll}>
+                <!-- section visible if showFilter is false -->
+                <template if:true={showFilterOrSticky}>
+                    <div class ={dynamicClass}>
+                    <div class="su__align-items-center su__pb-2 su__d-flex su__justify-content-center su__position-relative">
+                        <div class="su__position-absolute su__left-5">
+                           
+                                <lightning-button-icon icon-name="utility:close" variant="bare" size="medium"
+                                    alternative-text="Close" onclick={handleFilterBox} title="Close"></lightning-button-icon>
+                  
+                        </div>
+                        
+                            <div class="slds-col slds-size_8-of-12 slds-align_absolute-center headerText">
+                                {showFilterOrStickyLabel}
+                            </div>
+        
+                        <template if:true={showClearFiltersButton}>
+                            <div class="su__position-absolute su__right-10">
+                                <div class="slds-clearfix">
+                                    
+                                        <label onclick={clearFilterForSlider}
+                                            class="su__clear-filters-btn su__cursor su-clear-filters-button-screen su__p-0 su__loading-view">
+                                            {translationObject.Clear_all}
+                                        </label>
+                                    
+                                </div>
+                            </div>
+                        </template>    
+                    </div>
+                </div>
+                </template>
+                <template if:true={showFilter}>
+                    <template iterator:filter={aggregationsData}>
+                        <div key={filter.value.Id} data-key={filter.value.key} if:false={filter.first}>
+                            <template if:true={filter.value.hasValues}>
+                                <div class="su__filter-div su__d-flex su__flex-column" >
+                                    <div class="su__w-100 su__position-relative su-filter-box-legend su__flex-vcenter su__bg-white clearfix">
+                                        <template if:true={filter.value.post_Time_Enable}>
+                                            <div class="su__backdrop su__d-none" onclick={closePopup}></div>
+                                            <div class="su__sort-filter-icon su__d-flex su__pr-2 su__mr-1 su__rtlmr-0 su__rtlml-1 su__px-1 su__cursor su__loading-view" data-id={filter.index} onclick={filtersPopup}>
+                                                <svg class="su__fill-gray su__fill-hover-gray" title="sort filter" width="4" height="16" xmlns="http://www.w3.org/2000/svg">
+                                                    <g>
+                                                        <rect id="clip-Save_as_bookmark_list-1" fill="none" height="402" width="582" y="-1" x="-1" />
+                                                    </g>
+                                                    <g>
+                                                        <title>{translationObject.Sort_By}</title>
+                                                        <path id="Shape-1" d="m2,4c1.1,0 2,-0.9 2,-2c0,-1.1 -0.9,-2 -2,-2c-1.1,0 -2,0.9 -2,2c0,1.1 0.9,2 2,2l0,0zm0,2c-1.1,0 -2,0.9 -2,2c0,1.1 0.9,2 2,2c1.1,0 2,-0.9 2,-2c0,-1.1 -0.9,-2 -2,-2l0,0zm0,6c-1.1,0 -2,0.9 -2,2c0,1.1 0.9,2 2,2c1.1,0 2,-0.9 2,-2c0,-1.1 -0.9,-2 -2,-2l0,0z" />
+                                                    </g>
+                                                </svg>
+                                            </div>
+                                            <div class={filter.value.filterisCollapsed}>
+                                                <ul class="su__p-0 su__m-0 su__lg-shadow su__loading-view">
+                                                    <li
+                                                        class="font-12 su__color-lblue su__text-black su__font-bold su__flex-vcenter su__justify-content-left su__px-4 su__py-2">
+                                                        <div class="bg-sort"></div>
+                                                        <span class="su__color-lblue">
+                                                            {translationObject.Sort_By}
+                                                        </span>
+                                                    </li>
+                                                    <template if:true={filter.value.enable_Custom_Sort}>
+                                                        <li data-id={index} class={filter.value.customSortingClass}
+                                                            data-item={filter.value.key} data-sort="custom"
+                                                            onclick={filterSorting}>
+                                                            {translationObject.Custom}
+                                                        </li>
+                                                    </template>
+                                                    <li data-id={index} class={filter.value.term_ascSortingClass}
+                                                        data-item={filter.value.key} data-sort="term_asc"
+                                                        onclick={filterSorting}>
+                                                        {translationObject.Alphabetically__a_z_}
+                                                    </li>
+                                                    <li data-id={index} class={filter.value.term_descSortingClass}
+                                                        data-item={filter.value.key} data-sort="term_desc"
+                                                        onclick={filterSorting}>
+                                                        {translationObject.Alphabetically__z_a_}
+                                                    </li>
+                                                    <li data-id={index} class={filter.value.count_descSortingClass}
+                                                        data-item={filter.value.key} data-sort="count_desc"
+                                                        onclick={filterSorting}>
+                                                        {translationObject.Count__desc_}
+                                                    </li>
+                                                    <li data-id={index} class={filter.value.count_ascSortingClass}
+                                                        data-item={filter.value.key} data-sort="count_asc"
+                                                        onclick={filterSorting}>
+                                                        {translationObject.Count__asc_}
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </template>
+                                        <div class="su__d-flex su__w-100 su__cursor su__text-semi-gray" data-id={filter.value.key} onclick={handleInsideFilters}>
+                                            <div class="su__filter-title su__text-truncate font-14 su__font-bold su__mr-3 su__rtlml-3 su__rtlmr-0 su__loading-view">
+                                                {filter.value.label}
+                                            </div>
+                                            <div class="su__filter-icon su__radius-50 su__cursor su__position-relative su__loading-view">
+                                                <div class="su__filter-arows su__outline-none su__position-absolute">
+                                                    <i class="su__arrow-down"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="filterDiv">
+                                        <div class="panel" data-id={filter.value.collapseExampleEmptyID}>
+                                            <div class={filter.value.filterNonExpanded} data-id={filter.value.expanded_Id}>
+                                                <template for:each={filter.value.values} for:item="filterValue"
+                                                    for:index="index">
+                                                    <div class="filterValues" key={filterValue.Id}>
+                                                        <div class="slds-clearfix su__flex-vcenter">
+                                                            <div class="su__overflow-hide">
+                                                                <div class="slds-clearfix su__flex-vcenter">
+                                                                    <template if:true={filterValue.showChild}>
+                                                                        <div class={defaultFilterCollapseCheckUp_Arrow}
+                                                                            data-id={filterValue.collapseExampletoggleIconID}>
+                                                                            <lightning-icon icon-name="utility:chevronright"
+                                                                                alternative-text="Utility chevronright"
+                                                                                size="xx-small"
+                                                                                onclick={collapseFilters}
+                                                                                data-id={filterValue.collapseExampleID}>
+                                                                            </lightning-icon>
+                                                                        </div>
+                                                                        <div class={defaultFilterCollapseCheckDown_Arrow}
+                                                                            data-id={filterValue.collapseExampletoggleIconOffID}>
+                                                                            <lightning-icon icon-name="utility:chevrondown"
+                                                                                alternative-text="Utility chevrondown"
+                                                                                size="xx-small"
+                                                                                onclick={collapseFilters}
+                                                                                data-id={filterValue.collapseExampleID}>
+                                                                            </lightning-icon>
+                                                                        </div>
+                                                                    </template>
+                                                                    <div>
+                                                                        <lightning-input type="checkbox"
+                                                                            class="su__loading-view su__cursor"
+                                                                            data-id={filterValue.uniqueId}
+                                                                            key={filterValue.Id} variant="label-hidden"
+                                                                            label="headerCheckbox"
+                                                                            onchange={headerCheckoxChanged}
+                                                                            data-order={filter.value.order}
+                                                                            name={filterValue.Contentname}
+                                                                            data-key={filter.value.key}
+                                                                            data-max={filterValue.level}
+                                                                            data-name={filterValue.Contentname}
+                                                                            data-step={filter.value.key}
+                                                                            value={filterValue.selected}
+                                                                            checked={filterValue.selected}
+                                                                            data-displayname={filterValue.displayName}
+                                                                            data-contentname={filterValue.Contentname}
+                                                                            data-econtentname={filterValue.encodedContentname}
+                                                                            data-label={filter.value.label}></lightning-input>
+                                                                    </div>
+                                                                    <div class="su__text-truncate-custom su__mr-3 su__loading-view su__updated-filter"
+                                                                        key={filterValue.Id}>
+                                                                        <template if:true={filterValue.displayName}>
+                                                                                <lightning-formatted-rich-text value={filterValue.displayName}>
+                                                                                </lightning-formatted-rich-text>
+                                                                        </template>
+                                                                            <template
+                                                                                if:true={filterValue.displayNameNOTAvailable}>
+                                                                                <lightning-formatted-rich-text value={filterValue.Contentname}>
+                                                                                </lightning-formatted-rich-text>
+                                                                        </template>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="su__loading-view su__margin-left-auto su__line-height-n">
+                                                                <p key={filterValue.Id}>{filterValue.value}</p>
+                                                            </div>
+                                                        </div>
+                                                        <!-- added for child -->
+                                                        <div class="su__d-none" data-id={filterValue.collapseExampleEmptyID}>
+                                                            <template if:true={filterValue.showChild}>
+
+                                                                <c-s-u_-nested-filter event-code={eventCode}
+                                                                    value={filterValue.childArray} parent={filterValue}>
+                                                                </c-s-u_-nested-filter>
+
+                                                            </template>
+                                                        </div>
+                                                        <!-- Ended added for child -->
+                                                    </div>
+                                                </template>
+                                            </div>
+                                            <template if:true={filter.value.filtersMoreThan9}>
+                                                <div class="su__showmore su__show-more su__cursor su__bg-white font-12 su__flex-vcenter showMoreDiv su__mt-1"
+                                                    data-id={filter.value.showmorefacetIcon}>
+                                                    <template if:true={filter.value.filtervalues}>
+                                                        <span class="su__flex-vcenter su__d-flex su__show-more su__d-none su__loading-view" data-id={filter.value.showMoreOrder} onclick={showMore}>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="18.183" height="18.183" viewBox="0 0 18.183 18.183">
+                                                                <path fill="none" d="M0,0H18.183V18.183H0Z"/>
+                                                                <path fill="#a8aab7" d="M9.576,2a7.576,7.576,0,1,0,7.576,7.576A7.579,7.579,0,0,0,9.576,2Zm3.031,8.334H10.334v2.273a.758.758,0,0,1-1.515,0V10.334H6.546a.758.758,0,1,1,0-1.515H8.819V6.546a.758.758,0,0,1,1.515,0V8.819h2.273a.758.758,0,1,1,0,1.515Z" transform="translate(-0.485 -0.485)"/>
+                                                            </svg>
+                                                            <span class="su__ml-1">{translationObject.Show_more}</span>
+                                                        </span>
+                                                        <span class="su__flex-vcenter su__d-flex su__show-less su__d-none su__loading-view" data-id={filter.value.showMoreOrder} onclick={showMore}>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4 11H8c-.55 0-1-.45-1-1s.45-1 1-1h8c.55 0 1 .45 1 1s-.45 1-1 1z" fill="#a8aab7"/></svg>
+                                                            <span class="su__ml-1 su__rtlmr-3">{translationObject.Show_less}</span>
+                                                        </span>
+                                                    </template>
+                                                    <template if:true={filter.value.keytype}>
+                                                        <div class="su__search-head-icon su__search-facet-head-icon su__radius-50 su__cursor su__loading-view">
+                                                            <svg data-id={filter.value.facetFilterId} data-index={filter.index} onclick={searchFilters} class={filter.value.facetFilterClass} viewBox="0 0 24 24" width="18px" height="18px">
+                                                                <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+                                                                    fill="#59BEFE" />
+                                                            </svg>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </template>
+                                            <div class="su__facet-parent-div su__d-none" data-index={filter.index} >
+                                                <div class="su__w-100" data-id={filter.value.facetIconId}>
+                                                    <span class="su__search-facet su__loading-view">
+                                                        <div class="su__mb-sm-0 su__loading-view su__position-relative"
+                                                            data-id={filter.value.facetSearchId}>
+                                                            <lightning-button-icon icon-name="utility:search" size="x-small"
+                                                                alternative-text="search" class="slds-m-left_xx-small search-icon-static">
+                                                            </lightning-button-icon>
+                                                            <input type="text" onkeyup={searchFilterController}
+                                                                data-id={filter.value.facetSearchInput}
+                                                                class={filter.value.filterSuggestClass} placeholder="Search"
+                                                                name={filter.value.facetIconId}/>
+                                                            <lightning-button-icon icon-name="utility:close" size="x-small"
+                                                                alternative-text="close" class={filter.value.facetIconClass}
+                                                                data-id={filter.value.facetCloseId} onclick={filterClose}>
+                                                            </lightning-button-icon>
+                                                        </div>
+                                                    </span>
+                                                </div>
+                                                <div class="su__facet-main-div">
+                                                    <template if:false={filter.suggestionLength}>
+                                                        <div class={facetdrop} id={filter.value.key} data-index={filter.index} onmouseleave={mouseleft}>
+                                                            <template for:each={filter.value.filterSuggestions}
+                                                                for:item="filterSuggest" for:index=indexVar>
+                                                                <div class="su__search-facet-filter-div su__filter-group font-14 hover__effect su__search-facet-items"
+                                                                    key={filterSuggest.Contentname}>
+                                                                    <div class="su__flex-vcenter su__search_facet-list">
+                                                                        <div
+                                                                            class="su__position-relative su__filter-checkbox su__loading-view">
+                                                                            <input type="checkbox"
+                                                                                data-accesskey={filter.value.order}
+                                                                                name={filterSuggest.Contentname}
+                                                                                value={filterSuggest.Contentname}
+                                                                                key={filter.value.key}
+                                                                                data-max={filterSuggest.level}
+                                                                                class={filter.value.filterSuggestItemClass}
+                                                                                id={filterSuggest.filterSuggestItemId}
+                                                                                onclick={headerCheckoxChanged}
+                                                                                data-step={filter.value.key}
+                                                                                checked={filterSuggest.selected}
+                                                                                data-name={filterSuggest.Contentname}
+                                                                                data-label={filter.value.label} />
+                                                                            <label class={filter.value.filterSuggestLabelClass}
+                                                                                for={filterSuggest.filterSuggestItemId}>
+                                                                                <span class="su__toggle__text"></span>
+                                                                                <span
+                                                                                    class="su__nested__text su__loading su__d-none su__position-absolute"></span>
+                                                                            </label>
+                                                                        </div>
+                                                                        <div class="su__filter-label su__text-truncate font-12 su__mr-3 su__rtlml-3 su__rtlmr-0 su__loading-view"
+                                                                            title={filterSuggest.Contentname}>
+                                                                            <label>
+                                                                                <template if:true={filterSuggest.displayNameAvailable}>
+                                                                                    {filterSuggest.displayName}
+                                                                                </template>
+                                                                                <template if:false={filterSuggest.displayNameAvailable}>
+                                                                                    {filterSuggest.Contentname}
+                                                                                </template>
+                                                                            </label>
+                                                                        </div>
+                                                                        <div class="su__filter-badge font-12">
+                                                                            <label
+                                                                                class="label-badge su__bg-light-gray su__loading-view notranslate">
+                                                                                {filterSuggest.value}
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </template>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                </template>
+                <div class ={dynamicClass}> 
+                <template if:true={showAllStickyFacets}>
+                    <div id="sticky-box" class={stickyClass}>
+                        <template for:each={selectedStickyFilter} for:item="filterType" for:index="index">
+                            <div class="su__sticky-row su__flex-vcenter su__flex-wrap su__pb-2 su__align-items-start"
+                                key={filterType.label}>
+                                <span
+                                    class="su__sticky__head font-12 su__color-lgray su__font-bold su__mr-2 su__loading-view"
+                                    data-label={filterType.label} >
+                                    <!--{!v.finalLang.filterType.label ? v.finalLang.filterType.label : filterType.label}:-->
+                                    {filterType.label}
+                                    <!-- <template if:false={filterType.wildCardData}>
+                                        :
+                                    </template> -->
+                                </span>
+                                <template for:each={filterType.values} for:item="filterValue" for:index="ind">
+                                    <span class="su__flex-vcenter su__radius su__border su__mb-1 su__mr-1 su__sticky"
+                                        key={filterValue}>
+                                        <span
+                                            class="su__sticky__filters su__cursor font-12 su__px-1 su__text-black su__text-nowrap su__loading-view su__close-icon-txt su__text-normal su__flex-vcenter su__position-relative">
+                                            <!--{!(v.finalLang.filterValue.sticky_name || v.finalLang.filterValue.displayName || v.finalLang.filterValue.Contentname) ? (v.finalLang.filterValue.sticky_name || v.finalLang.filterValue.displayName || v.finalLang.filterValue.Contentname)  : (filterValue.sticky_name || filterValue.displayName || filterValue.Contentname)}-->
+                                            {filterValue.sticky_name}
+                                        </span>
+                                        <span
+                                            class="su__cursor font-10  su__px-1 su__text-black  su__text-nowrap su__loading-view su__close-icon-txt su__text-normal su__flex-vcenter su__position-relative"
+                                            data-label={filterType.label} data-contentname={filterValue.Contentname}
+                                            data-type={filterType.key} data-level={filterValue.level}
+                                            data-immediate-parent={filterValue.immediateParent}
+                                            data-path={filterValue.pathString} onclick={removeStickyFilter}>
+                                            X
+                                        </span>
+                                    </span>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+            </div>
+            </div>
+            <template if:true={showFilterOrSticky}>
+                <div class="slds-m-top_small slds-align_absolute-center showResultsButton">
+                    <div class ={dynamicClass}>  
+                    <lightning-button label="Show Results" data-id="showresults" vairant="brand" onclick={handleFilterBox}>{translationObject.Show_Results}
+                    </lightning-button>
+                </div>
+                </div>
+            </template>
+        </div>
+        <!-- Ended addition here-->
+    </div>
+</template>

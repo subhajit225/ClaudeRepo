@@ -1,0 +1,63 @@
+<apex:component controller="DownloadController">
+
+
+<apex:attribute type="string" description="the id of the product being shown" name="versionidstring" assignTo="{!releaseId}"/>
+ 
+       <apex:repeat value="{!Entitlements}" /> 
+       <apex:outputPanel >
+       <apex:dataTable value="{!ReleaseSoftwareV}" var="swarev" styleClass="table" columns="7" rendered="{!IF(ReleaseSoftwareV.size !=null, TRUE, FALSE)}">
+       
+        <apex:column headerValue="Name" >
+        <apex:outputtext value="{!swarev.Release__r.Name}" />
+        </apex:column>
+
+        <apex:column headerValue="Type" >
+        <apex:outputfield value="{!swarev.Product_Type__c}"/>
+        </apex:column>
+
+        <apex:column headerValue="Date">
+        <apex:outputtext value="{0, date, short}">
+        <apex:param value="{!swarev.Release__r.Release_Date__c}"></apex:param>
+        </apex:outputtext>
+        </apex:column>
+        
+        <apex:column headerValue="Release Type" >
+        <apex:outputfield value="{!swarev.Release_Type__c} "/>
+        </apex:column>
+
+        <apex:column headerValue="Bytes">
+        <apex:outputfield value="{!swarev.Bytes__c}"/>
+        </apex:column>
+
+        <apex:column headerValue="MD5" >
+        <apex:outputtext value="{!swarev.MD5__c}"/>
+        </apex:column>
+
+        <apex:column headerValue="" style="width:20%;">
+          <a data-toggle="modal" data-target="#softwareModal{!swarev.id}" target="_blank" class="speciallinks">Download</a>
+        </apex:column>
+
+        </apex:dataTable>
+
+
+    <apex:repeat value="{!ReleaseSoftwareV}" var="sware"  rendered="{!IF(ReleaseSoftwareV.size !=null, TRUE, FALSE)}">
+        <!-- Modal -->
+                <div class="modal fade" id="softwareModal{!sware.id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Accept EULA</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <apex:iframe src="/AcceptEULA?softwareid={!sware.id}"/>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </apex:repeat>
+    </apex:outputPanel>
+
+</apex:component>

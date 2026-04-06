@@ -1,0 +1,65 @@
+<template>
+    <template if:false={mergedresults}>
+        <template if:true={totalresults}>
+            <div data-id="pagination" class="hide1">
+                <div class="su__w-100 su__pagination-section su__mt-4">
+                    <div class={paginationClass}>
+                        <template if:true={showResultPerPage}>
+                            <div class="su__d-inline-block perPage su__position-relative">
+                                <div class="resultsPerPage su__loading-view su__cursor su__radius-1 su__mr-3  font-12 su__font-regular su__pr-2 su__pl-2 su__pt-1 su__pb-1 su__margin-bottom-10"
+                                    onclick={toggleResultsPerPage}>
+                                    <span class="su__text-black su__pr-2">{translationObject.Results_per_page} :</span>{pagesize}
+                                    <svg class="su__ml-1" xmlns="http://www.w3.org/2000/svg" width="10" height="5" viewBox="0 0 14.06 8.285">
+                                        <path fill="#818181" d="M8.562,9.366l4.882,4.882,4.882-4.882A1.254,1.254,0,0,1,20.1,11.139l-5.775,5.775a1.253,1.253,0,0,1-1.774,0L6.776,11.139a1.253,1.253,0,0,1,0-1.774A1.28,1.28,0,0,1,8.562,9.366Z" transform="translate(-6.407 -8.998)"/>
+                                    </svg>
+                                    <span class="pageSize_dropdown  su__arrow-icons su__d-inline-block"></span>
+                                </div>
+                                <div data-id="formBlock" class="mainFormDiv">
+                                    <div
+                                        class="resultsPerPage su__zindex-2  pageSize su__bg-white su__position-absolute su__d-inline-block font-12 su__radius-1 su__font-regular su__pr-2 su__pl-2 su__pt-1 su__pb-1">
+                                        <div data-accesskey="10" onclick={onSelectChange} class="su__cursor">10</div>
+                                        <div data-accesskey="20" onclick={onSelectChange} class="su__cursor">20</div>
+                                        <div data-accesskey="30" onclick={onSelectChange} class="su__cursor">30</div>
+                                        <div data-accesskey="40" onclick={onSelectChange} class="su__cursor">40</div>
+                                        <div data-accesskey="50" onclick={onSelectChange} class="su__cursor">50</div>
+                                    </div>
+                                    <div class="su-bg-overlay su__bg-transparent" onclick={toggleResultsPerPage} role="button" tabindex="0"></div>
+                                </div>
+                            </div>
+                        </template>
+                        <div class="alignPaginationList su__loading-view">
+                            <div class="">
+                                <lightning-button icon-name="utility:chevronleft" data-id="previous-page" class="su__pagination-previous-last"
+                                    icon-position="left" onclick={pageChanged} disabled={disablePrevious}></lightning-button>
+                            </div>
+                            <div class="cmakeFlex">
+                                <template if:true={pageGreaterThanFour}>
+    
+                                    <span class="pagination" data-id="previous-Dots"
+                                        onclick={pageChanged}>
+                                        ...
+                                    </span>
+                                </template>
+                                <div class="su__d-flex">
+                                    <template for:each={paginationlist} for:item="paginationNumber">
+                                        <button onclick={pageChanged} data-id="paginationButton" key={paginationNumber}
+                                            value={paginationNumber}
+                                            class="pageButton pagination">{paginationNumber}</button>
+                                    </template>
+                                </div>
+                                <template if:true={pageGreaterThanEqualToOne}>
+                                    <span class="pagination" data-id="next-Dots" onclick={pageChanged}>
+                                        ...
+                                    </span>
+                                </template>
+                                <lightning-button icon-name="utility:chevronright"
+                                    class="su__pagination-previous-last" icon-position="right" data-id="next-page" onclick={pageChanged}
+                                    disabled={disableNext}></lightning-button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </template>
+</template>

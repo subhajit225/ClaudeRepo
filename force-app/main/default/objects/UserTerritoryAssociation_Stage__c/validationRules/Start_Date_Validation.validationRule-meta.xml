@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Start_Date_Validation</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(ISPICKVAL(SQL_Operation__c, &quot;Add&quot;), ISBLANK(Start_Date__c))</errorConditionFormula>
+    <errorDisplayField>Start_Date__c</errorDisplayField>
+    <errorMessage>Start Date must be entered for Add SQL operation</errorMessage>
+</ValidationRule>

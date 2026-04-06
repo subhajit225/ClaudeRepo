@@ -1,0 +1,248 @@
+<template>
+  <div class={flexipageregionwidth} onmouseleave={mouseoutfromcard}>
+    <template if:true={showFistTime}>
+      <div class="tooltip_background"></div>
+    </template>
+    <div class="slds-box">
+      <div class="card_item d-flex">
+        <div class="d-flex card_inner_top_content">
+          <div class="inner_top_main_content d-flex">
+            <div class="">
+              <lightning-avatar variant="circle" src={item.SmallPhotoUrl} fallback-icon-name="standard:person_account"
+                alternative-text={item.Owner.Name}></lightning-avatar>
+            </div>
+            <div class="name_truncate">
+              <div class="slds-truncate article_username owner_name">
+                <div class="slds-popover slds-popover_tooltip slds-nubbin_top-left" role="tooltip">
+                  <div class="owner_name_tooltip">{item.Owner.Name}</div>
+                </div>
+                <div class="owner_name_label">{item.Owner.Name}</div>
+              </div>
+              <div class="article_number">{item.ArticleNumber}</div>
+            </div>
+          </div>
+          <!-- for copying -->
+          <input disabled class="copytoclipboardinput" style="position: fixed; top: -5rem; height: 1px; width: 10px" />
+          <!-- for copying -->
+          <div class="d-flex inner_top_right_content">
+            <template if:true={item.sentForReview}>
+              <div class="tooltip_parent" style="margin-right:6.6px">
+                <div class="tooltip_content" role="tooltip">
+                  Sent for Review
+                </div>
+                <svg xmlns="http://www.w3.org/2000/svg" width="22.485" height="20.877" viewBox="0 0 22.485 20.877">
+                  <g id="Group_20418" data-name="Group 20418" transform="translate(5922 6781.184)">
+                    <g id="Review" transform="translate(-5922 -6779.399)">
+                      <path id="Path_18375" data-name="Path 18375"
+                        d="M17.41,13.882a.7.7,0,0,0-.7-.7H9.028a.7.7,0,0,0,0,1.4h7.683A.7.7,0,0,0,17.41,13.882Z"
+                        transform="translate(-2.719 -7.714)" fill="#36b7ff" />
+                      <path id="Path_18376" data-name="Path 18376"
+                        d="M9.026,17.729a.7.7,0,1,0,0,1.4H13.1a.7.7,0,1,0,0-1.4Z" transform="translate(-2.719 -8.731)"
+                        fill="#36b7ff" />
+                      <path id="Path_18377_review" data-name="Path 18377"
+                        d="M20.393,12.343a.7.7,0,0,0-.7.7V18.69a1.919,1.919,0,0,1-1.917,1.917H13.106a.7.7,0,0,0-.42.14L8.652,23.781a.219.219,0,0,1-.247.019.222.222,0,0,1-.126-.211l.078-2.258a.7.7,0,0,0-.7-.723H4.414A1.919,1.919,0,0,1,2.5,18.691V9.456A1.922,1.922,0,0,1,4.414,7.532H13.02a.7.7,0,0,0,0-1.4H4.414A3.322,3.322,0,0,0,1.1,9.457v9.234a3.319,3.319,0,0,0,3.314,3.315H6.935l-.053,1.538A1.629,1.629,0,0,0,9.49,24.9l3.848-2.894h4.438a3.318,3.318,0,0,0,3.314-3.315V13.042a.7.7,0,0,0-.7-.7Z"
+                        transform="translate(-1.1 -6.135)" fill="#36b7ff" />
+                    </g>
+                    <g id="check-box_15219921" transform="translate(-5908.807 -6780.184)">
+                      <path id="Path_18379" data-name="Path 18379"
+                        d="M11.1,13.167a.7.7,0,0,1-.543-.233L8.233,10.606A.768.768,0,0,1,9.319,9.52L11.1,11.3l3.868-4.256a.768.768,0,0,1,1.086,1.086l-4.411,4.8A.7.7,0,0,1,11.1,13.167Z"
+                        transform="translate(-7 -7.816)" fill="#36b7ff" />
+                    </g>
+                  </g>
+                </svg>
+              </div>
+            </template>
+            <div
+              class="slds-dropdown-trigger slds-dropdown-trigger_click edit_button slds-is-open knowbler__salesforce-dropdown-trigger-parent"
+              data-id={cardindex}>
+              <template if:true={showFistTime}>
+                <div class="slds-popover slds-popover_tooltip slds-nubbin_top-right">
+                  <div class="tooltip_text">
+                    Click here to find out additional options.
+                  </div>
+                  <div class="tooltip_button" onclick={hidePopup}>OK</div>
+                </div>
+              </template>
+              <template if:true={isPublished}>
+                <div class="tooltip_parent">
+                  <div class="tooltip_content" role="tooltip">
+                    Published
+                  </div>
+                  <svg id="letter_13426185" xmlns="http://www.w3.org/2000/svg" width="18.55" height="18.559"
+                    viewBox="0 0 18.55 18.559">
+                    <path id="Path_18377" data-name="Path 18377"
+                      d="M19,2.748a.4.4,0,0,1,.423.657L9.949,12.878,3.336,10.433a.976.976,0,0,1,0-1.812Z"
+                      transform="translate(-2.725 -2.72)" fill="#53b483" />
+                    <path id="Path_18378" data-name="Path 18378"
+                      d="M13.481,20.668l-2.446-6.612L20.59,4.5a.4.4,0,0,1,.657.424L15.293,20.668a.977.977,0,0,1-1.811,0Z"
+                      transform="translate(-2.725 -2.72)" fill="#53b483" />
+                  </svg>
+                </div>
+              </template>
+              <template if:true={isDraft}>
+                <div class="tooltip_parent">
+                  <div class="tooltip_content" role="tooltip">
+                    Draft
+                  </div>
+                  <svg id="notes_3799708" xmlns="http://www.w3.org/2000/svg" width="20.332" height="20.332"
+                    viewBox="0 0 20.332 20.332">
+                    <path id="notes_3799708-2" data-name="notes_3799708"
+                      d="M13.088,7.488,7.894,12.673a.794.794,0,0,0-.2.331l-.95,3.126a.8.8,0,0,0,.972,1l3.206-.888a.8.8,0,0,0,.349-.2l5.185-5.177a2.383,2.383,0,0,0-3.369-3.37ZM10.3,14.763l-1.613.447.472-1.554,3.776-3.769,1.123,1.123Zm5.037-5.029-.154.154L14.058,8.765l.153-.153a.794.794,0,0,1,1.124,1.123Zm3.409,3.45V3.177a1.588,1.588,0,0,0-1.588-1.588H6.949a1.6,1.6,0,0,0-1.127.47L1.96,5.957h3.2a.794.794,0,0,0,.794-.794V3.971a.794.794,0,1,1,1.588.019V5.162A2.383,2.383,0,0,1,5.162,7.545H1.588v9.61a1.588,1.588,0,0,0,1.588,1.588H17.155a1.6,1.6,0,0,0,1.589-1.6.794.794,0,0,1,.8-.784.814.814,0,0,1,.789.834,3.181,3.181,0,0,1-3.177,3.138H3.177A3.177,3.177,0,0,1,0,17.155V6.969A3.177,3.177,0,0,1,.925,4.728L4.694.939A3.2,3.2,0,0,1,6.949,0H17.155a3.177,3.177,0,0,1,3.177,3.177v9.988A.794.794,0,1,1,18.744,13.184Z"
+                      transform="translate(0 0)" fill="#7e34ec" />
+                  </svg>
+                </div>
+              </template>
+
+
+              <template if:false={ispublisharticletab}>
+                <div class="edit-article" onclick={openCloseDropdown}>
+                  <img src={editArticle} alt="Error to load" />
+                </div>
+                <template if:true={item.showDropdown}>
+                  <div class="slds-dropdown slds-dropdown_right">
+                    <ul class="slds-dropdown__list" role="menu" aria-label="Show More">
+                      <li class="slds-dropdown__item" role="presentation" onclick={openSubTab}>
+                        <div class="manage_salesforce">
+                          <img src={manage} class="manage_salesforce_icon" alt="failed to load" />
+                          Manage in Salesforce
+                        </div>
+                      </li>
+                      <template if:true={showEdit}>
+                        <li onclick={openEdit}>
+                          <div class="edit_article">
+                            <img src={edit} class="manage_salesforce_icon" alt="failed to load" />
+                            Edit Article
+                          </div>
+                        </li>
+                      </template>
+                    </ul>
+                  </div>
+                </template>
+              </template>
+              <template if:true={ispublisharticletab}>
+                <div class="edit-article" onclick={openCloseDropdown}>
+                  <img src={editArticle} alt="Error to load" />
+                </div>
+                <template if:true={item.showDropdown}>
+                  <div class="slds-dropdown slds-dropdown_right">
+                      <ul class="slds-dropdown__list publishmenu" role="menu" aria-label="Show More">
+                        <template if:false={caseclosed}>
+                          <template if:false={articleattached}>
+                            <li class="slds-dropdown__item" role="presentation" onclick={openmodal}>
+                              <div class="edit_article attach">
+                                <img src={attachtocaseimg} class="manage_salesforce_icon" alt="failed to load" />
+                                Attach to case
+                              </div>
+                            </li>
+                          </template>
+                          <template if:true={articleattached}>
+                            <li class="slds-dropdown__item" role="presentation" onclick={detacharticle}>
+                              <div class="edit_article attach">
+                                <img src={detachimg} class="manage_salesforce_icon detach" alt="failed to load" />
+                                Detach
+                              </div>
+                            </li>
+                          </template>
+                          <li class="slds-dropdown__item" role="presentation" onclick={copytoclipboard}>
+                            <div class="edit_article">
+                              <img src={copyimg} class="manage_salesforce_icon" alt="failed to load" />
+                              Copy to clipboard
+                            </div>
+                          </li>
+                          <li class="slds-dropdown__item" role="presentation" onclick={casecommentclicked}>
+                            <div class="edit_article">
+                              <img src={casecommentimg} class="manage_salesforce_icon" alt="failed to load" />
+                              Link via case comment
+                            </div>
+                          </li>
+                          <li class="slds-dropdown__item" role="presentation" onclick={caseemailclicked}>
+                            <div class="edit_article">
+                              <img src={emaillinkimg} class="manage_salesforce_icon" alt="failed to load" />
+                              Send link via email
+                            </div>
+                          </li>
+                          <li class="slds-dropdown__item" role="presentation" onclick={openSubTab}>
+                            <div class="edit_article">
+                              <img src={manage} class="manage_salesforce_icon" alt="failed to load" />
+                              Manage in Salesforce
+                            </div>
+                          </li>
+                        </template>
+                        <template if:true={caseclosed}>
+                          <li class="slds-dropdown__item" role="presentation" onclick={openSubTab}>
+                            <div class="edit_article" style="padding:0.3rem 0.1rem 0.3rem 0.1rem;">
+                              <img src={manage} class="manage_salesforce_icon" alt="failed to load" /> Manage in Salesforce
+                            </div>
+                          </li>
+                        </template>
+                      </ul>
+                    </div>
+                  </template>
+              </template>
+            </div>
+          </div>
+        </div>
+        <!-- Parent preview start-->
+        <div class="d-flex flex_direction_column Card_inner_mid_content">
+          <div class={getCardTitle} onclick={openManageArticle} onmouseover={mouseEnter}>
+            {item.Title}
+          </div>
+          <span class={getCardBox}>
+            <div class="slds-modal" onmouseleave={mouseOut} style="height: 600px; width: 470px">
+              <template if:true={showArticlePreview}>
+                <template if:true={item.RecordType}>
+                  <c-knowbler-parent-preview alldatacategories={alldatacategories} mappingfields={mappingfields}
+                    cmpvisible={cmpvisible} top={offsetTop} left={offsetLeft} postion={postion}
+                    recordtypeid={item.RecordTypeId} ranger-id={item.Id} destobj={destobj} item={item}
+                    onkeepopen={mouseEnter} is-article-exist={isArticleExist}></c-knowbler-parent-preview>
+                </template>
+                <template if:false={item.RecordType}>
+                  <c-knowbler-parent-preview alldatacategories={alldatacategories} mappingfields={mappingfields}
+                    cmpvisible={cmpvisible} top={offsetTop} left={offsetLeft} postion={postion} ranger-id={item.Id}
+                    destobj={destobj} item={item} is-article-exist={isArticleExist}></c-knowbler-parent-preview>
+                </template>
+              </template>
+            </div>
+          </span>
+        </div>
+        <!-- Parent preview end-->
+        <div class="d-flex card_inner_bottom_content article_card_bottom">
+          <template if:true={item.RecordType}>
+            <div class="article_type" title={item.RecordType.Name}>
+              {item.RecordType.Name}
+            </div>
+            <div class="article_dot">.</div>
+          </template>
+          <div class="card_calander">
+            <div class="slds-popover slds-popover_tooltip slds-nubbin_bottom-left" role="tooltip">
+              <div class="calander_tooltip">Last Modified Date</div>
+            </div>
+            <img src={calander} class="card_calender_img" alt="filed to Load" />
+            <div class="article_date">
+              <p>
+                <lightning-formatted-date-time value={item.LastModifiedDate} year="2-digit" month="short" day="2-digit"
+                  hour="2-digit" minute="2-digit" time-zone={timezone}></lightning-formatted-date-time>
+              </p>
+            </div>
+          </div>
+          <template if:true={item.duplicacyPercentage}>
+            <div class="knowbler__salesforce-matching-percentage">
+              <div class="percentage">{item.duplicacyPercentage}% Match</div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div lwc:dom="manual"></div>
+  <c-knowbler-modal-component isattach={isattach} client-settings={clientSettings} oncloseattach={closeattach}
+    onattachresolution={attachresolution} onattachreference={attachreference} ongotohome={gotohome} jwttoken={jwttoken}
+    endpoint={endpoint} casenumber={casenumber} caseid={caseId} commentclicked={commentclicked}
+    emailclicked={emailclicked} onclickedemail={clickedemail} onclickedcommentreference={clickedcommentreference}
+    onclickedemailreference={clickedemailreference} onclickedcommentresolution={clickedcommentresolution}
+    onclickedemailresolution={clickedemailresolution} kcslabel={kcslabel} draftarticlemode={draftarticlemode}>
+  </c-knowbler-modal-component>
+  <c-knowbler-send-link-via-email flexipageregionwidth={flexipageregionwidth} body={emailbody}
+    oncloseemailmodal={closeemailmodal} caseid={casedata} articleid={articleId} ishowmodal={ishowmodal}>
+  </c-knowbler-send-link-via-email>
+</template>

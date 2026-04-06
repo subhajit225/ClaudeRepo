@@ -1,0 +1,174 @@
+<template>
+   <!-- Slider button that opens date modal and checkbox that filters data-->
+   <div class="topButtons ag-filter-section su__ag-filter-div su__justify-content-between">
+      <div class="date-labels">
+         <template if:true={createdChecked}>
+            <label>Created Date: {createdStartDate} - {createdEndDate}</label>
+         </template>
+         <!-- <label ng-show="updated.selected">Updated Date: {{updated.startDate | date:'yyyy-MM-dd'}} - {{updated.endDate | date:'yyyy-MM-dd'}}</label> -->
+      </div>
+      <span>
+         <span class="closed-cases hide-320">
+            <lightning-input type="checkbox" style="margin-left: 5px;display: inline-block;" label="Closed Cases" checked={closedCases} onchange={handleClosedCases}></lightning-input>
+         </span>
+            <lightning-button-icon title="Filters" class="expert-filters" icon-name="utility:slider" onclick={openDateCaseModal}></lightning-button-icon>
+      </span>
+      <template if:true={DateCaseModalFlag}>
+         <div class="su__ag-filter-dropdown su__ag-filter-position">
+            <div class="su_listing-style">
+               <ul>
+                  <li>
+                     <lightning-input type="checkbox" checked={createdChecked} onchange={handleChangeCreatedDate} label="Created Date"></lightning-input>
+                     <template if:true={createdChecked}>
+                        <div class="dateCaseModalContent">
+                           <div class="calendars">Start Date:<input  type="date" data-id="createdStartDate" max={todaysDate} value={createdStartDate} onchange={handleCreatedDateChange}></input></div>
+                           <div class="calendars">End Date:<input  type="date" data-id="createdEndDate" min={createdStartDate} max={todaysDate} value={createdEndDate} onchange={handleCreatedDateChange}></input></div>
+                        </div>
+                     </template>
+                     <template if:false={createdChecked}>
+                        <div class="dateModalContent disableDateDiv">
+                           <div class="calendars">Start Date:<input type="date" value={createdStartDate} disabled></input></div>
+                           <div class="calendars">End Date:<input type="date" value={createdEndDate} disabled></input> </div>
+                        </div>
+                     </template>
+                  </li>
+                  <li class="show-320">
+                     <lightning-input type="checkbox" style="display: inline-block;" label="Closed Cases" checked={closedCases} onchange={handleClosedCases}></lightning-input>
+                  </li>
+               </ul>
+            </div>
+         </div>
+         <div class="slds-backdrop slds-backdrop_open su__ag-backdrop" onclick={openDateCaseModal} data-id="backdrop"></div>
+      </template>
+   </div>
+   <!-- Date Modal popup code -->
+   <div class="parent">
+         <!-- Data displayed in Top Related Cases tab -->
+      <template if:true={showRelatedCases}>
+         <div class="su-cases-info su-agent-section">
+            <template for:each={relatedCasesRecords} for:item="relatedCase" for:index="index">
+               <div class={relatedCase.listClass} key={relatedCase}>
+                  <template if:false={relatedCase.expanded}>  
+                     <div class="ag-list-subject su__cursor" onclick={expandInfoDiv} data-index={index}>
+                        
+                           <div class="title-hidden">
+                              <a href={relatedCase.previewUrl} target="_blank" >
+                                 <span title="Preview Case in Salesforce">
+                                    <svg id="Icon_awesome-eye" data-name="Icon awesome-eye" xmlns="http://www.w3.org/2000/svg" width="15" height="9" viewBox="0 0 15 11">
+                                       <path id="Icon_awesome-eye-2" data-name="Icon awesome-eye" d="M14.909,9.582A8.319,8.319,0,0,0,7.5,4.5,8.32,8.32,0,0,0,.091,9.582a1.01,1.01,0,0,0,0,.836A8.319,8.319,0,0,0,7.5,15.5a8.32,8.32,0,0,0,7.409-5.082A1.01,1.01,0,0,0,14.909,9.582ZM7.5,14.125A3.951,3.951,0,0,1,3.75,10,3.951,3.951,0,0,1,7.5,5.875,3.951,3.951,0,0,1,11.25,10,3.949,3.949,0,0,1,7.5,14.125Zm0-6.875a2.274,2.274,0,0,0-.659.109A1.474,1.474,0,0,1,6.718,9.14a1.163,1.163,0,0,1-1.62.135,2.884,2.884,0,0,0,1.018,3,2.313,2.313,0,0,0,2.907-.1,2.91,2.91,0,0,0,.844-3.062A2.524,2.524,0,0,0,7.5,7.25Z" transform="translate(0 -4.5)" fill="#707070"/>
+                                    </svg>
+                                 </span>
+                              </a>
+                              <span class="full-subject">
+                                 <a class="tooltip-title">{relatedCase.CaseSubject}
+                                    <span class="casesTitle">{relatedCase.CaseSubject}</span>
+                                 </a>
+                              </span>
+                           </div>
+                           <div class="ag-buttons">
+                              <template if:true={relatedCase.isAccountName}>
+                                 <button type="button" class="ag-button-title">Account: {relatedCase.AccountName}</button>
+                              </template>
+                           </div>
+                        
+                     </div>
+                  </template>
+                        <template if:true={relatedCase.expanded}>
+                           <div class="ag-list-subject su__cursor su__expandDiv-width">
+                                 
+                                    <div class="title-hidden">
+                                       <a href={relatedCase.previewUrl} target="_blank">
+                                          <span title="Preview Case in Salesforce">
+                                             <svg id="Icon_awesome-eye-3" data-name="Icon awesome-eye" xmlns="http://www.w3.org/2000/svg" width="15" height="9" viewBox="0 0 15 11">
+                                                <path id="Icon_awesome-eye-icon" data-name="Icon awesome-eye" d="M14.909,9.582A8.319,8.319,0,0,0,7.5,4.5,8.32,8.32,0,0,0,.091,9.582a1.01,1.01,0,0,0,0,.836A8.319,8.319,0,0,0,7.5,15.5a8.32,8.32,0,0,0,7.409-5.082A1.01,1.01,0,0,0,14.909,9.582ZM7.5,14.125A3.951,3.951,0,0,1,3.75,10,3.951,3.951,0,0,1,7.5,5.875,3.951,3.951,0,0,1,11.25,10,3.949,3.949,0,0,1,7.5,14.125Zm0-6.875a2.274,2.274,0,0,0-.659.109A1.474,1.474,0,0,1,6.718,9.14a1.163,1.163,0,0,1-1.62.135,2.884,2.884,0,0,0,1.018,3,2.313,2.313,0,0,0,2.907-.1,2.91,2.91,0,0,0,.844-3.062A2.524,2.524,0,0,0,7.5,7.25Z" transform="translate(0 -4.5)" fill="#707070"/>
+                                             </svg>
+                                          </span>
+                                       </a>
+                                       <span class="full-subject">
+                                          <a class="tooltip-title">{relatedCase.CaseSubject}
+                                             <span class="casesTitle">{relatedCase.CaseSubject}</span>
+                                          </a>
+                                       </span>   
+                                    </div>
+                                 
+                           </div>
+                           <div class="su-cases-info su-agent-section">   
+                              <div class="case-details">
+                                 <span class="account-name">
+                                    <template if:true={relatedCase.isAccountName}>
+                                             <span class="agent-name">Account: </span>
+                                             <span class="su__text-truncate account-name-width">{relatedCase.AccountName}</span>
+                                    </template>
+                                 </span>
+                                 <span class="show-320">
+                                    <span class="icon-margin-right">
+                                       <a href={relatedCase.previewUrl} target="_blank">
+                                          <span title="Preview Case in Salesforce">
+                                             <svg id="Icon_awesome-eye-4" data-name="Icon awesome-eye" xmlns="http://www.w3.org/2000/svg" width="15" height="9" viewBox="0 0 15 11">
+                                                <path id="Icon_awesome-eye-icon-5" data-name="Icon awesome-eye" d="M14.909,9.582A8.319,8.319,0,0,0,7.5,4.5,8.32,8.32,0,0,0,.091,9.582a1.01,1.01,0,0,0,0,.836A8.319,8.319,0,0,0,7.5,15.5a8.32,8.32,0,0,0,7.409-5.082A1.01,1.01,0,0,0,14.909,9.582ZM7.5,14.125A3.951,3.951,0,0,1,3.75,10,3.951,3.951,0,0,1,7.5,5.875,3.951,3.951,0,0,1,11.25,10,3.949,3.949,0,0,1,7.5,14.125Zm0-6.875a2.274,2.274,0,0,0-.659.109A1.474,1.474,0,0,1,6.718,9.14a1.163,1.163,0,0,1-1.62.135,2.884,2.884,0,0,0,1.018,3,2.313,2.313,0,0,0,2.907-.1,2.91,2.91,0,0,0,.844-3.062A2.524,2.524,0,0,0,7.5,7.25Z" transform="translate(0 -4.5)" fill="#707070"/>
+                                             </svg>
+                                          </span>
+                                       </a>
+                                       </span>   
+                                    <span>{relatedCase.CaseSubject}</span>
+                              </span>
+                                 <span class="agent-info">
+                                    <span class="cases-count-div">
+                                       <span class="case-date-color">Case Created: </span>
+                                       <span class="case-padding-right">{relatedCase.caseCreated} </span>
+                                    </span>
+                                    <span class="cases-count-div"> 
+                                       <span class="case-date-color">{relatedCase.closedLabel}</span>
+                                       <span>{relatedCase.closedSince}</span>
+                                    </span>   
+                                    <button class="arrow-up-button" onclick={expandInfoDiv} data-index={index}>
+                                       <svg height="10.399" viewBox="0 0 17.65 10.399" width="10.65" fill="#56C6FF">
+                                          <path d="M14.946,9.937,8.817,3.81,2.689,9.937A1.575,1.575,0,0,1,.462,7.711L7.712.462a1.573,1.573,0,0,1,2.227,0l7.25,7.249a1.573,1.573,0,0,1,0,2.227A1.607,1.607,0,0,1,14.946,9.937Z" transform="translate(17.65 10.399) rotate(180)">
+                                          </path>
+                                       </svg>
+                                    </button>
+                                 </span> 
+                              </div>
+                           
+                              <template if:true={relatedCase.ownerAndComments}>
+                                 <div class="case-agent-details">
+                                    <template if:true={relatedCase.ownerExists}>
+                                       <div class="su__flex-vcenter-2"> 
+                                          <div> 
+                                             <a href={relatedCase.CaseId} target="_blank" class="su__flex-vcenter"> 
+                                             <img class="agent-icon-img"  src={relatedCase.Icon} /></a>
+                                          </div>
+                                          <div class="su__flex-vcenter-3" >        
+                                             <label class="agent-name agent-name-1 text-name-width" title={relatedCase.OwnerName}>{relatedCase.OwnerName}
+                                             </label>
+                                             <svg xmlns="http://www.w3.org/2000/svg" width="7.311" height="11" viewBox="0 0 7.311 7.311">
+                                                <template if:true={relatedCase.isActive}>
+                                                      <ellipse id="Ellipse_361" data-name="Ellipse 36" cx="3.656" cy="3.656" rx="3.656" ry="3.656" fill="#00b81e"/>
+                                                </template>
+                                                <template if:false={relatedCase.isActive}>
+                                                      <ellipse id="Ellipse_362" data-name="Ellipse 36" cx="3.656" cy="3.656" rx="3.656" ry="3.656" fill="#9A9898"/>
+                                                </template>
+                                             </svg>
+                                             <label class="agent-desigantion su__text-truncate" title={relatedCase.OwnerTitle}>{relatedCase.OwnerTitle}</label>
+                                          </div>
+                                       </div>
+                                    </template>
+                                    <template if:true={relatedCase.isLastCommentPresent}>
+                                       <label class="agent-comment">Last Comment By Agent: </label>
+                                       <label>{relatedCase.LastCommentByAgent}</label>
+                                    </template>
+                                 </div> 
+                              </template>
+                           
+                           </div> 
+                        </template>
+               </div>
+               
+            </template>
+         </div>
+      </template>
+      <template if:false={showRelatedCases}>
+         <c-s-u_-no-results-template></c-s-u_-no-results-template>
+      </template>
+   </div>
+</template>

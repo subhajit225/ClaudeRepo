@@ -1,0 +1,61 @@
+<apex:page standardController="Opportunity" extensions="ContentController" lightningStylesheets="true" docType="html-5.0">
+    <apex:slds rendered="{!$User.UITheme != 'Theme3'}"/> 
+<script>
+function CheckUpload(chooseFile1,chooseFile2){
+        
+        var chooseFile1Element = document.getElementById(chooseFile1).value;
+        var chooseFile2Element = document.getElementById(chooseFile2).value;
+    
+    
+        if(!(chooseFile1Element == '' || chooseFile2Element == '') && chooseFile1Element != null && chooseFile2Element != null && chooseFile1Element.toLowerCase() == chooseFile2Element.toLowerCase()){
+            alert('Please select "Sizing Presentation" and "Sizing Response" file type while uploading more than one files')
+        }else{
+            if(chooseFile1Element == '' && chooseFile2Element == ''){
+                alert('Please choose a single file type to proceed or press cancel to return back to opportunity')
+            }else{
+                Upload();
+                alert('Uploading your documents.....Please wait')
+            }
+        }
+    
+    
+}
+</script>
+<apex:form >
+<apex:pageBlock >
+    <br/>
+    <center>
+    <apex:pageMessages ></apex:pageMessages>
+    <font size="4px"><b>Please Upload Sizing Presentation and Sizing Response files below</b></font>
+    <br/> <br/>
+    <table border="2x" >
+        <tr>
+            <td style="padding:5px">
+                <apex:selectList id="chooseFile1" value="{!FM1.fileName}" size="1">
+                    <apex:selectOption itemValue="" itemLabel="--None--"/>
+                    <apex:selectOption itemValue="Sizing Presentation" itemLabel="Sizing Presentation"/>
+                    <apex:selectOption itemValue="Sizing Response" itemLabel="Sizing Response"/>
+                </apex:selectList> 
+            </td>
+            <td style="padding-left:10px;padding-top: 2px;"><apex:inputFile value="{!FM1.file}" contentType="{!FM1.contentType}" fileName="{!FM1.ContentfileName}"/></td>
+        </tr>
+         <tr>
+            <td style="padding:5px">
+                <apex:selectList id="chooseFile2" value="{!FM2.fileName}" size="1">
+                    <apex:selectOption itemValue="" itemLabel="--None--"/>
+                    <apex:selectOption itemValue="Sizing Presentation" itemLabel="Sizing Presentation"/>
+                    <apex:selectOption itemValue="Sizing Response" itemLabel="Sizing Response"/>
+                </apex:selectList> 
+            </td>
+            <td style="padding-left:10px;padding-top: 2px;"><apex:inputFile value="{!FM2.file}" contentType="{!FM2.contentType}" fileName="{!FM2.ContentfileName}"/></td>
+        </tr>
+    </table>
+    <br/>
+    <button type="button" class="slds-button slds-button_brand " onclick="CheckUpload('{!$Component.chooseFile1}','{!$Component.chooseFile2}')">Upload</button>
+    
+    <apex:actionFunction name="Upload" action="{!Upload}"/>
+    <apex:commandbutton action="{!back}" value="Cancel" />
+    </center>
+   </apex:pageBlock> 
+</apex:form>
+</apex:page>

@@ -1,0 +1,5 @@
+({
+	setCommentData : function(component){
+		
+	}
+})

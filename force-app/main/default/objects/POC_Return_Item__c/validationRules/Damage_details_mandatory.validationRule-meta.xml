@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Damage_details_mandatory</fullName>
+    <active>true</active>
+    <errorConditionFormula>Damage_Reported_by_the_customer__c &amp;&amp; ISBLANK (Damage_Details__c)</errorConditionFormula>
+    <errorMessage>Please fill the damage details</errorMessage>
+</ValidationRule>

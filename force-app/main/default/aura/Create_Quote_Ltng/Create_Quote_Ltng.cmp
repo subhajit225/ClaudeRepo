@@ -1,0 +1,42 @@
+<aura:component extends="c:LCC_GenericLightningComponent" controller="LCC_ButtonsController">
+    <aura:handler event="c:LCC_GenericApplicationEvent" action="{!c.execute}"/>
+    <aura:set attribute="partially" value="false"></aura:set>
+    <aura:attribute name="accountRec" type="Object" />
+    <aura:attribute name="quoteCount" type="Integer" default = "0" />
+    <aura:attribute name="QuotesRecds" type="Object" />
+    <aura:attribute name="showAlert" type="Boolean" default="false"/>
+    <aura:attribute name="oppLoaded" type="Boolean" default="false"/>
+    <aura:attribute name="alertText" type="String"/>
+    <aura:attribute name="showCmp" type="Boolean" default="false"/>
+    <aura:set attribute="isAdditionalObject" value="false"></aura:set>
+    <!--   <aura:handler name="change" value="{!v.QuotesRecds}" action="{!c.quoteChange}"/> -->
+
+    
+    <div>
+        <div class="slds-scrollable slds-p-around_medium slds-text-heading_small" id="modal-content-id-1">
+            <aura:if isTrue="{!v.showAlert}">
+                <p class="slds-hyphenate">{!v.alertText}</p>
+                <aura:set attribute="else">
+                    <div style="height: 6.75rem;">
+                        <div role="status" class="slds-spinner slds-spinner_large slds-spinner_brand">
+                            <span class="slds-assistive-text">Loading</span>
+                            <div class="slds-spinner__dot-a"></div>
+                            <div class="slds-spinner__dot-b"></div>
+                        </div>
+                    </div>
+                </aura:set>
+            </aura:if>
+            <br/>
+        </div>
+       
+     <!--   <aura:if isTrue="{!v.oppLoaded}">
+            <force:recordData aura:id="recordLoader"
+                              recordId="{!v.sObjectInfo.AccountId}"
+                              layoutType="FULL"
+                              targetFields="{!v.accountRec}"
+                              targetError="{!v.recordError}"
+                              recordUpdated="{!c.handleRecordUpdated}"/>
+        </aura:if>   
+        -->
+    </div>
+</aura:component>

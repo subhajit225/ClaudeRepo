@@ -1,0 +1,84 @@
+<aura:component controller="CCRAndPOCPendingApprovalController" implements="force:appHostable,flexipage:availableForAllPageTypes" access="global" >
+    <!-- attributes -->
+    <aura:attribute name="AllAccountList" type="List"/>
+    <aura:attribute name="PageAccountList" type="List"/>
+    <aura:attribute name="ErrorMsg" type="String"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="RecordsPerPageOption" type="Integer[]" default="5,10,15,20"/>
+    <aura:attribute name="selectedObjValue" type="String" default="All"/>
+    <aura:attribute name="options" type="List" />
+    <!-- Pagination Attributes-->
+    <aura:attribute name="RecordsPerPage" type="Integer" default="10"/>
+    <aura:attribute name="TotalRecords" type="Integer" />
+    <aura:attribute name="TotalPages" type="Integer" default="0"/>
+    <aura:attribute name="CurrentPageNumber" type="Integer" default="1"/>
+    
+    <!-- handlers-->
+    <aura:handler name="init" value="{!this}" action="{!c.getCcrPocRecords}"/>
+    
+    <div >
+        <div>
+        	<lightning:spinner aura:id="Spinner" alternativeText="Loading" size="medium" variant="brand"/>
+		</div>
+        
+        <div>
+            <aura:if isTrue="{! !empty(v.ErrorMsg)}">
+                <ui:message title="Error" severity="error" closable="true">
+                    {!v.ErrorMsg}
+                </ui:message>
+            </aura:if>
+        </div>
+        
+        <div >
+              <div class='slds-m-bottom_medium slds-box'>
+                    <lightning:select name="mySelect" label="Select Object" aura:id="mySelect" value="{!v.selectedObjValue}" onchange="{!c.getSelectedObjRecords}" class="slds-size_1-of-6">
+                         <aura:iteration items="{!v.options}" var="item">
+                            <option text="{!item.label}" value="{!item.value}" />
+                        </aura:iteration>
+                    </lightning:select>
+              </div>
+            <aura:if isTrue="{!v.TotalRecords > 0}">
+          
+                <!-- Select List-->
+                <!-- div class='slds-m-bottom_medium slds-box'>
+                    <lightning:select name="mySelect" label="Select Object" aura:id="mySelect" value="{!v.selectedObjValue}" onchange="{!c.getSelectedObjRecords}" class="slds-size_1-of-6">
+                         <aura:iteration items="{!v.options}" var="item">
+                            <option text="{!item.label}" value="{!item.value}" />
+                        </aura:iteration>
+                    </lightning:select>
+                </div-->
+                <!-- Select List-->
+                
+                <div class="slds-box">
+                    <lightning:datatable data="{!v.PageAccountList}"
+                                         columns="{!v.columns}" 
+                                         keyField="id" hideCheckboxColumn="true"/>	
+                </div>
+                
+                <div class="slds-grid slds-wrap slds-form_horizontal">   
+                    <div class="slds-float_center slds-col--padded slds-size--4-of-12">
+                        
+                        <lightning:select onchange="{! c.onChange }" name="select1" label="Show" required="true" value="{!v.RecordsPerPage}" >
+                            <aura:iteration items="{!v.RecordsPerPageOption}" var="num" >
+                                <option value="{!num}">{!num}</option>    
+                            </aura:iteration>
+                        </lightning:select>
+                    </div>
+                    <div class="slds-col--padded slds-m-top_small slds-size--4-of-12">
+                        <span>(Page {!v.CurrentPageNumber} of {!v.TotalPages})</span>
+                        <span class="slds-p-left_medium">(Total Records {!v.TotalRecords})</span>
+                    </div>
+                    <div class="slds-col--padded slds-size--4-of-12">
+                        <lightning:buttonGroup class="slds-float_right slds-m-top_xx-small ">
+                            <lightning:button label="First" onclick="{!c.onClickFirst}"/>
+                            <lightning:button label="Prev"  onclick="{!c.onClickPrev}" iconName="utility:back"/>
+                            <lightning:button label="Next"  onclick="{!c.onClickNext}" iconName="utility:forward"/>
+                            <lightning:button label="Last"  onclick="{!c.onClickLast}"/>
+                        </lightning:buttonGroup>
+                    </div>
+                </div> 
+            </aura:if>
+        </div>
+        
+    </div>
+</aura:component>

@@ -1,0 +1,22 @@
+<apex:page standardController="Escalation__c" extensions="EscalationManagementTeamController" showHeader="false" standardStylesheets="true" sidebar="false" docType="html-5.0" lightningStylesheets="true">
+    <apex:includeLightning />
+
+    <div id="LightningComponentid" />  
+      
+    <script>
+    $Lightning.use("c:NextStepsEscalationNotesApp", function() {
+        $Lightning.createComponent("c:customDataTable",
+          { 
+            tableName: 'Issue(s) Summary',
+            objectName: 'Note__c',
+            fieldSetName: 'ES_Issue_Summary',
+            recordId: '{!$CurrentPage.parameters.Id}',
+            filterStr: 'Escalation_Issue_Summary'
+          },
+          "LightningComponentid",
+          function(cmp) {
+             console.log('Issue(s) Summary LWC Componenet added in VF page');
+          });
+    });
+    </script>
+</apex:page>

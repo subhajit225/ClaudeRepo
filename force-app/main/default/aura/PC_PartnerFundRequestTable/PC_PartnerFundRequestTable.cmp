@@ -1,0 +1,99 @@
+<aura:component extends="c:PC_UtilityCmp" implements="forceCommunity:availableForAllPageTypes" access="global"
+    controller="PC_PartnerFundReqTableController">
+    <ltng:require styles="/resource/PartnerCommunityResource/Stylesheets/PartnerCommunityCSS.css"/>
+    <!-- Lightning Datatable Attributes -->
+    <aura:attribute name="pfList" type="List" default="[]"
+        description="contains list of Partner Fund Request records" />
+    <aura:attribute name="col" type="List" description="contains List of Column names and its type" />
+    <aura:attribute name="loadTable" type="Boolean" default="false"
+        description="flag variable used to show Table on page only after getting records from backend. Used only at page load." />
+    <aura:attribute name="returnFieldsinQuery" type="string"
+        default="Id,Activity,PO_Number__c,createddate,Request_Number__c,Title,Activity_Start_Date__c,Company__c,Status,Is_Expired__c,RequestedAmount,Submitted_by_Partner_Contact__c,FORMAT(Amount) Amount,ChannelPartnerId,TotalApprovedFcs,Activity_End_Date__c,MDF_Request_Closed__c"
+        description="field api names separated by comma" />
+    <aura:attribute name="objTypeinQuery" type="string" default="PartnerFundRequest" description="Object name" />
+    <!-- Lightning Datatable Attributes -->
+    <!-- Load more Attributes -->
+    <aura:attribute name="flag" type="Boolean" default="true"
+        description="to aviod multiple calls to backend which scrolling table" />
+    <aura:attribute name="IdSet" type="List" default="[]" description="contains Id of records which are queried" />
+    <aura:attribute name="totalSize" type="string" description="total size of records" />
+    <aura:attribute name="pageSize" type="Integer" default="20" description="page size of records to be shown" />
+    <aura:attribute name="loadMoreStatus" type="string"
+        description="tells whether if any data is present at back side to load" />
+    <!-- Load more Attributes -->
+    <!-- Sort Attributes -->
+    <aura:attribute name="sortedBy" type="String" default="createddate"
+        description="Field api name of field used in sorting" />
+    <aura:attribute name="sortedDirection" type="String" default="desc" description="sorting direction" />
+    <aura:attribute name="defaultSortDirection" type="String" description="default sort direction" />
+    <aura:attribute name="sortedByValue" type="String"
+        description="value of sorted field which is used to fetch next set of records" />
+    <!-- Sort Attributes -->
+    <!-- Search Attributes -->
+    <aura:attribute name="searchText" type="string" default="" description="contains search value" />
+    <!-- Search Attributes -->
+    <aura:attribute name="disableNewButton" type="Boolean" default="false"
+        description="to disable new button on the table" />
+    <!--PRIT24-517 start-->
+    <aura:attribute name="fiscalYearData" type="List" default="[]" />
+    <aura:attribute name="fiscalYearOptions" type="List" default="[]" />
+    <aura:attribute name="fiscalYear" type="String" default="" />
+    <aura:attribute name="startDate" type="String" default="" />
+    <aura:attribute name="endDate" type="String" default="" />
+    <aura:attribute name="accIds" type="List" default="[]" />
+    <!--PRIT24-517 end-->
+    <!--  Attribues section -->
+
+    <aura:handler name="init" value="this" action="{!c.doInit}" />
+    <aura:handler event="c:searchEvent" name="searchEventName" action="{!c.handlesearchEvent}" />
+
+    <lightning:card class="fund-req-card">
+        <div class="fund-table-heading">
+            <h1 class="heading-36 slds-m-bottom_large">Marketing Development Funds</h1>
+        </div>
+        <div class="demo-only demo-only--sizing slds-grid slds-wrap">
+            <div class="slds-size_1-of-4">
+                <div class="slds-m-around_x-small">
+                    <c:searchTableCmp searchText="{!v.searchText}"/>
+                </div>
+            </div>
+            <div class="slds-size_1-of-4">
+                <div class="slds-m-around_x-small">
+                    <lightning:combobox name="Fiscal Year" value="{!v.fiscalYear}" label="Fiscal Year"
+                        placeholder="Select Fiscal Year" options="{!v.fiscalYearOptions}"
+                        onchange="{!c.handleFiscalYearChange}"></lightning:combobox>
+                </div>
+            </div>
+            <div class="slds-size_1-of-4">
+                <div class="slds-m-around_x-small">
+                    <c:pc_accountHierarchy aura:id="accountHierarchy" onaccountfilter="{!c.handleAccountFilter}"/>
+                </div>
+            </div>
+            <div class="slds-size_1-of-4">
+                <div class="slds-float_right">
+                <label class="slds-form-element__label slds-transition-hide"> Search label</label>
+                <div class="slds-m-around_x-small slds-p-top_xx-small">
+                    
+                    <lightning:button variant="brand" label="Reset" title="Reset" onclick="{!c.handleReset}" class="slds-m-left_x-small"></lightning:button>
+                </div>
+            </div>
+            </div>
+        </div>
+        <p class="slds-p-horizontal_small">
+        <div id="myDIV" class="slds-p-top_large custom-table-wrapper custom-fund-req-table">
+            <aura:If isTrue="{!v.loadTable}">
+                <lightning:datatable data="{!v.pfList}" columns="{!v.col}" keyField="Id"
+                    onrowselection="{!c.handleSelectedRow}" sortedBy="{!v.sortedBy}"
+                    sortedDirection="{!v.sortedDirection}" defaultSortDirection="{!v.defaultSortDirection }"
+                    onsort="{!c.handleColumnSorting}" hideCheckboxColumn="true" minColumnWidth="100px"
+                    onrowaction="{!c.handleRowAction}" />
+                <div class="slds-align_absolute-center">
+                    {! v.loadMoreStatus }
+                </div>
+            </aura:If>
+        </div>
+        <br />
+        <br />
+        </p>
+    </lightning:card>
+</aura:component>

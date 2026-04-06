@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Check_based_on_Justification_Cohesity</fullName>
+    <active>true</active>
+    <description>Describe Sales Campaign field is required when Justification is Cohesity</description>
+    <errorConditionFormula>ISPICKVAL( Justifications__c ,&apos;Cohesity Specific Situation&apos;) &amp;&amp; ISBLANK(Describe_Sales_Campaign__c)</errorConditionFormula>
+    <errorDisplayField>Describe_Sales_Campaign__c</errorDisplayField>
+    <errorMessage>Describe Sales Campaign field is required when Justification is Cohesity</errorMessage>
+</ValidationRule>

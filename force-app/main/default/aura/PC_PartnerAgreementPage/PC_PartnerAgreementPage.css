@@ -1,0 +1,25 @@
+.THIS .disable { 
+    pointer-events: none; 
+    cursor: default; 
+}
+.THIS .customRequired{
+    font-weight: 400; 
+} 
+.THIS .customRequired:before{    
+    content: "*";
+    margin: 0 0.125rem 0 0.125rem;
+    color: rgb(194, 57, 52);
+    float: left; 
+} 
+.THIS .none{
+    display:none; 
+}
+.THIS .form-element__helpError {
+    color: rgb(194, 57, 52);
+}
+.THIS .slds-has-error [role=combobox] input[readonly] {
+    border-color: rgb(194, 57, 52);
+}
+.THIS .slds-p-around_medium{
+    height: 100% !important;
+}

@@ -1,0 +1,107 @@
+<template>
+  <div class={flexipageregionwidth}>
+    <template if:true={getSmallLayout}>
+      <div
+        onclick={openModal}
+        class="slds-p-vertical_x-small slds-grid slds-grid_vertical-align-center language_mobile_view"
+      >
+        <div
+          class="slds-popover slds-popover_tooltip slds-nubbin_top-right slds-p-horizontal_x-small slds-p-vertical_x-small"
+          role="tooltip"
+        >
+          <div class="language_tooltip">Language</div>
+        </div>
+        <div>
+          <img class="language_icon" src={articleLanguageIcon} />
+        </div>
+      </div>
+    </template>
+  </div>
+  <div class={flexipageregionwidth}>
+    <template if:false={getSmallLayout}>
+      <div onclick={openModal} class="langugae_outer d-flex">
+        <!-- <div class="slds-popover slds-popover_tooltip slds-nubbin_top-right" role="tooltip">
+          <div class="language_tooltip">Language</div>
+        </div> -->
+        <div class="language_icon">
+          <img class="language_icon_desktop" src={articleLanguageIcon} />
+        </div>
+        <template if:true={selectedLanguage}>
+          <div class="language_name">{selectedLanguage.label}</div>
+        </template>
+        <div class="dropdown_icon">
+          <img
+            src={arrowDown}
+            alt="failed to Load"
+            style="height: 6px; width: 30px; margin-top: 12px"
+          />
+        </div>
+      </div>
+    </template>
+  </div>
+
+  <template if:true={showModal}>
+    <div class={flexipageregionwidth}>
+      <div class="slds-backdrop slds-backdrop_open">
+        <div class="language_main">
+          <div class="language_inner d-flex">
+            <div class="select_language">Select Language</div>
+            <div class="cross_icon" onclick={closeModal}>
+              <img src={close} alt="Failed to load" />
+            </div>
+          </div>
+          <div class="language_drop_outer d-flex">
+            <template
+              for:each={pickListValues}
+              for:item="item"
+              for:index="currentIndex"
+            >
+              <div
+                class="language_dropdefault"
+                data-label={item.label}
+                data-id={currentIndex}
+                key={item.value}
+                onclick={selectLanguage}
+              >
+                {item.label}
+                <template if:true={item.isDefaultValue}>
+                  <span class="su_icon">
+                    <lightning-icon
+                      icon-name="utility:success"
+                      alternative-text="Approved"
+                      title="Approved"
+                      size="small"
+                      class="approvedicon"
+                    ></lightning-icon>
+                  </span>
+                </template>
+              </div>
+            </template>
+          </div>
+          <div class="language_buttondone" onclick={changeLanguage}>
+            <div class="language_textdone">Done</div>
+          </div>
+          <template if:true={displaywarning}>
+            <div class="knowbler__block1-wrapper">
+              <div class="block1">
+                <div class="oops">Oops...</div>
+
+                <p class="heading">
+                  Content health predictions are only supported for articles in
+                  English language
+                </p>
+                <div class="block2">
+                  You can self evaluate the content health for articles in other
+                  language
+                </div>
+                <div class="language_button" onclick={closeWarning}>
+                  <div class="language_text">OK</div>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+  </template>
+</template>

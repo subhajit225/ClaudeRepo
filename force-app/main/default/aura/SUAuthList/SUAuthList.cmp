@@ -1,0 +1,142 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" controller="su_vf_console.SUAuthentication" >
+  <aura:handler name="init" value="{!this}" action="{!c.doInitListComp}" />
+  <!--Client driven input varibales-->
+  <aura:attribute name="modalOpen" type="Boolean" default="true" access="global"/>
+  <aura:attribute name="pagesize" type="String" default="10" description="Used in the List page" access="global"/>
+  <aura:attribute name="pageHeaderTitle" type="String" default="View suggested articles" access="global"/>
+  <aura:attribute name="gotoSearchPageText" type="String" default="Go to search result page" access="global"/>
+  <aura:attribute name="noResultFoundMsg" type="String" default="Sorry, no results found." access="global"/>
+  <aura:attribute name="openNewTab" type="Boolean" default="false" access="global"/>
+  <aura:attribute name="advanceFilterData" type="Object" access="global"/>
+  <aura:attribute name="showMetadata" type="Boolean" access="global" default="false"/>
+  <aura:attribute name="showResultbody" type="Boolean" access="global" default="true"/>
+  <!--validate search request-->
+  <aura:attribute name="scConfigObj" type="Object" />
+  <aura:attribute name="searchString" type="String" default="" description="Used in the List page" access="global"/>
+  <aura:attribute name="ListCompautosuggestList" type="List" default=""/>
+  <aura:attribute name="currentCommunityURL" type="String" default="" />
+  <aura:attribute name="endPoint" type="String"/>
+  <aura:attribute name="uid" type="String"/>
+  <aura:attribute name="aggregation" type="String" default="[]" description="Used in the List page for category selected to be passed in the search query."/>
+  <aura:attribute name="delayCounter" type="Integer" default="0" />
+  <aura:attribute name="customSettingErrorMessage" type="String" />
+  <aura:attribute name="currentUserEmail" type="String" default=""/>
+  <aura:attribute name="loadingResult" type="Integer"/>
+  <aura:attribute name="totalResults" type="Integer"/>
+  <aura:attribute name="conversion" type="Boolean" default="false"/>
+  <aura:attribute name="Bearer" type="String" default="" />
+  <aura:attribute name="customSettingsFilled" type="Boolean" default="false" />
+  <aura:attribute name="showViewedResults" type="Boolean" default="false" />
+  <aura:attribute name="searchUnifyDownStatus" type="Boolean" default="false"/>
+  <aura:registerEvent name="cmpEvent" type="su_vf_console:fillSearchBox" access="global"/>
+  <aura:method name="suggestedResult" action="{!c.ListComponentautosearch}">
+    <aura:attribute name="data" type="String"/>
+  </aura:method>
+  <!-- <c:SUAuthHeaderDynamic aura:id="SuAnalytics" /> -->
+  <aura:if isTrue="{!v.customSettingsFilled}">
+    <c:SUAuthHeaderDynamic aura:id="SuAnalytics" endPoint="{!v.endPoint}" uid="{!v.uid}" currentUserEmail="{!v.currentUserEmail}" customSettingErrorMessage="{!v.customSettingErrorMessage}"/>    
+  </aura:if>
+  <div class="{!if(v.showViewedResults == true, 'su__viewed-results slds-grid slds-wrap', 'slds-grid slds-wrap')}">
+    <div id="su_listResult" class="slds-col slds-large-size--1-of-1 slds-small-size--1-of-1 slds-medium-size--1-of-1 ">
+      <div class="slds-col slds-large-size--1-of-1 slds-small-size--1-of-1 slds-medium-size--1-of-1 suListContainer nopad">
+	<aura:if isTrue="{!if(v.customSettingErrorMessage == '', true, false)}">
+	  <div class="slds-col slds-large-size--1-of-1 slds-small-size--1-of-1 slds-medium-size--1-of-1 su_listResult nopad">
+	    <aura:if isTrue="{!if(v.searchUnifyDownStatus == false,true,false)}">
+	    <span id="suggestions">
+	      <aura:if isTrue="{!if(v.totalResults == 0, true,false)}">
+		<div class="su_list_title">{!v.noResultFoundMsg}</div>
+	      </aura:if>
+	      <aura:if isTrue="{!if(v.totalResults > 0, true,false)}">
+		<div class="su_list_title">{!v.pageHeaderTitle}</div>
+		<div class="su_list_autocompleteDiv" id="ListCompautosuggestElement">
+		  <aura:iteration items="{!v.ListCompautosuggestList}" var="autosuggestItem" indexVar="indexVar">
+		    <div class="slds-col slds-large-size--1-of-1 slds-small-size--1-of-1 slds-medium-size--1-of-1 su_list_autoSuggest-element">
+
+		      <div class="su_list-search-icon">
+			<aura:if isTrue="{!if(autosuggestItem.icon, true,false)}">
+			  <img class="{!if(v.loadingResult == 1, 'su_ListResultImage','su_displayHide')}" src="{!autosuggestItem.icon}" title="{!autosuggestItem.objLabel}"/>
+			</aura:if>
+			<h5 class="su_list-search-title">
+			  <a class="{!if(v.loadingResult == 1, '','su_loadingDisguise')}" target="_blank" title="{!autosuggestItem.highlight.TitleToDisplayString}" accessKey="{!autosuggestItem.Id}" data-Id="{!autosuggestItem._id}" data-Rank="{!indexVar}"  data-url="{!autosuggestItem.href}" data-Sub="{!autosuggestItem.highlight.TitleToDisplayString}" data-Type="{!autosuggestItem.objName}" data-Index="{!autosuggestItem.sourceName}" data-trackAnalytics= "{!autosuggestItem.trackAnalytics}" onclick="{!c.openModal}">
+			    <aura:unescapedHtml value="{!autosuggestItem.highlight.TitleToDisplay}">
+			    </aura:unescapedHtml>
+			  </a>
+			</h5>
+		      </div>
+		      <aura:if isTrue="{!if((v.showMetadata || v.showResultbody ),true,false)}">
+			<div class="slds-col slds-large-size--1-of-1 slds-small-size--1-of-1 slds-medium-size--1-of-1 su_list_content nopad">
+
+			  <aura:if isTrue="{!v.showResultbody}">
+			    <aura:iteration items="{!autosuggestItem.highlight.SummaryToDisplay}" var="summary">
+			      <div class="{!if(v.loadingResult == 1, 'su-listsummary-section-child','su_loadingDisguise')}"><aura:unescapedHtml value="{!summary}"></aura:unescapedHtml></div>
+			    </aura:iteration>
+			  </aura:if>
+			  <!-- this code is for the metadata content-->
+			  <aura:if isTrue="{!v.showMetadata}">
+			    <aura:if isTrue="{!if(autosuggestItem.metadata.length > 0,true,false)}">
+			      <div class="suList-other-elements-section">
+				<aura:iteration items="{!autosuggestItem.metadata}" var="metadata">
+				  <aura:if isTrue="{!if(metadata.value.length > 0,true,false)}">
+				    <span class="{!if(v.loadingResult == 1, 'su_list-metadata','su_loadingDisguise')}">
+				      <span style="margin-right: 15px;">
+					<b class="su_list-metadataTitle">{!if(metadata.key == 'post_time','Created Date',metadata.key)}</b>&lrm;:
+					<aura:if isTrue="{!if(metadata.key == 'post_time',true,false)}">
+					  <aura:iteration items="{!metadata.value}" var="metadataVal">
+					    <ui:outputDate value="{!metadataVal}" format="EEE dd MMM yyyy / hh:mm a"/>
+					  </aura:iteration>
+					  <aura:set attribute="else">
+					    <aura:iteration items="{!metadata.value}" var="metadataVal" indexVar="singleVal">
+					      <aura:if isTrue="{!singleVal == 0}">
+						<span>&nbsp;{!metadataVal}</span>
+						<aura:set attribute="else">
+						  <span>,&nbsp;{!metadataVal}</span>
+						</aura:set>
+					      </aura:if>
+					    </aura:iteration>
+					  </aura:set>
+					</aura:if>
+				      </span>
+				    </span>
+				  </aura:if>
+				</aura:iteration>
+			      </div>
+			    </aura:if>
+			  </aura:if>
+			  <!-- code ends here-->
+			</div>
+		      </aura:if>
+		    </div>
+		  </aura:iteration>
+		</div>
+	      </aura:if>
+	      <aura:if isTrue="{!if(v.totalResults > v.pagesize, true,false)}">
+		<div class="su_list_searchBtnDIV">
+		  <a class="searchBtn" target="_blank" onclick="{!c.searchButtonPress}">{!v.gotoSearchPageText}</a>
+		</div>
+	      </aura:if>
+	    </span>
+	    <aura:set attribute="else">
+	      <div class="su_list_title">{!v.noResultFoundMsg}</div>
+	      </aura:set>
+	    </aura:if>
+	  </div>
+	  <aura:set attribute="else">
+	    <span class="customSettingErrMsg">{!v.customSettingErrorMessage}</span>
+	  </aura:set>
+	</aura:if>
+	  </div>
+	  <aura:if isTrue="{!!v.loadingResult}">
+		<div class="disSpinerDiv">
+			<div aura:id="dvSpinner3" class="loadingCon global siteforceLoadingBalls su_disSpiner" data-aura-rendered-by="25:0" data-aura-class="siteforceLoadingBalls">
+				<div class="customBalls">
+					<span class="loadingBall first" data-aura-rendered-by="26:0"></span>
+					<span class="loadingBall second" data-aura-rendered-by="27:0"></span>
+					<span class="loadingBall third" data-aura-rendered-by="28:0"></span>
+					<span class="assistiveText" data-aura-rendered-by="29:0">Loading</span>
+				</div>
+			</div>
+		</div>
+	  </aura:if>
+    </div>
+  </div>
+  </aura:component>

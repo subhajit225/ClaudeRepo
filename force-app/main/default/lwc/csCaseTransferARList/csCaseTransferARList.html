@@ -1,0 +1,14 @@
+<template>
+    <template if:true={showAssistRequest}>
+        <lightning-datatable 
+                key-field="Id" 
+                data={assistRequests} 
+                show-row-number-column 
+                hide-checkbox-column 
+                columns={columns}>
+        </lightning-datatable>
+    </template>
+    <h2 if:false={showAssistRequest} class="slds-m-top_medium slds-m-left_small slds-m-bottom_medium">
+        No Assist Request on this case.
+    </h2>
+</template>

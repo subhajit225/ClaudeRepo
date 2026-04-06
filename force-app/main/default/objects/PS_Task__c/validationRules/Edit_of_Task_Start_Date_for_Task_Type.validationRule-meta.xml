@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Edit_of_Task_Start_Date_for_Task_Type</fullName>
+    <active>true</active>
+    <errorConditionFormula>NOT(
+OR(
+ISPICKVAL(Task_Type__c, &quot;Resident Engineer&quot;),
+ISPICKVAL(Task_Type__c, &quot;Resident Engineer-PD&quot;),
+AND(
+ISPICKVAL(Task_Type__c,&apos;T&amp;E&apos;),
+OR(
+ISPICKVAL(Related_PS_Task__r.Task_Type__c, &quot;Resident Engineer&quot;),
+ISPICKVAL(Related_PS_Task__r.Task_Type__c, &quot;Resident Engineer-PD&quot;)
+)
+)
+)
+)
+&amp;&amp;
+ISCHANGED(Task_Start_Date__c)</errorConditionFormula>
+    <errorMessage>Task Start Date can not be edited. Task Type is not Resident Engineer/Resident Engineer-PD</errorMessage>
+</ValidationRule>

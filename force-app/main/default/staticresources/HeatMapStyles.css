@@ -1,0 +1,210 @@
+.table-wrapper {
+	width: 100%;
+}
+.table-scrollable {
+	overflow: auto;
+}
+.table-container-smallerScreen {
+	width: 60%;
+	height: 360px;
+}
+.table-container-largeScreen {
+	width: 60%;
+	height: 573px;
+}
+.table-container-noDataSmallerScreen {
+	width: 25%;
+	height: 360px;
+}
+.table-container-noDataLargeScreen {
+	width: 18%;
+	height: 573px;
+}
+.table-container-largeScreenWithColumnLenght {
+	width: 30%;
+	height: 573px;
+}
+.table-container-smallerScreenWithColumnLenght {
+	width: 45%;
+	height: 360px;
+}
+.table-header {
+	background: #154467;
+	position: sticky;
+	top: 0;
+	z-index: 20;
+}
+.slds-table_striped tbody tr:nth-of-type(even)>td{
+	background-color: #08477D ;
+}
+
+.slds-table_striped tbody tr:nth-of-type(odd)>td{
+	background-color: #065789;
+}
+
+.header-styles {
+	/* line-height: 2rem; */
+	line-height: 1rem;
+}
+.cellStyles{
+	padding: 5px 10px 5px 15px;
+}
+
+.textColor{
+	color:white;
+}
+
+.table-scrollable::-webkit-scrollbar {
+  /* width: 5px;
+  height:5px */
+  width: 7px;
+  height:7px
+  
+}
+
+
+.table-scrollable::-webkit-scrollbar-track {
+  background: #f1efef; 
+}
+ 
+
+.table-scrollable::-webkit-scrollbar-thumb {
+  background: #0098a8; 
+}
+
+
+.table-scrollable::-webkit-scrollbar-thumb:hover {
+  background: #017f96; 
+}
+
+.iconHeader .slds-button__icon {
+	
+	color: white !important;
+}
+
+.cellStyles .slds-truncate{
+	max-width: 98%;
+}
+
+ .slds-spinner_container {
+	background-color: unset !important;
+}
+
+ .spinnerClass .slds-spinner_brand.slds-spinner:before, .slds-spinner_brand.slds-spinner:after, 
+			.slds-spinner_brand .slds-spinner__dot-a:before,
+			.slds-spinner_brand .slds-spinner__dot-b:before,
+			.slds-spinner_brand .slds-spinner__dot-a:after, .slds-spinner_brand .slds-spinner__dot-b:after,
+			.slds-spinner--brand.slds-spinner:before, .slds-spinner--brand.slds-spinner:after,
+			.slds-spinner--brand .slds-spinner__dot-a:before, 
+			.slds-spinner--brand .slds-spinner__dot-b:before,
+			.slds-spinner--brand .slds-spinner__dot-a:after, .slds-spinner--brand .slds-spinner__dot-b:after{
+	background-color: #ffffff !important	;
+}
+
+/*Workload Modal Styles*/
+.workload-entry-dropdown .slds-combobox__input{
+	background-color: #154467;
+	color: #e5e9ed;
+	border-color: #e5e9ed;
+	border-width: 1px;
+}
+.workload-entry-dropdown .slds-combobox {
+	width: 70%
+}
+.workload-entry-dropdown .slds-dropdown {
+	/*width: 70%;*/
+	min-width: none;
+	background-color: #154467;
+	color: #e5e9ed;
+}
+.workload-entry-dropdown .slds-dropdown_fluid{
+	width: 70%;
+	min-width: 70%;
+	height: 135px;
+}
+.workload-entry-dropdown .slds-listbox_vertical .slds-listbox__option:focus{
+	box-shadow: none !important;
+	background-color: #bac9d1;
+	color: #FFFFFF;
+	cursor: pointer;
+}
+.workload-entry-input .slds-input{
+	background-color: #154467;
+	color: #e5e9ed;
+	width: 70%;
+	text-align: right;
+	border-color: #e5e9ed;
+	border-width: 1px;
+}
+.workload-entry-button .slds-button{
+    color: black;
+    line-height: 1.4rem;
+}
+
+.button .slds-button{
+	color:white;
+}
+.labelClass{
+	color: black !important;
+    margin-left: 5% !important;
+    font-weight: 400 !important;
+}
+.sortingButtonClass .slds-button{
+	padding-top: 6px !important;
+}
+
+.workload-entry-dropdown .slds-listbox_vertical .slds-listbox__option:hover , .slds-listbox_vertical .slds-listbox__option.slds-has-focus{
+	background-color: #bac9d1;
+	color: black;
+	outline: none;
+	box-shadow: none;
+}
+
+.workload-entry-dropdown .slds-form-element__label slot:empty,
+.workload-entry-input .slds-form-element__label slot:empty {
+    display: none;
+}
+
+.workload-entry-dropdown .slds-listbox_vertical .slds-listbox__option_plain{
+	padding: 5px 5px;
+}
+
+/* new changes of media query  */
+@media only screen and (min-width: 1440px) and (max-width: 1525px) {
+    .table-scrollable {
+		overflow: auto;
+		height:66vh
+	}
+}
+@media only screen and (min-width: 1100px) and (max-width: 1440px) {
+    .table-scrollable {
+		overflow: auto;
+		height:64vh
+	}
+}
+@media (width >= 1525px) {
+	.table-scrollable {
+		overflow: auto;
+		height:76vh
+	}
+}
+
+
+/* new changes for filter */
+.textClass .slds-form-element__label{
+	color:white !important;
+}
+.filterbuttonClass .slds-button_icon-border-filled, .slds-button--icon-border-filled, .slds-button_icon-border, .slds-button--icon-border{
+	border-color: white !important ;
+	margin-top: -2px !important;
+}
+.filterSectionButton .slds-button:focus{
+	box-shadow: var(--slds-c-button-shadow-focus, var(--sds-c-button-shadow-focus, var(--slds-g-shadow-outline-focus-2)));
+}
+
+.warningClass .slds-icon-text-default {
+    --slds-c-icon-color-foreground: white !important;
+}
+.closeBannerClass .slds-icon-text-default {
+    --slds-c-icon-color-foreground: white !important;
+}

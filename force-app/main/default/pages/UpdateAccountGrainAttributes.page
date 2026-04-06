@@ -1,0 +1,55 @@
+<apex:page standardController="Account" extensions="UpdategrainAttributesController" lightningStylesheets="true">
+<apex:slds rendered="{!$User.UITheme != 'Theme3'}"/>        
+<style>
+.custombtn {
+margin: 0 auto !important;
+display: block;
+margin-top: 20px !important;
+}
+</style>
+<script type="text/javascript">
+function setLoader(status,elename) {
+if (status) {
+        document.getElementById(elename).style.display = 'inline';
+}
+else {
+    document.getElementById(elename).style.display = 'none';
+}
+}
+function getStateName(){
+debugger;
+    var stateNode = document.querySelectorAll("[id$=statecode]")[0]; 
+document.getElementById('{!$Component.accUpdateform.BillingStateName}').value = stateNode.options[stateNode.selectedIndex].text;
+}
+</script> 
+<apex:form id="accUpdateform">
+    <apex:pageMessages id="error"/>
+    <apex:inputHidden id="BillingStateName" value="{!BillingStateName}" />
+    <apex:commandButton value="Back" action="{!redirectToAcc}" rendered="{!updateAcc.isFederalIntel__c == true || hasRecAccess == false}" styleClass="custombtn"/> 
+
+    <apex:pageblock title="Update Account" rendered="{!isFederal==false && hasRecAccess == true && disableCM=false}">
+    <apex:pageblockSection >
+    
+    <!--<apex:repeat value="{!$ObjectType.Account.FieldSets.Account_Grain_Attributes}" var="field"> 
+        <apex:inputField value="{!updateAcc[field]}" required="{!field.Required}" onselect="getStateName(this)" label="{!if(field=='BillingCountryCode','Billing Country',if(field=='BillingStateCode','Billing State/Province',field.label))}"/>  
+    </apex:repeat> -->
+        <apex:inputfield value="{!updateAcc.Name}"/>  
+                <apex:inputfield label="Billing Country" value="{!updateAcc.Billingcountrycode}" required="true"/> 
+                <apex:inputfield label="Billing State" value="{!updateAcc.BillingStateCode}" id="statecode"/>
+                <apex:inputfield label="Billing City" value="{!updateAcc.BillingCity}"/>
+                <apex:inputfield label="Billing Street" value="{!updateAcc.BillingStreet}" required="true"/>
+                <apex:inputfield label="Billing Postal code" value="{!updateAcc.BillingpostalCode}"/>
+    </apex:pageblockSection>
+    <apex:pageblockButtons >
+        <apex:commandButton value="Save" action="{!updateAccount}" onclick="getStateName()" status="loading" rerender="error"/> 
+        <apex:actionStatus id="loading" onstart="setLoader(true,'loadingAccPost')" onstop="setLoader(false,'loadingAccPost')" /> 
+        <apex:commandButton action="{!redirectToAcc}" value="Cancel"/>
+        <span id="loadingAccPost" style="display:none;">
+    <img src="/img/loading.gif" alt="Loading graphic"/>
+</span>
+            
+    </apex:pageblockButtons>
+    </apex:pageblock>
+    
+</apex:form>
+</apex:page>

@@ -1,0 +1,123 @@
+<template>
+    <template if:true={isSaveBookMark}>
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+            class="slds-modal slds-fade-in-open">
+            <div class="bookmark-section su__position-absolute su__shadow-lg su__bg-white su__radius-1 su__mx-auto su__zindex-2">
+                <!-- Heading -->
+                <div class="su__bookmark-popup-title su__p-2 su__clear su__bg-blue-grd su__d-flex">
+                    <div class="su__p-2 su__bg-white-circle su__radius-50">
+                        <svg class="su__new-bookmark-img" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 40 40">
+                            <defs>
+                              <clipPath id="clip-_12">
+                                <rect width="40" height="40"/>
+                              </clipPath>
+                            </defs>
+                            <g id="_12" data-name="12" clip-path="url(#clip-_12)">
+                              <g id="Group_1919" data-name="Group 1919" transform="translate(5998 5752)">
+                                <circle id="Ellipse_92" data-name="Ellipse 92" cx="20" cy="20" r="20" transform="translate(-5998 -5752)" fill="#ebebeb" opacity="0.24"/>
+                                <g id="Group_1918" data-name="Group 1918" transform="translate(-6445 -5762)">
+                                  <g id="round-collections_bookmark-24px" transform="translate(455 18)">
+                                    <path id="Path_1546" data-name="Path 1546" d="M0,0H24V24H0Z" fill="none"/>
+                                    <path id="Path_1547" data-name="Path 1547" d="M17,20H5a1,1,0,0,1-1-1V7A1,1,0,0,0,2,7V20a2.006,2.006,0,0,0,2,2H17a1,1,0,0,0,0-2ZM20,2H8A2.006,2.006,0,0,0,6,4V16a2.006,2.006,0,0,0,2,2H20a2.006,2.006,0,0,0,2-2V4A2.006,2.006,0,0,0,20,2Zm0,10-2.5-1.5L15,12V4h5Z" fill="#fff"/>
+                                  </g>
+                                </g>
+                              </g>
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="su__bookmark-title su__align-self-center">
+                        <div class="font-16 su__text-white su__font-bold su__loading-view ng-binding">
+                            {translationObject.Saved_Bookmarks}
+                        </div>
+                    </div>
+                    <div class="su__close-icon su__align-self-center su__cursor su__cross-icon su__loading-view" onclick={closeIcon}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="#fff"/><path d="M0 0h24v24H0z" fill="none"/></svg>
+                    </div>
+                </div>
+                <!-- Mid body -->
+                <template if:true={isBookmarkExist}>
+                    <ul class="su__p-0 su__bookmark-ul" id="modal-content-id-1">
+                        <template for:each={bookmarkSearches} for:item="result">
+                            <li class="su__flex-vcenter su__px-2 su__mb-1 su__border-b" key={result}>
+                                <div class="su__flex-1 su__cursor su__w-75">
+                                    <a class="su__text-decoration su__d-block su__p-2 su__text-black su__font-regular su__loading-view su__text-truncate-custom" data-query={result.href}
+                                        data-counter={result.counter} data-pagelist={result.pagelist}
+                                        data-totalresults={result.totalresults} data-endpoint={result.endpoint}
+                                        onclick={bookmarkClicked1}>
+                                        {result.title}
+                                    </a>
+                                </div>
+                                <div class="su__mx-2 su__rtlmr-3 su__rtlml-0 su__outline-none su__cursor su__loading-view">
+                                    <div class="su__loading-view">
+                                        <lightning-input type="checkbox"
+                                        onchange={bookmarkActive} data-id="checkbox" value={result.title}
+                                        name={result.href}></lightning-input>
+                                    </div>
+                                </div>
+                            </li>
+                        </template>
+                    </ul>
+                </template>
+                <template if:false={isBookmarkExist}>
+                    <div class="su__bookmark-inner font-14">
+                        <div class="su__text-center">
+                            <div class="su__no-bookmark su__my-2 su__my-sm-1">
+                                <svg width="65" height="65" viewBox="0 0 80 80">
+                                    <defs>
+                                        <clipPath id="clip-No_book_mark">
+                                            <rect width="80" height="80"></rect>
+                                        </clipPath>
+                                    </defs>
+                                    <g id="No_book_mark" data-name="No book mark" clip-path="url(#clip-No_book_mark)">
+                                        <g id="Group_1380" data-name="Group 1380" transform="translate(-2598 6846)">
+                                            <g id="Group_1362" data-name="Group 1362" transform="translate(250 289)">
+                                                <g transform="translate(2348 -7135)">
+                                                    <path data-name="Path 1546" d="M0,0H80V80H0Z"
+                                                        fill="none"></path>
+                                                    <path data-name="Path 1547"
+                                                        d="M53.7,64.039H12.34a3.457,3.457,0,0,1-3.447-3.447V19.233a3.447,3.447,0,0,0-6.893,0V64.039a6.914,6.914,0,0,0,6.893,6.893H53.7a3.447,3.447,0,1,0,0-6.893ZM64.039,2H22.68a6.914,6.914,0,0,0-6.893,6.893v41.36a6.914,6.914,0,0,0,6.893,6.893h41.36a6.914,6.914,0,0,0,6.893-6.893V8.893A6.914,6.914,0,0,0,64.039,2Zm0,34.466L55.423,31.3l-8.617,5.17V8.893H64.039Z"
+                                                        transform="translate(3.534 3.534)" fill="#d2d6df"></path>
+                                                </g>
+                                                <path id="Path_1555" data-name="Path 1555"
+                                                    d="M2380.454-7132.657l9.838,26.865-9.118-8.528,15.4,33.121-26.6-40.874,8.822,2.02-4.558-12.6Z"
+                                                    transform="translate(2 3.232)" fill="#7e879b"></path>
+                                                <path id="Path_1556" data-name="Path 1556"
+                                                    d="M2380.454-7132.657l7.289,22.553-7.289-6.275,10.328,25.394-17.452-29.067,7.844.928-6.934-13.533Z"
+                                                    transform="translate(2 3.232)" fill="#9fa8bb"></path>
+                                            </g>
+                                        </g>
+                                    </g>
+                                </svg>
+                            </div>
+                            <p class="su__my-3 font-32 su__text-black su__font-bold su__line-height-n su__loading-view">
+                                {translationObject.Oops}!
+                            </p>
+                            <p class="font-14 su__my-2 su__pb-3 su__loading-view">
+                                {translationObject.There_is_nothing_here__Zilch__Return_to_search}<br>
+                                {translationObject.and_create_your_first_bookmark}
+                            </p>
+                        </div>
+                    </div>
+                </template>
+                <template if:true={isBookmarkExist}>
+                    <div class="su__bookmark-btn su__flex-vcenter su__justify-content-between su__p-3">
+                        <template if:true={renderBookmarksButtons}>
+                            <button class="su__btn su__p-2 su__disabled-color su__radius-1 su_bookmark su__loading-view"
+                                disabled="disabled">
+                                {translationObject.Remove_Bookmark}</button>
+                        </template>
+
+                        <template if:false={renderBookmarksButtons}>
+                            <button
+                                class="su__btn su__p-2 su__bg-gray-40 su__radius-1 su_bookmark su__loading-view"
+                                onclick={closeAndDeleteBmark}>
+                                {translationObject.Remove_Bookmark}
+                            </button>
+                        </template>
+                    </div>
+                </template>
+            </div>
+            <div class="slds-backdrop slds-backdrop_open su__bookmark-backdrop" onclick={closeIcon}></div>
+        </section>
+    </template>
+</template>

@@ -1,0 +1,132 @@
+<template>
+    <div class="slds-grid slds-wrap">
+        <div class="slds-large-size_1-of-1">
+            <div class="slds-text-align_center" style={backgroundStyle}>
+                <div class="slds-text-align_center alignment">
+                    <template if:true={currentUser.Is_Rubrik_Employee__c}>
+                        <p style="font-size: 23px;color: #f2f2f2;margin: 20px 200px;">You don't have access to Rewards.</p>
+                    </template>
+                    <template if:false={currentUser.Is_Rubrik_Employee__c}>
+                        <p style="font-size: 40px;color: #f2f2f2;margin-top: 10px;font-weight: 500;">Rewards</p>
+                        <p style="font-size: 23px;color: #f2f2f2;margin: 20px 200px;">By engaging in the Forums community, you can earn coins to redeem for any of the below rewards. To see how coins are earned, view the <a href="forum-guidelines?type=All" target="_blank" style="color: rgb(0, 157, 172);">community guidelines</a>.</p>
+                        <p style="font-size: 21px;color: #f2f2f2;margin-top: 10px;">You have <b style="font-weight: 500;color: #009dac;">{currentUser.Coins__c}</b> coins.</p>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slds-grid slds-wrap">
+        <div class="slds-size_1-of-12"></div>
+        <div class="slds-size_10-of-12">
+            <div class="slds-grid slds-wrap">
+                <template for:each={catalogItems} for:item="item">
+                    <div class="slds-large-size_2-of-8 slds-x-small-size_12-of-12 slds-medium-size_6-of-12 tooltip1" key={item.Id}>
+                        <div class={item.panelClass}>
+                            <template if:true={item.Current_user_eligible_to_redeem__c}>
+                                <lightning-button class="redeemButton buttonStyle" label="Redeem" onclick={openItemViewModal} name={item} variant="brand"></lightning-button>
+                            </template>
+                            <div class="slds-carousel__panel" style={item.disabledPanelStyle}>
+                                <a class="slds-text-link_reset" tabindex="0" style="padding: 15px;display:block;">
+                                    <div style="border-radius:5px;height:235px;">
+                                        <img src={item.URL__c} alt={item.Name__c} style="height: 100%;width: 100%;object-fit: contain;border-radius: 8px"/>
+                                    </div>
+                                    <div class="itemContent">
+                                        <h2 class="slds-carousel__content-title" style="font-weight:unset;">{item.Name__c}</h2>
+                                        <p>{item.Amount__c} coins
+                                            <!--<img src={coinsIcon} style="height: 17px;width: 23px;vertical-align: text-top;"/>-->
+                                        </p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <template if:false={item.Current_user_eligible_to_redeem__c}>
+                            <div>
+                                <span class="tooltiptextBottom">Earn more coins to redeem this reward</span>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+            </div>
+        </div>
+        <div class="slds-size_1-of-12"></div>
+    </div>
+
+    <template if:true={showItemModal}>
+        <div class="demo-only" style="height: 640px; " id="itemViewModal">
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container" style="width: 27%;">
+                    <div class="slds-modal__content" id="modal-content-id-1">
+                        <div class="slds-carousel__panel">
+                            <a class="slds-text-link_reset">
+                                <div style="height:325px;">
+                                    <img src={selectedItem.URL__c} alt={selectedItem.Name__c} class="itemViewImage" style="height: 100%;width: 100%;object-fit: contain;"/>
+                                </div>
+                                <div class="itemViewContent">
+                                    <h2 class="slds-carousel__content-title">{selectedItem.Name__c}</h2>
+                                    <p style="color: #595959;font-size: 13px;text-align: start;margin-top: 13px;">
+                                        <lightning-formatted-rich-text value={selectedItem.Description__c}></lightning-formatted-rich-text>
+                                    </p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <span style="float: left;margin-top:6px;">{selectedItem.Amount__c} coins
+                            <!--<img src={coinsIcon} style="height: 17px;width: 23px;vertical-align: text-top;"/>-->
+                        </span>
+                        <lightning-button class="buttonStyle" label="Cancel" onclick={closeModal} variant="brand" style="float: right;margin-left: 10px;"></lightning-button>
+                        <lightning-button class="buttonStyle" label="Redeem" onclick={openRedeemModal} variant="brand" style="float: right;"></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </template>
+
+    <template if:true={showModal}>
+        <div class="demo-only" style="height: 640px; " id="Modalbox">
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+                        <template if:true={showRedeemModal}>
+                            <lightning-record-edit-form object-api-name="CS_Order__c" onsubmit={handleSubmit} onsuccess={handleSuccess}>
+                                <p style="text-align: center;font-size: 20px;">Shipping Details</p>
+                                <lightning-messages></lightning-messages>
+                                <lightning-input-field field-name="Full_Name__c" required></lightning-input-field>
+                                <lightning-input-field field-name="Company_Name__c" required></lightning-input-field>
+                                <lightning-input-field field-name="Official_Email_Address__c" required></lightning-input-field>
+                                <!--<lightning-input-field field-name="Phone_Number__c" required></lightning-input-field>-->
+                                <lightning-input type="tel"
+                                        name="phoneNumber"
+                                        label="Phone Number"
+                                        value={phoneNumber}
+                                        required
+                                        variant="label-stacked"
+                                        onchange={handlePhoneChange}
+                                        pattern={phoneNumberPattern}
+                                        message-when-pattern-mismatch="Phone number should contain only numbers (0-9) and plus (+) and should have atleast 7 characters"></lightning-input>
+                                <lightning-input-field field-name="Street__c" required></lightning-input-field>
+                                <lightning-input-field field-name="City__c" required></lightning-input-field>
+                                <lightning-input-field field-name="State__c" required></lightning-input-field>
+                                <lightning-input-field field-name="Country__c" required></lightning-input-field>
+                                <lightning-input-field field-name="Postal_Code__c" required></lightning-input-field>
+                                <lightning-button class="buttonStyle" variant="brand" onclick={closeModal} label="Cancel" style="float: right;margin-left:10px;"></lightning-button>
+                                <lightning-button class="buttonStyle" type="submit" label="Submit" variant="brand" style="float: right;"></lightning-button>
+                            </lightning-record-edit-form>
+                        </template>
+                        <template if:true={showSuccessMessageModal}>
+                            <p>The Rubrik Forums team is processing your request. You will receive an email from support-forums@rubrik.com when your reward has shipped.</p>
+                        </template>
+                    </div>
+                    <template if:true={showSuccessMessageModal}>
+                        <footer class="slds-modal__footer">
+                            <button class="slds-button slds-button_brand buttonStyle" onclick={refreshPage}>Close</button>
+                        </footer>
+                    </template>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </template>
+</template>

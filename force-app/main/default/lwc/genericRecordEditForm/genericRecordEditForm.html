@@ -1,0 +1,42 @@
+<template>
+    <lightning-card>
+        <div class="slds-is-relative">
+            <!-- Loader -->
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
+            </template>
+            <!-- Title -->
+            <div class="slds-p-vertical_medium slds-align_absolute-center slds-border_bottom">
+                <h2 class="slds-text-heading_medium">Edit Record</h2>
+            </div>
+            <template if:false={isLoading}>
+                <div class="slds-card__body slds-p-around_medium">
+                    <template if:false={objData.isUserGroupValid}>
+                        <p class="slds-text-heading_small slds-text-color_error slds-text-align_center slds-var-m-bottom_x-small">
+                            <b>You do not have the necessary permissions to edit the current record.</b>
+                        </p>
+                    </template>
+                    <template if:true={objData.isUserGroupValid}>
+                        <lightning-record-edit-form 
+                            record-id={parentRecordId} 
+                            object-api-name={objData.objAPIName}
+                            onsubmit={handleSubmit}>
+                            <lightning-messages></lightning-messages>
+                            <div class="slds-grid slds-wrap slds-p-horizontal_small">
+                                <template for:each={objData.fieldAPINames} for:item="fielName">
+                                    <div key={fielName} class="slds-col slds-size_1-of-2 slds-p-horizontal_small">
+                                        <lightning-input-field field-name={fielName}></lightning-input-field>
+                                    </div>
+                                </template>
+                            </div>
+                            <div class="slds-p-top_large slds-align_absolute-center">
+                                <lightning-button label="Cancel" onclick={handleCancel}></lightning-button>
+                                <lightning-button variant="brand" type="submit" label="Save" class="slds-m-left_x-small"></lightning-button>
+                            </div>
+                        </lightning-record-edit-form>
+                    </template>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

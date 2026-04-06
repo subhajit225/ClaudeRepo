@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Block_Request_Creation</fullName>
+    <active>true</active>
+    <description>Block portal request creation if the first name, last name, email, and the company is missing</description>
+    <errorConditionFormula>ISBLANK(First_Name__c) || ISBLANK(Last_Name__c) || ISBLANK( Company_Name__c) || ISBLANK(Email__c)</errorConditionFormula>
+    <errorMessage>Can&apos;t create portal access request without basic details (Name, Email, Company)</errorMessage>
+</ValidationRule>

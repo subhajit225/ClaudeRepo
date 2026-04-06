@@ -1,0 +1,62 @@
+<aura:component controller="CSVCreator" implements="force:appHostable,flexipage:availableForAllPageTypes">
+	<aura:attribute name="csvObject" type="Object"/>
+	<aura:attribute name="mapLines" type="List"/>
+	<aura:attribute name="csvString" type="String"/>
+	<aura:attribute name="loadSpinner" type="Boolean" default="false"/>
+	<aura:attribute name="disableButton" type="Boolean" default="true"/>
+	<aura:attribute name="disableSave" type="Boolean" default="true"/>
+	<aura:attribute name="displayStatus" type="Boolean" default="false"/>
+	<aura:attribute name="errorMessage" type="String" default=""/>
+
+	<aura:handler name="change" value="v.csvString" action="{!c.handleGetCSV}"/>
+	
+	<aura:if isTrue="{!v.loadSpinner}">
+		<lightning:spinner aura:id="mySpinner" />
+	</aura:if>
+	
+	<div class="slds-card">
+		<div class="slds-card__header slds-grid">
+			<header class="slds-media slds-media_center slds-has-flexi-truncate">
+				<div class="slds-media__body">
+					<h1 class="slds-card__header-title">
+						<span>CSV Dataloader</span>
+					</h1>
+				</div>
+				<lightning:button class="slds-button slds-button_brand" disabled="{!v.disableSave}" onclick="{!c.handleSave}">Save</lightning:button>
+				<lightning:button class="slds-button slds-button_brand" disabled="{!v.disableButton}" onclick="{!c.cleanData}">Clean Data</lightning:button>
+			</header>
+		</div>
+		<div class="slds-card__body slds-card__body_inner">
+			<input type="file" class="file" aura:id="file" onclick="{!c.handleNewUpload}" onchange="{!c.handleUploadFinished}" accept=".csv"/>
+			<aura:if isTrue="{!not(empty(v.csvObject))}">
+				<div><table class="slds-table">
+					<thead>
+						<tr>
+							<aura:iteration items="{!v.csvObject.headers}" var="header">
+								<th>{!header.column_name}</th>
+							</aura:iteration>
+							<aura:if isTrue="{!v.displayStatus}">
+								<th>Updated Successfully</th>
+							</aura:if>
+						</tr>
+					</thead>
+					<tbody id="table_body">
+						<aura:iteration items="{!v.mapLines}" var="line">
+							<tr>
+								<aura:iteration items="{!line.value}" var="cell">
+									<td>{!cell}</td>
+								</aura:iteration>
+							</tr>
+						</aura:iteration>
+					</tbody>
+				</table>
+			</div>
+			</aura:if>
+			<aura:if isTrue="{!not(empty(v.errorMessage))}">
+			<div class="error-message">
+				<p>{!v.errorMessage}</p> 
+			</div>
+			</aura:if>
+		</div>
+	</div>
+</aura:component>

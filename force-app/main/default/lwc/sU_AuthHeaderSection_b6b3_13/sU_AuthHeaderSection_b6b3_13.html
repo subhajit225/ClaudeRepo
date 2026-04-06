@@ -1,0 +1,165 @@
+<template>
+  <div class="su-p-input-header su__mb-2 c-global-header__search-menu col-sm-12">
+    <div class="su__width-100">
+      <div class="su__flex-vcenter su__align-items-baseline">
+        <div class="smallfilterSectionClass">
+          <div title={translationObject.Filters} disable class={filterButtonClass} onclick={handleUtilitySlider}>
+            <span>
+              <svg class="su__filter-icon su__pr-1" width="13" height="13" viewBox="0 0 15 15">
+                <path
+                  d="M13.966,0H1.047A.547.547,0,0,0,.5.547,5.346,5.346,0,0,0,2.293,4.54l2.4,2.131a1.951,1.951,0,0,1,.654,1.457v6.252a.548.548,0,0,0,.851.455l3.23-2.153a.548.548,0,0,0,.244-.455v-4.1a1.951,1.951,0,0,1,.654-1.457l2.4-2.131A5.346,5.346,0,0,0,14.513.547.547.547,0,0,0,13.966,0Z"
+                  fill="#919bb0" class="su__active-path"></path>
+              </svg>
+            </span>
+            <span>
+              filter
+            </span>
+          </div>
+        </div>
+        <div class="su__flex-vcenter advancesearch">
+          <c-s-u_-auth-Advance-Search_b6b3_13  class="su__position-relative su__width-rtl-advance"
+            advanced-search-selected={advancedSearchSelected} translation-object={translationObject} exactword={exactphrase}
+            withonemore={withoneormore} withoutword={withoutthewords}
+            withwildsearch={withwildcardsearches}></c-s-u_-auth-Advance-Search_b6b3_13 >
+        </div>
+        <div>
+          <div class="su__flex-vcenter wildcard">
+            <template if:true={hasWildcardSearch}>
+              <div class="su__d-flex su__flex-column su__wildcardMargin su__rtl-wildcard">
+                <span class="su__flex-vcenter su__radius su__border su__mb-2  su__mr-1 su__sticky su__width-wild ">
+                  <span
+                    class="su__sticky__filters su__cursor font-12 su__px-1 su__text-black  su__text-nowrap su__loading-view su__close-icon-txt su__text-normal su__flex-vcenter su__position-relative">
+                    {translationObject.Wildcard_Search}
+                  </span>
+                  <span
+                    class="su__cursor font-10  su__px-1 su__text-black  su__text-nowrap su__loading-view su__close-icon-txt su__text-normal su__flex-vcenter su__position-relative su__wildcard-cross"
+                    onclick={removeWildcardSearch}>
+                    X
+                  </span>
+                </span>
+              </div>
+            </template>
+            <template if:true={showHideDidYouMean}> 
+              <div class=" font-12 su__loading-view">
+                <b
+                  class="su__font-bold font-14 su__mr-2 su__rtlmr-0 su__rtlml-2 su__text-warning su__loading-view" style="margin-left: 3px;">{translationObject.Did_you_mean}:
+                </b>
+                <a class="su__loading-view" href="javascript:void(0)" onclick={correctSpelling}>
+                  <span style="color:rgb(164, 163, 166)"
+                      class="font-12 su__text-decoration su__color-lgray">
+                    {correctspell}
+                  </span>
+                </a>
+              </div>
+            </template>
+          </div>
+          <template if:true={totalresults}>
+            <template if:false={mergedresults}>
+              <template if:false={hasWildcardSearch}>
+                <template if:false={showHideDidYouMean}>
+                  <div
+                  class="su__showing-results-heading su__color-lgray filterSectionClass su__ml-4  su__align-self-center su__text-truncate-custom font-12 su__loading-view su__rtl-showing-page">
+                  <span style="margin-left:3px">
+                    {translationObject.Showing_page} <span class="su__font-bold">{pagenum} </span> {translationObject.of}
+                    <span class="su__font-bold"> {totalpages} </span>{translationObject.of} {totalresults}
+                    {translationObject.results} ‌({searchresultime}‌
+                    {translationObject.seconds}).
+                  </span>
+                </div>
+                </template>
+              </template>
+            </template>
+          </template>
+        </div>
+        </div>
+        </div>
+        <div class="su__flex-vcenter">
+          <span
+            class="su__bookmark-save su__cursor su__p-6 su__radius-50 su__circle-hover su__bookmarkStartIconColor filterSectionClassGridView su__loading-view"
+            onclick={starClicked} title={translationObject.Save_Bookmark}>
+            <svg class="su__bokmark-icon su__bg-white-hover-50" width="26" height="26" viewBox="0 0 24 24">
+              <path
+                d="M19.65,9.04l-4.84-.42L12.92,4.17a1,1,0,0,0-1.84,0L9.19,8.63l-4.83.41a1,1,0,0,0-.57,1.75l3.67,3.18-1.1,4.72a1,1,0,0,0,1.49,1.08L12,17.27l4.15,2.51a1,1,0,0,0,1.49-1.08l-1.1-4.73,3.67-3.18a1,1,0,0,0-.56-1.75Z"
+                fill="#919BB0"></path>
+            </svg>
+      </span>
+      <!-- <span
+            class="su__bookmark  su__cursor  su__radius-50 su__bookmarkSavedIconColor su__circle-hover filterSectionClassGridView"> -->
+      <c-s-u_-auth-bookmark-component_b6b3_13  bookmark-list={bookmarkList} translation-object={translationObject}></c-s-u_-auth-bookmark-component_b6b3_13 >
+      <!-- </span> -->
+      <template if:true={languageEnabled}>
+        <c-s-u_-auth-Language-Section_b6b3_13  lang-config={langlist}
+          translation-object={translationObject}></c-s-u_-auth-Language-Section_b6b3_13 >
+      </template>
+      <template if:true={DataLoaded}>
+        <c-s-u_-auth-sort-by-section_b6b3_13  event-code={eventCode} sort-by-check={sortByCheck} class="su__ml-auto"
+          translation-object={translationObject}></c-s-u_-auth-sort-by-section_b6b3_13 >
+      </template>
+
+      <template if:true={DataLoaded}>
+        <template if:false={mergedresults}>
+          <span class="su__bookmark-save su__listViewIconColor filterSectionClassGridView su__cursor  su__ml-halfrem su__mr-halfrem su__loading-view"
+            onclick={listView}>
+            <div class={suListViewActive} title={translationObject.List_View}>
+              <svg class="su__switch-icon-size" preserveAspectRatio="xMidYMid meet" width="21" height="21"
+                viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <clipPath id="clip-List">
+                    <rect width="21" height="21"></rect>
+                  </clipPath>
+                </defs>
+                <g clip-path="url(#clip-List)">
+                  <g transform="translate(-1310 -189)" data-name="Group 1352" fill="#535355">
+                    <g transform="translate(1310 189)" data-name="Group 1267">
+                      <g transform="translate(4.838)" data-name="Group 1266">
+                        <rect width="16.128" height="3.226" rx="1.613" data-name="Rectangle 368"></rect>
+                      </g>
+                      <rect width="3.226" height="3.226" rx="1.613" data-name="Rectangle 371"></rect>
+                    </g>
+                    <g transform="translate(1310 206.77)" data-name="Group 1268">
+                      <g transform="translate(4.838)" data-name="Group 1266">
+                        <rect width="16.128" height="3.226" rx="1.613" data-name="Rectangle 368"></rect>
+                      </g>
+                      <rect width="3.226" height="3.226" rx="1.613" data-name="Rectangle 371"></rect>
+                    </g>
+                    <g transform="translate(1310 194.92)" data-name="Group 1269">
+                      <g transform="translate(4.838)" data-name="Group 1266">
+                        <rect width="16.128" height="3.226" rx="1.613" data-name="Rectangle 368"></rect>
+                      </g>
+                      <rect width="3.226" height="3.226" rx="1.613" data-name="Rectangle 371"></rect>
+                    </g>
+                    <g transform="translate(1310 200.85)" data-name="Group 1270">
+                      <g transform="translate(4.838)" data-name="Group 1266">
+                        <rect width="16.128" height="3.226" rx="1.613" data-name="Rectangle 368"></rect>
+                      </g>
+                      <rect width="3.226" height="3.226" rx="1.613" data-name="Rectangle 371"></rect>
+                    </g>
+                  </g>
+                </g>
+              </svg>
+            </div>
+          </span>
+        </template>
+      </template>
+      <template if:true={DataLoaded}>
+        <template if:false={mergedresults}>
+          <span class="su__bookmark-save  filterSectionClassGridView su__cursor su__loading-view" onclick={gridView}>
+            <div class={suGridViewActive} title={translationObject.Grid_View}>
+              <svg class="su__switch-icon-size" width="21" height="21" viewBox="0 0 21 21">
+                <g transform="translate(-17220 20062)">
+                  <rect width="9.677" height="9.677" rx="2" transform="translate(17220 -20062)" fill="#919bb0"></rect>
+                  <rect width="9.677" height="9.677" rx="2" transform="translate(17220 -20050.711)" fill="#919bb0">
+                  </rect>
+                  <rect width="9.677" height="9.677" rx="2" transform="translate(17231.289 -20062)" fill="#919bb0">
+                  </rect>
+                  <rect width="9.677" height="9.677" rx="2" transform="translate(17231.289 -20050.711)" fill="#919bb0">
+                  </rect>
+                </g>
+              </svg>
+            </div>
+          </span>
+        </template>
+      </template>
+    </div>
+  </div>
+</template>

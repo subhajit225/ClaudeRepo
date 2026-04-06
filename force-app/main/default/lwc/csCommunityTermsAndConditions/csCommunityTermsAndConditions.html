@@ -1,0 +1,50 @@
+<template>
+    <template if:true={showTermsAndConditionsAgreement}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-scrollable_y">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Support Portal User Agreement
+                    </h2>
+                </header>
+                <div>
+                    <iframe src={supportCommunityTermsAndContidions} scrolling="true" class="iframewidth"></iframe>
+                </div>
+                <footer class="slds-modal__footer">
+                    <div class="slds-grid slds-wrap slds-m-around_small">
+                        <div class="termsandcondbox slds-grid">
+                        <div class="check-box">
+                            <lightning-input type="checkbox" name="agree" onchange={handleCheckBoxChange}
+                                message-when-value-missing=" "
+                                required></lightning-input>
+                        </div>
+                        <div class="checkbox-label">
+                            I have read and agree to the Terms and Conditions and agree that Rubrik will process my personal data in accordance with Rubrik’s&nbsp;
+                            <a href="https://www.rubrik.com/legal/privacy-policy" target="_blank">Privacy Policy</a>.
+                        <template if:true={checkBoxError}>
+                            <div class="slds-size_2-of-2">
+                               <div class="checkBoxErrorMsg slds-text-body_small slds-text-color_error">{checkBoxErrorMsg}</div> 
+                            </div>
+                        </template>
+                        </div>
+                        </div>
+                       
+                        <template if:true={showError}>
+                            <div class="slds-size_2-of-2">
+                               <div class="errordesign">{errorMessage}</div> 
+                            </div>
+                        </template>
+                        <div class="slds-size_2-of-2 slds-m-top_small slds-align_absolute-center">
+                            <button class="slds-button slds-button_brand buttondesign" onclick={handleFormSubmit}>
+                                <a class="underlinenone">
+                                    Agree &amp; Continue
+                                </a>
+                            </button>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

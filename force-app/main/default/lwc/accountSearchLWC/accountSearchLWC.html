@@ -1,0 +1,123 @@
+<template>
+<div if:true={displayPage}>
+    <template if:true={showLoader}>
+        <lightning-spinner alternative-text="Loading" size="medium" class="spinnerClass"></lightning-spinner>
+    </template>         
+    <div if:true={ShowAccount}>
+    <lightning-card title="Account Search">    
+    <lightning-record-edit-form record-id={recordId} object-api-name={objectApiName}>
+        <div class="slds-align_absolute-center slds-p-bottom_medium">
+            <lightning-button variant="brand" label="Search/Create Account" onclick={createSearchAccount} class="slds-align_absolute-centerslds-m-left_x-small"></lightning-button>
+        </div>
+        <div>
+            <lightning-layout >
+                <lightning-layout-item padding="around-small" size="6">
+                    <div class="slds-p-bottom_small">
+                        <span style="color:red;">*</span><label for="acId">Account Name</label>
+                        <lightning-input-field id="acId" variant="label-hidden" field-name="Name" required></lightning-input-field>
+                    </div>
+                    <div class="slds-p-bottom_small">
+                        <label for="bsId">Billing State</label>
+                        <lightning-input-field id="bsId" variant="label-hidden" field-name="BillingStateCode"></lightning-input-field>
+                    </div>
+                    <div class="slds-p-bottom_small">
+                        <label for="bstId">Billing Street</label>
+                        <lightning-input-field id="bstId" variant="label-hidden" field-name="BillingStreet" ></lightning-input-field>
+                    </div>
+                    <div if:true={isFederalVisible}>
+                        <label for="faId">Federal Account</label>
+                        <lightning-input-field id="faId" variant="label-hidden" field-name="isFederalIntel__c"></lightning-input-field>  
+                    </div>
+                    <div>
+                        <label for="wId">Website</label>
+                        <lightning-input-field id="wId" variant="label-hidden" field-name="Website" ></lightning-input-field>
+                    </div>
+                </lightning-layout-item>
+                <lightning-layout-item padding="around-small" size="6" >
+                    <div class="slds-p-bottom_small">
+                        <span style="color:red;">*</span><label for="bcId">Billing Country</label>
+                        <lightning-input-field id="bcId" variant="label-hidden" field-name="BillingCountryCode" required></lightning-input-field> 
+                    </div>
+                    <div class="slds-p-bottom_small">
+                        <label for="bctId">Billing City</label>
+                        <lightning-input-field id="bctId" variant="label-hidden" field-name="BillingCity"></lightning-input-field>
+                    </div>
+                    <div class="slds-p-bottom_small">
+                        <label for="bpId">Billing Postal code</label>
+                        <lightning-input-field id="bpId" variant="label-hidden" field-name="BillingPostalCode"></lightning-input-field>  
+                    </div>
+                    <div class="slds-p-bottom_small">
+                        <label for="tId">Telephone</label>
+                        <lightning-input-field id="tId" variant="label-hidden" field-name="Phone"></lightning-input-field>  
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>
+        </div> 
+        </lightning-record-edit-form> 
+    </lightning-card>
+    <div class="slds-box slds-theme_shade slds-theme_alert-texture slds-p-bottom_xx-large">
+        <div><strong> NOTE </strong></div>
+        <div > To search for an Account - Enter Account Name &amp; Billing Country  </div>
+        <div if:false={isFederalUpdateable}> To create new Account - Enter Account Name, Billing Street, Billing Country, and either Billing City, Billing State or Billing Postal Code </div>
+        <div if:true={isFederalUpdateable}> To create a new Federal Account - Enter Account Name & Billing Country </div>
+        <div if:true={isFederalUpdateable}> To create new Non-Federal Account - Enter Account Name, Billing Street, Billing Country, and either Billing City, Billing State or Billing Postal Code </div>
+    </div>
+    
+    
+    <div class="slds-p-top_x-large slds-p-bottom_x-large">
+    <template if:true={showPotentialMatch}>
+        <lightning-card title="Similar accounts found">
+        <c-reusablepaginationlwc records={potentialMatchList} 
+                        total-records={potentialMatchList.length} 
+                        onpaginatorchange={potentialHandlePaginatorChange}>
+            </c-reusablepaginationlwc>
+            <lightning-datatable key-field="index" 
+                                data={potentialrecordsToDisplay} 
+                                hide-checkbox-column
+                                columns={columns}
+                                onrowaction={handleRowAction}>
+            </lightning-datatable>
+        </lightning-card>
+    </template>
+    </div>
+    <div class="slds-p-bottom_xx-large">
+    <template if:true={showExactMatch}>
+        <lightning-card title={exactTitle}>
+        <c-reusablepaginationlwc records={exactMatchList} 
+                        total-records={exactMatchList.length} 
+                        onpaginatorchange={exactHandlePaginatorChange}>
+            </c-reusablepaginationlwc>
+            <lightning-datatable key-field="index" 
+                                data={exactrecordsToDisplay} 
+                                hide-checkbox-column
+                                columns={exactcolumns}
+                                onrowaction={handleRowAction}>
+            </lightning-datatable>
+        </lightning-card>
+    </template>   
+    </div> 
+ </div>   
+ </div> 
+<div if:false={ShowAccount} class="slds-p-bottom_xx-large">
+    <lightning-card title="Select Record Type">
+            <lightning-layout multiple-rows="true" vertical-align="end">
+                <lightning-layout-item size="6" small-device-size="2" medium-device-size="4" large-device-size="4" padding="around-small">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <lightning-combobox name="recordTypes"
+                                                    label="Account Record Types"
+                                                    value={selectedrecordTypeId}
+                                                    placeholder="-Select-"
+                                                    options={options}
+                                                    onchange={handleChange} ></lightning-combobox>
+                            </div>
+                        </div>
+                </lightning-layout-item>
+            </lightning-layout><br/>
+        <div class="slds-align_absolute-center slds-p-top_medium slds-p-bottom_medium">
+            <lightning-button variant="brand" label="Continue" onclick={recordtypeSelected} class="slds-align_absolute-centerslds-m-left_x-small"></lightning-button>
+        </div>
+    </lightning-card>
+</div>
+
+</template>

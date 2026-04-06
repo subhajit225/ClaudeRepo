@@ -1,0 +1,25 @@
+<apex:page id="pageId" standardController="PartnerFundRequest" extensions="PC_PartnerFundReqController" lightningStylesheets="true">
+    <script src="/soap/ajax/43.0/connection.js"/>
+    <script src="/soap/ajax/43.0/apex.js"/>
+  <script>
+    window.onload = function(e){ 
+     callcheckCancelAF();
+      }
+     function showMsg(){
+         //alert(document.getElementById('pageId:form:msgId').value);
+         if({!$User.UIThemeDisplayed == 'Theme3'}){
+         		window.location.href="/"+'{!PartnerFundRequest.Id}';
+         }else{
+             sforce.one.navigateToSObject('{!PartnerFundRequest.Id}','detail');
+         }
+     }
+  </script>
+    <apex:form id="form">
+         <apex:actionFunction action="{!callcheckCancel}" name="callcheckCancelAF"  reRender="msgId">
+        </apex:actionFunction>
+        <apex:pageBlock title="Request Cancellation:">
+            <apex:outputtext id="msgId" value="{!msg}"/>&nbsp;&nbsp;
+   			<apex:commandButton action="{!Cancel}" value="Back"/>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

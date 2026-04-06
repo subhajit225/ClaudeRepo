@@ -1,0 +1,54 @@
+<template>
+    <template if:true={showComponentSection}>
+        <div class="slds-card no-style-slds-card custom-featured-item-card" >
+            <h1 class="heading-58 slds-p-around_large">{resourceHeader}</h1>
+        <lightning-button variant="brand" label={resourceButtonLabel} title={resourceButtonLabel}
+            onclick={handleExploreClick}
+            class="slds-p-left_large">
+        </lightning-button>
+            <lightning-layout>
+                <lightning-layout-item size="6" small-device-size="6" medium-device-size="6" large-device-size="6">
+                    <div class="slds-col slds-p-around_x-large slds-p-horizontal_small">
+                        <div class="slds-card slds-gutter slds-card_boundary slds-p-around_large custom-global-resource-item-col slds-m-top_none">
+                            <div class="slds-p-top_large slds-p-bottom_large">
+                                <img class="imgClass" src={featureCardBig.Image_Url__c}>
+                            </div>
+                            <div class="custom-global-resource-card-content">
+                                <div class="slds-p-bottom_x-small">
+                                    <span class="slds-col cardBodyTag">
+                                        {featureCardBig.Tag__c}
+                                    </span>
+                                </div>
+                                <div class="slds-p-bottom_x-small">
+                                    <span class="slds-col cardBodyheading">
+                                        {featureCardBig.Card_Title__c}
+                                    </span>
+                                </div>
+                                <div class="slds-p-bottom_x-small">
+                                    <span class="slds-col cardBodyDescription">
+                                        {featureCardBig.Description__c}
+                                    </span>
+                                </div>
+                                <div class="slds-p-bottom_x-small">
+                                    <!-- Use slds icon button for underlined link button styling -->
+                                    <span class="cardUrl">
+                                        <lightning-formatted-url value={featureCardBig.Navigate_Url__c} tooltip="" label={featureCardBig.Navigate_Text__c} target="_blank"></lightning-formatted-url>
+                                        <img class="link-arrow-img"
+                                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAtCAYAAADV2ImkAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAD3SURBVHgB7daxDcJADEBR+0BAGZiAESghHRtRAkIiaRAdMzABjEDFGmQClJImOXAqCoKcu+MuEn6tLeUrsqIACCGEEEKIPxZNl+NRvN6CIwq8wMRVtKdg4ibaYzCxj/YcTOyiAwQT8+hAwcQsGjlLw3hzQignYAzH9TOd3K+7FJi6nCWFOtL620NtVG8auNEBT+LdK3q2WnA2WxIMWdnXZ85iG4KzslfM88s+4yyzbhixSEGrIxjQiBFoONSMG8VWLfBj9POjVOf2YdQ4loQ6CaNYEiLYOJb4DraKJT6DrWOJr2AnsYT1WbMyGOQlPJzECiGEEKJ1nnbLYBZlR9+tAAAAAElFTkSuQmCC">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </lightning-layout-item>
+                <lightning-layout-item size="6" small-device-size="6" medium-device-size="6" large-device-size="6">
+                    <div class="slds-col slds-p-left_medium slds-p-around_x-large slds-p-horizontal_small">
+                        <span>
+                            <c-pc_-Featured-Item-Card_lwc cardslist={featureCardsList}></c-pc_-Featured-Item-Card_lwc>
+                        </span>
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>
+        </div>
+    </template>
+</template>

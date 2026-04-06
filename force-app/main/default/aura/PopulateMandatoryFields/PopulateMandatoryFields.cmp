@@ -1,0 +1,112 @@
+<aura:component controller="QuoteExtController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute type="Object" name="qlList"/>
+    <aura:attribute type="Object" name="hwQlList"/>
+    <ltng:require styles="{!$Resource.ModalSizeWithCSSMandateFields}"/>
+    <aura:attribute name="isLoading" type="Boolean" default="false"/> 
+    <aura:handler event="c:getDynamicPicklistValue" action="{!c.getValueFromApplicationEvent}"/>
+    <aura:attribute name="mapOfBundleIdvsAssetIds" type="Map" 
+                    default="{}"/> 
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="reasonList" type="List" default="[]"/>  
+    <aura:handler name="init" value="{!this}" action="{!c.getLines}"/>
+    
+    <aura:if isTrue="{!v.qlList.length>0}">
+        <p>{!$Label.c.ExceptionQuoting_ErrorMessageSW}</p><br/> 
+        <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+             
+            <thead>
+                <tr class="slds-text-title_caps">
+                    <th scope="col" width="3%">
+                        <div class="slds-truncate" title="Number">#</div>
+                    </th>
+                    <th scope="col" width="3%">
+                        <div class="slds-truncate" title="Name">Line Name</div>
+                    </th>
+                    <th scope="col" width="10%">
+                        <div class="slds-truncate" title="Product Name">Product Name</div>
+                    </th>
+                    <th scope="col" width="35%">
+                        <div class="slds-cell-wrap" title="Product Name">Subscribed Asset Names</div>
+                    </th>
+                    <th scope="col" width="35%">
+                        <div class="slds-cell-wrap" title="Product Name">Subsumed Old Contract Line Items</div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <aura:iteration items="{!v.qlList}" var="a" indexVar = "i">
+                    <tr data-myid="some data" value="{!a.Id}" > 
+                        <td data-label="#">
+                            <div class="slds-truncate" title="">{!i+1}</div>
+                        </td> 
+                        <td data-label="Product Name">
+                            <div class="slds-truncate" title="">{!a.Name}</div>
+                        </td>
+                        <td data-label="Product Name">
+                            <div class="slds-truncate" title="">{!a.SBQQ__ProductCode__c}</div>
+                        </td>
+                        <td data-label="Quantity">
+                            <div class="slds-cell-wrap" title=""><lightning:input name="titleField" aura:id="titleFieldVal" value="{!a.SubscribedAssetNames__c}"/></div>
+                        </td>
+                        <td data-label="Quantity">
+                            <div class="slds-cell-wrap" title=""><lightning:input name="titleField" aura:id="aryOldCLI" value="{!a.Arroyo_Subsumed_Old_Contract_Line_Items__c}"/></div>
+                            
+                        </td>
+                    </tr> 
+                </aura:iteration>
+            </tbody>
+        </table>
+	<br/> <br/>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.hwQlList.length>0}">
+        {!$Label.c.ExceptionQuoting_ErrorMessageHW}
+        <br/><br/>
+        <table class="slds-table slds-table_bordered slds-table_cell-buffer" width = "60%">
+            <thead>
+                <tr class="slds-text-title_caps">
+                    <th scope="col" width="5%">
+                        <div class="slds-truncate" title="Number">#</div>
+                    </th>
+                    <th scope="col" width="10%">
+                        <div class="slds-truncate" title="Name">Line Name</div>
+                    </th>
+                    <th scope="col" width="20%">
+                        <div class="slds-truncate" title="Product Name">Product Name</div>
+                    </th>
+                    <th scope="col" width="35%">
+                        <div class="slds-truncate" title="Product Name">Licensing Type</div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <aura:iteration items="{!v.hwQlList}" var="a" indexVar = "i">
+                    <tr> 
+                        <td data-label="#">
+                            <div class="slds-truncate" title="">{!i+1}</div>
+                        </td>      
+                        <td data-label="Product Name">
+                            <div class="slds-truncate" title="">{!a.Name}</div>
+                        </td>
+                        <td data-label="Product Name">
+                            <div class="slds-truncate" title="">{!a.SBQQ__ProductCode__c}</div>
+                        </td>
+                        <td data-label="Quantity">
+                            <c:getDynamicPicklist qlInScope = "{!a.Id}" prevSelection = "{!a.Licensing_Model__c}" />
+                        </td>
+                    </tr> 
+                </aura:iteration>
+            </tbody>
+        </table>
+    </aura:if>
+    
+    <aura:if isTrue="{!or(v.qlList.length>0, v.hwQlList.length>0)}" >
+        <div class="slds-align_absolute-center" style="height:5rem">
+    		<lightning:button variant="brand" label="Submit" onclick="{!c.LeadSave}" />
+		</div>
+    	 
+    </aura:if>
+    <aura:if isTrue="{!v.isLoading}">
+        <lightning:spinner alternativeText="Loading.." variant="brand"/>
+    </aura:if>
+</aura:component>

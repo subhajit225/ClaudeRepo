@@ -1,0 +1,16 @@
+<apex:page standardController="Cluster__c" extensions="UpdateClusterController" action="{!updateCluster}" lightningStylesheets="true">
+     <apex:pageBlock title="Registeration Request for Cluster {!Cluster__c.name}">
+
+        <apex:pageBlockTable value="{!requestCluster}" var="item">
+            <apex:column value="{!item.Cluster__r.name}" rendered="{!item.Cluster__c != null}"/>
+            <apex:column value="{!item.Cluster__r.account__r.Name}"  rendered="{!item.Cluster__c != null}"/>
+            <apex:column value="{!Cluster__c.name}" rendered="{!item.Cluster__c == null}"/>
+            <apex:column value="{!Cluster__c.account__r.Name}"  rendered="{!item.Cluster__c == null}"/>
+            <apex:column value="{!item.Requested_Users__r.Name}"/>
+            <apex:column value="{!item.Registration_Date__c}"/>
+            <apex:column value="{!item.Request_Status__c}"/>
+
+        </apex:pageBlockTable>
+
+    </apex:pageBlock>
+</apex:page>

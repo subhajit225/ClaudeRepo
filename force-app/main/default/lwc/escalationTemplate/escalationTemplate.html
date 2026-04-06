@@ -1,0 +1,83 @@
+<template>
+
+    <div if:true={error} class="slds-m-top_xx-large slds-notify_container slds-is-relative">
+        <div class="slds-notify slds-notify_toast slds-theme_error" role="alert">
+            <div class="slds-notify__content">
+                <h2 class="slds-text-heading_small">An error occurred!</h2>
+                <p>{error}</p>
+            </div>
+        </div>
+    </div>
+
+    <lightning-spinner if:true={showSpinner} alternative-text="Loading" size="medium"></lightning-spinner>
+    <lightning-accordion-section name={templateDetail.section} label={templateDetail.section} >
+        <!-- Edit Form -->
+        <template if:true={escalationObj.isEdit}>
+            <lightning-record-edit-form object-api-name={sobjectName} density="comfy" record-id={escalationObj.recordId} record-type-id={templateDetail.recordtypeId}>
+                <lightning-messages> </lightning-messages>
+                <div class="slds-box slds-grid slds-wrap slds-p-around--medium" style="border:1px #ddd solid;padding-bottom: 4%;">
+                    <template if:true={templateDetail.fields} for:each={templateDetail.fields} for:item="fld">
+                        <div key={fld} class="slds-col slds-size_6-of-12 slds-p-horizontal_medium">
+                            <lightning-input-field field-name={fld} name={fld} onchange={handleChange}> </lightning-input-field>
+                        </div>
+                    </template>
+                    <div class="slds-p-left_large">
+                        <lightning-input type="text" label="Reported By" value={currentUserName} disabled> </lightning-input>
+                    </div>
+                    <div class="slds-p-top_x-large slds-p-left_large">
+                        <span if:true={draftLastModifiedDate}> Draft last saved <lightning-formatted-date-time value={draftLastModifiedDate} 
+                            year="2-digit" 
+                            month="short" 
+                            day="2-digit" 
+                            hour="numeric"
+                            weekday="short" 
+                            minute="2-digit"></lightning-formatted-date-time></span>
+                    </div>
+                </div>
+            </lightning-record-edit-form>
+            <!-- buttons -->
+            <div if:false={error} class="slds-m-top_xx-large slds-align_absolute-center slds-docked-form-footer">
+                <lightning-button class="slds-m-right_medium"
+                                    title="Cancel"
+                                    name="Cancel"
+                                    label="Cancel"
+                                    onclick={handleCancel}></lightning-button>
+                <lightning-button variant="brand"
+                                    title="Save"
+                                    type="submit"
+                                    name="Save"
+                                    label="Save"
+                                    onclick={handleSubmit}></lightning-button>
+            </div>
+        </template>
+        
+        <!-- View Form -->
+        <template if:false={escalationObj.isEdit}>
+            <lightning-record-view-form record-id={escalationObj.recordId} object-api-name={sobjectName}>
+                <div class="slds-box slds-grid slds-wrap slds-p-around--medium" style="border:1px #ddd solid;">
+                    <template if:true={templateDetail.fields} for:each={templateDetail.fields} for:item="fld">
+                        <div key={fld} class="slds-col slds-size_6-of-12 slds-p-horizontal_medium">
+                            <lightning-output-field field-name={fld}></lightning-output-field>
+                        </div>
+                    </template>
+                    <!-- Edit and Continue -->
+                    <div class="slds-m-top_xx-large slds-align_absolute-center slds-docked-form-footer stickyFooter">
+                        <!-- Edit -->
+                        <lightning-button class="slds-m-right_medium"
+                                            variant="brand"
+                                            type="edit"
+                                            name="Edit"
+                                            label="Edit"
+                                            onclick={handleEdit}></lightning-button>
+                        <!-- Continue: Hidden for Draft record -->
+                        <lightning-button if:false={isDraft} variant="brand"
+                                            type="continue"
+                                            name="continue"
+                                            label="Continue"
+                                            onclick={handleContinue}></lightning-button>
+                        </div>
+                    </div>
+            </lightning-record-view-form>
+        </template>
+    </lightning-accordion-section>
+</template>

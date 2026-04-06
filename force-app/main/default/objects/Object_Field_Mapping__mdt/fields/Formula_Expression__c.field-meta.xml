@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Formula_Expression__c</fullName>
+    <description>Formula expression to evaluate dynamically at runtime using Formula.builder(). Used when Transformation_Type__c = &apos;FORMULA&apos;. Supports standard Salesforce formula syntax. Example: IF(ISBLANK({!ETM_Role__c}), {!Routing_Method__c}, &apos;MQL to ETM&apos;)</description>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <inlineHelpText>Enter a Salesforce formula expression. Use {!FieldName} syntax to reference source record fields. Example: IF(ISBLANK({!ETM_Role__c}), {!Routing_Method__c}, &apos;MQL to ETM&apos;)</inlineHelpText>
+    <label>Formula Expression</label>
+    <length>32768</length>
+    <type>LongTextArea</type>
+    <visibleLines>5</visibleLines>
+</CustomField>

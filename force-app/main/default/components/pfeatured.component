@@ -1,0 +1,16 @@
+<apex:component controller="ResourceSearchController">
+
+<apex:attribute assignTo="{!pagescope}" name="thescope" type="string" description="workspace string to query"/>
+  <h3 class="sectionHeaders">Featured Items<br/></h3>
+ 
+  
+  <apex:repeat value="{!Featured}" var="f">
+  <ul class="links">
+ <li class="listItems">
+
+ <a href="{!$Page.ContentView}?id={!f.id}" Class="lightlink">{!f.title}</a>
+
+ </li>
+ </ul>
+ </apex:repeat>
+</apex:component>

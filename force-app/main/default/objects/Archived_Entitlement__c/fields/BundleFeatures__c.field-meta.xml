@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>BundleFeatures__c</fullName>
+    <description>Captures Bundle features of all the Opportunity Products associated with the Opportunity - CS21-865</description>
+    <externalId>false</externalId>
+    <formula>IF(INCLUDES(Product__r.Bundle_Features__c,&apos;AIR&apos;),&apos;AIR;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;App Flows&apos;),&apos;App Flows;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;Appliance&apos;),&apos;Appliance;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;Cloud Cluster&apos;),&apos;Cloud Cluster;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;Cloud Native Protection&apos;),&apos;Cloud Native Protection;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;CloudOn&apos;),&apos;CloudOn;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;CloudOut&apos;),&apos;CloudOut;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;Edge&apos;),&apos;Edge;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;Hardware&apos;),&apos;Hardware;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;NAS DA&apos;),&apos;NAS DA;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;O365&apos;),&apos;O365;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;Polaris GPS&apos;),&apos;Polaris GPS;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;Polaris Radar&apos;),&apos;Polaris Radar;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;Premium Support&apos;),&apos;Premium Support;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;RCDM&apos;),&apos;RCDM;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;Sonar&apos;),&apos;Sonar;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;L3 Support&apos;),&apos;L3 Support;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;RCDM Premium Support&apos;),&apos;RCDM Premium Support;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;Hardware Premium Support&apos;),&apos;Hardware Premium Support;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;Basic Support&apos;),&apos;Basic Support;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;L3 Basic Support&apos;),&apos;L3 Basic Support;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;M365H&apos;),&apos;M365H;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;UCL&apos;),&apos;UCL;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;NAS Cloud Direct&apos;),&apos;NAS Cloud Direct;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;Hybrid RCDM&apos;),&apos;Hybrid RCDM;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;Cloud Cluster ES&apos;),&apos;Cloud Cluster ES;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;Kubernetes&apos;),&apos;Kubernetes;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;Hybrid Edge&apos;),&apos;Hybrid Edge;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;Incident Containment&apos;),&apos;Incident Containment;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;Hybrid SAP HANA&apos;),&apos;Hybrid SAP HANA;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;CEM&apos;),&apos;CEM;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;SAP HANA&apos;),&apos;SAP HANA;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;Cloud Vault&apos;),&apos;Cloud Vault;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;Mosaic&apos;),&apos;Mosaic;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;PMC&apos;),&apos;PMC;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;NoSQL&apos;),&apos;NoSQL;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;CDP&apos;),&apos;CDP;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;Hybrid NASDA&apos;),&apos;Hybrid NASDA;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;Hardware L3 Support&apos;),&apos;Hardware L3 Support;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;NAS&apos;),&apos;NAS;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;RCDM L3 Support&apos;),&apos;RCDM L3 Support;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;Native VM&apos;),&apos;Native VM;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;Cloud Vault Backup&apos;),&apos;Cloud Vault Backup;&apos;,null)&amp;
+IF(INCLUDES(Product__r.Bundle_Features__c,&apos;CloudOn, RCDM&apos;),&apos;CloudOn, RCDM;&apos;,null)</formula>
+    <label>Bundle Features</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

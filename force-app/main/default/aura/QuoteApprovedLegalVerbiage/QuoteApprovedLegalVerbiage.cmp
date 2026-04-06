@@ -1,0 +1,57 @@
+<aura:component controller="QuoteApprovedLegalVerbiageController" implements="force:hasRecordId,force:lightningQuickAction" access="global" >
+	<aura:html tag="style">             
+        .slds-modal__container{        
+        width: 100% !important;
+        max-width: 75rem !important;
+        }        
+    </aura:html>
+    <!-- attributes -->
+    <aura:attribute name="data" type="Object"/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="quote" type="SBQQ__Quote__c" />
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="selectedRowsCount" type="Integer" default="0"/>
+    <aura:handler name="init" value="{! this }" action="{! c.doInit }"/>
+    <!---DataTable-->
+    
+    <div class="slds-align_absolute-center " >    
+        <lightning:layout >
+            <!--lightning:layoutItem padding="around-small">
+                <lightning:button label="Cancel" title="Cancel" onclick="{! c.cancel}"/>
+            </lightning:layoutItem-->
+            <lightning:layoutItem padding="around-small">
+                <lightning:button variant="brand" label="Save" title="Save" onclick="{!c.save}" />
+            </lightning:layoutItem>
+        </lightning:layout>
+        <br/>
+    </div>
+        <lightning:datatable
+            class="slds-table_bordered slds-table_col-bordered"
+            aura:id="legalTable"
+            columns="{! v.columns }"
+            data="{! v.data }"
+            keyField="id"             
+                             
+        />
+    <div class="slds-align_absolute-center " >    
+        <lightning:layout >
+            <!--lightning:layoutItem padding="around-small">
+                <lightning:button label="Cancel" title="Cancel" onclick="{! c.cancel}"/>
+            </lightning:layoutItem-->
+            <lightning:layoutItem padding="around-small">
+                <lightning:button variant="brand" label="Save" title="Save" onclick="{!c.save}" />
+            </lightning:layoutItem>
+        </lightning:layout>
+        <br/>
+    </div>
+    
+    <aura:if isTrue="{!v.Spinner}">
+        <div id="spinnerId" aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+</aura:component>

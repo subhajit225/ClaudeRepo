@@ -1,0 +1,17 @@
+<aura:component controller="TopicInfoController"  implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,force:hasRecordId" access="global">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="networkId" type="String" default="0DB1W00000001vMWAQ"/>
+    <aura:attribute name="topicId" type="String"/>
+    <aura:attribute name="Description" type="String"/>
+    <aura:attribute name="Name" type="String"/>
+    
+    <div class="slds-truncate slds-p-top_large slds-text-title_bold slds-title slds-align_absolute-center" title="{!v.Name}">
+        <span class="titleName">{!v.Name}</span>
+        <aura:if isTrue="{!v.Description != null}">
+            <lightning:helptext  content="{!v.Description}"/>
+        </aura:if>
+    </div>
+    
+    
+    
+</aura:component>

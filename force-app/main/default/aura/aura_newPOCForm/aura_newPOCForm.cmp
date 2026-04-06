@@ -1,0 +1,19 @@
+<aura:component implements="force:appHostable,force:lightningQuickActionWithoutHeader,force:hasRecordId,lightning:actionOverride" controller="PocFormControllerCls">
+	
+    <aura:attribute name="showPOCForm" type="boolean" default="false"/>
+   <aura:attribute name="showPOCReturnForm" type="boolean" default="false"/>
+   <aura:attribute name="callfromVfPage" type="boolean" default="false"/>
+    <aura:attribute name="sfURL" type="String" default=""/>
+    <lightning:workspaceAPI aura:id="workspace"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.onLoad}"/>
+    
+    <aura:if isTrue="{!v.showPOCForm}">
+    	<c:newPOCForm recordId="{!v.recordId}" callfromVfPage="{!v.callfromVfPage}" onredirectrecord="{!c.goBack}" componentMode="nested"/>
+        <aura:set attribute="else">
+          Redirecting.....
+        </aura:set>
+    </aura:if>
+    
+   
+</aura:component>

@@ -1,0 +1,103 @@
+<apex:page standardController="Case" showHeader="false" sidebar="false">
+    <div style="display:none;">
+        {!Case.RecordType.Name}
+    </div>
+    <apex:slds />
+    <apex:includeLightning />
+    <apex:includeScript value="/support/console/50.0/integration.js"/>
+    <div id="lightning" /> 
+    
+    <script type="text/javascript">
+    if(sforce.console.isInConsole()) {
+        
+    }
+    $Lightning.use("c:closeCaseApp", function() {
+        $Lightning.createComponent(
+            "c:closeCaseLightning",
+            {"recordId" : "{!Case.Id}","recordType": "{!IF(Case.RecordType.Name=='','Support Case',Case.RecordType.Name)}"},
+            "lightning",
+            function(cmp) {
+                // do some stuff
+            });
+    });
+    function receiveMessage(event){
+        
+        var primaryId ; 
+        
+        if (event.data.startsWith('500')){
+            if (sforce.console.isInConsole()) {
+                sforce.console.openPrimaryTab(null, '/lightning/r/Case/'+event.data, false,null, function(result){
+                    if (result.success == true) {
+                        primaryId = result.id;
+                        sforce.console.getEnclosingTabId(function(result2){
+                            var tabId = result2.id;
+                            sforce.console.closeTab(tabId);
+                        });
+                        
+                        
+                    } else {
+                        alert('Primary tab cannot be opened');
+                    }
+                }, null);
+                
+            } else {
+                sforce.one.navigateToSObject(event.data, "detail");
+            }
+            return;
+        }
+        
+        
+        if (event.data == "refresh"){
+            /* var callCloseTab= function callCloseTab(result) {
+                sforce.console.closeTab(result.id);
+                window.top.location='{!$Label.caseRecordLink+Case.Id+"/view"}'
+                return;
+            }
+            sforce.console.getEnclosingTabId(callCloseTab);*/
+            if(sforce.console.isInConsole()) {
+                sforce.console.getFocusedPrimaryTabId(showTabId);
+                //To Close the Current Tab OR Enclosing Tab
+                sforce.console.getEnclosingTabId(closeSubtab);
+            }else{
+                window.history.back();
+            }
+            
+        }
+        if (event.data == "close"){
+            if (sforce.console.isInConsole()) {
+                sforce.console.getEnclosingTabId(function(result2){
+                    var tabId = result2.id;
+                    sforce.console.closeTab(tabId);
+                });
+                return;
+            }else{
+                sforce.one.navigateToSObject('{!Case.Id}', "detail");
+            }
+        }   
+        var openSuccess = function openSuccess(result) {
+            //Report whether opening the new tab was successful
+            
+        }
+        }
+    var showTabId = function showTabId(result){
+        var tabId = result.id;
+        sforce.console.refreshPrimaryTabById(tabId , true, refreshSuccess);
+    };
+    
+    var refreshSuccess = function refreshSuccess(result){
+        //Report whether refreshing the primary tab was successful
+        if (result.success == true){
+            alert('Primary tab refreshed successfully');
+        } 
+        else{
+            alert('Primary did not refresh');
+        }
+    };
+    var closeSubtab = function closeSubtab(result) {
+        //Now that we have the tab ID, we can close it
+        var tabId = result.id;
+        sforce.console.closeTab(tabId);
+    };
+    window.addEventListener("message", receiveMessage, false);
+    </script>
+</apex:page>

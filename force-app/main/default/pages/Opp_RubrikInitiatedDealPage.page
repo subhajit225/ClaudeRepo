@@ -1,0 +1,51 @@
+<apex:page standardController="Opportunity" extensions="OpportunityRubrikInitiatedDeal" lightningStylesheets="true">
+<apex:slds />
+    <apex:outputPanel rendered="{!$User.UITheme != 'Theme3'}">
+        <style>
+            .pbButton{
+              text-align: center !important;
+               padding-right: 30% !important;
+            }
+        </style>
+    </apex:outputPanel>
+  <apex:form id="OppForm" styleClass="oppFormClass">
+    <apex:pageMessages id="message"></apex:pageMessages> 
+    <!--<script>
+        function showPopup(){ 
+           var x = document.getElementsByClassName("conPopup")[0];
+           x.style.display='block'; 
+           document.getElementsByClassName('contactFormClass')[0].reset();
+           //document.getElementsByClassName('contactFormClass')[0].reset() inputContact.
+           //callOpenAction();
+        }
+        function hidePopup(){
+           var x = document.getElementsByClassName("conPopup")[0];
+           x.style.display='none'; 
+        }
+        function callSave(){
+            callSaveAction();
+        }
+    </script>-->
+    
+            <apex:outputPanel styleClass="custPopup" layout="block" >
+<apex:pageBlock id="newOpp" title="Partner Info" >
+
+          <apex:pageBlockButtons >
+            <apex:commandButton action="{!saveOpp}"  value="Save" reRender="message"/>
+            <apex:commandButton action="{!cancel}"  value="Cancel"/>
+          </apex:pageBlockButtons>
+          <apex:pageMessages />
+
+          <apex:pageBlockSection columns="2" id="fieldsSet">
+          <apex:inputField value="{!Opportunity.Partner_Lookup__c}" required="true"/>
+            <apex:repeat value="{!$ObjectType.Opportunity.FieldSets.OpportunityInitiatedDealFields}" var="f">
+              
+              <apex:inputField value="{!Opportunity[f]}" required="true"/>
+            </apex:repeat>
+            <apex:inputField value="{!Opportunity.Partner_Rep_Phone_Number__c}"/>
+          </apex:pageBlockSection> 
+        </apex:pageBlock>
+         </apex:outputPanel>
+        
+  </apex:form>
+</apex:page>

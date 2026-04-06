@@ -1,0 +1,99 @@
+<template>
+  <template if:true={showimage}>
+    <div data-id="alertModal" class="displayModal">
+      <section class="modal">
+        <div class="uploadImagePopup">
+          <div class="imgPopupheader">
+            <div class="closeImgPopup" onclick={closePopup}>
+              <img src={close} alt="error" />
+            </div>
+          </div>
+          <div class="uploadImgBody">
+            <div
+              class={imageUploadMethodClass}
+              data-id="uploadImg"
+              onclick={uploadImg}
+            >
+              Upload Image
+            </div>
+            <div
+              class={imageUploadWebAddressMethodClass}
+              data-id="imgWebAddress"
+              onclick={uploadImgUsingWebAddress}
+            >
+              Web Address
+            </div>
+          </div>
+          <template if:true={uploadImageData}>
+            <div class="attachment_label">Attachment*</div>
+            <div class="upload_file_main">
+              <div class="upload_img_inner">
+                <div class="upload_img">
+                  <img src={fileImg} alt="error" />
+                </div>
+
+                <template if:true={fileData}>
+                  <div style="width: calc(100% - 28px)">
+                    <p class="file_uploaded">{fileData.filename}</p>
+                  </div>
+                </template>
+                <template if:false={fileData}>
+                  <div style="width: calc(100% - 28px)">
+                    <div class="no_file_selected">No file Selected</div>
+                  </div>
+                </template>
+              </div>
+              <div class="slds-m-top_medium">
+                <lightning-input
+                  type="file"
+                  accept=".png,.jpg,.gif"
+                  onchange={openfileUpload}
+                ></lightning-input>
+              </div>
+            </div>
+
+            <template if:true={imageFileValidation}>
+              <div class="error">File not supported</div>
+            </template>
+
+            <div class="imgCriteria">
+              Maximum size 1 MB. Only PNG, JPG or GIF
+            </div>
+
+            <div class="insertImgBtnDiv">
+              <lightning-button
+                variant="neutral"
+                label="Insert Image"
+                title="Insert Image"
+                onclick={insertImg}
+                disabled={imageBtnDisabled}
+              ></lightning-button>
+            </div>
+          </template>
+
+          <template if:true={webAddressImgData}>
+            <lightning-input
+              label="Image Web Address"
+              name="webAddress"
+              value={webAddressUrl}
+              data-id="webAddress"
+              onchange={getImageUrl}
+            ></lightning-input>
+            <template if:true={imageFileValidation}>
+              <div class="error">Url not supported</div>
+            </template>
+            <div class="insertImgBtnDiv">
+              <lightning-button
+                variant="neutral"
+                label="Insert Image"
+                title="Insert Image"
+                onclick={insertImgURL}
+                disabled={imageBtnDisabled}
+              ></lightning-button>
+            </div>
+          </template>
+        </div>
+      </section>
+    </div>
+  </template>
+</template>

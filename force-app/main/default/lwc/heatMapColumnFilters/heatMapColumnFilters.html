@@ -1,0 +1,17 @@
+<template>
+    <div class="sidebar-container">
+        <div class={sidebarClass}>
+            <template if:true={showColumnData}>
+                <template for:each={columnFiters} for:item="item">
+                    <div class="sidebar-item" key={item.ColumnName}>
+                        <input type="checkbox" id={item.ColumnName} name={item.ColumnName} onclick={handlerfilter} checked={item.State}/>
+                        <label for={item.ColumnName}>{item.ColumnName}</label>
+                    </div>
+                </template>
+            </template>
+        </div>
+        <button class="collapse-button" onclick={toggleSidebar}>
+            <lightning-icon icon-name={buttonIcon} size="small" class="cheveronRightClass"></lightning-icon>
+        </button>
+    </div>
+</template>

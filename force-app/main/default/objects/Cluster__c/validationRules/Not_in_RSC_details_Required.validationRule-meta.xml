@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Not_in_RSC_details_Required</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+ISBLANK(Not_in_RSC_details__c),
+ISPICKVAL(Not_in_RSC_reason__c, &quot;Other&quot;)
+)</errorConditionFormula>
+    <errorDisplayField>Not_in_RSC_details__c</errorDisplayField>
+    <errorMessage>&apos;Not in RSC details&apos; field must be filled out if the &apos;Not in RSC reason&apos; field is set to &apos;Other&apos;.</errorMessage>
+</ValidationRule>

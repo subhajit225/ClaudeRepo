@@ -1,0 +1,57 @@
+<template>
+  <template if:true={rangerId}>
+    <div class="parentPopUpClass su__h-100">
+      <section class="modelTooltipClass su__h-100" role="dialog">
+        <template if:true={articlerecorexists}>
+          <div class="mainContainer">
+            <div class="con">
+              <lightning-button-icon class="su__preview-cross-icon" icon-name="utility:close" size="x-small"
+                onclick={crosspreview}>
+              </lightning-button-icon>
+              <div class="containerClass">
+                <div class="slds-page-header__row">
+                  <div class="slds-page-header__col-title">
+                    <div class="slds-media su__align-items-center">
+                      <div class="slds-media__figure su__ml-0">
+                        <lightning-icon icon-name={iconName} alternative-text={iconText} title={iconText}>
+                        </lightning-icon>
+                      </div>
+                      <div class="slds-media__body">
+                        <div class="slds-page-header__name">
+                          <div class="slds-page-header__name-title">
+                            <lightning-record-view-form record-id={rangerId} object-api-name={objectName}>
+                              <lightning-output-field field-name={fieldName} field-class="textHeading" variant="label-hidden">
+                              </lightning-output-field>
+                            </lightning-record-view-form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="paddingBottom previewHeaderSection">
+                <template if:true={showarticlepreview}>
+                  <lightning-record-form record-id={rangerId} object-api-name={objectName} fields={compactLayoutFields}
+                    columns="4" mode="readonly"></lightning-record-form>
+                </template>
+              </div>
+            </div>
+            <!-- Add child Component -->
+            <div class="div slds-p-around_medium">
+              <template if:true={showarticlepreview}>
+                <c-s-u_-article-preview-child left={left} fileattachments={fileattachment} attachment={attachments} kid={rangerId}
+                  object={objectName}></c-s-u_-article-preview-child>
+              </template>
+            </div>
+          </div>
+        </template>
+        <template if:false={articlerecorexists}>
+          <div class="mainContainer su__h-100">
+            <h1 class="su_no-article su__h-100">Record no longer exists</h1>
+          </div>
+        </template>
+      </section>
+    </div>
+  </template>
+</template>

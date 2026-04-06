@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Partner_Portal_Link__c</fullName>
+    <externalId>false</externalId>
+    <formula>HYPERLINK($Label.Partner_Portal_Link+&quot;recordId=&quot;+Id+&quot;&amp;recordName=&quot;+Name,$Label.Partner_Portal_Link+&quot;recordId=&quot;+Id+&quot;&amp;recordName=&quot;+Name,&quot;View&quot;)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Partner Portal Link</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

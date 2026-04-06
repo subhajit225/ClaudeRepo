@@ -1,0 +1,32 @@
+<aura:component controller="topicController" implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,force:hasRecordId" access="global" >
+  <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="topicList" type="SObject"/>
+	<aura:attribute name="heading" type="string"/>
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+     <div class="slds-grid  slds-align_absolute-center slds-p-around_large" >
+        <div class="slds-size--1-of-1 " style="background-color:white;">
+            <div class="slds-grid" style="padding-left:17px;padding-top: 15px;"> 
+                <br />
+                <br />
+                <h1 class="artcls ">{!v.heading}</h1>
+            </div>
+            <div class="slds-grid slds-wrap paddingtopbottom " style="padding-left:25px;padding-right:25px;">
+                <aura:iteration var="topic" items="{!v.topicList}">
+                   <div class="slds-col articlecls1 slds-border_bottom slds-size_10-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12">
+                        <p>
+                            <a class="textdecorate" href="{!$Label.c.Community_Base_URL+'question/'+topic.item.Id}"><span class="titlesize">{!topic.item.Title}</span></a>
+                          <br></br>
+                            <span class="datepadding">
+                                By: {!topic.userName}
+                            </span>
+                            <br></br>
+                            <span class="datepadding">
+                                Created: <lightning:formattedDateTime value="{!topic.item.CreatedDate}" year="numeric" day="2-digit" month="short" timeZone="UTC"/>
+                            </span>
+                        </p>
+                    </div>
+                </aura:iteration>
+            </div>
+         </div>
+    </div>
+</aura:component>

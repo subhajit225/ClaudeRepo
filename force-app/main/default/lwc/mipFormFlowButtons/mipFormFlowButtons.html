@@ -1,0 +1,44 @@
+<template>
+    <div>
+        <template if:true={showAddMilestoneBtn}>
+            <lightning-formatted-rich-text class="formattedText" value={header1}></lightning-formatted-rich-text>
+        </template>
+
+        <template if:true={comingFromRebateMilestone}>
+            <lightning-formatted-rich-text class="formattedText" value={header2}></lightning-formatted-rich-text>
+        </template>
+        
+    </div>
+    <div class="slds-m-top_small slds-m-bottom_medium">
+        <template if:true={showAddMilestoneBtn}>
+            <lightning-button variant="brand" class="slds-m-left_x-small" label="Add Milestone" onclick={handleAddMilestone}> </lightning-button>
+        </template>
+        <template if:true={comingFromRebateMilestone}>
+            <lightning-button variant="brand" class="slds-m-left_x-small" label="Add Milestone" onclick={handleAddMilestone}> </lightning-button>
+            <lightning-button variant="brand-outline" class="slds-m-left_x-small" label="Back to Rebate Element Creation" onclick={handleBackToRebateElement}> </lightning-button>
+        </template>
+        <template if:false={comingFromRebateMilestone}>
+            <template if:true={showRebateMilestoneBtn}>
+                <lightning-button variant="brand" class="slds-m-left_x-small" label="Rebate Milestone Element" onclick={handleRebateMilestone}> </lightning-button>
+            </template>
+            <template if:true={showPSNLBtn}>
+                <lightning-button variant="brand" class="slds-m-left_x-small" label="PSNL Bookings Element" onclick={handlePSNL} disabled={disablePSNL}> </lightning-button>
+            </template>
+            <template if:true={showTotalBtn}>
+                <lightning-button variant="brand" class="slds-m-left_x-small" label="Total Booking Element" onclick={handleTotalBookings} disabled={disableTotal}> </lightning-button>
+            </template>
+            <template if:true={showBackToElementBtn}>
+                <lightning-button variant="destructive" class="slds-m-left_x-small" label="Back to Element Creation" onclick={handleBackToElement}> </lightning-button>
+            </template>
+            <template if:false={showPSNLBtn}>
+                <template if:true={milestoneCreated}>
+                        <lightning-button variant="brand-outline" class="slds-m-left_x-small" label="Back to Element Creation" onclick={handleBackToElement}> </lightning-button>
+                        <!--<footer class="slds-modal__footer slds-m-top_x-large">
+                            <lightning-button variant="destructive" class="slds-m-left_x-small" label="Finish" onclick={endFlow}> </lightning-button>
+                        </footer>-->
+                </template>
+            </template>
+        </template>
+    </div>
+    
+</template>

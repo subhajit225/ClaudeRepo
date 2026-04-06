@@ -1,0 +1,84 @@
+<aura:component extends="c:LCC_GenericLightningComponent" implements="force:hasRecordId,force:lightningQuickActionWithoutHeader,force:hasRecordId" controller="QuoteExtController" access="global">
+	<aura:attribute name="content" type="String"/> 
+    <aura:attribute name="ruleConditions"      type="RBRKRuleCondition__c[]"     default="[]" />
+    <aura:attribute name="summaryVariables"      type="RBRK_SubscriptionSummaryVariable__c[]"     default="[]" />
+    <aura:attribute name="businessVali" type="String"/>  
+    <aura:attribute name="showbusinesserr" type="Boolean" default = "false"/>  
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="sObjectInfo" type="Object" />
+    <aura:attribute name="quoteRec" type="Object" />
+    <aura:attribute name="simpleRecord" type="Object" access="global"/>
+    <aura:attribute name="recordError" type="String"/>
+    <aura:attribute name="quoteLineItemsRecds" type="Object" />
+    <aura:attribute name="assetRecords" type="Object" />
+    <aura:attribute name="pbeRecords" type="Object" />
+    <aura:attribute name="dlpRecords" type="Object" />
+    <aura:attribute name="accRecds" type="Object" />
+    <aura:attribute name="entitlementRecords" type="Object" />
+    <aura:attribute name="showDetailsScreen" type="Boolean" default = "false"/><!--CPQ22-3975--> 
+    <aura:attribute name="currentUser" type="User"/> 
+    <aura:attribute name="CLIRecords" type="Object" />
+    <aura:attribute name="cpqDispositionQLs" type="Object" />
+    <aura:attribute name="alertMessage" type="String[]" default="[]"/> 
+    <aura:attribute name="isApproval" type="Boolean"/> 
+    <aura:attribute name="ApproveQuote" type="Boolean" default = "false"/>
+    <aura:attribute name="showSMSPage" type="Boolean" default="true"/> <!--FYSR25-1460-->
+    <aura:attribute name="disableOppValid" type="Boolean" default="false"/> <!--CPQ22-6026-->
+    <aura:attribute name="last_90_days" type="Date"/>
+    <aura:attribute name="next_365_days" type="Date"/>
+    <aura:attribute name="lowerBound" type="Decimal"/><!--FY25SR-1745-->
+    <aura:attribute name="upperBound" type="Decimal"/><!--FY25SR-1745-->
+    <lightning:workspaceAPI aura:id="workspace"/>
+    <aura:handler name="init" value="{!this}" action="{!c.handleRecordUpdated}"/>
+    <force:recordData aura:id="recordLoader" recordId="{!$SObjectType.CurrentUser.Id}" fields="Profile.Name" targetFields="{!v.currentUser}"/>
+    <aura:handler name="sendForApprovalEvt" event="c:SendForApprovalEvt" action="{!c.sendForApproval}" />
+    <!-- CPQ22-5846 starts-->
+    <aura:attribute name="isException" type="Boolean" default="false"/> 
+    <aura:attribute name="exceptionTitle" type="string" default=""/> 
+    <aura:attribute name="alertExceptionMessage" type="String[]" default="[]"/> 
+    <!-- CPQ22-5846 Ends-->
+    
+    <!--  <force:recordData aura:id="recordLoader"
+      recordId="{!v.recordId}"
+      fields = "Id,Opportunity_Stage__c,Installed_By__c,Running_User_Profile__c,ApprovalStatus__c,Count_of_Rubrik_Basic_Edition__c,Discount_Justification__c,SBQQ__Type__c,Discount_Floor_Breached__c,SBQQ__Account__c,Is_Refreshed_Identifier__c,Polaris_Conversion__c"                 
+      targetRecord="{!v.simpleRecord}"
+      targetFields="{!v.quoteRec}"
+      targetError="{!v.recordError}"
+      recordUpdated="{!c.handleRecordUpdated}"
+      mode="EDIT"                
+    />--> 
+    {!v.recordError}
+    {!v.recordError}
+    <aura:if isTrue="{!v.showbusinesserr}"> 
+        <div class="slds-box slds-theme_success"  > 
+           <aura:unescapedHtml value= "{!v.businessVali}"></aura:unescapedHtml> 
+       </div> 
+       <aura:set attribute="else"> 
+           <!--<div class="slds-p-top_large slds-p-bottom_large slds-align_absolute-center"> -->
+                <div class="slds-box wordBreak"> <!--CPQ22-5990-->
+        <aura:unescapedHtml value="{!v.content}"></aura:unescapedHtml>
+    </div>
+      </aura:set> 
+       
+   </aura:if>  
+    <!--CPQ22-3975 starts-->
+    <div>
+        <aura:if isTrue="{!v.showDetailsScreen}">
+			<c:PopulateMandatoryFields recordId = "{!v.recordId}"/>        
+        </aura:if>
+    </div>
+    <!--CPQ22-3975 Ends-->
+    <div>
+        <aura:if isTrue="{!v.isApproval}">
+			<c:AlertSubmitApproval isApproval = "{!v.isApproval}"  
+            ApproveQuote = "{!v.ApproveQuote}" quoteRec="{!v.quoteRec}" alertMessage = "{!v.alertMessage}" 
+            alertExceptionMessage = "{!v.alertExceptionMessage}"
+            isException="{!v.isException}"
+            exceptionTitle="{!v.exceptionTitle}" />        
+        </aura:if>
+    </div>
+
+    
+    
+    
+</aura:component>

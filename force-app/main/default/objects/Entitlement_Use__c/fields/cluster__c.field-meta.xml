@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>cluster__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>Cluster on which this entitlement is activated / consumed / used / bound.</description>
+    <label>Cluster</label>
+    <referenceTo>Cluster__c</referenceTo>
+    <relationshipLabel>Entitlement Uses</relationshipLabel>
+    <relationshipName>Entitlement_Uses</relationshipName>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

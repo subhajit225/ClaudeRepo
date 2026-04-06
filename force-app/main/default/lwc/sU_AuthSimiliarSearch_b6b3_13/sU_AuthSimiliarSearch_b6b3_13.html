@@ -1,0 +1,24 @@
+<template>
+    <template if:true={similarSearches}>
+        <div
+            class="su__position-relative su__mt-18 su__p-3 su__sm-shadow su__bg-white similar-search-width similiarSearchBox">
+            <div class="su__ribbon-block su__position-absolute">
+                <div class="su__ribbon-row-block su__w-auto su__clearfix su__loading-view">
+                    <div
+                        class="su__ribbon-text font-12 su__float-left su__text-center su__text-black su__font-bold su__mb-2 su__radius-3">
+                        similiar search
+                    </div>
+                </div>
+            </div>
+            <ul class="su__p-0 u__mb-2 su__mt-2">
+                <template for:each={similiarSearchData} for:item="data" for:index="indexVar">
+                    <li key={data}
+                        class="su__mb-2 su__px-3 su__py-1 su__d-flex su__border su__radius su__align-items-start hover__effect su__loading-view">
+                        <a class="font-14 su__text-decoration su__text-black hover-color-dblue" data-val={data}
+                            onclick={clickSearchSuggestion}>{data}</a>
+                    </li>
+                </template>
+            </ul>
+        </div>
+    </template>
+</template>

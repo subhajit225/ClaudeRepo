@@ -1,0 +1,29 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" Controller="PC_ProfileController">
+    <aura:attribute name="name" type="string"/>
+    <aura:attribute name="user" type="User"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <div class="slds-size_1-of-1">        
+        <div class="slds-box_x-small slds-text-align_center slds-m-around_x-small tileMenuItemCard">
+            <div class="uiMenuItem forceCommunityTileMenuItem" data-aura-class="slds-box uiMenuItem forceCommunityTileMenuItem">
+                <!-- <a class="navTileLink" role="menuitem" data-special-link="true" title="Register a Deal">-->
+                <div class="tileLabel">Profile</div>                     
+                <div class="left">
+                    <img style="height:130px; object-fit:cover" alt="{!v.user.Name}" src="{!v.user.FullPhotoUrl}" title="{!v.user.Name}" />
+                </div>
+                <div class="right">
+                    <p class="slds-text-align_left slds-border_bottom">{!v.user.Contact.Account.Name}</p>
+                    <p class="slds-text-align_left slds-border_bottom">{!v.user.Contact.Name}</p>
+
+                    <p class="slds-text-align_left slds-border_bottom">Role: {!v.user.Contact.Primary_Role__c}</p>
+                    <p class="slds-text-align_left slds-border_bottom">Partner Type: {!v.user.Contact.Account.Type}</p>
+                    <p class="slds-text-align_left">Program Status: {!v.user.Contact.Account.Program_Status__c}</p>
+                </div>
+                <!--<div class="slds-align-absolute-center imagePreview" style="background-image: url(/partnersnew/file-asset/Rubrik7?v=1);">
+                        
+                    </div> -->
+                <!-- </a>-->
+            </div>
+        </div>
+    </div>
+</aura:component>

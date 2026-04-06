@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Risk_Category__c</fullName>
+    <description>Low
+Medium
+High</description>
+    <label>Risk Category</label>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Engagement Risk</fullName>
+                <default>false</default>
+                <label>Engagement Risk</label>
+            </value>
+            <value>
+                <fullName>CX Score Risk</fullName>
+                <default>false</default>
+                <label>CX Score Risk</label>
+            </value>
+            <value>
+                <fullName>Renewal Sentiment Risk</fullName>
+                <default>false</default>
+                <label>Renewal Sentiment Risk</label>
+            </value>
+            <value>
+                <fullName>CSM Sentiment Risk</fullName>
+                <default>false</default>
+                <label>CSM Sentiment Risk</label>
+            </value>
+            <value>
+                <fullName>Prediction Model</fullName>
+                <default>false</default>
+                <label>Prediction Model</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

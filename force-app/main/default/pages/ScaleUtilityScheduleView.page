@@ -1,0 +1,131 @@
+<apex:page showHeader="false" sidebar="false" cache="false" contentType="text/xml" controller="ScaleUtilitySegmentedLineViewController">
+        <block>
+           <table table-layout="fixed" >
+                <table-body>
+                    <table-row>
+                        <table-cell display-align="center">
+                            <block text-align="left" font-size = "10px" font-weight="bold" margin-bottom = "5px"> 
+                                <apex:outputText rendered="{! IF((scheduleLinesToDisplay.size > 0), true, false)}">
+                                Schedule
+                                </apex:outputText>
+                            </block>
+                        </table-cell>
+                    </table-row>
+                </table-body>
+            </table>
+          
+            <apex:outputText rendered="{! IF((scheduleLinesToDisplay.size > 0), true, false)}"> 
+                <table border-color="#000000" border-width="1px" border-style="solid">
+                    
+                     <table-column column-width="12%"/>
+                    <table-column column-width="20%"/>
+                    <apex:outputText rendered="{!NOT(hasPayGoProduct)}">
+                        <table-column column-width="16%"/> 
+                        <table-column column-width="10.67%"/>
+                    </apex:outputText>
+                    <table-column column-width="14.67%"/>
+                    
+                    
+
+                         <table-header>
+                            <table-row font-weight="bold" font-size="0.7em" text-align="left" background-color="#47baef" color="#ffffff" >
+                                <table-cell  border="1px solid black" margin="0pt" padding="2pt" padding-top="11pt" padding-bottom="1pt" text-align="center"><block>Month</block></table-cell>
+                                <table-cell  border="1px solid black" margin="0pt" padding="2pt" padding-top="11pt" padding-bottom="1pt" text-align="Left"><block>Product Code</block></table-cell>
+                                 <apex:outputText rendered="{!NOT(hasPayGoProduct)}">
+                                    <table-cell  border="1px solid black" margin="0pt" padding="2pt" padding-top="11pt" padding-bottom="1pt" text-align="Left"><block>Reserve Quantity</block></table-cell>
+                                    <table-cell  border="1px solid black" margin="0pt" padding="2pt" padding-top="1pt" padding-bottom="1pt" text-align="left"><block>Unit Net Price</block></table-cell>
+                                </apex:outputText>
+                                <table-cell  border="1px solid black" margin="0pt" padding="2pt" padding-top="1pt" padding-bottom="1pt" text-align="right"><block>Total Net Price Per Month</block></table-cell>
+                            </table-row> 
+                        </table-header>
+                        {!scheduleLinesToDisplay}
+                    
+                        <table-body>
+                            <apex:repeat var="varWrap" value="{!scheduleLinesToDisplay}">
+                                <table-row font-size="0.7em">
+                                
+                                <apex:outputText rendered="{! IF((varWrap.month != null), true, false)}">
+                                    <table-cell  border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="center" >
+                                        <block>{!varWrap.month}</block>
+                                    </table-cell>
+                                     <table-cell  border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left" >
+                                        <block>{!varWrap.productCode}</block>
+                                    </table-cell>
+                                    <apex:outputText rendered="{!NOT(hasPayGoProduct)}">
+                                        <table-cell   border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left" >
+                                            <block>{!varWrap.reserveQty} {!varWrap.userOrTb}</block>
+                                        </table-cell>
+                                        <table-cell   border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left" >
+                                            <block>${!varWrap.unitNetPrice}</block>
+                                        </table-cell>
+                                    </apex:outputText>  
+                                   
+                                    <table-cell   border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="right" >
+                                        <block>${!varWrap.totalNetPricePerMonthStr}</block>
+                                    </table-cell>
+                                    </apex:outputText> 
+                                    
+                                    <apex:outputText rendered="{! IF((varWrap.month == null), true, false)}">
+                                    
+                                     <table-cell border="none" background-color= "#D3D3D3" margin="0pt" padding="2pt" padding-left="0.5pt" padding-right="2pt" text-align="left">
+                                         <block>{!varWrap.unitNetPrice}</block>  
+                                    </table-cell>
+                                       <table-cell  border="none" background-color= "#D3D3D3" margin="0pt" padding="2pt" padding-left="0.5pt" padding-right="2pt" text-align="left" >
+                                         
+                                              <block> TOTAL per month</block>
+                                    </table-cell> 
+                                    <apex:outputText rendered="{!NOT(hasPayGoProduct)}">
+                                        <table-cell  border="none" background-color= "#D3D3D3" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="center" >
+                                            <block>{!varWrap.reserveQty}</block>
+                                        </table-cell>
+                                    </apex:outputText>
+                                    <apex:outputText rendered="{!NOT(hasPayGoProduct)}">
+                                        <table-cell  border="none" background-color= "#D3D3D3" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="center" >
+                                            <block>{!varWrap.month}</block>
+                                        </table-cell>
+                                    </apex:outputText>
+                                   
+                                    <table-cell  border="1px solid black" background-color= "#D3D3D3" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="right" >
+                                        <block>${!varWrap.totalNetPricePerMonthStr}</block>
+                                    </table-cell>                            
+                                 
+                                    </apex:outputText>
+                                    
+                                    
+                                    
+                                      
+                                </table-row>
+                                
+                                 </apex:repeat>
+                        </table-body>
+                </table>
+                <table table-layout="fixed" border-color="#000000" >
+                    <apex:outputText rendered="{!NOT(hasPayGoProduct)}">
+                        <table-column column-width="58.67%"/> 
+                        <table-column column-width="14.67%"/>
+                     </apex:outputText>
+                     <apex:outputText rendered="{!hasPayGoProduct}">
+                        <table-column column-width="32%"/> 
+                        <table-column column-width="14.67%"/>
+                     </apex:outputText>
+                    
+                        <table-body>
+                                <table-row font-size="0.7em">
+                                      <table-cell  margin="0pt" padding="3pt" padding-left="0pt" padding-right="2pt" text-align="right" > 
+                                        <block>TOTAL</block>
+                                     </table-cell>  
+                                    <table-cell border="1px solid black" margin="0pt" padding="3pt" padding-left="2pt" padding-right="2pt" text-align="right" >
+                                        
+                                         <block>{!reserveTableTotal}</block>
+                                    </table-cell>
+                                    
+                                </table-row>
+                                 
+                        </table-body>
+                </table>
+                </apex:outputText> 
+            <apex:outputText rendered="{! IF((orderforQuote != null), true, false)}" >
+             <block font-style="italic" text-align="left" font-size = "9px" margin-top = "10px">The above quoted products are added to the products ordered under PO# {!orderforQuote} as specified on the original quote {!originalquoteNumber}.</block>
+           </apex:outputText>
+    </block>
+</apex:page>

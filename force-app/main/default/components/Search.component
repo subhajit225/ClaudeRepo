@@ -1,0 +1,510 @@
+<apex:component ><div id="search" class="CoveoSearchInterface" data-enable-history="true" data-design="new">
+<div class="CoveoFolding" data-field="@conversationreferenceid" data-tab="Email" data-parent-field="@containsattachment" data-child-field="@isattachment" data-range="0"></div>
+<div class="CoveoFolding" data-field="@jiissueid" data-expand-expression="@jidocumenttype==Attachment" data-tab="Jira" data-parent-field="@jiid" data-child-field="@jiparentissueid" data-range="10"> </div>
+<div class="CoveoFoldingForThread" data-field="@sfcaseid" data-tab="SalesforceCase" data-parent-field="@sfid" data-child-field="@sfcaseid" data-range="0"></div>
+<div class="CoveoAnalytics"></div>
+<div class="coveo-tab-section">
+    <a class="CoveoTab" data-id="All" data-caption="All Content"></a>
+<a class="CoveoTab" data-id="Salesforce" data-caption="Salesforce" data-expression="@sfid"></a>
+<a class="CoveoTab" data-id="Email" data-caption="Email" data-expression="@mailbox" data-sort="date descending"></a>
+<a class="CoveoTab" data-id="GoogleDrive" data-caption="Google Drive" data-expression="@connectortype==GoogleDriveCrawler"></a>
+<a class="CoveoTab" data-id="Jira" data-caption="Jira" data-expression="@jisourcetype AND NOT @jidocumenttype=&quot;WorkLog&quot;"></a>
+<a class="CoveoTab" data-id="SalesforceCase" data-caption="Cases" data-expression="@sfcaseid"></a>
+<a class="CoveoTab" data-id="Slack" data-caption="Slack" data-expression="@syssourcetype==&quot;Slack&quot;"></a>
+</div>
+<div class="coveo-search-section">
+    <div class="CoveoSettings"></div>
+    <div class="CoveoSearchbox" data-enable-omnibox="true"></div>
+</div>
+<div class="coveo-main-section">
+    <div class="coveo-facet-column"><div class="CoveoFacet" data-title="Type" data-field="@objecttype" data-tab="All"></div>
+<div class="CoveoFacet" data-title="Source" data-field="@source" data-tab="All, Salesforce, Email, GoogleDrive, Jira, SalesforceCase, Slack"></div>
+<div class="CoveoFacet" data-title="FileType" data-field="@filetype" data-tab="All"></div>
+<div class="CoveoFacet" data-title="Author" data-field="@author" data-tab="All"></div>
+<div class="CoveoFacet" data-title="Year" data-field="@year" data-tab="All"></div>
+<div class="CoveoFacet" data-title="Month" data-field="@month" data-tab="All"></div>
+<div class="CoveoFacet" data-title="Type" data-field="@objecttype" data-number-of-values="5" data-tab="Salesforce"></div>
+<div class="CoveoFacet" data-title="Close quarter" data-field="@sfopportunityclosedquarterc" data-computed-field="@sfopportunityamountconverted" data-sort-criteria="AlphaDescending" data-tab="Salesforce"></div>
+<div class="CoveoFacet" data-title="Salesforce Account" data-field="@sfaccountname" data-computed-field="@sfopportunityamountconverted" data-sort-criteria="ComputedFieldDescending" data-number-of-values="7" data-tab="Salesforce"></div>
+<div class="CoveoFacet" data-title="Salesforce Owner" data-field="@sfownername" data-computed-field="@sfopportunityamountconverted" data-sort-criteria="ComputedFieldDescending" data-number-of-values="7" data-tab="Salesforce"></div>
+<div class="CoveoFacet" data-title="Opportunity Type" data-field="@sfopportunitytype" data-computed-field="@sfopportunityamountconverted" data-sort-criteria="ComputedFieldDescending" data-number-of-values="5" data-tab="Salesforce"></div>
+<div class="CoveoFacet" data-title="Opportunity Stage" data-field="@sfopportunitystagename" data-computed-field="@sfopportunityamountconverted" data-sort-criteria="ComputedFieldDescending" data-tab="Salesforce"></div>
+<div class="CoveoFacet" data-title="Lead Source" data-field="@sfleadsource" data-computed-field="@sfopportunityamountconverted" data-sort-criteria="ComputedFieldDescending" data-number-of-values="5" data-tab="Salesforce"></div>
+<div class="CoveoFacet" data-title="Mailbox" data-field="@mailbox" data-tab="Email"></div>
+<div class="CoveoFacet" data-title="From" data-field="@from" data-tab="Email"></div>
+<div class="CoveoFacet" data-title="To" data-field="@to" data-tab="Email"></div>
+<div class="CoveoFacet" data-title="File Type" data-field="@filetype" data-tab="Email"></div>
+<div class="CoveoFacet" data-title="Year" data-field="@year" data-tab="Email"></div>
+<div class="CoveoFacet" data-title="Month" data-field="@month" data-tab="Email"></div>
+<div class="CoveoFacet" data-title="File Type" data-field="@filetype" data-tab="GoogleDrive"></div>
+<div class="CoveoFacet" data-title="Origin" data-field="@gdfilesource" data-custom-sort="My Drive,Shared with Me, Shared Globally" data-tab="GoogleDrive"></div>
+<div class="CoveoFacet" data-title="Owner" data-field="@author" data-tab="GoogleDrive"></div>
+<div class="CoveoFacet" data-title="Last modified by" data-field="@gdfilelastmodifyinguserdisplayname" data-tab="GoogleDrive"></div>
+<div class="CoveoFacet" data-title="Shared To" data-field="@to" data-allow-toggling-operator="true" data-is-multi-value="true" data-tab="GoogleDrive"></div>
+<div class="CoveoFacet" data-title="Shared From" data-field="@from" data-tab="GoogleDrive"></div>
+<div class="CoveoFacet" data-title="Year" data-field="@year" data-tab="GoogleDrive"></div>
+<div class="CoveoFacet" data-title="Month" data-field="@month" data-tab="GoogleDrive"></div>
+<div class="CoveoFacet" data-title="Type" data-field="@jidocumenttype" data-tab="Jira"></div>
+<div class="CoveoFacet" data-title="Project" data-field="@jiprojectname" data-tab="Jira"></div>
+<div class="CoveoFacet" data-title="Assignee" data-field="@jifieldsassigneedisplayname" data-tab="Jira"></div>
+<div class="CoveoFacet" data-title="Reporter" data-field="@jifieldsreporterdisplayname" data-tab="Jira"></div>
+<div class="CoveoFacet" data-title="Issue type" data-field="@jifieldsissuetypename" data-tab="Jira"></div>
+<div class="CoveoFacet" data-title="Author" data-field="@jiauthordisplayname" data-tab="Jira"></div>
+<div class="CoveoFacet" data-title="Update Author" data-field="@jiupdateauthordisplayname" data-tab="Jira"></div>
+<div class="CoveoFacet" data-title="Commenter" data-field="@jifieldscommentcommentsauthordisplayname" data-tab="Jira"></div>
+<div class="CoveoFacet" data-title="Links" data-field="@jifieldsissuelinkstypename" data-tab="Jira"></div>
+<div class="CoveoFacet" data-title="Outward links" data-field="@jifieldsissuelinkstypeoutward" data-tab="Jira"></div>
+<div class="CoveoFacet" data-title="Inward links" data-field="@jifieldsissuelinkstypeinward" data-tab="Jira"></div>
+<div class="CoveoFacet" data-title="Fix Version/s" data-field="@jifieldsfixversionsname" data-tab="Jira"></div>
+<div class="CoveoFacet" data-title="Version" data-field="@jifieldsversionsname" data-tab="Jira"></div>
+<div class="CoveoFacet" data-title="Label" data-field="@jifieldslabels" data-allow-toggling-operator="true" data-is-multi-value="true" data-tab="Jira"></div>
+<div class="CoveoFacet" data-title="Status" data-field="@jifieldsstatusname" data-allow-toggling-operator="true" data-is-multi-value="true" data-tab="Jira"></div>
+<div class="CoveoFacet" data-title="Priority" data-field="@jifieldspriorityname" data-tab="Jira"></div>
+<div class="CoveoFacet" data-title="Type" data-field="@objecttype" data-tab="SalesforceCase"></div>
+<div class="CoveoFacet" data-title="Case Status" data-field="@sfcasestatus" data-tab="SalesforceCase"></div>
+<div class="CoveoFacet" data-title="Case Priority" data-field="@sfcasespriority" data-tab="SalesforceCase"></div>
+<div class="CoveoFacet" data-title="Account" data-field="@sfaccountname" data-tab="SalesforceCase"></div>
+<div class="CoveoFacet" data-title="Owner" data-field="@sfownername" data-tab="SalesforceCase"></div>
+<div class="CoveoFacet" data-title="Document Type" data-field="@slackdocumenttype" data-tab="Slack"></div>
+<div class="CoveoFacet" data-title="Channels" data-field="@slackchannelsname" data-tab="Slack"></div>
+<div class="CoveoFacet" data-title="Participating Users" data-field="@slackparticipatingusers" data-tab="Slack" data-is-multi-value-field="true"></div>
+<div class="CoveoFacet" data-title="Shared Channels" data-field="@slackfilesharedchannelsnames" data-tab="Slack" data-is-multi-value-field="true"></div>
+<div class="CoveoFacet" data-title="File Type" data-field="@sysfiletype" data-tab="Slack"></div>
+<div class="CoveoFacet" data-title="Author" data-field="@author" data-tab="Slack"></div>
+<div class="CoveoFacet" data-title="Year" data-field="@year" data-tab="Slack"></div>
+<div class="CoveoFacet" data-title="Month" data-field="@month" data-tab="Slack"></div></div>
+    <div class="coveo-results-column">
+        <div class="CoveoShareQuery"></div>
+        <div class="CoveoPreferencesPanel">
+            <div class="CoveoResultsPreferences"></div>
+            <div class="CoveoResultsFiltersPreferences"></div>
+        </div>
+        <div class="CoveoTriggers"></div>
+        <div class="CoveoBreadcrumb"></div>
+        <div class="CoveoSearchAlerts"></div>
+        <div class="coveo-results-header">
+            <div class="coveo-summary-section">
+                <span class="CoveoQuerySummary"></span>
+                <span class="CoveoQueryDuration"></span>
+            </div>
+            <div class="coveo-result-layout-section">
+                <span class="CoveoResultLayout"></span>
+            </div>
+            <div class="coveo-sort-section">
+                <span class="CoveoSort" data-sort-criteria="relevancy" data-caption="Relevance"></span>
+<span class="CoveoSort" data-sort-criteria="date descending,date ascending" data-caption="Date"></span>
+<span class="CoveoSort" data-sort-criteria="@sfopportunityamountconverted descending,@sfopportunityamountconverted ascending" data-tab="Salesforce" data-caption="Amount"></span>
+            </div>
+        </div>
+        <div class="CoveoHiddenQuery"></div>
+        <div class="CoveoDidYouMean"></div>
+        <div class="CoveoErrorReport" data-pop-up="false"></div>
+        <div class="CoveoResultList" data-layout="list" data-wait-animation="fade" data-auto-select-fields-to-include="true">
+            <script id="SalesforceCase" class="result-template" type="text/html" data-layout="list" data-field-sfcaseid=""><div class="coveo-result-frame">
+  <div class="coveo-result-row">
+    <div class="coveo-result-cell" style="width:85px; text-align:center; padding-top:7px">
+      <span class="CoveoIcon">
+      </span>
+      <span class="CoveoQuickview">
+      </span>
+    </div>
+    <div class="coveo-result-cell" style="padding-left:15px">
+      <div class="coveo-result-row">
+        <div class="coveo-result-cell" style="font-size:18px">
+          <a class="CoveoResultLink">
+          </a>
+        </div>
+        <div class="coveo-result-cell" style="width:120px;text-align:right;font-size:12px;">
+          <span class="CoveoFieldValue" data-field="@date" data-helper="date">
+          </span>
+        </div>
+      </div>
+      <div class="coveo-result-row">
+        <div class="coveo-result-cell" style="padding-top:5px; padding-bottom:5px">
+          <div class="CoveoExcerpt">
+          </div>
+        </div>
+      </div>
+      <div class="coveo-result-row">
+        <div class="coveo-result-cell" style="padding-top:5px; padding-bottom:5px">
+          <table class="CoveoFieldTable">
+            <tbody>
+              <tr data-field="@sffcaseid" data-caption="Subject">
+              </tr>
+              <tr data-field="@sfcasesubject" data-caption="Subject">
+              </tr>
+              <tr data-field="@sfcasenumber" data-caption="Case Number">
+              </tr>
+              <tr data-field="@sfcasepriority" data-caption="Priority">
+              </tr>
+              <tr data-field="@sfcaseorigin" data-caption="Origin">
+              </tr>
+              <tr data-field="@sfaccountname" data-caption="Account Name">
+              </tr>
+              <tr data-field="@sfowner" data-caption="Owner">
+              </tr>
+              <tr data-field="@sfcasestatus" data-caption="Status">
+              </tr>
+              <tr data-field="@sfcontactname" data-caption="Contact">
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</script><script id="Salesforce" class="result-template" type="text/html" data-layout="list" data-field-sfid=""><div class="coveo-result-frame">
+  <div class="coveo-result-row">
+    <div class="coveo-result-cell" style="width:85px; text-align:center; padding-top:7px">
+      <span class="CoveoIcon">
+      </span>
+      <span class="CoveoQuickview">
+      </span>
+    </div>
+    <div class="coveo-result-cell" style="padding-left:15px">
+      <div class="coveo-result-row">
+        <div class="coveo-result-cell" style="font-size:18px">
+          <a class="CoveoResultLink">
+          </a>
+        </div>
+        <div class="coveo-result-cell" style="width:120px; text-align:right;font-size:12px">
+          <span class="CoveoFieldValue" data-field="@date" data-helper="date">
+          </span>
+        </div>
+      </div>
+      <div class="coveo-result-row">
+        <div class="coveo-result-cell" style="padding-top:5px; padding-bottom:5px">
+          <div class="CoveoExcerpt">
+          </div>
+        </div>
+      </div>
+      <div class="coveo-result-row">
+        <div class="coveo-result-cell" style="padding-top:5px; padding-bottom:5px; font-size:13px;">
+          <table class="CoveoFieldTable">
+            <tbody>
+              <tr data-field="@sfaccountname" data-caption="Account">
+              </tr>
+              <tr data-field="@sfownername" data-caption="Owner">
+              </tr>
+              <tr data-field="@sfopportunityamountconverted" data-caption="Total" data-helper="currency">
+              </tr>
+              <tr data-field="@sfopportunitylicensingstotalcconverted" data-caption="License" data-helper="currency">
+              </tr>
+              <tr data-field="@sfopportunityamountsupportcconverted" data-caption="Support" data-helper="currency">
+              </tr>
+              <tr data-field="@sfopportunityconsultingstotalcconverted" data-caption="PS" data-helper="currency">
+              </tr>
+              <tr data-field="@sfopportunitystagename" data-caption="Stage">
+              </tr>
+              <tr data-field="@sfopportunitydealtypec" data-caption="Deal Type">
+              </tr>
+              <tr data-field="@sfopportunitycompetitionc" data-caption="Competition" data-split-values="true">
+              </tr>
+              <tr data-field="@sfibdusername" data-caption="ISR">
+              </tr>
+              <tr data-field="@sfopportunityregionc" data-caption="Region">
+              </tr>
+              <tr data-field="@sfleadsource" data-caption="Lead Source">
+              </tr>
+              <tr data-field="@sfleadstatus" data-caption="Lead status">
+              </tr>
+              <tr data-field="@worktitle" data-caption="Work title">
+              </tr>
+              <tr data-field="@sfemail" data-caption="Email" data-helper="email" data-html-value="true">
+              </tr>
+              <tr data-field="@sfcontactphone" data-caption="Phone">
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</script><script id="EmailThread" class="result-template" type="text/html" data-layout="list" data-field-mailbox=""><div class="coveo-result-frame coveo-email-result">
+  <div class="coveo-result-row">
+    <div class="coveo-result-cell" style="width:85px; text-align:center; padding-top:7px">
+      <span class="CoveoIcon">
+      </span>
+      <div class="CoveoQuickview" data-template-id="EmailQuickviewContent">
+      </div>
+    </div>
+    <div class="coveo-result-cell" style="padding-left:15px">
+      <div class="coveo-result-row">
+        <div class="coveo-result-cell" style="font-size:18px">
+          <a class="CoveoResultLink">
+          </a>
+        </div>
+        <div class="coveo-result-cell" style="width:120px; text-align:right; font-size:12px">
+          <span class="CoveoFieldValue" data-field="@date" data-helper="emailDateTime">
+          </span>
+        </div>
+      </div>
+      <div class="coveo-result-row">
+        <div class="coveo-result-cell" style="font-size:13px;padding-top:5px;padding-bottom:5px;">
+          <span class="CoveoText" data-value="From:">
+          </span>
+          <span class="CoveoFieldValue" data-field="@from" data-helper="email" data-html-value="true">
+          </span>
+          <span class="CoveoText" data-value="To:">
+          </span>
+          <span class="CoveoFieldValue" data-field="@recipients" data-helper="email" data-html-value="true">
+          </span>
+        </div>
+      </div>
+      <div class="coveo-result-row">
+        <div class="coveo-result-cell" style="padding-top:5px; padding-bottom:5px">
+          <span class="CoveoExcerpt">
+          </span>
+        </div>
+      </div>
+      <div class="coveo-result-row">
+        <div class="coveo-result-cell" style="padding-top:5px; padding-bottom:5px; font-size:13px;">
+          <span class="CoveoResultAttachments" data-result-template-id="EmailResultAttachment">
+          </span>
+        </div>
+      </div>
+      <div class="coveo-result-row">
+        <div class="coveo-result-cell" style="padding-top:5px; padding-bottom:5px;  font-size:13px;">
+          <span class="CoveoResultFolding" data-result-template-id="EmailChildResult" data-more-caption="ShowAllReplies" data-less-caption="ShowOnlyMostRelevantReplies">
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</script><script id="GoogleDrive" class="result-template" type="text/html" data-layout="list" data-field-connectortype="GoogleDriveCrawler"><div class="coveo-result-frame">
+  <div class="coveo-result-row">
+    <div class="coveo-result-cell" style="width:85px; text-align:center; padding-top:7px">
+      <span class="CoveoIcon">
+      </span>
+      <div class="CoveoQuickview">
+      </div>
+    </div>
+    <div class="coveo-result-cell" style="padding-left:15px">
+      <div class="coveo-result-row">
+        <div class="coveo-result-cell" style="font-size:18px">
+          <a class="CoveoResultLink">
+          </a>
+        </div>
+        <div class="coveo-result-cell" style="width:120px;text-align:right;font-size:12px">
+          <span class="CoveoFieldValue" data-field="@date" data-helper="date">
+          </span>
+        </div>
+      </div>
+      <div class="coveo-result-row">
+        <div class="coveo-result-cell" style="padding-top:5px; padding-bottom:5px">
+          <span class="CoveoExcerpt">
+          </span>
+        </div>
+      </div>
+      <div class="coveo-result-row">
+        <div class="coveo-result-cell" style="padding-top:5px; padding-bottom:5px; font-size:13px;">
+          <table class="CoveoFieldTable">
+            <tbody>
+              <tr data-field="@author" data-caption="Author">
+              </tr>
+              <tr data-field="@language" data-caption="Language">
+              </tr>
+              <tr data-field="@filetype" data-caption="Type">
+              </tr>
+              <tr data-field="@gdfilewebcontentlink" data-caption="Download" data-html-value="true" data-helper="anchor">
+              </tr>
+              <tr data-field="@gdfilelastmodifyinguserdisplayname" data-caption="Last Modified By">
+              </tr>
+              <tr class="CoveoValueRow">
+                <th>
+                  Preview
+                </th>
+                <td>
+                  <img class="CoveoThumbnail" data-no-thumbnail-class='coveo-sprites-custom-small'/>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="coveo-result-row">
+        <div class="coveo-result-cell" style="padding-top:5px; padding-bottom:5px">
+          <span class="CoveoPrintableUri">
+          </span>
+        </div>
+      </div>
+      <div class="coveo-result-row">
+      </div>
+    </div>
+  </div>
+</div></script><script id="Jira" class="result-template" type="text/html" data-layout="list" data-field-connectortype="JiraCrawler"><div class="coveo-result-frame">
+  <div class="coveo-result-row">
+    <div class="coveo-result-cell" style="width:85px;text-align:center">
+      <span class="CoveoIcon"></span>
+      <div class="CoveoQuickview"></div>
+    </div>
+    <div class="coveo-result-cell">
+      <div class="coveo-result-row">
+        <div class="coveo-result-cell" style="font-size:18px">
+          <a class="CoveoResultLink"></a>
+        </div>
+        <div class="coveo-result-cell" style="width:120px;text-align:right;font-size:12px">
+          <span class="CoveoFieldValue" data-field="@date" data-helper="date"></span>
+        </div>
+      </div>
+      <div class="coveo-result-row">
+        <div class="coveo-result-cell" style="padding-top:5px; padding-bottom:5px;">
+          <span class="CoveoExcerpt"></span>
+        </div>
+      </div>
+      <div class="coveo-result-row">
+        <div class="coveo-result-cell" style="padding-top:5px; padding-bottom:5px;">
+          <span class="CoveoResultAttachments" data-result-template-id="JiraAttachment"></span>
+        </div>
+      </div>
+      <div class="coveo-result-row">
+        <div class="coveo-result-cell" style="padding-top:5px; padding-bottom:5px; font-size:13px;">
+          <table class="CoveoFieldTable">
+            <tr data-field="@jikey" data-caption="Key"></tr>
+            <tr data-field="@jifieldsprojectname" data-caption="Project name"></tr>
+            <tr data-field="@jifieldsissuetypename" data-caption="Issue type"></tr>
+            <tr data-field="@jifieldstimetrackingoriginalestimatehours" data-caption="Time tracking Estimated"></tr>
+            <tr data-field="@jifieldstimetrackingremainingestimatehours" data-caption="Time tracking Remaining"></tr>
+            <tr data-field="@jifieldstimetrackingtimespenthours" data-caption="Time tracking Logged"></tr>
+            <tr data-field="@jifieldspriorityname" data-caption="Priority"></tr>
+            <tr data-field="@jifieldsversionsname" data-caption="Version"></tr>
+            <tr data-field="@jifieldslabels" data-caption="Labels"></tr>
+            <tr data-field="@jifieldsenvironment" data-caption="Environment"></tr>
+            <tr data-field="@jifieldsstatusname" data-caption="Status"></tr>
+            <tr data-field="@jifieldsReporterDisplayName" data-caption="Reporter"></tr>
+            <tr data-field="@jifieldsAssigneeDisplayName" data-caption="Assignee"></tr>
+            <tr data-field="@jifieldsfixVersionsname" data-caption="Fix Vesions"></tr>
+            <tr data-field="@jifieldsresolution" data-caption="Resolution"></tr>
+            <tr data-field="@jifieldscreated" data-caption="Created Date" data-helper="dateTime"></tr>
+            <tr data-field="@jifieldsupdated" data-caption="Updated Date" data-helper="dateTime"></tr>
+            <tr data-field="@jifieldsduedate" data-caption="Due Date" data-helper="dateTime"></tr>
+            <tr data-field="@jifieldsissuelinkstypename" data-caption="Links"></tr>
+            <tr data-field="@jifieldsissuelinkstypeoutward" data-caption="Outward links"></tr>
+            <tr data-field="@jifieldsissuelinkstypeinward" data-caption="Inward links"></tr>
+            <tr data-field="@jiprojectname" data-caption="Project name"></tr>
+            <tr data-field="@jiissuename" data-caption="Issue name"></tr>
+            <tr data-field="@jiauthordisplayname" data-caption="Author"></tr>
+            <tr data-field="@jisize" data-caption="Size"></tr>
+            <tr data-field="@jiupdateauthordisplayname" data-caption="Update Author"></tr>
+            <tr data-field="@jicreated" data-caption="Created Date" data-helper="dateTime"></tr>
+            <tr data-field="@jiupdated" data-caption="Updated Date" data-helper="dateTime"></tr>
+            <tr data-field="@jibody" data-caption="Comment"></tr>
+            <tr data-field="@jistarted" data-caption="Started Date" data-helper="dateTime"></tr>
+            <tr data-field="@jitimespent" data-caption="TimeSpent"></tr>
+            <tr data-field="@jicomment" data-caption="Comment"></tr>
+          </table>
+        </div>
+      </div>
+      <div class="coveo-result-row">
+        <div class="coveo-result-cell" style="padding-top:5px; padding-bottom:5px">
+          <span class="CoveoPrintableUri"></span>
+        </div>
+      </div>
+      <div class="coveo-result-row"></div>
+    </div>
+  </div>
+</div></script><script id="Slack" class="result-template" type="text/html" data-layout="list" data-field-connectortype="SlackCrawler"><div class="coveo-result-frame">
+  <div class="coveo-result-row">
+    <div class="coveo-result-cell" style="width:85px; text-align:center; padding-top:7px">
+      <span class="CoveoIcon">
+      </span>
+      <div class="CoveoQuickview">
+      </div>
+    </div>
+    <div class="coveo-result-cell" style="padding-left:15px">
+      <div class="coveo-result-row">
+        <div class="coveo-result-cell" style="font-size:18px">
+          <a class="CoveoResultLink">
+          </a>
+        </div>
+        <div class="coveo-result-cell" style="width:120px;text-align:right;font-size:12px">
+          <span class="CoveoFieldValue" data-field="@date" data-helper="date">
+          </span>
+        </div>
+      </div>
+      <div class="coveo-result-row">
+        <div class="coveo-result-cell" style="padding-top:5px; padding-bottom:5px">
+          <span class="CoveoExcerpt">
+          </span>
+        </div>
+      </div>
+      <div class="coveo-result-row">
+        <div class="coveo-result-cell" style="padding-top:5px; padding-bottom:5px; font-size:13px;">
+          <table class="CoveoFieldTable">
+            <tbody>
+              <tr data-field="@author" data-caption="Author"></tr>
+              <tr data-field="@source" data-caption="Source"></tr>
+              <tr data-field="@language" data-caption="Language"></tr>
+              <tr data-field="@date" data-caption="Creation Date" data-helper="date" />
+              <tr data-field="@slackchannelsname" data-caption="Channel"/>
+              <tr data-field="@slackchannelpurposevalue" data-caption="Channel Purpose"/>
+              <tr data-field="@slackchanneltopicvalue" data-caption="Channel Topic"/>
+              <tr data-field="@slackuserrealname" data-caption="Real Name"/>
+              <tr data-field="@slackteamemaildomain" data-caption="Email Domain"/>
+              <tr data-field="@slackteamdomain" data-caption="Domain"/>
+              <tr data-field="@slackparticipatingusers" data-caption="Participating Users" data-is-multi-value-field="true" data-split-values="true"/>
+              <tr data-field="@slackfilesharedchannelsnames" data-caption="Shared Channels" data-is-multi-value-field="true" data-split-values="true"/>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</script><script id="Default" class="result-template" type="text/html" data-layout="list"><div class="coveo-result-frame">
+  <div class="coveo-result-row">
+    <div class="coveo-result-cell" style="width:85px;text-align:center;padding-top:7px;">
+      <span class="CoveoIcon">
+      </span>
+      <div class="CoveoQuickview">
+      </div>
+    </div>
+    <div class="coveo-result-cell" style="padding-left:15px;">
+      <div class="coveo-result-row">
+        <div class="coveo-result-cell" style="font-size:18px;">
+          <a class="CoveoResultLink">
+          </a>
+        </div>
+        <div class="coveo-result-cell" style="width:120px; text-align:right; font-size:12px">
+          <span class="CoveoFieldValue" data-field="@date" data-helper="date">
+          </span>
+        </div>
+      </div>
+      <div class="coveo-result-row">
+        <div class="coveo-result-cell">
+          <span class="CoveoExcerpt">
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="coveo-result-row">
+    <div class="coveo-result-cell" style="width:85px;text-align:center">
+    </div>
+    <div class="coveo-result-cell" style="font-size:13px;padding-left: 15px;">
+      <table class="CoveoFieldTable">
+        <tbody>
+          <tr data-field="@author" data-caption="Author">
+          </tr>
+          <tr data-field="@source" data-caption="Source">
+          </tr>
+          <tr data-field="@language" data-caption="Language">
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</script>
+        </div>
+        <div class="CoveoPager"></div>
+        <div class="CoveoLogo"></div>
+        <div class="CoveoResultsPerPage"></div>
+    </div>
+    
+</div>
+</div>
+</apex:component>

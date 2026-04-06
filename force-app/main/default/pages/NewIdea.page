@@ -1,0 +1,98 @@
+<apex:page standardController="Idea" extensions="CommunityIdeaExtension" cache="false" applyBodyTag="false" standardStylesheets="false" showHeader="false" sidebar="false" action="{!CASE($User.UserType,
+                          "Standard",urlFor($Page.NewIdea, $ObjectType.Idea, null, true),
+                          "PowerPartner",urlFor($Page.NewIdea, $ObjectType.Idea, null, true),
+                          "CSPLitePortal",null,
+                          "CustomerSuccess",null,
+                          "PowerCustomerSuccess",null,
+                          "CsnOnly",null,
+                          null)}" 
+                          >
+      <link rel="shortcut icon" href="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/favicon.ico')}" type="image/x-icon" />
+    <link rel="icon" href="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/favicon1.png')}" type="image/png" />
+    <style>
+    .pbSubsection, pbBody {
+    padding: 25px;
+    }
+    table {
+    padding: 5px;
+    }
+    td.labelCol {
+    font-size: 16px;
+    font-family: Gotham-Medium;
+    padding-left: 10px
+    }
+    td.dataCol {
+    padding: 5px;
+    padding-right: 15px;
+    }
+
+    td.data2Col {
+    padding: 5px;
+    padding-left: 15px;
+    }
+    td {
+    padding: 15px;
+    }
+    wrapper{
+    padding-bottom: 5px;
+    }
+    
+    .btnpad{
+    padding: 15px;
+    }
+    
+    </style>
+    
+     <c:visualstrapblock >
+    
+        <!--start header-->
+        <c:siteheader ></c:siteheader>
+        <!--end Header-->
+  
+        <!--start the Container-->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+  
+              <apex:form >
+                  <apex:pageBlock mode="maindetail"  >
+                    <apex:pageBlockSection title="New Idea" columns="1">
+                     <div class="col-md-12">
+                    <apex:inputField value="{!Idea.Title}" styleclass="form-control input-sm" id="subject"/>
+<apex:pageMessages />
+                         <div class="col-md-12">
+                          <apex:inputfield value="{!Idea.Body}" style="height:200px;width:400px" styleclass="form-control input-sm"/>
+                          </div>  
+                          
+                                              <apex:inputField value="{!Idea.Categories}" styleclass="form-control input-sm" id="cat"/>
+
+                        </div>
+                    </apex:pageBlockSection>
+                 </apex:pageBlock>
+                 
+           <div class="container">
+                <div class="row text-center btnpad">
+                    <div>
+                       <apex:commandButton value="Save" action="{!save}" styleclass="btn rubrik-btn" />&nbsp;
+                       <apex:commandButton value="Cancel" action="{!URLFOR($Page.IdeasHome)}" styleclass="btn rubrik-btn" />
+                       </div>
+                </div>
+            </div>
+                 
+              </apex:form>
+              
+              
+                </div>
+            </div>
+        </div>
+        <!--End the Container-->
+
+
+
+        <!--start the footer-->
+        <c:sitefooter ></c:sitefooter>
+        
+    </c:visualstrapblock>
+
+
+</apex:page>

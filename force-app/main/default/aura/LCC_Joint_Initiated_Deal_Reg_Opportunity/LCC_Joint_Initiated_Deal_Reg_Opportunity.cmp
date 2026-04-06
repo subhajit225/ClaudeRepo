@@ -1,0 +1,7 @@
+<aura:component extends="c:LCC_GenericLightningComponent" >
+    <aura:attribute type="string" name="content"/>
+        <aura:handler event="c:LCC_GenericApplicationEvent" action="{!c.execute}"/>
+        <div class="slds-p-top_large slds-align_absolute-center">
+       		{!v.content}
+    	</div>
+</aura:component>

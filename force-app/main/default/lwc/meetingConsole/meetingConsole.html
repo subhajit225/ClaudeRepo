@@ -1,0 +1,176 @@
+<template>
+               
+            <div if:true={mainFilterList}>
+            <div class="c-container">
+                
+                <template for:each={mainFilterList} for:item="rowFilter">
+                     <lightning-layout  horizontal-align="start" key={rowFilter} class={rowFilter.rowClass}>
+                         <template for:each={rowFilter.data} for:item="item">
+                             <lightning-layout-item size="12" key={item} small-device-size="2" medium-device-size="2" large-device-size="2" padding="horizontal-medium" class="left-align">
+                                <lightning-combobox
+                                    name={item.DeveloperName}
+                                    label={item.MasterLabel}
+                                    data-id={item.DeveloperName}
+                                    value={item.defaultValue}
+                                    options={item.optionsValues}
+                                    onchange={handleChange}
+                                    field-level-help={item.Help_Text__c}
+                                   >
+                                </lightning-combobox>
+
+                             </lightning-layout-item>
+                         </template>
+                     </lightning-layout>
+
+                </template>
+                <div class="slds-col slds-text-align_left slds-p-around_small">
+                    <lightning-button variant="brand" label="Apply Filters" title="Applies filters to meetings" onclick={filterSubmit} class="slds-m-left_x-small"></lightning-button>
+                    <lightning-button variant="brand" label="Reset Filters" title="Reset filters to default" onclick={resetSubmit} class="slds-m-left_x-small"></lightning-button>
+                </div>
+        </div>
+
+        <c-meeting-console-header record-list={resultItems} headertitles={headerTitles} dashboard={dashboard}></c-meeting-console-header>
+    </div>
+        
+        <lightning-layout  horizontal-align="spread">
+             <lightning-layout-item size="12" small-device-size="4" medium-device-size="3" large-device-size="2" padding="around-medium" class="left-align">
+                 <h1><b>My Meetings</b></h1>
+             </lightning-layout-item>
+             <lightning-layout-item size="12" small-device-size="4" medium-device-size="3" large-device-size="2" padding="around-medium" class="slds-text-align_right">
+                  <lightning-button variant="brand" label="Quick Disposition" title="Quick dispostion of selected meetings" onclick={getSelectedRows}></lightning-button>
+             </lightning-layout-item>
+        </lightning-layout>
+        <div class="c-container">
+
+        </div>
+
+       <div if:true={data}>
+        <div class="slds-p-horizontal_small">
+            
+                <lightning-datatable
+                    data-id="datarow"
+                    data={data} 
+                    columns={columns} 
+                    key-field="meetingLink"
+                    sorted-by={sortBy}
+                    sorted-direction={sortDirection}
+                    onsort={doSorting}
+                    selected-rows={selection}
+                    onrowselection={rowSelection}>
+                </lightning-datatable>
+            
+        </div>
+
+
+        <!--  Pagination Buttons Start -->
+        <div class="slds-align_absolute-center" style="margin-top:5px;">
+            <lightning-button label="Previous" icon-name="utility:chevronleft" onclick={previousHandler}
+                disabled={isPreviousDisable}>
+            </lightning-button>
+            <span class="slds-badge slds-badge_lightest"
+                        style="margin-right: 10px;margin-left: 10px;">
+                       Page {page} of {totalPage}
+            </span>
+            <lightning-button label="Next" icon-name="utility:chevronright" icon-position="right" onclick={nextHandler}
+                disabled={isNextDisable}>
+            </lightning-button>
+        </div>
+        <!--  Pagination Buttons End -->
+      </div>
+   
+
+
+    <!-- modal start -->      
+   <template if:true={isShowModal}>
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+       <div class="slds-modal__container">
+           <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={hideModalBox}>
+               <lightning-icon icon-name="utility:close"
+                   alternative-text="close"
+                   variant="inverse"
+                   size="small" ></lightning-icon>
+                <span class="slds-assistive-text">Close</span>
+            </button>
+        
+          <!-- modal body start -->
+          <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                
+                <lightning-layout vertical-align="center">
+                    <lightning-layout-item flexibility="auto" padding="around-small">
+                        <lightning-combobox
+                            name="Outcome"
+                            label="What was the Outcome of the Meeting?"
+                            value="Opportunity Sourced"
+                            options={selectedRowsOption}
+                            onchange={handleSelectedRows} >
+                            >
+                        </lightning-combobox>
+                    </lightning-layout-item>
+                </lightning-layout>
+                <template if:true={noOppSourced}>
+                    <lightning-layout vertical-align="center">
+                    <lightning-layout-item flexibility="auto" padding="around-small">
+                        <lightning-combobox
+                            name={_name}
+                            label={_label}
+                            value={_reason}
+                            options={reasonOptions}
+                            onchange={handleReasons}
+                            required="true" >
+                            >
+                        </lightning-combobox>
+                    </lightning-layout-item>
+                    </lightning-layout>
+                </template>
+                <template if:true={noOppSourcedwithOther}>
+                    <lightning-layout vertical-align="center">
+                        <lightning-layout-item flexibility="auto" padding="around-small">
+                            <lightning-input type="text" label="Other Reason" name="other" value ={_otherReason} onchange={handlerOtherReason} required={_req}></lightning-input>
+                        </lightning-layout-item>
+                   </lightning-layout>
+                </template>
+                
+          </div>
+
+          <!-- modal footer start-->
+          <footer class="slds-modal__footer">
+             <button class="slds-button slds-button_neutral" onclick={submitDispositioned}>Save</button>
+          </footer>
+       
+       </div>
+    </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    <!-- modal end -->
+
+    <!-- modal start -->
+
+    <template if:true={upcomingMeetings}>
+         <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+              <div class="slds-modal__container popup-container">
+                  <footer class="slds-modal__footer">
+                      <lightning-layout>
+                                <lightning-layout-item padding="around-small" class="center-align" size="6">
+                                    <lightning-button variant="brand" label="Proceed" title="Primary action" onclick={handleSubmit} class="slds-m-left_x-small"></lightning-button>
+                                </lightning-layout-item>
+                                   
+                                <lightning-layout-item padding="around-small" class="left-align" size="6">
+                                     <lightning-button label="Cancel" title="Non-primary action" onclick={handleCancel} style="margin-right:100px;"></lightning-button>
+                                </lightning-layout-item>
+                      </lightning-layout>
+                  </footer>
+              </div>
+         </section>
+             <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+     <!-- modal end -->
+
+     <div class="spinner">
+        <template if:true={isLoading}>
+             <lightning-spinner alternative-text="Loading" variant="brand" size="large">
+             </lightning-spinner>
+        </template>
+    </div>
+
+</template>

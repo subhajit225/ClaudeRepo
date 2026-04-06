@@ -1,0 +1,15 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="url" type="String" default="https://rubriksandbox.docebosaas.com/partners"/>
+    <aura:attribute name="height" type="String" default="1000px"/>
+	<aura:attribute name="isDeskTop" type="string" default="true"/>
+    
+    <iframe src="{!v.url}" width="100%" height="{!v.height}"/>
+    
+    <!--<aura:handler name="init" value="this" action="{!c.doInit}"/>    
+    <aura:if isTrue="{!v.isDeskTop}">
+        <iframe src="{!v.url}" width="100%" height="{!v.height}"/>
+        <aura:set attribute="else">
+            Learn page open in new window..
+        </aura:set>
+    </aura:if>-->
+</aura:component>

@@ -1,0 +1,36 @@
+<aura:component implements="forceCommunity:themeLayout" access="global" description="Custom Theme Layout">
+    <aura:attribute name="search" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="profileMenu" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="navBar" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="TemplateHeaderTop" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="TemplateHeaderBottom" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="TemplateFooter" type="Aura.Component[]" required="false"/>
+    <div>
+        <div class="">
+            {!v.TemplateHeaderTop}
+        </div>
+        <div class="profileMenuRegion right">
+            {!v.profileMenu}
+        </div>
+        <div class="navigation">
+            {!v.navBar}
+        </div>              
+        <div class="newHeader">
+            {!v.TemplateHeaderBottom}
+        </div>
+        <div class="searchRegion center">            
+            <lightning:layout multipleRows="true" horizontalAlign="spread" pullToBoundary="small"><!--horizontalAlign="spread" pullToBoundary="small"-->
+                <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="3" largeDeviceSize="2" padding="around-small">
+                    Search
+                </lightning:layoutItem>
+                <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="9" largeDeviceSize="10" padding="around-small">
+                    {!v.search}
+                </lightning:layoutItem>
+            </lightning:layout>
+        </div>        
+        <br/>
+        <div class="mainContentArea">
+            {!v.body}
+        </div>
+    </div>
+</aura:component>

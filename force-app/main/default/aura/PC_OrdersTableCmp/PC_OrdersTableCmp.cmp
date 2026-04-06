@@ -1,0 +1,100 @@
+<aura:component extends="c:PC_UtilityCmp" implements="forceCommunity:availableForAllPageTypes" access="global"
+    controller="PC_OrdersController">
+    <ltng:require styles="/resource/PartnerCommunityResource/Stylesheets/PartnerCommunityCSS.css"/>
+    <!-- attributes -->
+    <aura:attribute name="distributorPO" type="String"/>
+    <aura:attribute name="endUserPO" type="String"/>
+    <aura:attribute name="rubrikSO" type="String"/>
+    
+    
+    <aura:attribute name="ordersList" type="PC_OrdersController.OrderWrap[]" default ="[]" description="contains list of Orders" />
+    <aura:attribute name="keyField" type="String" default="id"/>
+    
+    
+    <aura:attribute name="loadMoreOffset" type="Integer" default="20"/>    
+    
+    <aura:attribute name="pageSize" type="Integer" default="25"/>
+    <aura:attribute name="pageNumber" type="Integer" default="1"/>
+    <aura:attribute name="totalRecords" type="Integer" default="1"/>
+    <aura:attribute name="totalPages" type="Integer" default="1"/>
+    <aura:attribute name="ordersWrap" type="PC_OrdersController.OrdersWrap" />
+    
+    
+    
+    <!-- Sort Attributes -->    
+    <aura:attribute name="sortedBy" type="String" default="orderNumber" description="Field api name of field used in sorting"/>
+    <aura:attribute name="sortedDirection" type="String" default="desc" description="sorting direction"/>
+    <aura:attribute name="defaultSortDirection" type="String" description="default sort direction"/>
+    <aura:attribute name="sortedByValue" type="String" description="value of sorted field which is used to fetch next set of records"/>
+    
+    
+    <!-- Handlers -->
+    <aura:handler name="init" value="this" action="{!c.doInit}"/>
+    
+    <!-- attributes -->
+    <aura:attribute name="data" type="Object"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="selectedRowsCount" type="Integer" default="0"/>
+    <aura:attribute name="selectedRowsDetails" type="Object" />
+    <aura:attribute name="selectedRowsList" type="List" />
+    
+    <aura:attribute name="maxRowSelection" type="Integer" default="5"/>
+    <aura:attribute name="selectedRows" type="List" />
+    
+    <!--- enableInfiniteLoading  -->
+    <aura:attribute name="isLoading" type="Boolean" default="true"/>
+    <aura:attribute name="enableInfiniteLoading" type="Boolean" default="true"/>
+    <aura:attribute name="initialRows" type="Integer" default="20"/>
+    <aura:attribute name="rowsToLoad" type="Integer" default="15"/>
+    <aura:attribute name="totalNumberOfRows" type="Integer" default="15"/>
+    <aura:attribute name="loadMoreStatus" type="String" default="Loading .... "/>
+    <aura:attribute name="showRowNumberColumn" type="Boolean" default="false"/>
+    <aura:attribute name="rowNumberOffset" type="Integer" default="0"/>
+    <aura:attribute name="rowsToAdd" type="Integer" default="10"/>
+    <aura:attribute name="currentCount" type="Integer" default="10"/>
+    
+    <aura:attribute name="activeFilter" type="string" default="All" description="The currently selected actions filter"/>
+    
+    
+    <!-- handlers-->
+    <aura:handler name="init" value="{! this }" action="{! c.doInit }" />
+        
+    <lightning:layout multipleRows="true" horizontalAlign="spread">
+        <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="12" largeDeviceSize="12"
+            padding="around-small">
+            <div class="heading-36">Order Information Lookup</div>
+        </lightning:layoutItem>
+        <div class="flex-box">
+            <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="3" largeDeviceSize="3"
+                padding="around-small">
+                <lightning:input aura:id="dealRegField" label="Distributor PO#" value="{!v.distributorPO}" />
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="3" largeDeviceSize="3"
+                padding="around-small">
+                <lightning:input aura:id="dealRegField" label="End User PO#" value="{!v.endUserPO}" />
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="3" largeDeviceSize="3"
+                padding="around-small">
+                <lightning:input aura:id="dealRegField" label="Rubrik SO#" value="{!v.rubrikSO}" />
+            </lightning:layoutItem> 
+            <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="3" largeDeviceSize="3"
+                padding="around-small">
+                <lightning:button label="Search" variant="brand" onclick="{!c.handleSearch}" />
+            </lightning:layoutItem>
+        </div>
+    </lightning:layout>
+    <br />
+    <lightning:card class="custom-order-table-card">
+        <div class="heading-36 slds-m-bottom_medium">All Orders</div>
+        <div class="custom-table-wrapper custom-order-table">
+            <lightning:datatable columns="{! v.columns }" data="{! v.data }" keyField="{!v.keyField}"
+                enableInfiniteLoading="{! v.enableInfiniteLoading }" loadMoreOffset="{! v.loadMoreOffset }"
+                onloadmore="{! c.loadMoreData }" sortedBy="{! v.sortedBy }" sortedDirection="{! v.sortedDirection }"
+                defaultSortDirection="{! v.defaultSortDirection }" onsort="{! c.updateColumnSorting }"
+                resizeColumnDisabled="ture" hideCheckboxColumn="true" showRowNumberColumn="true">
+            </lightning:datatable>
+            <div class="slds-align_absolute-center slds-m-vertical_large">{! v.loadMoreStatus }</div>
+        </div>
+        <br />
+    </lightning:card>
+</aura:component>

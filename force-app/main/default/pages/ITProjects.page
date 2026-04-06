@@ -1,0 +1,186 @@
+<apex:page controller="ITProjectsController" showHeader="false">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <style>
+        body .pbBody table.list tr.headerRow th{
+            background-color:rgb(2, 33, 37);
+            text-align: center;
+            color: #FFFFFF;
+        }
+    </style>
+
+    <style type="text/css">
+        .custPopup{
+            background-color: white;
+            border-width: 2px;
+            border-style: solid;
+            z-index: 9999;
+            left: 50%;
+            padding:10px;
+            position: absolute;
+            /* These are the 3 css properties you will need to change so the popup
+            displays in the center of the screen. First set the width. Then set
+            margin-left to negative half of what the width is. You can add
+            the height property for a fixed size pop up if you want.*/
+            width: 500px;
+            margin-left: -250px;
+            top:100px;
+        }
+        .popupBackground{
+            background-color:black;
+            opacity: 0.20;
+            filter: alpha(opacity = 20);
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 9998;
+        }
+
+    </style>
+
+    <apex:form style="font-size: 12px;">
+        <apex:outputPanel id="mainPanel">
+            <apex:outputPanel rendered="{! !isAuthenticated}">
+                <img src="{!$Resource.Rubrik_Logo}" style="width:10%;margin-left:45%;"/>
+                <div style="width:26%;margin-left:38%;">
+                    <apex:pageBlock title="Login">
+                        <apex:pageMessages />
+                        <table width="40%" align="center">
+                            <tr>
+                                <td style="padding:10px;">Login As:</td>
+                                <td style="padding:10px;">
+                                    <apex:selectList value="{!selectedUser}" size="1">
+                                        <apex:selectOptions value="{!users}" />
+                                    </apex:selectList>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:10px;">Password:</td>
+                                <td style="padding:10px;">
+                                    <apex:inputSecret value="{!password}" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="padding:10px;">
+                                    <center>
+                                        <apex:commandButton action="{!login}" value="Login" reRender="mainPanel" style="background:rgb(0, 157, 172);color:white;"/>
+                                    </center>
+                                </td>
+                            </tr>
+                        </table>
+                    </apex:pageBlock>
+                </div>
+            </apex:outputPanel>
+
+            <apex:outputPanel rendered="{!isAuthenticated}">
+                <!-- <apex:actionPoller action="{!autoSaveDecision}" reRender="autoSaveMessage" interval="15"/> -->
+                <img src="{!$Resource.Rubrik_Logo}" width="10%" style="float:left;padding:10px;"/>
+                <apex:outputPanel style="float:left;font-size: 20px;padding-left: 35%;padding-top:10px;color:green;" rendered="{!saved}" Id="fadeout">
+                    Decision Saved
+                    <script>
+                    
+                        window.setTimeout(fadeout, 5000); //8 seconds
+                        function fadeout() {
+                            document.getElementById('{!$Component.fadeout}').style.opacity = '0';
+                        }
+                    </script>
+                </apex:outputPanel>
+                <apex:outputPanel style="float:right;font-size: 20px;padding: 10px;">
+                        <apex:commandLink action="{!logout}" value="Logout" reRender="mainPanel"/>
+                </apex:outputPanel>
+                <apex:outputPanel style="float:right;font-size: 20px;padding: 10px;">
+                    Logged in as {!selectedUserName}
+                </apex:outputPanel>
+                <apex:pageBlock title="FY21 IT Enterprise Apps Project Proposals">
+                    <apex:pageMessages />
+                    <apex:pageBlockButtons >
+                        <apex:commandLink type="button" action="{!showFilterDialog}" style="background:rgb(0, 157, 172);color:white;" styleClass="btn btn-default btn-sm" reRender="tstpopup">
+                            <span class="glyphicon glyphicon-filter"></span> Apply Filter 
+                        </apex:commandLink>
+                        <apex:outputPanel style="float: right;">
+                            <apex:outputText value="Do remember to save your work! "></apex:outputText>
+                            <apex:commandButton action="{!saveDecision}" value="Save" style="background:rgb(0, 157, 172);color:white;"/>
+                            <apex:commandButton value="Print" onclick="window.print();return false;" style="background:rgb(0, 157, 172);color:white;"/>
+                        </apex:outputPanel>
+                        <!-- <apex:commandButton action="{!sendEmail}" value="Email My Choices" style="font-size:large;background:rgb(0, 157, 172);color:white;"/> -->
+                    </apex:pageBlockButtons>
+                    
+                    <apex:outputPanel id="tstpopup">
+                    <apex:outputPanel styleClass="popupBackground" layout="block" rendered="{!showFilter}"/>
+                        <apex:outputPanel styleClass="custPopup" layout="block" rendered="{!showFilter}">
+                            <table>
+                                <tr>
+                                    <td style="padding:10px;">Enterprise Functions:</td>
+                                    <td style="padding:10px;">
+                                        <apex:selectList value="{!selectedEnterpriseFunctions}" multiselect="true">
+                                            <apex:selectOptions value="{!enterpriseFuntionsFilter}" />
+                                        </apex:selectList>
+                                    </td>
+                                </tr>
+                                <tr>
+                                        <td style="padding:10px;">Organizations:</td>
+                                        <td style="padding:10px;">
+                                            <apex:selectList value="{!selectedOrganizations}" multiselect="true">
+                                                <apex:selectOptions value="{!organizationsFilter}" />
+                                            </apex:selectList>
+                                        </td>
+                                    </tr>
+                            </table>
+                            <apex:commandButton value="Apply" action="{!applyFilter}" rerender="tstpopup,projectTable" style="background:rgb(0, 157, 172);color:white;"/>
+                            <apex:commandButton value="Cancel" action="{!dismissFilter}" rerender="tstpopup,projectTable" />
+                        </apex:outputPanel>
+                    </apex:outputPanel>
+                    
+                    <div style="overflow:scroll;">
+                        <apex:pageBlockTable value="{!projectData}" var="item" id="projectTable">
+                            <apex:column value="{!item.projectId}" headerValue="Project Id"/>
+                            <apex:column value="{!item.financialYear}" headerValue="Financial Year" />
+                            <apex:column value="{!item.projectName}" headerValue="Project Name" />
+                            <!-- <apex:column value="{!item.projectCode}" headerValue = "Project Code"/> -->
+                            <apex:column value="{!item.description}" headerValue="Description" />
+                            <apex:column value="{!item.enterpriseFunction}" headerValue="Enterprise Function" />
+                            <apex:column value="{!item.strategicInitiative}" headerValue="Strategic Initiative" />
+                            <!-- <apex:column value="{!item.poc}" headerValue = "POC"/> -->
+                            <apex:column value="{!item.currentOrganization}" headerValue="Organization" />
+                            <!-- <apex:column value="{!item.proposedOrganization}" headerValue = "Proposed Organization"/> -->
+                            <!-- <apex:column value="{!item.itOwnerName}" headerValue="IT Owner"/> -->
+                            <!-- <apex:column value="{!item.estimated_Pre_POR_Quarter}" headerValue = "Estimated Pre POR Quarter (Q1, Q2, Q3, Q4)"/> -->
+                            <!-- <apex:column value="{!item.softwareExpenses}" headerValue="Software Expenses"/> -->
+                            <!-- <apex:column value="{!item.resourceCost}" headerValue = "Resource Cost"/> -->
+                            <!-- <apex:column value="{!item.total}" headerValue="Total"/> -->
+                            <apex:column headerValue="Total Amount ($)">
+                                <apex:outputText value="{0, number, ###,###,##0}" id="totalElement">
+                                    <apex:param value="{!item.total}" />
+                                </apex:outputText>
+                            </apex:column>
+                            <!-- <apex:column value="{!item.organizationRank}" headerValue = "Organization Rank"/> -->
+                            <!-- <apex:column value="{!item.entepriseFunctionRank}" headerValue="Enteprise Function Rank"/> -->
+                            <apex:column headerValue="Decision">
+                                <apex:selectRadio value="{!item.decision}" id="decisionRadio">
+                                    <apex:selectOptions value="{!item.decisions}" />
+                                </apex:selectRadio>
+                                <script>
+                                    var selectOptionTable = document.getElementById('{!$Component.decisionRadio}');
+                                    var cells = selectOptionTable.getElementsByTagName('td');
+
+                                    for (var i = 0, len = cells.length; i < len; i++) {
+                                        cells[i].style = 'border: none;white-space: nowrap;';
+                                    }
+                                </script>
+                            </apex:column>
+                            <apex:column headerValue="Start Quarter">
+                                <apex:selectList value="{!item.approvedPORQuarter}" size="1">
+                                    <apex:selectOptions value="{!item.quarters}" />
+                                </apex:selectList>
+                            </apex:column>
+                            <apex:column headerValue="Comments">
+                                <apex:inputTextarea value="{!item.comments}" />
+                            </apex:column>
+                        </apex:pageBlockTable>
+                    </div>
+                </apex:pageBlock>
+            </apex:outputPanel>
+        </apex:outputPanel>
+    </apex:form>
+</apex:page>

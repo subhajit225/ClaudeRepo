@@ -1,0 +1,2 @@
+- [Verify Deployment Landed in Org](deployment-verification.md) — Always run a Tooling API query after deploying to confirm components exist; never trust deploy result alone
+- [Always Invoke for Redeployments](always-invoke-for-redeployments.md) — Main agent must call devops agent for ALL deployments including hotfixes and redeployments — no exceptions

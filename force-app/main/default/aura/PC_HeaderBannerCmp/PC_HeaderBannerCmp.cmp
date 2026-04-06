@@ -1,0 +1,19 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" controller="PC_TilesController">
+    <aura:attribute name="banner" type="object"/>
+    <aura:attribute name="pageName" type="string" default="home"/>
+    <aura:attribute name="imageType" type="string" default="Banner"/>
+    <aura:attribute name="imageUrl" type="string" default=""/>
+    <aura:attribute name="imgHeight" type="string" default="150"/>
+    
+    <aura:handler event="forceCommunity:routeChange" action="{!c.doInit}"/>
+   <!-- <aura:handler name="init" value="this" action="{!c.doInit}"/> -->
+        <div class="slds-size_1-of-1">
+            <div class="slds-align-absolute-center" >
+                <a>
+                    <!--<img class="hero" src="{!$Resource.PCBannerImagesSales + v.imageUrl}"/>-->
+                    <img class="hero" src="{!v.imageUrl}"/>
+                </a>
+            </div>
+            <!--style="{!'height:'+v.imgHeight+'px;'}"-->
+        </div>
+</aura:component>

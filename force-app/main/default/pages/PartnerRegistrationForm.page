@@ -1,0 +1,292 @@
+<apex:page standardStylesheets="false" sidebar="false" standardController="Partner_Registration_Request__c" showHeader="false" extensions="PartnerRegistrationRequestExtension" docType="html-5.0" cache="false" title="Rubrik Community" applyBodyTag="false">
+    <c:visualstrapblock >
+        <c:importbs />
+        <c:communitystyle />
+ <apex:stylesheet value="{!URLFOR($Resource.DealReg, 'DealRegCss.css')}" />
+  <!-- <apex:includeScript value="{!URLFOR($Resource.DealReg, 'DealRegScript.js')}" />-->
+  <apex:includeScript value="{!$Resource.PortalRegScript}" />
+  <apex:includeScript value="//ajax.microsoft.com/ajax/jquery.validate/1.6/jquery.validate.min.js"/>  
+
+     <!--hide the action column from Community users-->
+        <style>
+        .actionColumn{
+        display:none;
+        }
+        
+        .pbBody{
+        padding: 5px;
+        }
+        
+        .visualstrap td, th {
+        padding: 5px !important;
+        }
+        
+        .rolodex {
+          padding: 4px !important;  
+       }
+       
+       .btnpad{
+        padding: 15px;
+        }
+        
+       .row {
+       padding: 10px 0px 0px 0px;
+       }
+       
+           .control-label:after {
+          content:"*";
+          color:red;
+        }
+        
+        .dealRError{
+        position: absolute !important;
+        z-index: 1;
+        }
+        
+        .visualstrap select[size] {
+        height: 34px;
+        }
+        
+         .section__title {
+        font-size: 44px;
+        line-height: 60px;
+        letter-spacing: -1.2px;
+        margin-left: auto;
+        margin-right: auto;
+              
+        }
+        
+        .section__paragraph {
+        font-size: 16px;
+        line-height: 30px;
+        letter-spacing: -.42px;
+                margin-bottom: 40px;
+        }
+        
+    </style>
+    
+                  <c:unauthsiteHeader name="Partner Portal Access Request Form"></c:unauthsiteHeader>
+
+        <!--start the Container-->
+        <div class="container">
+            <div class="row" style="margin:0px">
+                <div class="col-md-12">
+                
+                 
+                 <br/>
+                 
+                 <div class="row" >
+                      <div class="col-md-12">
+                   
+                  <apex:messages id="messages"/>
+                         <apex:pageMessages id="messages1"/>
+                 
+                <!--content-->
+                 <apex:form id="requestForm" html-data-toggle="validator" >
+                    <div id="requestFormDiv">
+                        <apex:outputPanel id="requestFormPanel" >
+                            
+                                         
+                <div class="col-md-12">
+                
+                    <div class="row">
+                    <div class="col-md-12">
+                    <center><div class="section__title">Already A Rubrik Partner?</div></center><br/>
+                 </div>
+                 <div class="row">
+                 <div class="col-md-1"/>
+                 <div class="col-md-10">
+                 <center> 
+                 <div class="section__paragraph">Get started and request your Rubrik Partner Portal account to submit deal registrations, access sales and marketing resources, begin our on-demand sales and technical training, and much more!
+                 </div>
+                 </center>
+                 <div class="col-md-1"/>
+
+                 </div>
+                 
+                    </div>
+                    </div>
+
+                    <!--block 1-->
+                    <div class="row">
+                    
+                    <div class="col-md-6 col-md-offset-3">
+                        <apex:outputLabel styleclass="control-label">First Name</apex:outputLabel>
+                        <apex:inputfield value="{!PR_Request.First_Name__c}" styleClass="form-control block inputrubrik required"/>
+                     <br/>
+                     </div>
+                  
+                     <div class="col-md-6 col-md-offset-3">
+                        <apex:outputLabel styleclass="control-label">Last Name</apex:outputLabel>
+                        <apex:inputfield value="{!PR_Request.Last_Name__c}" styleClass="form-control block inputrubrik required"/>
+                     <br/>
+                     </div>
+                  
+                    <div class="col-md-6 col-md-offset-3">
+                        <apex:outputLabel styleclass="control-label">Company Name</apex:outputLabel>
+                        <apex:inputfield value="{!PR_Request.Company_Name__c}" styleClass="form-control block inputrubrik required"/>
+                     <br/>
+                     </div>
+
+
+                   <div class="col-md-6 col-md-offset-3">
+                        <apex:outputLabel styleclass="control-label">Job Title</apex:outputLabel>
+                        <apex:inputfield value="{!PR_Request.Job_Title__c}" styleClass="form-control block inputrubrik required"/>
+                     <br/>
+                     </div>
+
+                    <div class="col-md-6 col-md-offset-3">
+                        <apex:outputLabel styleclass="control-label">Email</apex:outputLabel>
+                        <apex:inputField id="inputEmail" styleClass="slds-input form required email form-control block inputrubrik required" type="email" onkeyup="validateEmailField(this);" onkeydown="validateEmailField(this);" onclick="validateField(this);"   onchange="validateEmailField(this);" value="{!PR_Request.Email__c}" />
+                     <br/>
+                     </div>                  
+ 
+                     <div class="col-md-6 col-md-offset-3">
+                        <apex:outputLabel styleclass="control-label">Phone</apex:outputLabel>
+                        <apex:inputfield value="{!PR_Request.Phone_Number__c}" styleClass="form-control block inputrubrik required"/>
+                     <br/>
+                     </div>                  
+
+
+                    <div class="col-md-6 col-md-offset-3">
+                        <apex:outputLabel styleclass="control-label">Address</apex:outputLabel>
+                        <apex:inputfield value="{!PR_Request.Address__c}" styleClass="form-control block inputrubrik required"/>
+                     <br/>
+                     </div> 
+                    <div class="col-md-6 col-md-offset-3">
+                        <apex:outputLabel styleclass="control-label">City</apex:outputLabel>
+                        <apex:inputfield value="{!PR_Request.City__c}" styleClass="form-control block inputrubrik required"/>
+                     <br/>
+                     </div> 
+                     <div class="col-md-6 col-md-offset-3">
+                        <!--<apex:outputLabel styleclass="control-label">Country</apex:outputLabel>
+                        <apex:inputfield value="{!PR_Request.Country_Picklist__c}" styleClass="form-control block inputrubrik required"/>-->
+                    <!--<apex:selectList value="{!PR_Request.Country_Picklist__c}" styleClass="form-control block inputrubrik required" size="1" multiselect="false" required="true" >
+                        <apex:selectOptions value="{!countryPickList}" />
+                    </apex:selectList> --> 
+                    
+                    <apex:actionRegion >
+                    <apex:outputLabel styleclass="control-label">Country</apex:outputLabel>
+                        <apex:inputfield value="{!PR_Request.Country_Picklist__c}" styleClass="form-control block inputrubrik required">
+                           <apex:actionSupport event="onchange" action="{!isItRequired}" reRender="zipPanel,zip1"/>
+                        </apex:inputField>
+                        </apex:actionRegion>
+                                          
+                     <br/>
+                     </div> 
+                    <div class="col-md-6 col-md-offset-3">
+                        <apex:outputLabel styleclass="control-label">State/Province</apex:outputLabel>
+                        <apex:inputfield value="{!PR_Request.State_Picklist__c}" styleClass="form-control block inputrubrik required"/>
+                     <br/>
+                     </div>                                       
+
+                    <div class="col-md-6 col-md-offset-3">
+                        <!--<apex:outputLabel styleClass="{!IF(ziperror,'control-label','')}">Zip/Postal Code</apex:outputLabel>
+                        <apex:inputfield value="{!PR_Request.Postal_Code__c}" id="Zip_Code__c" required="{!ziperror}" styleClass="form-control block inputrubrik {!IF(ziperror,'required','')}"/>
+                        -->
+                       
+                        <apex:outputPanel id="zipPanel">
+                         <apex:outputLabel styleClass="{!IF(OR(isRequired,ziplength),'control-label','')}">Zip/Postal Code</apex:outputLabel>
+                        <apex:inputfield value="{!PR_Request.Postal_Code__c}" id="zip1" required="{!OR(isRequired,ziplength)}" styleClass="form-control block inputrubrik {!IF(OR(isRequired,ziplength), 'required', '')}">
+                        <apex:actionSupport event="onchange" action="{!ziplength}" reRender="zipPanel,zip1"/>
+                     
+                     </apex:inputfield>
+                      <div id="ziperrorDiv" style="display:none">
+                        <apex:outputPanel layout="block" id="warningMsgPanel">
+                           
+                            <apex:outputtext value="Please enter a 5 digit Zip Code for a US Address." style="color:red;"/>
+
+                        </apex:outputPanel>
+                        </div>
+                     <!--{!ziplength} {!isRequired}-->
+                       </apex:outputpanel>
+                     
+                     <br/>
+                     </div>                  
+                  
+                  
+                  
+                  
+                    </div>
+                    
+                    <!--end block 1-->
+                    </div>
+                    
+                    
+                  <center>
+                    <apex:commandButton value="Submit" styleclass="btn rubrik-btn text-center" title="Submit" id="Submit" onClick="SubmitOnClick(this);" />
+                  <!--<button class="btn rubrik-btn text-center" onclick="SubmitOnClick(this);">Submit</button>-->
+                   <script language="Javascript">
+                          function SubmitOnClick(objSubmitBtn) {
+                            btn= objSubmitBtn;
+                            objSubmitBtn.disabled = true;
+                            objSubmitBtn.value = 'Submitting...';
+                            validateData();
+                            //return null;
+                          }
+                   </script>
+                  </center>
+                  
+                                    </apex:outputpanel>
+
+                  </div>
+                  
+            <apex:actionFunction name="saveRecord" action="{!saveRequest}" reRender="requestForm,requestFormDiv,successMsgPanel,warningMsgPanel,duplicateConMessageDiv" oncomplete="showMessageonSave();"/>
+            <!--form messages-->
+            <div id="successMessageDiv" style="display:none">
+                <apex:outputPanel layout="block" styleClass="alert alert-success" id="successMsgPanel">
+                    Your request has been submitted successfully. Once your request is approved, you will receive a login for the partner portal within 48 hours. For any questions please reach out to <a href="mailto:channel@rubrik.com">channel@rubrik.com</a>.
+                </apex:outputPanel>
+            </div>
+            
+            <div id="duplicateConMessageDiv" style="display:none">
+                <apex:outputPanel id="duplicateConMessageDiv" layout="block" styleClass="alert alert-danger" >
+                    You are already registered for the partner portal with this Email ID. Note: Your username may be different than your email. Please visit <a href="https://rubrik.force.com/partners/">https://rubrik.force.com/partners/</a> to reset your password.                    
+                    <script>
+                    function showMessageonSave(){
+                   if({!OR(ziperror,zipLength)}) {
+                        document.getElementById('ziperrorDiv').style.display='block';
+                    }
+                    
+                    if({!isduplicateContactBool} == true && {!ziperror==false} && {!zipLength==false}) {
+                        document.getElementById('requestFormDiv').style.display='none';
+                        document.getElementById('duplicateConMessageDiv').style.display='block';
+                    } 
+                    
+                    else if({!isduplicateContactBool} == false && {!ziperror==false} && {!zipLength==false}){
+                    document.getElementById('requestFormDiv').style.display='none';
+                    document.getElementById('successMessageDiv').style.display='block';
+                   // setTimeout('window.close()', 10000);
+                    }
+                    
+                    
+                }
+            </script>
+            
+            
+            
+                </apex:outputPanel>
+                
+            </div>
+                
+                <!--end form messages-->
+
+                   </apex:form>
+                <!--end main content--> 
+                
+                
+               </div>
+               </div>
+
+            
+                </div>
+            </div>
+        </div>
+        <!--End the Container-->
+        
+        <!--start the footer-->
+        <br/>
+        <c:psitefooterlogin ></c:psitefooterlogin>
+    </c:visualstrapblock>           
+                
+</apex:page>

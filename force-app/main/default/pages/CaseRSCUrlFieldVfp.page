@@ -1,0 +1,133 @@
+<apex:page docType="html-5.0" standardController="Case" extensions="RSCInstanceService" lightningStylesheets="true" showHeader="false" sidebar="false" standardStylesheets="false">
+    <apex:slds />
+    <style>
+        body { 
+            margin: 0; 
+            padding: 0; 
+            background: transparent !important; 
+        }
+        .custom-field-container { border-bottom: 1px solid rgb(229, 229, 229); }
+
+        .edit-icon { 
+            cursor: pointer; 
+            visibility: visible; 
+            margin-left: 8px; 
+            display: inline-flex;
+            vertical-align: middle;
+        }
+        
+        .slds-button_disabled {
+            cursor: not-allowed;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+        .slds-scope {
+            padding-right: 1px;
+        }
+
+        /* --- CLASSIC ONLY FIX --- */
+        /* We target the Classic theme specifically using the User UI Theme global variable */
+        /* This ensures Lightning is 100% untouched */
+        <apex:outputText rendered="{!$User.UIThemeDisplayed == 'Theme3'}" value="
+            .slds-scope .slds-form-element {
+                display: flex !important;
+                align-items: center !important;
+                padding: 4px 0 !important;
+            }
+            .slds-scope .slds-form-element__label {
+                width: 36% !important; /* Adjust this % to match your Classic Layout */
+                text-align: right !important;
+                padding-right: 15px !important;
+                padding-top: 2px !important;
+                margin: 0 !important;
+                font-weight: bold !important;
+                font-size: 88%;
+                color: #4a4a56 !important;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+            .slds-scope .slds-form-element__control {
+                flex: 1 !important;
+                display: flex !important;
+                align-items: center !important;
+            }
+        "/>
+        /* --- END CLASSIC FIX --- */
+    </style>
+
+    <div class="slds-scope">
+        <apex:form id="theForm">
+            <apex:pageMessages id="msgs" />
+            
+            <apex:outputPanel id="fieldWrapper">
+                <div class="slds-form-element custom-field-container">
+                    <span class="slds-form-element__label slds-p-around_none">Selected RSC instance</span>
+                    
+                    <div class="slds-form-element__control slds-grid slds-grid_vertical-align-center">
+                        
+                        <apex:outputPanel rendered="{!NOT(isEditMode)}" layout="none">
+                            <div class="slds-form-element__static" style="min-height: 20px;">
+                                <apex:outputPanel rendered="{!currentCase.RSCInstance__c != null}">
+                                    <a href="{!IF(CONTAINS(currentCase.RSCInstance__r.RSCUrl__c, '://'), '', 'https://')}{!currentCase.RSCInstance__r.RSCUrl__c}" style="font-size: {!IF($User.UIThemeDisplayed == 'Theme3', '0.80rem', '0.75rem')} !important;"
+                                       target="_blank" rel="noopener noreferrer" class="slds-text-link">
+                                         {!IF(
+                                            currentCase.RSCInstance__r.RSCUrl__c != null,
+                                            currentCase.RSCInstance__r.RSCUrl__c,
+                                            currentCase.RSCInstance__r.Name
+                                        )}
+                                    </a>
+                                </apex:outputPanel>
+                                
+                            </div>
+                            
+                            <button type="button" onclick="enableEdit();" class="slds-button slds-button_icon edit-icon" title="Edit RSC">
+                                <svg class="slds-button__icon slds-button__icon_medium" aria-hidden="true" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                    <use xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/utility-sprite/svg/symbols.svg#edit')}"></use>
+                                </svg>
+                            </button>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel rendered="{!isEditMode}" layout="block" style="width:100%;">
+                            <apex:selectList value="{!selectedRscId}" size="1" styleClass="slds-select slds-m-bottom_x-small rsc-dropdown" style="font-size: .75rem !important;">
+                                <apex:selectOptions value="{!rscOptions}"/>
+                            </apex:selectList>
+                     
+                                
+                                <apex:commandButton value="Cancel" action="{!cancelEdit}" reRender="fieldWrapper" 
+                                                    styleClass="slds-button slds-button_neutral slds-m-right_x-small cancel-btn"
+                                                    immediate="true"/>
+                                
+                                <apex:commandButton value="Save" action="{!saveRSC}" 
+                                                    onclick="return handleSave(this);"
+                                                    styleClass="slds-button slds-button_brand save-btn"/>
+                        </apex:outputPanel>
+                    </div>
+                </div>
+            </apex:outputPanel>
+            <apex:actionFunction name="enableEdit" action="{!toggleEdit}" reRender="fieldWrapper,block"/>
+        </apex:form>
+    </div>
+
+    <script>
+        function handleSave(saveBtnElement) {
+            setTimeout(function() {
+                var cancelBtn = document.querySelector('.cancel-btn');
+                var dropdown = document.querySelector('.rsc-dropdown');
+                
+                if (cancelBtn) {
+                    cancelBtn.disabled = true;
+                    cancelBtn.classList.add('slds-button_disabled');
+                }
+
+                if (dropdown) {
+                    dropdown.disabled = true;
+                }
+                
+                saveBtnElement.disabled = true;
+                saveBtnElement.value = 'Saving...';
+                saveBtnElement.classList.add('slds-button_disabled');
+            }, 50);
+
+            return true;
+        }
+    </script>
+</apex:page>

@@ -1,0 +1,154 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" extends="c:PC_UtilityCmp" access="global" controller="PC_PartnerRequestingFormController">
+    <!-- Attribute Defination -->
+    <aura:attribute name="RegistrationFields" type="Object" access="global"/> 
+    <aura:attribute name="PartnerRequest" type="Object" access="global"/> 
+    <aura:attribute name="newRegsitrationError" type="String"/>
+    <aura:attribute name="requiredFields" type="List" default="Country_Picklist__c,State_Picklist__c" />
+    <aura:attribute name="showStates" type="boolean" /> 
+    <aura:attribute name="HideStates" type="boolean"/> 
+    <aura:attribute name="reqZipMsg" type="string"/>
+    <aura:attribute name="reqCountryFieldMsg" type="string"/>
+    <aura:attribute name="reqStateFieldMsg" type="string"/>
+    <aura:attribute name="url" type="string"/>
+    <aura:attribute name="showsaveMessage" type="Boolean" default="false"/>
+    <!-- PRIT24-435- START -->
+    <aura:attribute name="reqCompanyFieldMsg" type="String" default=""/>
+    <aura:attribute name="selectedCompanyValue" type="String" default=""/>
+    <aura:attribute name="emailDomain" type="String" default=""/>
+    <aura:attribute name="emailError" type="String" default=""/>
+    <!-- PRIT24-435- END -->
+    <!-- Handler -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/> 
+    <aura:handler event="force:refreshView" action="{!c.doInit}" />
+    <force:recordData aura:id="PartnerRecordCreator" 
+                      layoutType="FULL"
+                      fields = "Partner_Account_Lookup__c,Related_Partner_Contact__c"
+                      targetRecord="{!v.PartnerRequest}"
+                      targetFields="{!v.RegistrationFields}"
+                      targetError="{!v.newRegsitrationError}"
+                      />
+    <aura:if isTrue="{!!v.showsaveMessage}"> 
+        <lightning:recordEditForm aura:id="recordEditForm"
+                                  recordId="{!v.recordId}"
+                                  recordTypeId ="{!v.recTypeId}"
+                                  objectApiName="Partner_Registration_Request__c">
+            <h3 class="slds-text-heading_large slds-align_absolute-center slds-size_4-of-4">
+                <b> Already A Rubrik Partner? </b>
+            </h3>
+            <p class="slds-text-heading_small slds-align_absolute-center slds-m-top_large slds-size_2-of-3">
+                Get started and request your Rubrik Partner Portal account to submit deal registrations, access sales and marketing resources, begin our on-demand sales and technical training, and much more!
+            </p>
+            <lightning:messages />
+            <br/>
+            
+            <div class="c-container slds-align_absolute-center">
+                <lightning:layout multipleRows="true" class="slds-size_2-of-5">
+                    <lightning:layoutItem size="12" class="margin-bottom-16">
+                        <lightning:input aura:id="Email" label="Email" value="{!v.RegistrationFields.Email__c}" required="true" type="email" 
+                                         onchange="{!c.handleEmailChange}"/>
+                        <div role="alert" aura:id="Email_help" class="form-element__helpError none">{!v.emailError}</div>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" class="margin-bottom-16">
+                        <lightning:input aura:id="RegistrationFields" label="First Name" value="{!v.RegistrationFields.First_Name__c}" required="true"/>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" class="margin-bottom-16">
+                        <lightning:input aura:id="RegistrationFields" label="Last Name" value="{!v.RegistrationFields.Last_Name__c}" required="true"/>
+                    </lightning:layoutItem>                    
+                    <lightning:layoutItem size="12" class="margin-bottom-16">
+                        <!-- PRIT24-435- START -->
+                        <!--<lightning:input aura:id="RegistrationFields" label="Company Name" value="{!v.RegistrationFields.Company_Name__c}" required="true"/>-->
+                        <label class="slds-form-element__label customRequired" for="lookupCmp">Company Name</label>
+                        <c:customLookUpLWC objectname="Account" iconname="standard:account" recordtype="Partner/Distributor"
+                            onselected="{!c.handleSelectedAccount}" onsearch="{!c.handleSearchValue}" onclear="{!c.handleClearValue}"
+                            placeholder="Enter Company Name and select from dropdown if shown" aura:id="Company__c" selectedValue="{!v.selectedCompanyValue}" emaildomain="{!v.emailDomain}">
+                        </c:customLookUpLWC>
+                        <div role="alert" aura:id="Company__c_help" class="form-element__helpError none">
+                            {!v.reqCompanyFieldMsg}</div>
+                        <!-- PRIT24-435- END -->
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" class="margin-bottom-16">
+                        <lightning:input aura:id="RegistrationFields" label="Job Title" value="{!v.RegistrationFields.Job_Title__c}" required="true"/>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" class="margin-bottom-16">
+                        <lightning:input  aura:id="RegistrationFields" label="Phone Number" value="{!v.RegistrationFields.Phone_Number__c}" required="true" type="tel" />
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" class="margin-bottom-16">
+                        <lightning:input  aura:id="RegistrationFields" label="Address" value="{!v.RegistrationFields.Address__c}" required="true"/>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" class="margin-bottom-16">
+                        <lightning:input  aura:id="RegistrationFields" label="City" value="{!v.RegistrationFields.City__c}" required="true"/>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" class="margin-bottom-16">
+                        <lightning:inputField fieldName="Country_Picklist__c" aura:id="Country_Picklist__c" value="{!v.RegistrationFields.Country_Picklist__c}" class="customRequired none" onchange="{!c.HandlingCountryChange}"/>
+                        <div role="alert" aura:id="Country_Picklist__c_help" class="form-element__helpError none">{!v.reqCountryFieldMsg}</div>
+                    </lightning:layoutItem>                    
+                    <lightning:layoutItem size="12">
+                        <aura:if isTrue="{!v.showStates}">
+                            <lightning:inputField fieldName="State_Picklist__c" aura:id="State_Picklist__c" value="{!v.RegistrationFields.State_Picklist__c}" class="customRequired none margin-bottom-16" />
+                            <div role="alert" aura:id="State_Picklist__c_help" class="form-element__helpError none">{!v.reqStateFieldMsg}</div>
+                        </aura:if>
+                        <aura:if isTrue="{!v.HideStates}">
+                            <lightning:inputField fieldName="State_Picklist__c" aura:id="State_Picklist__c"  value="- None -" class="none margin-bottom-16" />
+                            <div role="alert" aura:id="State_Picklist__c_help" class="form-element__helpError none">{!v.reqFieldMsg}</div>
+                        </aura:if>
+                    </lightning:layoutItem>                    
+                    <lightning:layoutItem size="12" class="margin-bottom-16">
+                        <lightning:inputField fieldName="Postal_Code__c" aura:id="Postal_Code__c" value="{!v.RegistrationFields.Postal_Code__c}" class="customRequired" />
+                        <div role="alert" aura:id="Postal_Code__c_help" class="form-element__helpError none">{!v.reqZipMsg}</div>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" class="slds-align_absolute-center slds-p-top_x-small margin-bottom-16">
+                        <lightning:button label="Submit" variant="brand" onclick="{!c.SavePartnerRequestRecord}"/>
+                        <lightning:spinner aura:id="mySpinner" alternativeText="Saving.." title="Saving.." variant="brand" size="large" class="slds-hide"/>
+                    </lightning:layoutItem>
+                </lightning:layout>                
+            </div>
+            <!--
+            <div class="slds-form-element">
+                <div class="slds-page-header slds-text-heading-large slds-align_absolute-center">Already A Rubrik Partner?</div>
+                <div class="slds-align_absolute-center slds-text-heading-small headingClass">Get started and request your Rubrik Partner Portal account to submit deal registrations, access sales and marketing </div>
+                <div class="slds-align_absolute-center slds-text-heading-small headingClass">resources, begin our on-demand sales and technical training, and much more!</div>
+                <div class="slds-small-size_8-of-12">  
+                    <div class="  slds-p-left_large slds-align_absolute-center">
+                        <div class="slds-col "></div>
+                        <div class="slds-col ">
+                            <lightning:input aura:id="RegistrationFields" label="First Name" value="{!v.RegistrationFields.First_Name__c}" required="true"/>
+                            <lightning:input aura:id="RegistrationFields" label="Last Name" value="{!v.RegistrationFields.Last_Name__c}" required="true"/>
+                            <lightning:input aura:id="RegistrationFields" label="Company Name" value="{!v.RegistrationFields.Company_Name__c}" required="true"/>
+                            <lightning:input aura:id="RegistrationFields" label="Job Title" value="{!v.RegistrationFields.Job_Title__c}" required="true"/>
+                            <lightning:input aura:id="RegistrationFields" label="Email" value="{!v.RegistrationFields.Email__c}" required="true" type="email" pattern="[^@]+@[^\.]+\..+"/>
+                            <lightning:input  aura:id="RegistrationFields" label="Phone Number" value="{!v.RegistrationFields.Phone_Number__c}" required="true" type="tel" />
+                            <lightning:input  aura:id="RegistrationFields" label="Address" value="{!v.RegistrationFields.Address__c}" required="true"/>
+                            <lightning:input  aura:id="RegistrationFields" label="City" value="{!v.RegistrationFields.City__c}" required="true"/>
+                            <lightning:inputField fieldName="Country_Picklist__c" aura:id="Country_Picklist__c" value="{!v.RegistrationFields.Country_Picklist__c}" class="customRequired none" onchange="{!c.HandlingCountryChange}"/>
+                            <div role="alert" aura:id="Country_Picklist__c_help" class="form-element__helpError none">{!v.reqCountryFieldMsg}</div>
+                            <aura:if isTrue="{!v.showStates}">
+                                <lightning:inputField fieldName="State_Picklist__c" aura:id="State_Picklist__c" value="{!v.RegistrationFields.State_Picklist__c}" class="customRequired none" />
+                                <div role="alert" aura:id="State_Picklist__c_help" class="form-element__helpError none">{!v.reqStateFieldMsg}</div>
+                            </aura:if>
+                            <aura:if isTrue="{!v.HideStates}">
+                                <lightning:inputField fieldName="State_Picklist__c" aura:id="State_Picklist__c"  value="- None -" class="none" />
+                                <div role="alert" aura:id="State_Picklist__c_help" class="form-element__helpError none">{!v.reqFieldMsg}</div>
+                            </aura:if>
+                            <lightning:inputField fieldName="Postal_Code__c" aura:id="Postal_Code__c" value="{!v.RegistrationFields.Postal_Code__c}" class="customRequired" />
+                            <div role="alert" aura:id="Postal_Code__c_help" class="form-element__helpError none">{!v.reqZipMsg}</div>
+                            <lightning:input type="checkbox" aura:id="RegistrationFields" label="Communication Opt-in" checked="{!v.RegistrationFields.Communication_Opt_in__c}"/>
+                            <div class="slds-text-body_x-small slds-text-color_weak slds-p-top_x-small">*Please opt-in to receive future marketing and partner-related communications from Rubrik. These communications include invitations to our monthly partner enablement webcasts, monthly partner newsletters, important Rubrik product and company announcements, and more. I understand I can always opt-out of these emails at any time per the Rubrik Privacy Policy.</div> 
+                            <div class="slds-align_absolute-center" style="height: 5rem;">
+                                <lightning:button label="Submit" variant="brand" onclick="{!c.SavePartnerRequestRecord}"/>
+                                <lightning:spinner aura:id="mySpinner" alternativeText="Saving.." title="Saving.." variant="brand" size="large" class="slds-hide"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            -->
+            <aura:if isTrue="{!not(empty(v.newRegsitrationError))}">
+                <div class="recordError">
+                    {!v.newRegsitrationError}</div> 
+            </aura:if>
+        </lightning:recordEditForm>
+    </aura:if>    
+    <aura:if isTrue="{!v.showsaveMessage == true}">
+        <aura:unescapedHtml value="{!v.saveMessage}" />
+    </aura:if>
+</aura:component>

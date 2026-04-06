@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Task_status_updation_validation</fullName>
+    <active>true</active>
+    <errorConditionFormula>NOT($Permission.Rubrik_Professional_Services_Operations) &amp;&amp; ISCHANGED( Task_Status__c ) &amp;&amp;
+ISPICKVAL( Task_Status__c , &apos;Cancelled&apos;)</errorConditionFormula>
+    <errorDisplayField>Task_Status__c</errorDisplayField>
+    <errorMessage>Operation not permitted. Please contact PSO-OPS to request cancellation.</errorMessage>
+</ValidationRule>

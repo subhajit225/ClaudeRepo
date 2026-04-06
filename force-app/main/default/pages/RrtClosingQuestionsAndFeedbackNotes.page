@@ -1,0 +1,22 @@
+<apex:page standardController="Escalation__c" extensions="EscalationManagementTeamController" showHeader="false" standardStylesheets="true" sidebar="false" docType="html-5.0" lightningStylesheets="true">
+    <apex:includeLightning />
+
+    <div id="LightningComponentid" /> 
+       
+    <script>
+    $Lightning.use("c:NextStepsEscalationNotesApp", function() {
+        $Lightning.createComponent("c:customDataTable",
+          { 
+            tableName: 'RRT Closing Questions & Feedback Notes',
+            objectName: 'Note__c',
+            fieldSetName: 'ER_RRT_Questions_Feedback',
+            recordId: '{!$CurrentPage.parameters.Id}',
+            filterStr: 'Escalation_RRT_Questions_Feedback'
+          },
+          "LightningComponentid",
+          function(cmp) {
+             console.log('RRT Closing Questions & Feedback Notes LWC Componenet added in VF page');
+          });
+    });
+    </script>
+</apex:page>

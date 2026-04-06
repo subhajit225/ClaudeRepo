@@ -1,0 +1,64 @@
+<apex:page standardController="PSO__c" extensions="Add_PSOLineItemsExtn" showHeader="false" sidebar="false">
+    <apex:form >
+    <script>
+    function CloseAndRefresh(){
+        window.opener.location.href="/{!$CurrentPage.parameters.yourAccountIdParamName}";
+        window.top.close();
+    }
+
+    </script>
+    <style>
+    .infoclass{
+    background-color: lightgoldenrodyellow;
+}
+    </style>
+    <apex:pageBlock title="PSO Time Entry" >
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Save" action="{!save}" rerender="error" oncomplete="CloseAndRefresh();"/>
+                <apex:commandButton value="Calculate Days" action="{!calculateNumber}" rerender="table,error,CalculateNumber,totalNumberPanel" />
+                <apex:commandButton value="Cancel" onclick="CloseAndRefresh();" rerender="error" />
+                
+            </apex:pageBlockButtons>
+            <apex:pageMessages ></apex:pageMessages>
+            <div class="infoclass">
+              <b>NOTE:</B> <br/>
+              <ul>
+              <li>
+              <p>Total number of completed dates should not exceed total number of committed(ordered) days [Total Committed days: {!totalCommitedDays} ]</p></li>
+              <li><p>Please add consecutive days, if there is a break use a new row by clicking on "Add Row"</p>
+            </li>
+            </ul>
+            </div>
+            <apex:pageBlockTable value="{!lineItems}" var="a" id="table">
+                <apex:column headerValue="Order Detail ID">
+                    <apex:inputField value="{!a.Start_Date__c}" required="true"/>
+                </apex:column>                
+                <apex:column headerValue="Request">
+                    <apex:inputField value="{!a.End_Date__c}" required="true"/>
+                </apex:column>
+                
+                <apex:column headerValue="Number of Days">
+                <apex:outputpanel id="CalculateNumber" >
+                    <apex:outputText > {!a.NumberofDays__c}</apex:outputtext>
+                    </apex:outputpanel>
+                </apex:column>
+                
+            </apex:pageBlockTable>
+            <br/>
+            <br/>
+            <div style="font-weight:bold;">Total Number of Days
+            <apex:outputpanel id="totalNumberPanel" >&nbsp;&nbsp;
+                <apex:outputText > {!totalNumberOfDays}</apex:outputtext>
+            </apex:outputpanel>
+            </div>
+    <apex:pageblockButtons location="bottom">
+
+        <div style="text-align:right;margin-right:30px;font-weight:bold;">
+             <apex:commandLink value="Add Row" action="{!addRow}" rerender="table,error" immediate="true" />
+&nbsp;|&nbsp;&nbsp;
+            <apex:commandLink value="Remove Row" action="{!removeRow}" rerender="table,error" immediate="true" />                
+        </div>
+    </apex:pageblockButtons>  
+    </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,130 @@
+<!-- * Created by: Vijay Kumar K R <vijay.kr@rubrik.com>
+     * Created Date: Mar 6th 2022 -->
+<template>
+    <div class="slds-box slds-theme--default">
+        <lightning-spinner if:true={isLoading} alternative-text="Loading" size="medium"></lightning-spinner>
+        <template if:true={error}>
+            <div class="slds-notify_container slds-is-fixed">
+                <div class="slds-notify slds-notify_toast slds-theme_error" role="alert">
+                    <div class="">
+                        <h2 class="slds-text-heading_small">{errorHeader}. Please Contact System Administrator.</h2>
+                        <p>{error}</p>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <div class="slds-text-color_inverse slds-text-heading_large" style="padding:0.5rem;background:#16325c">        
+            {tableName}
+        </div>
+        <!-- *CSS: word wrap in column ro over overflow -->
+        <table class="slds-table_cell-buffer slds-table_fixed-layout slds-max-medium-table_stacked-horizontal slds-table_bordered slds-medium-size_4-of-4 slds-table_cell-buffer slds-table_bordered slds-table_striped" style="padding-bottom: 8rem;">
+                <thead>
+                <tr class="slds-line-height_reset">
+                    <th class="slds-p-around_small" scope="col">
+                        <a class="slds-th__action slds-text-link_reset" name="SL No">
+                            Sl No
+                        </a>
+                    </th>
+                    <th class="slds-p-around_small" scope="col">
+                        <a class="slds-th__action slds-text-link_reset" name="Edit">
+                            
+                        </a>
+                    </th>
+                    <template if:true={fldDetail} iterator:it={fldDetail} >
+                        <th class="slds-p-around_small" scope="col" key={it.value.fldLabel}>
+                            <a class="slds-th__action slds-text-link_reset" name={it.value.fldLabel}>
+                                {it.value.fldLabel}
+                            </a>
+                        </th>
+                    </template>
+                </tr>
+            </thead>
+            <!-- CS21-1915 Width space for table columns -->
+            <colgroup if:false={isAreaOfImpSec}>
+                <col span="1" style="width: 5%;">
+                <col span="1" style="width: 5%;">
+                <col span="1" style="width: 65%;">
+                <col span="1" style="width: 10%;">
+                <col span="1" style="width: 10%;">
+            </colgroup>
+            <!-- Width space for table columns -->
+            <colgroup if:true={isAreaOfImpSec}>
+                <col span="1" style="width: 5%;">
+                <col span="1" style="width: 5%;">
+                <col span="1" style="width: 13%;">
+                <col span="1" style="width: 26%;">
+                <col span="1" style="width: 10%;">
+                <col span="1" style="width: 10%;">
+                <col span="1" style="width: 10%;">
+                <col span="1" style="width: 6%;">
+                <col span="1" style="width: 8%;">
+                <col span="1" style="width: 8%;">
+            </colgroup>
+              <tbody>
+                <!-- row Data -->
+                <template if:true={records} iterator:rec={records} >
+                    <tr class="slds-hint-parent" key={rec.value}>
+                        <td class="slds-p-around_small">
+                            <div class="slds-cell-wrap">{rec.value.uiIndex}</div>
+                        </td>
+                        <td class="slds-p-around_small">
+                            <div style="padding-bottom: 1rem;">
+                                <template if:true={rec.value.isDraft__c}>
+                                    <b style="color: red;">DRAFT</b><br/>
+                                </template>
+                            </div>
+                            <div class="slds-cell-wrap" if:false={rec.value.editable}>
+                                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" >
+                                    <lightning-icon icon-name="utility:edit" 
+                                                    alternative-text="edit" 
+                                                    size="xx-small" 
+                                                    title="Edit" 
+                                                    onclick={handleEditRow} 
+                                                    data-name={rec.value.index}></lightning-icon>
+                                </button>
+                            </div>
+                        </td>
+                        <!-- Column fields -->
+                        <template if:true={fldDetail} iterator:fld={fldDetail} >
+                            <!-- *CSS: word wrap in column ro over overflow -->
+                            <td key={fld.value} class="slds-p-around_small" style="white-space: break-spaces; overflow-wrap:break-word;">
+                                <c-custom-data-table-row fld={fld.value}
+                                                            row={rec.value}
+                                                            oneditview={handleEditView}
+                                                            onchangerow={handleChangeRow}
+                                                            ll-status={llStatus}>
+                                </c-custom-data-table-row>
+                            </td>
+                        </template>
+                        <td if:true={rec.value.isDraft__c}>
+                            <lightning-button-icon icon-name="utility:delete" 
+                                                    alternative-text="Delete" 
+                                                    title="Delete" 
+                                                    data-id={rec.value.Id}
+                                                    onclick={handleDeleteNote}>
+                            </lightning-button-icon>
+                        </td>
+                    </tr>
+                </template>
+            </tbody>
+        </table>
+        <template if:true={editMode}>
+            <footer class="slds-modal__footer slds-docked-form-footer stickyFooter">
+                <div class="slds-align_absolute-center">
+                    <lightning-button variant="brand"
+                                        title="Save"
+                                        type="submit"
+                                        name="Save"
+                                        label="Save"
+                                        onclick={handleSave}></lightning-button>
+                    <lightning-button class="slds-m-left_medium"
+                                        title="Cancel"
+                                        name="Cancel"
+                                        label="Cancel"
+                                        onclick={handleCancel}></lightning-button>
+                </div>
+            </footer>
+        </template>
+    </div>
+</template>

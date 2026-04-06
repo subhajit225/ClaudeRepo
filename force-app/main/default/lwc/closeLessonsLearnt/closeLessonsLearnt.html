@@ -1,0 +1,10 @@
+<template>
+    <lightning-quick-action-panel if:true={isShowModal} header="Close Lessons Learned?">
+       <p>Please confirm if you want to close this Lessons Learned.</p>
+   
+       <div slot="footer">
+           <lightning-button variant="neutral" label="Cancel" onclick={hideModalBox}></lightning-button>
+           <lightning-button variant="brand" label="Confirm" class="slds-m-left_x-small" onclick={hideConfirm}></lightning-button>
+       </div>
+   </lightning-quick-action-panel>
+</template>

@@ -1,0 +1,42 @@
+<!--
+* Visualforce Component Name :- KnowledgeDetailComponent
+* Controller :- KnowledgeDetailController
+* Use :- <c:KnowledgeDetailComponent kbId="*****************************"/>
+* Author :- Shiva Sharma
+* Created Date :- 24-06-2019
+* Description : This Page is being used in Forum information we can show article information through this component.
+* 
+*************Change Logs***************************************************************************
+* 
+* Modified By          Date        Description 
+* 
+
+*************Change Logs Ends**********************************************************************
+-->
+<apex:component controller="KnowledgeDetailController" access="global" >
+    <apex:attribute name="kbId" description="This contains kbId." assignTo="{!kbRecordId}"
+        type="String"/>
+    <apex:attribute name="showNumber" description="This contains kbId."
+        type="Boolean"/>
+    
+  
+    <apex:outputPanel rendered="{!showNumber}">
+        <apex:repeat value="{!knowRecords}" var="i">{!' '+i.ArticleNumber}</apex:repeat>
+    </apex:outputPanel>
+    <apex:outputPanel rendered="{!!showNumber}">
+        <apex:repeat value="{!knowRecords}" var="i">
+<br/><br/>
+            <b>Quick Summary: </b> <apex:outputText escape="false" value="{!i.Summary}" />  <br/>
+            <b>Detailed Summary: </b> <br/><apex:outputText escape="false" value="{!i.Summary__c}" />  <br/>
+            <br/>
+            <b>Version: </b>  <br/><apex:outputText escape="false" value="{!i.Version__c}" />  <br/>
+            <br/>
+            <b>Environment: </b> <br/>  <apex:outputText escape="false" value="{!i.Environment__c}"/> <br/>
+            <br/>
+            <b>Cause: </b> <br/> <apex:outputText escape="false" value="{!i.Cause__c}"/>  <br/>
+            <br/>
+            <b>Resolution: </b> <br/><apex:outputText escape="false" value="{!i.Resolution__c}"/>  <br/>
+        </apex:repeat>
+    </apex:outputPanel>
+    
+</apex:component>

@@ -1,0 +1,190 @@
+<template>
+    <lightning-card  >
+    <!-- <lightning-accordion  allow-multiple-sections-open onsectiontoggle={handleToggleSection} active-section-name={activeSectionName}>
+            <lightning-accordion-section name="A"  label="Account's Clusters" >
+                <lightning-helptext  class="helptext" content="Default Sorted By Cluster UUID"></lightning-helptext> -->
+                <template if:true={SpinnerForCluster}>  
+                <div class="slds-spinner_container">	
+                    <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">	
+                        <span class="slds-assistive-text">Loading</span>	
+                        <div class="slds-spinner__dot-a"></div>	
+                        <div class="slds-spinner__dot-b"></div>	
+                    </div>	
+                </div>	 
+            </template> 
+                <div class="slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12 tableDiv">
+                    <div class="slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12 CL_highlightFields">
+                    <div class="Account-cluster-Detail">
+                      <span class="Migration-status"><b>Account RSC Migration Status:</b> {AccountClusterMigrationStatus}</span>
+                      <span class="Migration-status"><b>Overall Account Migration: </b> {AccountOverallClusterMigration}%</span>
+                      <span><b>Account RSC Migration Tasks In-progress:  </b> {AccountTotalTaskInprogress}</span> <br> <br>
+                      <span class="Migration-status"> <b>Account-Total No of SLAs Migrated: </b> {AccountTotalNoOfSLAsMigrated}</span>
+                      <span> <b>Account-Total No of SLAs with objects : </b> {AccountTotalNoOfSLAsWithObjects}</span>
+                        </div>
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered tableBorder">
+                            <thead class="font">
+                                <tr class="slds-line-height_reset">
+                                    <th >
+                                        <div class="slds-truncate" title="Cluster UUID">
+                                            <div class="arrowContain">
+                                                <a class="casenocolor" href="javascript:void(0);" name="Name" data-id="desc"  onclick={Sorttable}>
+                                                    Cluster UUID
+                                                </a>
+                                                <template if:true={isName}>
+                                                    <template if:true={Desc}>
+                                                        <lightning-icon class="right-alignment"  icon-name="utility:chevronup" size="xx-small" > </lightning-icon>
+                                                    </template>
+                                                    <template if:false={Desc}>
+                                                        <lightning-icon class="right-alignment"  icon-name="utility:chevrondown" size="xx-small" > </lightning-icon>
+                                                    </template>
+
+                                                </template>
+                                               </div>
+                                        </div>
+                                    </th>
+                                    <th >
+                                        <div class="slds-truncate" title="Tag">
+                                            <div class="arrowContain">
+                                                <a class="casenocolor" href="javascript:void(0);" name="tag__c" data-id="descTag"  onclick={Sorttable}>
+                                                    Tag
+                                                </a>
+                                                <template if:true={isTag}>
+                                                    <template if:true={Desc}>
+                                                        <lightning-icon class="right-alignment"  icon-name="utility:chevronup" size="xx-small" > </lightning-icon>
+                                                    </template>
+                                                    <template if:false={Desc}>
+                                                        <lightning-icon class="right-alignment"  icon-name="utility:chevrondown" size="xx-small" > </lightning-icon>
+                                                    </template>
+
+                                                </template>
+                                               </div>
+                                        </div>
+                                    </th>
+                                    <th >
+                                        <div class="slds-truncate" title="Archived">
+                                            <div class="arrowContain">
+                                                <a class="casenocolor" href="javascript:void(0);" name="archived__c" data-id="descArchived"  onclick={Sorttable}>
+                                                    Archived
+                                                </a>
+                                                <template if:true={isArchived}>
+                                                    <template if:true={Desc}>
+                                                        <lightning-icon class="right-alignment"  icon-name="utility:chevronup" size="xx-small" > </lightning-icon>
+                                                    </template>
+                                                    <template if:false={Desc}>
+                                                        <lightning-icon class="right-alignment"  icon-name="utility:chevrondown" size="xx-small" > </lightning-icon>
+                                                    </template>
+
+                                                </template>
+                                                </div>
+                                        </div>
+                                    </th>
+                                    <th >
+                                        <div class="slds-truncate" title="Software Version">
+                                            <div class="arrowContain">
+                                                <a class="casenocolor" href="javascript:void(0);" name="software_version__c"  data-id="descSoftware"   onclick={Sorttable}>
+                                                    Software Version
+                                                </a>
+                                               
+                                                <template if:true={isSoftware_version}>
+                                                    <template if:true={Desc}>
+                                                        <lightning-icon class="right-alignment"  icon-name="utility:chevronup" size="xx-small" > </lightning-icon>
+                                                    </template>
+                                                    <template if:false={Desc}>
+                                                        <lightning-icon class="right-alignment"  icon-name="utility:chevrondown" size="xx-small" > </lightning-icon>
+                                                    </template>
+
+                                                </template>
+                                                </div>
+                                        </div>
+                                    </th>
+                                     <th>
+                                            Overall Clusters Migration %
+                                           
+                                    </th>
+                                    <th>
+                                          Total Tasks Completed
+                                    </th>
+                                    <th>
+                                          Total Tasks In-progress
+                                    </th>
+
+                                    <th> 
+                                        Total No of SLAs Migrated
+                                    </th>
+
+                                    <th> 
+                                        Total No of SLAs with objects 
+                                    </th>
+
+                                    <th>
+                                            RSC Migration Tasks
+                                           
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="font">
+                                <template if:true={clusterList} for:each={clusterList} for:item="Clusters">
+                                    
+                                    <tr key ={Clusters.Id} class="bottomBorder"  >
+                                        <td data-id={Clusters.Id} onclick={openAccountDetailPage} class="pointer-link" style="cursor: pointer;text-align: left; color: rgb(49, 158, 216)">{Clusters.Name}</td>
+                                        <!-- <td  ><a href="#" id={Clusters.Id} onclick={openAccountDetailPage}>{Clusters.Name}</a></td> -->
+                                        <td >{Clusters.tag__c}</td>
+                                        <td >{Clusters.archived__c}</td>
+                                        <td >{Clusters.software_version__c}</td>
+                                        <template if:true={Clusters.Overall_Cluster_Migration__c}>
+                                          <td>{Clusters.Overall_Cluster_Migration__c}%</td>
+                                        </template>
+                                        <template if:false={Clusters.Overall_Cluster_Migration__c}>
+                                          <td>0%</td>
+                                        </template>
+
+                                         <template if:true={Clusters.Total_RSC_Migration_Tasks__c}>
+                                          <td>{Clusters.RSC_Migrations_Tasks_Completed__c}/{Clusters.Total_RSC_Migration_Tasks__c}</td>
+                                        </template>
+                                        <template if:false={Clusters.Total_RSC_Migration_Tasks__c}>
+                                          <td>0/0</td>
+                                        </template>
+                                         <template if:true={Clusters.Total_RSC_Migration_Tasks__c}>
+                                             <td>{Clusters.RSC_Migration_Tasks_Inprogress__c}/{Clusters.Total_RSC_Migration_Tasks__c}</td>
+                                         </template>
+                                         <template if:false={Clusters.Total_RSC_Migration_Tasks__c}>
+                                          <td>0/0</td>
+                                        </template>
+                                            <td >{Clusters.NoOfSLAsMigrated}</td>
+                                             <td >{Clusters.NoOfSLAsWithObjects}</td>
+                                         <template if:true={Clusters.Total_RSC_Migration_Tasks__c}>
+                                        <td><a onclick={OpenRSCtasksList} data-id={Clusters.Id}>View Tasks</a></td>
+                                         </template>
+                                          <template if:false={Clusters.Total_RSC_Migration_Tasks__c}>
+                                          <td></td>
+                                          </template>
+
+                                    </tr>
+                                </template>
+                                
+                            </tbody>
+                        </table>
+                        
+                    </div>
+
+                </div>
+                <div>
+                    <template if:true={showButton}>
+                        <template if:true={showLess}>
+                            <button onclick={showAllRecords} class="showButton slds-button slds-button_icon slds-align_absolute-center" tabindex="0" title="Show All">
+                                Show All
+                            </button>
+                        </template>
+                        <template if:false={showLess}>
+                            <button onclick={showAllRecords} class="showButton slds-button slds-button_icon slds-align_absolute-center" tabindex="0" title="Show All">
+                                Show Less
+                            </button>
+                        </template>
+                    </template>
+                </div>
+            <!-- </lightning-accordion-section>
+        </lightning-accordion> -->
+    
+  
+</lightning-card>
+</template>

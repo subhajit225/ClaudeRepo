@@ -1,0 +1,18 @@
+<template>
+    <template if:true={isData}>
+        <div class="market-accordian">
+            <div class="slds-p-around_large">
+                <span class="heading-36">{accordionHeadline}</span>
+            </div>
+            <div class="slds-p-horizontal_large">
+                <lightning-accordion>
+                    <template for:each={accordionDetails} for:item="accordion">
+                        <lightning-accordion-section label={accordion.Headline__c} key={accordion.Id}>
+                            <span class="cardBodyDescription"><lightning-formatted-rich-text value={accordion.Image_Text__c}></lightning-formatted-rich-text></span>
+                        </lightning-accordion-section>
+                    </template>
+                </lightning-accordion>
+            </div>
+        </div>
+    </template>
+</template>

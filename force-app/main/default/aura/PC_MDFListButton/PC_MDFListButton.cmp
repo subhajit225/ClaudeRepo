@@ -1,0 +1,17 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="label" type="string"/>
+    <aura:attribute name="linkType" type="string"/>
+    <aura:attribute name="url" type="string" default="contentdisplay"/>
+    <aura:attribute name="width" type="string"/>
+    <aura:attribute name="label2" type="string"/>
+    <aura:attribute name="linkType2" type="string"/>
+    <aura:attribute name="url2" type="string" default="contentdisplay"/>
+    <aura:attribute name="width2" type="string"/>
+    <br/>
+    <!--<lightning:button label="{!v.label}" name ="{!v.label}" variant="brand" onclick="{!c.handleClick}" class="slds-align_absolute-center slds-size_3-of-4"/>-->
+   <div class="slds-align_absolute-center">
+    <button label="{!v.label}" name ="{!v.label}" style="{!'width:'+ v.width+ 'px'}"  onclick="{!c.handleClick}" class="slds-button slds-button_brand">{!v.label}</button>
+    <button label="{!v.label2}" name ="{!v.label2}" style="{!'width2:'+ v.width2+ 'px'}"  onclick="{!c.handleClick2}" class="slds-button slds-button_brand">{!v.label2}</button>
+   </div>	
+    
+</aura:component>

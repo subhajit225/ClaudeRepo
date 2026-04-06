@@ -1,0 +1,113 @@
+<aura:component controller="forumNavigationController" implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,force:hasRecordId" access="global" >
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="userId" type="String"/>
+    <aura:attribute name="userRecord" type="Object"/>
+    <aura:attribute name="userFeedData" type="Object"/>
+    <aura:attribute name="bestCommentCount" type="String"/>
+    <aura:attribute name="newTopicId" type="String"/>
+    <aura:attribute name="currentTopicId" type="String"/>
+    <aura:attribute name="currentCategory" type="String" access="global"/>
+    <aura:attribute name="feed" type="Object" access="global"/>
+    <aura:attribute name="topicsList" type="Object" access="global"/>
+    <aura:attribute name="type" type="String" />
+    <aura:attribute name="topicRecord" type="Object"/>
+    <aura:attribute name="errorBlock" type="Boolean" default="false"/>
+    <aura:attribute name="isDeleted" type="Boolean" default="false" />
+    <force:recordData aura:id="recordLoader"
+                      recordId="{!$SObjectType.CurrentUser.Id}"
+                      fields="Name,Profile.Name"
+                      targetFields="{!v.userRecord}"
+                      />
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+    <div class="slds-grid  slds-align_absolute-center slds-p-around_large " style="padding-bottom:0px !important">
+        
+        <div class="slds-size--1-of-1 " style="display:inline-flex;">
+            <a class="textdecorate" href="{!$Label.c.Community_Base_URL+'topiccatalog'}"><span class="titlesize">Back to Forums&nbsp;</span></a>
+            <aura:if isTrue="{!v.type == 'Question'}">
+                <a class="textdecorate" href="{!$Label.c.Community_Base_URL+'topic/'+v.currentTopicId}"><span class="titlesize">|&nbsp;Back to {!v.currentCategory}</span></a>
+            </aura:if>
+          <aura:if isTrue="{!and(v.type == 'Question',or(or(v.userRecord.Profile.Name == 'Rubrik Customer Support User',v.userRecord.Profile.Name == 'Rubrik Customer Support Manager'),v.userRecord.Profile.Name == 'System Administrator'))}">
+                <a class="textdecorate" href="JavaScript:void(0)" onclick="{!c.openmodal}"><span class="titlesize">&nbsp;| Edit</span></a>
+            </aura:if>
+        </div>
+        <aura:if isTrue="{!and(v.type == 'Question',or(or(v.userRecord.Profile.Name == 'Rubrik Customer Support User',v.userRecord.Profile.Name == 'Rubrik Customer Support Manager'),v.userRecord.Profile.Name == 'System Administrator'))}">
+          <div class="slds-modal slds-fade-in-close" aura:id="Modalbox">
+            <div class="slds-modal__container slds-p-around_large">
+                <div class="slds-modal__header">
+                    <lightning:buttonIcon iconName="utility:close"  variant="border-inverse" title="close" alternativeText="Close modal" onclick="{!c.closeModal}" class="closeIcon"/>
+                    <div  style="font-family: Gotham-Medium;font-size: 24px;">Reassign Category</div>
+                </div>
+                <!--<div class="slds-modal__content">
+                    <lightning:input disabled="true" class="slds-p-around_x-small" type="text" aura:id="Subject" accesskey="Subject" label="Current Category" value="{!v.topicRecord.Topic.Name}" /> 
+                    <lightning:select value="{!v.newTopicId}" label="Choose New Category" class="slds-p-around_x-small" required="true"> 
+                        <option value="">choose one...</option>
+                        <aura:iteration items="{!v.topicsList}" var = "topic">
+                            <option value="{!topic.Id}">{!topic.Name}</option>    
+                        </aura:iteration>
+                    </lightning:select>
+                </div>-->
+                <div class="slds-modal__content slds-p-around_large">
+                    
+                    <lightning:select aura:id="productCat" name="ProductCat" value="{!v.newTopicId}"  label="Product forums"  class="inputWidth-m"> 
+                        <option text="--None--" value=""/>
+                         <aura:iteration items="{!v.topicsList}" var = "option">
+                            <option text="{!option.label}" value="{!option.value}" selected="{!option.selected}"/>   
+                        </aura:iteration>
+                    </lightning:select>
+                    <aura:if isTrue="{!and(v.errorBlock,v.newTopicId == '')}">
+                        <div class="errorContainer">
+                            <span class="errorBlock">You must select a Category</span>
+                        </div>
+                    </aura:if>
+                    <div class="slds-form-element">
+                        <div class="slds-form-element__control">
+                            <lightning:input aura:id="disTitle" placeholder="Enter Post title" label="Title" value="{!v.feed.Title}" class="inputWidth-l" />
+                            <aura:if isTrue="{!and(v.errorBlock,v.feed.Title == null)}">
+                                <div class="errorContainer">
+                                    <span class="errorBlock">Title is required</span>
+                                </div>
+                            </aura:if>
+                        </div>
+                    </div>
+                    <label class="slds-form-element__label" for="Message">Message</label>
+                    <div class="slds-form-element">
+                        <div class="slds-form-element__control">
+                            <lightning:inputRichText aura:id="disBody" value="{!v.feed.Body}" label="Message" variant="bottom-toolbar" placeholder="Create your post"/>
+                            <aura:if isTrue="{!and(v.errorBlock,v.feed.Body == null)}">
+                                <div class="errorContainer">
+                                    <span class="errorBlock">Body is required</span>
+                                </div>
+                            </aura:if>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-modal__footer">
+                    <lightning:button  class="cancelbtn" onclick="{!c.closeModal}">Close</lightning:button>
+                    <lightning:button variant="brand"  class="supportBtn" onclick="{!c.SaveFormData}">Save</lightning:button>
+                </div>
+            </div>
+        </div>
+        </aura:if>
+    <div class="slds-backdrop " aura:id="Modalbackdrop"></div>        
+    </div>
+    <!-- Commented for CS21-719 - Veera -->
+    <!--<aura:if isTrue="{!if(and(v.type == 'Question',not(v.isDeleted)),true,false)}">
+        <div class="iconDiv">
+            <div style="display:flex;" class="icons">
+                <lightning:Icon iconName="utility:share_post" size="x-small" title="{!$Label.c.Total_Posts}"/>
+               &nbsp; {!v.userFeedData.PostCount} &nbsp;
+                <lightning:Icon iconName="utility:check" size="x-small" title="{!$Label.c.Best_Answers}"/>
+                &nbsp; {!v.bestCommentCount}  &nbsp;
+                <lightning:Icon iconName="utility:like" size="x-small" title="{!$Label.c.Likes_Recieved}"/>
+                 &nbsp; {!v.userFeedData.LikeReceivedCount} &nbsp;  <br/>
+            </div>
+            <div class="textComment">
+                <p><b>Total Comments: </b>{!v.userFeedData.CommentCount}</p>
+            </div>
+        </div>
+    </aura:if>-->
+    <!-- CS21-719 - End -->
+    <aura:if isTrue="{!v.type == 'Question'}">
+        <lightning:spinner aura:id="spinner" alternativeText="Loading" size="medium" class="slds-show" />
+	</aura:if>
+</aura:component>

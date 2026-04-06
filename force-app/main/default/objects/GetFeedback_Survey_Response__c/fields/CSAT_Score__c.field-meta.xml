@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CSAT_Score__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(ISPICKVAL(CSAT__c, &quot;Very Dissatisfied&quot;), 1,IF(ISPICKVAL(CSAT__c, &quot;Somewhat Dissatisfied&quot;),2,IF(ISPICKVAL(CSAT__c, &quot;Neither Satisfied nor Dissatisfied&quot;),3,IF(ISPICKVAL(CSAT__c, &quot;Somewhat Satisfied&quot;),4,IF(ISPICKVAL(CSAT__c, &quot;Very Satisfied&quot;),5,0)))))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>CSAT Score</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,30 @@
+<apex:page standardController="CCR__c" recordSetVar="selectedRecords"  standardStylesheets="true" showHeader="false" lightningStylesheets="true">
+    <apex:slds />
+    <apex:includeLightning />
+
+    <div class="slds-scope">
+        <div id="LwcId"></div>
+        <div id="error" style="display:none; color:red; padding:10px;"></div>
+    </div>
+
+    <script>
+        console.log('Page loaded. Parent ID from URL: {!$CurrentPage.parameters.id}');
+
+        $Lightning.use("c:saleNewCCRApp", function() {
+
+            $Lightning.createComponent(
+                "c:createSalesCCRWrapper",
+                {
+                    parentId : '{!$CurrentPage.parameters.id}'
+                },
+                "LwcId",
+                function(cmp) {
+                },
+                function(error) {
+                    document.getElementById('error').style.display = 'block';
+                    document.getElementById('error').innerHTML = 'Error creating component: ' + JSON.stringify(error);
+                }
+            );
+        });
+    </script>
+</apex:page>

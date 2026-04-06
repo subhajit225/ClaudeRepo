@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CCR_Validation_for_If_yes_which_account</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND( 
+ISNEW(), 
+ISPICKVAL( Existing_Customers_getting_transferred__c, &apos;Yes&apos;), 
+ISBLANK( Which_Accounts__c  ),
+TODAY()  &gt;  DATE(2017,03,23)  
+)</errorConditionFormula>
+    <errorDisplayField>Which_Accounts__c</errorDisplayField>
+    <errorMessage>Please enter this field when Type is &quot;Virgin / Non-Virgin Territory &amp; Quota&quot;</errorMessage>
+</ValidationRule>

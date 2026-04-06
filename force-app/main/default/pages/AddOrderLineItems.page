@@ -1,0 +1,169 @@
+<apex:page tabStyle="Order" standardController="Order" extensions="OrderLineEntry" action="{!initWrapper}" showHeader="true" standardStylesheets="false" applyBodyTag="false" docType="html-5.0" sidebar="true"  lightningStylesheets="true"> 
+    <style>
+    .cancelBtn{
+        -webkit-appearance: none;
+        position: relative;
+        display: inline-block;
+        border: 1px solid transparent;
+        padding: 0;
+        font-size: .75rem;
+        line-height: 1.875rem;
+        text-decoration: none;
+        white-space: normal;
+        border-radius: .25rem;
+        background: transparent;
+        background-clip: border-box;
+        color: rgba(27, 82, 151, 1);
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        -webkit-transition: color .05s linear,background-color .05s linear;
+        transition: color .05s linear,background-color .05s linear;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        text-align: center;
+        vertical-align: middle;
+        border: 1px solid rgb(221, 219, 218);
+        -webkit-transition: border 0.15s linear;
+        transition: border 0.15s linear;
+        border-color: rgb(221, 219, 218);
+        background-color: rgb(255, 255, 255);
+    }
+    </style>
+    <apex:outputPanel rendered="{! $User.UIThemeDisplayed != 'Theme3' }">
+        <style>
+            h1{
+            	font-family: "Salesforce Sans",Arial,sans-serif !important;
+            }
+            .slds-page-header__title{
+            	font-weight: 400 !important;
+                line-height: 1.25 !important;
+            }
+            .slds-page-header__title{
+                font-size: 1.25rem !important;
+            }
+            .slds-align-middle{
+            vertical-align: middle !important;
+                align-self: center !important;
+            }
+            .slds-m-right--small{
+            margin-right: .75rem !important;
+            
+            }
+            .slds-truncate{
+            	max-width: 100% !important;
+                overflow: hidden !important;
+                text-overflow: ellipsis !important;
+                white-space: nowrap !important;
+            } 
+            svg:not(:root) {
+            	width: 2rem !important;
+                height: 2rem !important;
+                fill: #fff !important;
+            	background-color: #769ed9;
+            	background-color: #769ed9 !important;
+            	box-sizing: border-box !important;
+            	vertical-align: middle !important;
+            	border-radius: .25rem !important;
+            }
+            .slds-table--bordered{
+                border-collapse: separate !important;
+                border-top: 1px solid #d8dde6 !important;
+                border-bottom: 1px solid #d8dde6 !important;
+                background-color: #fdfdfd !important;
+                font-size: inherit !important;
+            	width: 100% !important;
+            	border-spacing: 0 !important;
+            	display: table !important;	
+            }
+            .slds-button--destructive{
+            	background-color: #870500 !important;
+    			border-color: #870500 !important;
+            	color: #fff !important;
+            }
+        </style>
+    </apex:outputPanel>
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+  <apex:slds />
+ <apex:form id="lines" >
+ <div class="slds" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <!--action status-->
+ <c:busystatus />
+ 
+     <div class="slds-page-header">
+      <div class="slds-grid">
+        <div class="slds-col slds-has-flexi-truncate">
+          <div class="slds-media slds-no-space slds-grow">
+           <div class="slds-media__figure">
+              <svg class="slds-icon slds-icon-standard-orders" aria-hidden="true">
+                      <use xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/standard-sprite/svg/symbols.svg#orders')}"></use>
+              </svg>
+            </div>
+            <div class="slds-media__body">
+              <p class="slds-text-title--caps slds-line-height--reset">Add Lines</p>
+              <h1 class="slds-page-header__title slds-m-right--small slds-align-middle slds-truncate" title="this should match the Record Title">Order # {!Order.OrderNumber}</h1>
+            </div>
+          </div>
+        </div>
+         </div>
+         </div>
+ 
+        <apex:pageMessages ></apex:pageMessages>
+           
+       <apex:outputPanel rendered="{!Order.ActivatedDate!=null}" >
+        <div class="alert alert-info">
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        
+          <strong>NOTE:</strong> This order has already been activated and cannot be modified.
+        </div>
+        </apex:outputPanel>   
+
+        <apex:outputPanel id="panel">
+
+         <!--start Lines-->
+         <apex:outputPanel id="linepanel" rendered="{!Order.ActivatedDate==null}">
+               <apex:dataTable value="{!wrapPurchasedLines}" var="wrap" id="progproducts" styleClass="slds-table slds-table--bordered slds-table--cell-buffer" >  
+                 
+                 <apex:column headerValue="Select" styleclass="col-md-1 slds-text-title--caps">
+                     <apex:inputCheckbox value="{!wrap.selected}" id="inputId" disabled="{!wrap.disabled}"/>
+                     </apex:column>
+                 <apex:column value="{!wrap.prodName}" headerValue="Product" styleclass="col-md-8"/>
+
+
+                  <apex:column headerValue="Unit Price" styleclass="col-md-1 slds-text-title--caps">
+                     
+                     <apex:outputText value="{0, number, $###,###,###,##0.00} " id="price">
+                     <apex:param value="{!wrap.price}"/>
+                     </apex:outputText>
+                     </apex:column>
+
+                  <apex:column headerValue="Available Quantity" styleclass="col-md-1 slds-text-title--caps">
+                     <apex:outputText value="{!wrap.addquantity}" id="availquantity"/>
+                     </apex:column>
+
+                   <apex:column headerValue="Quantity to Add" styleclass="col-md-1 slds-text-title--caps">
+                     <apex:inputtext value="{!wrap.userquantity}" id="inputquantity" rendered="{!!wrap.disabled}" styleclass="slds-input"/>
+                     </apex:column>
+                     
+                  </apex:dataTable>
+                  
+          </apex:outputPanel>
+         <!--start  Lines-->
+         </apex:outputpanel>
+
+         <center>
+         <br/>
+         
+         
+    <apex:commandButton action="{!saveRecord}" title="Save Lines" value="Save Lines" styleclass="slds-button slds-button--neutral" status="busyStatus" rendered="{!Order.ActivatedDate==null}"/>
+    <apex:commandLink action="{!cancel}" title="Cancel" value="Cancel" immediate="true" styleclass="cancelBtn slds-button slds-button--neutral" status="busyStatus" accesskey="" />
+    <apex:commandButton action="{!resetPage}" title="Reset" value="Reset" reRender="panel" styleclass="slds-button slds-button--destructive" status="busyStatus"  rendered="{!Order.ActivatedDate==null}"/>
+
+    </center>
+
+    </div>
+    
+
+    </apex:form>
+</apex:page>

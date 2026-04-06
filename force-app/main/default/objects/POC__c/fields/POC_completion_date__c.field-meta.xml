@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>POC_completion_date__c</fullName>
+    <formula>Planned_Installation_Date__c +
+(if(ISPICKVAL(POC_Duration__c, &apos;2 Days&apos;), 2 , 0)) + 
+(if(ISPICKVAL(POC_Duration__c, &apos;4 Days&apos;), 4 , 0)) + 
+(if(ISPICKVAL(POC_Duration__c, &apos;6 Days&apos;), 6 , 0)) + 
+(if(ISPICKVAL(POC_Duration__c, &apos;8 Days&apos;), 8 , 0)) + 
+(if(ISPICKVAL(POC_Duration__c, &apos;10 Days&apos;), 10 , 0)) + 
+(if(ISPICKVAL(POC_Duration__c, &apos;12 Days&apos;), 12 , 0)) + 
+(if(ISPICKVAL(POC_Duration__c, &apos;14 Days&apos;), 14 , 0)) + 
+
+(if(ISPICKVAL(POC_Duration__c, &apos;7 Days&apos;), 7 , 0)) + 
+(if(ISPICKVAL(POC_Duration__c, &apos;15&apos;), 15 , 0)) +
+(if(ISPICKVAL(POC_Duration__c, &apos;15 Days&apos;), 15 , 0)) +
+(if(ISPICKVAL(POC_Duration__c, &apos;30 Days&apos;), 30 , 0)) +
+(if(ISPICKVAL(POC_Duration__c, &apos;60 Days&apos;), 60 , 0)) +
+(if(ISPICKVAL(POC_Duration__c, &apos;90 Days&apos;), 90 , 0)) + 
+(if(ISPICKVAL(POC_Duration__c, &apos;120 Days&apos;), 120 , 0))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>POC completion date</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Date</type>
+</CustomField>

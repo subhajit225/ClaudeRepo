@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>New_Sales_CCR_Status_Pending</fullName>
+    <active>true</active>
+    <description>Sales CCR Status should be Pending at the time of record creation.</description>
+    <errorConditionFormula>AND(
+    NOT($Setup.ShGl_DisableBusinessLogic__c.Disable_CCR_Validation_Rules__c), 
+    $Profile.Name &lt;&gt; &quot;System Administrator&quot;,
+    ISNEW(),
+    RecordType.Name = &apos;Sales CCR&apos;,
+    NOT(ISPICKVAL(User__c,&apos;Pending&apos;)),
+    NOT(CCR_Split_Exception__c)
+)</errorConditionFormula>
+    <errorDisplayField>User__c</errorDisplayField>
+    <errorMessage>New Sales CCR Status should be Pending at the time of creation.</errorMessage>
+</ValidationRule>

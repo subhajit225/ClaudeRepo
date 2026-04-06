@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RecordIsReadOnly</fullName>
+    <active>true</active>
+    <description>RecordIsReadOnly</description>
+    <errorConditionFormula>!ISNEW()</errorConditionFormula>
+    <errorMessage>Record is not editable. Please create a new entry</errorMessage>
+</ValidationRule>

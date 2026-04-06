@@ -1,0 +1,109 @@
+.THIS .tooltip1 {
+    position: relative;
+    display: inline;
+}
+.THIS .redirectcls{
+    border:none;
+    color:#009DAC;
+    font-family: Gotham-Medium!important;
+    font-size: 16px !important;
+}
+.THIS .redirectcls:hover{
+    border:none;
+    background:white;
+    color: #23527c;
+}
+@media only screen and (max-width: 600px) {
+    .THIS .sub {
+        position: relative!important;
+    }
+    .THIS.ContainerDiv {
+        position: relative!important;
+        width: 100% !important;margin:auto;
+    }
+}
+
+.THIS .tooltip1 .tooltiptext {
+    visibility: hidden;
+    width: 400px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    font-family: Gotham-Light !important;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -380px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.THIS  .tooltip1 .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 95%;
+    margin-left: -5px;
+    border-width: 5px;
+    font-family: Gotham-Light !important;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+.THIS  .tooltip1:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+    line-height: 16px;
+}
+.THIS  .buttonTop{
+    padding-bottom: 10px !important;
+    border-bottom: 1px solid #eee;
+}
+
+.THIS .sub>.slds-button{
+    
+    display: inline-block;
+    margin-bottom: 0;
+    font-weight: normal;
+    text-align: center;
+    vertical-align: middle;
+    touch-action: manipulation;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    border-radius: 4px;
+    font-family : Gotham-Light;
+}
+.THIS .Categories{
+    padding: .5rem 0rem 0 2rem;
+    font-size: 14px;
+    line-height: 1.42857143;
+    border-radius: 4px;
+    font-family : Gotham-Light;
+}
+
+.THIS.ContainerDiv{
+    /*width : 1140px;
+    margin : auto;
+        padding: 0 0px;*/
+    margin-top:2rem;
+    padding-bottom: 2rem;
+    width : 1140px;
+}
+.THIS .slds-badge {
+    border : 1px solid #009dac;
+    font-family : Gotham-Light;
+    font-size: 14px;
+    margin: 0 .5rem .5rem 0;
+}
+.THIS .sub{
+    right:0;
+    position:absolute;
+}

@@ -1,0 +1,65 @@
+<aura:component Controller= "UpdateAssistRequestController" implements="force:lightningQuickActionWithoutHeader,lightning:actionOverride,force:hasRecordId" access="global">
+    <aura:attribute name = "AssistRequest" type ="Assist_Request__c"/>
+    <aura:attribute name = "fulfilled" type ="String[]"/>
+    <aura:attribute name = "isReopen" type ="String"/>
+    <aura:attribute name = "ReopenText" type ="String"/>
+    <aura:attribute name = "isLoad" type ="Boolean" default="false"/>
+    <aura:attribute name = "isOveride" type ="String" default="No"/>
+    <aura:attribute name = "overideReason" type ="String" default=""/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:if isTrue="{!v.isLoad == true}">
+        <aura:if isTrue="{!v.AssistRequest.Status__c == 'Closed'}">
+            <ui:message title="Warning" severity="warning" closable="true">
+                Assist Request is already closed.
+            </ui:message>
+        </aura:if>
+        <aura:if isTrue="{!v.AssistRequest.Status__c != 'Closed'}">
+            <!--This has been modified by Ashish for Jira bug CS21-1128-->
+            <aura:if isTrue="{!and(v.AssistRequest.Case__r.OwnerId != $SObjectType.CurrentUser.Id , v.isOveride == 'No')}">
+                
+                 <div class="slds-modal__container" style="width:100%;padding:0px;margin:0px;background-color:#d76908;    margin-top: 10px;">
+                        <div class="slds-modal__content" id="modal-content-id-1" style="height:auto !important;padding:15px !important;background-color:#d76908">
+                            <div style="margin-bottom:4px">
+                             <lightning:icon iconName="utility:warning" alternative-text="Warning!" style="display:inline-block" title="Warning"></lightning:icon>
+                            <p style="font-weight:600; font-size:20px;display:inline-block">Warning</p><br/>
+                            </div>
+                                <p style="overflow-wrap: anywhere;font-size:14px">You are not an authorized user to close the assist Request. Only the case owner associated with the assist request can close” Refer to the  Assist Request. Process for more details: https://rubrik.atlassian.net/wiki/spaces/TSE/pages/711395886/Global+Customer+Support+Assist+Request+Process
+                                If you still want to Close the Assist Request. Please click on <button style="margin:5px" onclick="{! c.OverideClose }">Overide Close</button>
+                            </p> </div>
+                        
+                    </div>
+                
+            </aura:if>
+            <aura:if isTrue="{!or(v.AssistRequest.Case__r.OwnerId == $SObjectType.CurrentUser.Id, v.isOveride == 'Yes')}">
+                <aura:if isTrue="{!v.isOveride == 'Yes'}">
+                    <lightning:textarea name="isOveride" value="{!v.overideReason}" aura:id="isOveride" required="true" label="Overide Reason"></lightning:textarea>
+                          
+                </aura:if>
+                <lightning:textarea name="input1" label="Owner Case Comment" aura:id="OwnerComment" required="true" value="{!v.AssistRequest.Summary_of_the_Issue_Problem_Statement__c}"/>
+                
+                <lightning:select name="select1" label="Assist Request - Fullfilled?" aura:id="Fullfilled" required="true" value="{!v.AssistRequest.Assist_Request_Fullfilled__c}">
+                    <option value="">---None---</option>
+                    <aura:iteration items="{!v.fulfilled}" var="option">
+                        <option text="{!option}" value="{!option}"/>
+                    </aura:iteration>
+                </lightning:select>
+                <aura:if isTrue="{!v.AssistRequest.Assist_Request_Fullfilled__c == 'Unresolved/Request Reopen'}">
+                    <lightning:select name="select1" label="Reopen?" required="true" value="{!v.isReopen}" aura:id="Reopen">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </lightning:select>
+                    <lightning:textarea name="input1" required="{!v.isReopen == 'Yes'}"  label="Reason" aura:id="Reason" value="{!v.ReopenText}"/>
+                    
+                </aura:if>
+                <br/><br/><br/>
+                <center>
+                    <lightning:button variant="Neutral" label="Update"  onclick="{! c.updateRequest }"/>
+                    <lightning:button variant="Neutral" label="Cancel" onclick="{! c.close }"/>
+                    
+                </center>
+            </aura:if>
+        </aura:if>
+    </aura:if>
+    
+    
+</aura:component>

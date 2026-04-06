@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Complete_till_25th__c</fullName>
+    <formula>IF(ISPICKVAL(Task_Type__c,&apos;T&amp;E&apos;) &amp;&amp; NOT(ISBLANK(Related_PS_Task__c)),
+Related_PS_Task__r.Hidden_Task_Completion_25_Non_TE__c 
+,
+Hidden_Task_Completion_25_Non_TE__c 
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>% Complete till 25th</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Percent</type>
+</CustomField>

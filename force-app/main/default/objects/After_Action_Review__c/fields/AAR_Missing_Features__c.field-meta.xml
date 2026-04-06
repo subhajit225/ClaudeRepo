@@ -1,0 +1,567 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>AAR_Missing_Features__c</fullName>
+    <description>SAL23-.this field is manually populated by AE for Closed Lost opportunity based on the threshold.</description>
+    <inlineHelpText>What features were missing in the Rubrik product that caused the deal to be lost</inlineHelpText>
+    <label>Missing Feature</label>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>AAR_Product_Features__c</controllingField>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Active Directory Support</fullName>
+                <default>false</default>
+                <label>Active Directory Support</label>
+            </value>
+            <value>
+                <fullName>API / SDK / Plug-in</fullName>
+                <default>false</default>
+                <label>API / SDK / Plug-in</label>
+            </value>
+            <value>
+                <fullName>Application Recovery (AppFlows) Snappable Support</fullName>
+                <default>false</default>
+                <label>Application Recovery (AppFlows) Snappable Support</label>
+            </value>
+            <value>
+                <fullName>Azure SQL</fullName>
+                <default>false</default>
+                <label>Azure SQL</label>
+            </value>
+            <value>
+                <fullName>AzureStack</fullName>
+                <default>false</default>
+                <label>AzureStack</label>
+            </value>
+            <value>
+                <fullName>Cloud Native (AWS)</fullName>
+                <default>false</default>
+                <label>Cloud Native (AWS)</label>
+            </value>
+            <value>
+                <fullName>Cloud Native (Azure)</fullName>
+                <default>false</default>
+                <label>Cloud Native (Azure)</label>
+            </value>
+            <value>
+                <fullName>Cloud Native (GCP)</fullName>
+                <default>false</default>
+                <label>Cloud Native (GCP)</label>
+            </value>
+            <value>
+                <fullName>Cloud ON</fullName>
+                <default>false</default>
+                <label>Cloud ON</label>
+            </value>
+            <value>
+                <fullName>Cloud Out /Archival</fullName>
+                <default>false</default>
+                <label>Cloud Out /Archival</label>
+            </value>
+            <value>
+                <fullName>Cloud Storage (EFS/FSx/S3/Azure Blob)</fullName>
+                <default>false</default>
+                <label>Cloud Storage (EFS/FSx/S3/Azure Blob)</label>
+            </value>
+            <value>
+                <fullName>Data Classification Snappable Support</fullName>
+                <default>false</default>
+                <label>Data Classification Snappable Support</label>
+            </value>
+            <value>
+                <fullName>DB2 capabilities</fullName>
+                <default>false</default>
+                <label>DB2 capabilities</label>
+            </value>
+            <value>
+                <fullName>EPIC (virtualized) - Support for Physical EPIC setup</fullName>
+                <default>false</default>
+                <label>EPIC (virtualized) - Support for Physical EPIC setup</label>
+            </value>
+            <value>
+                <fullName>EPIC (virtualized) - Support for Virtual EPIC setup</fullName>
+                <default>false</default>
+                <label>EPIC (virtualized) - Support for Virtual EPIC setup</label>
+            </value>
+            <value>
+                <fullName>HP UX</fullName>
+                <default>false</default>
+                <label>HP UX</label>
+            </value>
+            <value>
+                <fullName>Hyper-V</fullName>
+                <default>false</default>
+                <label>Hyper-V</label>
+            </value>
+            <value>
+                <fullName>IBM SmartCloud</fullName>
+                <default>false</default>
+                <label>IBM SmartCloud</label>
+            </value>
+            <value>
+                <fullName>Kubernetes capabilities</fullName>
+                <default>false</default>
+                <label>Kubernetes capabilities</label>
+            </value>
+            <value>
+                <fullName>Legacy OS Support (AIX, Solaris, HPUX)</fullName>
+                <default>false</default>
+                <label>Legacy OS Support (AIX, Solaris, HPUX)</label>
+            </value>
+            <value>
+                <fullName>Linux Backup</fullName>
+                <default>false</default>
+                <label>Linux Backup</label>
+            </value>
+            <value>
+                <fullName>Linux Power PC</fullName>
+                <default>false</default>
+                <label>Linux Power PC</label>
+            </value>
+            <value>
+                <fullName>M365</fullName>
+                <default>false</default>
+                <label>M365</label>
+            </value>
+            <value>
+                <fullName>Managed Kubernetes (AKS/EKS/GKE)</fullName>
+                <default>false</default>
+                <label>Managed Kubernetes (AKS/EKS/GKE)</label>
+            </value>
+            <value>
+                <fullName>Mongo DB Support</fullName>
+                <default>false</default>
+                <label>Mongo DB Support</label>
+            </value>
+            <value>
+                <fullName>MSSQL</fullName>
+                <default>false</default>
+                <label>MSSQL</label>
+            </value>
+            <value>
+                <fullName>MySQL Support</fullName>
+                <default>false</default>
+                <label>MySQL Support</label>
+            </value>
+            <value>
+                <fullName>NAS Backup</fullName>
+                <default>false</default>
+                <label>NAS Backup</label>
+            </value>
+            <value>
+                <fullName>NASCD</fullName>
+                <default>false</default>
+                <label>NASCD</label>
+            </value>
+            <value>
+                <fullName>Native Exchange Support</fullName>
+                <default>false</default>
+                <label>Native Exchange Support</label>
+            </value>
+            <value>
+                <fullName>Native Sharepoint Support</fullName>
+                <default>false</default>
+                <label>Native Sharepoint Support</label>
+            </value>
+            <value>
+                <fullName>None</fullName>
+                <default>false</default>
+                <label>None</label>
+            </value>
+            <value>
+                <fullName>Nutanix AFS</fullName>
+                <default>false</default>
+                <label>Nutanix AFS</label>
+            </value>
+            <value>
+                <fullName>Nutanix AHV</fullName>
+                <default>false</default>
+                <label>Nutanix AHV</label>
+            </value>
+            <value>
+                <fullName>Office 365</fullName>
+                <default>false</default>
+                <label>Office 365</label>
+            </value>
+            <value>
+                <fullName>OpenSource Virtualization (oVirt)</fullName>
+                <default>false</default>
+                <label>OpenSource Virtualization (oVirt)</label>
+            </value>
+            <value>
+                <fullName>Oracle</fullName>
+                <default>false</default>
+                <label>Oracle</label>
+            </value>
+            <value>
+                <fullName>Postgress DB Support</fullName>
+                <default>false</default>
+                <label>Postgress DB Support</label>
+            </value>
+            <value>
+                <fullName>Ransomware Snappable Support</fullName>
+                <default>false</default>
+                <label>Ransomware Snappable Support</label>
+            </value>
+            <value>
+                <fullName>RCV</fullName>
+                <default>false</default>
+                <label>RCV</label>
+            </value>
+            <value>
+                <fullName>RDS Support</fullName>
+                <default>false</default>
+                <label>RDS Support</label>
+            </value>
+            <value>
+                <fullName>RedHat Enterprise Virtualization (RHEV)</fullName>
+                <default>false</default>
+                <label>RedHat Enterprise Virtualization (RHEV)</label>
+            </value>
+            <value>
+                <fullName>RedShift Support</fullName>
+                <default>false</default>
+                <label>RedShift Support</label>
+            </value>
+            <value>
+                <fullName>Reporting Capabilities</fullName>
+                <default>false</default>
+                <label>Reporting Capabilities</label>
+            </value>
+            <value>
+                <fullName>SaaS Support (G Suite)</fullName>
+                <default>false</default>
+                <label>SaaS Support (G Suite)</label>
+            </value>
+            <value>
+                <fullName>SaaS Support (Microsoft Dynamics 365)</fullName>
+                <default>false</default>
+                <label>SaaS Support (Microsoft Dynamics 365)</label>
+            </value>
+            <value>
+                <fullName>SaaS Support (Other)</fullName>
+                <default>false</default>
+                <label>SaaS Support (Other)</label>
+            </value>
+            <value>
+                <fullName>SaaS Support (SFDC)</fullName>
+                <default>false</default>
+                <label>SaaS Support (SFDC)</label>
+            </value>
+            <value>
+                <fullName>SaaS Support (SnowFlake)</fullName>
+                <default>false</default>
+                <label>SaaS Support (SnowFlake)</label>
+            </value>
+            <value>
+                <fullName>SAP Support</fullName>
+                <default>false</default>
+                <label>SAP Support</label>
+            </value>
+            <value>
+                <fullName>Storage Array Integration</fullName>
+                <default>false</default>
+                <label>Storage Array Integration</label>
+            </value>
+            <value>
+                <fullName>UI</fullName>
+                <default>false</default>
+                <label>UI</label>
+            </value>
+            <value>
+                <fullName>VMware</fullName>
+                <default>false</default>
+                <label>VMware</label>
+            </value>
+            <value>
+                <fullName>Windows Backup</fullName>
+                <default>false</default>
+                <label>Windows Backup</label>
+            </value>
+            <value>
+                <fullName>Other</fullName>
+                <default>false</default>
+                <label>Other</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>Active Directory Support</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>API / SDK / Plug-in</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>Application Recovery (AppFlows) Snappable Support</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>Azure SQL</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>AzureStack</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>Cloud Native (AWS)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>Cloud Native (Azure)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>Cloud Native (GCP)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>Cloud ON</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>Cloud Out /Archival</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>Cloud Storage (EFS/FSx/S3/Azure Blob)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>Data Classification Snappable Support</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>DB2 capabilities</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>EPIC (virtualized) - Support for Physical EPIC setup</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>EPIC (virtualized) - Support for Virtual EPIC setup</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>HP UX</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>Hyper-V</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>IBM SmartCloud</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>Kubernetes capabilities</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>Legacy OS Support (AIX, Solaris, HPUX)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>Linux Backup</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>Linux Power PC</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>M365</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>Managed Kubernetes (AKS/EKS/GKE)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>Mongo DB Support</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>MSSQL</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>MySQL Support</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>NAS Backup</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>NASCD</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>Native Exchange Support</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>Native Sharepoint Support</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>None</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>Nutanix AFS</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>Nutanix AHV</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>Office 365</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>OpenSource Virtualization (oVirt)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>Oracle</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>Postgress DB Support</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>Ransomware Snappable Support</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>RCV</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>RDS Support</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>RedHat Enterprise Virtualization (RHEV)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>RedShift Support</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>Reporting Capabilities</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>SaaS Support (G Suite)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>SaaS Support (Microsoft Dynamics 365)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>SaaS Support (Other)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>SaaS Support (SFDC)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>SaaS Support (SnowFlake)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>SAP Support</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>Storage Array Integration</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>UI</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>VMware</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>Windows Backup</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Negative</controllingFieldValue>
+            <controllingFieldValue>Neutral</controllingFieldValue>
+            <valueName>Other</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

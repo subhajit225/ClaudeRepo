@@ -1,0 +1,129 @@
+.THIS.containerDiv {
+    margin: 10px;
+    position: relative;
+}
+
+.THIS .lightningCardCase{
+    max-height: 200px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.THIS .focusTitle{
+    font-weight: bold;
+    color: #4a4a56;
+}
+
+.THIS .focusUpdatedTitle{
+    font-weight: bold;
+    color: #4a4a56;
+    margin-right: 35px;
+}
+
+.THIS .focusUpdatedTimeCase{
+    float: right;
+    margin-right: 20px;
+    font-weight: bold;
+}
+
+.THIS .sectionHeaderArrow{
+    margin-right: 7px;
+    vertical-align: middle;
+    margin-top: 5px;
+}
+
+.THIS .countryFlag {
+    width: 28px;
+    height: 20px;
+}
+
+.THIS .tooltip1 {
+    position: relative;
+    /*display: inline;*/
+}
+
+.THIS .tooltip1 .tooltiptextTop {
+    visibility: hidden;
+    max-width: 400px;
+    background-color: #555;
+    color: #fff;
+    text-align: left;
+    border-radius: 6px;
+    padding: 5px 10px;
+    position: absolute;
+    font-family: Gotham-Light !important;
+    z-index: 999;
+    bottom: 110%;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.THIS  .tooltip1 .tooltiptextTop::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 20%;
+    margin-left: -5px;
+    border-width: 5px;
+    font-family: Gotham-Light !important;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+.THIS  .tooltip1:hover .tooltiptextTop {
+    visibility: visible;
+    opacity: 1;
+    line-height: 16px;
+}
+
+.THIS .tooltip1 .tooltiptextBottom {
+    visibility: hidden;
+    max-width: 400px;
+    background-color: #555;
+    color: #fff;
+    text-align: left;
+    border-radius: 6px;
+    padding: 5px 10px;
+    position: absolute;
+    font-family: Gotham-Light !important;
+    z-index: 999;
+    top: 115%;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.THIS  .tooltip1 .tooltiptextBottom::after {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 20%;
+    margin-left: -5px;
+    border-width: 5px;
+    font-family: Gotham-Light !important;
+    border-style: solid;
+    border-color: transparent transparent #555 transparent;
+}
+
+.THIS  .tooltip1:hover .tooltiptextBottom {
+    visibility: visible;
+    opacity: 1;
+    line-height: 16px;
+}
+
+/*@media queries goes here*/
+
+@media (max-width:1199px){
+    .THIS.containerDiv{
+        padding:0px 15px;
+    }
+}
+@media (max-width:991px){
+    .THIS .fields {
+        padding: 0;
+        width: 100%;
+        margin-bottom: 15px;
+        }
+    .THIS .buttoncenter {
+        margin: 0 auto;
+    }
+}

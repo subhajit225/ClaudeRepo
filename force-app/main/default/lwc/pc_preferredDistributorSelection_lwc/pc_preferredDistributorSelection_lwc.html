@@ -1,0 +1,80 @@
+<template>
+    <div class="slds-card slds-banner border-none">
+        <lightning-layout multiple-rows>
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12" class="banner-section">
+                <div class="slds-p-around_xx-large ">
+                    <h1 class="heading-36">TRANSFORM PARTNER PROGRAM</h1>
+                    <h1 class="heading-58">Preferred Distributor Selection</h1>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+                <div class="slds-box slds-content-box">
+                    <h4 class="cardBodyTag slds-banner-h2 slds-align_absolute-center">RUBRIK INC.</h4>
+                    <h4 class="cardBodyTag slds-banner-h2 slds-align_absolute-center">Preferred Distributor Selection</h4>
+                    <div class="slds-m-top_x-large">
+                    <lightning-formatted-rich-text value={formDescription1}></lightning-formatted-rich-text>
+                    <lightning-formatted-rich-text value={formDescription2}></lightning-formatted-rich-text>
+                </div>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12" class="distributor-radio">
+                <div>
+                    <p>
+                        {formDescription3}
+                    </p>
+                    <p><lightning-radio-group name="Distributor"
+                                              label="Please pick a Distributor for your company:"
+                                              options={distiOptions}
+                                              type="radio"
+                                              onchange={handleRadioChange}
+                                              class="radio-form formDetails"
+                                              required
+                                              disabled={isDisabled}>
+                    </lightning-radio-group></p>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+                <div class="demo-only demo-only--sizing slds-grid slds-wrap distributor-form">
+                    <template if:true={showSpinner}>
+                        <lightning-spinner alternative-text="Loading..." size="large" class="slds-align_absolute-center"></lightning-spinner>
+                    </template>
+                    <div class="slds-size_1-of-2">
+                        <div class="slds-box slds-box_x-small slds-text-align_left slds-m-around_x-small">
+                            <lightning-input type="text" label="First Name: " required onchange={handleChangeEvent}
+                                name={fieldNames.firstName} class="slds-p-around_small formDetails" disabled={isDisabled}>
+                            </lightning-input>
+                            <lightning-input type="text" label="Job Title: " required onchange={handleChangeEvent}
+                                name={fieldNames.jobTitle} class="slds-p-around_small formDetails" disabled={isDisabled}>
+                            </lightning-input>
+                        </div>
+                    </div>
+                    <div class="slds-size_1-of-2">
+                        <div class="slds-box slds-box_x-small slds-text-align_left slds-m-around_x-small">
+                            <lightning-input type="text" label="Last Name: " required onchange={handleChangeEvent}
+                                name={fieldNames.lastName} class="slds-p-around_small formDetails" disabled={isDisabled}>
+                            </lightning-input>
+                            <lightning-input type="text" label="Company Name: " required onchange={handleChangeEvent}
+                                name={fieldNames.companyName} class="slds-p-around_small formDetails" disabled={isDisabled}>
+                            </lightning-input>
+                        </div>
+                    </div>
+                    <div class="slds-size_1-of-2">
+                        <div class="slds-box slds-box_x-small slds-text-align_left slds-m-around_x-small distributor-search">
+                            <lightning-input type="text" label="Email Address: " required onchange={handleChangeEvent}
+                                pattern={emailRegex} message-when-pattern-mismatch="Please enter a valid email"
+                                name={fieldNames.email} class="slds-p-around_small formDetails" disabled={isDisabled}>
+                            </lightning-input>
+                        </div>
+                    </div>
+                    <div class="slds-size_2-of-2">
+                        <div class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small distributor-button">                           
+                            <lightning-button variant="brand" label="I Accept" title="I Accept"
+                                onclick={handleAccept} class="slds-p-around_small exploreButton" disabled={isDisabled}>
+                            </lightning-button>
+                        </div>
+                    </div>
+                </div>
+            </lightning-layout-item>
+        </lightning-layout>
+    </div>
+</template>

@@ -1,0 +1,150 @@
+<apex:page controller="GlobalLoginController"  standardStylesheets="false" sidebar="false" cache="false" showheader="false" title="Login - Rubrik Community" applyBodyTag="false">
+
+<c:importbs />
+<c:communitystyle />
+<c:visualstrapblock >
+<style>
+     label {
+            display: inline-block;
+            color: #4A4A4A;
+            font-family: Gotham-Light;
+            font-size: 14px;
+            line-height: 14px;
+            }
+    .inputrubrik {
+         box-shadow: inset 0 1px 3px 0 rgba(0,0,0,0.06);
+        border: 1px solid #E6E6E6;
+        border-radius: 2px;
+    }
+    
+    .t1 {
+    font-size: 21px;
+    line-height: 25px;
+    color: #17232E;
+    }
+    
+
+    
+            
+  </style>
+  
+   <script>
+    function oncomplete(){
+        document.forms["login"].submit();
+    }
+    </script>
+
+  
+        <!--start the Container-->
+        <div class="container">
+            <div class="row">
+             <apex:pageMessages />
+                <div class="col-md-12 text-left">
+                 
+                
+                 
+       <!-- PARTNER LOGIN CODE HERE -->
+                                <apex:form >
+                                   
+
+                                     <div class="container-fluid text-left">
+                <div class="row text-left">
+                    <div class="col-md-4 text-left">
+                                        <c:pageTitle Name="Log in"/>  
+                            <div class="form-group">
+                                 
+                                <label for="username">
+                                   Username
+                                </label>
+                              <apex:inputtext id="username" value="{!username}" styleClass="form-control block inputrubrik"/>
+                            </div>
+                            <div class="form-group">
+                                 
+                                <label for="pword">
+                                    Password
+                                </label>
+                              <apex:inputSecret id="pword" value="{!pw}"  styleClass="form-control block inputrubrik"/>
+                            </div>
+
+                       <apex:commandlink action="{!go}" target="_top" rerender="profile,loginform" oncomplete="oncomplete();">
+                                         <apex:commandButton value="{!$Label.site.login_button}" style="width:124px;height:42px;" styleClass="btn rubrik-btn" />&nbsp;&nbsp;&nbsp;
+
+                       </apex:commandLink>
+                             <apex:outputlink title="Cancel" value="{!$Page.ForgotPassword}" style="font-size:12px;line-height:40px;">Forgot Password?</apex:outputlink>
+                             <div class="col-md-4">
+                             <!--bottom row-->
+                             </div>
+                             <div class="form-group">
+                              <hr style="noshade"/>
+                            </div>
+
+                             <div class="form-group">
+                             <apex:outputtext value="Need an Account?" styleclass="t1"/>&nbsp;&nbsp;&nbsp;
+                             <apex:commandButton action="mailto:{!$Label.requestaccessemail}" value="Request Access" style="width:143px; height:43px;" styleClass="btn rubrik-btn--transparent" id="request"/>
+                            </div>
+
+                    </div>
+                </div>
+            </div>   
+                                    
+                                </apex:form>
+
+                                        <apex:outputPanel id="loginform" rendered="true">
+                                            <form name="login" id="login" action="https://rubrik.force.com/{!portalid}/login?un={!username}&pw={!pw}" method="POST" base_target="_top" style="visibility:hidden;">
+                                                <input type="hidden" name="startURL" value="{!$CurrentPage.parameters.startURL}"/>
+                                                <input type="hidden" name="loginURL" value=""/>
+                                                <input type="hidden" name="useSecure" value="true"/>
+                                                <input type="hidden" name="jse" ID="jse" value="0"/>
+                                                <input type="hidden" name="local" value=""/>
+                                                <div class="pbHeader">
+                                                    <table border="0" cellpadding="0" cellspacing="0">
+                                                        <tr>
+                                                            <td class="pbTitle"><h2>Secure Customer Login</h2></td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                                <div class="pbBody">
+                                                    <div class="errorMsg">Please enter your username below.</div>
+                                                    <table border="0" cellpadding="0" cellspacing="0">
+                                                        <tr>
+                                                            <th scope="row"><label for="username">User Name:</label></th>
+                                                            <td>
+                                                                <apex:outputpanel id="test">
+                                                                <input autocomplete="on" type="text" NAME="un" id="un" size="25" maxlength="80" value="{!username}" class="username"/>
+                                                                </apex:outputpanel>
+                                                            </td>
+
+                                                        </tr>
+                                                        <tr>
+                                                            <th scope="row"><label for="password">Password:</label></th>
+                                                            <td><input autocomplete="on" type="password" id="password" name="pw" size="25" maxlength="80" class="pw" value="{!pw}"/></td>
+                                                        </tr>
+                                                    </table>
+                                                    <div>
+                                                    </div>
+                                                </div>
+                                                <div class="pbBottomButtons">
+                                                    <table border="0" cellpadding="0" cellspacing="0">
+                                                        <tr>
+                                                            <td class="pbTitle"><img width="1" height="1" title="" class="minWidth" alt="" src="/s.gif"/></td>
+                                                            <td class="pbButtonb"><input type="submit" class="btn" value="Login"/></td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </form>
+                                        </apex:outputPanel>
+              
+               
+
+                    </div>
+    
+            </div>
+        </div>
+        <!--End the Container-->
+
+
+        
+    </c:visualstrapblock>          
+  
+                               
+</apex:page>

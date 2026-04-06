@@ -1,0 +1,30 @@
+<template>
+    
+    <template if:false={isLoadingComplete}>
+        <lightning-spinner alternative-text="Loading" size="medium" class="spinnerClass"></lightning-spinner>
+    </template>  
+
+    <lightning-card title="Request For Information Page">    
+    </lightning-card>
+        <lightning-record-edit-form record-id={recordId} object-api-name="sbaa__Approval__c" onload={handleLoad} onsubmit={handleSubmit} onsuccess={handleSuccess}>
+        <lightning-messages>
+        </lightning-messages>
+        <lightning-input-field field-name="Feedback_Groups__c" variant="label-stacked"  value={selectedValue} onchange={handleInputChange}></lightning-input-field>
+        <template if:true={EmailProvided}>
+        <lightning-input-field field-name="Feedback_User_Email__c" variant="label-stacked" value={selectedEmail} onchange={handleEmailChange} onfocusout={validateEmail} required={valueRequired} class="validEmail"></lightning-input-field>
+        <div class="error-message slds-text-color_error" if:true={isEmailInvalid}>Please Enter valid Rubrik Email to proceed</div>
+        </template>
+
+            <lightning-input-field field-name="Feedback_Group_Comments__c" variant="label-stacked" value={selectedFeedComment} onchange={handleFeedCommentChange}></lightning-input-field>
+            
+        <lightning-input-field field-name="Categories__c" variant="label-stacked" value={selectedCategory} onchange={handleCategoryChange}></lightning-input-field>
+        <lightning-input-field field-name="Request_To_Information_Comment__c" variant="label-stacked" value={selectedComment} onchange={handleCommentChange}></lightning-input-field>
+
+        <lightning-button class="buttonStyle" variant="brand" type="submit" name="save" disabled={isEmailInvalid} label="Save"  style="float: center;margin-left: 10px;margin-right: 10px;"></lightning-button>
+        
+        <lightning-button class="buttonStyle" variant="brand" type="cancel" name="cancel" label="Cancel" style="float: center;" onclick={handleCancel}></lightning-button>
+        
+        <p></p>
+   
+        </lightning-record-edit-form>
+    </template>

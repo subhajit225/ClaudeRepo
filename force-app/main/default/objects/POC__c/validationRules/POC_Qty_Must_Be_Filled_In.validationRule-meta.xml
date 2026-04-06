@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>POC_Qty_Must_Be_Filled_In</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+ Product_for_POC__r.Name &lt;&gt; NULL,  POC_Qty__c = NULL)</errorConditionFormula>
+    <errorDisplayField>POC_Qty__c</errorDisplayField>
+    <errorMessage>POC Qty Must be filled in to proceed</errorMessage>
+</ValidationRule>

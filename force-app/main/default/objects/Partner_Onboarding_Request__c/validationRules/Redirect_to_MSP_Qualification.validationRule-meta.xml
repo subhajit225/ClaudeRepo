@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Redirect_to_MSP_Qualification</fullName>
+    <active>true</active>
+    <errorConditionFormula>ISPICKVAL( SDP_Selling_Type__c , &apos;Consumption&apos;)</errorConditionFormula>
+    <errorMessage>Please fill the details in &apos;MSP Qualification&apos; instead of Partner Onboarding form</errorMessage>
+</ValidationRule>

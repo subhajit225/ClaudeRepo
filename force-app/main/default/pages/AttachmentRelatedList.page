@@ -1,0 +1,19 @@
+<apex:page standardController="Assist_Request__c" extensions="AttachmentRelatedListController" sidebar="true" showHeader="false" >     
+    
+    <apex:form >                 
+        <apex:pageblock id="AttachmentList"> 
+            <div style="margin-left: 30%;"><!--apex:commandLink value="Attach File" action="{!attachFile}" target="_parent" styleClass="btn" style="text-decoration:none;padding:4px;"/--></div> 
+            <br/> 
+            <apex:pageBlockTable value="{!attachments}" var="att" rendered="{!NOT(ISNULL(attachments))}">                 
+                <apex:column HeaderValue="Action" width="100"> 
+                    <apex:commandLink value="Preview" style="color:#015ba7;" action="{!viewAtt}" target="_blank" ><apex:param value="{!att.Id}" name="attId"/> 
+                    </apex:commandLink> 
+                </apex:column> 
+                <apex:column headerValue="File Name"><apex:outputLink value="/{!att.Id}" target="_blank">{!att.Name}</apex:outputLink> </apex:column>               
+                <apex:column value="{!att.LastModifiedById}"></apex:column> 
+                <apex:column value="{!att.CreatedById}"/>              
+            </apex:pageBlockTable>            
+            <apex:outputLabel value="No records to display" rendered="{!(ISNULL(attachments))}" styleClass="noRowsHeader"></apex:outputLabel> 
+        </apex:pageblock> 
+    </apex:form> 
+</apex:page>

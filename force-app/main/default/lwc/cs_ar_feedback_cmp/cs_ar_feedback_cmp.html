@@ -1,0 +1,67 @@
+<template>
+    <div class="slds-m-around_medium">
+        <lightning-record-edit-form
+        object-api-name={objectApiName}
+        record-id={recordId}
+        onsubmit={handleSubmit}
+        onsuccess={handleSuccess}>  
+            <lightning-output-field field-name="Case__c"> </lightning-output-field>
+            <lightning-output-field field-name="Name"> </lightning-output-field>
+            <lightning-output-field field-name="Status__c"  > </lightning-output-field>
+            <lightning-output-field field-name="OwnerId"  > </lightning-output-field>
+            <hr/>
+            <p>Score : {percentage}</p>
+                <lightning-progress-bar value={percentage} size="large" variant="circular"></lightning-progress-bar>
+            <br/><br/>
+            <lightning-progress-indicator current-step={stepCount} type="base" variant="base">
+            <lightning-progress-step label="Issue Understanding" value="1"></lightning-progress-step>
+            <lightning-progress-step label="Research Skills" value="2"></lightning-progress-step>
+            <lightning-progress-step label="Troubleshooting Skills" value="3"></lightning-progress-step>
+            <lightning-progress-step label="Resolution Skill" value="4"></lightning-progress-step>
+            <lightning-progress-step label="Case Communication" value="5"></lightning-progress-step>
+
+            </lightning-progress-indicator>
+
+            <br/><br/>
+
+            <div class={showIssueBlock}>
+                <lightning-input-field field-name={issueCategory} onchange={handleButtonChange} value={issueCategoryVal}> </lightning-input-field>
+                <lightning-input-field field-name={issueReason} required> </lightning-input-field>
+                <lightning-input-field field-name={issueComment}> </lightning-input-field>
+            </div>
+            <div class={showResearchBlock}>
+                <lightning-input-field field-name={researchSkillsCategoryField} onchange={handleButtonChange} > </lightning-input-field>
+                <lightning-input-field field-name={researchSkillsReasonField} required> </lightning-input-field>
+                <lightning-input-field field-name={reaseachSkillsComment}> </lightning-input-field>
+            </div>
+            <div class={showTroubleshootingBlock}>
+                <lightning-input-field field-name={troubleshootingSkillsCategoryField} onchange={handleButtonChange} > </lightning-input-field>
+                <lightning-input-field field-name={troubleshootingSkillsReasonField} required > </lightning-input-field>
+                <lightning-input-field field-name={troubleshootingSkillsComment}> </lightning-input-field>
+            </div>
+            <div class={showResolutionBlock}>
+                <lightning-input-field field-name={resolutionSkillCategoryField} onchange={handleButtonChange}  > </lightning-input-field>
+                <lightning-input-field field-name={resolutionSkillReasonField} required> </lightning-input-field>
+                <lightning-input-field field-name={resolutionSkillComment}> </lightning-input-field>
+            </div>
+            <div class={showCommunicationBlock}>
+                <lightning-input-field field-name={caseCommunicationCategoryField} onchange={handleButtonChange}  > </lightning-input-field>
+                <lightning-input-field field-name={caseCommunicationReasonField}  required> </lightning-input-field>
+                <lightning-input-field field-name={caseCommunicationComment}> </lightning-input-field>
+            </div>
+            <div class="slds-var-m-top_medium slds-float_right">
+                <lightning-button variant="neutral" label="Back" onclick={handleBack}>
+                </lightning-button>
+                <template if:true={saveRecord}>
+                    <lightning-button variant="brand" type="submit" label="Save"  disabled={disableNext}>
+                    </lightning-button>
+                </template>
+                <template if:true={hasNext}>
+                    <lightning-button variant="brand" label="Next" onclick={handleNext} disabled={disableNext}>
+                    </lightning-button>
+                </template>
+            </div>
+             <br/><br/>
+        </lightning-record-edit-form>
+    </div>
+</template>

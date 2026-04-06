@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Tracking_URL_Hidden__c</fullName>
+    <externalId>false</externalId>
+    <formula>CASE( Shipping_Method__c ,
+&apos;AIT&apos;,&apos;http://fastrak.aitworldwide.com/FormattedDefault.aspx&apos;,
+&apos;UPS&apos;,&apos;https://www.ups.com/WebTracking/track?loc=en_gb&apos;,
+&apos;FedEx&apos;,&apos;http://www.fedex.com/us/track/ &apos;,
+&apos;DHL&apos;,&apos;http://www.dhl.com/en/express/tracking.html&apos;,
+&apos;Expeditors&apos;,&apos;https://www.expeditors.com/&apos;,
+&apos;&apos;)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Tracking URL(Hidden)</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

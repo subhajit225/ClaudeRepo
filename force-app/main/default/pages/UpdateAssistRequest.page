@@ -1,0 +1,110 @@
+<apex:page standardController="Assist_Request__c" extensions="UpdateAssistRequestController" lightningStylesheets="true" >
+    <style>
+        .restClass{
+        border-left: 4px solid #c00;
+        width: 500px;
+        height: 7rem;
+        }
+        option[value='Response Update Assist Request'] {
+        display: none;
+        }
+    </style>
+    
+    
+    <apex:includeScript value="/support/console/48.0/integration.js"/>
+    <script type="text/javascript">
+    function testCloseTab() {
+        //First find the ID of the current tab to close it
+        sforce.console.openPrimaryTab(null, '/'+'{!Assist_Request__c.Id}', false, null, null, null);
+    }
+    
+    var closeSubtab = function closeSubtab(result) {
+        //Now that we have the tab ID, we can close it
+        var tabId = result.id;
+        sforce.console.closeTab(tabId);
+    };
+    </script>
+    <apex:outputPanel >
+        <apex:form id="fullPanel">
+            <script>
+            function overpassClose(){
+                updateOveride();
+                return false;
+            }
+            </script>
+            <apex:actionFunction name="updateOveride" action="{!updateOveride}" rerender="fullPanel" immediate="true">
+            </apex:actionFunction>
+            
+            <apex:outputPanel rendered="{!assistRequest.Status__c == 'Closed'}">
+                <apex:pageMessage severity="warning" title="Assist Request is already closed." strength="1"></apex:pageMessage>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!assistRequest.Status__c != 'Closed'}">
+                <apex:outputPanel rendered="{!and(assistRequest.Case__r.OwnerId != $User.Id,!isOveride)  }">
+                    <apex:pageMessage escape="false" severity="warning" title="You are not an authorized user to close the assist Request. Only the case owner associated with the assist request can close Refer to the  Assist Request.Process for more details:<br/> https://rubrik.atlassian.net/wiki/spaces/TSE/pages/711395886/Global+Customer+Support+Assist+Request+Process<br/> <br/>If you still want to Close the Assist Request. Please click on <button onclick='overpassClose();return false;'>Overide Close</button>" strength="1"></apex:pageMessage>
+                </apex:outputPanel>
+                
+                <apex:outputPanel rendered="{!or(assistRequest.Case__r.OwnerId == $User.Id,isOveride)}">
+                    <script>
+                    function updateField(){
+                        var selectedValue = document.querySelectorAll('select[id*="counter"]')[0].value;
+                        actionIt(selectedValue);
+                    }
+                    
+                    function callJSScript(){
+                        var id = '{!assistRequest.Id}';
+                        if (sforce.console.isInConsole()) {
+                            sforce.console.openPrimaryTab(null, '/lightning/r/Case/'+id, false,null, function(result){
+                                if (result.success == true) {
+                                    primaryId = result.id;
+                                    sforce.console.getEnclosingTabId(function(result2){
+                                        var tabId = result2.id;
+                                        sforce.console.closeTab(tabId);
+                                    });
+                                    
+                                    
+                                } else {
+                                    alert('Primary tab cannot be opened');
+                                }
+                            }, null);
+                            
+                        } else {
+                            sforce.one.navigateToSObject(id, "detail");
+                        }
+                    }
+                    </script>
+                    
+                    <apex:actionFunction name="actionIt" action="{!actionIt}" rerender="counter" immediate="true">
+                        <apex:param name="selectedValue" value=""/>
+                    </apex:actionFunction>
+                    
+                    <apex:sectionHeader title="Assist Request" subtitle="Close Assist Request"/>
+                    <apex:pageBlock id="counter">
+                        <apex:pageBlockSection title="Assist Request Information">
+                            <apex:inputTextarea value="{!overideReason}" rendered="{!isOveride}"  required="true"  style="width: 500px; height: 100px;Border-left:2px solid #c00;" label="Overide Reason"/>
+                            <apex:pageBlockSectionItem />
+                            <apex:inputField value="{!assistRequest.Summary_of_the_Issue_Problem_Statement__c}" id="summary" required="true"  style="width: 500px; height: 100px" />
+                            <apex:pageBlockSectionItem />
+                            <apex:inputField value="{!assistRequest.Assist_Request_Fullfilled__c}" required="true" onchange="updateField();">
+                                
+                            </apex:inputField>
+                            <apex:pageBlockSectionItem />
+                            <apex:selectList label="Do you want to reopen Assist request" value="{!isReopen}" rendered="{!isShow}" size="1">
+                                <apex:selectOption itemValue="Yes" itemLabel="Yes"/>
+                                <apex:selectOption itemValue="No" itemLabel="No"/>
+                            </apex:selectList>
+                            <apex:pageBlockSectionItem />
+                            <apex:inputTextarea styleClass="restClass" value="{!reopenText}" label="Reason" rendered="{!isShow}" required="true"/>
+                            <p/>
+                            
+                        </apex:pageBlockSection>
+                        <apex:pageBlockButtons location="bottom">
+                            <apex:commandButton value="Update" action="{!updateClose}"  reRender="counter" />
+                            <apex:commandButton value="Cancel" action="{!cancel}"/>
+                            <apex:outputText escape="false" value="{!callJS}"></apex:outputText>
+                        </apex:pageBlockButtons> 
+                    </apex:pageBlock>
+                </apex:outputPanel>
+            </apex:outputPanel>
+        </apex:form>
+    </apex:outputPanel>
+</apex:page>

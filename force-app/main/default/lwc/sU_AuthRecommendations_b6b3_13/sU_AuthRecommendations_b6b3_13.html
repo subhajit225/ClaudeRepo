@@ -1,0 +1,61 @@
+<template>
+	<template if:true={customSettingsFilled}>
+		<template if:true={getRecommendations}>
+			<div id="su_recommendBox" class={recommendationPadding}>
+				<div class="su_recommendContainer su__w-100">
+					<div
+						class="su-recommendBoxDiv su__position-relative su__mt-4 su__px-3 su__pt-3 su__pb-1 su__sm-shadow su__bg-white ">
+						<div class="su__d-flex su__align-items-start su__border-b">
+							<div class="Icon-feather-thumbs-up su__loading-view"></div>
+							<div class="su__w-100">
+								<div class="su__font-normal su__mb-2 su__ml-1 su__loading-view">
+									{recommendationTitle}
+								</div>
+							</div>
+						</div>
+						<div class="su-recommendDiv" id="suRecommendElement">
+							<template for:each={getRecommendationsDataShowList} for:item="suRecommendItem"
+								for:index="indexVar">
+								<template if:true={suRecommendItem.highlight.titleShow}>
+									<div key={suRecommendItem}
+										class="su__d-flex su__align-items-center su__py-2 su__justify-content-between su_recommended__border-b ">
+										<div class={suRecommendItem.contentTagShowClass}>
+											<div>
+												<a class="su-recommend-title su__loading-view" href={suRecommendItem.href} target="_blank"
+													data-id={suRecommendItem._id} data-rank={indexVar}
+													data-sub={suRecommendItem.highlight.titleToDisplayString}
+													data-url={suRecommendItem.href} data-type={suRecommendItem.objName}
+													data-index={suRecommendItem.sourceName}>
+													<lightning-formatted-rich-text
+														value={suRecommendItem.highlight.titleToShowText}></lightning-formatted-rich-text>
+												</a>
+											</div>
+										</div>
+										<template if:true={suRecommendItem.contentTagShow}>
+											<div class="su__w-30 su__py-2" >
+												<p class="recommendation-label su__text-center su__whitespace-initial su__loading-view " title={suRecommendItem.contentTag}>
+													{suRecommendItem.contentTag}</p>
+											</div>
+										</template>
+									</div>
+								</template>
+							</template>
+						</div>
+						<template if:true={redirectionUrl}>
+							<div class="su__recommendations-ViewMore">
+								<a href={redirectionUrl} target="_blank" rel="noopener noreferrer"
+									class="su__text-decoration su__recommendations-content">
+									<span class="su__recommendations-ViewMore-text su__loading-view">View more articles</span>
+								</a>
+							</div>
+						</template>
+					</div>
+				</div>
+			</div>
+	
+		</template>
+	</template>
+	<template if:false={customSettingsFilled}>
+		<span class="customSettingErrMsg">{customSettingErrorMessage}</span>
+	</template>
+</template>

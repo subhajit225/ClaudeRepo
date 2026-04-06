@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Read_Only_After_Opportunity_Stage_7</fullName>
+    <active>true</active>
+    <description>SAL26-1450 - Oppty Solution Can Not Be Edited After Stage 7</description>
+    <errorConditionFormula>AND(
+NOT($Setup.ShGl_DisableBusinessLogic__c.Disable_Opportunity_Solution_Validation__c),
+OR(
+ISPICKVAL(Opportunity__r.StageName, &quot;7 Closed Won&quot;),
+ISPICKVAL(Opportunity__r.StageName, &quot;7 Closed Lost&quot;),
+ISPICKVAL(Opportunity__r.StageName, &quot;7 Closed Admin&quot;),
+NOT(
+OR(
+ISPICKVAL(Opportunity__r.Opportunity_Sub_Type__c, &quot;MSP&quot;),
+ISPICKVAL(Opportunity__r.Opportunity_Sub_Type__c, &quot;MSP Overage&quot;), 
+ISPICKVAL(Opportunity__r.Opportunity_Sub_Type__c, &quot;MSP Consumption Renewal&quot;),
+ISPICKVAL(Opportunity__r.Opportunity_Sub_Type__c, &quot;GC Offer&quot;))
+) 
+)
+)</errorConditionFormula>
+    <errorMessage>Opportunity Solution Details cannot be created or edited when the Opportunity is in Stage 7 or has a Non-MSP / GC Offer Sub Type.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,23 @@
+<template>
+    <div if:true={_isUserCanAccess}>
+    <lightning-card title="Meeting Console" icon-name="standard:event" style="height:100%">
+        <lightning-tabset active-tab-value="two">
+            <lightning-tab label="Dispositions" value="one"> 
+                <c-meeting-console></c-meeting-console>
+            </lightning-tab>
+            <lightning-tab label="Categorizations" value="two"> 
+                <c-meeting-categorization-l-w-c></c-meeting-categorization-l-w-c>
+            </lightning-tab>
+        </lightning-tabset>
+    </lightning-card>
+    </div>
+    <div class="tb-box slds-p-around_medium" if:true={_isUserCanNotAccess}>
+    <div class="slds-notify slds-notify_alert" role="alert">
+        <span class="slds-assistive-text">info</span>
+        <span>You don't have access to the Meeting Console!
+            <br> For Sales Leaders, please use the M4S Dashboard for this data.
+            <br>For Sellers, please contact Sales Operations to receive permissions to the Meeting Console.
+        </span>
+        </div>
+    </div>
+</template>

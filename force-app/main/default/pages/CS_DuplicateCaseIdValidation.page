@@ -1,0 +1,66 @@
+<apex:page standardController="Case" lightningStylesheets="true" sidebar="false" showQuickActionVfHeader="false"
+           showHeader="false" extensions="CS_DuplicateCaseIdValidationController">
+    
+    <apex:includeScript value="/support/console/48.0/integration.js"/>
+    <script type="text/javascript">
+    function openRecord(caseId) {
+        if (sforce.console.isInConsole()) {
+            sforce.console.getEnclosingPrimaryTabId(openSubtab);
+        }
+        else {
+            window.open('/' + caseId, '_blank');
+        }
+    }
+    
+    var openSubtab = function openSubtab(result) {
+        //Now that we have the primary tab ID, we can open a new subtab in it
+        var primaryTabId = result.id;
+        sforce.console.openSubtab(primaryTabId , '/' + '{!case.Duplicate_Case_Id__c}', true, 
+                                  '{!duplicateCaseName}', null, setOpenedTabIcon, 'salesforceSubtab');
+    };
+    
+    function setOpenedTabIcon(result) { 
+        if(result.success) {
+            sforce.console.setTabIcon('/resource/1585868012000/Case_Tab_Icon', result.id, null);
+        } else {
+            //alert('Tab icon cannot be set!');
+        }
+    }
+    
+    </script>
+    
+    <apex:form id="thisForm">
+        <apex:pageBlock mode="edit" rendered="{!isEdit}">
+            <apex:pageBlockSection columns="1">
+                <apex:pageMessages />
+                <apex:inputField id="inputfield" value="{!case.Duplicate_Case_Id__c}"/>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockButtons location="bottom">
+                <apex:commandButton value="Save" action="{!validateDuplicateCaseId}" rendered="{!AND(isEdit, !isWarningDisplayed, OR(case.Origin = 'Alert', case.Origin = 'Alert (come in email)', case.Origin = 'Pulse'))}"/>
+                <apex:commandButton value="Save" action="{!updateCase}" rendered="{!AND(isEdit, !isWarningDisplayed, case.Origin != 'Alert', case.Origin != 'Alert (come in email)', case.Origin != 'Pulse')}"/>
+                <apex:commandButton value="Ignore & Save" action="{!updateCase}" rendered="{!AND(isEdit, isWarningDisplayed)}"/>
+                <apex:commandButton value="Cancel" action="{!cancel}" />
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+        
+        <apex:pageBlock mode="view" rendered="{!!isEdit}">
+            <apex:pageBlockSection columns="1">
+                
+                <!-- Display this section only Classic and Classic-console -->
+                <apex:pageBlockSectionItem rendered="{!OR($User.UIThemeDisplayed == 'Theme2', $User.UIThemeDisplayed == 'Theme3')}">
+                    <apex:outputLabel value="Duplicate Case Id" style="color:#4a4a56;font-size:102%;font-weight:bold;font-family:Arial,Helvetica,sans-serif;"/>
+                    <apex:outputLabel value="{!duplicateCaseName}" onclick="openRecord('{!case.Duplicate_Case_Id__c}');return false;" style="text-decoration:underline;cursor:pointer;"/>
+                </apex:pageBlockSectionItem>
+                
+                <!-- Display this section only for Lightning and Lightning - console -->
+                <apex:outputField value="{!case.Duplicate_Case_Id__c}" rendered="{!OR($User.UIThemeDisplayed == 'Theme4d', $User.UIThemeDisplayed == 'Theme4u')}"/>
+                
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockButtons location="bottom">
+                <apex:commandButton value="Edit" action="{!changeToEditMode}" reRender="thisForm"/>
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

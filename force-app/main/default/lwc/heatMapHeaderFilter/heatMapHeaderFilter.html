@@ -1,0 +1,17 @@
+<template>
+    <div onmouseleave={handleMouseLeave} >
+        <section aria-describedby="dialog-body-id-109" aria-label="Dialog Title"
+            style={styleSection}
+            class="slds-popover slds-nubbin_top slds-dynamic-menu" role="dialog">
+            <div class="boxContainer ">
+                <div class="checkboxConatainer ">
+                    <template for:each={filterOptions} for:item="opt">
+                        <lightning-input key={opt.label} type="checkbox"  label={opt.label} value={opt.value}
+                            name={opt.label} onchange={handleCheckbox} data-colname={opt.columnName} data-colcategory={opt.columnCategory} checked={opt.isChecked}></lightning-input>
+                    </template>
+                </div>
+            </div>
+        </section>
+    </div>
+
+</template>

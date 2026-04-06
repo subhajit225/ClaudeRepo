@@ -1,0 +1,28 @@
+<aura:component
+  implements="force:hasRecordId,flexipage:availableForAllPageTypes"
+  access="global"
+>
+  <aura:attribute name="recordIdAvailable" type="Boolean" default="false" />
+  <aura:handler
+    name="change"
+    value="{!v.recordId}"
+    action="{!c.onRecordIdChange}"
+  />
+
+  <aura:if isTrue="{!v.recordIdAvailable}">
+    <c:knowbler newid="{!v.recordId}" />
+    <aura:set attribute="else">
+      <div
+        class="slds-text-color_error slds-m-vertical_medium slds-text-align_center slds-text-heading_medium"
+        style="
+          height: 85%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        "
+      >
+        Record ID is not available.
+      </div>
+    </aura:set>
+  </aura:if>
+</aura:component>

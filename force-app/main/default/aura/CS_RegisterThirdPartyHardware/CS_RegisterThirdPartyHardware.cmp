@@ -1,0 +1,188 @@
+<aura:component controller="CS_RegisterThirdPartyHWController" implements="forceCommunity:availableForAllPageTypes" access="global" >
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <aura:attribute name="uuid" type="string"/>
+    <aura:attribute name="nodeId" type="string"/>
+    <aura:attribute name="entitlementId" type="string"/>
+    <aura:attribute name="manufacturingTime" type="string"/>
+    <aura:attribute name="teleportToken" type="string"/>
+    <aura:attribute name="success" type="Boolean" default="false"/>
+    <aura:attribute name="error" type="Boolean" default="false"/>
+    <aura:attribute name="regString" type="string"/>
+    <aura:attribute name="nodeRes" type="List"/>
+    <aura:attribute name="regdownload" type="string"/>
+    <aura:attribute name="entitlementVerificationList" type="List"/>
+    <aura:attribute name="showSpinner" type="Boolean" default="true"/>
+    <aura:attribute name="hasError" type="Boolean" default="false"/>
+    <aura:attribute name="displayTimeoutMessage" type="Boolean" default="false"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+        <div class ="conatinerDiv">
+            <aura:if isTrue="{!v.showSpinner}">
+                <lightning:spinner alternativeText="Processing.." class="spins"/>
+            </aura:if>
+            <div class="slds-wrap slds-grid slds-size_12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 conatainer">
+                <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 slds-size_12-of-12 slds-text-align_center ideaTitle">{!$Label.c.Third_Party_Hardware_Title}</div>
+                <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 prodDecp">
+                    <aura:unescapedHtml value="{!$Label.c.Third_Party_Hardware_Description}"/>
+                </div>
+
+                <aura:iteration items="{!v.nodeRes}" var="eachResult">
+                    <aura:if isTrue="{!(eachResult &amp;&amp; eachResult.internalError == false &amp;&amp; eachResult.integrationError == false &amp;&amp; not(eachResult.message == '') &amp;&amp; not(eachResult.message == null))}">
+                        <div class="slds-notify successDiv" role="alert">
+                            <p class="" title="Description of icon when needed">
+                                <b style="font-family:Gotham-medium;">{!$Label.c.Third_Party_Hardware_Registration_Success}&nbsp;</b>
+                                <code class="code css-9z42f9" style="font-size:17px;background-color:lightgrey;padding:2px;border-radius:3px">cluster entitle_node</code>
+                                <b style="font-family:Gotham-medium;">&nbsp;{!$Label.c.Command}</b>
+                                <br/>
+                                <br/>
+                                <b style="font-family:Gotham-medium;">{!$Label.c.Registration_Token_Message}&nbsp;{!v.nodeId}:</b>
+                            </p>
+                            <br/>
+                            <p style="font-size:16px; word-wrap: break-word;">
+                                <aura:unescapedHtml value="{!eachResult.message}"/>
+                            </p>
+                        </div>
+                    </aura:if>
+                </aura:iteration>
+
+                <aura:if isTrue="{!v.displayTimeoutMessage}">
+                    <div class="slds-notify timeoutMessageDiv" role="alert">
+                        <p class="" title="Description of icon when needed">
+                            <b>{!$Label.c.Timeout_message}</b>
+                        </p>
+                    </div>
+                </aura:if>
+
+                <aura:if isTrue="{!v.hasError}">
+                    <div class="slds-notify slds-theme_alert-texture errorDiv" role="alert">
+                        <p class="" title="Description of icon when needed">
+                            <b style="font-family:Gotham-medium;">{!$Label.c.Third_Party_Hardware_Error_Message}</b>
+                        </p>
+                        <aura:iteration items="{!v.nodeRes}" var="eachResult">
+                            <aura:if isTrue="{!!(eachResult.message == '')}">
+                                <aura:unescapedHtml value="{!eachResult.message}"></aura:unescapedHtml>
+                            </aura:if>
+                            <aura:if isTrue="{!eachResult.integrationError}">
+                            	<br/>
+                                <p>
+                                    <a href="https://support.rubrik.com/s/article/000006464" target="blank">More information about this error.</a>
+                                </p>
+                            </aura:if>
+                        </aura:iteration>
+                    </div>
+                </aura:if>
+                <br/>
+
+                <aura:iteration items="{!v.nodeRes}" var="eachResult">
+                    <aura:if isTrue="{!(eachResult.entitlementVerificationResult != null)}">
+                        <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 slds-size_12-of-12 slds-text-align_left entitlementVerificationTitle">
+                        	<div class="slds-notify timeoutMessageDiv" role="alert">
+                                <p class="" title="Description of icon when needed">
+                                    <b>{!$Label.c.Timeout_message}</b>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 slds-size_12-of-12 slds-text-align_left entitlementVerificationTitle">{!$Label.c.Entitlement_Verification_Title}</div>
+                        <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 entitlementVerificationDescription">
+                            {!$Label.c.Entitlement_Verification_Description}
+                        </div>
+                        <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12" style="margin-top:29px;">
+                            <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                                <thead>
+                                    <tr class="slds-text-title_caps tableHeader">
+                                        <th scope="col" class="slds-cell-wrap slds-truncate">{!$Label.c.Entitlement_Verification_Type}</th>
+                                        <th scope="col" class="slds-cell-wrap slds-truncate">{!$Label.c.Result}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <aura:iteration items="{!eachResult.entitlementVerificationResult}" var="eachVerify">
+                                        <tr class="tableRows">
+                                            <td class="slds-cell-wrap slds-truncate">{!eachVerify.type}</td>
+                                            <td class="{!if(eachVerify.error == true, 'redHighlightCell slds-cell-wrap slds-truncate', 'greenHighlightCell slds-cell-wrap slds-truncate')}">
+                                                <aura:unescapedHtml value="{!eachVerify.result}"></aura:unescapedHtml>
+                                            </td>
+                                        </tr>
+                                    </aura:iteration>
+                                </tbody>
+                            </table>
+                        </div>
+                    </aura:if>
+                </aura:iteration>
+
+                <br/><br/>
+                <div class="slds-wrap slds-grid slds-large-size--12-of-12" style="margin-top:2rem;">
+                    <div class="slds-large-size--6-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 fields">
+                        <lightning:input aura:id="uuid"
+                                        name="uuid"
+                                        label="System UUID"
+                                        value="{!v.uuid}"
+                                        required="true"
+                                        pattern="{!$Label.c.UUID_Pattern}"
+                                        variant="label-stacked"
+                                        fieldLevelHelp="{!$Label.c.System_UUID_Help_Text}"
+                                        messageWhenValueMissing="{!$Label.c.Missing_Value_Error}"
+                                        messageWhenPatternMismatch="{!$Label.c.UUID_Pattern_Mismatch_Error}"
+                                        onblur="{!c.onBlur}"/>
+                    </div>
+                    <br/>
+
+                    <div class="slds-large-size--6-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 fields">
+                        <lightning:input aura:id="nodeId"
+                                        name="nodeId"
+                                        label="Node ID"
+                                        value="{!v.nodeId}"
+                                        required="true"
+                                        variant="label-stacked"
+                                        fieldLevelHelp="{!$Label.c.Node_Id_Help_Text}"
+                                        messageWhenValueMissing="{!$Label.c.Missing_Value_Error}"
+                                        onblur="{!c.onBlur}"/>
+                    </div>
+                    <div class="slds-large-size--6-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 fields">
+                        <lightning:input aura:id="entitlementId"
+                                        name="entitlementId"
+                                        label="Entitlement ID"
+                                        value="{!v.entitlementId}"
+                                        required="true"
+                                        variant="label-stacked"
+                                        fieldLevelHelp="{!$Label.c.Entitlement_ID_Help_Text}"
+                                        messageWhenValueMissing="{!$Label.c.Missing_Value_Error}"
+                                        onblur="{!c.onBlur}"/>
+                    </div>
+                    <br/>
+
+                    <div class="slds-large-size--6-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 fields">
+                        <lightning:input aura:id="manufacturingTime"
+                                        name="manufacturingTime"
+                                        label="Manufacturing time"
+                                        value="{!v.manufacturingTime}"
+                                        pattern="{!$Label.c.Manufacturing_Time_Pattern}"
+                                        required="true"
+                                        variant="label-stacked"
+                                        fieldLevelHelp="{!$Label.c.Manufacturing_time_Help_Text}"
+                                        messageWhenValueMissing="{!$Label.c.Missing_Value_Error}"
+                                        messageWhenPatternMismatch="{!$Label.c.Manufacturing_Time_Pattern_Mismatch_Error}"
+                                        onblur="{!c.onBlur}"/>
+                    </div>
+                    <div class="slds-large-size--6-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 fields">
+                        <lightning:input aura:id="teleportToken"
+                                        name="teleportToken"
+                                        label="Teleport token"
+                                        value="{!v.teleportToken}"
+                                        required="true"
+                                        variant="label-stacked"
+                                        fieldLevelHelp="{!$Label.c.Teleport_token_Help_Text}"
+                                        messageWhenValueMissing="{!$Label.c.Missing_Value_Error}"
+                                        onblur="{!c.onBlur}"/>
+                    </div>
+                    <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 buttoncenter">
+                        <div>
+                            <br/>
+                            <lightning:button aura:id="registerButton" disabled="false" class="hovercolor" label="Register Product" title="Register Product" onclick="{!c.register}"/>
+                        </div>
+                    </div>
+                </div>
+                <br/>
+            </div>
+        </div>
+</aura:component>

@@ -1,0 +1,68 @@
+<apex:page standardStylesheets="false" sidebar="false" cache="false" showheader="false" title="Login - Rubrik Community" applyBodyTag="false">
+    <c:visualstrapblock >
+        <style>
+            
+            /* Large screens ----------- */
+            @media only screen 
+            and (min-height : 1100px) {
+            #footer {
+            position:absolute!important;
+            height:24%!important;
+            width:99%
+            }
+            }
+            #footer {
+            position:relative;
+            bottom:0;
+            }
+            .Absolute-Center1 {
+            min-height: 40px!important;
+            }
+            .Absolute-Center {
+            margin: auto;
+            // position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            }
+            
+            .Absolute-Center.is-Responsive {
+            width: 50%;             
+            min-width: 200px;
+            max-width: 425px;
+            padding: 20px;
+            }left: 0; bottom: 0; right: 0;
+            }
+        </style>
+        
+        <div class="container">
+            <div class="row">
+                <div class="text-center">
+                    <apex:pageMessages /> 
+                    <apex:outputpanel rendered="{!IF(CONTAINS($CurrentPage.URL, 'customers'),true,false)}">
+                        <div>                            
+                            <br/>Pardon our dust!<br/>
+                            We're putting the final touches on the new Rubrik Support Portal. We'll send out an announcement once the website is launched.
+                            <br/><br/>
+                            Thanks for your continued patience.
+                            <br/><br/>      
+                            <apex:image value="{!$Resource.rubriksupportlogodark}" style="height:50px; align:center !important;" rendered="{!AND($CurrentPage.parameters.frame=null,IF(CONTAINS($CurrentPage.URL, 'customers'),true,false))}"/>
+                            <br/>
+                        </div>
+                    </apex:outputpanel>
+                </div>
+            </div>
+            <div class="row">
+                <div class="Absolute-Center is-Responsive text-center">
+                    <!-- this is site specific-->
+                    <c:communitylogin2 />
+                </div>
+            </div>
+        </div>
+        
+        <!--start the footer-->               
+        <div id="footer">
+            <c:psitefooterlogin ></c:psitefooterlogin>
+        </div>                             
+        
+    </c:visualstrapblock>           
+    
+</apex:page>

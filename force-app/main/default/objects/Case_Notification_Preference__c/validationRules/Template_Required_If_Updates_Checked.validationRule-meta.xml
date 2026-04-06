@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Template_Required_If_Updates_Checked</fullName>
+    <active>false</active>
+    <errorConditionFormula>OR(
+AND(
+ All_case_creation__c ,
+ ISBLANK(All_case_creation_Template__c)
+),
+AND(
+ Case_CT_Temperature_update__c  ,
+ ISBLANK(Case_CT_Temperature_update_Template__c )
+),
+AND(
+ Case_escalation__c  ,
+ ISBLANK(Case_escalation_Template__c )
+),
+AND(
+ Case_Priority_Updates__c   ,
+ ISBLANK(Case_Priority_Updates_Template__c )
+)
+)</errorConditionFormula>
+    <errorMessage>Please provide corresponding Template name</errorMessage>
+</ValidationRule>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Rejection_Reason__c</fullName>
+    <label>Rejection Reason</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Duplicate</fullName>
+                <default>false</default>
+                <label>Duplicate</label>
+            </value>
+            <value>
+                <fullName>Exceeds deal size threshold</fullName>
+                <default>false</default>
+                <label>Exceeds deal size threshold</label>
+            </value>
+            <value>
+                <fullName>Existing opp with another partner</fullName>
+                <default>false</default>
+                <label>Existing opp with another partner</label>
+            </value>
+            <value>
+                <fullName>Registered with another partner</fullName>
+                <default>false</default>
+                <label>Registered with another partner</label>
+            </value>
+            <value>
+                <fullName>No active opportunity</fullName>
+                <default>false</default>
+                <label>No active opportunity</label>
+            </value>
+            <value>
+                <fullName>No meeting set with customer</fullName>
+                <default>false</default>
+                <label>No meeting set with customer</label>
+            </value>
+            <value>
+                <fullName>Other</fullName>
+                <default>false</default>
+                <label>Other</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

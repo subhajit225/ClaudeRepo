@@ -1,0 +1,94 @@
+.THIS .backImage{
+  /*  background-repeat: no-repeat;
+    background-size: cover;*/
+}
+
+.THIS .hero {
+    width: 100%;
+    height: 100%;
+    min-width: 100%;
+    min-height: 100%;
+    position: relative;
+}
+.THIS .hero::before {    
+    background-size: cover;
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    opacity: 0.4;
+}
+.THIS .hero::after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0.4;
+}
+
+.THIS .textColor{
+        /*color: white;
+font-size: xx-large;*/
+}
+
+.THIS .forceCommunityTileMenuItem .imagePreview {
+    border: none;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    position: inherit;
+}
+/*
+@media (min-width: 320px) {
+    .THIS .hero::before {
+        background-image: url(/img/background-1932466_1920-460x305.jpg);
+    }
+}
+
+@media (min-width: 460px) {
+    .THIS .hero::before {
+        background-image: url(/img/background-1932466_1920-720x477.jpg);
+    }
+}
+
+@media (min-width: 720px) {
+    .THIS .hero::before {
+        background-image: url(/img/background-1932466_1920-980x649.jpg);
+    }
+}
+
+@media (min-width: 980px) {
+    .THIS .hero::before {
+        background-image: url(/img/background-1932466_1920-1240x821.jpg);
+    }
+}
+
+
+
+@media (min-width: 1240px) {
+    .THIS .hero::before {
+        background-image: url(/img/background-1932466_1920-1500x993.jpg);
+    }
+}
+
+@media (min-width: 1500px) {
+    .THIS .hero::before {
+        background-image: url(/img/background-1932466_1920-1760x1166.jpg);
+    }
+}
+
+@media (min-width: 1760px) {
+    .THIS.hero::before {
+        background-image: url(/img/background-1932466_1920-1920x1271.jpg);
+    }
+}
+*/

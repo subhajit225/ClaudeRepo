@@ -1,0 +1,28 @@
+<template>
+    <div onmouseleave={handleMouseLeave} >
+        <section aria-describedby="dialog-body-id-109" aria-label="Dialog Title"
+            style={sectionStyle}
+            class="slds-popover slds-nubbin_top slds-dynamic-menu" role="dialog">
+            <div class="boxContainer ">
+                <div class="allow-default">
+                    <lightning-input class="allow-default" name={inputName} variant="label-hidden" type="search"
+                        style="color: black !important;" placeholder="Search Here" onchange={handleInputChange} >
+                    </lightning-input>
+                </div>
+                
+                <div class="checkboxConatainer ">
+                    <template for:each={filterOptions} for:item="opt">
+                        <lightning-input data-id={opt.id} key={opt.Id} type="checkbox"  label={opt.label} value={opt.value}
+                            name={opt.label} onchange={handleCheckbox} checked={opt.isChecked}></lightning-input>
+                    </template>
+                </div>
+                <!-- //new Changes -->
+                    <div  class="footerContainer">
+                        <lightning-button class="filterSectionButton" variant="base" label="Select All" title="Select All" onclick={handleSelectAll}></lightning-button>
+                        <lightning-button class="filterSectionButton" variant="base" label="Clear All" title="Reset All" onclick={handleClearAll}></lightning-button>
+                    </div>
+                    <!-- new changes -->
+            </div>
+        </section>
+    </div>
+</template>

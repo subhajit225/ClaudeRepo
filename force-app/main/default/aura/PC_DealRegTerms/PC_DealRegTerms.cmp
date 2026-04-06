@@ -1,0 +1,127 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global">
+    <ltng:require styles="/resource/PartnerCommunityResource/Stylesheets/PartnerCommunityCSS.css"/>
+    <!-- PRIT-340 start -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="objectId" type="String" />
+    <aura:attribute name="objectName" type="String" />
+    <!-- PRIT-340 end -->    
+    
+    <div class="heading-36 slds-text-align_center slds-m-top_medium">
+        <b><p>Deal Registration </p> <p>Terms and Conditions</p></b>
+    </div>
+    <br />
+    <div class="slds-m-top_medium">
+        <h1 class="heading-22">Rubrik Deal Registration Terms and Conditions</h1>
+        <br/>
+        <p class="terms-body-text">The Rubrik deal
+            registration program is an opportunity-based registration program that provides
+            resellers, who uncover new end user sales opportunities for Rubrik solutions,
+            to receive special discounts available on qualifying transactions (the
+            “Program”). </p>
+        <br/>
+        <h1 class="heading-22">Registration on Rubrik Partner Portal </h1>
+        <br/>
+        <p class="terms-body-text">New opportunities
+            registered by a reseller or distributor (on behalf of a reseller) must be
+            submitted using the Rubrik online deal registration form on the Rubrik Partner
+            Portal. Deal registration is permitted only for a specific opportunity within
+            an account; an account or company as a whole may not be registered; the
+            registration must be for a funded project(s) within the account. </p>
+        <br/>
+        <h1 class="heading-22">Approval</h1>
+        <br/>
+        <p class="terms-body-text">Rubrik’s sales team is responsible for the approval or rejection of all deal registrations
+            submitted through the Rubrik Partner Portal and will use commercially
+            reasonable efforts to respond within 48 business hours of its receipt. Approval
+            or rejection of a deal registration submission will be made at the sole
+            discretion of Rubrik and Rubrik does not guarantee the success or closure of
+            any registered deals approved under this program.</p>
+        <br/>
+        <p class="terms-body-text">Upon acceptance of
+            a submitted opportunity, the applicable sales opportunity shall be considered
+            registered for the purposes of the Program. An email will be sent to the
+            reseller upon approval which should be provided Rubrik or Rubrik’s authorized
+            distributor (where applicable) when submitting requests for quotes and
+            discounts on the registered opportunity.</p>
+        <br/>
+        <h1 class="heading-22">Registration Rejection</h1>
+        <br/>
+        <p class="terms-body-text">For example, if the
+            opportunity has already been registered by another reseller; or the deal
+            registration submission is incorrect or incomplete; or the reseller is not in
+            good financial standing with Rubrik; or if the customer and Rubrik have
+            previously been or are concurrently in material discussion regarding purchase
+            of product. The customer listed on the deal registration must be willing to
+            work with the registered partner. A deal registration will also be rejected or
+            terminated if the customer submits in direct writing to Rubrik that they are
+            not able to work with the registered reseller. Registration may also be
+            rejected or terminated for failure to conduct a meeting with the prospect
+            within fifteen (15) business days of the registration submission date
+            requirement. </p>
+        <br/>
+        <h1 class="heading-22">Eligible Opportunities</h1>
+        <br/>
+        <p class="terms-body-text">An opportunity
+            will only be approved for the first reseller to register the opportunity. If
+            another reseller has already registered the opportunity, the reseller is only
+            entitled to non-registration discounts. Upon submitting a deal through the
+            registration process, Rubrik expects that the submitting partner is
+            offering/proposing Rubrik's products as the preferred solution to the
+            commercial customer and has an established relationship with the end user.
+            Federal, SLED and International government accounts may not be applicable to
+            standard deal registration and will be reviewed on an 'as needed’ basis see
+            below.</p>
+        <br/>
+        <h1 class="heading-22">Period</h1>
+        <br/>
+        <p class="terms-body-text">An approved deal
+            registration will be effective for 90 days from the date of approval unless an extension is requested and approved by
+            the applicable Rubrik sales team. Failure to obtain an extension will result in
+            'unregistering' of the opportunity and elimination of any preferred discounting
+            previously offered by Rubrik. Deal registration extensions will be made at the
+            sole discretion of Rubrik.</p>
+        <br/>
+        <h1 class="heading-22">Deal Registration Rules Of Engagement </h1>
+        <br/>
+        <p class="terms-body-text">Partners may only register opportunities within the territory in which they are authorized to
+            sell. If a partner requests a registration for an opportunity outside of their
+            authorized territory, the requesting partner must receive written approval from
+            Rubrik to do so.</p>
+        <br/>
+        <p class="terms-body-text">Partners agree to
+            represent Rubrik's interests above all other competitive solutions in
+            registered deals. Partners also agree that by representing direct competitors
+            of Rubrik to their clients for the same registered opportunity, Rubrik reserves
+            the right to cancel the deal registration at any time with no repercussions,
+            even if deal registration has prior approval. </p>
+        <br/>
+        <p class="terms-body-text">Partners may not
+            discuss the details of the Program with any customers or use details of the
+            Program as a means to influence a customer to purchase from one partner over
+            another.</p>
+        <br/>
+        <p class="terms-body-text">SLED and Federal
+            projects that are out for public bid and the result of an RFP or Tender are not
+            eligible for registration unless the partner was specifically involved in the
+            creation of the RFP/Tender and was fundamental in getting Rubrik positioned to
+            compete in the opportunity. Rubrik reserves the right to rescind any approved
+            deal registrations if an RFP/RFQ or Tender Request becomes applicable to the
+            approved opportunity. Deal registration discounts may be granted after the
+            contracts have been awarded. </p>
+        <br/>
+        <p class="terms-body-text">If a deal
+            registration does not move to closed won or closed lost after 90 days and an
+            extension of that deal registration has not been granted by Rubrik, the deal
+            registration is subject to being closed or renewed. </p>
+        <br/>
+        <h1 class="heading-22">Program Changes</h1>
+        <br/>
+        <p class="terms-body-text">Rubrik reserves the right to modify the Program terms and conditions at any time or to terminate the Program without notice.</p>
+        <br/>
+    </div>
+    <div class="slds-text-align_center deal-action-buttons">
+        <lightning:button label="I ACCEPT THE TERMS AND CONDITIONS" variant="brand" value="dealregnew" onclick="{!c.handleClick}"/>
+        <lightning:button label="I DO NOT ACCEPT THE ABOVE TERMS AND CONDITIONS" variant="brand" value="dealreglist" onclick="{!c.handleClick}"/>
+    </div>
+    <br/>
+</aura:component>

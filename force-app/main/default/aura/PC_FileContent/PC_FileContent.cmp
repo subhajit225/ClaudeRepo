@@ -1,0 +1,18 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" controller="PC_TagsContentController">
+    <ltng:require styles="/resource/PartnerCommunityResource/Stylesheets/PartnerCommunityCSS.css"/>
+    <aura:attribute name="ContentDocIds" type="String[]" />
+    <aura:attribute name="Heading" type="String"/>
+    
+    <aura:handler name="init" value="{! this }" action="{! c.doInit }" />
+    
+    <lightning:card title="{!v.Heading}" class="slds-m-top_medium no-style-slds-card">
+        <lightning:layout multipleRows="true">
+            <aura:iteration items="{!v.ContentDocIds}" var="cnt" start="0" end="6">
+                <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="4"
+                    padding="around-small">
+                    <c:PC_ContentView id="{!cnt}"></c:PC_ContentView>
+                </lightning:layoutItem>
+            </aura:iteration>
+        </lightning:layout>
+    </lightning:card>
+</aura:component>

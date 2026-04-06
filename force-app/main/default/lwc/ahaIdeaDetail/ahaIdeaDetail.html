@@ -1,0 +1,81 @@
+<template>
+   <div class="maindiv">
+    <lightning-card title="IDEA DETAIL" icon-name="standard:answer_best">
+         <br/> <br/> <br/>
+        <div class="slds-p-horizontal_small">
+            <lightning-layout multiple-rows>
+                <lightning-layout-item size="12">
+                    <div class="slds-col slds-size_12-of-12 slds-p-horizontal--small slds-m-bottom--medium">
+                            <div class="header"> Idea Number </div>
+                           <lightning-input label="" name="" value={ideaNumberval} read-only></lightning-input>
+                            <hr class="underline">
+                    </div>
+                     <div class="slds-col slds-size_12-of-12 slds-p-horizontal--small slds-m-bottom--medium">
+                             <div class="header"> Name </div>
+                            <lightning-input label=""  name="" value={nameval} read-only ></lightning-input>
+                             <hr class="underline">
+                    </div>
+                     <div class="slds-col slds-size_12-of-12 slds-p-horizontal--small slds-m-bottom--medium">
+                              <div class="header"> Idea Description </div>
+                            <lightning-input label=""  name="" value={IdeaDescriptionval} read-only></lightning-input>
+                             <hr class="underline">
+                    </div>
+                    <br/>
+                    <div class="slds-grid slds-wrap" style="width: auto;">
+                        <div class="slds-col slds-size_6-of-12 slds-p-horizontal--small slds-m-bottom--medium">
+                            <div class="headerleft"> Business Case/Value </div>
+                            <lightning-input class="headerleft" label=""  name="" value={businessfieldval} read-only></lightning-input>
+                             <hr class="underline2">
+                        </div>
+                        <div class="slds-col slds-size_6-of-12 slds-p-horizontal--small slds-m-bottom--medium">
+                             <div class="headerRight"> Creator Proposed Solution </div>
+                            <lightning-input class="headerRight" label=""  name="" value={Proposed_Solutionval} read-only></lightning-input>
+                             <hr class="underline2">
+                        </div>
+                        <div class="slds-col slds-size_6-of-12 slds-p-horizontal--small slds-m-bottom--medium">
+                             <div class="headerleft"> Escalation? </div>
+                            <lightning-input class="headerleft" label=""  name="" value={EscalationIdeaval} read-only></lightning-input>
+                             <hr class="underline2">
+                        </div>
+                        <div class="slds-col slds-size_6-of-12 slds-p-horizontal--small slds-m-bottom--medium">
+                            <div class="headerRight"> For Workspace </div>
+                            <lightning-input class="headerRight" label=""  name="" value={ForWorkspaceval} read-only></lightning-input>
+                             <hr class="underline2">
+                        </div>
+                        <div class="slds-col slds-size_6-of-12 slds-p-horizontal--small slds-m-bottom--medium">
+                            <div class="headerleft"> Idea Category</div>
+                            <lightning-input class="headerleft" label=""  name="" value={IdeaCategoryval} read-only></lightning-input>
+                              <hr class="underline2">
+                        </div>
+                        <div class="slds-col slds-size_6-of-12 slds-p-horizontal--small slds-m-bottom--medium">
+                             <div class="headerRight"> Idea Tags</div>
+                            <lightning-input class="headerRight" label=""  name="" value={IdeaTagsval} read-only></lightning-input>
+                              <hr class="underline2">
+                        </div>
+                        <div class="slds-col slds-size_6-of-12 slds-p-horizontal--small slds-m-bottom--medium">
+                            <div class="headerleft">Problem Statement</div>
+                            <lightning-input class="headerleft" label=""  name="" value={ProblemStatementval} read-only></lightning-input>
+                              <hr class="underline2">
+                        </div>
+                        <div class="slds-col slds-size_6-of-12 slds-p-horizontal--small slds-m-bottom--medium">
+                            <div class="headerRight">Product Area</div>
+                            <lightning-input class="headerRight" label=""  name="" value={ProductAreaval} read-only></lightning-input>
+                              <hr class="underline2">
+                        </div>
+                        <div class="slds-col slds-size_6-of-12 slds-p-horizontal--small slds-m-bottom--medium">
+                             <div class="headerleft">Strategic/Major Account?</div>
+                            <lightning-input class="headerleft" label=""  name="" value={StrategicMajorAccountval} read-only></lightning-input>
+                              <hr class="underline2">
+                        </div>
+                        <div class="slds-col slds-size_6-of-12 slds-p-horizontal--small slds-m-bottom--medium">
+                             <div class="headerRight">Account Preference</div>
+                            <lightning-input class="headerRight" label=""  name="" value={AccountPreferenceval} read-only></lightning-input>
+                              <hr class="underline2">
+                        </div>
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>
+        </div>
+    </lightning-card>
+   </div>
+</template>

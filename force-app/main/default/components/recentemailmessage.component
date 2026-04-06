@@ -1,0 +1,7 @@
+<apex:component controller="CaseSubHistoryController" access="global">
+ <apex:attribute name="thecaseId" assignTo="{!cseId}" type="String" description="Id of the case"/>  
+ <apex:repeat value="{!LastEmail}" var="em">
+{!em.FromAddress} wrote:
+{!em.TextBody}
+ </apex:repeat>
+</apex:component>

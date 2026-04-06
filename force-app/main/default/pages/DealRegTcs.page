@@ -1,0 +1,105 @@
+<apex:page standardStylesheets="false"  sidebar="false" showheader="false"  title="Deal Registration T&Cs - Rubrik Partner Community" applyBodyTag="false"  
+                           >
+ <c:visualstrapblock >
+    
+    
+    <!--hide the action column from Community users-->
+    <style>
+    .actionColumn{
+    display:none;
+    }
+    
+    .pbBody{
+    padding: 5px;
+    }
+    
+    .visualstrap td, th {
+    padding: 5px !important;
+    }
+    
+    .rolodex {
+      padding: 4px !important;  
+   }
+   
+   .btnpad{
+    padding: 15px;
+    }
+    
+    
+    </style>
+    
+        <!--start header-->
+        <c:siteheader ></c:siteheader>
+        <!--end Header-->
+   
+
+      <!--start the Container-->
+        <div class="container">
+        <!--action status overlay-->
+        <c:processing />
+            <div class="row rowcontainer" >
+                <div class="col-md-12">
+                  <c:pageTitle name="Deal Registration Terms and Conditions"></c:pageTitle> 
+              <div class="row" >
+              <div class="col-md-12">
+                       
+                       <!--start-->
+                    <apex:outputText >
+                   Rubrik deal registration is an end-user opportunity based registration program that
+provides resellers, who uncover new sales opportunities for Rubrik solutions, to
+receive the special discounts available on qualifying transactions.
+Registration are valid for 90 days.<br />
+<br />
+                        Submissions Process<br />
+                        <br />
+<strong>Registration on Partner Portal </strong><br />
+New opportunities registered by a reseller or distributor (on behalf of a reseller) must be submitted to the sales organization using the Rubrik online deal registration form located on the Rubrik Partner Portal. Deal registration is applicable only for a specific opportunity within an account; an account or company as a whole may not be registered; the registration must be for a funded project(s) within the account (see defining and opportunity below)<br />
+                        <br />
+<strong>Approval</strong><br />
+Rubrik sales team is responsible for the approval or rejection of all deal registrations submitted using the online deal registration system within 48 business hours. Upon acceptance of a registered opportunity submission, the applicable sales opportunity shall be deemed a 'registered deal' or 'registered opportunity'. An email will be sent to the partner sales rep upon approval which should be provided Rubrik or distribution (where applicable) when submitting requests for quotes and discounts on the specified opportunity.<br />
+                        <br /><!--
+In order for the registered opportunity to remain valid for the full ninety (90) days, a meeting must be scheduled (i.e. in person, WebEx, conference call) with the appropriate Rubrik sales person within fifteen (15) business days of the registration submission date. Failure to do so will result in rejection or termination of this registration.<br />
+                        <br />-->
+<strong>Registration Rejection</strong><br />
+Deal registrations may be rejected for a legitimate business reason. For example, if the opportunity has already been registered by another reseller; or the deal registration submission is incorrect or incomplete; or the reseller is not in good financial standing with Rubrik; or if the customer and Rubrik have previously been or are concurrently in material discussion regarding purchase of product. A deal registration will also be rejected or terminated if the customer submits in direct writing to Rubrik that they are not able to work with the registered reseller. Registration may also be rejected or terminated for failure to conduct a meeting with the prospect within fifteen (15) business days of the registration submission date requirement. <br />
+                        <br />
+<strong>One Registration for Opportunity</strong><br />
+A prospective opportunity will only be approved for the first reseller to register the opportunity. If another reseller has already registered the opportunity, the reseller is only entitled to non-registration discounts. Upon submitting a deal through the registration process, Rubrik expects that the submitting partner is offering/proposing Rubrik's products as the preferred solution to the commercial customer and has an established relationship with the end user. Federal, SLED and International government accounts may not be applicable to standard deal registration and will be reviewed on an 'as needed basis' see below.<br />
+                        <br />
+<strong>Period</strong><br />
+Deal registration will be effective for 90 days after the approval unless an extension is requested and approved by the applicable Rubrik sales team. Failure to obtain an extension will result in 'unregistering' of the opportunity and elimination of any preferred discounting. Deal registration extensions may be granted at the discretion of the Rubrik rep at any time.<br />
+                        <br />
+                        <strong>General Deal Registration Rules Of Engagement
+                        </strong><br/>
+                       Partners may only register opportunities within the territory in which they are authorized to sell. If a partner requests a registration for an opportunity outside of their authorized territory, the requesting partner must receive written approval from the appropriate Rubrik Sales Management personnel.<br/><br/> Partners agree to represent Rubrik's interests above all other competitive solutions in registered deals. Partners also agree that by representing direct competitors of Rubrik to their clients for the same registered opportunity, Rubrik reserves the right to cancel the deal registration at any time with no repercussions, even if deal registration has prior approval.
+<br />
+<br/>
+SLED and Federal projects that are out for public bid and the result of an RFP or Tender are not eligible for registration unless the partner was specifically involved in the creation of the RFP/Tender and was fundamental in getting Rubrik positioned to compete in the opportunity. Rubrik reserves the right to rescind any approved deal registrations if an RFP/RFQ or Tender Request becomes applicable to the approved opportunity. Deal registration discounts may be granted after the contracts have been awarded.
+<br />
+<br/>
+If a deal registration does not move to closed won or closed lost after 90 days and a renewal has not been requested the deal registration is subject to being closed or renewed.
+<br />
+<br/>
+The customer listed on the deal registration must be willing to work with the registered partner. If Rubrik  receives notification from a customer that they will not (cannot) work with a specified reseller the registration on that opportunity will be terminated.<br /><br />
+                   </apex:outputText>
+                   
+                  <center> <a href="{!URLFOR($Page.DealReg, null, null)}"><button type="button" class="btn rubrik-btn" >I ACCEPT THE TERMS AND CONDITIONS</button></a>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <a href="{!URLFOR($Page.DealRegHome, null, null)}"><button type="button" class="btn rubrik-btn" >I DO NOT ACCEPT THE ABOVE TERMS AND CONDITIONS</button></a> </center>
+     
+                       <!--end-->
+                       
+                                        
+                </div>
+                                  
+                </div>
+                </div>
+            </div>
+            </div>
+        <!--End the Container-->
+
+       <!--start the footer-->
+        <c:psitefooter ></c:psitefooter>
+        
+    </c:visualstrapblock>
+</apex:page>

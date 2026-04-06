@@ -1,0 +1,127 @@
+<template>
+    <template if:true={knowledgeGraph}>
+        <div
+            class="su__knowledgeGraph su__knowledgeGraphIcons su__sm-fullwidth su__col-xl-4 su__col-lg-12 su__col-md-12 su__col-xs-12  su__position-relative su__p-3 su__pb-0 su__mb-3 su__sm-shadow su__radius-1">
+            <template if:true={knowledgeGraphMetaGraph}>
+                <template if:true={metaGraph.title}>
+                    <div class="su__text-truncate su__m-0 su__loading-view" style="width:100%">
+                        <a href={metaGraph.link} class="su__text-decoration font-14 su__text-black su__font-bold"
+                            target="_blank">
+                            <lightning-formatted-rich-text value={metaGraph.title}></lightning-formatted-rich-text>
+                        </a>
+                    </div>
+                </template>
+                <template if:true={metaGraph.link}>
+                    <div class=" su__w-100 su__m-0 su__mt-1 font-12 su__word-break su__loading-view">
+                        <cite class="su__text-decoration su__color-non-link  font-12">
+                            {metaGraph.link}>
+                        </cite>
+                    </div>
+                </template>
+                <template if:true={metaGraph.img}>
+                    <div class="metaImg su__my-2">
+                        <img class="knowledgeGraph-metaImg" src={metaGraph.img} />
+                    </div>
+                </template>
+                <template if:true={metaGraph.description}>
+                    <div class="su__list-item-desc su__w-100 su__m-0 su__mt-1 font-12 su__word-break su__loading-view">
+                        <lightning-formatted-rich-text value={metaGraph.description}></lightning-formatted-rich-text>
+                    </div>
+                </template>
+                <div class="su__meta-item su__mt-2 font-12">
+                    <template for:each={metaGraph.metaFields} for:item="mf">
+                        <template if:true={mf.value}>
+                            <div key={mf} class="su__meta-row su__mb-1 su__mt-1 su__loading-view">
+                                <span class="metaDataKey su__font-bold su__color-blue su__rtlmr-0 su__rtlml-2">
+                                    <lightning-formatted-rich-text value={mf.key}></lightning-formatted-rich-text>
+                                </span>
+                                : &lrm;
+                                <span class="su__color-lgray su__ml-1 su__rtlml-0 su__rtlmr-1">
+                                    <lightning-formatted-rich-text value={mf.value}></lightning-formatted-rich-text>
+                                </span>
+                            </div>
+                        </template>
+                    </template>
+                </div>
+            </template>
+            <template if:true={knowledgeGraphRelatedTiles}>
+                <template for:each={relatedTiles} for:item="rt">
+                    <h4 key={rt}>
+                        <lightning-formatted-rich-text value={rt.tagLine}></lightning-formatted-rich-text>
+                    </h4>
+                    <template for:each={rt.relatedFields} for:item="rti">
+                        <li key={rti}>
+                            <a href={rti.link} target="_blank">
+                                <lightning-formatted-rich-text value={rti.heading1}></lightning-formatted-rich-text>
+                            </a>
+                        </li>
+                    </template>
+                </template>
+            </template>
+            <template if:false={knowledgeGraphResponseRecorded}>
+                <div
+                    class="su-featured-text su__row su__flex-vcenter su__px-3 su__py-2 su__mt-2 su__bg-blue-grd su__loading-view">
+                    <div class="font-12 su__mt-1 su__text-white su__mr-3 su__rtlmr-0 su__rtlml-3 su__loading-view">
+                        {translationObject.Was_above_result_helpful}
+                    </div>
+                    <div class="su__knowledge-feedback-row su__d-flex">
+                        <span class="su__knowledge-feedback su__cursor su__loading-view"
+                            onclick={sendknowledgeGraphFeedback} data-feedback="1">
+                            <svg class="ab-testing-btn" alt="Useful" viewBox="0 0 12 12" style="&#10;">
+                                <defs>
+                                    <clipPath id="clip-Thumbs_up">
+                                        <rect width="12" height="12" />
+                                    </clipPath>
+                                </defs>
+                                <g id="Thumbs_up" data-name="Thumbs up" class="cls-1">
+                                    <g id="outline-thumb_up_alt-24px">
+                                        <path id="Path_404" data-name="Path 404" class="cls-2" d="M0,0H12V12H0Z" />
+                                        <path id="Path_405" data-name="Path 405" class="cls-3"
+                                            d="M10.091,3.8H7.223l.432-1.828.014-.128a.568.568,0,0,0-.2-.424L6.986,1,4,3.636a.739.739,0,0,0-.268.564v4a.862.862,0,0,0,.909.8H8.727a.912.912,0,0,0,.836-.488l1.373-2.82A.708.708,0,0,0,11,5.4V4.6A.862.862,0,0,0,10.091,3.8Zm0,1.6L8.727,8.2H4.636v-4L6.609,2.464,6.1,4.6h3.986ZM1,4.2H2.818V9H1Z" />
+                                    </g>
+                                </g>
+                            </svg>
+                        </span>
+                        <span class="su__knowledge-feedback su__cursor su__loading-view"
+                            onclick={sendknowledgeGraphFeedback} data-feedback="0">
+                            <svg class="ab-testing-btn" alt="Not Useful" viewBox="0 0 12 12" style="&#10;">
+                                <defs>
+                                    <clipPath id="clip-Thumbs_Up">
+                                        <rect width="12" height="12" />
+                                    </clipPath>
+                                </defs>
+                                <g id="Thumbs_Up" data-name="Thumbs Up" class="cls-1">
+                                    <g id="outline-thumb_down_alt-24px">
+                                        <path id="Path_406" data-name="Path 406" class="cls-2" d="M0,0H12V12H0Z" />
+                                        <path id="Path_407" data-name="Path 407" class="cls-3"
+                                            d="M7.364,3H3.273a.912.912,0,0,0-.836.488L1.064,6.308A.708.708,0,0,0,1,6.6v.8a.862.862,0,0,0,.909.8H4.777l-.432,1.828-.014.128a.568.568,0,0,0,.2.424l.482.42L8,8.364A.739.739,0,0,0,8.273,7.8v-4A.862.862,0,0,0,7.364,3Zm0,4.8L5.391,9.536,5.9,7.4H1.909V6.6L3.273,3.8H7.364ZM9.182,3H11V7.8H9.182Z" />
+                                    </g>
+                                </g>
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+            </template>
+            <template if:true={knowledgeGraphResponseRecorded}>
+                <div class="su-featured-text su__row su__flex-vcenter su__px-3 su__py-2 su__mt-2  su__loading-view">
+                    <div class="su__knowledge-thankyou su__clearfix su__mb-sm-1">
+                        <div
+                            class="su__text-success font-12  su__flex-vcenter su__px-1 su__position-relative su__loading-view ng-scope">
+                            <span class="su__mr-2 su__rtlmr-0 su__rtlml-2">
+                                <svg class="ft-green-tick" alt="Success icon" xmlns="http://www.w3.org/2000/svg"
+                                    height="22" width="22" viewBox="0 0 48 48" aria-hidden="true">
+                                    <circle class="circle" fill="#5bb543" cx="24" cy="24" r="22" />
+                                    <path class="tick" fill="none" stroke="#FFF" stroke-width="6" stroke-linecap="round"
+                                        stroke-linejoin="round" stroke-miterlimit="10" d="M14 27l5.917 4.917L34 17" />
+                                </svg>
+                            </span>
+                            <span>
+                                {translationObject.Thank_you_for_your_response}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </template>
+</template>

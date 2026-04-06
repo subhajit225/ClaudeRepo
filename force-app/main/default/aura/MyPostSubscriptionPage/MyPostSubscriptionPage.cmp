@@ -1,0 +1,87 @@
+<aura:component controller="SubscribePostController" implements="flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+    <aura:attribute name="dataCategList" type="List" />
+    <aura:attribute name="catMAp" type="Map" />
+    <!-- CS21-1172 attributes-->
+    <aura:attribute name="isChanged" type="Boolean" default = "false"/>
+    <aura:attribute name="isYes" type="Boolean" default = "false"/>
+    <aura:attribute name="options" type="List" default="[
+                                                        {'label': 'Real-time', 'value': 'true'},
+                                                        {'label': 'Weekly summary', 'value': 'false'}
+                                                        ]"/>
+    <aura:attribute name="value" type="String" default=""/>
+    <aura:attribute name="defaultVal" type="String" />
+    
+    <div class ="containerDiv">
+        <div class ="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 backToCateg">
+            <a class ="backtoCateg" href="../s/topiccatalog">Back to Categories</a>
+        </div>
+        
+        
+        <!--CS21-1172 ************* starts **************** -->
+        <div class ="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12">
+            <span class="CategoryDiv">Category subscriptions:</span>
+            <span class="CategoryPara">Select your preferred email frequency below. You will receive an email when there is a discussion in your subscribed categories of interest.</span>
+        </div>
+        <div class ="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12">
+            <lightning:radioGroup name="Radio Group"
+                                  label=""
+                                  options="{! v.options }"
+                                  value="{! v.value }"
+                                  type="radio"
+                                  onchange="{!c.radioHandler}"
+                                  class="customRadioClass"
+                                  />
+            <span><lightning:helptext  content="Receive an email when there is an update in a category you are subscribed to."/></span>
+            <div class="tooltipCategories" ><lightning:helptext  content="Receive an email once a week with a summary of updates to the categories you are subscribed to."/></div>
+        </div>
+        <aura:if isTrue="{!v.isChanged}">
+            <div id="contactSupportModal" role="dialog" tabindex="-1" aria-labelledby="header99" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container ">
+                    <div class="slds-modal__content slds-p-around--medium">
+                        <div>
+                            <p class="CategoryPara">Confirm you would like to change your subscription frequency.</p>
+                        </div>
+                        
+                    </div>
+                    <div class="slds-modal__footer">
+                        <div class="resolveIssueBttns">
+                            <span class ="SaveBtnDiv">
+                                <button class="slds-button slds-button--neutral"  onclick="{!c.yesButton}">Yes</button>
+                            </span>
+                            <span class ="cancelBtnDiv">
+                                <button class="slds-button slds-button--brand canclbtn" onclick="{!c.closeButton}">No</button>
+                            </span>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="slds-backdrop slds-backdrop--open"></div>
+        </aura:if>
+        
+        <!--CS21-1172 ************* ends **************** -->
+        
+        
+        
+        <div class ="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 ">
+            <span class="CategoryDiv">Post subscriptions:</span>
+            <span class ="CategoryPara">You are subscribed to an individual post when you ask or respond to a question or when you click “Subscribe to post”. A real-time email will be sent when there is a new response to the discussion. You are currently subscribed to the posts listed below. If the list is empty, you have not subscribed to any posts.
+            </span>
+        </div>
+        <aura:if isTrue="{!v.dataCategList.length > 0}">
+            <div>
+                <a style="float:right;font-size:16px" onclick="{!c.handleUnsubscribeAll}">Unsubscribe All</a>
+            </div>
+            <br/>
+        </aura:if>
+        <div class ="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 CloudAndArchive">
+            <aura:iteration items="{!v.dataCategList}" var="dc" indexVar="key">
+                <div class ="titleDiv">
+                    <h1 class ="headingTitle">{!dc}</h1>
+                    <div class ="nameList"><c:InnerPostSubscriptionComponent  dataString="{!dc}" catMAp = "{!v.catMAp}"/></div>
+                </div>
+            </aura:iteration>
+        </div>
+    </div>
+</aura:component>

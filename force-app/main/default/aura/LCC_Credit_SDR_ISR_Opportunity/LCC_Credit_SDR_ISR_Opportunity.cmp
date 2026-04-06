@@ -1,0 +1,33 @@
+<aura:component extends="c:LCC_GenericLightningComponent" implements="force:lightningQuickAction,force:hasRecordId" controller="LCC_Credit_SDRISR_Opportunity_Controller">
+  <!--  <aura:set attribute="partially" value="false"></aura:set>
+    	
+    <div class="slds-scrollable slds-p-around_medium slds-text-heading_small" id="modal-content-id-1">
+        <p style="height: 108px; word-wrap: break-word;"><a style="outline: 0;" href="https://github.com/developerforce/LEXComponentsBundle" target="_blank">Sample Lightning Component Action</a></p>
+        <br/>
+    </div>
+    <div class="slds-modal__footer">
+        <lightning:button class="slds-button_brand" onclick="{!c.accept}" label="Accept"/>
+    </div> -->
+        
+    
+    <aura:attribute name="displayMessage" type="String"/> 
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="ShowApprovalModel" type="boolean" default="true"/>
+    <div style="height: 6.75rem;">
+    <aura:if isTrue="{!v.ShowApprovalModel}">
+        <aura:if isTrue="{! v.sObjectInfo.SDR_Led__c == FALSE || v.sObjectInfo.OriginalLeadOwner__c == null}" >
+            <div class="mainDiv slds-p-vertical_large"> 
+                <div class="slds-align_absolute-center">Are you sure to submit this for Approval?</div>
+                <div class="slds-align_absolute-center">
+                    <button type="button" class="slds-button slds-button_neutral  " onclick="{!c.close}">Close</button>            
+                    <button type="button" class="slds-button slds-button_brand  " onclick="{!c.sendForApproval}">Yes</button>
+                </div>
+            </div>
+            <aura:set attribute="else">
+                <div>Criteria does not match for Approval (Original Lead Owner is already filled or SDR Led is checked)</div>
+            </aura:set>
+        </aura:if>
+    </aura:if>     
+    <div>{!v.displayMessage}</div>
+    </div>
+</aura:component>

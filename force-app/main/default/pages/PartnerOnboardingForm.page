@@ -1,0 +1,790 @@
+<apex:page standardController="Partner_Onboarding_Request__c" cache="false" standardStylesheets="false" showHeader="false" extensions="PartnerOnboardingRequestExtension" docType="html-5.0">
+    <c:visualstrapblock >
+    <c:importbs />
+    <c:communitystyle />
+    <apex:includeScript value="{!URLFOR($Resource.DealReg, 'DealRegScript.js')}" />
+  <apex:includeScript value="//ajax.microsoft.com/ajax/jquery.validate/1.6/jquery.validate.min.js"/>  
+    
+        <style>
+        .pbBody{
+        padding: 5px;
+        }
+        
+        .row {
+       padding: 10px 0px 0px 0px;
+       }
+       
+        .visualstrap td, th {
+        padding: 5px !important;
+        }
+        
+        .rolodex {
+          padding: 4px !important;  
+       }
+       
+       .btnpad{
+        padding: 15px;
+        }
+        
+        .topterms{
+        font-size: 10px;
+        }
+             
+        .dealRError{
+        position: absolute !important;
+        z-index: 1;
+        }
+        
+       
+       .terms {
+       font-size:12px;
+       }
+       
+           .control-label:after {
+          content:"*";
+          color:red;
+        }
+        
+        .visualstrap input[type="checkbox"] {
+            margin-right: 4px;
+
+        }
+        
+        .section__title {
+        font-size: 44px;
+        line-height: 50px;
+        letter-spacing: -1.2px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 20px;
+        }
+        
+        .section__paragraph {
+        font-size: 24px;
+        line-height: 30px;
+        letter-spacing: -.42px;
+        margin-bottom: 20px;
+        margin-top: 20px;
+        }
+
+        .section__paragraph_small {
+        font-size: 14px;
+        line-height: 22px;
+        letter-spacing: -.42px;
+        margin-bottom: 20px;
+        margin-top: 20px;
+        }
+        
+        .visualstrap .well {
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+
+    border: none !important;
+    }
+        
+        
+
+     /* .dealRErrorMsg {
+        display: block;
+        color: #e51b00;
+        font-size: 1em;
+        line-height: 1.2em;
+        max-width: 16em;
+        position: inherit;
+        }*/
+        
+        .dealRErrorMsg {
+        display: block;
+        background-color: #e51b00;
+        background-image: -webkit-linear-gradient(#e51b00 43%, #ba1600 100%);
+        background-image: -moz-linear-gradient(#e51b00 43%, #ba1600 100%);
+        background-image: linear-gradient(#e51b00 43%, #ba1600 100%);
+        background-image: -ms-linear-gradient(#e51b00 43%, #ba1600 100%);
+        border: 1px solid #9f1300;
+        -webkit-border-radius: 6px;
+        border-radius: 6px;
+        -webkit-box-shadow: rgba(0,0,0,0.65) 0 2px 7px, inset #ff3c3c 0 1px 0px;
+        box-shadow: rgba(0,0,0,0.65) 0 2px 7px, inset #ff3c3c 0 1px 0px;
+        color: #f3f3f3;
+        font-size: 1em;
+        line-height: 1.2em;
+        max-width: 16em;
+        padding: 0.4em 0.6em;
+        text-shadow: #901100 0 -1px 0;
+                }
+    </style>
+    
+       <c:unauthsiteHeader name="Partner Application Request Form"></c:unauthsiteHeader>
+ 
+
+        <!--start the Container-->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                
+                 <div class="row" >
+                      <div class="col-md-12">
+                    <apex:messages />
+                    <apex:pageMessages ></apex:pageMessages>
+                  
+                 
+                <!--content-->
+                 <apex:form id="requestForm" html-data-toggle="validator">
+                    <div id="requestFormDiv">
+                        <apex:outputPanel id="requestFormPanel" >
+
+                <div class="col-md-12">
+
+
+                  <!--message & terms-->
+                    
+                 <div class="col-md-12">
+                 <div class="row">
+                 <center>
+                 <!--paragraph 1-->
+                 <div class="section__title">Transform Your Business. <br/> Become A Rubrik Partner.</div>
+                  <div class="section_paragraph">We’re disrupting a $48 billion backup and recovery market with a 100% channel-focused business model. </div>
+                  </center>
+                 </div>
+                 <!--end paragraph 1-->
+                 
+                 
+                 <div class="col-md-1"/>
+                 <div class="col-md-10">
+                 <center> 
+                 <div class="section__paragraph_small">Any partner interested in joining the Rubrik Partner Program but resides outside US, Canada, or EMEA, please send an email to <a href="mailto:goforward@rubrik.com">goforward@rubrik.com</a> to get further information.
+                 </div>
+                 
+                 <h6 style="text-align: justify;text-justify: inter-word;">
+                 By completing and submitting this Online Company Application (“Application”), Company promises Rubrik: All the following information is accurate, complete and current. Company will notify Rubrik promptly of all changes. The person(s) completing this Application and accepting the Terms is authorized by the Company to do so. Once Rubrik accepts Company’s Application, the Company acknowledges and agrees it is bound by the Terms, and, if Company does not agree to all of these Terms, do not proceed to complete this Application and accept the Terms.
+                 </h6>
+                 <br/>
+                 </center>
+                 </div>
+                 <div class="col-md-1"/>
+                 
+
+                
+                 </div>
+                   <!--end message & terms-->
+                        
+                 
+                                    
+
+                                
+
+                    <div class="row"/>
+                    <!--end row 1-->
+                     <div class="well well-sm">COMPANY INFORMATION</div> 
+                      <div class="row">
+                      
+                      <div class="col-md-4">
+                        <apex:outputLabel styleclass="control-label">Full Legal Name of Company</apex:outputLabel>
+                        <apex:inputfield value="{!PO_Request.Company_Name__c}" styleClass="form-control block inputrubrik required"/>
+                     <br/>
+                     </div>
+                  
+                     <div class="col-md-4">
+                        <apex:outputLabel styleclass="control-label">Address 1</apex:outputLabel>
+                        <apex:inputfield value="{!PO_Request.Address_1__c}" styleClass="form-control block inputrubrik required"/>
+                     <br/>
+                     </div>
+
+                     <div class="col-md-4">
+                        <apex:outputLabel >Address 2</apex:outputLabel>
+                        <apex:inputfield value="{!PO_Request.Address_2__c}" styleClass="form-control block inputrubrik"/>
+                     <br/>
+                     </div>
+                  
+                    <div class="col-md-4">
+                        <apex:outputLabel styleclass="control-label">City</apex:outputLabel>
+                        <apex:inputfield value="{!PO_Request.City__c}" styleClass="form-control block inputrubrik required"/>
+                     <br/>
+                     </div>
+
+
+                   <div class="col-md-4">
+                        <apex:outputLabel styleclass="control-label">Country</apex:outputLabel>
+                        <apex:actionRegion >
+                        <apex:inputfield value="{!PO_Request.Country__c}" styleClass="form-control block inputrubrik required">
+                           <apex:actionSupport event="onchange" action="{!isItRequired}" reRender="zipPanel,zip1"/>
+                        </apex:inputField>
+                        </apex:actionRegion>
+                     
+                     <br/>
+                     </div>
+
+                    <div class="col-md-4" id="selectList3">
+                        <apex:outputLabel styleclass="control-label">State/Province</apex:outputLabel>
+                        <apex:inputfield value="{!PO_Request.StateProvince__c}" styleClass="form-control block inputrubrik required"/>
+                     <br/>
+                     </div>                  
+ 
+                     <div class="col-md-4">
+                     <apex:outputPanel id="zipPanel">
+                        <apex:outputLabel styleClass="{!IF(OR(isRequired,ziplength),'control-label','')}">Zip/Postal Code</apex:outputLabel>
+                        <apex:inputfield value="{!PO_Request.Postal_Code__c}" id="zip1" required="{!OR(isRequired,ziplength)}" styleClass="form-control block inputrubrik {!IF(OR(isRequired,ziplength), 'required', '')}">
+                        <apex:actionSupport event="onchange" action="{!ziplength}" reRender="zipPanel"/>
+                        <!--length: {!ziplength}, zip: {!isRequired}-->
+                        <div id="ziperrorDiv" style="display:none">
+                        <apex:outputPanel layout="block" id="warningMsgPanel">
+                           
+                            <apex:outputtext value="Please enter a 5 digit Zip Code for a US Address." style="color:red;"/>
+
+                        </apex:outputPanel>
+                        </div>
+                     </apex:inputfield>
+                     </apex:outputPanel>
+                     <br/>
+                     </div>    
+                      
+                      
+                      </div> <!--end row-->
+                      
+ 
+ 
+                    <!--block 2-->
+                   <div class="well well-sm">CONTACT INFORMATION</div>                
+
+                    <div class="row">
+                    <div class="col-md-4">
+                        <apex:outputLabel styleclass="control-label">First Name</apex:outputLabel>
+                        <apex:inputfield value="{!PO_Request.First_Name__c}" styleClass="form-control block inputrubrik required"/>
+                     <br/>
+                     </div>
+                  
+                     <div class="col-md-4">
+                        <apex:outputLabel styleclass="control-label">Last Name</apex:outputLabel>
+                        <apex:inputfield value="{!PO_Request.Last_Name__c}" styleClass="form-control block inputrubrik required"/>
+                     <br/>
+                     </div>
+                  
+                    <div class="col-md-4">
+                        <apex:outputLabel styleclass="control-label">Job Title</apex:outputLabel>
+                        <apex:inputfield value="{!PO_Request.Title__c}" styleClass="form-control block inputrubrik required"/>
+                     <br/>
+                     </div>
+
+
+                   <div class="col-md-4">
+                        <apex:outputLabel styleclass="control-label">Email Address</apex:outputLabel>
+                        <apex:inputfield id="inputEmail" type="email" onkeyup="validateEmailField(this);" onkeydown="validateEmailField(this);" onclick="validateField(this);"    value="{!PO_Request.Email__c}" styleClass="form-control block inputrubrik required"/>
+                     <br/>
+                     </div>
+
+                    <div class="col-md-4">
+                        <apex:outputLabel styleclass="control-label">Phone</apex:outputLabel>
+                        <apex:inputfield value="{!PO_Request.Phone__c}" styleClass="form-control block inputrubrik required"/>
+                     <br/>
+                     </div>                  
+ 
+                 
+                    <!--end block 2-->
+                    </div>
+                    <!--end row 2-->
+ 
+ 
+                  <!--block 3-->
+                   <div class="well well-sm">BUSINESS INFORMATION </div>                  
+
+                    <div class="row">
+                    <div class="col-md-4" id="selectList4">
+                        <apex:outputLabel styleclass="control-label">Territory</apex:outputLabel>
+                        <apex:inputfield value="{!PO_Request.Territory__c}" styleClass="form-control block inputrubrik required"/>
+                     <br/>
+                     </div>
+
+                     <div class="col-md-4" id="selectList2">
+                     <apex:outputLabel styleclass="control-label">Distributor</apex:outputLabel>
+                     <apex:inputfield value="{!PO_Request.Distributor__c}" styleClass="form-control block inputrubrik required"/>
+                     <br/>
+                     </div> 
+                  
+                     <div class="col-md-4" id="selectList1">
+                        <apex:outputLabel styleclass="control-label">Region</apex:outputLabel>
+                        <apex:inputfield value="{!PO_Request.Region__c}" styleClass="form-control block inputrubrik required"/>
+                     <br/>
+                     </div>
+                  
+ 
+
+
+                   <div class="col-md-8">
+                        <apex:outputLabel styleclass="control-label">Please indicate which vendors your organization works with today</apex:outputLabel>
+                       
+                        <apex:selectcheckboxes layout="pageDirection" value="{!selectedVendors}" styleClass="block inputrubrik">                   
+                            <apex:selectoptions value="{!vendorsList}" />          
+                        </apex:selectcheckboxes>
+                        <div id="vendorDiv" style="display:none">
+                        <apex:outputPanel layout="block" id="warningMsgPanel">
+                           
+                            <apex:outputtext value="Please select at least one vendor" style="color:red;"/>
+
+                        </apex:outputPanel>
+                        </div>
+                        
+                     <br/>
+                     </div>
+                     
+                    <div class="col-md-4">
+                        <apex:outputLabel styleclass="control-label">Referral Source</apex:outputLabel>
+                        <apex:inputfield value="{!PO_Request.Referral_Source__c}" styleClass="form-control block inputrubrik required"/>
+                     <br/>
+                     </div>                    
+
+
+                    <div class="col-md-4">
+                        <apex:outputLabel >Please indicate the number of employees in the following positions within your organization:</apex:outputLabel>
+                         <br/><br/>
+                     <apex:outputLabel styleclass="control-label">Outside Sales</apex:outputLabel>
+                     <apex:inputfield value="{!PO_Request.Outside_Sales__c}" styleClass="form-control block inputrubrik required"/>
+                     <br/>
+                     </div>                  
+ 
+                     <div class="col-md-4">
+                        <apex:outputLabel styleclass="control-label">Technical Sales</apex:outputLabel>
+                        <apex:inputfield value="{!PO_Request.Technical_Sales__c}" styleClass="form-control block inputrubrik required"/>
+                     <br/>
+                     </div>                  
+
+                     <div class="col-md-4">
+                        <apex:outputLabel styleclass="control-label">Inside Sales</apex:outputLabel>
+                        <apex:inputfield value="{!PO_Request.Inside_Sales__c}" styleClass="form-control block inputrubrik required"/>
+                     <br/>
+                     </div>  
+                    
+                    <!--end block 3-->
+                    </div>
+                    <!--end row 3-->
+                    
+                    
+                    
+                    
+                    <!--row 4-->
+                    <div class="row">
+                    <div class="col-md-6">
+                        <apex:outputLabel >Additional Comments</apex:outputLabel>
+                        <apex:inputfield value="{!PO_Request.Additional_Comments__c}" style="height:85px;rows:4; resize: vertical;"  styleClass="form-control block inputrubrik"/>
+                     <br/>
+                     </div>
+                     
+                     
+                     <div class="col-md-6">
+                     <div class="col-sm-offset-2 col-sm-10">
+                      <div class="checkbox1 terms">
+                        <label>
+                        <apex:inputfield value="{!po_Request.Agreed_Term_Conditions__c}" styleclass="checkbox required" style="display:inline;" onclick="validateCheckboxField(this);" id="TermsConditions" >&nbsp;&nbsp;I Accept <a href="{!URLFOR($Resource.PartnerOnboarding_TermsAndCondition, 'TermsandConditions.pdf')}" target="_blank">Terms and Conditions</a><br/></apex:inputfield>
+                        </label>
+                        <br/>
+                        By clicking on “I Accept” you confirm you are authorized to bind your organization to the Terms and Conditions set forth above.<br/><br/>
+                        By clicking on “I Accept” you confirm that your application has not yet been accepted by Rubrik, Inc. but you will be notified of the acceptance or rejection of this application within 48 business hours of submission.
+                      </div>
+                    </div>
+                     
+                     
+                     </div>
+                     </div>
+                     <!--end row 4-->
+                    
+                    
+                    
+                    </div><!--12 ends-->
+                    
+                    
+                  <center>
+                        <apex:commandButton value="Submit" styleclass="btn rubrik-btn text-center" title="Submit" id="Submit" onClick="SubmitOnClick(this);" />
+                            <!--<button class="btn rubrik-btn text-center" onclick="SubmitOnClick(this);" value="Submit"></button>-->
+
+                            <script language="Javascript">
+                          function SubmitOnClick(objSubmitBtn) {
+                            btn= objSubmitBtn;
+                            objSubmitBtn.disabled = true;
+                            objSubmitBtn.value = 'Submitting...';
+                            validateDataFields();
+                            //return null;
+                          }
+                        </script>
+
+                  </center>
+                  
+                  </apex:outputpanel>
+
+                  </div>
+                  
+                        <apex:actionFunction name="saveRecord" action="{!saveRequest}" reRender="requestFormPanel,requestForm,requestFormDiv,successMsgPanel,vendorDiv,duplicateConMessageDiv" oncomplete="showMessageonSave();"/>
+
+
+           <!--form messages-->
+            <div id="successMessageDiv" style="display:none">
+                <apex:outputPanel layout="block" styleClass="alert alert-success" id="successMsgPanel">
+                Your request has been submitted successfully. We will reach out within 48 hours once your request is reviewed. For any questions please reach out to <a href="mailto:channel@rubrik.com">channel@rubrik.com</a> </apex:outputPanel>
+            </div>
+            <div id="duplicateConMessageDiv" style="display:none">
+                <apex:outputPanel id="duplicateConMessageDiv" layout="block" styleClass="alert alert-danger" >
+                
+                You are already registered as a partner using this email address. Please contact <a href="mailto:channels@rubrik.com">channels@rubrik.com</a> if you have questions. 
+                    <script>
+                function showMessageonSave(){
+                
+                    if({!OR(isRequired,zipLength)}) {
+                        document.getElementById('ziperrorDiv').style.display='block';
+                    }
+                    
+                     
+                    if({!isduplicateContactBool} == true && {!isRequired==false} && {!zipLength==false}) {
+                        document.getElementById('requestFormDiv').style.display='none';
+                        document.getElementById('duplicateConMessageDiv').style.display='block';
+                    } 
+                
+                    else if ({!isduplicateContactBool} == false && {!ziplength} == false && {!isRequired} == false ){
+                    document.getElementById('requestFormDiv').style.display='none';
+                    document.getElementById('successMessageDiv').style.display='block';
+                    //setTimeout('window.close()', 5000);
+                    }
+                    //else{
+                    //document.getElementById('successMessageDiv').style.display='block';
+                    //document.getElementById('requestFormDiv').style.display='none';
+                    //}
+                }
+                
+            // Mutation object
+            var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+            
+            // Defining observer 
+            var observer = new MutationObserver(function(mutations) { 
+                // If the myListClass was removed from the list - re-assign it
+                if(!jQuery('#selectList1 select').first().hasClass('slds-select')){
+                    jQuery('#selectList1 select').first().addClass('slds-select required');
+                }
+                if(!jQuery('#selectList2 select').first().hasClass('slds-select')){
+                    jQuery('#selectList2 select').first().addClass('slds-select required');
+                }
+                if(!jQuery('#selectList3 select').first().hasClass('slds-select')){
+                    jQuery('#selectList3 select').first().addClass('slds-select required');
+                }
+                
+                if(!jQuery('#selectList4 select').first().hasClass('slds-select')){
+                    jQuery('#selectList4 select').first().addClass('slds-select required');
+                }
+            });
+            
+            // A target object fot the observer
+            var myNode1 = document.querySelector('#selectList1'); 
+            var myNode2 = document.querySelector('#selectList2');
+            var myNode3 = document.querySelector('#selectList3');
+            var myNode4 = document.querySelector('#selectList4');
+            // Assigning observer to the dependent picklist
+            observer.observe(myNode1, {
+                childList: true,
+                subtree: true,
+                attributes: true
+            });
+            observer.observe(myNode2, {
+                childList: true,
+                subtree: true,
+                attributes: true
+            });
+            observer.observe(myNode3, {
+                childList: true,
+                subtree: true,
+                attributes: true
+            });
+            observer.observe(myNode4, {
+                childList: true,
+                subtree: true,
+                attributes: true
+            });
+                            
+                
+                
+                
+                
+                
+            $j = jQuery.noConflict();
+    var domains=[
+  "aol.com",
+  "att.net",
+  "comcast.net",
+  "facebook.com",
+  "gmail.com",
+  "gmx.com",
+  "googlemail.com",
+  "google.com",
+  "hotmail.com",
+  "hotmail.co.uk",
+  "mac.com",
+  "me.com",
+  "mail.com",
+  "msn.com",
+  "live.com",
+  "sbcglobal.net",
+  "verizon.net",
+  "yahoo.com",
+  "yahoo.co.uk",
+  "email.com",
+  "games.com",
+  "gmx.net",
+  "hush.com",
+  "hushmail.com",
+  "icloud.com",
+  "inbox.com",
+  "lavabit.com",
+  "love.com",
+  "outlook.com",
+  "pobox.com",
+  "rocketmail.com",
+  "safe-mail.net",
+  "wow.com",
+  "ygm.com",
+  "ymail.com",
+  "zoho.com",
+  "fastmail.fm",
+  "yandex.com",
+  "bellsouth.net",
+  "charter.net",
+  "comcast.net",
+  "cox.net",
+  "earthlink.net",
+  "juno.com",
+  "btinternet.com",
+  "virginmedia.com",
+  "blueyonder.co.uk",
+  "freeserve.co.uk",
+  "live.co.uk",
+  "ntlworld.com",
+  "o2.co.uk",
+  "orange.net",
+  "sky.com",
+  "talktalk.co.uk",
+  "tiscali.co.uk",
+  "virgin.net",
+  "wanadoo.co.uk",
+  "bt.com",
+  "sina.com",
+  "qq.com",
+  "naver.com",
+  "hanmail.net",
+  "daum.net",
+  "nate.com",
+  "yahoo.co.jp",
+  "yahoo.co.kr",
+  "yahoo.co.id",
+  "yahoo.co.in",
+  "yahoo.com.sg",
+  "yahoo.com.ph",
+  "hotmail.fr",
+  "live.fr",
+  "laposte.net",
+  "yahoo.fr",
+  "wanadoo.fr",
+  "orange.fr",
+  "gmx.fr",
+  "sfr.fr",
+  "neuf.fr",
+  "free.fr",
+  "gmx.de",
+  "hotmail.de",
+  "live.de",
+  "online.de",
+  "t-online.de",
+  "web.de",
+  "yahoo.de",
+  "mail.ru",
+  "rambler.ru",
+  "yandex.ru",
+  "ya.ru",
+  "list.ru",
+  "hotmail.be",
+  "live.be",
+  "skynet.be",
+  "voo.be",
+  "tvcablenet.be",
+  "telenet.be",
+  "hotmail.com.ar",
+  "live.com.ar",
+  "yahoo.com.ar",
+  "fibertel.com.ar",
+  "speedy.com.ar",
+  "arnet.com.ar",
+  "hotmail.com",
+  "gmail.com",
+  "yahoo.com.mx",
+  "live.com.mx",
+  "yahoo.com",
+  "hotmail.es",
+  "live.com",
+  "hotmail.com.mx",
+  "prodigy.net.mx",
+  "msn.com",
+  "yahoo.com.br",
+  "hotmail.com.br",
+  "outlook.com.br",
+  "uol.com.br",
+  "bol.com.br",
+  "terra.com.br",
+  "ig.com.br",
+  "itelefonica.com.br",
+  "r7.com",
+  "zipmail.com.br",
+  "globo.com",
+  "globomail.com",
+  "oi.com.br"
+];
+    var btn;
+    var validateDataFields = function() {
+        var isValid = true;
+        var isErrorShown = false;
+        $j(".required").each(function() {
+            if(!$j(this).prop("value")) {
+                if(isErrorShown == false) {
+                    validateField(this);
+                    isErrorShown = true;
+                }
+                isValid = false;
+                $j(this).css("border-color", "#8C0005");
+            } else {
+                $j(this).css("border-color", "#aeb0b6");
+            }
+        });
+        console.log('isValid 2=='+isValid);
+        if(isValid == true) {
+            
+            if(validateEmailField() && validateCheckboxField() ){
+                console.log('in save button');
+                saveRecord();
+                
+            }
+            else{
+                
+                return false;
+            }
+        }
+        else{
+            console.log('in else');
+            console.log(btn);
+            btn.disabled = false;
+            btn.value = 'Submit';
+            return false;
+        } 
+    }
+    
+    var hideError = function() {
+        $j(".dealRError").fadeOut(500);
+        $j(".dealRError").remove();
+    }
+    
+    var validateField = function(thisComponent) {
+        $j(".dealRError").fadeOut(500);
+        $j(".dealRError").remove();
+
+        if( ! $j(thisComponent).prop("value") ) {
+            $j(thisComponent).css("border-color", "#8C0005");
+            
+            var errorContent = "<div class='dealRError' style='right: 5.5px; margin-bottom: -34px; z-index: 100; position: relative;'><div class='dealRErrorArrowWrap' style='position: initial;'><div class='dealRErrorArrow'></div></div><div class='dealRErrorMsg' style=''>This field is required.</div></div>";
+
+            if($j(thisComponent).hasClass("email")) {
+                errorContent = "<div class='dealRError' style='right: 5.5px; margin-bottom: -34px; position: relative;'><div class='dealRErrorArrowWrap' style='position: initial;'><div class='dealRErrorArrow'></div></div><div class='dealRErrorMsg'>Must be valid email. <span class='dealRErrorDetail'>example@yourdomain.com</span></div></div>";
+            }
+            
+            if($j(thisComponent).hasClass("phone")) {
+                errorContent = "<div class='dealRError' style='right: 5.5px; margin-bottom: -34px; position: relative;'><div class='dealRErrorArrowWrap' style='position: initial;'><div class='dealRErrorArrow'></div></div><div class='dealRErrorMsg'>Must be a phone number. <span class='dealRErrorDetail'>503-555-1212</span></div></div>";
+            }
+
+            if(! $j(thisComponent).parent().find(".dealRError").length)
+                $j(thisComponent).after($j(errorContent).fadeIn(500));
+            
+            
+        } else {
+            $j(thisComponent).css("border-color", "#aeb0b6");
+        }
+        
+    }
+    
+    var validateEmailField = function() {
+        $j(".dealRError").fadeOut(500);
+        $j(".dealRError").remove();
+        
+        var isValidEmail =true;
+    $j(".email").each(function() {
+        var errorContent ;
+            if($j(this).hasClass("email")) {
+                console.log('in email loop');
+                console.log('value--'+$j(this).prop("value"));
+                console.log('substr--'+$j(this).prop("value").substr($j(this).prop("value")));
+                console.log('substr index--'+$j(this).prop("value").substr($j(this).prop("value").indexOf('@')+1));
+               if($j.inArray( $j(this).prop("value").substr($j(this).prop("value").indexOf('@')+1), domains )> -1){
+                   $j(this).css("border-color", "#8C0005");
+                var errorContent = "<div class='dealRError' style='right: 5.5px; margin-bottom: -34px; z-index: 100; position: relative;'><div class='dealRErrorArrowWrap' style='position: initial;'><div class='dealRErrorArrow'></div></div><div class='dealRErrorMsg'>Please enter your company Email Id <span class='dealRErrorDetail'>example@companyname.com</span></div></div>";
+                   if(! $j(this).parent().find(".dealRError").length)
+                   $j(this).after($j(errorContent).fadeIn(500));
+                    isValidEmail= false;   
+                } 
+                else {
+                    $j(this).css("border-color", "#aeb0b6");
+                }
+            }
+        });
+        return isValidEmail;
+     }
+     
+     
+         var validateCheckboxField = function() {
+        //$j(".dealRError").fadeOut(500);
+        //$j(".dealRError").remove();
+        console.log('in checkbox loop');
+        var ischecked =true;
+    $j(".checkbox").each(function() {
+        var errorContent ;
+            if($j(this).hasClass("checkbox")) {
+                console.log('in checkbox loop 22');
+                console.log('value--'+$j(this).is(":checked"));
+               if($j(this).is(":checked")){
+                   $j(this).css("border-color", "#aeb0b6");
+                } 
+                else {
+                    console.log('value--inside ');
+                    $j(this).css("border-color", "#8C0005");
+                var errorContent = "<div class='dealRErrorMsg1' >Please Accept the Terms</div>";
+                
+                   if(! $j(this).parent().find(".dealRError").length)
+                   $j(this).after($j(errorContent).fadeIn(500));
+                    ischecked= false; 
+                }
+            }
+        });
+        return ischecked;
+     }
+        
+            </script>
+                </apex:outputPanel>
+                
+            </div>
+                
+                
+                <!--end form messages-->
+
+
+                   </apex:form>
+                <!--end main content--> 
+                
+                
+                
+             
+                
+                
+               </div>
+               </div>
+
+            
+                </div>
+            </div>
+        </div>
+        <!--End the Container-->
+        
+        <!--start the footer-->
+        <br/>
+        <c:psitefooterlogin ></c:psitefooterlogin>
+
+    </c:visualstrapblock>           
+                
+</apex:page>

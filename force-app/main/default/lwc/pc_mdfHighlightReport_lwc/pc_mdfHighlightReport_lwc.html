@@ -1,0 +1,96 @@
+<template>
+    <div class="slds-card">
+        <lightning-layout multiple-rows="true" horizontal-align="spread">
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+                <div class="slds-p-around_large">
+                    <span class="heading-36">
+                        Marketing Fund Request Highlight Report
+                    </span>
+                    <div class="disclaimer">
+                        *Showing current fiscal year requests
+                        <span>
+                            <lightning-button variant="brand" label="Submit a MDF Request" title="Submit a MDF Request" onclick={handleClick} class="slds-p-top_medium slds-float_right"></lightning-button>
+                        </span>
+                    </div>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="6" small-device-size="12" medium-device-size="6" large-device-size="6" class="slds-p-around_medium">
+                <div class="pipelineReportCard">
+                    <span class="pipelineCardNumber">
+                        {mdfRequestsMade}
+                    </span>
+                    <span class="pipelineCardText">
+                        <p>MDF Requests Made</p>
+                    </span>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="6" small-device-size="12" medium-device-size="6" large-device-size="6" class="slds-p-around_medium">
+                <div class="pipelineReportCard">
+                    <span class="pipelineCardNumber">
+                        {mdfClaimsOutstanding}
+                    </span>
+                    <span class="pipelineCardText">
+                        <p> MDF Claims Outstanding</p>
+                    </span>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12" class="slds-p-around_medium">
+                <table class="slds-table slds-table_cell-buffer" aria-labelledby="element-with-table-label other-element-with-table-label">
+                    <thead class="">
+                        <tr>
+                            <th class="account-header-col" scope="col">
+                                <div title="Name">NAME</div>
+                            </th>
+                            <th scope="col">
+                                <div title="Status">STATUS</div>
+                            </th>
+                            <th class="contact-header-col" scope="col">
+                                <div title="Start Date">START DATE</div>
+                            </th>
+                            <th scope="col">
+                                <div title="End Date">END DATE</div>
+                            </th>
+                            <th scope="col">
+                                <div title="PO Number">PO NUMBER</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <template for:each={mdfList} for:item="mdf">
+                        <tbody key={mdf.Id}>
+                            <tr>
+                                <td data-label="Name">
+                                    <div class="account-body-col">
+                                        {mdf.Title}
+                                    </div>
+                                </td>
+                                <td data-label="Status">
+                                    <div>
+                                        {mdf.Status}
+                                    </div>
+                                </td>
+                                <td data-label="Start Date">
+                                    <div class="contact-body-col">
+                                        {mdf.Activity_Start_Date__c}
+                                    </div>
+                                </td>
+                                <td data-label="End Date">
+                                    <div>
+                                        {mdf.Activity_End_Date__c}
+                                    </div>
+                                </td>
+                                <td data-label="PO Number">
+                                    <div>
+                                        {mdf.PO_Number__c}
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </template>
+                </table>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12" class="slds-p-around_large">
+                <a href={url} class="pipelineViewAll">View All <img class="link-arrow-img" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAtCAYAAADV2ImkAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAD3SURBVHgB7daxDcJADEBR+0BAGZiAESghHRtRAkIiaRAdMzABjEDFGmQClJImOXAqCoKcu+MuEn6tLeUrsqIACCGEEEKIPxZNl+NRvN6CIwq8wMRVtKdg4ibaYzCxj/YcTOyiAwQT8+hAwcQsGjlLw3hzQignYAzH9TOd3K+7FJi6nCWFOtL620NtVG8auNEBT+LdK3q2WnA2WxIMWdnXZ85iG4KzslfM88s+4yyzbhixSEGrIxjQiBFoONSMG8VWLfBj9POjVOf2YdQ4loQ6CaNYEiLYOJb4DraKJT6DrWOJr2AnsYT1WbMyGOQlPJzECiGEEKJ1nnbLYBZlR9+tAAAAAElFTkSuQmCC"></a>
+            </lightning-layout-item>
+        </lightning-layout>
+    </div>
+</template>

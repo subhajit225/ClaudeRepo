@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Prevent_Valid_to_Invalid_Update</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+ISPICKVAL(PRIORVALUE(Risk_Validation_Status__c), &quot;Valid&quot;),
+OR( 
+ISPICKVAL(Risk_Validation_Status__c, &quot;Pending Approval&quot;), ISPICKVAL(Risk_Validation_Status__c, &quot;Invalid&quot;) 
+)
+)</errorConditionFormula>
+    <errorDisplayField>Risk_Validation_Status__c</errorDisplayField>
+    <errorMessage>Once a Risk Profile is marked as &apos;Valid&apos;, it cannot be changed back to &apos;Invalid&apos;. Create a new Risk Profile instead.</errorMessage>
+</ValidationRule>

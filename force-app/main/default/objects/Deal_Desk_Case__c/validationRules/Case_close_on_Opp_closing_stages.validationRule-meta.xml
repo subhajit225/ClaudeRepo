@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Case_close_on_Opp_closing_stages</fullName>
+    <active>false</active>
+    <errorConditionFormula>ISCHANGED(Request_Status__c) &amp;&amp; !ISPICKVAL(Request_Status__c, &apos;Closed - Incomplete&apos;) &amp;&amp;
+OR(Opportunity_Stage__c= &apos;6 PO With Channel&apos;, Opportunity_Stage__c=&apos;7 Closed Won&apos;, Opportunity_Stage__c=&apos;7 Closed Lost&apos;, Opportunity_Stage__c=&apos;7 Closed Admin&apos;,Opportunity_Stage__c = &apos;0 Nurture&apos; )</errorConditionFormula>
+    <errorDisplayField>Request_Status__c</errorDisplayField>
+    <errorMessage>You can&apos;t update the status when related Opportunity is on Stage 6 or Stage 7</errorMessage>
+</ValidationRule>

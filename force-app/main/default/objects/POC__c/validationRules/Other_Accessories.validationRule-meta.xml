@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Other_Accessories</fullName>
+    <active>true</active>
+    <description>When Add. Accessories Required is &quot;Other - fill in field,&quot;  &quot;Other Accessories&quot; field becomes required</description>
+    <errorConditionFormula>AND(
+ISPICKVAL(  Additional_Accessories_Required__c ,&quot;Other - fill in field&quot;),
+ISBLANK(  Other_Accessories__c  ))</errorConditionFormula>
+    <errorDisplayField>Other_Accessories__c</errorDisplayField>
+    <errorMessage>This field is required when Add. Accessories Required is &quot;Other - fill in field&quot;</errorMessage>
+</ValidationRule>

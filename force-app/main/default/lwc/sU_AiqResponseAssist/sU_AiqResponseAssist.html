@@ -1,0 +1,357 @@
+<template>
+    <!-- actions-container starts -->
+    <div class="actions-container">
+        <button class="set-tone-btn" type="button" role="button" onclick={toggleToneModal} disabled={metaData.isClosed}>
+            <span onclick={avoidClick} class="responseAssistNewTag" if:false={metaData.isClosed}>New!
+                <div class="tooltip-container">
+                        <div class="new-tooltip">
+                            <p>Introducing Tone Control: Agents now have the power to adjust the tone of the response, ensuring personalized and effective communication according to your personality.</p>
+                            <span onclick={readMoreCaseTimelineHandler}>Read More</span>
+                        </div>
+                </div>
+            </span>
+            <svg class="su__mr-2" xmlns="http://www.w3.org/2000/svg" width="18.462" height="16.272"
+                viewBox="0 0 18.462 16.272">
+                <defs>
+                    <clipPath id="clip-path">
+                        <rect id="Rectangle_12701" data-name="Rectangle 12701" width="18.462" height="16.272"
+                            fill="#f5f5f5" />
+                    </clipPath>
+                    <clipPath id="clip-path-2">
+                        <rect id="Rectangle_11264" data-name="Rectangle 11264" width="8.881" height="6.376"
+                            fill="#0a1a84" />
+                    </clipPath>
+                </defs>
+                <g id="Group_20772" data-name="Group 20772" transform="translate(2 2)">
+                    <g id="Group_19450" data-name="Group 19450" transform="translate(-2 -2)"
+                        clip-path="url(#clip-path)">
+                        <path id="Path_18438" data-name="Path 18438"
+                            d="M1.578,6.354V6.146l.01-.021V5.949l.01-.021V5.8l.01-.01V5.731l.01-.042V5.6l.01-.01V5.524l.01-.01a6.081,6.081,0,0,1,.145-.779H1.454A1.01,1.01,0,0,0,.436,5.752v1a1,1,0,0,0,.3.716.987.987,0,0,0,.716.3h.28a5.266,5.266,0,0,1-.093-.561,5.768,5.768,0,0,1-.062-.851m6.365,6.7a5.884,5.884,0,0,1-1.132-.1.547.547,0,1,1,.176-1.08,5.836,5.836,0,0,0,.955.083,5.71,5.71,0,0,0,.945-.083.566.566,0,0,1,.54.228,6.011,6.011,0,0,0,2.7-1.547A5.914,5.914,0,0,0,13.861,6.51V6.126l-.01-.01V5.98l-.01-.062V5.825l-.01-.052V5.7l-.01-.01V5.617l-.01-.01V5.534H13.8V5.472l-.01-.01V5.44L13.726,5.1v-.01l-.01-.062h-.01c-.031-.145-.073-.291-.114-.436v-.01l-.01-.01a5.923,5.923,0,0,0-11.286,0v.021h-.01V4.61l-.01.021v.021l-.01.01v.01l-.021.062A.765.765,0,0,1,2.2,4.88l-.01.062v.01c-.042.166-.073.332-.1.5v.01c-.01.042-.01.083-.021.135v.01l-.01.073v.01c0,.052-.01.093-.01.135v.01l-.01.042v.114l-.01.042V6.3l-.01.031v.021a6.743,6.743,0,0,0,.052.8,6.317,6.317,0,0,0,.166.768.22.22,0,0,1-.156.27.131.131,0,0,1-.062.01H1.454A1.453,1.453,0,0,1,0,6.749v-1A1.409,1.409,0,0,1,.426,4.724a1.418,1.418,0,0,1,1.028-.436h.467a6.37,6.37,0,0,1,10.518-2.43,6.292,6.292,0,0,1,1.516,2.43h.478a1.471,1.471,0,0,1,1.454,1.464v1A1.453,1.453,0,0,1,14.432,8.2h-.4a6.372,6.372,0,0,1-1.589,2.658,6.454,6.454,0,0,1-2.918,1.661.542.542,0,0,1-.446.426,6.039,6.039,0,0,1-1.132.1m6.146-8.316a6.754,6.754,0,0,1,.177.934v.062l.01.021v.1l.01.031v.135l.01.01v.623a6.654,6.654,0,0,1-.156,1.111h.291a1.028,1.028,0,0,0,1.018-1.018v-1a1.029,1.029,0,0,0-.3-.727,1.04,1.04,0,0,0-.716-.291Z"
+                            transform="translate(1.288 1.288)" fill="#f5f5f5" stroke="#0a1a84" stroke-width="1" />
+                        <g id="Group_19452" data-name="Group 19452" transform="translate(4.791 4.626)">
+                            <g id="Group_19429" data-name="Group 19429" transform="translate(0 0)"
+                                clip-path="url(#clip-path-2)">
+                                <path id="Path_18422" data-name="Path 18422"
+                                    d="M.237,288.473c-.131,0-.237-.164-.237-.368v-.143c0-.2.106-.368.237-.368s.237.165.237.368v.143c0,.2-.106.368-.237.368"
+                                    transform="translate(0 -284.438)" fill="#0a1a84" />
+                                <path id="Path_18423" data-name="Path 18423"
+                                    d="M119.868,205.2c-.131,0-.237-.165-.237-.368v-1.044c0-.2.106-.368.237-.368s.237.165.237.368v1.044c0,.2-.106.368-.237.368"
+                                    transform="translate(-118.786 -201.186)" fill="#0a1a84" />
+                                <path id="Path_18424" data-name="Path 18424"
+                                    d="M237.045,49.97c-.131,0-.237-.165-.237-.368V47.447c0-.2.106-.368.237-.368s.237.165.237.368V49.6c0,.2-.106.368-.237.368"
+                                    transform="translate(-235.135 -46.562)" fill="#0a1a84" />
+                                <path id="Path_18425" data-name="Path 18425"
+                                    d="M354.045,3.924c-.131,0-.237-.165-.237-.368V.368c0-.2.106-.368.237-.368s.237.165.237.368V3.556c0,.2-.106.368-.237.368"
+                                    transform="translate(-351.308 0)" fill="#0a1a84" />
+                                <path id="Path_18426" data-name="Path 18426"
+                                    d="M472.868,110.449c-.131,0-.237-.165-.237-.368v-3.189c0-.2.106-.368.237-.368s.237.165.237.368v3.189c0,.2-.106.368-.237.368"
+                                    transform="translate(-469.291 -105.356)" fill="#0a1a84" />
+                                <path id="Path_18427" data-name="Path 18427"
+                                    d="M595.154,14.288c-.131,0-.237-.165-.237-.368V8.368c0-.2.106-.368.237-.368s.237.165.237.368V13.92c0,.2-.106.368-.237.368"
+                                    transform="translate(-590.713 -7.912)" fill="#0a1a84" />
+                                <path id="Path_18428" data-name="Path 18428"
+                                    d="M1190.071,288.473c-.131,0-.237-.164-.237-.368v-.143c0-.2.106-.368.237-.368s.237.165.237.368v.143c0,.2-.106.368-.237.368"
+                                    transform="translate(-1181.427 -284.438)" fill="#0a1a84" />
+                                <path id="Path_18429" data-name="Path 18429"
+                                    d="M1070.441,205.2c-.131,0-.237-.165-.237-.368v-1.044c0-.2.106-.368.237-.368s.237.165.237.368v1.044c0,.2-.106.368-.237.368"
+                                    transform="translate(-1062.642 -201.186)" fill="#0a1a84" />
+                                <path id="Path_18430" data-name="Path 18430"
+                                    d="M953.264,49.97c-.131,0-.237-.165-.237-.368V47.447c0-.2.106-.368.237-.368s.237.165.237.368V49.6c0,.2-.106.368-.237.368"
+                                    transform="translate(-946.293 -46.562)" fill="#0a1a84" />
+                                <path id="Path_18431" data-name="Path 18431"
+                                    d="M836.264,3.924c-.131,0-.237-.165-.237-.368V.368c0-.2.106-.368.237-.368s.237.165.237.368V3.556c0,.2-.106.368-.237.368"
+                                    transform="translate(-830.12 0)" fill="#0a1a84" />
+                                <path id="Path_18432" data-name="Path 18432"
+                                    d="M717.44,110.449c-.131,0-.237-.165-.237-.368v-3.189c0-.2.106-.368.237-.368s.237.165.237.368v3.189c0,.2-.106.368-.237.368"
+                                    transform="translate(-712.135 -105.356)" fill="#0a1a84" />
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </svg>Set your tonality
+        </button>
+        <label if:true={lastUpdatedDate}>Last Updated: {lastUpdatedDate}</label>
+        <div class="actions-btn">
+            <button disabled={disbaleEdit} type="button" role="button" class="edit-button">
+                <div class="tooltip-content">Edit Response</div>
+                <svg onclick={toggleEditor} id="Component_131_8" data-name="Component 131 – 8" xmlns="http://www.w3.org/2000/svg" width="25"
+                    height="22" viewBox="0 0 25 22">
+                    <rect id="Rectangle_127091" data-name="Rectangle 12709" width="25" height="22" rx="5"
+                        fill="#e7efff" />
+                    <g id="Group_20769" data-name="Group 20769" transform="translate(-1292 -280.082)">
+                        <path id="Path_18491" data-name="Path 18491"
+                            d="M9.511,6H4.447A1.447,1.447,0,0,0,3,7.447V17.574a1.447,1.447,0,0,0,1.447,1.447H14.574a1.447,1.447,0,0,0,1.447-1.447V12.511"
+                            transform="translate(1294.579 278.979)" fill="none" stroke="#7081b9" stroke-linecap="round"
+                            stroke-linejoin="round" stroke-width="1" />
+                        <path id="Path_18492" data-name="Path 18492"
+                            d="M19.6,3.267a1.535,1.535,0,1,1,2.17,2.17L14.894,12.31,12,13.033l.723-2.894Z"
+                            transform="translate(1289.2 281.345)" fill="none" stroke="#7081b9" stroke-linecap="round"
+                            stroke-linejoin="round" stroke-width="1" />
+                    </g>
+                </svg>
+            </button>
+            <button disabled={disableCopy} type="button" role="button" class="copy-button">
+                <div class="tooltip-content">Copy To Clipboard</div>
+                <svg onclick={copyToClipboard} id="Component_132_8" data-name="Component 132 – 8" xmlns="http://www.w3.org/2000/svg" width="24"
+                    height="22" viewBox="0 0 24 22">
+                    <rect id="Rectangle_127092" data-name="Rectangle 12709" width="24" height="22" rx="5"
+                        fill="#e7efff" />
+                    <path id="Path_18493" data-name="Path 18493"
+                        d="M15.13,13.5h7.336a1.63,1.63,0,0,1,1.63,1.63v7.337a1.63,1.63,0,0,1-1.63,1.63H15.13a1.63,1.63,0,0,1-1.63-1.63V15.13A1.63,1.63,0,0,1,15.13,13.5Z"
+                        transform="translate(-5.122 -6.179)" fill="none" stroke="#7081b9" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="1" />
+                    <path id="Path_18494" data-name="Path 18494"
+                        d="M5.445,13.6H4.63A1.63,1.63,0,0,1,3,11.967V4.63A1.63,1.63,0,0,1,4.63,3h7.336A1.63,1.63,0,0,1,13.6,4.63v.815"
+                        transform="translate(2.579 1.522)" fill="none" stroke="#7081b9" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="1" />
+                </svg>
+                <!-- <span class="copy-tooltip">Copy To Clipboard</span> -->
+                <!-- <span class="copied-tooltip slds-hide">Copied To Clipboard</span> -->
+            </button>
+            <button disabled={disableRegenerate} type="button" role="button" class="refresh-button ">
+                <div class="tooltip-content">Regenerate</div>
+                <svg onclick={refreshFirstResponse} xmlns="http://www.w3.org/2000/svg" width="24" height="24.25" viewBox="0 0 24 24.25">
+                    <g id="Group_41919" data-name="Group 41919" transform="translate(-887 -221)">
+                        <g id="Component_133_4" data-name="Component 133 – 4" transform="translate(887 223)">
+                            <rect class="highlight" id="Rectangle_12709" data-name="Rectangle 12709" width="24"
+                                height="22" rx="5" fill="#edf4fe" />
+                            <g id="Group_19470" data-name="Group 19470" transform="translate(2.306 2.887)">
+                                <g id="Group_15472" data-name="Group 15472" transform="translate(0.089 -0.103)">
+                                    <path id="Path_11739" data-name="Path 11739" d="M4.6,0V4.6H0"
+                                        transform="translate(3.244 9.156) rotate(-120)" fill="none" stroke="#7081b9"
+                                        stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" />
+                                    <path id="Path_11740" data-name="Path 11740" d="M0,4.6V0H4.6"
+                                        transform="translate(14.361 14.073) rotate(-120)" fill="none" stroke="#7081b9"
+                                        stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" />
+                                    <path id="Path_11741" data-name="Path 11741"
+                                        d="M1.4,4.433A6.347,6.347,0,0,1,5.438.029a4.7,4.7,0,0,1,5.055,1.721l2.769,3.22M-.191,8.212l2.769,3.22a4.7,4.7,0,0,0,5.055,1.721,6.347,6.347,0,0,0,4.034-4.4"
+                                        transform="translate(6.969 17.911) rotate(-120)" fill="none" stroke="#7081b9"
+                                        stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" />
+                                </g>
+                            </g>
+                        </g>
+                        <template if:true={refreshAvailable}>
+                            <circle id="Ellipse_445" data-name="Ellipse 444" cx="3.5" cy="3.5" r="3.5"
+                                transform="translate(904 221)" fill="#f48b00" />
+                        </template>
+                    </g>
+                </svg>
+            </button>
+        </div>
+    </div>
+    <!-- actions-container ends -->
+    <!-- add 'position: relative' to 'response-container' when Saved Successfully! modal open -->
+    <div class="response-container">
+        <div class="error-occured" if:true={somethingWentWrong}>
+            <figure class="unavailable-figure"></figure>
+            <p>Oops! Unable to generate response!</p>
+        </div>
+        <div class="data-loader" if:true={isLoading}></div>
+
+
+        <template if:false={somethingWentWrong}>
+            <!-- editor view mode strats -->
+            <div class={responseClass} if:false={isEditMode}>
+
+                <div class="citation-feedback" if:false={metaData.isClosed}>
+                    <c-s-u_-aiq-feedback feedback-location="response-assist" case-summary-location={casesummary}
+                        key={keys.key3} maincontainerwidth={maincontainerwidth} case-id={caseId} uid={uid} generative-content={generatedContent}
+                        end-point={endPoint} token={token} onsentimenttypechange={handleSentimentTypeChange}>
+                    </c-s-u_-aiq-feedback>
+                </div>
+
+                <lightning-formatted-rich-text value={firstResponseData} class="rich-text-content">
+                </lightning-formatted-rich-text>
+
+               
+
+            </div>
+            <!-- editor view mode ends -->
+
+            <!-- saved successfully alert starts-->
+            <div if:true={savedSuccess} class="alert-backdrop">
+                <div class="saved-successfully-alert">
+
+                    <svg xmlns="http://www.w3.org/2000/svg" width="50.953" height="50.181" viewBox="0 0 50.953 50.181">
+                        <g id="Icon_feather-check-circle" data-name="Icon feather-check-circle"
+                            transform="translate(2.005 2.027)">
+                            <path id="Path_25615" data-name="Path 25615"
+                                d="M49.12,23.943v2.121A23.06,23.06,0,1,1,35.445,4.988" transform="translate(-3 -2.991)"
+                                fill="none" stroke="#52d40e" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="4" />
+                            <path id="Path_25616" data-name="Path 25616" d="M43.478,6,20.418,29.083,13.5,22.165"
+                                transform="translate(2.642 -1.374)" fill="none" stroke="#52d40e" stroke-linecap="round"
+                                stroke-linejoin="round" stroke-width="4" />
+                        </g>
+                    </svg>
+
+                    <h2>Saved Successfully!</h2>
+                </div>
+            </div>
+            <!-- saved successfully alert ends-->
+
+            <!-- text editor strats -->
+            <div class="response-data response-editor" if:true={isEditMode}>
+                <lightning-input-rich-text value={firstResponseData} formats={allowedFormats}
+                    onchange={handleRichTextChange}></lightning-input-rich-text>
+                <div class="char-count-container">
+                    <span if:true={charLimitExceeded} class="edit-limit-error">Error: Your post is too long.</span> 
+                    <span class="char-count" data-char-limit-exceeded={charLimitExceeded}>{charCountRA}/{responseAssistCharLimit}</span>
+                </div>
+                <div class="editor-buttons">
+                    <button if:false={savingEditedResponse} class="save-btn" type="button" role="button" onclick={saveEditedData} disabled={charLimitExceeded}>Save</button>
+                    <button if:true={savingEditedResponse} class="save-btn saving-btn" type="button" role="button" >Saving...</button>
+                    <button class="cancel-btn" type="button" onclick={cancelEditor} role="button">Cancel</button>
+                </div>
+            </div>
+            
+
+            <template if:true={hasCitations}>
+            <div class="citation-bar">
+                <span class="citation-label">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"  style="margin-right: 7px;"  xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M6.16006 3.97336C5.10406 3.97336 4.24007 3.10936 4.24007 2.05336C4.24007 0.997362 5.10406 0.133362 6.16006 0.133362C7.21606 0.133362 8.08006 0.997362 8.08006 2.05336C8.08006 3.10936 7.21606 3.97336 6.16006 3.97336ZM6.16006 1.41336C5.80806 1.41336 5.52006 1.70136 5.52006 2.05336C5.52006 2.40536 5.80806 2.69336 6.16006 2.69336C6.51206 2.69336 6.80006 2.40536 6.80006 2.05336C6.80006 1.70136 6.51206 1.41336 6.16006 1.41336ZM10 7.8134C8.944 7.8134 8.08 6.9494 8.08 5.8934C8.08 4.8374 8.944 3.97341 10 3.97341C11.056 3.97341 11.92 4.8374 11.92 5.8934C11.92 6.9494 11.056 7.8134 10 7.8134ZM10 5.2534C9.648 5.2534 9.36 5.5414 9.36 5.8934C9.36 6.2454 9.648 6.5334 10 6.5334C10.352 6.5334 10.64 6.2454 10.64 5.8934C10.64 5.5414 10.352 5.2534 10 5.2534ZM2.32002 7.8134C1.26402 7.8134 0.400024 6.9494 0.400024 5.8934C0.400024 4.8374 1.26402 3.97341 2.32002 3.97341C3.37602 3.97341 4.24002 4.8374 4.24002 5.8934C4.24002 6.9494 3.37602 7.8134 2.32002 7.8134ZM2.32002 5.2534C1.96802 5.2534 1.68002 5.5414 1.68002 5.8934C1.68002 6.2454 1.96802 6.5334 2.32002 6.5334C2.67202 6.5334 2.96002 6.2454 2.96002 5.8934C2.96002 5.5414 2.67202 5.2534 2.32002 5.2534ZM6.16006 11.6533C5.10406 11.6533 4.24007 10.7893 4.24007 9.73334C4.24007 8.67734 5.10406 7.81334 6.16006 7.81334C7.21606 7.81334 8.08006 8.67734 8.08006 9.73334C8.08006 10.7893 7.21606 11.6533 6.16006 11.6533ZM6.16006 9.09334C5.80806 9.09334 5.52006 9.38134 5.52006 9.73334C5.52006 10.0853 5.80806 10.3733 6.16006 10.3733C6.51206 10.3733 6.80006 10.0853 6.80006 9.73334C6.80006 9.38134 6.51206 9.09334 6.16006 9.09334Z" fill="white"/>
+                </svg>
+                    Sources:</span>
+
+                    <button class="scroll-indicator left" onclick={handleScrollLeft} if:true={showLeftButton}>
+    
+                        <svg width="5" height="9" viewBox="0 0 5 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M1.81822 4.49997L5 8L4.09092 9L3.93405e-07 4.49997L4.09092 -7.94746e-08L5 0.999993L1.81822 4.49997Z" fill="#203A72"/>
+                        </svg>
+                    </button>
+
+                    
+                    <div class="citation-links-container" onscroll={handleScroll} data-container>
+                        <template for:each={citation} for:item="ctn">
+                            <a key={ctn} href={ctn} target="_blank">{ctn}</a>
+                        </template>
+                    </div>
+
+                    <!-- Right Scroll Button -->
+                    <button class="scroll-indicator right" onclick={handleScrollRight} if:true={showRightButton}>
+                        <svg width="5" height="9" viewBox="0 0 5 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3.18178 4.50003L0 1L0.909084 0L5 4.50003L0.909084 9L0 8.00001L3.18178 4.50003Z" fill="#203A72"/>
+                        </svg>
+                    </button>
+
+                
+            </div>
+            </template>
+
+            <!-- text editor ends -->
+        </template>
+        <!-- tone alert starts-->
+        <div class="tone-alert-backdrop" if:true={isToneModal}>
+            <div class="tone-alert">
+                <div class="title-section">
+                    <h2>Select your tone</h2>
+                    <p>Tailor your responses to customers by adjusting tonality and writing style</p>
+                    <button class="tonalityModal-closeButton" onclick={toggleToneModal}>
+                        <svg class="cross-btn" xmlns="http://www.w3.org/2000/svg" width="9.283" height="9.281" viewBox="0 0 9.283 9.281">
+                            <path id="1_Icon_ionic-ios-close1" data-name="Icon ionic-ios-close" d="M17.027,15.929l3.316-3.316a.777.777,0,1,0-1.1-1.1L15.928,14.83l-3.316-3.316a.777.777,0,1,0-1.1,1.1l3.316,3.316-3.316,3.316a.777.777,0,1,0,1.1,1.1l3.316-3.316,3.316,3.316a.777.777,0,1,0,1.1-1.1Z" transform="translate(-11.285 -11.289)" fill="#b0adad"/>
+                        </svg>
+                    </button>
+                </div>
+
+               <template if:true={tonesLoader}><div class="data-loader tones-loader"></div></template>
+
+               <template if:false={tonesLoader}>
+                <div class="avtar-outer">
+                    <ul class="avtar-list">
+                        <template for:each={updatedProfiles} for:item="toneProfile" for:index="index">
+                            <li key={toneProfile.name}>
+                            <template if:false={toneProfile.is_custom}>
+                                    <button role="button" class={toneProfile.cssClass} type="button"
+                                        onclick={handleTabClick1} data-index={index}>
+                                        <figure>
+                                            <img width="69" height="69" alt={toneProfile.name}
+                                                src={toneProfile.image_path}>
+                                        </figure>
+                                        <span class="info-container">
+                                            <svg class="info-icon" id="Component_129_1331" data-name="Component 129 – 13"
+                                                xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                viewBox="0 0 16 16">
+                                                <g id="Ellipse_44331" data-name="Ellipse 443" fill="#fff" stroke="#393939"
+                                                    stroke-width="1">
+                                                    <circle cx="8" cy="8" r="8" stroke="none" />
+                                                    <circle cx="8" cy="8" r="7.5" fill="none" />
+                                                </g>
+                                                <path id="Icon_ionic-md-information-circle31"
+                                                    data-name="Icon ionic-md-information-circle"
+                                                    d="M9.578,3.375a6.2,6.2,0,1,0,6.2,6.2A6.206,6.206,0,0,0,9.578,3.375Zm.626,9.3H8.952V8.952H10.2Zm0-4.95H8.952V6.477H10.2Z"
+                                                    transform="translate(-1.578 -1.578)" fill="#393939" />
+                                            </svg>
+                                            <div class="info-tooltip">
+                                                <p>{toneProfile.description}</p>
+                                            </div>
+                                        </span>
+                                        <span class="name">{toneProfile.name}</span>
+                                    </button>
+                            </template>
+                            <template if:true={toneProfile.is_custom}>
+                                <button role="button" class={toneProfile.cssClass} type="button"
+                                    onclick={handleTabClick1} data-index={index}>
+                                    <div if:true={toneProfile.brand_new} class="su-tune-modal-addnew-svg"><svg xmlns="http://www.w3.org/2000/svg" width="69" height="69" viewBox="0 0 69 69">
+                                            <g id="Group_42256" data-name="Group 42256" transform="translate(-1263 -185)">
+                                                <g id="Ellipse_448" data-name="Ellipse 448" transform="translate(1263 185)" fill="#fff" stroke="#b6b5b4" stroke-linecap="round" stroke-width="2" stroke-dasharray="5">
+                                                <circle cx="33.5" cy="33.5" r="33.5" stroke="none"/>
+                                                <circle cx="33.5" cy="33.5" r="32.5" fill="none"/>
+                                                </g>
+                                                <g id="Icon_feather-plus" data-name="Icon feather-plus" transform="translate(1278.5 200.5)">
+                                                <path id="Path_25595" data-name="Path 25595" d="M18,7.5v21" fill="none" stroke="#f48b00" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/>
+                                                <path id="Path_25596" data-name="Path 25596" d="M7.5,18h21" fill="none" stroke="#f48b00" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/>
+                                                </g>
+                                            </g>
+                                    </svg></div>
+                                    <div class="su-customTone-nameHolder" if:false={toneProfile.brand_new}>
+                                        {getToneProfileInitial}
+                                    </div>
+                                    <input class="name sunewToneNameInput" type="text" oninput={nameInputHandler} onkeydown={nameInputKeyDownHandler} placeholder="Enter avtar name" value={toneProfile.name}/>
+                                    <!-- <span class="name">{toneProfile.name}</span> -->
+                                </button>
+                            </template>
+                            </li>
+                        </template>
+                    </ul>
+                </div>
+             
+
+
+                <!-- tabs body starts -->
+                <div class="suTone-slider-holder">
+                <template for:each={selectedProfileTuning.props} for:item="tune" for:index="index">
+                    <div key={tune.lowerName} class="sliders-container">
+                        <label>{tune.lowerName}</label>
+                        <div key={tune.upperName} class="range-slider">
+                            <input oninput={handleSliderChange} type="range" min="0" max="1" value={tune.value}
+                                class={tune.lowerName} step="1" data-featureindex={index} disabled={isDisabled}/>
+                            <div class="sliderticks">
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </div>
+                        <label>{tune.upperName}</label>
+                    </div>
+                </template>
+                </div>
+                <!-- /tabs body ends -->
+
+                <div class="editor-buttons">
+                    <!-- <button class="reset-btn" type="button" role="button" onclick={resetProfile}>Reset Avatar</button> -->
+                    <button class="save-btn" type="button" role="button" onclick={saveProfile}>Save</button>
+                    <button class="cancel-btn" type="button" onclick={toggleToneModal} role="button">Cancel</button>
+                </div>
+
+                </template>
+
+            </div>
+        </div>
+        <!-- tone alert ends-->
+
+        <!-- tone alert starts-->
+        
+
+    </div>
+    
+</template>

@@ -1,0 +1,149 @@
+<apex:page controller="IdeasViewController" standardStylesheets="false" cache="false" sidebar="false" showheader="false" title="Ideas - Rubrik Community" applyBodyTag="false">
+
+    <link rel="shortcut icon" href="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/favicon.ico')}" type="image/x-icon" />
+    <link rel="icon" href="{!URLFOR($Resource.RubrikCustomerCommunity,'RubrikCommunity/Images/favicon1.png')}" type="image/png" />
+    <c:visualstrapblock >
+    
+    
+    <!--hide the action column from Community users-->
+    <style>
+    html body{display:none;}
+    .actionColumn{
+    display:none;
+    }
+    
+    .pbBody{
+    padding: 5px;
+    }
+    
+    .visualstrap td, th {
+    padding: 5px !important;
+    }
+    
+    .rolodex {
+      padding: 4px !important;  
+   }
+   
+   .votebutton, .voteButton a, .voteButton a:hover, .votedButton a, .votedButton a:hover , votebuttonText {
+    text-decoration: none;
+    font-size: 12px !important;  
+    font-family: Gotham-Light;
+    }
+    
+    .votedUpButton .voteUp, .votedDownButton .voteDown {
+    text-decoration: none;
+    font-size: 12px !important;  
+    font-family: Gotham-Light;    
+    }
+
+    .ideatext{
+    font-size: 14px !important;  
+    font-family: Gotham-Light; 
+    padding: 5px;   
+    }    
+    
+    </style>
+    
+   
+          
+  
+    
+        <!--start header-->
+        <c:siteheader ></c:siteheader>
+        <!--end Header--
+
+
+      <!--start the Container-->
+        <div class="container">
+            <div class="row rowcontainer" >
+                <div class="col-md-12">
+                  <c:pageTitle name="Ideas" ></c:pageTitle>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopad">
+                        <su_vf_community:SU_Vf_CommunitySearchBox advanceFilterData="_type" advanceFilterValue="idea" placeHolderContent="Search Ideas"/>    
+                    </div> 
+             <!--buttons-->
+            <div id="container">
+                <div class="row  btnpad">
+                    <div class="btn-group">
+                            <a href="{!URLFOR($Page.NewIdea, null, null)}"><button type="button" class="btn rubrik-btn" >Submit an Idea</button></a><br /><br />
+                            To search for previous Ideas, use the search box on the main landing page of the <a href="https://support.rubrik.com/CommunityHome">Support Portal</a>.
+                    </div>
+                </div>
+            </div>
+         <!--end buttons-->  
+<br/>
+<apex:pageBlock >
+        <a href="{!URLFOR($Page.IdeasHome)}">Browse All Ideas</a>
+        |&nbsp;
+        <ideas:listOutputLink sort="recent" page="IdeasSort" >Recent Ideas</ideas:listOutputLink>
+        |&nbsp;
+        <ideas:listOutputLink sort="top" page="IdeasSort">Top Ideas</ideas:listOutputLink>
+        |&nbsp;
+        <ideas:listOutputLink sort="popular" page="IdeasSort">Popular Ideas</ideas:listOutputLink>
+        |&nbsp;
+        <ideas:listOutputLink sort="comments" page="IdeasSort">Recent Comments</ideas:listOutputLink>
+        |&nbsp;
+        <ideas:ListOutputLink sort="ideas" page="IdeasSort">My Ideas</ideas:ListOutputLink>
+        |&nbsp;
+        <ideas:ListOutputLink sort="votes" page="IdeasSort">My Votes</ideas:ListOutputLink>
+    </apex:pageBlock>
+    <br/>
+   <apex:form >
+   
+      
+       
+       
+        <apex:pageBlock id="blockMain">
+        
+         <apex:panelGrid columns="9">
+          <apex:selectList value="{!category}" multiselect="false"  size="1">
+       <apex:selectOptions value="{!Categories}"></apex:selectOptions>
+       </apex:selectList> 
+              <apex:commandlink action="{!searchIdeas}"><button type="button" class="btn rubrik-btn" >Filter Ideas</button></apex:commandlink>
+
+         
+                <apex:outputText >Showing&nbsp;{!(pageNumber * size)+1-size}-{!IF((pageNumber * size)>noOfRecords, noOfRecords,(pageNumber * size))} of {!noOfRecords} Ideas</apex:outputText>
+
+                <apex:commandButton styleClass="btn rubrik-btn" status="st" reRender="blockMain" value="|<" action="{!first}" disabled="{!!hasPrevious}" title="First Page"/>
+                <apex:commandButton styleClass="btn rubrik-btn" status="st" reRender="blockMain" value="<" action="{!previous}" disabled="{!!hasPrevious}" title="Previous Page"/>
+                <apex:commandButton styleClass="btn rubrik-btn" status="st" reRender="blockMain" value=">" action="{!next}" disabled="{!!hasNext}" title="Next Page"/>
+                <apex:commandButton styleClass="btn rubrik-btn" status="st" reRender="blockMain" value=">|" action="{!last}" disabled="{!!hasNext}" title="Last Page"/>
+               
+            </apex:panelGrid>
+            <br/>
+        
+          <apex:repeat var="ideadata" value="{!ideas}" id="idealist" >
+          <div class="row" style="table" >
+          <div class="col-md-1"><apex:vote objectId="{!ideadata.id}" rerender="IdeaList" />  </div>
+          <div class="col-md-10"><a href="{!URLFOR($Page.IdeaView, null, [id=ideadata.Id])}">{!ideadata.Title}</a><apex:outputtext value=" | Status: {!ideadata.Status}" rendered="{!ideadata.status!=null}"/><br/>  
+          <div class="ideatext"><apex:outputtext value="{!ideadata.Body}" escape="false"/><br/>
+          <br />
+          <b>{!ideadata.NumComments} comments | Posted by {!ideadata.CreatedBy.CommunityNickname} on&nbsp; <apex:outputfield value="{!ideadata.CreatedDate}"/></b></div>
+          </div>
+          </div>
+          <hr/>
+          </apex:repeat>
+            <apex:panelGrid columns="7">
+                <apex:outputText >Showing&nbsp;{!(pageNumber * size)+1-size}-{!IF((pageNumber * size)>noOfRecords, noOfRecords,(pageNumber * size))} of {!noOfRecords} Ideas</apex:outputText>
+
+                <apex:commandButton styleClass="btn rubrik-btn" status="st" reRender="blockMain" value="|<" action="{!first}" disabled="{!!hasPrevious}" title="First Page"/>
+                <apex:commandButton styleClass="btn rubrik-btn" status="st" reRender="blockMain" value="<" action="{!previous}" disabled="{!!hasPrevious}" title="Previous Page"/>
+                <apex:commandButton styleClass="btn rubrik-btn" status="st" reRender="blockMain" value=">" action="{!next}" disabled="{!!hasNext}" title="Next Page"/>
+                <apex:commandButton styleClass="btn rubrik-btn" status="st" reRender="blockMain" value=">|" action="{!last}" disabled="{!!hasNext}" title="Last Page"/>
+               
+            </apex:panelGrid>
+        </apex:pageBlock>
+ 
+  </apex:form> 
+       
+              </div>
+            </div>
+        </div>
+        <!--End the Container-->
+
+
+       <!--start the footer-->
+        <c:sitefooter ></c:sitefooter>
+        
+    </c:visualstrapblock>
+</apex:page>

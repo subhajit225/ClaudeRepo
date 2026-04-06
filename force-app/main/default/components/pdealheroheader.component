@@ -1,0 +1,141 @@
+<apex:component >
+<style>
+.center-block {
+    float: none;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.input-group .icon-addon .form-control {
+    border-radius: 0;
+}
+
+.icon-addon {
+    position: relative;
+    color: #555;
+    display: block;
+}
+
+.icon-addon:after,
+.icon-addon:before {
+    display: table;
+    content: " ";
+}
+
+.icon-addon:after {
+    clear: both;
+}
+
+.icon-addon.addon-md .glyphicon,
+.icon-addon .glyphicon, 
+.icon-addon.addon-md .fa,
+.icon-addon .fa {
+    position: absolute;
+    z-index: 2;
+    font-size: 14px;
+    width: 20px;
+    margin-left: -2.5px;
+    text-align: center;
+    padding: 10px 0;
+    top: 1px
+}
+
+.icon-addon.addon-lg .form-control {
+    line-height: 1.33;
+    height: 46px;
+    font-size: 18px;
+    padding: 10px 16px 10px 40px;
+}
+
+.icon-addon.addon-sm .form-control {
+    height: 30px;
+    padding: 5px 10px 5px 28px;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+  button.input-group-addon {
+    position: absolute;
+    z-index: 2;
+    font-size: 14px;
+    width: 20px;
+    margin-left: -2.5px;
+    text-align: center;
+    padding: 10px 0;
+    top: 1px
+}
+
+   .dealregheaderwhite {
+   font-size: 55px;
+   color: white;
+   }
+
+.icon-addon.addon-lg .fa,
+.icon-addon.addon-lg .glyphicon {
+    font-size: 26px;
+    margin-left: 0;
+    right: -40px;
+    top: 4px;
+}
+
+
+.icon-addon .form-control:focus + .glyphicon,
+.icon-addon:hover .glyphicon,
+.icon-addon .form-control:focus + .fa,
+.icon-addon:hover .fa {
+    color: #2580db;
+}
+
+    .herogroups {
+    font-family: Gotham-Light;
+    font-weight: bold;
+    font-size: 21px;
+    line-height: 19px;
+    padding-bottom: 4px;
+    color: #FFFFFF;
+    }
+
+    a.herolinks{
+        font-size: 14px;
+        line-height: 24px;
+        color: #FFFFFF;
+        }
+        
+    a.herolinks:before{
+        padding: 0;
+        content: "\00BB \0020";
+        color: #FFFFFF;
+        }
+
+    .pdealheader {
+        min-height: 205px;
+        color: #FFFFFF;
+        }        
+    
+    .dealregheaderwhite {
+        color: #FFFFFF;
+        font-size: 55px;
+        text-align: center;
+        margin-top: 16px;
+        }
+    .center {
+    text-align: center;
+    }
+    
+    </style>
+    <div class="row pdealheader hidden-sm hidden-xs" style="background-image:url('{!URLFOR($Resource.pdealregheader)}'); background-repeat:no-repeat;background-attachment:fixed;background-position:center top;">
+        <div class="container block">
+
+          <div class="col-md-12 block"><!--mid--><div class="dealregheaderwhite">Register a Deal</div>
+          
+          <br/>
+          <div class="center"><a href="{!URLFOR($Page.DealRegTcs, null, null)}"><button type="button" style=" width:124px;height:42px;    background-color: #ffffff;" class="btn rubrik-btn--white" >Get Started</button></a></div>
+
+          </div>
+
+    </div>
+   </div>
+ 
+    
+
+</apex:component>

@@ -1,0 +1,42 @@
+/* pill look */
+.custom-slds-pill {
+    background: #0176d3;
+    border: 1px solid #0176d3;
+    color: white;
+    margin: 0.25rem;
+    border-radius: 16px;
+    padding-left: 15px;
+    padding-right: 2px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+/* X button background + radius + icon color */
+.custom-slds-pill .slds-pill__remove {
+    background: black;
+    border-radius: 20px;
+    padding: 2px;
+    margin-left: 10px;
+    margin-right: 4px;
+}
+
+.custom-slds-pill .slds-pill__remove lightning-icon {
+    --slds-c-icon-color-foreground-default: white;
+}
+
+.custom-slds-pill:hover {
+  background: #e5f1fb;      /* light blue */
+  color: #032d60;           /* dark blue text */
+  border-color: #0176d3;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
+.pill-container{
+    background: #eaeaea;
+    min-height: 200px;
+    border-radius: 5px;
+    padding: 15px;
+}

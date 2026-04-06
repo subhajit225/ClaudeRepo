@@ -1,0 +1,40 @@
+<template>
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container" if:false={showSpinner}>
+            <div class="slds-modal__content slds-p-around_large" id="modal-content-id-1">
+                <h2 id="modal-heading-01" class="heading-36 slds-text-align_center slds-m-bottom_medium">{modalHeading}</h2>
+                <template if:true={isBookingOrReschedule}>
+                        <lightning-input type="date" name="day" value={selectedDate} placeholder="Select a day" onchange={handleOnDateChange} min={today} class="slds-p-around_small inputClass"></lightning-input>
+                        <lightning-layout class="slds-p-around_small">
+                        <lightning-layout-item size="12" small-device-size="6" medium-device-size="6" large-device-size="6" class="slds-p-right_small">
+                            <lightning-input type="time" name="startTime" placeholder="Start with" 
+                                    value={startTime}  disabled={startTimeDisable} min={minimumStartTime} onchange={handleOnStartTimeChange} if:true={toggle} class="inputClass">
+                            </lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" small-device-size="6" medium-device-size="6" large-device-size="6" class="slds-p-left_small">
+                            <lightning-input type="time" name="endTime" placeholder="End with" 
+                                    value={endTime}  disabled={endTimeDisable} min={minimumEndTime} onchange={handleOnEndTimeChange} if:true={toggle} class="inputClass">
+                            </lightning-input>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </template>
+                <template if:true={isShowMeetOutcome}>
+                    <lightning-combobox name="meetingOutcome" label={labelMeetingOutcome} placeholder="Select outcome" value={outcome}
+                        options={outcomeOptions} onchange={handleOnOutcomeChange} class="inputClass pc-dropdown slds-p-around_small" required></lightning-combobox>
+                    <template if:true={toggle}>
+                    <lightning-combobox name="noConvertreason" label={labelNoConvertReason} placeholder="Select no conversion reason" value={noConvertReason}
+                        options={noConvertReasonOptions} onchange={handleOnNoConvertReasonChange} disabled={noConvertReasonDisable} class="inputClass pc-dropdown slds-p-around_small" required></lightning-combobox>
+                    <lightning-combobox name="cancelReason" label={labelCancelReason} placeholder="Select cancellation reason"  value={cancelReason}
+                        options={canceltReasonOptions} onchange={handleOnCancelReasonChange} disabled={cancelReasonDisable} class="inputClass pc-dropdown slds-p-around_small" required></lightning-combobox>
+                    </template>
+                </template>
+            </div>
+            <footer class="slds-modal__footer slds-p-around_large">
+                <lightning-button label={buttonLabel} variant="brand" onclick={handleButtonClick} class="slds-m-left_x-small" name="Submit" disabled={buttonDisable}></lightning-button>
+                <lightning-button label="Cancel" variant="brand" onclick={hideModalBox} class="slds-m-left_x-small"></lightning-button>
+            </footer>
+        </div>
+        <lightning-spinner if:true={showSpinner} alternative-text="Loading"></lightning-spinner>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+</template>

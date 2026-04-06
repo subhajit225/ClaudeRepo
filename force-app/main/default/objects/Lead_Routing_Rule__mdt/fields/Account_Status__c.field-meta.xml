@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Account_Status__c</fullName>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Account Status</label>
+    <required>false</required>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Active Opportunity</fullName>
+                <default>true</default>
+                <label>Active Opportunity</label>
+            </value>
+            <value>
+                <fullName>Existing Customer</fullName>
+                <default>false</default>
+                <label>Existing Customer</label>
+            </value>
+            <value>
+                <fullName>Lost Opportunity</fullName>
+                <default>false</default>
+                <label>Lost Opportunity</label>
+            </value>
+            <value>
+                <fullName>Prospect</fullName>
+                <default>false</default>
+                <label>Prospect</label>
+            </value>
+            <value>
+                <fullName>Customer w/Opp</fullName>
+                <default>false</default>
+                <label>Customer w/Opp</label>
+            </value>
+            <value>
+                <fullName>Account Based Routing</fullName>
+                <default>false</default>
+                <label>Account Based Routing</label>
+            </value>
+            <value>
+                <fullName>Existing Customer with New Sale Opportunity</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Existing Customer with New Sale Opportunity</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

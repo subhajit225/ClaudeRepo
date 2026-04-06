@@ -1,0 +1,103 @@
+<template>
+        <br/>
+        <template if:true={showmsg}>
+		<div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+			<span class="slds-assistive-text">error</span>
+			<span class="slds-icon_container slds-icon-utility-error slds-m-right_x-small"
+				title="Description of icon when needed"></span>
+			<h2>
+				<p>
+					<span class="bolded"> 
+						<label>{message}</label>
+					</span>
+				</p>
+			</h2>
+		</div>
+	</template>
+        <template if:true={showSpinner}>
+		<div id="spinnerDiv" style="height: 10rem">
+			<div class="slds-spinner_container">
+				<div role="status" class="slds-spinner slds-spinner_medium">
+					<span class="slds-assistive-text">Loading</span>
+					<div class="slds-spinner__dot-a"></div>
+					<div class="slds-spinner__dot-b"></div>
+				</div>
+			</div>
+		</div>
+	</template>
+        <template if:true={datamodified}>
+                <table>                
+                <tbody>
+                <!-- <div class="combobox-wrapper"> -->
+                        <template for:each={datamodified} for:item="row">
+                                <tr key={row.id}>
+                                <template for:each={row.columns} for:item="col">
+                                <td key={col.skuRowCustomIndex} style="max-width: 5px;">
+                                <template if:true={col.PickListType}>
+                                        <div class="combo-wrapper">
+                                                <label class="custom-label">{col.fieldLabel}</label>                                        
+                                                        <lightning-combobox 
+                                                        class="custom-combobox"                                                                                                        
+                                                        name={col.fieldLabel} 
+                                                        value={col.fieldValue}
+                                                        options={col.pickValues} 
+                                                        onchange={handlePickListChange}
+                                                        data-custom-index={col.skuRowCustomIndex}
+                                                                ></lightning-combobox>
+                                                        <label class="custom-error">{col.errorMessage}</label> 
+                                        </div>
+                                </template>
+                                <template if:true={col.IntegerDoubleType}>
+                                        <div ondblclick={handleDoubleClick}>
+                                        <div class="combo-wrapper">
+                                        <label class="custom-label">{col.fieldLabel}</label>
+                                        <lightning-input 
+                                                type="number"
+                                                value={col.fieldValue}
+                                                step={col.stepValue}
+                                                onchange={handleDecimalChange}
+                                                onclick={handleDecimalClick}
+                                                data-custom-index={col.skuRowCustomIndex}
+                                                formatter={col.formatterValue}>
+                                        </lightning-input>
+                                        <label class="custom-error">{col.errorMessage}</label>
+                                        </div>
+                                        </div>
+                                </template>
+                                <template if:true={col.currencyType}>
+                                        <div class="combo-wrapper">
+                                        <label class="custom-label">{col.fieldLabel}</label>
+                                        <lightning-input 
+                                                type="number"
+                                                value={col.fieldValue}
+                                                formatter={col.formatterValue}
+                                                step={col.stepValue}
+                                                data-custom-index={col.skuRowCustomIndex}
+                                                onchange={handleCurrencyChange}>
+                                        </lightning-input>
+                                        <label class="custom-error">{col.errorMessage}</label>
+                                        </div>
+                                </template>
+                                <template if:true={col.TextType}>
+                                        <div class="combo-wrapper">
+                                        <label class="custom-label">{col.fieldLabel}</label>
+                                        <lightning-input
+                                                type="text"
+                                                name={col.fieldLabel}
+                                                value={col.fieldValue}
+                                                maxlength={col.lengthOfTextField}
+                                                data-custom-index={col.skuRowCustomIndex}
+                                                onchange={handleTextChange}>
+                                        </lightning-input>
+                                        <label class="custom-error">{col.errorMessage}</label>
+                                        </div>
+                                </template>
+                        </td>
+                        </template>
+                        </tr>
+                        </template>
+                <!-- </div> -->
+                </tbody>                
+                </table>                
+        </template>
+</template>

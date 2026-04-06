@@ -1,0 +1,233 @@
+<apex:page standardController="Case" extensions="CaseTeamExtension" id="pageId" cache="false" standardStylesheets="false" sidebar="false" showheader="false" title="Case: {!Case.CaseNumber} - Rubrik Community" applyBodyTag="false">
+    <!--   
+    Allows portal users to add contacts from within their company to get copied on Case updates.
+     -->
+ <script type="text/javascript">
+        window.onkeypress = handleKeyPress;
+        function handleKeyPress(e) {
+          var eventInstance = window.event ? event : e;       
+          var keyCode = eventInstance.charCode ? eventInstance.charCode : eventInstance.keyCode;    
+          if (keyCode == 13) {
+              saveRec();
+              return false;
+          }
+        }
+    </script>
+    
+    <!--create contact-->
+    <script>
+
+    $(document).on("click","#myReset",function() {
+                //$('#contactModal').modal('hide');
+            });
+
+            //click to save contact data
+            $(document).on("click", "#btnCreateContact", function(event){
+                var fn = document.getElementById("firstname").value;
+                var ln = document.getElementById("lastname").value;
+                var ph = document.getElementById("phone").value;
+                var em = document.getElementById("email").value;
+                var title = document.getElementById("title").value;
+
+                if(em == '' || ln == '' || fn == '' || title == '') {
+                    alert('First Name, Last Name, Email and Title are required.');
+                } else {
+
+                    //calling remote action
+                    ManageUserController.createContact(fn, ln, em, title, ph, function(response,event) {  
+
+                        //$('#contactModal').modal('hide');    
+                        if (event.status ) {
+
+                            //debugger; 
+                            if (response == null || response == '') {
+                                //Reload window and close modal
+                                //$('#contactModal').modal('hide');
+                                 
+                               
+
+                            } else {
+                                //$('#contactModal').modal('hide');
+                                alert(response);
+                                 //location.reload(false);
+
+                            }
+                        } else {
+                            //$('#contactModal').modal('hide');
+                            alert(event.message);
+                            //location.reload(false);
+
+                        }
+                    },{escape:false, buffer: true});
+                }
+            });
+       </script>
+    <!--end create contact-->
+    
+    
+    <script>
+        var intSelectedItemsCount = parseFloat("{!CaseTeamMembersCount}");          
+    </script>   
+    
+    
+    <c:visualstrapblock >
+
+        <!--start header-->
+        <c:siteheader ></c:siteheader>
+        <!--end Header-->
+     <!--start the Container-->
+        <div class="container">
+           <div class="row rowcontainer" >
+              <div class="col-md-12">
+              <c:pageTitle name="Add Colleagues to Case {!Case.CaseNumber}" ></c:pageTitle>
+    
+    <apex:form id="formId">
+    
+        <apex:actionfunction name="save" action="{!saveRec}" rerender="pnlMsg">            
+        </apex:actionFunction>
+    
+        
+        <apex:outputPanel id="pnlMsg">
+            <apex:pageMessages />
+        </apex:outputPanel>    
+ 
+        <center>
+            <apex:outputPanel rendered="{!CaseTeamMembersAll.size == 0}" layout="block" styleClass="required centerText">
+                                            
+            <apex:commandButton action="{!cancel}" value="Cancel" styleClass="btn rubrik-btn" status="busyStatus"/>
+           </apex:outputPanel>
+       </center>
+       
+    
+        <apex:pageBlock rendered="{!CaseTeamMembersAll.size > 0}" id="pbMembers">
+        
+            <apex:outputPanel id="pnlMsg">
+                <apex:pageMessages />
+            </apex:outputPanel>
+
+    
+    
+               <div class="container">
+                <div class="row text-center btnpad">
+                    <div>
+                       <button id="blocds" data-toggle="modal" data-target="#contactModal" class="btn rubrik-btn" style="margin-left: 15px;" type="button">Add New Contact</button>                     
+                       </div>
+                </div>
+            </div>
+    
+
+                <apex:actionStatus id="saveStatus">
+                    <apex:facet name="start">
+                        <apex:outputPanel >&nbsp;
+                        <img src="/img/loading.gif" />
+                        &nbsp;Saving...</apex:outputPanel>
+                    </apex:facet>
+                    <apex:facet name="stop">
+                        <apex:image value="{!URLFOR('/s.gif')}" alt="" style="height:17px;" />
+                    </apex:facet>
+               </apex:actionStatus>             
+      
+
+            
+            <apex:pageBlockSection collapsible="false" id="pbMembersSection"/> 
+                <apex:pageBlockTable value="{!CaseTeamMembersAll}" var="ctma" id="pbMembersTable" columns="3" styleclass="table">
+                
+                    <apex:column styleClass="actionColumn" >
+                        <apex:inputCheckbox value="{!ctma.checked}" id="selected" onclick="javascript:CheckUncheckFacet(this)"/>                                  
+                    </apex:column>
+                
+                    <apex:column >
+                        <apex:facet name="header">First Name</apex:facet>
+                        <apex:outputField value="{!ctma.Contact.FirstName}" />
+                    </apex:column>
+                    
+                    <apex:column >
+                        <apex:facet name="header">Last Name</apex:facet>
+                        <apex:outputField value="{!ctma.Contact.LastName}" />
+                    </apex:column>
+
+                    <apex:column >
+                        <apex:facet name="header">Email</apex:facet>
+                        <apex:outputField value="{!ctma.Contact.Email}" />
+                    </apex:column>
+                    
+                    
+                </apex:pageBlockTable>
+            
+        </apex:pageBlock>
+        
+       <div class="container">
+                <div class="row text-center btnpad">
+                    <div>
+                       <apex:commandButton value="Save" action="{!saveRec}" reRender="pnlMsg" status="saveStatus" styleclass="btn rubrik-btn" />&nbsp;
+                       <apex:commandButton value="Cancel" action="{!Cancel}" immediate="true" styleclass="btn rubrik-btn"/>
+                       </div>
+                </div>
+            </div>
+
+        <apex:outputText value="{!case.AccountId}" rendered="false"/>
+    
+      <!--contact modal-->
+       <!-- Modal -->
+          <div class="modal fade" id="contactModal">
+            <div class="modal-dialog">
+            
+              <!-- Modal content-->
+              <div class="modal-content">
+              
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Contact Details</h4>
+                </div>
+                    <div class="col-xs-12 form-group">
+                       
+                    </div>
+                    <div class="col-xs-12 form-group">
+                        <label>First Name<font color="red">*</font></label>
+                        <apex:inputtext value="{!contact.firstName}" styleclass="form-control" id="firstname"/>
+                    </div>
+                    <div class="col-xs-12 form-group">
+                        <label>Last Name<font color="red">*</font></label>
+                        <apex:inputtext value="{!contact.lastName}" styleclass="form-control" id="lastname"/>
+                    </div>
+                    <div class="col-xs-12 form-group">
+                        <label>Email<font color="red">*</font></label>
+                        <apex:inputtext value="{!contact.Email}" styleclass="form-control" id="email"/>
+                    </div>
+                    <div class="col-xs-12 form-group">
+                        <label>Title<font color="red">*</font></label>
+                        <apex:inputtext value="{!contact.Title}" styleclass="form-control" id="title"/>
+                    </div>
+                    <div class="col-xs-12 form-group">
+                        <label>Phone</label>
+                        <apex:inputtext value="{!contact.Phone}" styleclass="form-control phone" id="phone" onchange="formatPhone(this);"/>
+                    </div>
+
+                    <div class="btn-group" align="center">
+                        <apex:commandButton styleClass="btn rubrik-btn center-block" style="margin-left: 216px;" action="{!saveCon}" title="Save" value="Save"/>                      
+                    </div>
+                    <br></br>
+                    <br></br>
+                    <div class="modal-footer">
+                    </div>
+                 </div>
+              <br></br>
+          </div>
+          <br></br>
+        </div> 
+        <!--end contact modal--> 
+    
+        
+            </apex:form>
+    
+            </div>
+        </div>
+        </div>
+
+       
+     <!--start the footer-->
+        <c:sitefooter ></c:sitefooter>
+        
+    </c:visualstrapblock>           
+                
+</apex:page>

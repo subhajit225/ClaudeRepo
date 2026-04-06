@@ -1,0 +1,13 @@
+<aura:component implements="force:lightningQuickActionWithoutHeader,lightning:actionOverride,force:hasRecordId" access="global">
+    <aura:html tag="style"> 
+        .slds-modal__container { 
+            min-width: 80% !important; 
+        } 
+        .modal-body{
+            min-height: 80% !important;
+        }
+    </aura:html>
+<!--Quick Action LWC component -->
+    <c:assistRequestForm recordId="{!v.recordId}" />
+
+</aura:component>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Cell_Highlight_Override__c</fullName>
+    <description>Created as part of MKT26-1165 to indicate Workload is consuming 85% of Total License Count. Applies only to Telemetry.</description>
+    <externalId>false</externalId>
+    <formula>IF(
+  AND(
+		NOT( ISBLANK( Total_License_Count__c ) ), 
+		(( Automated_Object_Capacity__c  / Total_License_Count__c) &gt; 0.85 )
+	),
+	
+    &quot;#980000&quot;, &quot;&quot;
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Cell Highlight Override</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

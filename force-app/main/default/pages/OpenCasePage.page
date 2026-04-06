@@ -1,0 +1,41 @@
+<apex:page standardController="Case" lightningStylesheets="true" recordSetVar="caseList" extensions="CaseDetailController" >
+    <apex:includeLightning />
+    <apex:slds />
+    <apex:includeScript value="/support/console/47.0/integration.js"/>
+    <style>
+        body{
+        background-color:white !important;
+        }
+    </style>
+    <script type="text/javascript">
+    var IsCalled = 1;
+    var caseIdList;
+    window.onload = function(){
+        openCases();
+    };
+    function openCases() {
+        var caseIds = '{!selectedCaseIds}';
+        caseIdList = caseIds.split("_");
+        for(var i = 0;i<caseIdList.length;i++){
+            sforce.console.openPrimaryTab(null, '/'+caseIdList[i], false, null, openSuccess, null);
+        }
+        
+    };
+    var openSuccess = function openSuccess(result) {
+        if(IsCalled == caseIdList.length){
+            backPage();
+        }
+        IsCalled++;
+    };
+    function backPage() {
+        window.history.back(); 
+    }
+    </script>
+    <div class="demo-only demo-only demo-only_viewport" style="height:6rem;">
+        <div role="status" class="slds-spinner slds-spinner_medium">
+            <span class="slds-assistive-text">Loading</span>
+            <div class="slds-spinner__dot-a"></div>
+            <div class="slds-spinner__dot-b"></div>
+        </div>
+    </div>
+</apex:page>

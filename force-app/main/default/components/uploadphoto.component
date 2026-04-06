@@ -1,0 +1,25 @@
+<apex:component selfClosing="true"
+                controller="CommunityUserPhotoUploadController"
+                allowDML="true">
+        <apex:attribute name="subject" type="Id"
+                    assignTo="{!userId}"
+                    required="true"
+                    description="The User ID for the community user"/>
+    
+                <apex:form >
+                <div class="col-md-1">
+                <div class="col-md-1">
+                    <apex:image value="{!largePhotoUrl}" width="124px" style="align:left; text-align:left;"/>
+                    </div>
+                    <div class="col-md-1 ">
+                    <apex:inputFile value="{!blobValue}"
+                                    contentType="{!contentType}"
+                                    fileName="{!filename}" style="width:82px; font-size:8px; padding:5px; border:0px; padding-left:15px;"/>
+                     </div>
+                     <div class="col-md-1">               
+                    <apex:commandButton value="Upload"
+                                        action="{!upload}" styleclass="btn rubrik-btn"  style="width:100px;"/>
+                </div>
+                </div>
+                </apex:form>
+</apex:component>

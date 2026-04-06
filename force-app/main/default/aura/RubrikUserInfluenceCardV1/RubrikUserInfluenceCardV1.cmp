@@ -1,0 +1,42 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes"
+                controller="RubrikUserInfluenceCardController"
+                access="global" >
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="influenceDetails" type="Map"/>
+    <aura:attribute name="userId" type="String" access="global" />
+    
+    <div class="slds-grid">   
+        <div class="slds-size_1-of-4 slds-m-vertical_large">
+            <div class="slds-text-align_center">
+                <c:RubrikUserInfluenceItemV1 influenceName="{!v.influenceDetails.LikeReceivedIconText}" 
+                                           influenceIcon="{!v.influenceDetails.LikeReceivedIcon}"
+                                           influenceCount="{!v.influenceDetails.LikeReceivedCount}">
+                </c:RubrikUserInfluenceItemV1>
+            </div>
+        </div>
+        <div class="slds-size_1-of-4 slds-m-vertical_large">
+            <div class="slds-text-align_center">
+                <c:RubrikUserInfluenceItemV1 influenceName="{!v.influenceDetails.PostIconText}" 
+                                           influenceIcon="{!v.influenceDetails.PostIcon}"
+                                           influenceCount="{!v.influenceDetails.PostCount}">
+                </c:RubrikUserInfluenceItemV1>
+            </div>
+        </div>
+        <div class="slds-size_1-of-4 slds-m-vertical_large">
+            <div class="slds-text-align_center">
+                <c:RubrikUserInfluenceItemV1 influenceName="{!v.influenceDetails.CommentIconText}" 
+                                           influenceIcon="{!v.influenceDetails.CommentIcon}"
+                                           influenceCount="{!v.influenceDetails.CommentCount}">
+                </c:RubrikUserInfluenceItemV1>
+            </div>
+        </div>
+        <div class="slds-size_1-of-4 slds-m-vertical_large">
+            <div class="slds-text-align_center">
+                <c:RubrikUserInfluenceItemV1 influenceName="{!v.influenceDetails.BestAnswerReceivedIconText}" 
+                                           influenceIcon="{!v.influenceDetails.BestAnswerReceivedIcon}"
+                                           influenceCount="{!v.influenceDetails.BestAnswerReceivedCount}">
+                </c:RubrikUserInfluenceItemV1>
+            </div>
+        </div>
+    </div> 
+</aura:component>

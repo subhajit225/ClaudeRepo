@@ -1,0 +1,510 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" controller="RubrikCommunityLoginController" >
+    <ltng:require scripts="{!$Resource.CryptoJS}" afterScriptsLoaded="{!c.jsLoaded}" />
+    <aura:attribute name="showError" type="Boolean" required="true" description="" default="false" access="private"/>
+    <aura:attribute name="errorMessage" type="String" required="false" description="" access="private"/>
+    <aura:attribute name="startUrl" type="String" required="false" description="The url you go to after a successful login" />
+    <aura:attribute name="usernameLabel" type="String" required="false" default="Username"/>
+    <aura:attribute name="passwordLabel" type="String" required="false" default="Password"/>
+    <aura:attribute name="loginButtonLabel" type="String" required="false" default="Log in"/>
+    <aura:attribute name="expid" type="String" required="false" description="The branding experience ID" />
+
+    <aura:attribute name="randomCipherKey" type="String"/>
+    <aura:attribute name="forgotPasswordLabel" type="String" required="false" default="Forgot your password?"/>
+    <aura:attribute name="selfRegisterLabel" type="String" required="false" default="Register for a login?"/>
+    <aura:attribute name="forgotPasswordUrl" type="String" required="false" default="/ForgotPassword"/>
+    <aura:attribute name="selfRegisterUrl" type="String" required="false" default="/SelfRegister"/>
+
+    <aura:attribute name="showModal" type="Boolean" access="private" default="false"/>
+    <aura:attribute name="message" type="String" access="private" default="false"/>
+    <aura:attribute name="isUsernamePasswordEnabled" type="Boolean" access="private"/>
+    <aura:attribute name="isSelfRegistrationEnabled" type="Boolean" access="private" default="true"/>
+    <aura:attribute name="communityForgotPasswordUrl" type="String" access="private"/>
+    <aura:attribute name="communitySelfRegisterUrl" type="String" access="private"/>
+
+    <aura:registerevent name="sitePropagatedStartUrl" type="c:setStartUrl"/>
+    <aura:handler name="init" value="{!this}" action="{!c.initialize}"/>
+    <aura:dependency resource="c:setStartUrl" type="EVENT"/>
+    <aura:dependency resource="siteforce:registerQueryEventMap" type="EVENT"/>
+    <aura:handler event="c:setStartUrl" action="{!c.setStartUrl}"/>
+    <aura:handler event="c:setExpId" action="{!c.setExpId}"/>
+    <aura:dependency resource="c:setExpId" type="EVENT"/>
+
+    <!-- Okta attributes -->
+    <aura:attribute name="oktaAttributes" type="Object" access="private"/>
+    <aura:attribute name="customerPortalURL" type="String" access="private"/>
+    <aura:attribute name="partnerPortalURL" type="String" access="private"/>
+
+    <div class="slds-size_1-of-1 slds-wrap">
+        <div class="slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12  nopad" style="background-color: #2E4E52">
+            <div class="container">
+                <div class="slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12 ">
+                    <div class="slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12 " style="Padding:20px 15px;">
+                        <span class="block">
+                            <img src="{!$Resource.RubrikCustomerCommunity+'/RubrikCommunity/Images/logo.png'}" styleClass="headerlogo text-left" />
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12  nopad" style="{!'background-image: url('+$Resource.RubrikCustomerCommunity+'/RubrikCommunity/Images/NewBanner.png);background-repeat: no-repeat;background-size: cover;'}">
+            <div class="container">
+                <div class="slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12 ">
+                    <div class="slds-grid slds-wrap slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12  loginBlock">
+                        <div class="slds-large-size_7-of-12 slds-medium-size_7-of-12 slds-small-size_12-of-12 slds-x-small-size_12-of-12 nopad leftBlockLogin">
+                            <div class="slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12  nopad paragraph">
+                                <p class="paragraphHeading">World-Class 24/7 Support Committed to Your Success</p>
+                                <p class="Paragraph">
+                                    Rubrik provides around-the-clock support and customized support to deliver the best customer experience. Our highly experienced Support Engineers deliver proactive, real-time professional services 24/7 to increase your stability, efficiency, and effectiveness. If you have a question, we have an answer.
+                                </p>
+                                <a class="rubrik-btn rubrik-btn--main  " target="_blank" href="{!$Label.c.Download_Data_Sheet_Link}" title="Download Data Sheet"> Download Data Sheet </a>
+                            </div>
+                        </div>
+                        <div class="slds-large-size_5-of-12 slds-medium-size_5-of-12 slds-small-size_12-of-12 slds-x-small-size_12-of-12 nopad rightBlockLogin" style="">
+                            <div class="Absolute-Center is-Responsive">
+                                <div style="text-align:center;">
+                                    <h2 Class="loginHeading">
+                                        Log In to Support Portal
+                                    </h2>
+                                </div>
+
+                                <aura:if isTrue="{!v.oktaAttributes.Disable_User_Sync__c}">
+                                <div class="login-form-group">
+                                    <label>{!v.usernameLabel} </label>
+                                    <lightning:input name="input1"   aura:id="username"  class="inputrubrik"/>
+                                </div>
+                                    <b>Important: </b>Starting on October 7, 2023, customers and partners must perform a password reset to activate Rubrik One Passport logins, which provides a single sign-on experience for the Rubrik Support Portal and Rubrik Partner Portal.<br/><br/>
+                                <div  class="login-form-group">
+                                    <label>{!v.passwordLabel}  </label>
+                                    <div onkeypress="{!c.onKeyUp}">
+                                        <lightning:input name="input2"  type="password"  aura:id="password"   class="inputrubrik"/>
+                                    </div>
+                                </div>
+
+                                <div class="rubrikcheckbox">
+                                    <input type="checkbox" style="width: 18px;height: 18px;-webkit-tap-highlight-color: transparent;" name="hasRememberUn" id="hasRememberUn" />
+                                    <label for="hasRememberUn" class="labelsRem">Remember me</label>
+                                </div>
+                                </aura:if>
+
+                                <lightning:button variant="brand" title="Brand action" label="{!v.loginButtonLabel}" class="rubrik-btn btnClass"  onclick="{!c.handleLogin}"  />
+
+                                <div  class="login-form-group new-user" style="text-align: center;">
+                                    <span>
+                                        <a class="countryPH2" href="{!if(v.communitySelfRegisterUrl == null, v.selfRegisterUrl, v.communitySelfRegisterUrl)}">&nbsp;{!v.selfRegisterLabel}&nbsp;|&nbsp;</a>
+                                        <a class="countryPH2" href="{!if(v.communityForgotPasswordUrl == null, v.forgotPasswordUrl, v.communityForgotPasswordUrl)}" >{!v.forgotPasswordLabel}&nbsp;|&nbsp;</a>
+                                        <a class="countryPH2" target="_blank" href="{!$Resource.SupportCommunityTermsAndConditions + '#view=FitH'}">Terms &amp; Conditions&nbsp;|&nbsp;</a>
+                                        <a class="countryPH2" target="_blank" href="{!v.partnerPortalURL}">Partner Portal</a>
+
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12 slds-x-small-size_12-of-12 nopad containerCustomerService" id="awards">
+            <div class="container">
+                <center>
+                    <h1 class="customerServiceHeading">
+                        Award-winning Customer Service
+                    </h1>
+
+                    <p class="customerServiceParagraph">
+                        Rubrik is a recognized leader in customer satisfaction. Rubrik support professionals carry industry certifications in relevant enterprise applications with several years of highly trained experience. Along with our support portal, we deliver a comprehensive set of resources to ensure mutual success.
+                    </p>
+                </center>
+                <div class=" slds-wrap slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12 slds-x-small-size_12-of-12 slds-align_absolute-center">
+
+                        <div class="slds-wrap slds-grid slds-large-size_6-of-12 slds-medium-size_6-of-12 slds-small-size_12-of-12 slds-x-small-size_12-of-12 nopad imageBox">
+                            <div class="slds-large-size_4-of-12 slds-medium-size_4-of-12 col-sm-4 col-xs-4 nopad" style="padding-right: 15px;">
+                                <img src="{!$Resource.RubrikCustomerCommunity+'/RubrikCommunity/Images/logo-support.jpg'}" styleClass="img-responsive text-left" />
+                            </div>
+                            <div class="slds-large-size_8-of-12 slds-medium-size_8-of-12 slds-small-size_8-of-12 slds-x-small-size_8-of-12 nopad">
+                                <h3 class="imageHeading">
+                                    NorthFace ScoreBoard Award
+                                </h3>
+                                <p class="imagePara">
+                                    Awarded 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, and 2024 as demonstration of our commitment to service excellence and consistently exceeding customers’ expectations.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="slds-wrap slds-grid slds-large-size_6-of-12 slds-medium-size_6-of-12 slds-small-size_12-of-12 slds-x-small-size_12-of-12 imageBox" style="margin-left:19px">
+                            <div class="slds-large-size_4-of-12 slds-medium-size_4-of-12 col-sm-4 col-xs-4 nopad" style="padding-right: 15px;">
+                                <img src="{!$Resource.RubrikCustomerCommunity+'/RubrikCommunity/Images/logo-the-association.jpg'}" styleClass="img-responsive text-left" />
+                            </div>
+                            <div class="slds-large-size_8-of-12 slds-medium-size_8-of-12 slds-small-size_8-of-12 slds-x-small-size_8-of-12 nopad">
+                                <h3 class="imageHeading">
+                                    Association of Support Professionals
+                                </h3>
+                                <p class="imagePara">
+                                    Awarded 2017 and 2019 as one of the Top Ten Best Support Websites where each site is scored by independent judges in 25 different areas.
+                                </p>
+                            </div>
+                        </div>
+
+
+                        <div class="slds-wrap slds-grid slds-large-size_6-of-12 slds-medium-size_6-of-12 slds-small-size_12-of-12 slds-x-small-size_12-of-12 imageBox" >
+                            <div class="slds-large-size_4-of-12 slds-medium-size_4-of-12 col-sm-4 col-xs-4 nopad" style="padding-right: 15px;">
+                                <img src="{!$Resource.RubrikCustomerCommunity+'/RubrikCommunity/Images/CEMPRO_Logo.jpg'}" styleClass="img-responsive text-left" />
+                            </div>
+                            <div class="slds-large-size_8-of-12 slds-medium-size_8-of-12 slds-small-size_8-of-12 slds-x-small-size_8-of-12 nopad">
+                                <h3 class="imageHeading">
+                                    CEMPRO
+                                </h3>
+                                <p class="imagePara">
+                                    Certified CEM Professional training demonstrates mastery of best practices and standards of excellence in implementing customer satisfaction initiatives.
+                                </p>
+                            </div>
+                        </div>
+                    	<div class="slds-wrap slds-grid slds-large-size_6-of-12 slds-medium-size_6-of-12 slds-small-size_12-of-12 slds-x-small-size_12-of-12 imageBox" style="margin-left:19px">
+                            <div class="slds-large-size_4-of-12 slds-medium-size_4-of-12 col-sm-4 col-xs-4 nopad" style="padding-right: 15px;">
+                                <img src="{!$Resource.RubrikCustomerCommunity+'/RubrikCommunity/Images/NPSScore.png'}" styleClass="img-responsive text-left" />
+                            </div>
+                            <div class="slds-large-size_8-of-12 slds-medium-size_8-of-12 slds-small-size_8-of-12 slds-x-small-size_8-of-12 nopad">
+                                <h3 class="imageHeading">
+                                    Net Promoter Score of 83
+                                </h3>
+                                <p class="imagePara">
+                                    Industry-leading score audited and certified in 2024 by Customer Relationship Management Institute and recognized with the prestigious NorthFace ScoreBoard Award.
+                                </p>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+        <div class="slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12 slds-x-small-size_12-of-12 nopad globalSupportBlock">
+            <div class="container slds-wrap slds-grid ">
+                <div class="slds-large-size_4-of-12 slds-medium-size_4-of-12 slds-small-size_12-of-12 slds-x-small-size_12-of-12 nopad">
+                    <center>
+                        <div class="imageWrapper">
+                            <img src="{!$Resource.RubrikCustomerCommunity+'/RubrikCommunity/SVG/Icon_24hourService.svg'}" Class="img-responsive text-left" />
+                        </div>
+                        <h3 class="imageWrapperHeading" >
+                            24/7 Service
+                        </h3>
+                        <p class="imageWrapperDescription">
+                            Enterprise-class technical support provided 24/7, every day of the year.
+                        </p>
+                    </center>
+                </div>
+                <div class="slds-large-size_4-of-12 slds-medium-size_4-of-12 slds-small-size_12-of-12 slds-x-small-size_12-of-12 nopad">
+                    <center>
+                        <div class="imageWrapper">
+                            <img src="{!$Resource.RubrikCustomerCommunity+'/RubrikCommunity/SVG/Icon-globalsupport.svg'}" Class="img-responsive text-left" />
+                        </div>
+                        <h3 class="imageWrapperHeading" >
+                            Global Support
+                        </h3>
+                        <p class="imageWrapperDescription">
+                            Employee-based support engineers trained to meet the needs of any organization.
+                        </p>
+                    </center>
+                </div>
+                <div class="slds-large-size_4-of-12 slds-medium-size_4-of-12 slds-small-size_12-of-12 slds-x-small-size_12-of-12 nopad">
+                    <center>
+                        <div class="imageWrapper">
+                            <img src="{!$Resource.RubrikCustomerCommunity+'/RubrikCommunity/SVG/icon-real-time-monitoring.svg'}" styleClass="img-responsive text-left" />
+                        </div>
+                        <h3 class="imageWrapperHeading" >
+                            Real-Time Monitoring
+                        </h3>
+                        <p class="imageWrapperDescription">
+                            Proactive monitoring of events and alerts to ensure high performance of your Rubrik.
+                        </p>
+                    </center>
+                </div>
+            </div>
+        </div>
+        <div class="slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12 slds-x-small-size_12-of-12 nopad serviceBlock">
+            <div class="container">
+
+            <div class="serviceTextBlck slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12 slds-x-small-size_12-of-12" >
+                <h2 class="serviceBlockHeading" >
+                    Maximize Your Return with Add-On Services
+                </h2>
+            </div>
+            <div class="slds-wrap slds-grid containerSVG slds-grid_align-center">
+
+                <div class="slds-large-size_4-of-12 slds-medium-size_4-of-12 slds-small-size_12-of-12 slds-x-small-size_12-of-12 gradientBox" style="padding-left:19px;padding-right:19px;background-image: linear-gradient(213deg, #00cbde, #00b2c2);">
+                    <center>
+                        <div class="topToGradient">
+                            <img src="{!$Resource.RubrikCustomerCommunity+'/RubrikCommunity/SVG/svg1.svg'}" class="baseSVG text-left" />
+                            <img src="{!$Resource.RubrikCustomerCommunity+'/RubrikCommunity/SVG/1_icon.svg'}" class=" bimage img-responsive serviceBlockImage text-left" />
+                        </div>
+                        <h3 class="gradientHeading">
+                            Proactive Add-On Support
+                        </h3>
+                        <p class="gradientPara">
+                            Proactive health monitoring and a designated point of contact to call on top of your premium support.
+                        </p>
+                        <a style="    margin-top: 4rem;" class="rubrikbtn1 rubrikbtn rubrik-btn rubrik-btn--main rubrikFirstGradientButton" target="_blank" href="https://www.rubrik.com/wp-content/uploads/2018/03/DATA-SHEET-Rubrik-Proactive-Add-On-Support-Program.pdf" title="DOWNLOAD DATA SHEET"> DOWNLOAD DATA SHEET </a>
+                    </center>
+                </div>
+
+                <!-- CS21-1219
+                    Space between rubrik- -btn and rubrik-btn- -main needs to be removed before uncommenting this div
+
+                    <div class="slds-large-size_4-of-12 slds-medium-size_4-of-12 slds-small-size_12-of-12 slds-x-small-size_12-of-12 gradientBox" style="padding-left:19px;padding-right:19px;background-image: linear-gradient(213deg, #517088, #283d50);">
+                    <center style="">
+                        <div class="topToGradient">
+                            <img src="{!$Resource.RubrikCustomerCommunity+'/RubrikCommunity/SVG/svg2.svg'}"  class="baseSVG text-left" />
+                            <img src="{!$Resource.RubrikCustomerCommunity+'/RubrikCommunity/SVG/2_icon.svg'}" class=" bimage img-responsive serviceBlockImage text-left" />
+                        </div>
+                        <h3 class="gradientHeading">
+                            Enterprise Add-On Support
+                        </h3>
+                        <p class="gradientPara">
+                            All of the benefits of Proactive add-on support plus your own dedicated senior support engineer with an in-depth knowledge of your environment.
+                        </p>
+                        <a class="rubrik- -btn rubrik-btn rubrik-btn- -main " id="middleButton" target="_blank" href="https://www.rubrik.com/wp-content/uploads/2018/03/DATA-SHEET-Rubrik-Enterprise-Add-On-Support-Program.pdf" title="DOWNLOAD DATA SHEET"> DOWNLOAD DATA SHEET </a>
+                   </center>
+                </div>-->
+                <div class="slds-large-size_4-of-12 slds-medium-size_4-of-12 slds-small-size_12-of-12 slds-x-small-size_12-of-12 gradientBox" style="padding-left:19px;background-image: linear-gradient(213deg, #1898cd, #1487b4);">
+                    <center>
+                        <div class="topToGradient">
+                            <img src="{!$Resource.RubrikCustomerCommunity+'/RubrikCommunity/SVG/svg3.svg'}"  class="baseSVG text-left" />
+                            <img src="{!$Resource.RubrikCustomerCommunity+'/RubrikCommunity/SVG/3_icon.svg'}" class=" bimage img-responsive serviceBlockImage text-left" />
+                        </div>
+                        <h3 class="gradientHeading">
+                            Consulting Services
+                        </h3>
+                        <p class="gradientPara">
+                            Comprehensive portfolio of installation services to help your organization optimize deployment and realize full benefits of API integrations.
+                        </p>
+                        <a class="rubrikbtn1 rubrikbtn rubrik-btn rubrik-btn--main" style="padding: 15px 20px;" target="_blank" href="https://www.rubrik.com/wp-content/uploads/2018/03/DATA-SHEET-Rubrik-and-Certified-Partners-Consulting-Services.pdf" title="DOWNLOAD DATA SHEET"> DOWNLOAD DATA SHEET </a>
+                    </center>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12 slds-x-small-size_12-of-12 nopad getInTouchBlock">
+            <div class="slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12 slds-x-small-size_12-of-12">
+                <center>
+                    <h2 class="getInTouchHeading">
+                        Get In Touch
+                    </h2>
+                    <p Class="getInTouchPara">Call us by dialing any of the numbers below, or email us at <a id="contact-numbers" class="countryPH" style="font-family:gotham-Light;color: #009DAC;" href="mailto:support@rubrik.com">support@rubrik.com</a></p>
+                </center>
+            </div>
+            <div class="container slds-wrap slds-grid ">
+                <div class="slds-large-size_4-of-12 slds-medium-size_4-of-12 col-sm-6 slds-x-small-size_12-of-12 countryBlock">
+                    <center>
+                        <img src="{!$Resource.RubrikCustomerCommunity+'/RubrikCommunity/SVG/flag-w-w.svg'}" styleClass="img-responsive countryFlag" />
+                        <h4 class="countryBlockHeading">International</h4>
+                        <p>
+                            <a class="countryPH" href="tel:+18009209354">+1 800-920-9354</a>
+                        </p>
+                    </center>
+                </div>
+                <div class="slds-large-size_4-of-12 slds-medium-size_4-of-12 col-sm-6 slds-x-small-size_12-of-12 countryBlock">
+                    <center>
+                        <img src="{!$Resource.RubrikCustomerCommunity+'/RubrikCommunity/SVG/u-s.svg'}" styleClass="img-responsive countryFlag" />
+                        <h4 class="countryBlockHeading">United States</h4>
+                        <p>
+                            <a class="countryPH" href="tel:+18009975896">+1 800-997-5896</a>
+                        </p>
+                    </center>
+                </div>
+                <div class="slds-large-size_4-of-12 slds-medium-size_4-of-12 col-sm-6 slds-x-small-size_12-of-12 countryBlock">
+                    <center>
+                        <img src="{!$Resource.RubrikCustomerCommunity+'/RubrikCommunity/SVG/fed.svg'}" styleClass="img-responsive countryFlag" />
+                        <h4 class="countryBlockHeading">U.S. Federal Team</h4>
+                        <p>
+                            <a class="countryPH" href="tel:+18004598390">+1 800-459-8390</a>
+                        </p>
+                    </center>
+                </div>
+                <div class="slds-large-size_4-of-12 slds-medium-size_4-of-12 col-sm-6 slds-x-small-size_12-of-12 countryBlock">
+                    <center>
+                        <img src="{!$Resource.RubrikCustomerCommunity+'/RubrikCommunity/SVG/a-u.svg'}" styleClass="img-responsive countryFlag" />
+                        <h4 class="countryBlockHeading">Australia</h4>
+                        <p>
+                            <a class="countryPH" href="tel:+611800029982">+61 1800-029-982</a>
+                        </p>
+                    </center>
+                </div>
+                <div class="slds-large-size_4-of-12 slds-medium-size_4-of-12 col-sm-6 slds-x-small-size_12-of-12 countryBlock">
+                    <center>
+                        <img src="{!$Resource.RubrikCustomerCommunity+'/RubrikCommunity/SVG/br.svg'}" styleClass="img-responsive countryFlag" />
+                        <h4 class="countryBlockHeading">Brazil</h4>
+                        <p>
+                            <a class="countryPH" href="tel:+558007617020">+55 800-761-7020</a>
+                        </p>
+                    </center>
+                </div>
+                <div class="slds-large-size_4-of-12 slds-medium-size_4-of-12 col-sm-6 slds-x-small-size_12-of-12 countryBlock">
+                    <center>
+                        <img src="{!$Resource.RubrikCustomerCommunity+'/RubrikCommunity/SVG/cl.svg'}" styleClass="img-responsive countryFlag" />
+                        <h4 class="countryBlockHeading">Chile</h4>
+                        <p>
+                            <a class="countryPH" href="tel:+56800719943">+56 800-719-943</a>
+                        </p>
+                    </center>
+                </div>
+                <div class="slds-large-size_4-of-12 slds-medium-size_4-of-12 col-sm-6 slds-x-small-size_12-of-12 countryBlock">
+                    <center>
+                        <img src="{!$Resource.RubrikCustomerCommunity+'/RubrikCommunity/SVG/France_Flag.png'}" styleClass="img-responsive countryFlag" />
+                        <h4 class="countryBlockHeading">France</h4>
+                        <p>
+                            <a class="countryPH" href="tel:+33805220697">+33 805-220-697</a>
+                        </p>
+                    </center>
+                </div>
+                <div class="slds-large-size_4-of-12 slds-medium-size_4-of-12 col-sm-6 slds-x-small-size_12-of-12 countryBlock">
+                    <center>
+                        <img src="{!$Resource.RubrikCustomerCommunity+'/RubrikCommunity/SVG/Flag_of_Germany.svg'}" styleClass="img-responsive countryFlag" style="width:28px;"/>
+                        <h4 class="countryBlockHeading">Germany</h4>
+                        <p>
+                            <a class="countryPH" href="tel:+498001808335">+49 800-180-8335</a>
+                        </p>
+                    </center>
+                </div>
+                <div class="slds-large-size_4-of-12 slds-medium-size_4-of-12 col-sm-6 slds-x-small-size_12-of-12 countryBlock">
+                    <center>
+                        <img src="{!$Resource.RubrikCustomerCommunity+'/RubrikCommunity/SVG/india.svg'}" styleClass="img-responsive countryFlag" />
+                        <h4 class="countryBlockHeading">India</h4>
+                        <p>
+                            <a class="countryPH" href="tel:0008000404685 ">0008000404685 </a>
+                        </p>
+                    </center>
+                </div>
+                <div class="slds-large-size_4-of-12 slds-medium-size_4-of-12 col-sm-6 slds-x-small-size_12-of-12 countryBlock">
+                    <center>
+                        <img src="{!$Resource.RubrikCustomerCommunity+'/RubrikCommunity/SVG/ireland.svg'}" styleClass="img-responsive countryFlag" />
+                        <h4 class="countryBlockHeading">Ireland</h4>
+                        <p>
+                            <a class="countryPH" href="tel:1800851597">1800-851-597</a>
+                        </p>
+                    </center>
+                </div>
+                <div class="slds-large-size_4-of-12 slds-medium-size_4-of-12 col-sm-6 slds-x-small-size_12-of-12 countryBlock">
+                    <center>
+                        <img src="{!$Resource.RubrikCustomerCommunity+'/RubrikCommunity/SVG/Flag_of_Israel.svg'}" styleClass="img-responsive countryFlag" style="width:28px;"/>
+                        <h4 class="countryBlockHeading">Israel</h4>
+                        <p>
+                            <a class="countryPH" href="tel:1809469985">1809-469-985</a>
+                        </p>
+                    </center>
+                </div>
+                <div class="slds-large-size_4-of-12 slds-medium-size_4-of-12 col-sm-6 slds-x-small-size_12-of-12 countryBlock">
+                    <center>
+                        <img src="{!$Resource.RubrikCustomerCommunity+'/RubrikCommunity/SVG/j-p.svg'}" styleClass="img-responsive countryFlag" />
+                        <h4 class="countryBlockHeading">Japan</h4>
+                        <p>
+                            <a class="countryPH" href="tel:+815068625141">+81 506-862-5141</a>
+                        </p>
+                    </center>
+                </div>
+                 <div class="slds-large-size_4-of-12 slds-medium-size_4-of-12 col-sm-6 slds-x-small-size_12-of-12 countryBlock">
+                    <center>
+                        <img src="{!$Resource.RubrikCustomerCommunity+'/RubrikCommunity/SVG/malaysia.svg'}" styleClass="img-responsive countryFlag" style="width:28px;"/>
+                        <h4 class="countryBlockHeading">Malaysia</h4>
+                        <p>
+                            <a class="countryPH" href="tel:+601800805164">+60 1800-805-164</a>
+                        </p>
+                    </center>
+                </div>
+                 <div class="slds-large-size_4-of-12 slds-medium-size_4-of-12 col-sm-6 slds-x-small-size_12-of-12 countryBlock">
+                    <center>
+                        <img src="{!$Resource.RubrikCustomerCommunity+'/RubrikCommunity/SVG/mx.svg'}" styleClass="img-responsive countryFlag" />
+                        <h4 class="countryBlockHeading">Mexico</h4>
+                        <p>
+                            <a class="countryPH" href="tel:+528003230940">+52 800-323-0940</a>
+                        </p>
+                    </center>
+                </div>
+
+                <div class="slds-large-size_4-of-12 slds-medium-size_4-of-12 col-sm-6 slds-x-small-size_12-of-12 countryBlock">
+                    <center>
+                        <img src="{!$Resource.RubrikCustomerCommunity+'/RubrikCommunity/SVG/n-l.svg'}" styleClass="img-responsive countryFlag" />
+                        <h4 class="countryBlockHeading">Netherlands</h4>
+                        <p>
+                            <a class="countryPH" href="tel:+318002352265">+31 800-235-2265</a>
+                        </p>
+                    </center>
+                </div>
+
+
+                <div class="slds-large-size_4-of-12 slds-medium-size_4-of-12 col-sm-6 slds-x-small-size_12-of-12 countryBlock">
+                    <center>
+                        <img src="{!$Resource.RubrikCustomerCommunity+'/RubrikCommunity/SVG/n-z.svg'}" styleClass="img-responsive countryFlag" />
+                        <h4 class="countryBlockHeading">New Zealand</h4>
+                        <p>
+                            <a class="countryPH" href="tel:+64800234510">+64 800-234-510</a>
+                        </p>
+                    </center>
+                </div>
+
+                <div class="slds-large-size_4-of-12 slds-medium-size_4-of-12 col-sm-6 slds-x-small-size_12-of-12 countryBlock">
+                    <center>
+                        <img src="{!$Resource.RubrikCustomerCommunity+'/RubrikCommunity/SVG/s-g.svg'}" styleClass="img-responsive countryFlag" />
+                        <h4 class="countryBlockHeading">Singapore</h4>
+                        <p>
+                            <a class="countryPH" href="tel:+658003211410">+65 800-321-1410</a>
+                        </p>
+                    </center>
+                </div>
+                <div class="slds-large-size_4-of-12 slds-medium-size_4-of-12 col-sm-6 slds-x-small-size_12-of-12 countryBlock">
+                    <center>
+                        <img src="{!$Resource.RubrikCustomerCommunity+'/RubrikCommunity/SVG/Flag_of_Switzerland.svg'}" styleClass="img-responsive countryFlag" style="width:28px;"/>
+                        <h4 class="countryBlockHeading">Switzerland</h4>
+                        <p>
+                            <a class="countryPH" href="tel:+41800001699">+41 800-001-699</a>
+                        </p>
+                    </center>
+                </div>
+                <div class="slds-large-size_4-of-12 slds-medium-size_4-of-12 col-sm-6 slds-x-small-size_12-of-12 countryBlock">
+                    <center>
+                        <img src="{!$Resource.RubrikCustomerCommunity+'/RubrikCommunity/SVG/flag-w-w.svg'}" styleClass="img-responsive countryFlag" />
+                        <h4 class="countryBlockHeading">United Arab Emirates</h4>
+                        <p>
+                            <a class="countryPH" href="tel:0180006512051">0800-0651-2051</a>
+                        </p>
+                    </center>
+                </div>
+                <div class="slds-large-size_4-of-12 slds-medium-size_4-of-12 col-sm-6 slds-x-small-size_12-of-12 countryBlock">
+                    <center>
+                        <img src="{!$Resource.RubrikCustomerCommunity+'/RubrikCommunity/SVG/g-b.svg'}" styleClass="img-responsive countryFlag" />
+                        <h4 class="countryBlockHeading">United Kingdom</h4>
+                        <p>
+                            <a class="countryPH" href="tel:+448000324510">+44 800-032-4510</a>
+                        </p>
+                    </center>
+                </div>
+            </div>
+        </div>
+        <div class="slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12 slds-x-small-size_12-of-12 nopad lastBlock">
+            <div class="container text-center">
+                <h2 class="lastBlockHeading">Don’t Backup. <strong>Go Forward.</strong></h2>
+                <p class="lastBlockPara">
+                    All Your Apps. Instantly Available.
+                </p>
+                <a class="rubrik-btn rubrik-btn--main" target="_blank" href="http://pages.rubrik.com/Web-Evaluate-Rubrik-Request.html" title=""> Try Rubrik </a>
+            </div>
+        </div>
+    </div>
+
+    <aura:if isTrue="{!v.showError}">
+        <div class="demo-only" style="height: 640px;">
+            <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header slds-modal__header_empty">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.closeModal}">
+                            <lightning:icon iconName="action:remove" alternativeText="Approved" size="xx-small"/>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <p>{!v.errorMessage}</p>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <button class="slds-button slds-button_neutral"  onclick="{!c.closeModal}">Close</button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </aura:if>
+</aura:component>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Type_of_Comment__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(ISBLANK(Community_Feed__c ), &apos; &apos;,  IF( ISBLANK(Community_Feed__r.ParentId__c),&apos;Direct&apos; , &apos;Indirect&apos;) )</formula>
+    <label>Type of Comment</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

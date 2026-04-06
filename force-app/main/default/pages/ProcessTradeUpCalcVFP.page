@@ -1,0 +1,21 @@
+<apex:page standardcontroller="SBQQ__Quote__c" showHeader="false" sidebar="false" >
+    <apex:includeLightning /> 
+    <div id="lightning" />
+    <script type="text/javascript">
+    //var recordId= "{!$CurrentPage.parameters.newid}";
+    var recordId= "{!$CurrentPage.parameters.Id}";
+     
+    console.log('RecordId-->',recordId);
+    $Lightning.use("c:ProcessTradeUpCalcApp", function() {
+        console.log('called-->');
+        $Lightning.createComponent("c:ProcessTradeUpCalc", {
+            "recordId" :"{!$CurrentPage.parameters.Id}"
+        }, 
+                                   "lightning",
+                                   function(cmp) {
+                                       console.log('Component Loaded');
+                                   });
+    });
+  </script>
+
+</apex:page>

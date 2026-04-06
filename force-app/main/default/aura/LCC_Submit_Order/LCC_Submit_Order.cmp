@@ -1,0 +1,66 @@
+<aura:component  controller="LCC_ButtonsController" extends="c:LCC_GenericLightningComponent"       
+                implements="force:hasRecordId,force:lightningQuickActionWithoutHeader"> 
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="sObjectInfoClone" type="Object" />
+    <aura:attribute name="orderObjInfo" type="Object" />
+    <aura:attribute name="sObjectInfoFromLds" type="Object" />
+    <aura:attribute name="sObjectInfoOrderItem" type="List" />
+    <aura:attribute name="simpleRecord" type="Object" access="global"/>  
+    <aura:attribute name="recordError" type="String"/>
+    <aura:attribute name="iscoterm" type="Boolean" default="false"/>
+    <aura:attribute name="distiname" type="String" />	
+    <aura:attribute name="content" type="String"/>
+    <aura:attribute name="isBillToNameSame" type="Boolean" default="true"/>
+    <aura:attribute name="isOrderAndPOAmountSame" type="Boolean" default="true"/> 
+    <aura:attribute name="thresholdAmount" type="Decimal"/>
+    <aura:attribute name="isAdditionalTermFlag" type="Boolean" default="false"/>
+    <aura:attribute name="showok" type="Boolean" default="false"/>
+    <aura:attribute name="showcancel" type="Boolean" default="false"/>
+    <aura:attribute name="OrderInternalStage" type="String"/>
+    <aura:attribute name="spinner" type="boolean" default="FALSE"/>
+    <aura:attribute name="rcdmattr" type="String" />
+    <aura:attribute name="mapqli" type="Map" default="{}"/>
+    <aura:attribute name="allQli" type="List" />
+    <aura:attribute name="mapOfLicenceWithAllLinesSU" type="Map" default="{}"/>
+    <aura:attribute name="mapOfHrdwareWithAccessoriesAndLines" type="Map" default="{}"/>
+    <aura:attribute name="collectAllParentChildOnQuote" type="Map" default="{}"/>
+     <aura:attribute name="submitPhantomOrder" type="Boolean" default="false"/>
+    
+    <lightning:workspaceAPI aura:id="workspace"/>
+    
+    <force:recordData aura:id="recordLoader"
+      recordId="{!v.recordId}"        
+      targetRecord="{!v.simpleRecord}"
+      targetFields="{!v.sObjectInfoFromLds}"      
+      targetError="{!v.recordError}"
+      fields = "Id,Ship_to_Email__c,RecordType.Name,SBQQ__Quote__r.OpportunitySubType__c,Associated_Order_Numbers__c,Opportunity.StageName,SBQQ__Quote__r.SBQQ__Type__c,Stage_PO__c,Status,ShipToContactName__c,SBQQ__Quote__r.Name,Is_RWD_Polaris_Quote__c,SBQQ__Quote__c, Bill_To_Name__c,ManualFulfilment__c,is_Amendment_Order__c,Line_Types__c,Order_Sub_Type__c,Order_Status__c,Type,PoDate,Is_CPQ_Price_Book__c,SBQQ__PriceCalcStatus__c,Hold_Code__c,TotalAmount,Change_Needed_Reason_Other__c,ShippingStreet,ShippingPostalCode,Shipping_Carrier__c,Ship_To_Phone_Number__c,Have_Hardware_Products__c,
+                Service_Level__c,ShippingCountry,Auto_Manual_Split__c,Reason_For_Split__c,ShippingCountryCode,ShippingStateCode,ShippingCity,PoNumber,End_User_PO__c,Ship_To_Name__c,Payment_Terms__c,Shipping_Method__c,Shipping_Account_Number__c, Quote_RCDM_T_EOL_Date__c,Memo__c, Internal_Order_Stage__c,OpportunityId,Order_Split_Type__c,CreatedDate,customer_required_ship_date__c,Opportunity.Opportunity_Sub_Type__c"                          
+      mode="EDIT"
+      recordUpdated="{!c.handleRecordUpdated}"                
+    />   
+
+    <!--loading spinner start--> 
+    <aura:if isTrue="{!v.spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading...</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    <!-- Loading spinner end-->   
+    
+    
+   <div class="slds-p-top_large slds-align_absolute-center">
+       <lightning:formattedRichText value="{!v.content}"/>
+    </div>
+	 <aura:if isTrue="{!v.showcancel}">
+        <div class="slds-p-top_large slds-align_absolute-center">
+            <aura:if isTrue="{!v.showok}">
+            	<lightning:button variant="brand" label="Ok"  onclick="{! c.handleClick }"/>
+            </aura:if>
+            <lightning:button variant="brand" label="Cancel"  onclick="{! c.handleCancel }"/>
+        </div>  
+    </aura:if>   
+</aura:component>

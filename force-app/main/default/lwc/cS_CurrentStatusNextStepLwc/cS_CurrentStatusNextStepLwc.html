@@ -1,0 +1,89 @@
+<template>
+    <div class="slds-grid slds-wrap slds-size_12-of-12">
+        <div class="slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12">
+            <lightning-card>
+                <div class="CSNS_highlightFields slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12 slds-p-horizontal_x-small" style="font-size: 1rem;">
+                    <template if:true={isCollapsed}>
+                        <lightning-icon icon-name="utility:chevronright" onclick={toggleSectionHeader} class="slds-icon_container slds-p-left_xx-small slds-float_left" size="xx-small" style="padding:3px 3px 0 0;"></lightning-icon>
+                    </template>
+                    <template if:false={isCollapsed}>
+                        <lightning-icon icon-name="utility:chevrondown" onclick={toggleSectionHeader} class="slds-icon_container slds-p-left_xx-small slds-float_left" size="xx-small" style="padding:3px 3px 0 0;"></lightning-icon>
+                    </template>
+                    <span class="slds-truncate" style="font-weight:bold;font-size:1rem;">Current Status And Next Step Section</span>
+                    <template if:true={isEditable}>
+                        <button type="button" title="Current Status" onclick={openEditModal} class="slds-button slds-button_icon slds-m-left_x-small buttonPosition" tabindex="0">
+                            <lightning-icon title="EditIcon" icon-name="utility:edit" size="xx-small" alternative-text="edit"></lightning-icon>
+                        </button>
+                    </template>
+                </div>
+                <div class="outputFieldSection" style="padding-left:10px;padding-right:10px;">
+                    <template if:false={isCollapsed}>
+                        <br/>
+                        <lightning-record-view-form record-id={recordId} object-api-name="Case">
+                            <div class="slds-grid slds-wrap slds-size_12-of-12 slds-medium-size_12-of-12 slds-large-size_12-of-12 CSNS_highlightFields">
+                                <div class="slds-size_6-of-12 slds-medium-size_6-of-12 slds-large-size_6-of-12 CSNS_fieldsDiv">
+                                    <lightning-output-field field-name="Current_Status__c" class="editWindowFields" style="color:black;font-size:14px;font-weight:bold;">
+                                    </lightning-output-field>
+                                </div>
+                                <div class="slds-size_6-of-12 slds-medium-size_6-of-12 slds-large-size_6-of-12 CSNS_fieldsDiv">
+                                    <lightning-output-field  field-name="Next_Step__c" class="editWindowFields" style="color:black;font-size:14px;font-weight:bold;">
+                                    </lightning-output-field>
+                                </div>
+                            </div>
+                        </lightning-record-view-form>
+                    </template>
+                </div>
+            </lightning-card>
+        </div>
+        
+        <div>
+            <template if:true={isModalOpen}>
+                <div>
+                <!--###### MODAL BOX Start######--> 
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                    <template if:false={isLoadingComplete}>
+                        <div>
+                            <lightning-spinner alternative-text="Loading..." variant="brand"></lightning-spinner>
+                        </div>
+                    </template>
+
+                    <div class="slds-modal__container">
+                        <!-- ###### MODAL BOX HEADER Start ######-->
+                        <header class="slds-modal__header">
+                            <h2 class="slds-text-heading_medium slds-hyphenate">Current Status And Next Step Section</h2>
+                        </header>
+                        
+                        <!--###### MODAL BOX BODY Part Start######-->
+                        <lightning-record-edit-form record-id={recordId} object-api-name="Case" onsuccess={handleSuccess} onload={handleLoad} onsubmit={submitRecord} onerror={handleError}>
+                            <!--<lightning-messages ></lightning-messages>-->
+                            <div class="slds-modal__content slds-p-around_medium">
+                                <lightning-input-field field-name="Current_Status__c" class="editWindowFields" ></lightning-input-field>
+                                <lightning-input-field field-name="Next_Step__c" class="editWindowFields"></lightning-input-field>
+                            </div>
+                            <!--###### MODAL BOX FOOTER Part Start ######-->
+                            <footer class="slds-modal__footer">
+                                <lightning-button variant="brand"
+                                                  type="submit"
+                                                  label="Update"
+                                                  title="Update"
+                                                  disabled={isButtonDisabled}>
+                                </lightning-button>
+
+                                <lightning-button variant="neutral" 
+                                                  label="Cancel"
+                                                  title="Cancel"
+                                                  onclick={closeModal}
+                                                  class="slds-m-left_x-small"
+                                                  disabled={isButtonDisabled}>
+                                </lightning-button>
+                                
+                            </footer>
+                        </lightning-record-edit-form>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </div>
+            </template>
+        </div>
+    </div>
+</template>

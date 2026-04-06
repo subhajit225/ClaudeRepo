@@ -1,0 +1,39 @@
+<aura:component controller="LCC_ButtonsController" extends="c:LCC_GenericLightningComponent" 
+                implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickActionWithoutHeader" >
+    <aura:attribute name="orderRec" type="Order" />
+    <aura:attribute name="orderRecOriginal" type="object" />
+    <aura:attribute name="isReadOnly" type="boolean" default="true" />
+     <aura:attribute name="isReadOnlynn" type="boolean" default="true" />
+    <aura:attribute name="showSpinner" type="boolean" default="true" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <lightning:recordEditForm  objectApiName="Case" onsubmit="{!c.handleOnSubmit}">
+        <lightning:layout multipleRows="true">
+            <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                <label lightning-input_input="" for="input-78" class="slds-form-element__label slds-no-flex">Polaris Contact</label>
+                <lightning:inputField variant="label-hidden"  required="true" fieldName="ContactId" value="{!v.orderRec.Polaris_Contact__c}" disabled="{!v.isReadOnly}"/> 
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6" padding="around-small">
+                
+                <lightning:input label="Polaris Contact Email" aura:id="myinput" required="true" type="email" value="{!v.orderRec.Polaris_Contact_Email__c}"  disabled="{!v.isReadOnly}"/> 
+            </lightning:layoutItem>
+        </lightning:layout>
+        <div class="slds-no-flex" style="text-align: center;">
+            <aura:if isTrue="{!!v.isReadOnly}">
+                <lightning:button class="slds-m-top_small" variant="brand" type="submit" name="update" label="Save" />
+            </aura:if>
+            <aura:if isTrue="{!v.isReadOnly}">
+                <lightning:button class="slds-m-top_small" variant="brand" type="submit" name="Edit" label="Edit" onclick="{!c.editableForm}" />
+            </aura:if>
+        </div>
+    </lightning:recordEditForm>
+    <aura:if isTrue="{!v.showSpinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading...</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+</aura:component>

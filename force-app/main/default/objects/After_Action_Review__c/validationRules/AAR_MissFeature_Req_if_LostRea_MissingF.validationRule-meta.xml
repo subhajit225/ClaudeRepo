@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>AAR_MissFeature_Req_if_LostRea_MissingF</fullName>
+    <active>true</active>
+    <description>SAL23-.this field is manually populated by AE for Closed Lost opportunity based on Closed Lost Reason is Missing Feature then require AAR Missing Feature</description>
+    <errorConditionFormula>AND( 
+	ISPICKVAL( AAR_Missing_Features__c ,&quot;&quot;),
+	OR(
+		AND( 
+			ISPICKVAL(AAR_Loss_Reason__c,&apos;Missing Feature&apos;), 
+			NOT(ISPICKVAL(AAR_Product_Features__c ,&apos;Positive&apos;))
+		),
+		OR (
+          ISPICKVAL( AAR_Product_Features__c ,&apos;Negative&apos;), 
+          ISPICKVAL( AAR_Product_Features__c ,&apos;Neutral&apos;)
+        ) 
+	)
+)</errorConditionFormula>
+    <errorMessage>AAR Missing Features is required if Lost Reason is &quot;Missing Feature&quot; or Product Features is &quot;Negative/Neutral&quot;</errorMessage>
+</ValidationRule>

@@ -1,0 +1,444 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,force:hasRecordId" controller="DocumentationController" access="global">
+    <aura:attribute name="Attachmentlist" type="list[]"/>
+    <aura:attribute name="AttachmentDocslist" type="list"/>
+    <aura:attribute name="Downloadfile" type="list"/>
+    <aura:attribute name="pageTitle" type="String"/>
+    <aura:attribute name="releaseId" type="String"/>
+    <aura:attribute name="releaseType" type="String"/>
+    <aura:attribute name="isLoaded" type="boolean" default="false"/>
+    <aura:attribute name="toggleSpinner" type="Boolean" default="true"/>
+    <aura:attribute name="FileAccepted" type="Boolean" default="false"/>
+    <aura:attribute name="IsAnyError" type="Boolean" default="false" />
+    <aura:attribute name="showRelease" type="Boolean" default="false" />
+    <aura:attribute name="IsEulaAccepted" type="Boolean" default="false" />
+    <aura:attribute name="ReleaseSoftWare" type="Release_Software__c"  />
+    <!--added for CS21-706 - Veera-->
+    <aura:attribute name="showContract" type="Boolean" default="false" />
+    <aura:attribute name="softwareName" type="String"/>
+    <aura:attribute name="showSpinner" type="Boolean" default="false" />
+    <aura:attribute name="isProduction" type="Boolean" default="false" />
+    <aura:handler name="downloadEvent" event="c:IroncladDownload" action="{!c.handleSoftwareDownload}"/> 
+    <!--end for CS21-706 - Veera-->
+
+    <!-- CS21-2287 -->
+    <aura:attribute name="cdmData" type="List" default="[
+        {'version': 'CDM 8.1', 'gaDate': 'January 25, 2023', 'eosDate': 'July 25, 2024'},
+        {'version': 'CDM 8.0', 'gaDate': 'July 19, 2022', 'eosDate': 'January 19, 2024'},
+        {'version': 'CDM 7.0', 'gaDate': 'February 3, 2022', 'eosDate': 'August 3, 2023'},
+        {'version': 'CDM 6.0', 'gaDate': 'July 20, 2021', 'eosDate': 'January 20, 2023'}
+    ]" />
+    
+    <aura:handler event="lightning:openFiles" action="{! c.handleOpenFiles }" />
+    <aura:attribute name="mycolumns" type="List"/>
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+    <aura:if isTrue="{!!empty(v.pageTitle)}">
+        <div class="slds-grid">
+            <div class="slds-size--1-of-1 ">
+                <div class="slds-grid rowcontainer"> 
+                    <div class="slds-large-size_1-of-12">
+                    </div>
+                    <div class="slds-large-size_10-of-12 slds-medium-size_12-of-12 slds-size_12-of-12 slds-wrap"> 
+                        <div class="slds-grid">
+                            <aura:if isTrue="{!v.toggleSpinner}">
+                                <div class="slds-spinner_container" aura:id="uploadSpinner">
+                                    <div class="slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                        <div class="slds-spinner__dot-a"></div>
+                                        <div class="slds-spinner__dot-b"></div>
+                                    </div>
+                                </div>
+                            </aura:if>
+                            
+                            <div class="slds-large-size_12-of-12">
+                                <p class="pagetitle">{!v.pageTitle}</p> 
+                            </div>
+                            
+                        </div>
+                        <br />
+                        
+                        <div class="" role="alert" style="text-align: left;background-color: #fcf8e3;border: 1px solid black;color: #8a6d3b;width: 100%;padding: 20px;font-size: 16px;font-family:Gotham-Light!important;border-radius:10px;">
+                            <p>
+                                <b>Upgrade your clusters to reduce cyber risk exposure</b><br/>
+                            	Rubrik recommends keeping your clusters up-to-date to ensure that you have the latest features, security fixes, and performance optimizations. Only supported CDM versions are eligible to receive technical and software support services, including access to the 
+                                <a href="https://www.rubrik.com/blog/technology/22/10/ransomware-response-team" style="color:blue;text-decoration:none;" target="_blank">Ransomware Response Team</a>,
+                                a specialized task force for ransomware recovery support.<br/><br/>
+                                Rubrik is advising all customers to upgrade to the latest <a href="https://support.rubrik.com/s/documentationdetail?id=a5BVI00000AdRPB2A3" style="color:blue;text-decoration:none;" target="_blank">CDM 9.4</a> 
+                                and <a href="https://support.rubrik.com/s/documentationdetail?id=a5BVI000006Sd1N2AS" style="color:blue;text-decoration:none;" target="_blank">CDM 9.3</a> patches. For more information, refer to the 
+                                <a href="https://support.rubrik.com/s/announcementdetail?Id=a40VI000000dcVOYAY" style="color:blue;text-decoration:none;" target="_blank">Rubrik CDM Software Support Lifecycle</a>.
+                                
+                            </p>
+                        </div>
+
+                        <aura:if isTrue="{!!v.showRelease}">
+                            <div class="slds-grid">
+                                <div class="slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-size_12-of-12"> 
+                                    <p class="sectionheader">Software</p>
+                                    
+                                    <div class="tablecls">
+                                        <table class="slds-table slds-table_cell-buffer slds-table_bordered table_software bordertopnone">
+                                            <thead class="slds-Medium-size--12-of-12  slds-size_12-of-12">
+                                                <tr class="slds-max-x-small-hide slds-line-height_reset">
+                                                    <th class="designcls1" scope="col">
+                                                        <div class="slds-truncate sizecls" title="Opportunity Name">Name</div>
+                                                    </th>
+                                                    <th class="designcls" scope="col">
+                                                        <div class="slds-truncate sizecls" title="Account Name">Type</div>
+                                                    </th>
+                                                    <th class="designcls" scope="col">
+                                                        <div class="slds-truncate sizecls" title="Close Date">Date</div>
+                                                    </th>
+                                                    
+                                                    <th class="designcls" scope="col">
+                                                        <div class="slds-truncate sizecls" title="Confidence">Bytes</div>
+                                                    </th>
+                                                    <th class="designcls1" scope="col">
+                                                        <div class="slds-truncate sizecls" title="Amount">MD5</div>
+                                                    </th>
+                                                    <th class="designcls1" scope="col">
+                                                        <div class="slds-truncate sizecls" title="Amount"></div>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="borderbotom articlecls slds-size_12-of-12">
+                                                <aura:iteration var="att"  items="{!v.Attachmentlist}">
+                                                    <tr class="slds-size_12-of-12 slds-max-x-small-hide slds-hint-parent padbotmnone articlecls">
+                                                        <td data-label="Account Name " class="articlecls">
+                                                            <div class="fontsize" title="{!att.Release__r.Name}">{!att.Release__r.Name}</div>
+                                                        </td>
+                                                        <td data-label="Close Date">
+                                                            <div class="fontsize" title="{!att.Product_Type__c}">  {!att.Product_Type__c}</div>
+                                                        </td>
+                                                        <td data-label="Prospecting">
+                                                            <div class="fontsize" title="{!att.Release__r.Release_Date__c}">
+                                                                <lightning:formattedDateTime value="{!att.Release__r.Release_Date__c}" month="numeric" day="numeric" year="2-digit"   />
+                                                            </div>
+                                                        </td>
+                                                        
+                                                        <td data-label="Amount" class="articlecls">
+                                                            <div class="fontsize" title="{!att.Bytes__c}">{!att.Bytes__c}</div>
+                                                        </td>
+                                                        <td data-label="Amount" class="articlecls">
+                                                            <div class="fontsize datanew  " title="{!att.MD5__c}">{!att.MD5__c}</div>
+                                                        </td>
+                                                        <td class="gothammediumfont">
+                                                            <aura:if isTrue="{!!empty(att.S3_File_URL__c)}">
+                                                                <!--added data-label for CS21-706 - Veera-->
+                                                                <a class="colorcls "  id="{!att.Id}" data-label="{!att.Release__r.Name}" name="{!att.Release_Type__c}" href="" onclick="{!c.openModal}" target="_blank">Download</a>
+                                                            </aura:if>
+                                                            <!-- <lightning:button label="Download »" onclick="{! c.openSingleFile }"/> -->
+                                                        </td>
+                                                    </tr>
+                                                    
+                                                    <div class="table slds-x-small-show-only">
+                                                        <div class="mobViewDiv">
+                                                            <div class="PhonecaseContent">  
+                                                                <span class="slds-small-size--6-of-12 nameMob no-pad ">Name :</span>
+                                                                <span class="slds-small-size--6-of-12 no-pad Font">
+                                                                    <p class="slds-float_right nameMob">  <aura:unescapedHtml value="{!att.Release__r.Name}"/></p>
+                                                                </span>
+                                                            </div>
+                                                            <div class="PhonecaseContent">  
+                                                                <span class="slds-small-size--6-of-12 nameMob no-pad ">Type :</span>
+                                                                <span class="slds-small-size--6-of-12 no-pad Font">
+                                                                    <p class="slds-float_right nameMob">  <aura:unescapedHtml value="{!att.Product_Type__c}"/></p>
+                                                                </span>
+                                                            </div>
+                                                            <div class="PhonecaseContent">  
+                                                                <span class="slds-small-size--6-of-12 nameMob no-pad ">Date :</span>
+                                                                <span class="slds-small-size--6-of-12 no-pad Font">
+                                                                    <p class="slds-float_right nameMob"> 
+                                                                        <lightning:formattedDateTime value="{!att.Release_Date__c}" month="numeric" day="numeric" year="2-digit" />
+                                                                    </p>
+                                                                </span>
+                                                            </div>
+                                                            <div class="PhonecaseContent">  
+                                                                <span class="slds-small-size--6-of-12 nameMob no-pad ">Release Type :</span>
+                                                                <span class="slds-small-size--6-of-12 no-pad Font">
+                                                                    <p class="slds-float_right nameMob">  <aura:unescapedHtml value="{!att.Release_Type__c}"/></p>
+                                                                </span>
+                                                            </div>
+                                                            <div class="PhonecaseContent">  
+                                                                <span class="slds-small-size--6-of-12 nameMob no-pad ">Bytes :</span>
+                                                                <span class="slds-small-size--6-of-12 no-pad Font">
+                                                                    <p class="slds-float_right nameMob">  <aura:unescapedHtml value="{!att.Bytes__c}"/></p>
+                                                                </span>
+                                                            </div>
+                                                            <div class="PhonecaseContent">  
+                                                                <span class="slds-small-size--6-of-12 nameMob no-pad ">MD5 :</span>
+                                                                <span class="slds-small-size--6-of-12 no-pad Font">
+                                                                    <p class="slds-float_right nameMob">  <aura:unescapedHtml value="{!att.MD5__c}"/></p>
+                                                                </span>
+                                                            </div>
+                                                            <div class="PhonecaseContent">  
+                                                                <span class="slds-small-size--6-of-12 nameMob no-pad "></span>
+                                                                <span class="slds-small-size--6-of-12 no-pad Font">
+                                                                    <!--updated for CS21-706 - Veera-->
+                                                                    <aura:if isTrue="{!!empty(att.S3_File_URL__c)}">
+                                                                        <a class="colorcls "  id="{!att.Id}" data-label="{!att.Release__r.Name}" name="{!att.Release_Type__c}" href="" onclick="{!c.openModal}" target="_blank">Download</a>
+                                                                    </aura:if>
+                                                                    <!-- <a class="colorcls "  id="{!att.Id}" href="" onclick="{!c.openModal}" target="_blank">Download</a> -->
+                                                                    <!--End - CS21-706 - Veera-->
+                                                                </span>
+                                                            </div><br></br>
+                                                        </div>
+                                                    </div>
+                                                </aura:iteration>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-grid">
+                                <div class="slds-large-size_12-of-12 slds-size_12-of-12 slds-medium-size_12-of-12"> 
+                                    <p class="sectionheader">Documentation</p>
+                                    <div class="tablecls">
+                                        <table class=" slds-table slds-table_cell-buffer slds-table_bordered bordertopnone">
+                                            <thead>
+                                                
+                                                <tr class="slds-max-x-small-hide slds-line-height_reset">
+                                                    <th class="designcls" scope="col">
+                                                        <div class="slds-truncate sizecls" title="Account Name">Type</div>
+                                                    </th>
+                                                    <th class="designcls1" scope="col">
+                                                        <div class="slds-truncate sizecls" title="Amount">Date</div>
+                                                    </th>
+                                                </tr>
+                                                
+                                            </thead>
+                                            <tbody class="borderbotom">
+                                                <aura:iteration var="att1"  items="{!v.AttachmentDocslist}">
+                                                    <tr class="slds-max-x-small-hide slds-hint-parent">
+                                                        
+                                                        <td data-label="Close Date" class="nopad">
+                                                            <div class="slds-truncate fontsize" title="Status">  {!att1.Name}</div>
+                                                        </td>
+                                                        <td data-label="Amount" class="slds-truncate designcls1">
+                                                            <lightning:formattedDateTime value="{!att1.LastModifiedDate}" month="numeric" day="numeric" year="2-digit" />
+                                                        </td>
+                                                        <td class="gothammediumfont">
+                                                            <a class="colorcls" href="{!'/servlet/servlet.FileDownload?file='+att1.Id}" target="_blank">PDF</a>
+                                                            <aura:if isTrue="{!!empty(att1.Description)}">
+                                                                &nbsp;<a class="colorcls" href="{!'/s/htmldocuments?docurl='+att1.Description}" target="_blank">HTML</a>
+                                                            </aura:if><!-- <lightning:button label="Download »" onclick="{! c.openSingleFile }"/> -->
+                                                        </td>
+                                                    </tr>
+                                                    
+                                                    <div class="table slds-x-small-show-only"> 
+                                                        <div class="mobViewDiv">
+                                                            <div class="PhonecaseContent">  
+                                                                <span class="slds-small-size--6-of-12 nameMob no-pad ">Type :</span>
+                                                                <span class="slds-small-size--6-of-12 no-pad Font">
+                                                                    <p class="slds-float_right nameMob">  <aura:unescapedHtml value="{!att1.Description}"/></p>
+                                                                </span>
+                                                            </div>
+                                                            <div class="PhonecaseContent">  
+                                                                <span class="slds-small-size--3-of-12 nameMob no-pad ">Date :</span>
+                                                                <span class="slds-small-size--3-of-12 no-pad Font">
+                                                                    <p class="slds-float_right nameMob">  
+                                                                        <lightning:formattedDateTime value="{!att1.LastModifiedDate }" year="numeric" month="numeric" day="numeric" />
+                                                                    </p> 
+                                                                </span>
+                                                            </div>
+                                                            <div class="PhonecaseContent">  
+                                                                <span class="slds-small-size--3-of-12 nameMob no-pad "></span>
+                                                                <span class="slds-small-size--3-of-12  no-pad Font">
+                                                                    <!--<a class="colorcls" href="{!'/servlet/servlet.FileDownload?file='+att1.Id}" target="_blank">» Download</a>-->
+                                                                    <a class="colorcls" href="{!'/servlet/servlet.FileDownload?file='+att1.Id}" target="_blank">PDF</a>
+                                                                    <aura:if isTrue="{!!empty(att1.Description)}">
+                                                                        &nbsp;<a class="colorcls" href="{!'/s/htmldocuments?docurl='+att1.Description}" target="_blank">HTML</a>
+                                                                    </aura:if>
+                                                                </span>
+                                                            </div><br></br>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </aura:iteration>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </aura:if>
+                        <aura:if isTrue="{!v.showRelease}">
+                            <div class="slds-grid">
+                                <div class="slds-large-size_12-of-12 slds-size_12-of-12 slds-medium-size_12-of-12"> 
+                                    <p class="sectionheader">Documentation</p>
+                                    <div class="tablecls">
+                                        <table class=" slds-table slds-table_cell-buffer slds-table_bordered bordertopnone">
+                                            <thead>
+                                                
+                                                <tr class="slds-max-x-small-hide slds-line-height_reset">
+                                                    <th class="designcls" scope="col">
+                                                        <div class="slds-truncate sizecls" title="Account Name"></div>
+                                                    </th>
+                                                    <th class="designcls1" scope="col">
+                                                        <div class="slds-truncate sizecls" title="Amount"></div>
+                                                    </th>
+                                                </tr>
+                                                
+                                            </thead>
+                                            <tbody class="borderbotom">
+                                                <aura:iteration var="att1"  items="{!v.AttachmentDocslist}">
+                                                    <tr class="slds-max-x-small-hide slds-hint-parent">
+                                                        
+                                                        <td data-label="Close Date" class="nopad">
+                                                            <div class="slds-truncate fontsize" title="Status">  {!att1.Name}</div>
+                                                        </td>
+                                                        <td data-label="Amount" class="slds-truncate designcls1">
+                                                            <lightning:formattedDateTime value="{!att1.LastModifiedDate}" month="numeric" day="numeric" year="2-digit" />
+                                                        </td>
+                                                        <td class="gothammediumfont">
+                                                            
+                                                            <a class="colorcls" href="{!'/servlet/servlet.FileDownload?file='+att1.Id}" target="_blank">PDF</a>
+                                                            <aura:if isTrue="{!!empty(att1.Description)}">
+                                                                &nbsp;<a class="colorcls" href="{!'/s/htmldocuments?docurl='+att1.Description}" target="_blank">HTML</a>
+                                                            </aura:if>
+                                                            <!-- <lightning:button label="Download »" onclick="{! c.openSingleFile }"/> -->
+                                                        </td>
+                                                    </tr>
+                                                    
+                                                    <div class="table slds-x-small-show-only"> 
+                                                        <div class="mobViewDiv">
+                                                            <div class="PhonecaseContent">  
+                                                                <span class="slds-small-size--6-of-12 nameMob no-pad ">Type :</span>
+                                                                <span class="slds-small-size--6-of-12 no-pad Font">
+                                                                    <p class="slds-float_right nameMob">  <aura:unescapedHtml value="{!att1.Description}"/></p>
+                                                                </span>
+                                                            </div>
+                                                            <div class="PhonecaseContent">  
+                                                                <span class="slds-small-size--3-of-12 nameMob no-pad ">Date :</span>
+                                                                <span class="slds-small-size--3-of-12 no-pad Font">
+                                                                    <p class="slds-float_right nameMob">  
+                                                                        <lightning:formattedDateTime value="{!att1.LastModifiedDate }" year="numeric" month="numeric" day="numeric" />
+                                                                    </p> 
+                                                                </span>
+                                                            </div>
+                                                            <div class="PhonecaseContent">  
+                                                                <span class="slds-small-size--3-of-12 nameMob no-pad "></span>
+                                                                <span class="slds-small-size--3-of-12  no-pad Font">
+                                                                    <a class="colorcls" href="{!'/servlet/servlet.FileDownload?file='+att1.Id}" target="_blank">» Download</a>
+                                                                </span>
+                                                            </div><br></br>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </aura:iteration>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </aura:if>
+                        <div class="slds-grid">
+                            <div class="slds-large-size_12-of-12"> 
+                                <a class="nohovercolor" href="https://support.rubrik.com/s/documentation" > 
+                                    <h1 class="color">Return to Downloads </h1>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="slds-large-size_1-of-12"> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slds-grid">
+            
+            <div class="slds-size_12-of-12 ">
+                <!--Commented for CS21-706 - Veera-->
+                <!--  <header class="slds-modal__header textalignleft">
+                                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.closeModal}">
+                                            <lightning:icon iconName="action:remove" alternativeText="Approved" size="xx-small"/>
+                                            <span class="slds-assistive-text">Close</span>
+                                        </button>
+                                        <h2 id="modal-heading-01" class="alignleft slds-text-heading_medium slds-hyphenate">Accept EULA</h2>
+                                    </header>
+                                    <div class="">
+                                        <div class="slds-modal__content  slds-p-aroundmedium">
+                                            
+                                            <aura:if isTrue="{!v.IsEulaAccepted}" >
+                                                <div class="errordesign">
+                                                    <h4>Error:</h4>
+                                                    <span>You must accept the EULA before continuing.</span>
+                                                </div>
+                                            </aura:if>
+                                            
+                                            <aura:if isTrue="{!!v.FileAccepted}">
+                                                <h1 class="headcls">
+                                                    By downloading this software, you confirm that you accept the <a href="{!$Label.c.EULA_Link + '#view=FitH'}" onclick="{!$Label.c.EULA_Link + '#view=FitH'}" target="_blank" class="colorcls">EULA</a>
+                                                </h1>
+                                                
+                                                <div class="padtopbotm">
+                                                    
+                                                    <lightning:input type="checkbox"  name="checkbox" aura:id="checkbox" value="checkbox-5" disabled="false" /> 
+                                                    
+                                                    <button class="slds-button slds-button_brand buttondesign"   onclick="{!c.Downloadfile}">
+                                                        <a class="underlinenone" href="" onclick="{!c.refreshModal}">
+                                                                      Accept and download
+                                                                    </a>
+                                                        <a class="underlinenone">
+                                                            Accept and download
+                                                        </a>
+                                                    </button>
+                                                </div>
+                                                <div>
+                                                    <iframe class="iframewidth" src="{!$Resource.EULA + '#view=FitH'}" scrolling="true"></iframe>
+                                                </div>
+                                            </aura:if>
+                                            <aura:if isTrue="{!v.FileAccepted}">
+                                                {!v.Downloadfile}
+                                                <iframe class="iframewidth2" src="{!v.ReleaseSoftWare.Link__c}"  target="_blank" scrolling="true">
+                                                </iframe>
+                                            </aura:if>
+                                        </div> 
+                                    </div> -->
+                <!--End - CS21-706 - Veera-->
+                <!--added for CS21-706 - Veera-->
+                <aura:if isTrue="{!v.showContract}">
+                    <div role="dialog" tabindex="-1" aria-labelledby="header43" aura:id="Modalbox"
+                        class="slds-modal slds-fade-in-close">
+                        <div class="slds-modal__container containerwidth">
+                            <header class="slds-modal__header textalignleft">
+                                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                                    title="Close" onclick="{!c.closeModal}">
+                                    <lightning:icon iconName="action:remove" alternativeText="Approved" size="xx-small" />
+                                    <span class="slds-assistive-text">Close</span>
+                                </button>
+                                <h2 id="modal-heading-01" class="alignleft slds-text-heading_medium slds-hyphenate">Accept EULA</h2>
+                            </header>
+                            <div class="slds-modal__content  slds-p-aroundmedium">
+                                <c:IroncladContract releaseType="{!v.releaseType}" 
+                                                    releaseId="{!v.releaseId}" 
+                                                    softwareName="{!v.softwareName}" 
+                                                    showSpinner="{!v.showSpinner}"
+                                                    isProduction="{!v.isProduction}"></c:IroncladContract>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="slds-backdrop " aura:id="Modalbackdrop"></div>
+                </aura:if>
+                <aura:if isTrue="{!v.showSpinner}">
+                    <lightning:spinner aura:id="spinner" alternativeText="Loading" size="medium" class="spins slds-show" />
+                </aura:if>
+                <!--End - CS21-706 - Veera-->
+            </div>
+            
+        </div>
+        <aura:set attribute="else">
+            <aura:if isTrue="{!v.isLoaded}">
+                <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning" role="alert" style="padding:5rem 0;">
+                    <span class="slds-assistive-text">error</span>
+                    <span class="slds-icon_container slds-icon-utility-error slds-m-right_x-small" title="Description of icon when needed">
+                        <lightning:icon iconName="utility:error" alternativeText="Error!" variant="inverse"/>
+                    </span>
+                    <h2>You don't have access to the Download you are trying to view . Please navigate back to
+                        <a href="documentation">Docs &amp; Download</a>
+                    </h2>
+                    <div class="slds-notify__close">
+                        
+                    </div>
+                </div>
+            </aura:if>
+        </aura:set>
+    </aura:if>
+</aura:component>

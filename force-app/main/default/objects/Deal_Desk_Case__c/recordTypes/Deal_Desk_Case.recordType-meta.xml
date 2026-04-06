@@ -1,0 +1,631 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Deal_Desk_Case</fullName>
+    <active>true</active>
+    <label>Deal Desk Case</label>
+    <picklistValues>
+        <picklist>ApprovalStatus__c</picklist>
+        <values>
+            <fullName>Approved</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>On Hold</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Recalled</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rejected</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Case_Status__c</picklist>
+        <values>
+            <fullName>Closed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>In Progress</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>New comment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending CPQ%2FIT Ticket</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Request for Information</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Requested</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Waiting on CSAT Approval</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Waiting on Deal Structuring Approval</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Waiting on Legal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Waiting on Manager Approval</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Waiting on Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Waiting on Renewals</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Waiting on Requestor</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Waiting on Revenue</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Deal_Desk_Tagging__c</picklist>
+        <values>
+            <fullName>Add-On Node</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Best Practices Enablement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CPQ Bug</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CSAT</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Case Incorrectly Routed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Custom Deal Structure</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Deal Ops Exception</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Deal Structure %26 Pricing Guidance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Downgrade Request</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Error Message</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Expiration Date Change</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Flip quote</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Large Deal Review</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Legal Language Request</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Limited Availability</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Manual Fulfillment Quoting</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Marketplace Quoting</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Non-standard Billing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Partial Renewal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Promo Discount</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Promotional Program</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Quote Approval</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Quote Doc Issue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RSC-G</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RSC-P</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ramped Deal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Remove Lines Request</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Replacement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SKU Not Converting to V2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SW%2FHW Only Quoting</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scale Quoting</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Subsumed ACV</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Third Party Hardware</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Trade Up Exception</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unlimited ELA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Upgrade Request</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Deal_Desk_Team__c</picklist>
+        <values>
+            <fullName>Deal Operations</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Deal Structuring</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Request_Status__c</picklist>
+        <values>
+            <fullName>Approved</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Closed - Completed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Closed - Incomplete</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Conditionally Approved</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Draft</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>On Hold</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Recalled</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rejected</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Requested</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Request_Sub_Type__c</picklist>
+        <values>
+            <fullName>1 Year%3A FED%2FSLED</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ASPEN</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Add-On Node</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Approval Issues</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Below Minimum Amount %28Deal or Product%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Below Minimum Term</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Best Practices Enablement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CPQ Bug</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CSAT</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cohesity Take Out</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Complete Quoting</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Custom Deal Structure</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Custom Legal Verbiage</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Deal Ops Exception</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Delayed Start Date</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Discount Beyond Hard Floor</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Downgrade Request</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>E1000</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>E1000%E2%80%99s Request</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Entitlement Transfer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Error Message</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Expiration Date Change</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Expiration Date Update</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Extended Payment Terms</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Financial Stability Letter</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Flip quote</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HW Only Quoting</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>License Transfer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Limited Availability</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>M365 Beachhead</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Manual Fulfillment Quoting</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Manual Help</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Marketplace Quoting</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No Deal Left Behind</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Non-Standard Pay Annual Terms</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nonstandard Billing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Office Hours</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Operational Swim Lanes</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Out-of-Program Licensing Request</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Partial Renewal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Price Holds</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pricing Guidance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Product Transferability</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Promo Discount</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Quote Approval</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Quote Doc Issue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RCDM-T</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RRW</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RSC-G</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RSC-P</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RSC-P Request</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ramped Deal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Reinstatement Fee</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Remove Lines Request</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Renewal Specialist Enablement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Replacement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SKU Not Converting to V2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sales Enablement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sales Rep Exception</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scale Flip</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scale Quoting</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scale True Forward</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scale Utility</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Self-Service</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sizing Guarantee</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Subsumed ACV</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Third Party Hardware</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Trade Up Exception</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Trade-Up</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Trade-up Credits Exception</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unlimited ELA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unlimited License</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Upgrade Quote</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Upgrade Request</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>v1 Quoting</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Request_Type__c</picklist>
+        <values>
+            <fullName>Deal Ops Exception</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>General Inquiry</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Legal Language</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Minimum or Maximum Discount%2C Floor%2C or Term Exceptions</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Non-Standard Payments</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Non-Standard Programs %2F Deal Structures</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Quoting Bug</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Renewal Quote</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>

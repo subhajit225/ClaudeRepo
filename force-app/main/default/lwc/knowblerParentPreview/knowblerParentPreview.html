@@ -1,0 +1,86 @@
+<template>
+  <template if:true={rangerId}>
+    <div class="parentPopUpClass">
+      <section class="modelTooltipClass" role="dialog">
+        <template if:true={isArticleExist}>
+          <div class="mainContainer" style="height: 600px; width: 470px">
+            <!-- Main Heading -->
+            <div class="con">
+              <div class="containerClass">
+                <div class="user_detail">
+                  <div class="">
+                    <lightning-avatar
+                      variant="circle"
+                      src={Userdetail.SmallPhotoUrl}
+                      fallback-icon-name="standard:person_account"
+                      alternative-text={item.Owner.Name}
+                    ></lightning-avatar>
+                  </div>
+                  <div class="article_username">{Userdetail.Owner.Name}</div>
+                  <div class="dot">.</div>
+                  <div class="article_number">{item.ArticleNumber}</div>
+                </div>
+                <div class="slds-page-header__row">
+                  <div class="slds-page-header__col-title">
+                    <div class="slds-media">
+                      <div class="slds-media__body">
+                        <div class="slds-page-header__name">
+                          <div class="slds-page-header__name-title">
+                            <span
+                              class="slds-page-header__title slds-truncate slds-text-heading_medium textHeading"
+                              title={item.Title}
+                            >
+                              {item.Title}
+                            </span>
+                            <!-- <span class="tooltip">
+                              {item.Title}
+                            </span> -->
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="paddingBottom">
+                <lightning-record-form
+                  record-id={rangerId}
+                  object-api-name={destobj}
+                  layout-type="Compact"
+                  columns="4"
+                  mode="readonly"
+                >
+                </lightning-record-form>
+              </div>
+            </div>
+            <div class="div slds-p-around_medium">
+              <c-knowbler-child-preview
+                destobj={destobj}
+                cmpvisible={cmpvisible}
+                left={left}
+                kid={rangerId}
+                recordtypeid={recordtypeid}
+              ></c-knowbler-child-preview>
+            </div>
+          </div>
+        </template>
+        <template if:false={isArticleExist}>
+          <div
+            class="mainContainer article-no-longer-exists-wrapper"
+            style="height: 600px; width: 470px"
+          >
+            <img
+              class="img-center"
+              src={articleNotExists}
+              alt="article-no-longer exist"
+            />
+            <div class="article-no-longer-exists-text">
+              Article no longer exists!
+            </div>
+          </div>
+        </template>
+        <div class="container" lwc:dom="manual"></div>
+      </section>
+    </div>
+  </template>
+</template>

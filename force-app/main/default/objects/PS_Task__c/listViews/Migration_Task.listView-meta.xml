@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Migration_Task</fullName>
+    <columns>Project__c</columns>
+    <columns>NAME</columns>
+    <columns>Order_Product__c</columns>
+    <columns>Task_Status__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Order_Product__c</field>
+        <operation>equals</operation>
+        <value>RBK-DATA-MIGRATION</value>
+    </filters>
+    <label>Migration Task</label>
+</ListView>

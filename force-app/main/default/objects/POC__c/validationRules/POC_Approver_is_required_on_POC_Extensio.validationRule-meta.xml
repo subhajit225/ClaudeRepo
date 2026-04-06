@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>POC_Approver_is_required_on_POC_Extensio</fullName>
+    <active>true</active>
+    <errorConditionFormula>$User.POC_Approver__c = &apos;&apos; &amp;&amp; ISPICKVAL( Approval_Status__c , &apos;Extension Requested&apos;) &amp;&amp; ISCHANGED(Approval_Status__c )</errorConditionFormula>
+    <errorMessage>You’re missing a POC Approver. Please reach out to POChelp@rubrik.com</errorMessage>
+</ValidationRule>

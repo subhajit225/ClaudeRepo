@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Result__c</fullName>
+    <label>ResultType</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Success</fullName>
+                <default>false</default>
+                <label>Success</label>
+            </value>
+            <value>
+                <fullName>Application Failure</fullName>
+                <default>false</default>
+                <label>Application Failure</label>
+            </value>
+            <value>
+                <fullName>Server Failure</fullName>
+                <default>false</default>
+                <label>Server Failure</label>
+            </value>
+            <value>
+                <fullName>Salesforce Exception</fullName>
+                <default>false</default>
+                <label>Salesforce Exception</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

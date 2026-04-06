@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Product_for_POC__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>The product being tested as POC</description>
+    <inlineHelpText>Choose the product the customer will be testing.</inlineHelpText>
+    <label>(DEPRECATED) Product for POC.</label>
+    <referenceTo>Product2</referenceTo>
+    <relationshipLabel>POC Requests</relationshipLabel>
+    <relationshipName>POC_Requests</relationshipName>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

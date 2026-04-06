@@ -1,0 +1,68 @@
+<aura:component controller="ManageDomainsController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="domainList" type="Object[]"/>
+    <aura:attribute name="updateddomainList" type="Object[]"/>
+    <aura:handler name="init" action="{!c.doinit}" value="{!this}"/>
+    <div class="slds-p-around_x-large">
+        <div class="slds-grid slds-wrap">
+            <lightning:input name="input1" class="widthLarge" aura:id="domainEnter" pattern="(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]"/>
+            <lightning:button label="Add Domain" title="Add Domain" onclick="{! c.addDomain }"/>
+        </div>
+        <br/><br/>
+        <center>
+            <lightning:button label="Update Domains" aura:id="updateBtn" title="Update Domains" onclick="{! c.updateDomains }"/>
+        </center>
+        <br/><br/>
+        <div class="slds-grid slds-wrap">
+            <aura:iteration items="{!v.domainList}" var="dom" indexVar="index">
+                <div class="slds-col slds-size_1-of-3">
+                    <article class="slds-card">
+                        <div class="s slds-grid">
+                            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                                <div class="slds-media__figure">
+                                    <span class="slds-icon_container slds-icon-standard-account" title="account">
+                                        <lightning:icon size="xx-small" iconName="action:email" alternativeText="Approved" />
+                                    </span>
+                                </div>
+                                <div class="slds-media__body">
+                                    <h2 class="slds-card__header-title">
+                                            <span>{!dom.domainName}</span>
+                                    </h2>
+                                </div>
+                                <div class="slds-no-flex">
+                                    <lightning:buttonIcon name="{!index}" iconName="utility:close" variant="bare" onclick="{! c.removeDomain }" alternativeText="Settings" />
+                                </div>
+                            </header>
+                        </div>
+                    </article>
+                </div>
+            </aura:iteration>
+            <aura:iteration items="{!v.updateddomainList}" var="dom"  indexVar="index">
+                <aura:if isTrue="{!dom.domainMethod == 'ADD'}">
+                    <div class="slds-col slds-size_1-of-3">
+                        <article class="slds-card">
+                            <div class="s slds-grid">
+                                <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                                    <div class="slds-media__figure">
+                                        <span class="slds-icon_container slds-icon-standard-account" title="account">
+                                            <lightning:icon size="xx-small" iconName="action:email" alternativeText="Approved" />
+                                        </span>
+                                    </div>
+                                    <div class="slds-media__body">
+                                        <h2 class="slds-card__header-title">
+                                            <a href="javascript:void(0);" class="slds-card__header-link slds-truncate" title="{!dom.domainName}">
+                                                <span>{!dom.domainName}</span>
+                                            </a>
+                                        </h2>
+                                    </div>
+                                    <div class="slds-no-flex">
+                                        <lightning:buttonIcon name="{!index}" iconName="utility:close" variant="bare" onclick="{! c.removeDomainNew }" alternativeText="Settings" />
+                                    </div>
+                                </header>
+                            </div>
+                        </article>
+                    </div>
+                </aura:if>
+            </aura:iteration>
+        </div>
+    </div>
+</aura:component>

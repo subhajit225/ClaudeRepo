@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Bookings_Element</fullName>
+    <active>true</active>
+    <description>Rebate Partner Sourced Bookings or Rebate Total Bookings</description>
+    <label>Bookings Element</label>
+    <picklistValues>
+        <picklist>Element_Type__c</picklist>
+        <values>
+            <fullName>PSNL Bookings</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Total Bookings</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Payout_Type__c</picklist>
+        <values>
+            <fullName>All or Nothing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Partial</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Rebate_Type__c</picklist>
+        <values>
+            <fullName>Concierge</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Concierge PSNL Only</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Elite</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>

@@ -1,0 +1,48 @@
+<aura:component extends="c:LCC_GenericLightningComponent" implements="flexipage:availableForRecordHome,force:lightningQuickActionWithoutHeader,force:hasRecordId">
+    <!--<aura:set attribute="partially" value="false"></aura:set>
+     
+    <div class="slds-scrollable slds-p-around_medium slds-text-heading_small" id="modal-content-id-1">
+        <p style="height: 108px; word-wrap: break-word;"><a style="outline: 0;" href="https://github.com/developerforce/LEXComponentsBundle" target="_blank">Sample Lightning Component Action</a></p>
+        <br/>
+    </div>
+    <div class="slds-modal__footer">
+        <lightning:button class="slds-button_brand" onclick="{!c.accept}" label="Accept"/>
+    </div>
+    -->
+    
+    <!-- The height of the modal is defined in salesforce, when you create the new action. -->
+    <!-- Recommended height size: 250px -->
+    <aura:attribute name="Opportunity" type="Object"/>
+    <aura:attribute name="OpportunityRecord" type="Object"/>
+    <aura:attribute name="recordError" type="String"/>    
+    
+    <aura:attribute name="newOpportunity" type="Object"/>
+    <aura:attribute name="newOpportunityRecord" type="Object"/>
+    <aura:attribute name="newOrecordError" type="String"/>  
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    
+    <force:recordData aura:id="record"
+                      layoutType="FULL"
+                      recordId="{!v.recordId}"
+                      targetError="{!v.recordError}"
+                      targetRecord="{!v.Opportunity}"
+                      targetFields="{!v.OpportunityRecord}"
+                      fields="Name,AccountId,CloseDate,OwnerId,Win_Alert_Sent__c " 
+                      mode="VIEW"
+                      />
+    
+    
+    <force:recordData aura:id="createRecord"
+                      layoutType="FULL"
+                      targetError="{!v.newOrecordError}"
+                      targetRecord="{!v.newOpportunity}"
+                      targetFields="{!v.newOpportunityRecord}"/> 
+    <div class="mainDiv slds-p-vertical_large" style="height: 6.75rem;"> 
+        <div class="slds-align_absolute-center">Are you sure to clone this record?</div>
+        <div class="slds-align_absolute-center">
+            <button type="button" class="slds-button slds-button_neutral  " onclick="{!c.close}">Close</button>            
+            <button type="button" class="slds-button slds-button_brand" onclick="{!c.recordUpdated}">Clone</button>
+        </div>
+    </div> 
+</aura:component>

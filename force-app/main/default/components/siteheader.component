@@ -1,0 +1,17 @@
+<apex:component id="headerComponent" controller="Util">
+    
+    <c:importbs />
+    <c:communitystyle />
+     <div class="headerbacktop">
+        <div class="container-fluid container-fluid-right">
+            <div class="col-md-8 col-lg-9 col-sm-12 col-xs-12"></div>
+            <div class="col-md-4 col-lg-3 col-sm-12 col-xs-12" style="padding-left:0px">
+                <apex:outputLink styleClass="headerlinks" value="{!URLFOR($Page.Profile)}" rendered="{!$User.LastName!='Site Guest User'}">{!$User.FirstName} {!$User.LastName}</apex:outputLink>&nbsp;&nbsp;<c:smallprofilephoto subject="{!$User.Id}"/>&nbsp;&nbsp;| &nbsp;<a href="{!IF(NOT(ISNULL($Site.Prefix)), $Site.Prefix+'/secur/logout.jsp', '/secur/logout.jsp')}" class="headerlinks">Logout</a>
+            </div>
+        </div>
+    </div>
+    <c:tabs rendered="{!OR(Usertype=='customer',Usertype=='internal')}"></c:tabs>
+    <c:ptabs rendered="{!Usertype=='partner'}"></c:ptabs>
+    <c:trialTabs rendered="{!Usertype=='Trial'}"></c:trialTabs>
+   
+</apex:component>

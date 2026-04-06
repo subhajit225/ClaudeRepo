@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Escalation_Support_Number__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF( RecordType.Name == &apos;Escalation Support&apos;, &apos;ES-&apos;+ TEXT(ABS(VALUE(RIGHT( Name , (FIND(&apos;-&apos;, Name) + 6) )))), &apos;&apos;)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Escalation Support Number</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

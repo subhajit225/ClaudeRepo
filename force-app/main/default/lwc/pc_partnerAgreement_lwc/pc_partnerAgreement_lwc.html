@@ -1,0 +1,89 @@
+<template>
+    <template if:true={spinnerLoad}>
+        <lightning-spinner variant="brand" size="large"> </lightning-spinner>
+    </template>
+    <div class="slds-card">
+        <lightning-layout multiple-rows="true">
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">  
+                <div class="slds-p-around_small">
+                    <span class="cardBodyTag">Terms & Conditions</span>
+                </div>
+
+                <div class="slds-p-around_small flex-box">
+                    <input type="checkbox" id="terms" name="MasterTermsAndConditions"
+                        onchange={handlemasterTermsChange} checked={masterAgreementCheck} disabled
+                        class="inputClass pc-checkbox slds-m-right_small"></input>
+                    <label for="terms" class="slds-form-element__label"> I agree to
+                        the <a href="#" onclick={openMasterModel} class="agreement-link"> Master Terms and
+                            Conditions</a></label>
+                </div>
+                <template if:true={showAgreementLabel}>
+                    <label class="agreement-label">Please sign the following agreements:</label>
+                </template>
+                <template if:true={resellerAgreement}>
+                    <div class="agreement-wrapper">
+                        <input type="checkbox" id="reseller" name="ResellerAgreement"
+                            onchange={handleResellerAgreementChange} checked={resellerAgreementCheck}
+                            disabled class="inputClass pc-checkbox"></input>
+                        
+                        <a href="#" class="agreement-link" onclick={openResellerModel}> Reseller
+                            Agreement</a>
+                    </div>
+                </template>
+                <template if:true={mspAgreement}>
+                    <div class="agreement-wrapper">
+                        <input type="checkbox" id="msp" name="MSPAgreement"
+                            onchange={handleMSPAgreementChange} checked={mspAgreementCheck} disabled
+                            class="inputClass pc-checkbox"></input>
+                        
+                        <a href="#" class="agreement-link" onclick={openMSPModel}> MSP Agreement</a>
+                    </div>
+                </template>
+                <div class="slds-align_absolute-center">
+                    <lightning-button variant="brand" label="Submit" title="Submit"
+                                    onclick={handleSubmit} disabled={submitDisabled} class="slds-m-left_small">
+                    </lightning-button>
+                </div>
+            </lightning-layout-item>
+        </lightning-layout>
+    </div>
+    <template if:true={openMasterTermsModal}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        title="Close" onclick={hideModalBox}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse"
+                            size="small"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="heading-22">
+                        <template if:true={masterTermsAndConditionsAgreed}> Master Terms and Conditions</template>
+                        <template if:true={resellerAgreed}>Reseller Agreement</template>
+                        <template if:true={mspAgreed}>MSP Agreement</template>
+                    </h2>
+                </header>
+                
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1" style="height:50%;">
+                    <lightning-layout>
+                        <lightning-layout-item size="12" small-device-size="12" medium-device-size="12"
+                            large-device-size="12" class="layout-item">
+                            <template if:true={masterTermsAndConditionsAgreed}>
+                                <iframe src={masterUrl} width="100%" height="220%" class="slds-p-around_medium"></iframe>
+                            </template>
+                            <template if:true={resellerAgreed}>
+                                <iframe src={resellerUrl} width="100%" height="220%" class="slds-p-around_medium"></iframe>
+                            </template>
+                            <template if:true={mspAgreed}>
+                                <iframe src={mspUrl} width="100%" height="220%" class="slds-p-around_medium"></iframe>
+                            </template>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

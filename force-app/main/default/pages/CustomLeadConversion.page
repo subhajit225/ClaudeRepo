@@ -1,0 +1,286 @@
+<apex:page standardController="Lead" extensions="CustomLeadConvCntrlr" lightningStylesheets="true" id="ConvertLead" action="{!AccountDetails}">
+  <html  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <apex:stylesheet value="{!URLFOR($Resource.SLDS105, 'assets/styles/salesforce-lightning-design-system-vf.min.css')}" /> 
+     <script type = "text/javascript" src = "//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js" ></script>
+      <apex:slds />
+    <style>
+        .headerRow th{
+        padding: 14px;
+        }
+         .dataCol{
+            width:100% !important;
+         }
+         
+         .centerAllignBtn{
+        
+    width: 100%;
+    text-align: center;
+   
+         }
+         
+        .leadOwner > select {
+        display: none;
+        } 
+        .custPopup{
+        background-color: white;
+        z-index: 9999;
+        padding:10px;
+        position: absolute;
+        top:10px;
+        left: 34px;
+        width: min-content;
+        min-width: 62%;
+        
+        }
+        .popupBackground{
+        background-color: #00000038;
+        opacity: 1.2;
+        filter: alpha(opacity = 20);
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        //left: 0;
+        z-index: 9998;
+        }
+        .odd { 
+        background-color:white;
+        }
+        .even {
+        background-color: lightgrey;
+        }
+        
+    </style>
+    <apex:outputPanel rendered="{!$User.UITheme != 'Theme3'}">
+        <style>
+            body .slds-vf-messages{
+                color: white !important;
+            }
+        </style>
+    </apex:outputPanel>
+    <script type="text/javascript">
+   window.onload = function() {
+    document.getElementById('ConvertLead:Leadform:AccForm:leaddetails:leadOwner_mlktp').value = '005'; // Default lead owner selection as user and not as queuue
+    document.getElementById('ConvertLead:Leadform:AccForm:leaddetails:leadOwner_lktp').value = '005';
+    }
+   var j$ = jQuery.noConflict();
+   function reRenderSVG(){             // On panel rerender SVGs are lost,(sf bug) so have to re-draw them.
+                var imageURL = "{!URLFOR($Asset.SLDS, 'assets/icons/standard-sprite/svg/symbols.svg#search')}";
+                var SVG = j$("<svg/>", {
+                class: "slds-button__icon slds-button__icon_large",
+                });
+                var SVGUse = j$("<use/>");
+                SVGUse.attr("xlink:href",imageURL);
+                var SVGComplete = SVG.append(SVGUse);
+                console.log('@@@ SVGComplete');
+                console.log(SVGComplete);
+               j$(".svgButton").prepend(SVGComplete);
+               j$(".svgButton").html(j$(".svgButton").html());
+                
+            }
+  function setLoader(status,elename) {
+    if (status) {
+           document.getElementById(elename).style.display = 'block';
+    }
+    else {
+      document.getElementById(elename).style.display = 'none';
+    }
+  }
+</script>
+    
+    <apex:form id="Leadform">
+        <apex:outputPanel styleClass="popupBackground" rendered="{!showAccount}" >
+            <apex:outputPanel id="Accounttable1" styleClass="custPopup">
+                <apex:variable value="{!0}" var="emindex" />
+                  <apex:variable value="{!0}" var="pmindex" />
+                <div id="selectedrow" style="display:none;">{!selectedrowIndex}</div> <!-- needed for selectedrowId to be populated in cntrlr --->
+               <div class="centerAllignBtn">
+                 <span>       
+                 <apex:commandButton value="OK" action="{!selectAccount}" immediate="true" style="margin:10px;"/>
+                <apex:commandButton value="Cancel" action="{!closePopUp}" immediate="true" rendered="{!CMErrorMsg == null}"/>
+                </span>
+               </div>
+               
+                <div style= "width:50%;padding-bottom:10px;">
+                </div>
+                <apex:pageblock tabstyle="account" rendered="{!potentialAccMatch.size==0 && exactAccMatch.size==0 && searchType!='SF Internal'}" id="popuperr">
+                 
+                        <div class="message warningM2" style="text-align:center;width: 70%;margin:19px;" >
+                            {!CMErrorMsg} 
+                        </div>
+                   
+                   
+                    </apex:pageblock>
+                     <apex:outputPanel rendered="{!searchType=='SF Internal'}">
+                 
+                        <div class="message warningM2" style="text-align:center;margin:19px;padding-right:94px;width: fit-content;" >
+                            Salesforce internal search result
+                        </div>
+                    </apex:outputPanel>
+                <apex:pageblock tabStyle="account" title="Similar accounts found"  rendered="{!potentialAccMatch.size>0}"> 
+                    <div style="overflow: scroll; max-height: 400px;">
+                    <apex:pageBlockTable value="{!potentialAccMatch}" var="pm" > 
+                        <apex:column style="padding:10px;">
+                            <input type="radio" id="{!pmindex}-pm" name="selectedRadio">
+                            <apex:actionSupport event="onclick"  rerender="Accounttable" immediate="true"><br/>                                      
+                                <apex:param name="tempAcc" value="{!pmindex}-pm" assignTo="{!temAccRowIndex}"/>
+                            </apex:actionSupport> 
+                        </input>
+                    </apex:column>
+                    <!--<apex:column >
+                        <apex:variable value="{!pmindex+1}" var="pmindex"/> 
+                    </apex:column> -->
+                    <apex:column > <!--value="{!pm.accountName}">  -->
+                        <apex:facet name="header">Name</apex:facet>
+                        {!pm.accountName}
+                        <apex:variable value="{!pmindex+1}" var="pmindex"/> 
+                    </apex:column>
+                     <apex:column value="{!pm.accountStatus}"> 
+                            <apex:facet name="header">Status</apex:facet>
+                        </apex:column>
+                     <apex:column value="{!pm.recTypeName}"> 
+                        <apex:facet name="header"> Record Type</apex:facet>
+                    </apex:column>                
+                    <apex:column value="{!pm.accountOwner}"> 
+                            <apex:facet name="header">Owner</apex:facet>
+                        </apex:column>
+                         <apex:column value="{!pm.sourceID}"> 
+                            <apex:facet name="header">ID</apex:facet>
+                        </apex:column>
+                    <apex:column value="{!pm.addressLine1} {!pm.addressLine2}"> 
+                        <apex:facet name="header">Billing Street</apex:facet>
+                    </apex:column>
+                    <apex:column value="{!pm.city}"> 
+                        <apex:facet name="header">Billing City</apex:facet>
+                    </apex:column>
+                    <apex:column value="{!pm.state}"> 
+                        <apex:facet name="header">Billing State</apex:facet>
+                    </apex:column>
+                    <apex:column value="{!pm.postalCode}"> 
+                        <apex:facet name="header">Billing Postal Code</apex:facet>
+                    </apex:column>
+                    <apex:column value="{!pm.country}"> 
+                        <apex:facet name="header">Billing Country</apex:facet>
+                    </apex:column>   
+                </apex:pageBlockTable>
+                </div>
+              </apex:pageblock> 
+          <apex:pageblock tabStyle="account" title="{!IF(exactAccMatch.size==1,IF(exactAccMatch[0].newAccount=='Y'||exactAccMatch[0].newAccount=='y','Create New Account','Existing Account'),'Existing Account')}"  rendered="{!exactAccMatch.size>0}" id="pgsec">                  
+                        <apex:pageBlockTable value="{!exactAccMatch}" var="em" rowClasses="odd,even" id="pgtbl">
+                            <apex:column style="padding:10px;">   
+                                <input type="radio" id="{!emindex}-em" name="selectedRadio">
+                                <apex:actionSupport event="onclick"  rerender="Accounttable" immediate="true"><br/>                                      
+                                    <apex:param name="tempAcc1" value="{!emindex}-em" assignTo="{!temAccRowIndex}"/>
+                                </apex:actionSupport>
+                            </input>
+                        </apex:column>
+                        <!--<apex:column >
+                            <apex:variable value="{!emindex+1}" var="emindex"/>  
+                        </apex:column> -->
+                        <apex:column > <!--value="{!em.accountName}" --> 
+                            <apex:facet name="header">Name</apex:facet>
+                              {!em.accountName}
+                              <apex:variable value="{!emindex+1}" var="emindex"/> 
+                        </apex:column>
+                         <apex:column value="{!em.accountStatus}" rendered="{!IF(exactAccMatch.size==1,IF(exactAccMatch[0].newAccount=='Y'||exactAccMatch[0].newAccount=='y',false,true),true)}"> 
+                            <apex:facet name="header">Status</apex:facet>
+                        </apex:column>
+                        <apex:column value="{!em.recTypeName}" rendered="{!IF(exactAccMatch.size==1,IF(exactAccMatch[0].newAccount=='Y'||exactAccMatch[0].newAccount=='y',false,true),true)}"> 
+                        <apex:facet name="header"> Record Type</apex:facet>
+                    </apex:column> 
+                        <apex:column value="{!em.accountOwner}" rendered="{!IF(exactAccMatch.size==1,IF(exactAccMatch[0].newAccount=='Y'||exactAccMatch[0].newAccount=='y',false,true),true)}"> 
+                            <apex:facet name="header">Owner</apex:facet>
+                        </apex:column>
+                        <apex:column value="{!em.sourceID}" rendered="{!IF(exactAccMatch.size==1,IF(exactAccMatch[0].newAccount=='Y'||exactAccMatch[0].newAccount=='y',false,true),true)}"> 
+                            <apex:facet name="header">ID</apex:facet>
+                        </apex:column>
+                        <apex:column value="{!em.addressLine1} {!em.addressLine2}"> 
+                            <apex:facet name="header">Billing Street</apex:facet>
+                        </apex:column>
+                        <apex:column value="{!em.city}"> 
+                            <apex:facet name="header">Billing City</apex:facet>
+                        </apex:column>
+                        <apex:column value="{!em.state}"> 
+                            <apex:facet name="header">Billing State</apex:facet>
+                        </apex:column>
+                        <apex:column value="{!em.postalCode}"> 
+                            <apex:facet name="header">Billing Postal Code</apex:facet>
+                        </apex:column>
+                        <apex:column value="{!em.country}"> 
+                            <apex:facet name="header">Billing Country</apex:facet>
+                        </apex:column> 
+                    </apex:pageBlockTable>
+                </apex:pageblock>    
+        <script> 
+        if(document.getElementById('selectedrow').innerHTML){
+            document.getElementById((document.getElementById('selectedrow').innerHTML).replace(/ /g,'')).checked=true; 
+            }
+            /*  default 1st exact match selection on pop-up load 
+            else{
+            if(document.getElementById('0-em') != null)
+            document.getElementById('0-em').checked = true;
+            }*/
+        </script>     
+    </apex:outputPanel>  
+</apex:outputPanel>
+<apex:actionFunction name="searchacc" action="{!searchAccount}" immediate="true"/> 
+<div class="bPageTitle">
+    <div class="ptBody">
+        <div class="content">
+            <img src="/img/s.gif" alt="Lead" class="pageTitleIcon" title="Lead"/>
+            <h1 class="pageType">Convert Lead<span class="titleSeparatingColon">:</span></h1><h2 class="pageDescription"> {!lead.name}</h2><div class="blank">&nbsp;
+            </div></div></div></div>
+<div>
+    <div class="slds-m-around-x--small">Leads can be converted to accounts, contacts, opportunities, and followup tasks.<br/>You should only convert a lead once you have identified it as qualified.<br/>After this lead has been converted, it can no longer be viewed or edited as a lead, but can be viewed in lead reports.<br/><br/>
+    </div>
+</div>
+<apex:pageBlock mode="edit" id="AccForm">
+ 
+    <apex:pageBlockButtons >
+     <apex:commandButton action="{!createORsetAccount}" value="Convert" oncomplete="Postaccount();" status="startCreateProc" disabled="{!CMErrorMsg!=null}"/> <!--reRender="AccForm"-->
+                 <apex:actionStatus id="startCreateProc" onstart="setLoader(true,'leadConvertLoading')" />
+                 <apex:actionFunction name="Postaccount" action="{!PostAccountConvertLead}" rerender="AccForm" status="stopCreateProc" />      
+                  <apex:actionStatus id="stopCreateProc"   onstop="setLoader(false,'leadConvertLoading');reRenderSVG()" /> 
+                 
+        <apex:commandButton action="{!RedirectBack}" value="Cancel" immediate="true" />
+    </apex:pageBlockButtons>
+     <div id="leadConvertLoading" style="display:none;">
+    <div class="popupBackground"/>
+    <div class="loadCenter">
+    <div style="text-align: center;"> Loading...
+      <img src="/img/loading.gif" alt="Loading graphic" style="height: 25px;"/>
+    </div> </div>
+  </div> 
+      <apex:messages style="color:red;"></apex:messages>
+    <!-- <apex:pageMessages ></apex:pageMessages> -->
+ 
+    <apex:pageBlockSection title="Convert Lead" columns="1" id="leaddetails">
+      
+        <apex:inputField id="leadOwner" value="{!ldSource.OwnerId}" styleclass="leadOwner" label="Account Owner"/>
+        <apex:inputCheckBox value="{!sendEmailToOwner}" label="Send Email to the Owner"/>
+        <tr>
+            <th class="labelCol vfLabelColTextWrap">
+                <label>Account Name</label></th>
+            <td class="data2Col ">
+                <input type="text"  readonly="true" value="{!accName}"/>   
+                <button type="button" onclick="searchacc();" class="svgButton slds-button slds-button_icon button_icon-border">                
+                        <span class="slds-icon_container slds-icon-standard-account" style="background: transparent;" title="description of icon when needed"> 
+                          <svg class="slds-button__icon slds-button__icon_large" aria-hidden="true">
+                            <use xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/standard-sprite/svg/symbols.svg#search')}"></use>
+                          </svg>
+                           <span class="slds-assistive-text">search</span>
+                        </span>
+                    
+                </button> </td></tr>
+        <!-- <apex:inputField label="Country" value="{!ldSource.CountryCode}" required="true"/> -->
+        <apex:inputText label="Opportunity Name" value="{!oppName}"/>
+        <apex:inputField value="{!lead.Opportunity_Amount__c}" label="Opportunity Amount"/>
+        <apex:inputCheckBox id="icCreateOpp" value="{!dontCreateOpp}" label="Do Not Create Opportunity"/>
+        <apex:selectList size="1" value="{!selectedLeadStatus}" label="Converted Status" required="true"> 
+            <apex:selectOptions value="{!LeadStatus}"/>  
+        </apex:selectList>
+    </apex:pageBlockSection>
+</apex:pageBlock>
+</apex:form>
+ </html>
+</apex:page>

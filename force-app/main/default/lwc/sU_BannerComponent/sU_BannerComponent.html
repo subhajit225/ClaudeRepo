@@ -1,0 +1,150 @@
+<template>
+    <template if:true={customSettingsFilled}>
+        <div class="slds-grid slds-wrap conText">
+            <div dir={directionText} data-id="su_BannersearchBox" class="slds-col slds-large-size--1-of-1 slds-small-size--1-of-1 slds-medium-size--1-of-1">
+               
+                    <template if:true={customSettingsFilled}>
+                        <div>
+                            <div
+                                class="slds-col slds-large-size--1-of-1 slds-small-size--1-of-1 slds-medium-size--1-of-1">
+                                <div data-id="form-search" class="outerform">
+                                    <span class="su__bookmark-save">
+                                        <lightning-button-icon title={translationObject.Save_Bookmark} icon-name="utility:favorite" size="large"
+                                            onclick={starClicked} variant="bare"></lightning-button-icon>
+                                    </span>
+                                    <div
+                                        class="slds-form-element__control slds-input-has-icon slds-input-has-icon_left-right searchIconParent">
+                                        <lightning-input class="su__search-bar su__rtlpx-2" maxlength="500"
+                                            placeholder={translationObject.Search_here} value={searchString2} onkeyup={enterKeySearch}
+                                            data-id="searchBoxInput" focus={onfocus} type="text" autocomplete="off"
+                                            onchange={handleSearchStringChange} onkeydown={handleKeyDown}>
+                                        </lightning-input>
+                                        <template if:true={searchString2}>
+                                            <span class="su__search-bar-close-icon" onclick={deleteSearch}>
+                                                <lightning-button-icon icon-name="utility:close" size="large"
+                                                    variant="bare"></lightning-button-icon>
+                                            </span>
+                                        </template>
+                                        <span class="su__search-bar-icon" onclick={submitForm}>
+                                            <lightning-button-icon icon-name="utility:search" size="large"
+                                                variant="bare"></lightning-button-icon>
+                                        </span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <span data-id="su-suggestions">
+                                <template if:true={getCurrentStringLength}>
+                                    <div class="su__autoSuggestions su__width-100" data-id="autosuggestElement"
+                                        onmouseleave={mouseleft}>
+                                        <template if:true={autosuggestList.length}>
+                                            <template for:each={autosuggestList} for:item="autosuggestItem"
+                                                for:index="indexVar">
+                                                <div key={autosuggestItem._id} tabindex="-1"
+                                                    class="su-autoSuggest-element"
+                                                    data-id={autosuggestItem.autosuggestTitleToDisplay}
+                                                    data-count={autosuggestListLength}
+                                                    data-auto="true" data-value={autosuggestItem._id}
+                                                    data-url={autosuggestItem.href}
+                                                    data-subject={autosuggestItem.highlight.TitleToDisplayString}
+                                                    data-type={autosuggestItem.objName}
+                                                    data-index={autosuggestItem.sourceName}
+                                                    data-rank={indexVar}
+                                                    data-trackanalytics={autosuggestItem.trackAnalytics}
+                                                    > 
+
+                                                    <div class="su_autosuggest_icon">
+                                                        <h5 class="su-autosuggest-title">
+                                                            <span class="su__cursor" onclick={autoSuggestionClick}
+                                                                data-count={autosuggestListLength}
+                                                                data-id={autosuggestItem.highlight.TitleToDisplayString}
+                                                                data-auto="true" data-value={autosuggestItem._id}
+                                                                data-url={autosuggestItem.href}
+                                                                data-subject={autosuggestItem.highlight.TitleToDisplayString}
+                                                                data-type={autosuggestItem.objName}
+                                                                data-index={autosuggestItem.sourceName}
+                                                                data-rank={indexVar}
+                                                                data-trackanalytics={autosuggestItem.trackAnalytics}>
+                                                                <a class="su__text-truncate-custom su__d-block">
+                                                                    <lightning-formatted-rich-text
+                                                                        value={autosuggestItem.autosuggestTitleToDisplay}>
+                                                                    </lightning-formatted-rich-text>
+                                                                </a>
+                                                            </span>
+                                                            <template if:true={autosuggestItem.pfamily}>
+                                                                <span class="meta-source-name">
+
+                                                                    <lightning-formatted-rich-text
+                                                                        value={autosuggestItem.pfamily}>
+                                                                    </lightning-formatted-rich-text>
+                                                                </span>
+                                                            </template>
+                                                        </h5>
+                                                    </div>
+                                                    <div class="slds-large-size--1-of-1 slds-small-size--1-of-1 slds-medium-size--1-of-1 su-autosuggest-content">
+                                                        <template if:true={autosuggestItem.autosuggestData}>
+                                                            <div class=su__line-height-18>
+                                                                <template for:each={autosuggestItem.autosuggestData} for:item="metadata">
+                                                                    <template if:true={metadata.metaValue}>
+                                                                        <template if:true={metadata.value}>
+                                                                            <span class="su-metadata su__d-inline-block" key={metadata}>
+                                                                                <span>
+                                                                                    <template if:true={metadata.metaKeyValBoolean}>
+                                                                                        <b class="su-metadataTitle">
+                                                                                            {metadata.metaKeyVal}
+                                                                                        </b>&lrm;:
+                                                                                    <template for:each={metadata.value}
+                                                                                        for:item="metadataVal">
+                                                                                        <lightning-formatted-date-time
+                                                                                            key={metadataVal}
+                                                                                            year="numeric"
+                                                                                            month="numeric"
+                                                                                            day="numeric" hour="2-digit"
+                                                                                            minute="2-digit"
+                                                                                            time-zone-name="short"
+                                                                                            hour12="true"
+                                                                                                value={metadataVal}>
+                                                                                            </lightning-formatted-date-time>
+                                                                                        </template>
+                                                                                    </template>
+                                                                                    <template if:false={metadata.metaKeyValBoolean}>
+                                                                                        <template if:true={metadata.metaKeyVal}>
+                                                                                            <b class="su-metadataTitle">
+                                                                                                {metadata.metaKeyVal}&lrm;:
+                                                                                            </b>
+                                                                                        </template>
+                                                                                    <template for:each={metadata.value}
+                                                                                        for:item="metadataVal"
+                                                                                        for:index="singleVal">
+                                                                                            <span class="su-metadataVal" key={metadataVal}>
+                                                                                                {metadataVal}
+                                                                                            </span>
+                                                                
+                                                                                        </template>
+                                                                                    </template>
+                                                                
+                                                                                </span>
+                                                                            </span>
+                                                                        </template>
+                                                                    </template>
+                                                                </template>
+                                                            </div>
+                                                        </template>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </template>
+                                    </div>
+                                </template>
+                            </span>
+                        </div>
+                    </template>
+                    <template if:false={customSettingsFilled}>
+                        <span class="suBannerCustomSettingErrMsg">{customSettingErrorMessage}</span>
+                    </template>
+               
+            </div>
+        </div>
+    </template>
+</template>

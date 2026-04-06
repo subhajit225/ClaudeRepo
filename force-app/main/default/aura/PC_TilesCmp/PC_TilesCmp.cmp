@@ -1,0 +1,36 @@
+<aura:component extends="c:PC_UtilityCmp" implements="forceCommunity:availableForAllPageTypes" access="global" controller="PC_TilesController">
+    <aura:attribute name="tilesList" type="object"/>
+    <aura:attribute name="pageName" type="string" default="home"/>
+    <aura:attribute name="imageType" type="string" default="Card"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <lightning:layout multipleRows="true">
+        <aura:iteration items="{!v.tilesList}" var="tile">
+            <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="4" padding="around-small">
+                <div class="slds-box_x-large slds-text-align_center tileMenuItemCard">
+                    <div class="uiMenuItem forceCommunityTileMenuItem" data-aura-class="uiMenuItem forceCommunityTileMenuItem" >
+                        <span class="navTileLink" href="" role="menuitem" data-special-link="true" >
+                            <div class="tileLabel" id="{!tile.Id}" aura:id="tileLabelId" onclick="{!c.handleClick}" name="{!tile.Name}">{!tile.Name}</div>
+                             <aura:if isTrue="{!not(empty(tile.Static_Resource_Name__c))}">
+                                <div class="slds-align--absolute-center imagePreview" id="{!tile.Id}" name="{!tile.Name}" 
+                                     aura:id="tileDivId" onclick="{!c.handleClick}"
+                                     style="{!'background-image: url('+ $Resource.PCCardImages +tile.Image_Url__c+'); height:130px;'}">
+                                    <div style="font-size: 19px;color: white;"><aura:unescapedHtml value="{!tile.Image_Text__c}"/> </div>
+                                </div>
+                                <aura:set attribute="else">
+                              		<div class="slds-align--absolute-center imagePreview" id="{!tile.Id}" name="{!tile.Name}" 
+                                     	aura:id="tileDivId" onclick="{!c.handleClick}"
+                                     	style="{!'background-image: url('+tile.Image_Url__c+'); height:130px;'}">
+                                        <div style="font-size: 19px;color: white;"><aura:unescapedHtml value="{!tile.Image_Text__c}" /></div>
+                                	</div>
+                              	</aura:set>
+                            </aura:if>    
+                            
+                        </span>
+                    </div>
+                </div>                
+            </lightning:layoutItem>
+        </aura:iteration>
+    </lightning:layout>
+</aura:component>

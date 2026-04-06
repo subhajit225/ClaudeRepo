@@ -1,0 +1,29 @@
+<apex:page standardController="Opportunity">
+    <a id="helpTextRef" name="helpTextRef" target="_blank" onclick="openCenteredWindow(800,600);">{!$Label.HelpTextReference}</a>
+    
+    <style type="text/css">
+        a {
+        	display: inline-block; 
+        	padding-left: 10%;
+        	font-size: 14px;
+        	color: rgb(31 92 171);
+        	text-decoration: none !important; 
+        }
+          
+        @media (max-width: 768px) {
+        a {
+        	padding-left: 15%;
+        	font-size: 14px; 
+        	color: rgb(31 92 171);
+        	text-decoration: none !important; 
+        }
+    </style> 
+    <script>
+    function openCenteredWindow(w, h) {
+        const left = (screen.width - w) / 2;
+        const top = (screen.height - h) / 2; 
+        window.open('/apex/SalesOppChurnReasonPage', 'Churn Reason Info', 'width=' + w + ',height=' + h + ',left=' + left + ',top=' + top + ',resizable=yes,scrollbars=yes');
+    }
+    
+    </script>
+</apex:page>

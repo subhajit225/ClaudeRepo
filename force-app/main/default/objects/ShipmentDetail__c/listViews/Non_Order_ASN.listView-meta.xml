@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Non_Order_ASN</fullName>
+    <booleanFilter>1 OR 2</booleanFilter>
+    <columns>NAME</columns>
+    <columns>QuoteNumber__c</columns>
+    <columns>Quantity__c</columns>
+    <columns>ProductName__c</columns>
+    <columns>ProcessHistory__c</columns>
+    <columns>ShippedDate__c</columns>
+    <columns>Status__c</columns>
+    <columns>CREATED_DATE</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>SalesOrderNumber__c</field>
+        <operation>equals</operation>
+        <value>SPARES</value>
+    </filters>
+    <filters>
+        <field>SalesOrderNumber__c</field>
+        <operation>equals</operation>
+    </filters>
+    <label>Non-Order ASN</label>
+</ListView>

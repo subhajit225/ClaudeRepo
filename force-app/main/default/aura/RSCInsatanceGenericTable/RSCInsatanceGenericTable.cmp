@@ -1,0 +1,151 @@
+<aura:component controller="RSCInstanceService" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForAllPageTypes,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="isVisible" type="Boolean" default="false" />
+    <aura:attribute name="columns" type="List" />
+    <aura:attribute name="data" type="Object" />
+    <aura:attribute name="isExpanded" type="Boolean" default="false" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="isPortal" type="Boolean" default="false" />
+    <aura:attribute name="isPartenerDistributorAcc" type="Boolean" default="false" />
+    <aura:attribute name="sObjectOfID" type="String" />
+    <aura:attribute name="isMSPCustomer" type="Boolean" default="false" />
+
+    <aura:if isTrue="{!v.isVisible}">
+        <aura:if isTrue="{!v.isPortal}">
+            <!-- <div class="slds-large- --><!-- -size-12-of-12 ideaTitle">Rubrik Security Cloud</div> -->
+            <div class="slds-large--size-12-of-12 topSection">
+                <aura:if isTrue="{!not(empty(v.data))}">
+                    <!-- <div class="rsc-table-title">RSC Instances</div> -->
+                    <div class="portal-horizontal-scroll slds-scrollable_x portal-table-scroll">
+                        <div class="portal-table-logic">
+
+                            <div class="portal-row header">
+                                <aura:iteration items="{!v.columns}" var="col">
+                                    <div class="{!col.initialWidth}">
+                                        {!col.label}
+                                    </div>
+                                </aura:iteration>
+                            </div>
+
+                            <aura:iteration items="{!v.data}" var="rsc">
+                                <div class="portal-row">
+                                    <div class="{!v.columns[0].initialWidth}">
+                                        {!rsc.RSCAccountName__c}
+                                    </div>
+                                    <aura:if isTrue="{!v.isPartenerDistributorAcc}">
+                                        <div class="{!v.columns[1].initialWidth}">
+                                            {!rsc.SDPEndUser_Name}
+                                        </div>
+                                    </aura:if>
+                                    <div class="{!(v.isPartenerDistributorAcc ? v.columns[2].initialWidth : v.columns[1].initialWidth)}">
+                                        <lightning:formattedUrl value="{!rsc.RSCUrl__c}" label="{!rsc.RSCUrl__c}"
+                                            target="_blank" />
+                                    </div>
+                                    <div class="{!(v.isPartenerDistributorAcc ? v.columns[3].initialWidth : v.columns[2].initialWidth)}">
+                                        {!rsc.RSCAccountRelationship__c}
+                                    </div>
+                                    <div class="{!(v.isPartenerDistributorAcc ? v.columns[4].initialWidth : v.columns[3].initialWidth)}">
+                                        {!rsc.RSCOwnerEmails__c}
+                                    </div>
+                                    <div class="{!(v.isPartenerDistributorAcc ? v.columns[5].initialWidth : v.columns[4].initialWidth)}">
+                                        {!rsc.RSCAccountType__c}
+                                    </div>
+                                    <aura:if isTrue="{!v.isPartenerDistributorAcc}">
+                                        <div class="{!v.columns[6].initialWidth}">
+                                            {!rsc.ContractType__c}
+                                        </div>
+                                    </aura:if>
+                                    <div class="{!(v.isPartenerDistributorAcc ? v.columns[7].initialWidth : v.columns[5].initialWidth)}">
+                                        {!rsc.RSCRegion__c}
+                                    </div>
+                                     <div class="{!(v.isPartenerDistributorAcc ? v.columns[8].initialWidth : v.columns[6].initialWidth)}">
+                                        {!rsc.RSCDeployment__c}
+                                    </div>
+                                    <div class="{!(v.isPartenerDistributorAcc ? v.columns[9].initialWidth : v.columns[7].initialWidth)}">
+                                        {!rsc.Status__c}
+                                    </div>
+                                    <div class="{!(v.isPartenerDistributorAcc ? v.columns[10].initialWidth : v.columns[8].initialWidth)}">
+                                        {!rsc.RSCHostSite__c}
+                                    </div>
+                                </div>
+                            </aura:iteration>
+
+                        </div>
+                    </div>
+                </aura:if>
+            </div>
+
+            <aura:set attribute="else">
+                <aura:if isTrue="{!v.sObjectOfID == 'Case'}">
+                    <div
+                        class="slds-p-horizontal_small slds-section slds-is-open slds-box slds-theme_default fixed-container">
+                        <div class="slds-m-around_none slds-section  font_pointer"
+                            onclick="{!c.toggleTable}">
+                             <lightning:icon iconName="{!v.isExpanded ? 'utility:chevrondown' : 'utility:chevronright'}" 
+                                            size="x-small" 
+                                            class="slds-section__title-action-icon slds-button__icon_left" />
+                                <span class="bold_margin">
+                                RSC Instances
+                                <aura:if isTrue="{!v.isMSPCustomer}">
+                                    (MSP customer)
+                                    
+                                </aura:if>
+                                
+                            </span>
+                        </div>
+
+                        <div id="table-content">
+                            <aura:if isTrue="{!v.isExpanded}">
+                                <aura:if isTrue="{!not(empty(v.data))}">
+                                    <div class="table-scroll-wrapper">
+                                        <div class="scroller-content">
+                                            <div class="min_width_1500">
+                                              <lightning:datatable
+                                                    keyField="id"
+                                                    data="{! v.data }"
+                                                    columns="{! v.columns }"
+                                                    columnWidthsMode="auto"
+                                                    minColumnWidth="120"
+                                                    hideCheckboxColumn="true" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <aura:set attribute="else">
+                                        <div class="slds-p-around_medium slds-text-align_center slds-text-color_weak">
+                                            No RSC instance for the account.
+                                        </div>
+                                    </aura:set>
+                                </aura:if>
+                            </aura:if>
+                        </div>
+                    </div>
+                    <aura:set attribute="else">
+                        <div class="slds-p-horizontal_small slds-section slds-is-open slds-theme_default fixed-container">
+                            <aura:if isTrue="{!not(empty(v.data))}">
+                                <div class="table-scroll-wrapper">
+                                    <div class="scroller-content">
+                                        <div class="min_width_1500">
+                                           <lightning:datatable
+                                                keyField="id"
+                                                data="{! v.data }"
+                                                columns="{! v.columns }"
+                                                columnWidthsMode="auto"
+                                                minColumnWidth="120"
+                                                hideCheckboxColumn="true" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <aura:set attribute="else">
+                                    <div class="slds-p-around_medium slds-text-align_center slds-text-color_weak">
+                                        No RSC instance for the account.
+                                    </div>
+                                </aura:set>
+                            </aura:if>
+                        </div>
+                    </aura:set>
+                </aura:if>
+            </aura:set>
+        </aura:if>
+    </aura:if>
+</aura:component>

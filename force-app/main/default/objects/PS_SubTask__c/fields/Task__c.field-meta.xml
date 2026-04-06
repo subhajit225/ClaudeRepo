@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Task__c</fullName>
+    <description>PS Task related to this Subtask</description>
+    <inlineHelpText>Select PS Task related to this Subtask</inlineHelpText>
+    <label>Task</label>
+    <referenceTo>PS_Task__c</referenceTo>
+    <relationshipLabel>PS Subtasks</relationshipLabel>
+    <relationshipName>PS_Subtasks</relationshipName>
+    <relationshipOrder>0</relationshipOrder>
+    <reparentableMasterDetail>true</reparentableMasterDetail>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>MasterDetail</type>
+    <writeRequiresMasterRead>false</writeRequiresMasterRead>
+</CustomField>

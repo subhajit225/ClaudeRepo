@@ -1,0 +1,92 @@
+<aura:component>
+    <aura:attribute name="contributor" type="object" />
+    <aura:attribute name="rank" type="string" />
+    <aura:attribute name="showRank" type="boolean" default="false" />
+    <aura:attribute name="hideBorder" type="boolean" default="false" />
+
+    <div style="">
+        <ul class="">
+            <li class="slds-item">
+                <article class="slds-tile slds-media">
+                    <aura:if isTrue="{!v.showRank}">
+                        <div class="user-position slds-align_absolute-center">
+                            {!v.rank}
+                        </div>
+                    </aura:if>
+                    <div class="layered">
+                        <img alt="" src="{!v.contributor.PhotoURL}" title="{!v.contributor.Name}" class="image" />
+                        <aura:if isTrue="{!v.contributor.isRubrikEmployee}">
+                            <span class="rubrik">
+                                <c:rubrikSVGIcon></c:rubrikSVGIcon>
+                            </span>
+                        </aura:if>
+                    </div>
+                    <div class="slds-media__body" style="{!if(v.hideBorder,'','border-bottom: 2px inset;')}">
+                        <h3 class="slds-tile__title slds-truncate" title="{!v.contributor.Name}">
+                            <span class="name">{!v.contributor.Name}</span>
+                            <span class="rank"> &nbsp;({!v.contributor.ReputationPoints}&nbsp;
+                                <aura:if isTrue="{!v.contributor.ReputationPoints > 1}">Points)
+                                </aura:if>
+                                <aura:if isTrue="{!v.contributor.ReputationPoints == 1}">
+                                    Point)
+                                </aura:if>
+                            </span>
+                            <aura:if isTrue="{!v.contributor.isAuthor}">
+                                <span class="author">&nbsp;(Author)</span>
+                            </aura:if>
+                        </h3>
+                        <div class="slds-tile__detail">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-size_1-of-4 slds-m-vertical_x-small">
+                                    <div class="slds-m-around_x-small slds-align_absolute-center" title="Likes">
+                                        <span class="slds-file__text slds-truncate like-img slds-m-right_xx-small">
+                                            <lightning:icon iconName="utility:like" size="small" title="Likes"
+                                                class="icon" />
+                                        </span>
+                                        <span class="points">{!v.contributor.LikeReceivedCount}</span>
+                                    </div>
+                                </div>
+                                <div class="slds-size_1-of-4 slds-m-vertical_x-small">
+                                    <div class="slds-m-around_x-small slds-align_absolute-center" title="Posts">
+                                        <span class="slds-file__text slds-truncate like-img slds-m-right_xx-small">
+                                            <lightning:icon iconName="utility:share_post" size="small" title="Posts"
+                                                class="icon" />
+                                        </span>
+                                        <span class="points">{!v.contributor.PostCount}</span>
+                                    </div>
+                                </div>
+                                <div class="slds-size_1-of-4 slds-m-vertical_x-small">
+                                    <div class="slds-m-around_x-small slds-align_absolute-center" title="Replies">
+                                        <span class="slds-file__text slds-truncate like-img slds-m-right_xx-small">
+                                            <lightning:icon iconName="utility:comments" size="small" title="Replies"
+                                                class="icon" />
+                                        </span>
+                                        <span class="points">{!v.contributor.CommentCount}</span>
+                                    </div>
+                                </div>
+                                <div class="slds-size_1-of-4 slds-m-vertical_x-small">
+                                    <div class="slds-m-around_x-small slds-align_absolute-center" title="Best Answers">
+                                        <span class="slds-file__text slds-truncate like-img slds-m-right_xx-small">
+                                            <lightning:icon iconName="utility:check" size="small" title="Best Answers"
+                                                class="icon" />
+                                        </span>
+                                        <span class="points">{!v.contributor.BestAnswerReceivedCount}</span>
+                                    </div>
+                                </div>
+                                <!-- To be used in upcomming sprints
+                                    <div class="slds-size_1-of-5 slds-m-vertical_x-small">
+                                    <div class=" slds-text-align_center slds-m-around_x-small">
+                                        <span class="slds-file__text slds-truncate like-img slds-m-right_xx-small">
+                                            <lightning:icon iconName="utility:shield" size="small" title="Badges" class="icon"/>
+                                        </span>
+                                        <span class="points">{!v.contributor.BadgeCount}</span>
+                                    </div>
+                                </div>-->
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </li>
+        </ul>
+    </div>
+</aura:component>

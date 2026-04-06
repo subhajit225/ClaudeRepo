@@ -1,0 +1,24 @@
+<aura:component >
+    <ltng:require scripts="{!join(',',$Resource.chartbundle,
+                           $Resource.gaugeJs
+                           )}"/>
+    
+    <aura:handler name="change" value="{!v.ChartData}" action="{!c.afterScriptsLoaded}"/>
+    <aura:attribute name="chartName" description="This will contain Case Subject." type="String"/>
+    <aura:attribute name="ChartData" description="This will contain Case Subject." type="Map"/>
+    <aura:attribute name="mobileView" description="This will contain Case Subject." type="String"/>
+    <aura:if isTrue="{!v.chartName != 'gauage'}">
+        <div  style="text-align: center;">
+            <canvas aura:id="linechart"></canvas>
+        </div>
+        <aura:set attribute="else">
+            <div class="gauge" style="text-align: center;">
+                <canvas id="gauageChart"></canvas><br/>
+                <span id="res" style="font-size: 22px;color: #D7C575;"></span>
+            </div>
+           
+        </aura:set>
+    </aura:if>
+             
+   
+</aura:component>

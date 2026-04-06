@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CCR_Type_Partner_Referral_Fee</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+ISPICKVAL(CCR_Type__c ,&apos;Partner Referral Fee&apos;),
+OR(
+ISBLANK( Opportunity__c ),
+ISBLANK(Referral_Fee_Amount__c ),
+NOT(Referral_Fee_Amount__c &gt; 0),
+Impacts_Commission__c &lt;&gt; TRUE,
+Opportunity__r.AccountId &lt;&gt; Account_Name__r.Id
+)
+)</errorConditionFormula>
+    <errorMessage>1)Opportunity  &amp; Referral Fee Amount  are required  
+2)Impacts Commision should be checked
+3)AccountName should be Account on Opportunity for Type Partner Referral Fee</errorMessage>
+</ValidationRule>

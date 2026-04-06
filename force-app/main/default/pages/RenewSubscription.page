@@ -1,0 +1,183 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 11-17-21
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+  Modifications Log 
+  Ver   Date         Author          Modification 
+  1.0   11-17-21   Bryce Kilker     Initial Version
+  ***Copy of DisplayAllAssetsCloneP2 to be modified for subscription renewal use case
+-->
+
+
+<apex:page standardController="Account" extensions="RenewSubscriptionControllerV1" tabstyle="Account"  sidebar="false">
+    <meta>
+        <apex:slds />
+    </meta>
+    <apex:sectionHeader title="Renew Subscriptions"/>
+    <apex:pageMessages id="showmsg"></apex:pageMessages>
+    <apex:form rendered="{!landingPageRender}">
+        <apex:dataTable value="{!contractLineItemWrapperList}" var="contractLineItemWrapper"  id="quoteLineTable"
+            styleClass="slds-table slds-table_bordered">
+            <apex:column >
+                <apex:facet name="header">
+                    <apex:inputCheckbox value="{!allServiceContractChecked}">
+                        <apex:actionSupport event="onclick" action="{!checkAllServiceContractItems}"
+                                            rerender="quoteLineTable"/>
+                    </apex:inputCheckbox>
+                </apex:facet>
+                <apex:inputCheckbox value="{!contractLineItemWrapper.selected}" />
+            </apex:column>
+            <!-- RWD-1570 - START -->
+            <apex:column styleClass="col">
+                <apex:facet name="header">Contract Number</apex:facet>
+                <apex:outputText value="{!contractLineItemWrapper.contractLineItem.ServiceContract.ContractNumber}">
+                    <apex:param value="" />
+                </apex:outputText>
+                <apex:facet name="footer"></apex:facet>
+            </apex:column>
+            <!-- RWD-1570 - END -->
+            <apex:column styleClass="col">
+                <apex:facet name="header">Product Name</apex:facet>
+                <apex:outputText value="{!contractLineItemWrapper.contractLineItem.SBQQSC__ProductName__c}">
+                    <apex:param value="" />
+                </apex:outputText>
+                <apex:facet name="footer"></apex:facet>
+            </apex:column>
+            <apex:column styleClass="col">
+                <apex:facet name="header">Start Date</apex:facet>
+                <apex:outputText value="{0, date, MMMM d','yyyy}">
+                    <apex:param value="{!contractLineItemWrapper.contractLineItem.StartDate}" />
+                </apex:outputText>
+                <apex:facet name="footer"></apex:facet>
+            </apex:column>
+            <apex:column styleClass="col">
+                <apex:facet name="header">End Date</apex:facet>
+                <apex:outputText value="{0, date, MMMM d','yyyy}">
+                    <apex:param value="{!contractLineItemWrapper.contractLineItem.EndDate}" />
+                </apex:outputText>
+                <apex:facet name="footer"></apex:facet>
+            </apex:column>
+            <apex:column styleClass="col">
+                <apex:facet name="header">Subscription Term</apex:facet>
+                <apex:outputText value="{!contractLineItemWrapper.contractLineItem.Subscription_Term__c}"/>
+                <apex:facet name="footer"></apex:facet>
+            </apex:column>
+            <!-- Added on 15-07-2022 - Start -->
+            <apex:column styleClass="col">
+                <apex:facet name="header">Quantity </apex:facet>
+                <apex:outputText value="{!contractLineItemWrapper.contractLineItem.Quantity }"/>
+                <apex:facet name="footer"></apex:facet>
+            </apex:column>
+            <!-- Added on 15-07-2022 - End -->
+            <apex:column styleClass="col">
+                <apex:facet name="header">List Price</apex:facet>
+                <apex:outputText value="{!contractLineItemWrapper.contractLineItem.ListPrice}"/>
+                <apex:facet name="footer"></apex:facet>
+            </apex:column>
+            <apex:column styleClass="col">
+                <apex:facet name="header">Total Price</apex:facet>
+                <apex:outputText value="{!contractLineItemWrapper.contractLineItem.TotalPrice}"/>
+                <apex:facet name="footer"></apex:facet>
+            </apex:column>
+            <apex:column styleClass="col">
+                <apex:facet name="header">Contract Line Number</apex:facet>
+                <apex:outputText value="{!contractLineItemWrapper.contractLineItem.LineItemNumber}"/>
+                <apex:facet name="footer"></apex:facet>
+            </apex:column>
+            <!--link to related Service Contract -->
+            <apex:column styleClass="col">
+                <apex:facet name="header">Service Contract</apex:facet>
+                <apex:outputLink value="/{!contractLineItemWrapper.contractLineItem.ServiceContractId}" target="_blank">{!contractLineItemWrapper.contractLineItem.ServiceContract.Name}</apex:outputLink>
+                <apex:facet name="footer"></apex:facet>
+            </apex:column>
+            <apex:column >
+                <apex:facet name="header">Active Contract</apex:facet>
+                <apex:inputCheckbox disabled="true" value="{!contractLineItemWrapper.activeContract}" />
+            </apex:column>
+        </apex:dataTable>
+        <apex:pageBlock >
+            <div align="right" draggable="false" >
+                <apex:commandButton styleclass="slds-button slds-button_brand" value="Cancel" action="{!handleCancel}"/>
+                <apex:commandButton styleclass="slds-button slds-button_brand" value="Next" action="{!handleNext}"/>
+            </div>
+        </apex:pageBlock>
+    </apex:form>
+
+    <!-- ******************************************** Second Page Render *********************************************************-->
+    <apex:form rendered="{!renderSecondPage}">
+        <apex:dataTable value="{!allSelectedCLIAndProductWrapperList}" var="selectedCLIAndProductWrapper" id="productSKUTable" 
+            styleClass="slds-table slds-table_bordered">
+
+                <apex:column >
+                    <apex:facet name="header">
+                        <apex:inputCheckbox value="{!allCLIProductsChecked}">
+                            <apex:actionSupport event="onclick" action="{!checkCLIProducts}"
+                                                rerender="productSKUTable"/>
+                        </apex:inputCheckbox>
+                    </apex:facet>
+
+                    <apex:inputCheckbox value="{!selectedCLIAndProductWrapper.selectedCLiandProduct}" disabled="{!selectedCLIAndProductWrapper.disableCheckbox || selectedCLIAndProductWrapper.newPolarisSKUMappingList.size == 0}"/>
+                </apex:column>
+                <!-- RWD-1570 - START -->
+                <apex:column styleClass="col">
+                    <apex:facet name="header">Contract Number</apex:facet>
+                    <apex:outputText value="{!selectedCLIAndProductWrapper.selectedContractLineItem.ServiceContract.ContractNumber}">
+                        <apex:param value="" />
+                    </apex:outputText>
+                    <apex:facet name="footer"></apex:facet>
+                </apex:column>
+                <!-- RWD-1570 - END -->
+                <apex:column styleClass="col">
+                    <apex:facet name="header">Service Contract</apex:facet>
+                    <apex:outputLink value="/{!selectedCLIAndProductWrapper.selectedContractLineItem.ServiceContractId}" target="_blank">{!selectedCLIAndProductWrapper.selectedContractLineItem.ServiceContract.Name}</apex:outputLink>
+                    <apex:facet name="footer"></apex:facet>
+                </apex:column>
+
+                <apex:column styleClass="col">
+                    <apex:facet name="header">Contract Line Number</apex:facet>
+                    <apex:outputText value="{!selectedCLIAndProductWrapper.selectedContractLineItem.LineItemNumber}"/>
+                    <apex:facet name="footer"></apex:facet>
+                </apex:column>
+
+                <!-- Added on 15-07-2022 - start -->
+                <apex:column styleClass="col">
+                    <apex:facet name="header">Quantity</apex:facet>
+                    <apex:outputText value="{!selectedCLIAndProductWrapper.selectedContractLineItem.Quantity}"/>
+                    <apex:facet name="footer"></apex:facet>
+                </apex:column>
+                <!-- Added on 15-07-2022 - end -->
+
+                <apex:column styleClass="col">
+                    <apex:facet name="header">Old Product</apex:facet>
+                    <apex:outputText value="{!selectedCLIAndProductWrapper.selectedContractLineItem.SBQQSC__Product__r.Name}"/>
+                    <apex:facet name="footer"></apex:facet>
+                </apex:column>
+
+                <apex:column styleClass="col">
+                    <apex:facet name="header">New Product</apex:facet>
+                    <apex:dataTable value="{!selectedCLIAndProductWrapper.newPolarisSKUMappingList}" var="newPolarisSKUMapping" id="newProductList" styleClass="slds-table">
+                        <apex:column styleClass="col">
+                            <apex:outputText value="{!newPolarisSKUMapping.New_Product__r.Name}"/>
+                            <apex:facet name="footer"></apex:facet>
+                        </apex:column>
+                    </apex:dataTable>
+                    <apex:facet name="footer"></apex:facet>
+                </apex:column>
+                <apex:column >
+                <apex:facet name="header">Active Contract</apex:facet>
+                <apex:inputCheckbox disabled="true" value="{!selectedCLIAndProductWrapper.activeContract}" />
+                </apex:column>
+                
+        </apex:dataTable>
+        
+        <apex:pageBlock >
+            <div>
+                <apex:commandButton styleclass="slds-button slds-button_brand" value="Back" action="{!handleBack}" style="float: left;" />
+                <apex:commandButton styleclass="slds-button slds-button_brand" value="Renew" action="{!handleRenew}" style="float: right;" />
+                <apex:commandButton styleclass="slds-button slds-button_brand" value="Cancel" action="{!handleCancel}" style="float: right;" />
+            </div>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

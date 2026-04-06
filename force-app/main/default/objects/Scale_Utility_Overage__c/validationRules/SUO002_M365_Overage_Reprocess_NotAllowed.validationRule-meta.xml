@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SUO002_M365_Overage_Reprocess_NotAllowed</fullName>
+    <active>true</active>
+    <description>Reprocessing is not allowed Overage header with M365</description>
+    <errorConditionFormula>AND( ISPICKVAL(Process_Flag__c , &apos;Reprocess&apos;) , Bundle_Type__c = &quot;M365H&quot;)</errorConditionFormula>
+    <errorMessage>Reprocessing is not allowed on the M365 Scale Utility Overage. Please update the related M365 Snowflake Feed and changes will be reflected on the header and line.</errorMessage>
+</ValidationRule>

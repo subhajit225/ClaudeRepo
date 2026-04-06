@@ -1,0 +1,78 @@
+:host {
+  --primary-colour: #546c7e;
+  --secondary-colour: #3e7555;
+}
+
+.layout {
+  background: var(--primary-colour, #546c7e);
+}
+
+.layout-header {
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+.layout-header {
+  background: #fafafa;
+  border-radius: 20px 20px 0 0;
+  padding-top: 1rem;
+}
+
+.layout-body {
+  background: #ffffff;
+  border-radius: 20px 20px 0 0;
+  padding-bottom: 1rem !important;
+  position: relative;
+}
+
+.kcs_main {
+  position: relative;
+}
+
+.SMALL .layout-body,
+.LARGE .layout-body {
+  padding: 1rem 0;
+}
+
+.errorbox {
+  background: #ffffff;
+  padding: 1rem 0 !important;
+  border-radius: 20px 20px 0 0;
+  height: 500px;
+}
+
+.errormain {
+  background-color: #546c7e;
+  height: 500px;
+}
+
+.errorimg {
+  height: 6rem;
+  width: 100%;
+}
+
+.errormsg {
+  font-size: 15px;
+  width: 90%;
+  margin: auto;
+  text-align: center;
+  font-family: 'Roboto Regular', 'Helvetica Neue', sans-serif;
+  font-weight: 600;
+  margin-top: 2rem;
+  word-break: break-word;
+}
+
+.errorsub {
+  font-size: 15px;
+  color: #0f0a39;
+  width: 64%;
+  margin: auto;
+  text-align: center;
+  font-family: 'Roboto Regular', 'Helvetica Neue', sans-serif;
+  margin-top: 1rem;
+  opacity: 0.69;
+}
+
+.errorcontent {
+  margin-top: 8rem;
+}

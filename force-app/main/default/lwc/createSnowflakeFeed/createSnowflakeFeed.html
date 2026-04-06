@@ -1,0 +1,68 @@
+<template>  
+  <lightning-modal-header label="Create UCL SnowFlake Feed"> 
+  </lightning-modal-header>
+  <lightning-modal-body>
+    <template if:true={showLoading}>
+      <lightning-spinner
+        alternative-text="Loading"
+        size="medium"
+        class="spinnerClass"></lightning-spinner>
+    </template>
+
+    <lightning-layout multiple-rows="">
+      <lightning-layout-item
+        size="12"
+        flexibility="auto"
+        padding="horizontal-small"
+        class="slds-text-align_left">
+        <lightning-input
+          label="Cluster UUID"
+          value=""
+          data-field="ClusterUUID"
+          class="slds-m-bottom_x-small">
+        </lightning-input>
+      </lightning-layout-item>
+
+      <lightning-layout-item
+        size="12"
+        flexibility="auto"
+        padding="horizontal-small"
+        class="slds-text-align_left">
+        <lightning-input
+          label="Cluster Usage (FETB or No Of Users)"
+          type="number"
+          value=""
+          data-field="ClusterUsage"
+          class="slds-m-bottom_x-small">
+        </lightning-input>
+      </lightning-layout-item>
+
+      <lightning-layout-item
+        size="12"
+        flexibility="auto"
+        padding="horizontal-small"
+        class="slds-text-align_left">
+        <lightning-input
+          label="Global Commit Id"
+          value={globalcommitId}
+          data-field={globalcommitId}
+          disabled="true"
+          class="slds-m-bottom_x-small">
+        </lightning-input>
+      </lightning-layout-item>
+    </lightning-layout>
+  </lightning-modal-body>
+  <lightning-modal-footer>
+    <lightning-button
+      class="slds-button"
+      variant="neutral"
+      label="Cancel"
+      onclick={handleDismiss}></lightning-button>
+    <lightning-button
+      label="Save"
+      variant="brand"
+      class="slds-m-right_large"
+      onclick={handleCreate}>
+    </lightning-button>
+  </lightning-modal-footer>
+</template>

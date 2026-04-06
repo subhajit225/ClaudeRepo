@@ -1,0 +1,100 @@
+<template>
+  <div class="artcile_main">
+    <div class="article_layout" data-id="top">
+      <lightning-layout multiple-rows>
+        <template for:each={articlesData} for:item="item" for:index="cardIndex">
+          <template if:true={getSmallLayout}>
+            <lightning-layout-item
+              class="outerLayout"
+              data-id={cardIndex}
+              key={item.key}
+              size={getLayoutSize}
+            >
+              <template
+                for:each={item.values}
+                for:item="items"
+                for:index="cardIndexs"
+              >
+                <lightning-layout-item key={items.id} size="12">
+                  <c-kcsknowblerarticle-card
+                    ispublisharticletab={ispublisharticletab}
+                    destobj={destobj}
+                    cardlength={cardLength}
+                    currentuserlanguage={currentuserlanguage}
+                    contentstandard={contentstandard}
+                    flexipageregionwidth={flexipageregionwidth}
+                    item={items}
+                    cardindex={cardIndex}
+                    languagechanged={languagechanged}
+                    cardindexs={cardIndexs}
+                    query={querys}
+                    onopenmanagescreen={openManageScreen}
+                    ondotclick={dotClick}
+                    onpreviewopen={previewOpen}
+                    parameters={parameters}
+                    progressbar
+                    contenthealthdatamap={contenthealthdatamap}
+                    newnumber={newnumber}
+                  >
+                  </c-kcsknowblerarticle-card>
+                </lightning-layout-item>
+              </template>
+            </lightning-layout-item>
+          </template>
+          <template if:false={getSmallLayout}>
+            <lightning-layout-item
+              data-id={cardIndex}
+              key={item.key}
+              size={getLayoutSize}
+            >
+              <template
+                for:each={item.values}
+                for:item="ite"
+                for:index="cardIndexss"
+              >
+                <lightning-layout-item key={ite.id} size="12">
+                  <c-kcsknowblerarticle-card
+                    ispublisharticletab={ispublisharticletab}
+                    cardlength={cardLength}
+                    destobj={destobj}
+                    currentuserlanguage={currentuserlanguage}
+                    item={ite}
+                    cardindex={cardIndex}
+                    languagechanged={languagechanged}
+                    cardindexs={cardIndexss}
+                    query={querys}
+                    contentstandard={contentstandard}
+                    onopenmanagescreen={openManageScreen}
+                    ondotclick={dotClick}
+                    onpreviewopen={previewOpen}
+                    parameters={parameters}
+                    circularbar
+                    contenthealthdatamap={contenthealthdatamap}
+                    newnumber={newnumber}
+                  >
+                  </c-kcsknowblerarticle-card>
+                </lightning-layout-item>
+              </template>
+            </lightning-layout-item>
+          </template>
+        </template>
+      </lightning-layout>
+    </div>
+    <template if:true={getSmallLayout}>
+      <div class="content-reviewer-pagination pagination small">
+        <c-knowbler-pagination
+          records={querys}
+          onupdate={updatePageHandler}
+        ></c-knowbler-pagination>
+      </div>
+    </template>
+    <template if:false={getSmallLayout}>
+      <div class="content-reviewer-pagination pagination large">
+        <c-knowbler-pagination
+          records={querys}
+          onupdate={updatePageHandler}
+        ></c-knowbler-pagination>
+      </div>
+    </template>
+  </div>
+</template>

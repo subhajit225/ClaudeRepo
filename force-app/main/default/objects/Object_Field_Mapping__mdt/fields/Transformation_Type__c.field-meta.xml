@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Transformation_Type__c</fullName>
+    <description>Type of transformation to apply: NONE (direct copy), PICKLIST (value mapping), CONSTANT (hardcoded value), FORMULA (custom logic)</description>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <inlineHelpText>NONE: Direct field copy | PICKLIST: Map source value to target value | CONSTANT: Set hardcoded value | FORMULA: Custom transformation logic</inlineHelpText>
+    <label>Transformation Type</label>
+    <required>true</required>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>NONE</fullName>
+                <default>true</default>
+                <label>NONE</label>
+            </value>
+            <value>
+                <fullName>PICKLIST</fullName>
+                <default>false</default>
+                <label>PICKLIST</label>
+            </value>
+            <value>
+                <fullName>CONSTANT</fullName>
+                <default>false</default>
+                <label>CONSTANT</label>
+            </value>
+            <value>
+                <fullName>FORMULA</fullName>
+                <default>false</default>
+                <label>FORMULA</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

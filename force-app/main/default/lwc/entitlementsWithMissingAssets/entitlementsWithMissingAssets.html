@@ -1,0 +1,180 @@
+<template>
+    <!--<template if:false={showTable}>
+        <div class="slds-align_absolute-center slds-theme--shade"
+            style="margin: 10px;height:3rem;border: 2px solid rgb(20, 95, 133);border-radius: 10px;">
+            No Records Found
+        </div>
+    </template>
+    <template if:true={showTable}>
+        <div class="slds-grid slds-gutters slds-p-around_small">
+            <div class="slds-col slds-size_1-of-6 slds-p-top_large ">
+                <lightning-button label="Download Report" variant="brand" onclick={handleDownload}
+                    disabled={disableFilterBTN}></lightning-button>
+            </div>
+        </div>
+        <div style="width: 100%; overflow:auto;">
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered"
+                aria-label="Example table of Opportunities with vertical borders">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th class="" scope="col" onclick={handleSort} data-field="Name">
+                            <div class="slds-truncate">Entitlement Name</div>
+                        </th>
+                        <template if:false={isMissingAsset}>
+                            <th class="" scope="col" onclick={handleSort} data-field="Quantity__c">
+                                <div class="slds-truncate">Order Line</div>
+                            </th>
+                            <th class="" scope="col" onclick={handleSort} data-field="DiffOLIAndAssetQuntity">
+                                <div class="slds-truncate">Order</div>
+                            </th>
+                        </template>
+                        <th class="" scope="col" onclick={handleSort} data-field="Order_Number__c">
+                            <div class="slds-truncate">Order Process Type</div>
+                        </th>
+                        <th class="" scope="col" onclick={handleSort} data-field="BillToName">
+                            <div class="slds-truncate">Order Shipment Status</div>
+                        </th>
+                        <th class="" scope="col" onclick={handleSort} data-field="Order_Product_Name__c">
+                            <div class="slds-truncate">Support Start Date</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={entitlementData} for:item="oEntitlements">
+                        <tr key={oEntitlements.Id}>
+
+                            <td>
+                                <lightning-formatted-url value={oEntitlements.EntitlementURL} label={oEntitlements.Name}
+                                    target="_blank">
+                                </lightning-formatted-url>
+                            </td>
+                            <td>
+                                <lightning-formatted-url value={oEntitlements.OrderServiceItemURL}
+                                    label={oEntitlements.OrderServiceItem} target="_blank">
+                                </lightning-formatted-url>
+                            </td>
+                            <td>
+                                <lightning-formatted-url value={oEntitlements.OrderURL}
+                                    label={oEntitlements.Order_Number__c} target="_blank">
+                                </lightning-formatted-url>
+                            </td>
+
+                            <td>{oEntitlements.OrderProcessType} </td>
+                            <td>{oEntitlements.OrderShipmentStatus} </td>
+                            <td>{oEntitlements.SupportStartDate} </td>-->
+                            
+                            <!--<td>
+                                <lightning-formatted-url value={oEntitlements.ProductURL}
+                                    label={oEntitlements.Order_Product_Name__c} target="_blank">
+                                </lightning-formatted-url>
+                            </td>
+                            <td>
+                                <lightning-formatted-url value={oEntitlements.OrderServiceItemURL}
+                                    label={oEntitlements.OrderServiceItem} target="_blank">
+                                </lightning-formatted-url>
+                            </td>-->
+
+                       <!-- </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
+    </template>-->
+
+    <div if:false={isLoaded} class="slds-is-relative">
+        <lightning-spinner
+            alternative-text="Loading..." variant="brand">
+        </lightning-spinner>
+    </div>
+
+    
+    
+    <div if:true={isLoaded} class="slds-is-relative">
+    <template if:false={showTable}>
+        <div class="slds-align_absolute-center slds-theme--shade"
+            style="margin: 10px;height:3rem;border: 2px solid rgb(20, 95, 133);border-radius: 10px;">
+            No Records Found
+        </div>
+    </template>
+    <template if:true={showTable}>
+        <!--div class="slds-grid slds-gutters">
+            <div class="slds-col slds-p-around_x-small">
+                <lightning-combobox name="filterBy" value={filterBy} label="Filter By" options={FilterByOptions} onchange={filterByHandler}></lightning-combobox>
+            </div>
+            <div class="slds-col slds-p-around_x-small">
+                <lightning-combobox name="condition" value={condition} label="Condition" options={ConditionOption} onchange={conditionHandler}></lightning-combobox>
+            </div>
+            <div class="slds-col slds-p-around_x-small">
+                <lightning-input type="text" label="Filter" onkeyup={filterHandler}></lightning-input>
+            </div>
+            <div class="slds-col slds-align-middle slds-p-around_x-small"
+                style="display: flex; align-items: center; margin-top: 4px; ">
+                <lightning-button variant="brand" label="Filter" title="Primary action" onclick={filterHandle} class="slds-m-left_x-small"></lightning-button>
+            </div>
+        </div-->
+        <div class="">
+            <div class="slds-col slds-size_1-of-5 ">
+           <lightning-input label="Filter" value={filterText} onchange={handleFilterChange}  > </lightning-input>
+         </div>
+          <div class = "slds-p-around_small">
+             <p><b>Total Record Count</b> : {filteredData.length}</p>
+         </div>
+       </div>
+        <br><br>
+        <!--<lightning-layout>
+            <lightning-layout-item size="3" padding="around-small">
+                <lightning-combobox name="filterBy" value={filterBy} label="Filter By" options={FilterByOptions} onchange={filterByHandler}></lightning-combobox>
+            </lightning-layout-item>
+            <lightning-layout-item size="3" padding="around-small">
+                <lightning-combobox name="condition" value={condition} label="Condition" options={ConditionOption} onchange={conditionHandler}></lightning-combobox>
+            </lightning-layout-item>
+            <lightning-layout-item size="4" padding="around-small">
+                <lightning-input type="text" label="Filter" onkeyup={filterHandler}></lightning-input>
+            </lightning-layout-item>
+            <div class="slds-p-top_medium">
+                <lightning-layout-item size="2" padding="around-small" class="slds-p-top_medium">
+                    <lightning-button variant="brand" label="Filter" title="Primary action" onclick={filterHandle} class="slds-m-left_x-small"></lightning-button>
+                </lightning-layout-item>
+            </div>
+        </lightning-layout>-->
+        <!--Starts
+        <div class="slds-grid slds-gutters slds-p-around_small">
+            <div class="slds-col slds-size_1-of-6 slds-p-top_large ">
+                <lightning-button label="Download Report" variant="brand" onclick={handleDownload}>
+                </lightning-button>
+              </div>
+        </div>
+        <div class="slds-tabs_card slds-tabs_default">
+            <template for:each={pillData} for:item="currentPillData" for:index="index">
+                <lightning-pill
+                    key={currentPillData.fieldIndex}
+                    label={currentPillData.fieldLabel}
+                    name={currentPillData.fieldName}
+                    data-index={index}
+                    data-value={currentPillData.fieldValue}
+                    onremove={removeHandler}
+                    style="--sds-c-pill-color-background: rgb(245, 169, 111); --sds-c-pill-color-background-hover: rgb(116, 187, 249);"
+                ></lightning-pill>
+            </template>
+            <div class="slds-grid slds-gutters">
+                <template for:each={filterData} for:item="currentFilterData">
+                    <lightning-combobox
+                        key={currentFilterData.fieldIndex}
+                        name={currentFilterData.fieldName}
+                        label={currentFilterData.fieldLabel}
+                        value={currentFilterData.fieldValue}
+                        options={currentFilterData.fieldOptions}
+                        onchange={changeHandler}
+                        class="slds-p-vertical_x-small slds-p-horizontal_medium"
+                    ></lightning-combobox>
+                </template>
+                <lightning-button variant="neutral" label="Reset" onclick={resetAll} class="slds-p-top_x-large"></lightning-button>
+            </div>-->
+    <!-- Lightning Datatable -->
+    <lightning-datatable key-field="id" data={filteredData} hide-checkbox-column="true"
+    columns={columns} wrap-text-max-lines=20>
+</lightning-datatable>
+    </template>
+</div>
+
+</template>

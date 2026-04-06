@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Edit_of_Extended_End_Date_for_Task_Type</fullName>
+    <active>true</active>
+    <errorConditionFormula>OR(ISPICKVAL(Task_Type__c, &quot;Resident Engineer&quot;),(ISPICKVAL(Task_Type__c, &quot;Resident Engineer-PD&quot;))) &amp;&amp;
+        ISCHANGED(Extended_End_date__c)</errorConditionFormula>
+    <errorMessage>Extended End date can not be edited. Task Type is Resident Engineer/Resident Engineer-PD</errorMessage>
+</ValidationRule>

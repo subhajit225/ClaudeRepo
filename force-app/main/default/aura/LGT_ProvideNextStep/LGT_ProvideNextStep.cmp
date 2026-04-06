@@ -1,0 +1,15 @@
+<aura:component Controller= "UpdateAssistRequestController" implements="force:lightningQuickActionWithoutHeader,lightning:actionOverride,force:hasRecordId" access="global">
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+    <aura:attribute name="setIntervalId" type="Integer"/>
+    <aura:attribute name = "validation" type ="String"/>
+    <aura:attribute name = "nextSteps" type ="String"/>
+    <aura:attribute name = "oldNextSteps" type ="String"/>
+    <aura:attribute name = "disable" type ="Boolean" default="false"/>
+    <lightning:textarea name="input1" required="true"  label="Provide Next Steps/Recommendation" aura:id="nextSteps" value="{!v.nextSteps}" onblur="{!c.doInit}" onchange="{!c.charLimitValidation}"/>
+    <div id="message">{!v.validation}</div>
+    <br/><br/><br/>
+    <center>
+        <lightning:button variant="Neutral" label="Update"  onclick="{! c.updateRequest }" disabled="{!v.disable}"/>
+        <lightning:button variant="Neutral" label="Cancel" onclick="{! c.close }"/>
+    </center>
+</aura:component>

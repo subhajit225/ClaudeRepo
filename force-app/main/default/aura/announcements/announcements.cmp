@@ -1,0 +1,43 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes"  controller="ControllerCommunityHome" access="global">
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <aura:attribute name="type" type="String"/>
+    <aura:attribute name="newsList" type="list"/>
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+    <aura:attribute name="componenttype" type="string" default="new"/>
+    <div class="slds-grid slds-align_absolute-center mobileCSS"   style="{!if(v.type == 'Announcements','padding: 4rem 6rem 2rem 5rem;','padding: 0 6rem 4rem 5rem;')}">
+        <div class="slds-size--1-of-1 ">
+            <div class="slds-grid slds-align-center ">
+
+                <div class=" slds-col slds-large-size_11-of-12 slds-size--12-of-12 ">
+                    <h1 class="artcls ">{!v.type}</h1>
+                </div>
+            </div>
+            <div class="slds-grid slds-wrap paddingtopbottom">
+
+                <div class="slds-col articlecls  slds-size_12-of-12 slds-medium-size_11-of-12 slds-large-size_11-of-12">
+                    <aura:iteration var="newsList" items="{!v.newsList}">
+                        <p class="paracls"><span class="titlesize">
+                          <span style="{!if(newsList.Alert__c == true,'','display:none;')}"><lightning:icon iconName="utility:warning" alternativeText="Warning!" />&nbsp;</span><a href="{!'announcementdetail?Id='+ newsList.Id}" class="hrefcolor">  {!newsList.Name}</a>
+                            </span><br></br>
+                            <span class="contentsize">
+                                <a href="{!'announcementdetail?Id='+ newsList.Id}" class="hrefcolor1"> <p class="contentparasize">  <aura:unescapedHtml value="{!newsList.Summary__c}"  /></p></a>
+                            </span><br></br><span class="datepadding">
+                           <a href="{!'announcementdetail?Id='+ newsList.Id}" class="hrefcolor1"> <p class="parafontsize">Created: <lightning:formattedDateTime value="{!newsList.Created__c}" year="numeric" day="2-digit" month="short" timeZone="UTC"/>
+                              <span class="">
+                                &bull; Last Modified: <lightning:formattedDateTime value="{!newsList.Last_Modified__c}" year="numeric" day="2-digit" month="short" timeZone="UTC"/>
+                                </span>
+                               </p></a>
+                            </span>
+                        </p>
+                    </aura:iteration>
+                </div>
+            </div>
+            <aura:if isTrue="{!v.type == 'Announcements'}">
+            	<a href="../s/announcements?type=All" class="link">View All Announcements</a>
+            	<aura:set attribute="else">
+                	<a href="../s/announcements?type=Getting+Started" class="link">View All Getting Started</a>
+                </aura:set>
+            </aura:if>
+        </div>
+    </div>
+</aura:component>

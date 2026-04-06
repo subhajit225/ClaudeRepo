@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Submit_for_Approval</fullName>
+    <availability>online</availability>
+    <description>Custom</description>
+    <displayType>button</displayType>
+    <linkType>javascript</linkType>
+    <masterLabel>Submit for Approval</masterLabel>
+    <openType>onClickJavaScript</openType>
+    <protected>false</protected>
+    <url>{!REQUIRESCRIPT(&quot;/soap/ajax/46.0/connection.js&quot;)} 
+{!REQUIRESCRIPT(&quot;/soap/ajax/46.0/apex.js&quot;)} 
+
+var validate = sforce.apex.execute(&quot;SubmitCCRValidation&quot;, &quot;ApprovalValidation&quot;,{CCRId: &quot;{! CCR__c.Id}&quot; 
+});
+debugger; 
+if(validate==&apos;No error&apos;){
+if(&quot;{!CCR__c.Justifications__c}&quot;==&apos;Cohesity Specific Situation&apos; &amp;&amp; &apos;{!CCR__c.Number_of_Attchments__c}&apos; &lt; 2) {
+alert(&apos;CCR must be have 2 attachments before submitting for approval when Justification is Cohesity Specific Situation&apos;);
+}
+else{
+
+
+window.open(&quot;{!URLFOR( $Action.CCR__c.Submit,  CCR__c.Id  )}&quot;);
+
+}
+}
+else{
+ alert(validate);
+
+}</url>
+</WebLink>

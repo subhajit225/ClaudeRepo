@@ -1,0 +1,24 @@
+<template>
+    <div class="slds-box slds-theme–default slds-align_absolute-center">
+        <table class="slds-table slds-table_cell-buffer slds-table_striped" style="width:80%;border-collapse: separate;border-spacing: 20px 0;">
+            <thead>
+                <tr class="slds-line-height_reset">
+                    <template for:each={headertitles} for:item="header">
+                        <th key={header.id} class="" scope="col" style="text-align:center;">
+                            {header.label}
+                        </th>
+                    </template>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="slds-hint-parent">
+                    <template for:each={clonedHeaderTitles} for:item="header">
+                        <td key={header.id} data-label="Spec File" style="text-align:center;">
+                            <div class="slds-cell-wrap">{header.count}</div>
+                        </td>
+                    </template>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</template>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Account_Record_Type_Partner_Distibutor</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+NOT($Setup.ShGl_DisableBusinessLogic__c.Disable_Partner_Relation_Validation_Rule__c),
+$Profile.Name &lt;&gt;&apos;System Administrator&apos;,
+OR(
+ISCHANGED(Partner_Account__c),
+ISNEW()
+),
+Partner_Account__r.RecordType.DeveloperName != &apos;Partner_Distributor&apos;
+)</errorConditionFormula>
+    <errorDisplayField>Partner_Account__c</errorDisplayField>
+    <errorMessage>Only Accounts with Record Type &apos;Partner/Distributor&apos; can be selected</errorMessage>
+</ValidationRule>

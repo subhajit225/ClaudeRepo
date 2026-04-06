@@ -1,0 +1,205 @@
+.predictedScoreIcon {
+  top: 0px;
+  width: 15px;
+  height: 18px;
+}
+
+.predictedScoreArrowIcon {
+  height: 18px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.predictedScoreText {
+  padding-left: 8px;
+  color: #7e34ec;
+  font-weight: 500;
+}
+
+.waiting {
+  padding-left: 8px;
+  color: #7e34ec;
+}
+
+.loadingPredictedScoreText {
+  padding: 0 10px;
+  font-weight: bold;
+  color: #7e34ec;
+  font-weight: 500;
+}
+
+.projectedScore {
+  background-color: #7e34ec30;
+  padding: 2px 5px 3px 5px;
+  border-radius: 8px;
+  color: #7e34ec;
+  font: normal normal medium 14px/23px Poppins;
+  letter-spacing: 0px;
+  opacity: 1;
+  border: 1px solid #7e34ec;
+  transition: width 0.5s;
+  font-size: 14px;
+  --sds-c-icon-color-foreground-default: #7e34ec;
+  cursor: pointer;
+}
+
+.projectedScore:hover {
+  background-color: #7e34ec;
+  display: block;
+  color: White !important;
+  --sds-c-icon-color-foreground-default: white;
+}
+
+.projectedScore:hover .predictedScoreArrowIcon {
+  padding-left: 13px;
+  padding-right: 3px;
+  transition: 0.2s;
+}
+
+.loadingPredictedScore {
+  padding: 5px;
+  border-radius: 8px;
+  color: #7e34ec;
+  font: normal normal medium 14px/23px Poppins;
+  letter-spacing: 0px;
+  opacity: 1;
+  border: 1px solid rgb(213 213 213);
+  transition: width 0.5s;
+  font-size: 15px;
+  --sds-c-icon-color-foreground-default: #7e34ec;
+  display: flex;
+}
+
+.container {
+  background-color: white;
+  display: flex;
+  position: relative;
+  width: 25px;
+  height: 25px;
+  border-radius: 28px;
+}
+
+.progress {
+  stroke: #6c93ff !important;
+  stroke-width: 3px;
+}
+
+.progressBackground {
+  stroke: #dee7ff;
+  stroke-width: 3px;
+}
+
+.svg circle {
+  stroke-dashoffset: 0;
+  stroke: #dee7ff;
+  stroke-width: 0.34em;
+  transition: stroke-dashoffset, linear;
+}
+
+.evaluated {
+  color: #4ac889;
+  text-decoration: underline;
+  font-size: 13px;
+}
+
+.evaluated span {
+  cursor: pointer;
+}
+
+.evaluatebutton {
+  width: fit-content;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.spinner {
+  position: relative;
+  display: inline-block;
+  --sds-c-icon-color-foreground-default: #7e34ec;
+  animation: spin 2s linear infinite;
+}
+
+.checkedimg {
+  margin-right: 4px;
+}
+
+.score {
+  width: 50%;
+}
+.knowbler__salesforce-evaluation-alert-popup-overlay{
+  background: rgba(0,0,0,0.5);
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  z-index: 10;
+}
+.knowbler__salesforce-evaluation-alert-popup-dialog {
+	width: 100% !important;
+	height: 100% !important;
+	margin: 0 !important;
+	overflow: hidden;
+	max-width: 100% !important;
+	position: absolute;
+	bottom: 0;
+	max-height: 600px;
+	z-index: 20;
+	left: 50%;
+	transform: translateX(-50%);
+}
+ .knowbler__salesforce-evaluation-alert-popup-dialog .knowbler__salesforce-evaluation-alert-popup-content {
+	 background: white;
+	 width: 383px;
+	 height: 194px;
+	 margin-inline: auto;
+	 border-radius: 0px 0px 10px 10px;
+	 padding: 14px;
+}
+ .knowbler__salesforce-evaluation-alert-popup-dialog .knowbler__salesforce-evaluation-alert-popup-content .knowbler__salesforce-evaluation-alert-popup-body {
+	 display: flex;
+	 flex-direction: column;
+	 gap: 10px;
+}
+ .knowbler__salesforce-evaluation-alert-popup-dialog .knowbler__salesforce-evaluation-alert-popup-content .knowbler__salesforce-evaluation-alert-popup-body .knowbler__salesforce-evaluation-alert-popup-header {
+	 display: flex;
+	 gap: 5px;
+	 align-items: center;
+	 color: #546c7e;
+	 font-size: 12px;
+	 font-family: 'poppins', Helvetica, Arial, Verdana, Tahoma, sans-serif;
+}
+ .knowbler__salesforce-evaluation-alert-popup-dialog .knowbler__salesforce-evaluation-alert-popup-content .knowbler__salesforce-evaluation-alert-popup-body .knowbler__salesforce-evaluation-alert-content {
+	 display: flex;
+	 gap: 10px;
+}
+ .knowbler__salesforce-evaluation-alert-popup-dialog .knowbler__salesforce-evaluation-alert-popup-content .knowbler__salesforce-evaluation-alert-popup-body .knowbler__salesforce-evaluation-alert-content .knowbler__salesforce-evaluation-alert-content-icon {
+	 min-width: max-content;
+	 background: rgba(207, 207, 207, 0.28);
+	 border-radius: 13px;
+	 padding: 15px;
+}
+ .knowbler__salesforce-evaluation-alert-popup-dialog .knowbler__salesforce-evaluation-alert-popup-content .knowbler__salesforce-evaluation-alert-popup-body .knowbler__salesforce-evaluation-alert-content span {
+	 font-size: 15px;
+	 font-family: 'poppins', Helvetica, Arial, Verdana, Tahoma, sans-serif;
+	 letter-spacing: 0px;
+	 color: #172b4d;
+}
+ .knowbler__salesforce-evaluation-alert-popup-dialog .knowbler__salesforce-evaluation-alert-popup-content .knowbler__salesforce-evaluation-alert-popup-body .knowbler__salesforce-evaluation-alert-button {
+	 background: #e7d9fb 0% 0% no-repeat padding-box;
+	 border-radius: 4px;
+	 padding-top: 11px;
+	 padding-bottom: 11px;
+	 font-size: 13px;
+	 font-weight: 600;
+	 color: #7e34ec;
+	 margin-top: 16px;
+	 display: flex;
+	 gap: 8px;
+	 justify-content: center;
+	 align-items: center;
+	 cursor: pointer;
+}
+ .knowbler__salesforce-evaluation-alert-popup-dialog .knowbler__salesforce-evaluation-alert-popup-content .knowbler__salesforce-evaluation-alert-popup-body .knowbler__salesforce-evaluation-alert-button .knowbler__salesforce-icon {
+	 fill: #7e34ec;
+}

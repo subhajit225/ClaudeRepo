@@ -1,0 +1,35 @@
+<aura:component >
+	<aura:attribute name="contact" type="Object"/>    
+    <aura:attribute name="primaryContacts" type="Object[]"/>    
+    <aura:attribute name="buttonstate" type="Boolean" default="false"/>
+    
+    <tr class="slds-hint-parent">
+        <th scope="row">
+            <div class="slds-truncate" title="{!v.contact.Name}">
+                {!v.contact.Name}&nbsp;
+            </div>
+        </th>
+        <td role="gridcell">
+            <div class="slds-truncate" title="{!v.contact.Title}">{!v.contact.Title}</div>
+        </td>
+        <td role="gridcell">
+            <div class="slds-truncate" title="{!v.contact.Email}">{!v.contact.Email}</div>
+        </td>
+        <td role="gridcell">
+            <div class="slds-truncate" title="{!v.contact.Phone}">{!v.contact.Phone}</div>
+        </td>
+        <td role="gridAction">
+            <aura:if isTrue="{!! v.buttonstate }">
+                <lightning:buttonStateful
+                                          state="{! v.buttonstate }"
+                                          variant="brand"
+                                          labelWhenOff="Select"
+                                          labelWhenOn="Select"
+                                          labelWhenHover="Select"
+                                          onclick="{! c.selectContact }"
+                                          />
+            </aura:if>
+        </td>
+        
+    </tr>
+</aura:component>

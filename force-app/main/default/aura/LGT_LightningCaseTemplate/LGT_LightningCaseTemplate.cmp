@@ -1,0 +1,72 @@
+<aura:component implements="lightning:recordHomeTemplate" description="Test Template">
+    <aura:attribute name="header" type="Aura.Component[]" />
+    <aura:attribute name="left" type="Aura.Component[]" />
+    <aura:attribute name="recordType" type="String" />
+    <aura:attribute name="caseComment" type="Aura.Component[]" />
+    <aura:attribute name="Jira" type="Aura.Component[]" />
+    <aura:attribute name="Activity" type="Aura.Component[]" />
+    <aura:attribute name="articleSection" type="Aura.Component[]" />
+    <aura:attribute name="leftBottom" type="Aura.Component[]" />
+    <aura:attribute name="right" type="Aura.Component[]" />
+    <aura:attribute name="isLeftSidebarCollapsed" type="Boolean" access="PRIVATE" default="true" />
+	<aura:attribute name="footer" type="Aura.Component[]" />
+    <aura:attribute name="CaseMilestone" type="Aura.Component[]" />
+    <aura:attribute name="activeSections" type="List" default="['C']" />
+    <aura:handler name="RecTypeEvent" event="c:recordTypeEvent" action="{!c.parentComponentEvent}"/>
+    
+    <aura:attribute name="showJira" type="Boolean" default="false"/>
+    <aura:attribute name="showArticleSection" type="Boolean" default="false"/>
+	<aura:attribute name="showCommentSection" type="Boolean" default="false"/>
+    <aura:attribute name="showActivitySection" type="Boolean" default="false"/>
+    <aura:attribute name="showMilestone" type="Boolean" default="false"/>
+    
+    <div>
+        <div>{!v.header}</div><br/>
+        <lightning:layout class="{!v.recordType}">
+            <lightning:layoutItem class="{!! v.isLeftSidebarCollapsed ? ' slds-hide' : '' }" size="8">
+                {!v.left}
+                <div class="slds-m-top_medium" style="background-color:white;">
+                    <lightning:accordion class="slds-m-top_medium"
+                                         allowMultipleSectionsOpen="true"
+                                         activeSectionName="{!v.activeSections}"
+                                         onsectiontoggle ="{!c.handleSectionToggle}"
+                                         >
+                        <aura:if isTrue="{!v.recordType != 'Support'}">
+                            <lightning:accordionSection name="A" label="Jira Reference">
+                                <aura:if isTrue="{!v.showJira}">
+                                    {!v.Jira}
+                                </aura:if>
+                            </lightning:accordionSection>
+                        </aura:if>
+                        <lightning:accordionSection name="B" label="Article Section">
+                            <aura:if isTrue="{!v.showArticleSection}">
+                                {!v.articleSection}
+                            </aura:if> 
+                        </lightning:accordionSection>
+                        <lightning:accordionSection name="C" label="Case Comments">
+                            {!v.caseComment}           
+                        </lightning:accordionSection>
+                        {!v.leftBottom}
+                         <!--<lightning:accordionSection name="D" label="Activity">
+                             <aura:if isTrue="{!v.showActivitySection}">
+                                {!v.Activity}
+                            </aura:if>                     
+                        </lightning:accordionSection>-->
+                    </lightning:accordion>
+                </div>
+            </lightning:layoutItem>
+            <lightning:layoutItem flexibility="no-flex">
+                <lightning:buttonIcon onclick ="{!c.toggleLeftSection}"
+                                      class="design-allow-interaction toggle slds-p-around_xxx-small slds-m-horizontal_xx-small thinBar"
+                                      variant="border-filled"
+                                      iconName="{! v.isLeftSidebarCollapsed ? 'utility:chevronleft' : 'utility:chevronright' }" 
+                                      alternativeText="{!! v.isLeftSidebarCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar' }" />
+            </lightning:layoutItem>
+            <lightning:layoutItem  flexibility="auto">
+                {!v.right}
+            </lightning:layoutItem>
+        </lightning:layout>
+        <div class="slds-m-top_small">{!v.footer}</div><br/>
+    </div>
+    
+</aura:component>

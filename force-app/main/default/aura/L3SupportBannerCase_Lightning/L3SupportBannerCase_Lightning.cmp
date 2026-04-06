@@ -1,0 +1,70 @@
+<aura:component implements="force:appHostable,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global">
+    <aura:attribute name="record" type="Object" />
+    <aura:attribute name="recordView" type="Object" />
+    <aura:attribute name="caseRecord" type="Object" />
+     <aura:attribute name="caseViewRecord" type="Object" />
+    <aura:attribute name="recordError" type="String" />
+    <aura:attribute name="currentOwner" type="String" />
+    <aura:attribute name="initalOwner" type="String" />
+    <aura:attribute name="ownerChanged" type="Boolean" default="false"/>
+    <aura:attribute name="showPredibasetext" type="Boolean" default="false"/>
+    <force:recordData aura:id="record2"
+                      layoutType="FULL"
+                      fields = "Id,PartnerSupportBanner__c,Change_Case_Contact_Warning__c,OwnerId,CaseTransferType__c,Initial_Case_Owner__c,Account.Name,Account.Tabs_Visibility__c"
+                      recordId="{!v.recordId}"
+                      targetError="{!v.recordError}"
+                      targetRecord="{!v.recordView}"
+                      targetFields="{!v.caseViewRecord}"
+                      mode="VIEW" />
+     <force:recordData aura:id="record"
+                      layoutType="FULL"
+                      fields = "Id,CaseTransferType__c"
+                      recordId="{!v.recordId}"
+                      targetError="{!v.recordError}"
+                      targetRecord="{!v.record}"
+                      targetFields="{!v.caseRecord}"
+                      mode="EDIT" />
+    
+    <aura:handler name="change" value="{!v.caseViewRecord.OwnerId}" action="{!c.changeOwner}"/>
+    <aura:if isTrue="{!v.showPredibasetext}">
+        <div style="color:red;background-color:yellow;font-size:20px;text-align: center;"> 
+            {!v.caseViewRecord.Account.Name} is a Predibase customer. Predibase Engineering currently provides technical support services for Predibase products. Contact the #cs-predibase-engineering channel for questions.
+        </div>
+        </aura:if>
+    <!-- CS21-1367 by Vijay: left justify the text to ensure it’s always visible to the user.-->
+    <div style="color:red;background-color:yellow;font-size:20px;"> 
+        {!v.caseViewRecord.PartnerSupportBanner__c}
+    </div>
+    <!-- CS21-617 - Shubham - Added a warning to change case contact-->
+    <div style="color:red;background-color:yellow;font-size:20px;text-align: center;"> 
+        {!v.caseViewRecord.Change_Case_Contact_Warning__c}
+    </div>
+    <aura:if isTrue="{!v.ownerChanged}">
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick="{!c.closeModal}">
+                     <lightning:icon iconName="utility:close" alternativeText="Close!" title="Close" />
+                    <span class="slds-assistive-text">Cancel and close</span>
+                </button>
+                <div class="slds-modal__header">
+                    <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Case Transfer Reason</h1>
+                </div>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning:select aura:id="select" name="select" label="Select Reason" onchange="{! c.onChange }">
+                        <option value="">Select one</option>
+                        <option value="Inbound phone call">Inbound phone call</option>
+                        <option value="CO off-shift and case escalated">CO off-shift and case escalated</option>
+                        <option value="CO off-shift and case requires work">CO off-shift and case requires work</option>
+
+                        <option value="Manager reassigning case">Manager reassigning case</option>
+                    </lightning:select>
+                </div>
+                <div class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" aria-label="Cancel and close" onclick="{!c.closeModal}">Cancel</button>
+                    <button class="slds-button slds-button_brand" onclick="{!c.saveCase}">Update</button>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </aura:if>
+</aura:component>

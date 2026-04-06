@@ -1,0 +1,176 @@
+<template>
+  <div class="expert-section">
+    <div class="toast showFormBlock" data-id="toastId">
+      <!-- <lightning-button-icon icon-name="utility:copy" size="x-small" alternative-text="copy"
+          class=" slds-m-right_small" title="Copy" onclick={copyLink}></lightning-button-icon> -->
+      <span style="margin: 10px;" onclick={copyLink}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21">
+              <defs>
+              <clipPath id="clip-Copy_to_clip_baord">
+                  <rect width="21" height="21"/>
+              </clipPath>
+              </defs>
+              <g id="Copy_to_clip_baord" data-name="Copy to clip baord" clip-path="url(#clip-Copy_to_clip_baord)">
+              <g id="Group_1963" data-name="Group 1963" transform="translate(1 1)">
+                  <g id="Group_1962" data-name="Group 1962" transform="translate(-2605 -642)">
+                  <g id="Group_1961" data-name="Group 1961" transform="translate(2605 642)">
+                      <g id="_78313-02" data-name="78313-02">
+                      <path id="Path_1663" data-name="Path 1663" d="M3.5,1.5H18.42A2.08,2.08,0,0,1,20.5,3.58V18.5a2,2,0,0,1-2,2H3.5a2,2,0,0,1-2-2V3.5a2,2,0,0,1,2-2Z" transform="translate(-1.5 -1.5)" fill="none" stroke="#dddbda" stroke-miterlimit="10" stroke-width="1"/>
+                      </g>
+                      <path id="content_copy_48px" d="M11.256,2H5.037A1.036,1.036,0,0,0,4,3.037v7.256H5.037V3.037h6.219Zm1.555,2.073H7.11A1.036,1.036,0,0,0,6.073,5.11v7.256A1.036,1.036,0,0,0,7.11,13.4h5.7a1.036,1.036,0,0,0,1.037-1.037V5.11A1.036,1.036,0,0,0,12.811,4.073Zm0,8.293H7.11V5.11h5.7Z" transform="translate(0.256 2.139)" fill="#706e6b"/>
+                  </g>
+                  </g>
+              </g>
+              </g>
+          </svg>
+      </span>
+      Copied to Clipboard
+    </div>
+    <template if:true={showCaseExperts}>
+      <div class="ag-filter-section su__ag-filter-div">
+        <!-- <lightning-button type="button" variant="brand" name="shareSlack" onclick={getSlackChannels} label="Share on Slack Channel"></lightning-button> -->
+        <div class="top-filters">
+          <!-- <button class="buttonSlack jira-icon">
+            List of Open Channels
+          </button> -->
+          <button class="buttonSlack" onclick={getSlackChannels}>
+              Share on Slack Channel
+              <svg id="Group_15310" class="slack-svg" data-name="Group 15310" width="14" height="14" viewBox="0 0 19 19" style="vertical-align: text-bottom;margin: 0px 2px;">
+                  <defs>
+                  <clipPath id="clip-path">
+                      <rect id="Rectangle_5213" data-name="Rectangle 5213" width="19" height="19" fill="none"/>
+                  </clipPath>
+                  </defs>
+                  <g id="Group_15309" data-name="Group 15309" clip-path="url(#clip-path)">
+                  <path id="Path_11709" data-name="Path 11709" d="M6.966,0a1.9,1.9,0,1,0,0,3.8h1.9V1.9A1.9,1.9,0,0,0,6.966,0h0m0,5.067H1.9a1.9,1.9,0,0,0,0,3.8H6.966a1.9,1.9,0,1,0,0-3.8Z" transform="translate(0)" fill="#36c5f0"/>
+                  <path id="Path_11710" data-name="Path 11710" d="M1314.266,6.966a1.9,1.9,0,0,0-3.8,0v1.9h1.9a1.9,1.9,0,0,0,1.9-1.9m-5.067,0V1.9a1.9,1.9,0,0,0-3.8,0V6.966a1.9,1.9,0,1,0,3.8,0" transform="translate(-1295.266)" fill="#2eb67d"/>
+                  <path id="Path_11711" data-name="Path 11711" d="M1307.2,1316.768a1.9,1.9,0,1,0,0-3.8h-1.9v1.9a1.9,1.9,0,0,0,1.9,1.9m0-5.067h5.067a1.9,1.9,0,0,0,0-3.8H1307.2a1.9,1.9,0,0,0,0,3.8Z" transform="translate(-1295.167 -1297.768)" fill="#ecb22e"/>
+                  <path id="Path_11712" data-name="Path 11712" d="M0,1309.9a1.9,1.9,0,0,0,3.8,0V1308H1.9a1.9,1.9,0,0,0-1.9,1.9m5.067,0v5.067a1.9,1.9,0,1,0,3.8,0V1309.9a1.9,1.9,0,0,0-3.8,0h0" transform="translate(0 -1297.867)" fill="#e01e5a"/>
+                  </g>
+              </svg>
+          </button>
+          <lightning-button-icon title="Filters" class="expert-filters" icon-name="utility:slider" onclick={openExpertModalOne}></lightning-button-icon>
+        </div>
+        
+        <div class="containerExpertModalOne su__ag-filter-position su__d-none" data-id="containerExpertModalOne">
+          <div class="parent-checkbox">
+            <lightning-input type="checkbox" data-id="allStatusChecked" label="Account Status" onchange={handleAllStatusChange}></lightning-input>
+          </div>
+          <div class="slds-p-left_small child-checkboxes">
+            <template for:each={userFilters.accounts} for:item="status">
+              <lightning-input key={status.name} checked={status.selected} type="checkbox" data-id="chkStatus" label={status.name} onchange={applyUserFilters}>
+              </lightning-input>
+            </template>
+          </div>
+        </div>
+      </div>
+    </template>
+    <!-- Slider button on Top Experts tab that opens status modal -->
+    
+    <!-- Modal popup code -->
+    <c-s-u_-slack-channels onhidecaseexperts={handleHideCaseExperts} event-code={eventCode} record-id={recordId} height={height} uid={uid} end-point={endPoint}></c-s-u_-slack-channels>
+    <template if:true={showCaseExperts}>
+      <div class="expert-parent-div">
+        <div class="slds-backdrop slds-backdrop_open su__d-none su__ag-backdrop" onclick={openExpertModalOne} data-id="backdrop"></div>
+        <!-- Data displayed in Top Experts Tab -->
+        <template if:true={showCasesExperts}>
+          <div class="su-agent-info">
+
+            <template for:each={relatedCasesExperts} for:item="agent" for:index="index">
+              <div class="agent-block" key={agent.OwnerId} onclick={expertsDivClicked} data-index={index}>
+                <div class="su__flex-vcenter-2">
+                  <div >
+                    <a href={agent.OwnerId} target="_blank" class="su__flex-vcenter"> 
+                      <img class="agent-icon-img" src={agent.Icon} /></a>
+                  </div>
+                  <div class="su__flex-vcenter-3">
+                      <label class="agent-name su__text-truncate text-name-width" title={agent.OwnerName}>{agent.OwnerName}
+                      </label>
+                      <svg width="7.311" height="11" viewBox="0 0 7.311 7.311">
+                          <template if:true={agent.isActive}>
+                            <g>
+                              <ellipse id="Ellipse_361" data-name="Ellipse 36" cx="3.656" cy="3.656" rx="3.656" ry="3.656" fill="#00b81e"/>
+                            </g>
+                          </template>
+                          <template if:false={agent.isActive}>
+                            <g>
+                              <ellipse id="Ellipse_362" data-name="Ellipse 36" cx="3.656" cy="3.656" rx="3.656" ry="3.656" fill="#9A9898"/>
+                            </g>
+                          </template>
+                      </svg>
+                      <label class="agent-desigantion su__text-truncate" title={agent.OwnerTitle}>{agent.OwnerTitle}</label>
+                      <label class="agent-department su__text-truncate" title={agent.OwnerDepartment}>{agent.OwnerDepartment}</label>
+                  </div>
+                  <div class="jira-icon">  
+                    <svg width="15" height="11" viewBox="0 0 68.25 71.25" fill="#fff" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round"><use xlink:href="#C" x="3.125" y="3.125"></use><defs><linearGradient id="A" x1="91.90%" y1="40.22%" x2="28.49%" y2="81.63%"><stop offset="18%" stop-color="#0052cc"></stop><stop offset="100%" stop-color="#2684ff"></stop></linearGradient><linearGradient id="B" x1="8.70%" y1="59.17%" x2="72.26%" y2="17.99%"><stop offset="18%" stop-color="#0052cc"></stop><stop offset="100%" stop-color="#2684ff"></stop></linearGradient></defs><symbol id="C" overflow="visible"><g stroke="none" fill-rule="nonzero"><path d="M61.161 30.211L30.95 0 .74 30.211a2.54 2.54 0 0 0 0 3.581l30.211 30.21 30.211-30.21a2.54 2.54 0 0 0 0-3.581zM30.95 41.46l-9.462-9.462 9.462-9.462 9.462 9.462z" fill="#2684ff"/><path d="M30.95 22.599C24.755 16.405 24.724 6.37 30.881.138L10.114 20.774l11.268 11.268z" fill="url(#A)"/><path d="M40.437 31.973L30.95 41.46a15.93 15.93 0 0 1 0 22.536l20.749-20.749z" fill="url(#B)"/></g></symbol>
+                    </svg>
+                  </div>
+              </div>
+            </div>
+            </template>
+          </div>
+
+
+          <template if:true={viewExpertPopup}>
+            <div class="slds-m-around_small">
+              <div class="modal-container viewExpert">
+                <div onclick={expertsPopupClosed} class="experts-close-icon">
+                  <lightning-icon size="xx-small" icon-name="utility:close"></lightning-icon>
+                </div>
+                <!-- <div class="userIcon">
+                  <img class="agent-icon-img expert-icon-img" src={expertClicked.Icon} />
+                </div> -->
+                <div class="su__flex-vcenter-2 expertDivMargin">
+                  <div class="expert-img">
+                    <a href={expertClicked.previewUrl} target="_blank" class="su__flex-vcenter"> 
+                        <img class="agent-icon-img expert-icon-img" src={expertClicked.Icon}/></a>
+                    </div>
+                  <div class="experts-text">
+                    <label class="agent-name expert-name agent-expert-color agent-name-1 text-name-width text-expert-name-width" title={expertClicked.OwnerName}>{expertClicked.OwnerName} </label>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="7.311" height="22" viewBox="0 0 7.311 7.311">
+                      <template if:true={expertClicked.isActive}>
+                          <ellipse id="Ellipse_3611" data-name="Ellipse 36" cx="3.656" cy="3.656" rx="3.656" ry="3.656" fill="#00b81e"/>
+                      </template>
+                      <template if:false={expertClicked.isActive}>
+                          <ellipse id="Ellipse_3622" data-name="Ellipse 36" cx="3.656" cy="3.656" rx="3.656" ry="3.656" fill="#9A9898"/>
+                      </template>
+                    </svg>
+                    <label class="agent-desigantion expert-designation expert-name-width su__text-truncate" title={expertClicked.OwnerTitle}>{expertClicked.OwnerTitle}</label>
+                    <label class="agent-department expert-department expert-name-width su__text-truncate" title={expertClicked.OwnerDepartment}>{expertClicked.OwnerDepartment}</label>
+                  </div>
+                  <div class="expertInfoView">  
+                      <span class="email-icon-color" title="Copy Email">
+                          <svg onclick={emailCopyToClipboard} id="icons_Q2" data-name="icons Q2" xmlns="http://www.w3.org/2000/svg" width="15.99" height="11.643" viewBox="0 0 22.99 18.643">
+                              <path id="Path_11332" data-name="Path 11332" d="M23.945,7H3.045A1.072,1.072,0,0,0,2,8.1v16.45a1.072,1.072,0,0,0,1.045,1.1h20.9a1.072,1.072,0,0,0,1.045-1.1V8.1A1.072,1.072,0,0,0,23.945,7ZM22.9,23.45H4.09V12.319l9.144,5.648a.452.452,0,0,0,.523,0L22.9,12.154Zm-9.144-8.006a.452.452,0,0,1-.523,0L4.09,9.193H22.9Z" transform="translate(-2 -7)" fill="#b7b7b7"/>
+                          </svg>
+                      </span>
+                      <span class="jira-icon">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="11" viewBox="0 0 68.25 71.25" fill="#fff" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round"><use xlink:href="#C" x="3.125" y="3.125"></use><defs><linearGradient id="AA" x1="91.90%" y1="40.22%" x2="28.49%" y2="81.63%"><stop offset="18%" stop-color="#0052cc"></stop><stop offset="100%" stop-color="#2684ff"></stop></linearGradient><linearGradient id="BB" x1="8.70%" y1="59.17%" x2="72.26%" y2="17.99%"><stop offset="18%" stop-color="#0052cc"></stop><stop offset="100%" stop-color="#2684ff"></stop></linearGradient></defs><symbol id="CC" overflow="visible"><g stroke="none" fill-rule="nonzero"><path d="M61.161 30.211L30.95 0 .74 30.211a2.54 2.54 0 0 0 0 3.581l30.211 30.21 30.211-30.21a2.54 2.54 0 0 0 0-3.581zM30.95 41.46l-9.462-9.462 9.462-9.462 9.462 9.462z" fill="#2684ff"/><path d="M30.95 22.599C24.755 16.405 24.724 6.37 30.881.138L10.114 20.774l11.268 11.268z" fill="url(#A)"/><path d="M40.437 31.973L30.95 41.46a15.93 15.93 0 0 1 0 22.536l20.749-20.749z" fill="url(#B)"/></g></symbol>
+                          </svg>
+                      </span>    
+                  </div>
+                </div>
+                <div class="expert-cases-count">
+                    <div>
+                        <label class="expert-similar-cases">Similar Cases Resolved </label>
+                        <label>{expertClicked.RelatedClosedCaseCount}</label>
+                    </div>
+                    <div>
+                        <label class="expert-total-cases">Total Solved Cases </label>
+                        <label>{expertClicked.TotalClosedCasesCount}</label> 
+                    </div>     
+                </div>
+              </div>
+            </div>
+            <div class="slds-backdrop slds-backdrop_open" onclick={expertsPopupClosed} data-id="backdrop"></div>
+          </template>
+
+
+        </template>
+        <template if:false={showCasesExperts}>
+          <c-s-u_-no-results-template></c-s-u_-no-results-template>
+        </template>
+      </div>
+    </template>
+  </div>
+</template>

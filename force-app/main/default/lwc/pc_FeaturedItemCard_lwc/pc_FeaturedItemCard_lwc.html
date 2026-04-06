@@ -1,0 +1,43 @@
+<template>
+    <lightning-layout-item size="4" small-device-size="4" medium-device-size="4" large-device-size="4"
+        class="slds-p-around_xx-small custom-featured-item-card">
+        <template for:each={cardslist} for:item="card">
+            <div class="slds-card slds-gutter slds-p-around_large slds-m-top_none"
+                key={card.Id}>
+                <lightning-layout-item size="6" small-device-size="6" medium-device-size="6" large-device-size="6">
+                    <div class="slds-col slds-p-horizontal_small slds-m-vertical_xx-small">
+                        <img class="imgClass" src={card.Image_Url__c}>
+                    </div>
+                </lightning-layout-item>
+                <lightning-layout-item size="6" small-device-size="6" medium-device-size="6" large-device-size="6">
+                    <div class="slds-col slds-p-around_medium">
+                        <div class="slds-p-bottom_x-small">
+                            <span class="slds-col cardBodyTag">
+                                {card.Tag__c}
+                            </span>
+                        </div>
+                        <div class="slds-p-bottom_x-small">
+                            <span class="slds-col cardBodyheading">
+                                {card.Card_Title__c}
+                            </span>
+                        </div>
+                        <div class="slds-p-bottom_x-small">
+                            <span class="slds-col cardBodyDescription">
+                                {card.Description__c}
+                            </span>
+                        </div>
+                        <div class="slds-p-bottom_x-small">
+                            <!-- Use slds icon button for underlined link button styling -->
+                            <span class="cardUrl">
+                                <lightning-formatted-url value={card.Navigate_Url__c} tooltip=""
+                                    label={card.Navigate_Text__c} target="_blank"></lightning-formatted-url><img
+                                    class="link-arrow-img"
+                                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAtCAYAAADV2ImkAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAD3SURBVHgB7daxDcJADEBR+0BAGZiAESghHRtRAkIiaRAdMzABjEDFGmQClJImOXAqCoKcu+MuEn6tLeUrsqIACCGEEEKIPxZNl+NRvN6CIwq8wMRVtKdg4ibaYzCxj/YcTOyiAwQT8+hAwcQsGjlLw3hzQignYAzH9TOd3K+7FJi6nCWFOtL620NtVG8auNEBT+LdK3q2WnA2WxIMWdnXZ85iG4KzslfM88s+4yyzbhixSEGrIxjQiBFoONSMG8VWLfBj9POjVOf2YdQ4loQ6CaNYEiLYOJb4DraKJT6DrWOJr2AnsYT1WbMyGOQlPJzECiGEEKJ1nnbLYBZlR9+tAAAAAElFTkSuQmCC">
+                            </span>
+                        </div>
+                    </div>
+                </lightning-layout-item>
+            </div>
+        </template>
+    </lightning-layout-item>
+</template>

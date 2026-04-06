@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Task_Migration_Status__c</fullName>
+    <description>CS21-1939</description>
+    <label>Task Migration Status</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>IN_PROGRESS</fullName>
+                <default>false</default>
+                <label>IN PROGRESS</label>
+            </value>
+            <value>
+                <fullName>MIGRATED</fullName>
+                <default>false</default>
+                <label>MIGRATED</label>
+            </value>
+            <value>
+                <fullName>NOT_MIGRATED</fullName>
+                <default>false</default>
+                <label>NOT MIGRATED</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+	<apiVersion>57.0</apiVersion>
+	<isExposed>true</isExposed>
+	<targets>
+		<target>lightning__RecordPage</target>
+	</targets>
+	<targetConfigs>
+		<targetConfig targets="lightning__RecordPage">
+			<property name="tableSource" type="String" default="JIRA" datasource="JIRA,RFE,Checklist" label="Choose Table"/>
+			<property name="isClosed" type="Boolean" default="false" label="Closed or Open Cases?"/>
+			<property name="title" label="Title" type="String" required="true" default="Records"/>
+		</targetConfig>
+	</targetConfigs>
+</LightningComponentBundle>

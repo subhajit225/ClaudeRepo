@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Future_and_Current_Owner_required</fullName>
+    <active>true</active>
+    <description>When Issue =&apos;Account Transfer&apos; then the future account owner and current account owner both are required</description>
+    <errorConditionFormula>AND( 
+        ISPICKVAL( Issue__c , &apos;Account Transfer&apos;) ,
+        NOT($Setup.ShGl_DisableBusinessLogic__c.Disable_Operation_Request_VRs__c),
+        OR(ISBLANK( Current_account_owner__c ) ,ISBLANK(  Future_account_owner__c ) )
+    )</errorConditionFormula>
+    <errorMessage>The current Account Owner and Future Account Owner both are required when Issue is Account Transfer. Please make sure both are not empty.</errorMessage>
+</ValidationRule>

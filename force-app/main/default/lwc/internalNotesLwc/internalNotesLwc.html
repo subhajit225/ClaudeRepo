@@ -1,0 +1,69 @@
+<template>
+    <lightning-card hide-header="true">
+        <div class="slds-p-horizontal_x-small">
+            <template if:true={recordId}>
+                <template if:true={isCollapsed}>
+                    <lightning-icon icon-name="utility:chevronright" onclick={toggleSectionHeader}
+                        class="slds-icon_container slds-p-left_xx-small slds-float_left chevronIcon" size="xx-small"
+                        style="padding:3px 3px 0 0;"></lightning-icon>
+                </template>
+                <template if:false={isCollapsed}>
+                    <lightning-icon icon-name="utility:chevrondown" onclick={toggleSectionHeader}
+                        class="slds-icon_container slds-p-left_xx-small slds-float_left chevronIcon" size="xx-small"
+                        style="padding:3px 3px 0 0;"></lightning-icon>
+                </template>
+                <span class="slds-truncate slds-text-title_bold" style="font-size:1rem;">Internal notes</span>
+                <button type="button" title="Internal notes" onclick={handleEdit} class="slds-button slds-button_icon slds-m-left_x-small slds-m-bottom_xx-small" tabindex="0">
+                    <lightning-icon title="Edit" icon-name="utility:edit" size="xx-small" alternative-text="edit"></lightning-icon>
+                </button>
+                <template if:false={isCollapsed}>
+                    <div class="content">
+                        <lightning-record-view-form record-id={recordId} object-api-name="Case">
+                            <lightning-output-field field-name={fieldApiName} variant="label-hidden">
+                            </lightning-output-field>
+                        </lightning-record-view-form>
+                    </div>
+                </template>
+
+                <!-- Modal -->
+                <template if:true={isEditing}>
+                    <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading"
+                        class="slds-modal slds-fade-in-open">
+                        <template if:true={isLoading}>
+                            <lightning-spinner alternative-text="Saving"></lightning-spinner>
+                        </template>
+                        <div class="slds-modal__container">
+                            <header class="slds-modal__header">
+                                <h2 id="modal-heading" class="slds-text-heading_medium">Edit Internal notes</h2>
+                                <button class="slds-button slds-button_icon slds-modal__close"
+                            title="Close"
+                            onclick={handleCancel}>
+                        <lightning-icon icon-name="utility:close" alternative-text="Close" size="small"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                            </header>
+
+                            <div class="slds-modal__content slds-p-around_medium">
+                                <lightning-record-edit-form record-id={recordId} object-api-name="Case"
+                                    onsubmit={handleSubmit} onsuccess={handleSuccess} onerror={handleError}>
+                                    <lightning-messages></lightning-messages>
+                                    <lightning-input-field field-name={fieldApiName}></lightning-input-field>
+
+                                    <div class="actions slds-m-top_medium">
+                                        <lightning-button label="Cancel" onclick={handleCancel}></lightning-button>
+                                        <lightning-button class="slds-m-left_small" type="submit" label="Save"
+                                            variant="brand"></lightning-button>
+                                    </div>
+                                </lightning-record-edit-form>
+                            </div>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </template>
+            </template>
+            <template if:false={recordId}>
+                <div class="hint">No record id found</div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

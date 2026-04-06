@@ -1,0 +1,39 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" controller="PC_IncentiveTileController">
+    <aura:attribute name="incentiveList" type="object"/>
+    <aura:attribute name="url" type="string"/>
+    <aura:attribute name="btnlabel" type="string"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <lightning:layout multipleRows="true">
+        <aura:iteration items="{!v.incentiveList}" var="inc">
+            <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="4" padding="around-small">
+                <aura:if isTrue="{!inc.Name == 'BrikDollars Earned'}">
+                    <c:PC_CCRBrikDollar label="{!inc.Name}" incId="{!inc.Id}" imgurl="{!inc.Image_Url__c}" Navurl="{!inc.Navigate_Url__c}"></c:PC_CCRBrikDollar>
+                    <aura:set attribute="else">
+                        <div class="slds-box_x-large slds-text-align_center tileMenuItemCard">
+                            <div class="uiMenuItem forceCommunityTileMenuItem" data-aura-class="uiMenuItem forceCommunityTileMenuItem" >
+                                <span class="navTileLink" href="/incentivesclaim" role="menuitem" data-special-link="true" >
+                                    <div class="tileLabel" id="{!inc.Id}" aura:id="incId" onclick="{!c.handleClick}" name="{!inc.Name}">{!inc.Name}</div> 
+                                    <div class="slds-align--absolute-center imagePreview" id="{!inc.Id}" name="{!inc.Name}" aura:id="incId" onclick="{!c.handleClick}" clas="backImage" 
+                                         style="{!'background-image: url('+inc.Image_Url__c+'); height:130px;'}">
+                                      <!--  <div class="slds-grid slds-grid_vertical" style="{!'background-image: url('+inc.Image_Url__c+'); height:150px;'}">                                    
+                                           <aura:if isTrue="{!inc.Claim_Visibility__c==true}">
+                                                <div class="slds-col">
+                                                    <span>
+                                                        <p>
+                                                            <lightning:button label="{!v.btnlabel}" value="{!inc.Id}" aura:id="incId" variant="Neutral" onclick="{!c.handleClick}" class="slds-align_absolute-center"/>
+                                                        </p>
+                                                    </span>
+                                                </div>
+                                            </aura:if>
+                                        </div> -->
+                                    </div>
+                                </span>
+                            </div>
+                        </div> 
+                            
+                    </aura:set>
+                </aura:if>                
+            </lightning:layoutItem>
+        </aura:iteration>
+    </lightning:layout>
+</aura:component>

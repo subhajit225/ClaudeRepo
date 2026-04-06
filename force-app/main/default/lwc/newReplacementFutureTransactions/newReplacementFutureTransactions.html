@@ -1,0 +1,169 @@
+<template>
+    <template if:true={displayeddatawrapper}>
+        <table cellspacing="0" cellpadding="0" style="width:100%">
+            <tr colspan="16" key={displayeddatawrapper.customIndex}>
+                <td style="width: 2%;padding-right: 13px;padding-top: 4px;text-align: right;">
+                    &nbsp;<img src="" height="10" width="10"  title="">
+                </td>
+                <td style="width: 3%;">
+                    <!-- <template if:true={displayeddatawrapper.showSelectCheckBox}> -->
+                        <lightning-input type="checkbox" label=""
+                            data-index={displayeddatawrapper}
+                            onchange={handleCheckBoxSelectionChange}
+                            data-custom-index={displayeddatawrapper.customIndex} 
+                            checked={displayeddatawrapper.rowSelected} 
+                            disabled={displayeddatawrapper.renLine}></lightning-input>
+                    <!-- </template> -->
+                </td>
+                <td style="width: 2%;padding: 0%;">{displayeddatawrapper.customIndex}</td>
+                <td style="width:93%; padding: 0px;"> <!-- padding-left: 15px; -->
+                    <table cellspacing="0" cellpadding="0" key={displayeddatawrapper.customIndex} style="width:100%"> 
+                        <!-- {displayeddatawrapper.mapAssetEntitlements.value.length} -->
+                        <template for:each={displayeddatawrapper.mapAssetEntitlements.futureValues} for:item="displayeddata" for:index="indexwrapBaseLicense">
+                            <template if:true={displayeddata.entitlementName}>
+                                <tr key={displayeddatawrapper.customIndex} style="border:none !important">
+                                    <td data-label="#" key={displayeddataValue.customIndex} style="width: 9%;padding:0.5rem">
+                                        <div class="slds-truncate slds-cell-wrap" title="">
+                                            {displayeddata.entitlementName}									
+                                        </div>
+                                        <div class="slds-truncate slds-cell-wrap" style="color:red;">
+                                            {displayeddata.errors}
+                                        </div>
+                                    </td>
+                                    <template if:true={displayeddata.rowspan}>
+                                        <td data-label="#" key={displayeddatawrapper.customIndex} style="width: 4.8387%;" rowspan={displayeddata.rowspan}>
+                                            <div class="slds-truncate" title="">
+                                                <template if:true={displayeddata.showAdd}>
+                                                    <lightning-button variant="base" title="Add" icon-name="utility:add"
+                                                        class="slds-m-left_x-small" data-index={indexData}
+                                                        data-custom-index={displayeddatawrapper.customIndex} onclick={addRows}
+                                                        data-keyidentifier ={displayeddata.keyIdentifier}></lightning-button>
+                                                </template>
+                                                <template if:true={displayeddata.showAdd}>
+                                                    <template if:true={displayeddata.showDelete}> 
+                                                            <!-- / --> &nbsp;&nbsp;
+                                                    </template>
+                                                </template>
+                                                <template if:true={displayeddata.showDelete}>
+                                                    <lightning-button variant="base" title="Delete" icon-name="utility:delete"
+                                                        class="slds-m-left_x-small" onclick={deleteRows} data-index={indexData}
+                                                        data-entid={displayeddata.entitlementId} data-record-id={displayeddata.selectedAssetId}
+                                                        data-custom-index={displayeddatawrapper.customIndex}
+                                                        data-keyidentifier ={displayeddata.keyIdentifier}></lightning-button>
+                                                </template>
+                                            </div>
+                                        </td>
+                                    </template>
+                                    <td data-label="Service Contract" key={displayeddatawrapper.customIndex} style="padding-left: 21px;width: 6.5%;">
+                                        <div class="slds-truncate slds-cell-wrap">
+                                            <a target="_blank" onclick={handleServiceContract} data-custom-index={displayeddatawrapper.customIndex} 
+                                                data-service-id={displayeddata.serviceContractId}>{displayeddata.serviceContractNumber}</a>
+                                        </div>
+                                    </td>
+                                    <td data-label="OrderNumber" key={displayeddatawrapper.customIndex} style="width: 3.763%;padding-left: 11px;">
+                                        <div class="slds-truncate" title=""> {displayeddata.entitlementOrderNumber} </div>
+                                    </td>
+                                    <td data-label="StartDate" key={displayeddatawrapper.customIndex} style="width: 4.301%; padding: 0%;padding-left: 14px;">
+                                        <div class="slds-truncate" title="">
+                                            <lightning-formatted-date-time value={displayeddata.StartDate} 
+                                                year="numeric" month="2-digit" day="2-digit"
+                                                time-zone="UTC"></lightning-formatted-date-time>
+                                        </div>
+                                    </td>
+                                    <td data-label="EndDate" key={displayeddatawrapper.customIndex} style="width: 4.301%;padding: 0%;padding-left: 8px;">
+                                        <div class="slds-truncate" title="">
+                                            <lightning-formatted-date-time value={displayeddata.EndDate} 
+                                                year="numeric" month="2-digit" day="2-digit"
+                                                time-zone="UTC"></lightning-formatted-date-time>
+                                        </div>
+                                    </td>
+                                    <td data-label="Available Qty" key={displayeddatawrapper.customIndex} style="width: 4.301%;padding-left: 10px;">
+                                        <template if:true={displayeddata.showSelectCheckBox}>
+                                            <div class="slds-truncate" title="">{displayeddata.selectedMaxquantity}</div>
+                                        </template>
+                                    </td>
+                                    <td data-label="Selected Quantity" key={displayeddatawrapper.customIndex} style="width: 4.301%;">
+                                        <div class="slds-grid slds-wrap" title="">
+                                            <lightning-input class="quantityInput" type="number" 
+                                                value={displayeddata.selectedquantity} data-index={indexData}
+                                                data-entid={displayeddata.entitlementId} data-record-id={displayeddata.selectedAssetId}
+                                                data-custom-index={displayeddatawrapper.customIndex} 
+                                                data-keyidentifier ={displayeddata.keyIdentifier}
+                                                onchange={handleQuanChange}
+                                                disabled={displayeddata.disableQuantity}>
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <template if:true={displayeddata.rowspan}>
+                                        <td data-label="Assets to Replace" key={displayeddatawrapper.customIndex} style="width:16.129%;    max-width: 12px;" rowspan={displayeddata.rowspan}>
+                                            <template if:false={displayeddata.quantityAssetType}>
+                                                <c-multiselect-combobox-lwc-parent options={displayeddata.newAssetList}
+                                                    onselectoptionparent={handleselectoptionparent}
+                                                    data-custom-index={displayeddatawrapper.customIndex} 
+                                                    data-entid={displayeddata.entitlementId} 
+                                                    data-keyidentifier ={displayeddata.keyIdentifier}
+                                                    data-index={displayeddatawrapper.customIndex}>
+                                                </c-multiselect-combobox-lwc-parent>
+                                            </template>
+                                        </td>
+                                    </template>
+                                    <template if:true={displayeddata.rowspan}>
+                                        <td data-label="Replacement SKU" key={displayeddatawrapper.customIndex} style="width: 9.677%;"  rowspan={displayeddata.rowspan}>
+                                                <lightning-input type="search" data-index={displayeddatawrapper.customIndex}
+                                                    data-custom-index={displayeddatawrapper.customIndex} value={displayeddata.skuProdName}
+                                                    onclick={handleSKUClick} onchange={handleSKUchange}
+                                                    data-keyidentifier ={displayeddata.keyIdentifier} 
+                                                    disabled={displayeddata.isReplaceableProduct}>
+                                                </lightning-input>
+                                        </td>
+                                    </template>
+                                    <td data-label="Replacement Term" key={displayeddatawrapper.customIndex} style="width: 4.301%;">
+                                        <div class="slds-truncate" title="">
+                                            <lightning-input type="number" class="customInput" value={displayeddata.ReplacementTerm}
+                                                data-index={indexwrapUpgradeEnt} data-entid={displayeddata.entitlementId}
+                                                data-record-id={displayeddata.selectedAssetId} 
+                                                data-custom-index={displayeddatawrapper.customIndex}
+                                                data-keyidentifier ={displayeddata.keyIdentifier}
+                                                onchange={handleTermChange} disabled={displayeddata.disableTerm}></lightning-input>
+                                        </div>
+                                    </td>
+                                    <!-- <template if:true={displayeddata.rowspan}> -->
+                                    <td data-label="Disposition Reason" key={displayeddatawrapper.customIndex} 
+                                            style="max-width: 5px; width:8.602150%;" > <!-- max-width: 5px; -->
+                                        <template if:true={displayeddata.disableDisposition}>
+                                            <lightning-combobox name="Disposition" value={displayeddata.selecteddisposition}
+                                                placeholder="Select Disposition Reason" options={displayeddata.autoDisposition}
+                                                onchange={handleDisposition} data-index={indexwrapUpgradeEnt}
+                                                data-custom-index={displayeddatawrapper.customIndex}  data-entid={displayeddata.entitlementId}
+                                                data-keyidentifier ={displayeddata.keyIdentifier} disabled></lightning-combobox>
+                                        </template>
+                                        <template if:false={displayeddata.disableDisposition}>
+                                            <lightning-combobox name="Disposition" value={displayeddata.selecteddisposition}
+                                                placeholder="Select Disposition Reason" options={displayeddata.manualDisposition}
+                                                onchange={handleDisposition} data-index={indexwrapUpgradeEnt}
+                                                data-custom-index={displayeddatawrapper.customIndex}  data-entid={displayeddata.entitlementId}
+                                                data-keyidentifier ={displayeddata.keyIdentifier}></lightning-combobox>
+                                        </template>
+                                    </td>
+                                    <!-- </template> -->
+                                    <td data-label="Renewal End Date"  key={displayeddatawrapper.customIndex} style="width: 7.526%;">
+                                        <div class="slds-truncate slds-cell-wrap">
+                                            <lightning-input type="date" name="input1" label="" value={displayeddata.renewalEndDate}
+                                                    onchange={handleRenewalDateChange} data-index={indexwrapUpgradeEnt}
+                                                    data-custom-index={displayeddatawrapper.customIndex} disabled={displayeddata.disableRenewalEndDate}
+                                                    data-keyidentifier ={displayeddata.keyIdentifier}></lightning-input>
+                                        </div>
+                                        <div class="slds-truncate slds-cell-wrap">
+                                            <lightning-formatted-date-time value={displayeddata.renewalEndDate}
+                                            time-zone="UTC"></lightning-formatted-date-time>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </template>
+                        </template>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </template>
+</template>

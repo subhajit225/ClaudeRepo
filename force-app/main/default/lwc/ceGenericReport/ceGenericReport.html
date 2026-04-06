@@ -1,0 +1,13 @@
+<template>
+	<template lwc:if={reportsloaded}>
+		<template for:each={reports} for:item="report">
+			<div key={report.name} class="slds-m-vertical_medium">
+				<c-ce-generic-report-d-t  columns={report.columns} title={report.title}
+					dt-data={report.tableData} error={report.error} name={report.name} filtered-by={report.filteredBy}></c-ce-generic-report-d-t>
+			</div>
+		</template>
+	</template>
+	<template lwc:else>
+		<lightning-spinner alternative-text="Loading"></lightning-spinner>
+	</template>
+</template>

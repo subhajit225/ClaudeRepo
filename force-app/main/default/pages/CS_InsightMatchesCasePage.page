@@ -1,0 +1,21 @@
+<apex:page standardController="Case" rendered="{!$User.UITheme == 'Theme3'}">
+    <apex:slds />
+    <apex:includeLightning />
+    <div id="lightning" />
+
+    <script type="text/javascript">
+
+        $Lightning.use("c:CS_InsightMatchesApp", function() {
+            $Lightning.createComponent(
+                "c:CS_InsightMatchesComponent",
+                {
+                    "recordId" : "{!Case.Id}"
+                },
+                "lightning",
+                function(cmp) {
+                    // do some stuff
+                }
+            );
+        });
+    </script>
+</apex:page>

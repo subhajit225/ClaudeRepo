@@ -1,0 +1,26 @@
+<aura:component implements="force:lightningQuickAction,force:hasRecordId,lightning:actionOverride,lightning:isUrlAddressable" >
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="isLoading" type="Boolean" default="true" />
+    <aura:attribute name="errorMessage" type="String" default="Error Loading the Page, please connect with you Administrator" />
+
+    <lightning:workspaceAPI aura:id="workspace"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <aura:if isTrue="{!v.isLoading}">
+        <lightning:spinner alternativeText="Loading" size="medium" />
+    </aura:if>
+
+    <aura:if isTrue="{!not(v.isLoading)}">
+        <aura:if isTrue="{!not(empty(v.recordId))}">
+            <c:csRiskProfileCreation recordId="{!v.recordId}" onclosetab="{!c.closeFocusedTab}" calledFromAura="true" />
+            <div style="height: 58px;"></div>
+
+        <aura:set attribute="else">
+            <div class="slds-text-color_error">
+                <p>{!v.errorMessage}</p>
+            </div>
+        </aura:set>
+        </aura:if>
+    </aura:if>
+</aura:component>

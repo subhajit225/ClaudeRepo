@@ -1,0 +1,25 @@
+<apex:component access="global" controller="PolarisOrderTemplateClass">
+    <apex:attribute name="orderId" description="Order Id" type="Id" required="required"/>
+    <apex:outputPanel rendered="{!NOT(ISNULL(rateCardProducts)) && rateCardProducts.size > 0}">
+        <b>MSP PayGo program</b><br/>
+        The order was provisioned with the following products as referenced in the MSP PayGo rate card. The products and features are available for use in the RSC instance through the <i>Support Start Date</i> and <i>Support End Date</i> period as referenced in the following notice.
+        <br/><br/>
+        <table cellpadding="6" border="1" width="100%"
+               style="border-collapse: collapse; border-color: #9E9E9E">
+            <thead>
+                <tr>
+                    <th style="text-align:left;width:20%;font-size:10px;background-color: #f3f5f6;">Product name</th>
+                    <th style="text-align:left;width:80%;font-size:10px;background-color: #f3f5f6;">Product description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <apex:repeat value="{!rateCardProducts}" var="item">
+                    <tr>
+                        <td style="width:20%;font-size:10px;">{!item.Product_Name__c}</td>
+                        <td style="width:80%;font-size:10px;">{!item.Product_Description__c}</td>
+                    </tr>
+                </apex:repeat>
+            </tbody>
+        </table> 
+    </apex:outputPanel>
+</apex:component>

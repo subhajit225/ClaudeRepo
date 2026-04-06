@@ -1,0 +1,26 @@
+<apex:page id="OpporPOC2" standardController="Opportunity" title="{!$CurrentPage.parameters.quoteName} | SMS | {!$CurrentPage.parameters.accName}">   
+    <apex:form >
+        <apex:slds />
+    <apex:includeLightning />    
+    <div id="ltUpId"/>      
+    <script> 
+        var quoteId = "{!$CurrentPage.parameters.quoteId}";
+        var quoteAccId = "{!$CurrentPage.parameters.accId}";
+        var startDate = "{!$CurrentPage.parameters.quoteDate}";
+        let email = "{!$User.Email}";
+             $Lightning.use("c:ReplacementApp", function() { 
+                //$Lightning.createComponent("c:DisposeEntitlement",
+                $Lightning.createComponent("c:NewReplacement",
+                                           //{  "quoteId" : quoteId, "fromPage"  : "IBM QLI", "accId" : quoteAccId},
+                  {  "quoteIdOrginial" : quoteId, "accRecordId" : quoteAccId, "quoteCreateDate" : startDate},
+                                           
+                  "ltUpId",
+              function(cmp) {
+                 console.log('LWC Componenet added in VF page');
+              });
+            });
+        
+       
+    </script> 
+   </apex:form>
+</apex:page>

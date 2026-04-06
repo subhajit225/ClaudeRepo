@@ -1,0 +1,24 @@
+<apex:component controller="DownloadController">
+
+<apex:attribute type="string" description="the id of the product being shown" name="versionidstring" assignTo="{!docQueryID}"/>
+        <apex:datatable value="{!ReleaseVDocs}" var="attach"  styleClass="table" rendered="{!IF(ReleaseVDocs!=null, TRUE, FALSE)}">
+        <apex:column headerValue="Type">
+        <apex:outputtext value="{!attach.Description}"/>
+        </apex:column>
+
+       <apex:column headerValue="Date">
+        <apex:outputtext value="{0, date, short}">
+        <apex:param value="{!attach.LastModifiedDate}"></apex:param>
+        </apex:outputtext>       
+        </apex:column>
+
+       <!-- <apex:column headerValue="Revision">
+        <apex:outputfield value="{!attach.Name}"/>
+        </apex:column>-->
+
+        <apex:column headerValue="" style="width:20%;">
+          <a href="/servlet/servlet.FileDownload?file={!attach.Id}" target="_blank" class="speciallinks">Download</a>
+        </apex:column>
+        </apex:dataTable>
+
+</apex:component>

@@ -1,0 +1,64 @@
+<template>
+    <lightning-card title={reportName} icon-name="standard:report">
+        <!-- Loading -->
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading"></lightning-spinner>
+        </template>
+        <template if:false={isLoading}>
+            <template if:true={hasData}>
+                <div slot="actions">
+                    <lightning-button
+                        label="View Report"
+                        icon-name="utility:preview"
+                        onclick={handleViewReport}>
+                    </lightning-button>
+                </div>
+
+                <div class="slds-p-around_medium">
+                    <!-- Search -->
+                    <div class="slds-m-bottom_medium">
+                        <lightning-input
+                            type="search"
+                            label="Search"
+                            placeholder="Search all fields..."
+                            onchange={handleSearch}
+                            variant="label-hidden">
+                        </lightning-input>
+                    </div>
+                    <!-- Data Table -->
+                    <div class="slds-scrollable_y" style="height: 70vh;">
+                        <lightning-datatable
+                            key-field="id"
+                            data={paginatedData}
+                            columns={columns}
+                            hide-checkbox-column
+                            show-row-number-column>
+                        </lightning-datatable>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="slds-align_absolute-center slds-m-top_medium">
+                        <lightning-button
+                            label="Previous"
+                            onclick={previousPage}>
+                        </lightning-button>
+                        
+                        <span class="slds-p-horizontal_small">
+                            {currentRange}
+                        </span>
+                        
+                        <lightning-button
+                            label="Next"
+                            onclick={nextPage}>
+                        </lightning-button>
+                    </div>
+                </div>
+            </template>
+            <template if:false={hasData}>
+                <div class="slds-align_absolute-center slds-m-vertical_large slds-text-heading_small">
+                    No Data Found for the Report : {reportDeveloperName}
+                </div>
+            </template>
+        </template>
+    </lightning-card>
+</template>

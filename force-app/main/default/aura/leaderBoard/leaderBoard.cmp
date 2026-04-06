@@ -1,0 +1,286 @@
+<aura:component controller="leaderBoardController"
+    implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,force:hasRecordId"
+    access="global">
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+    <aura:attribute name="userRecord" type="Object" />
+    <aura:attribute name="postsRecord" type="Object" />
+    <aura:attribute name="selectedTab" type="String" default="" />
+    <aura:attribute name="selectedFilter" type="String" default="MostPopular" />
+    <aura:attribute name="userRecordPaged" type="Object" />
+    <aura:attribute name="currentPageNumber" type="Integer" default="1" />
+    <aura:attribute name="pageSize" type="Integer" default="21" />
+    <aura:attribute name="totalPages" type="Integer" default="false" />
+    <aura:attribute name="totalPagesList" type="List" default="false" />
+    <aura:attribute name="pageList" type="List" default="false" />
+    <aura:attribute name="showSpinner" type="Boolean" default="true" />
+    <aura:attribute name="popularPosts" type="Object" />
+    <aura:attribute name="mostRepliedPosts" type="Object" />
+    <aura:attribute name="recentPosts" type="Object" />
+
+
+    <div class="topDiv" style="background:aliceblue;font-family:gotham-light;">
+        <div style="padding-left:20px;margin-bottom:12px;">
+            <a class="textdecorate" href="{!$Label.c.Community_Base_URL+'topiccatalog'}"><span class="titlesize">Back to
+                    Forum</span></a>
+        </div>
+        <div
+            class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 slds-align_absolute-center filterDiv">
+            <ul>
+                <li class="filterList"><a class="filterLink" id="LeaderBoard" onclick="{!c.changeFilter}"
+                    style="{!if(v.selectedFilter == 'LeaderBoard', 'color: #23527c;','')}">Most Helpful Authors</a></li>| &nbsp;
+                <li class="filterList"><a class="filterLink" id="MostPopular" onclick="{!c.changeFilter}"
+                        style="{!if(v.selectedFilter == 'MostPopular', 'color: #23527c;','')}">Most Popular
+                        Posts</a></li>|&nbsp;
+                <li class="filterList"><a class="filterLink" id="MostReplied" onclick="{!c.changeFilter}"
+                        style="{!if(v.selectedFilter == 'MostReplied', 'color: #23527c;','')}">Most Replied
+                        Posts</a></li>|&nbsp;
+                <li class="filterList"><a class="filterLink" id="Recent" onclick="{!c.changeFilter}"
+                        style="{!if(v.selectedFilter == 'Recent', 'color: #23527c;','')}">Most Recent Posts</a></li>
+            </ul>
+        </div>
+        <br/>
+    </div>
+    <div>
+        <!--<div class="votesDiv">
+            <img src="{!$Resource.leaderBoard}" width="50" height="50"></img>Votes Leaderboard
+        </div>-->
+        <!--<lightning:tabset selectedTabId="{!v.selectedTab}" onselect="{!c.getData}">
+            <lightning:tab label="Authors" id="Author" >
+                <div style="padding:20px;">
+                    Most Helpful Authors
+                </div>
+                <ul class="slds-grid slds-wrap slds-grid_pull-padded detail-block" style="border:0px;">
+                    <aura:iteration items="{!v.userRecordPaged}" var="each" indexVar="number">
+                        <li class="slds-p-horizontal_xx-small slds-size_1-of-1 slds-medium-size_1-of-3 slds-p-around_small detail-block-child">-->
+        <!--<div class="slds-file slds-file_card slds-has-title" style="height: 90px;width:100%;margin-left: 24px;">-->
+        <!--<figure>-->
+        <!--<div class="detail-block">
+                                <div class="user-position">
+                                    {!if(v.currentPageNumber == 1,number+1, (number+1)+(v.pageSize*(v.currentPageNumber-1)))}
+                                </div>
+                                <div class="basic-details">-->
+
+        <!--<span class="slds-assistive-text">{!each.u.CommunityNickname}</span>
+                                   <img src="{!each.u.FullPhotoUrl}"  alt="Description of the image" class="image"/>-->
+        <!-- added for CS21-712 -->
+        <!--<div class="slds-grid slds-wrap">
+                                        <div class="slds-size_2-of-12">
+                                            <c:RubrikUserImage photoURL="{!each.u.SmallPhotoUrl}"
+                                                               name="{!each.u.CommunityNickname}"
+                                                               enableNavigation="true"
+                                                               userId="{!each.u.Id}"
+                                                               isRubrikEmployee="{!each.isRubrikEmployee}"
+                                                               imageHeight="50px"
+                                                               imageWidth="50px"
+                                                               rubrikIconMargin="30px">
+                                            </c:RubrikUserImage>
+                                        </div>
+                                        <div class="slds-size_10-of-12">
+                                            <span class="basic-details-span">{!each.u.CommunityNickname}</span>
+                                        </div>
+                                    </div>-->
+        <!-- end CS21-712 -->
+        <!--     </div>
+                                <div class="lia-user-kudos-received lia-component-kudos-received-count">
+                                    <span class="slds-file__text slds-truncate like-img">
+                                        <lightning:icon iconName="utility:like" size="small" class="likeicon" />
+                                    </span>
+                                    <span class="base-count-number">{!each.chA.LikeReceivedCount}</span>
+                                </div>
+                            </div>-->
+        <!--</div>-->
+        <!--         </li>
+                    </aura:iteration>
+                </ul>
+                <div class="slds-grid slds-gutters floatrow">
+                    <div class="slds-size_4-of-4 "    style=" padding-right: 0.5rem; padding-top: 7px;padding-bottom:20px;text-align:center;">
+                        <div class="paginationBlock">
+                            <aura:if isTrue="{!not(v.currentPageNumber == 1)}">
+                                <lightning:buttonIcon variant="bare" iconName="utility:chevronleft" alternativeText="View Left"
+                                                      disabled="{! v.currentPageNumber == 1}" onclick="{!c.onPrev}" />
+                            </aura:if>
+                            <div class="pagination">
+                                <aura:if isTrue="{!or(  v.currentPageNumber >= 5)}">
+                                    <a onclick="{!c.processMe}" name="1" class="{!if(v.currentPageNumber == pagi,'active','')}">1 </a>
+                                    <a>... </a>
+                                </aura:if>
+                                <aura:iteration items="{!v.totalPagesList}" var="pagi"  indexVar="index">
+
+                                    <aura:if isTrue="{!v.currentPageNumber == pagi+ 1}">
+                                        <a onclick="{!c.processMe}" name="{!index+1}" class="{!if(v.currentPageNumber == pagi,'active','')}">{!pagi} </a>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.currentPageNumber == pagi}">
+                                        <a onclick="{!c.processMe}" name="{!index+1}" class="{!if(v.currentPageNumber == pagi,'active','')}">{!pagi} </a>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.currentPageNumber == pagi -1 }">
+                                        <a onclick="{!c.processMe}" name="{!index+1}" class="{!if(v.currentPageNumber == pagi,'active','')}">{!pagi} </a>
+                                    </aura:if>
+                                </aura:iteration>
+                                <aura:if isTrue="{!or(  v.totalPages -1 > v.currentPageNumber)}">
+                                    <a>... </a>
+                                    <a onclick="{!c.processMe}" name="{!v.totalPages}" class="{!if(v.currentPageNumber == pagi,'active','')}">{!v.totalPages} </a>
+                                </aura:if>
+                                <lightning:buttonIcon variant="bare" iconName="utility:chevronright" alternativeText="View Right"
+                                                      disabled="{! v.currentPageNumber == v.totalPages}" onclick="{!c.onNext}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </lightning:tab>-->
+        <!--<lightning:tab label="Posts" id="Posts" >-->
+            <aura:if isTrue="{!v.selectedFilter == 'LeaderBoard'}">
+                <c:RubrikLeadershipBoard columns="1" hideBorder="false" showHeading="false"></c:RubrikLeadershipBoard>
+            </aura:if>
+            <aura:if isTrue="{!v.selectedFilter != 'LeaderBoard'}">
+
+                    <div>
+                        <div>
+                            <li class="slds-grid slds-p-horizontal_xx-small slds-size_1-of-1 slds-medium-size_1-of-1 slds-p-around_small detail-block-child"
+                                style="border-bottom:1px inset;">
+
+                                <div class="slds-size_5-of-12">
+                                    <div class="slds-grid">
+                                        <div class="slds-size_3-of-12">
+
+                                        </div>
+                                        <div class="slds-size_9-of-12">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="lia-user-kudos-received lia-component-kudos-received-count slds-size_1-of-12 slds-align_absolute-center" >
+                                    LIKES
+                                </div>
+                                <div class="lia-user-kudos-received lia-component-kudos-received-count slds-size_1-of-12 slds-align_absolute-center" >
+                                    REPLIES
+                                </div>
+                                <div class="lia-user-kudos-received lia-component-kudos-received-count slds-size_1-of-12 slds-align_absolute-center" >
+                                    BEST ANSWER
+                                </div>
+                                <div class="lia-user-kudos-received lia-component-kudos-received-count slds-size_1-of-12" >
+                                    CREATED DATE
+                                </div>
+                                <div class="lia-user-kudos-received lia-component-kudos-received-count slds-size_3-of-12" >
+                                    CATEGORY
+                                </div>
+                            </li>
+                        </div>
+                        <aura:iteration items="{!v.userRecordPaged}" var="each" indexVar="number">
+                            <aura:if
+                                isTrue="{!if(v.selectedFilter == 'Top Liked',each.eachFeed.LikeCount!=0,if(v.selectedFilter == 'Top Replied',each.eachFeed.CommentCount!=0,true))}">
+                                <li class="slds-grid slds-p-horizontal_xx-small slds-size_1-of-1 slds-medium-size_1-of-1 slds-p-around_small detail-block-child"
+                                    style="border-bottom:1px inset;">
+
+                                    <div class="slds-size_5-of-12 slds-grid">
+                                        <div class="slds-size_3-of_12">
+                                            <!--commented for CS21-712
+                                                <img src="{!each.u.FullPhotoUrl}"  alt="Description of the image" class="image"/>
+                                    		-->
+
+                                            <!-- added for CS21-712 -->
+                                            <c:RubrikUserImage photoURL="{!each.u.SmallPhotoUrl}" name="{!each.u.CommunityNickname}"
+                                                enableNavigation="true" userId="{!each.u.Id}" isRubrikEmployee="{!each.isRubrikEmployee}"
+                                                imageHeight="65px" imageWidth="65px" rubrikIconMargin="45px">
+                                            </c:RubrikUserImage>
+                                            <!--end CS21-712 -->
+                                        </div>
+                                        <div class="slds-size_9-of_12 slds-truncate" style="padding-left:30px;padding-top:10px;width:80%">
+                                            <span><a href="{!$Label.c.Community_Base_URL+'question/'+each.eachFeed.Id}"
+                                                    style="font-size:20px;">
+                                                    {!each.eachFeed.Title}</a></span>
+                                            <span style="display:block;">by {!each.u.CommunityNickname}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="lia-user-kudos-received lia-component-kudos-received-count slds-size_1-of-12 slds-align_absolute-center"
+                                        style="padding-top:10px;">
+                                        <span class="slds-file__text slds-truncate like-img">
+                                            <lightning:icon iconName="utility:like" size="small" class="icon" title="Likes" />
+                                        </span>
+                                        <span class="base-count-number">{!each.eachFeed.LikeCount}</span>
+                                    </div>
+                                    <!-- <div class="{!if(and(each.eachFeed.BestCommentId!=null,each.eachFeed.BestCommentId!=undefined),'lia-user-kudos-received lia-component-kudos-received-count slds-size_1-of-12 lastComment','lia-user-kudos-received lia-component-kudos-received-count slds-size_1-of-12' )}"
+                                        style="padding-top:10px;"> -->
+                                    <div class="lia-user-kudos-received lia-component-kudos-received-count slds-size_1-of-12 slds-align_absolute-center" style="padding-top:10px;">
+                                        <span class="slds-file__text slds-truncate like-img">
+                                            <lightning:Icon iconName="utility:comments" size="small" class="icon" title="Replies" />
+                                        </span>
+                                        <span class="base-count-number">{!each.eachFeed.CommentCount}</span>
+
+                                        <!--<aura:if isTrue="{!!empty(each.eachFeed.BestCommentId)}">
+                                                                                <lightning:icon iconName="utility:check" alternativeText="Connected" variant="inverse" size="small"
+                                                                                    class="slds-iconTick" />
+                                                                            </aura:if>-->
+                                    </div>
+                                    <div class="lia-user-kudos-received lia-component-kudos-received-count slds-size_1-of-12 slds-align_absolute-center" style="padding-top:10px;">
+                                        <span style="display:block;font-size:16px;" title="Best Answer">
+                                            <aura:if isTrue="{!!empty(each.eachFeed.BestCommentId)}">
+                                                <lightning:icon iconName="utility:check" size="small" title="Best Answer" class="icon" />
+                                            </aura:if>
+                                        </span>
+                                    </div>
+                                    <div class="lia-user-kudos-received lia-component-kudos-received-count slds-size_1-of-12"
+                                        style="padding-top:22px;">
+                                        <span style="display:block;font-size:16px;">
+                                            <ui:outputDate value="{!each.eachFeed.CreatedDate}" />
+                                        </span>
+                                    </div>
+                                    <div class="lia-user-kudos-received lia-component-kudos-received-count slds-size_3-of-12"
+                                        style="padding-top:22px;">
+                                        <a href="{!$Label.c.Community_Base_URL+'topic/'+each.eachTopic.TopicId}"
+                                            style="font-size:18px;">{!each.eachTopic.Topic.Name}</a>
+                                    </div>
+                                </li>
+                            </aura:if>
+                        </aura:iteration>
+                    </div>
+                    <div class="slds-grid slds-gutters floatrow">
+                        <div class="slds-size_4-of-4 "
+                            style=" padding-right: 0.5rem; padding-top: 7px;padding-bottom:20px;text-align:center;">
+                            <div class="paginationBlock">
+                                <aura:if isTrue="{!not(v.currentPageNumber == 1)}">
+                                    <lightning:buttonIcon variant="bare" iconName="utility:chevronleft" alternativeText="View Left"
+                                        disabled="{! v.currentPageNumber == 1}" onclick="{!c.onPrev}" />
+                                </aura:if>
+                                <div class="pagination">
+                                    <aura:if isTrue="{!or(  v.currentPageNumber >= 5)}">
+                                        <a onclick="{!c.processMe}" name="1"
+                                            class="{!if(v.currentPageNumber == pagi,'active','')}">1 </a>
+                                        <a>... </a>
+                                    </aura:if>
+                                    <aura:iteration items="{!v.totalPagesList}" var="pagi" indexVar="index">
+
+                                        <aura:if isTrue="{!v.currentPageNumber == pagi+ 1}">
+                                            <a onclick="{!c.processMe}" name="{!index+1}"
+                                                class="{!if(v.currentPageNumber == pagi,'active','')}">{!pagi} </a>
+                                        </aura:if>
+                                        <aura:if isTrue="{!v.currentPageNumber == pagi}">
+                                            <a onclick="{!c.processMe}" name="{!index+1}"
+                                                class="{!if(v.currentPageNumber == pagi,'active','')}">{!pagi} </a>
+                                        </aura:if>
+                                        <aura:if isTrue="{!v.currentPageNumber == pagi -1 }">
+                                            <a onclick="{!c.processMe}" name="{!index+1}"
+                                                class="{!if(v.currentPageNumber == pagi,'active','')}">{!pagi} </a>
+                                        </aura:if>
+                                    </aura:iteration>
+                                    <aura:if isTrue="{!or(  v.totalPages -1 > v.currentPageNumber)}">
+                                        <a>... </a>
+                                        <a onclick="{!c.processMe}" name="{!v.totalPages}"
+                                            class="{!if(v.currentPageNumber == pagi,'active','')}">{!v.totalPages} </a>
+                                    </aura:if>
+                                    <lightning:buttonIcon variant="bare" iconName="utility:chevronright"
+                                        alternativeText="View Right" disabled="{! v.currentPageNumber == v.totalPages}"
+                                        onclick="{!c.onNext}" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+            </aura:if>
+        <!--</lightning:tab>-->
+        <!--</lightning:tabset>-->
+    </div>
+    <aura:if isTrue="{!v.showSpinner}">
+    <lightning:spinner aura:id="spinner" alternativeText="Loading" size="medium" class="spins slds-show" />
+    </aura:if>
+</aura:component>

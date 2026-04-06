@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Only_One_Can_Be_Filled_In</fullName>
+    <active>true</active>
+    <description>Either Account or Contact can be filled in</description>
+    <errorConditionFormula>AND(
+NOT(ISBLANK(Account__c)),
+NOT(ISBLANK(Contact__c))
+)</errorConditionFormula>
+    <errorMessage>Either Account or Contact can be filled in</errorMessage>
+</ValidationRule>

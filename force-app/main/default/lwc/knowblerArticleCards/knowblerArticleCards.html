@@ -1,0 +1,108 @@
+<template>
+  <div class="artcile_main">
+    <div class="article_layout" data-id="top">
+      <lightning-layout multiple-rows>
+        <template for:each={articlesData} for:item="item" for:index="cardIndex">
+          <template if:true={getSmallLayout}>
+            <lightning-layout-item
+              class="outerLayout"
+              data-id={cardIndex}
+              key={item.key}
+              size={getLayoutSize}
+            >
+              <template
+                for:each={item.values}
+                for:item="items"
+                for:index="cardIndexs"
+              >
+                <lightning-layout-item key={items.id} size="12">
+                  <c-knowbler-article-card
+                    alldatacategories={alldatacategories}
+                    client-settings={clientSettings}
+                    ispublisharticletab={ispublisharticletab}
+                    destobj={destobj}
+                    cardlength={cardLength}
+                    currentuserlanguage={currentuserlanguage}
+                    flexipageregionwidth={flexipageregionwidth}
+                    item={items}
+                    cardindex={cardIndex}
+                    cardindexs={cardIndexs}
+                    query={querys}
+                    onopenmanagescreen={openManageScreen}
+                    ondotclick={dotClick}
+                    casenumber={casenumber}
+                    onpreviewopen={previewOpen}
+                    ongotohome={gotohome}
+                    draftarticlemode={draftarticlemode}
+                    casedata={casedata}
+                    jwttoken={jwttoken}
+                    endpoint={endpoint}
+                    caseclosed={caseclosed}
+                    newnumber={newnumber}
+                  >
+                  </c-knowbler-article-card>
+                </lightning-layout-item>
+              </template>
+            </lightning-layout-item>
+          </template>
+          <template if:false={getSmallLayout}>
+            <lightning-layout-item
+              data-id={cardIndex}
+              key={item.key}
+              size={getLayoutSize}
+            >
+              <template
+                for:each={item.values}
+                for:item="ite"
+                for:index="cardIndexss"
+              >
+                <lightning-layout-item key={ite.id} size="12">
+                  <c-knowbler-article-card
+                    alldatacategories={alldatacategories}
+                    client-settings={clientSettings}
+                    ispublisharticletab={ispublisharticletab}
+                    cardlength={cardLength}
+                    destobj={destobj}
+                    currentuserlanguage={currentuserlanguage}
+                    item={ite}
+                    cardindex={cardIndex}
+                    cardindexs={cardIndexss}
+                    query={querys}
+                    onopenmanagescreen={openManageScreen}
+                    ondotclick={dotClick}
+                    caseclosed={caseclosed}
+                    onpreviewopen={previewOpen}
+                    casenumber={casenumber}
+                    draftarticlemode={draftarticlemode}
+                    jwttoken={jwttoken}
+                    casedata={casedata}
+                    endpoint={endpoint}
+                    ongotohome={gotohome}
+                    newnumber={newnumber}
+                  >
+                  </c-knowbler-article-card>
+                </lightning-layout-item>
+              </template>
+            </lightning-layout-item>
+          </template>
+        </template>
+      </lightning-layout>
+    </div>
+    <template if:true={getSmallLayout}>
+      <div class="pagination small">
+        <c-knowbler-pagination
+          records={querys}
+          onupdate={updatePageHandler}
+        ></c-knowbler-pagination>
+      </div>
+    </template>
+    <template if:false={getSmallLayout}>
+      <div class="pagination large">
+        <c-knowbler-pagination
+          records={querys}
+          onupdate={updatePageHandler}
+        ></c-knowbler-pagination>
+      </div>
+    </template>
+  </div>
+</template>

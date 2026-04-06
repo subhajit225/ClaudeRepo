@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SUO001_Late_Request_Can_Not_Be_Changed</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+  NOT(ISPICKVAL(Process_Flag__c, &apos;Late Request&apos;)),
+  ISPICKVAL(PRIORVALUE(Process_Flag__c), &apos;Late Request&apos;)
+)</errorConditionFormula>
+    <errorDisplayField>Process_Flag__c</errorDisplayField>
+    <errorMessage>Late requests are not allowed to be updated
+(Error Code: Validation Rule SUO001)</errorMessage>
+</ValidationRule>

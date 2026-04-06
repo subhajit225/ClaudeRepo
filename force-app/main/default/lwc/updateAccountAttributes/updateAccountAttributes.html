@@ -1,0 +1,420 @@
+<template>
+    <lightning-card title="Update Account Attributes">
+        <div class="slds-p-around_medium">
+            <lightning-dual-listbox
+                name="overrideType"
+                label="Override Type"
+                source-label="Available"
+                selected-label="Selected"
+                options={attributeOptions}
+                value={selectedAttributes}
+                required
+                size = 3
+                onchange={handleAttributeChange}>
+            </lightning-dual-listbox>
+
+            <template if:true={isWebsiteSelected}>
+                <div class="slds-p-top_medium">
+                    <div class="slds-box slds-theme_shade slds-p-medium slds-m-bottom_medium">
+                        <h3 class="slds-text-heading_small slds-m-bottom_medium">Website</h3>
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_1-of-2 slds-p-right_small">
+                                <lightning-input
+                                    type="text"
+                                    name="url"
+                                    label="URL"
+                                    value={url}
+                                    required
+                                    onchange={handleUrlChange}
+                                    class="slds-p-bottom_small">
+                                </lightning-input>
+
+                                <lightning-input
+                                    type="text"
+                                    name="sfTicket"
+                                    label="SF Ticket No."
+                                    value={sfTicket}
+                                    required={isSfTicketNoRequired}
+                                    onchange={handleSfTicketChange}
+                                    class="slds-p-bottom_small">
+                                </lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-2 slds-p-left_small">
+                                <lightning-input
+                                    type="text"
+                                    name="approver"
+                                    label="Approver's Name"
+                                    value={approver}
+                                    required={isApproversNameRequired}
+                                    onchange={handleApproverChange}>
+                                </lightning-input>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <template if:true={isHierarchySelected}>
+                <div class="slds-p-top_medium">
+                    <div class="slds-box slds-theme_shade slds-p-medium slds-m-bottom_medium">
+                        <h3 class="slds-text-heading_small slds-m-bottom_medium">Hierarchy</h3>
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_1-of-2 slds-p-right_small">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="parentId">
+                                        <abbr class="slds-required" title="required">*</abbr>
+                                        Parent Id
+                                    </label>
+                                    <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_right">
+                                        <input
+                                            id="parentId"
+                                            type="text"
+                                            placeholder="Search Accounts"
+                                            value={parentIdDisplay}
+                                            oninput={handleParentAccountSearch}
+                                            class="slds-input slds-p-bottom_small">
+                                        <template if:true={parentId}>
+                                            <button
+                                                type="button"
+                                                class="slds-button slds-button_icon slds-input__icon slds-input__icon_right"
+                                                onclick={handleClearParentId}
+                                                title="Clear selection">
+                                                <svg class="slds-icon slds-icon-text-default slds-icon_x-small" viewBox="0 0 24 24">
+                                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
+                                                </svg>
+                                            </button>
+                                        </template>
+                                        <template if:true={showParentDropdown}>
+                                            <div class="slds-dropdown slds-dropdown_length-5 slds-dropdown_bottom">
+                                                <ul class="slds-dropdown__list" role="listbox">
+                                                    <template for:each={parentAccountOptions} for:item="option">
+                                                        <li key={option.value} role="presentation" class="slds-dropdown__item">
+                                                            <a href="javascript:void(0);"
+                                                               role="option"
+                                                               onclick={handleParentIdChange}
+                                                               data-value={option.value}
+                                                               class="slds-dropdown__link">
+                                                                {option.label}
+                                                            </a>
+                                                        </li>
+                                                    </template>
+                                                </ul>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-2 slds-p-left_small">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="globalParentId">
+                                        <abbr class="slds-required" title="required">*</abbr>
+                                        Global Parent Id
+                                    </label>
+                                    <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_right">
+                                        <input
+                                            id="globalParentId"
+                                            type="text"
+                                            placeholder="Search Accounts"
+                                            value={globalParentIdDisplay}
+                                            oninput={handleGlobalParentAccountSearch}
+                                            class="slds-input slds-p-bottom_small">
+                                        <template if:true={globalparentId}>
+                                            <button
+                                                type="button"
+                                                class="slds-button slds-button_icon slds-input__icon slds-input__icon_right"
+                                                onclick={handleClearGlobalParentId}
+                                                title="Clear selection">
+                                                <svg class="slds-icon slds-icon-text-default slds-icon_x-small" viewBox="0 0 24 24">
+                                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
+                                                </svg>
+                                            </button>
+                                        </template>
+                                        <template if:true={showGlobalParentDropdown}>
+                                            <div class="slds-dropdown slds-dropdown_length-5 slds-dropdown_bottom">
+                                                <ul class="slds-dropdown__list" role="listbox">
+                                                    <template for:each={globalParentAccountOptions} for:item="option">
+                                                        <li key={option.value} role="presentation" class="slds-dropdown__item">
+                                                            <a href="javascript:void(0);"
+                                                               role="option"
+                                                               onclick={handleGlobalParentIdChange}
+                                                               data-value={option.value}
+                                                               class="slds-dropdown__link">
+                                                                {option.label}
+                                                            </a>
+                                                        </li>
+                                                    </template>
+                                                </ul>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_1-of-2 slds-p-right_small">
+                                <lightning-input
+                                    type="text"
+                                    name="overrideDetails"
+                                    label="Override Details"
+                                    value={overrideDetails}
+                                    required
+                                    onchange={handleOverrideDetailsChange}
+                                    class="slds-p-bottom_small">
+                                </lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-2 slds-p-left_small">
+                                <lightning-input
+                                    type="text"
+                                    name="overrideRequestor"
+                                    label="Override Requestor"
+                                    value={overrideRequestor}
+                                    required
+                                    onchange={handleOverrideRequestorChange}
+                                    class="slds-p-bottom_small">
+                                </lightning-input>
+                            </div>
+                        </div>
+
+                        <div class="slds-grid slds-wrap slds-m-top_medium">
+                            <div class="slds-col slds-size_1-of-1">
+                                <lightning-input
+                                    type="checkbox"
+                                    name="overrideFlag"
+                                    label="Override Flag"
+                                    checked={overrideFlag}
+                                    onchange={handleOverrideFlagChange}
+                                    class="slds-p-bottom_small">
+                                </lightning-input>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <template if:true={isFortuneForbesSelected}>
+                <div class="slds-p-top_medium">
+                    <div class="slds-box slds-theme_shade slds-p-medium slds-m-bottom_medium">
+                        <h3 class="slds-text-heading_small slds-m-bottom_medium">Fortune/Forbes</h3>
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_1-of-2 slds-p-right_small">
+                                <lightning-combobox
+                                    name="fortuneType"
+                                    label="Type"
+                                    value={fortuneType}
+                                    options={typeOptions}
+                                    required
+                                    onchange={handleFortuneTypeChange}
+                                    class="slds-p-bottom_small">
+                                </lightning-combobox>
+
+                                <lightning-input
+                                    type="text"
+                                    name="fortuneRank"
+                                    label="Rank"
+                                    value={fortuneRank}
+                                    required
+                                    onchange={handleFortuneRankChange}
+                                    class="slds-p-bottom_small">
+                                </lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-2 slds-p-left_small">
+                                <lightning-combobox
+                                    name="fortuneMainSub"
+                                    label="Main/Sub"
+                                    value={fortuneMainSub}
+                                    required
+                                    options={mainSubOptions}
+                                    onchange={handleFortuneMainSubChange}>
+                                </lightning-combobox>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <template if:true={isAccountAttributesSelected}>
+                <div class="slds-p-top_medium">
+                    <div class="slds-box slds-theme_shade slds-p-medium slds-m-bottom_medium">
+                        <h3 class="slds-text-heading_small slds-m-bottom_medium">Account Attributes</h3>
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_1-of-1 slds-p-bottom_medium">
+                                <lightning-dual-listbox
+                                    name="accountAttributes"
+                                    label="Account Attributes"
+                                    source-label="Available"
+                                    selected-label="Selected"
+                                    options={attributePicklistOptions}
+                                    value={selectedAccountAttributes}
+                                    required
+                                    size = 3
+                                    onchange={handleAccountAttributesChange}
+                                    class="slds-p-bottom_small">
+                                </lightning-dual-listbox>
+                            </div>
+                        </div>
+                        <template if:true={hasSelectedAccountAttributes}>
+                            <div class="slds-grid slds-wrap">
+                                <template if:true={isAnnualRevenueSelected}>
+                                    <div class="slds-col slds-size_1-of-2 slds-p-right_small slds-p-bottom_medium">
+                                        <lightning-input
+                                            type="text"
+                                            name="overrideSource"
+                                            label="Override Source - Annual Revenue"
+                                            value={overrideSource}
+                                            onchange={handleOverrideSourceChange}
+                                            required
+                                            class="slds-p-bottom_small">
+                                        </lightning-input>
+                                    </div>
+                                </template>
+                                <template for:each={attributeOverrideFieldsList} for:item="attrField">
+                                    <div key={attrField.value} class="slds-col slds-size_1-of-2 slds-p-right_small slds-p-bottom_medium">
+                                        <template if:true={attrField.isIndustrySubcategory}>
+                                            <lightning-combobox
+                                                name={attrField.value}
+                                                label={attrField.label}
+                                                value={attrField.overrideValue}
+                                                options={industrySubcategoryPicklistValues}
+                                                required
+                                                onchange={handleAttributeOverrideValueChange}
+                                                data-attribute={attrField.value}
+                                                class="slds-p-bottom_small">
+                                            </lightning-combobox>
+                                        </template>
+                                        <template if:true={attrField.isIndustryCategory}>
+                                            <lightning-combobox
+                                                name={attrField.value}
+                                                label={attrField.label}
+                                                value={attrField.overrideValue}
+                                                options={industryPicklistValues}
+                                                required
+                                                onchange={handleAttributeOverrideValueChange}
+                                                data-attribute={attrField.value}
+                                                class="slds-p-bottom_small">
+                                            </lightning-combobox>
+                                        </template>
+                                        <template if:false={attrField.isIndustrySubcategory}>
+                                            <template if:false={attrField.isIndustryCategory}>
+                                                <template if:true={attrField.isDUNS}>
+                                                    <lightning-input
+                                                        type="text"
+                                                        name={attrField.value}
+                                                        label={attrField.label}
+                                                        value={attrField.overrideValue}
+                                                        pattern="[0-9]{9}"
+                                                        message-when-pattern-mismatch="DUNS must be a 9-digit number"
+                                                        required
+                                                        onchange={handleAttributeOverrideValueChange}
+                                                        data-attribute={attrField.value}
+                                                        class="slds-p-bottom_small">
+                                                    </lightning-input>
+                                                </template>
+                                                <template if:true={attrField.isAnnualRevenue}>
+                                                    <lightning-input
+                                                        type="number"
+                                                        name={attrField.value}
+                                                        label={attrField.label}
+                                                        value={attrField.overrideValue}
+                                                        required
+                                                        onchange={handleAttributeOverrideValueChange}
+                                                        data-attribute={attrField.value}
+                                                        class="slds-p-bottom_small">
+                                                    </lightning-input>
+                                                </template>
+                                                <template if:true={attrField.isGURevenue}>
+                                                    <lightning-input
+                                                        type="number"
+                                                        name={attrField.value}
+                                                        label={attrField.label}
+                                                        value={attrField.overrideValue}
+                                                        required
+                                                        onchange={handleAttributeOverrideValueChange}
+                                                        data-attribute={attrField.value}
+                                                        class="slds-p-bottom_small">
+                                                    </lightning-input>
+                                                </template>
+                                                <template if:true={attrField.isSICCode}>
+                                                    <lightning-input
+                                                        type="text"
+                                                        name={attrField.value}
+                                                        label={attrField.label}
+                                                        value={attrField.overrideValue}
+                                                        pattern="[0-9]{4}"
+                                                        message-when-pattern-mismatch="SIC Code must be a 4-digit number"
+                                                        required
+                                                        onchange={handleAttributeOverrideValueChange}
+                                                        data-attribute={attrField.value}
+                                                        class="slds-p-bottom_small">
+                                                    </lightning-input>
+                                                </template>
+                                                <template if:true={attrField.isOutOfBusinessFlag}>
+                                                    <lightning-combobox
+                                                        name={attrField.value}
+                                                        label={attrField.label}
+                                                        value={attrField.overrideValue}
+                                                        options={outOfBusinessFlagOptions}
+                                                        placeholder="Select an option"
+                                                        onchange={handleAttributeOverrideValueChange}
+                                                        data-attribute={attrField.value}
+                                                        class="slds-p-bottom_small">
+                                                    </lightning-combobox>
+                                                </template>
+                                                <template if:false={attrField.isDUNS}>
+                                                    <template if:false={attrField.isAnnualRevenue}>
+                                                        <template if:false={attrField.isGURevenue}>
+                                                            <template if:false={attrField.isSICCode}>
+                                                                <template if:false={attrField.isOutOfBusinessFlag}>
+                                                                    <lightning-input
+                                                                        type="text"
+                                                                        name={attrField.value}
+                                                                        label={attrField.label}
+                                                                        value={attrField.overrideValue}
+                                                                        required
+                                                                        onchange={handleAttributeOverrideValueChange}
+                                                                        data-attribute={attrField.value}
+                                                                        class="slds-p-bottom_small">
+                                                                    </lightning-input>
+                                                                </template>
+                                                            </template>
+                                                        </template>
+                                                    </template>
+                                                </template>
+                                            </template>
+                                        </template>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </template>
+        </div>
+        <div slot="footer" class="slds-p-around_medium">
+            <div class="slds-grid slds-wrap slds-grid_align-end">
+                <div class="slds-col slds-p-left_small">
+                    <lightning-button
+                        label="Cancel"
+                        title="Cancel"
+                        onclick={handleCancel}
+                        class="slds-m-left_x-small">
+                    </lightning-button>
+                </div>
+                <div class="slds-col slds-p-left_small">
+                    <lightning-button
+                        label={submitButtonLabel}
+                        title={submitButtonLabel}
+                        variant="brand"
+                        onclick={handleSubmit}
+                        disabled={isSubmitting}
+                        class="slds-m-left_x-small">
+                    </lightning-button>
+                </div>
+            </div>
+        </div>
+    </lightning-card>
+</template>

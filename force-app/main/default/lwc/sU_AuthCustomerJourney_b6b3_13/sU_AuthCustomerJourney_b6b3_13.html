@@ -1,0 +1,308 @@
+<template>
+    <div class="customerJourney" style={customerJourneyDivHeight}>
+        <h2 class="header-title-container">
+            <span title={customerJourneyLabel}
+                class="slds-card__header-title slds-truncate su_customerJournetLabel">{customerJourneyLabel}</span>
+        </h2>
+        <div class="col-sm-12 su__position-relative">
+            <template if:true={dataLoaded}>
+                <div class="su_anyticscontent">
+                    <p class="suanalyticscount"> <b>Total Activities: </b>{customerJourneyTotalActivities}</p>
+                    <table class="su_anytics_table">
+                        <thead>
+                            <tr>
+                                <th class="suanalyticstime"> Time (DD/MM/YYYY) </th>
+                                <th class="suanalyticstype">
+                                    <div class="multiselect" onclick={showHideCheckboxes}>
+                                        <div class="selectBox">
+                                            <span> Activity Type </span>
+                                            <span class="suanalyticsdropdown">
+                                                <svg xmlns="http://www.w3.org/2000/svg" version="1.0" width="10"
+                                                    height="10" viewBox="0 0 512.000000 512.000000"
+                                                    preserveAspectRatio="xMidYMid meet">
+                                                    <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
+                                                        fill="#000000" stroke="none">
+                                                        <path
+                                                            d="M4885 3841 c-17 -4 -38 -12 -47 -17 -9 -5 -523 -481 -1143 -1059 -620 -577 -1132 -1050 -1139 -1050 -7 0 -518 470 -1134 1045 -676 630 -1136 1052 -1159 1062 -154 70 -319 -87 -241 -230 28 -51 2386 -2254 2451 -2289 50 -28 119 -30 163 -5 28 15 2294 2120 2421 2248 41 41 53 61 58 96 8 53 -6 92 -48 136 -53 56 -118 78 -182 63z" />
+                                                    </g>
+                                                </svg>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <template if:true={customerJourneyFilterListPopup}>
+                                        <div class="checkboxes">
+                                            <label for="all">
+                                                <input type="checkbox" data-id="all" onclick={checkUncheckAll}
+                                                    checked={allChecked} />All
+                                            </label>
+                                            <template for:each={customerJourneyFilters} for:item="filter"
+                                                for:index="index">
+                                                <label key={filter}>
+                                                    <input type="checkbox" data-id={filter.filterName}
+                                                        data-index={index} checked={filter.isChecked}
+                                                        onclick={checkUncheck} />{filter.filterName}
+                                                </label>
+                                            </template>
+
+                                        </div>
+                                    </template>
+                                </th>
+                                <th class="suanalyticsdata">Activity Details</th>
+                                <th class="suanalyticsdata">Interface</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={customerJourneyArray} for:item="item" for:index="index">
+                                <tr key={item.Id}>
+                                    <td class="suanalyticstime ">{item.StartDate}</td>
+                                    <td data-id="suAnalyticsTypeId" class="suanalyticstype ">{item.ActivityType}</td>
+                                    <template if:true={item.showAnchorTag}>
+                                        <td class="suanalyticsdata">
+                                            <a target="_blank" href={item.ActivityValue}>{item.ActivityValue}</a>
+                                        </td>
+                                    </template>
+                                    <template if:false={item.showAnchorTag}>
+                                        <td class="suanalyticsdata">
+                                            {item.ActivityValue}
+                                        </td>
+                                    </template>
+                                    <td class="suanalyticsdata ">{item.Interface}</td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </template>
+            <template if:false={dataLoaded}>
+                <div class="su__noActivityFound">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="150.787"
+                        viewBox="0 0 341.642 150.787">
+                        <g id="Group_4" data-name="Group 4" transform="translate(-348.5 -907.142)">
+                            <path id="Path_20294" data-name="Path 20294"
+                                d="M58.781,13.745H43.6a1.1,1.1,0,0,1,0-2.195H56.284a11.628,11.628,0,0,1,4.492-9.731A11.03,11.03,0,0,1,72.147.388a10.557,10.557,0,0,1,5.8,5.67,17.351,17.351,0,0,1,1.091,3.022,1.1,1.1,0,1,1-2.124.551,15.151,15.151,0,0,0-.961-2.656l-.018-.04A8.413,8.413,0,0,0,71.316,2.42l-.047-.02a8.8,8.8,0,0,0-9.132,1.141l-.012.009a9.432,9.432,0,0,0-3.544,8.927Z"
+                                transform="translate(466.945 980.537)" fill="#cfe9fe" />
+                            <path id="Path_20295" data-name="Path 20295"
+                                d="M85.433,33.744H27.6a1.1,1.1,0,1,1,0-2.195H85.4a3.917,3.917,0,0,0,3.768-2.708,4.317,4.317,0,0,0-.738-3.929l-.008-.01c-.8-1.038-2.542-1.509-5.181-1.4l-1.2.049.063-1.2a13.518,13.518,0,0,0-.172-2.963v-.007a7.708,7.708,0,0,0-1.782-3.806,6.859,6.859,0,0,0-7.2-1.762l-.006,0A6.142,6.142,0,0,0,68.9,18.264a1.1,1.1,0,1,1-2.138-.5,8.375,8.375,0,0,1,5.468-6.032,9.058,9.058,0,0,1,9.524,2.348l.029.032a9.9,9.9,0,0,1,2.307,4.907A15.716,15.716,0,0,1,84.31,21.3a11.4,11.4,0,0,1,3,.422,5.472,5.472,0,0,1,2.849,1.841,6.512,6.512,0,0,1,1.106,5.934l-.005.017a6.126,6.126,0,0,1-5.825,4.233Z"
+                                transform="translate(471.24 977.365)" fill="#cfe9fe" />
+                            <path id="Path_20296" data-name="Path 20296" d="M18,27.5H65.552"
+                                transform="translate(473.522 973.001)" fill="#ff2a2a" fill-rule="evenodd" />
+                            <path id="Path_20296_-_Outline" data-name="Path 20296 - Outline"
+                                d="M65.149,28.195H17.6A1.1,1.1,0,0,1,17.6,26H65.149a1.1,1.1,0,0,1,0,2.195Z"
+                                transform="translate(473.924 973.403)" fill="#cfe9fe" />
+                            <path id="Path_20297" data-name="Path 20297" d="M0,27.5H5.853"
+                                transform="translate(478.353 973.001)" fill="#ff2a2a" fill-rule="evenodd" />
+                            <path id="Path_20297_-_Outline" data-name="Path 20297 - Outline"
+                                d="M5.45,28.195H-.4a1.1,1.1,0,0,1-1.1-1.1A1.1,1.1,0,0,1-.4,26H5.45a1.1,1.1,0,0,1,0,2.195Z"
+                                transform="translate(478.756 973.403)" fill="#cfe9fe" />
+                            <path id="Path_20298" data-name="Path 20298"
+                                d="M58.781,13.745H43.6a1.1,1.1,0,0,1,0-2.195H56.284a11.628,11.628,0,0,1,4.492-9.731A11.03,11.03,0,0,1,72.147.388a10.557,10.557,0,0,1,5.8,5.67,17.351,17.351,0,0,1,1.091,3.022,1.1,1.1,0,1,1-2.124.551,15.151,15.151,0,0,0-.961-2.656l-.018-.04A8.413,8.413,0,0,0,71.316,2.42l-.047-.02a8.8,8.8,0,0,0-9.132,1.141l-.012.009a9.432,9.432,0,0,0-3.544,8.927Z"
+                                transform="translate(386.473 945.422)" fill="#cfe9fe" />
+                            <path id="Path_20299" data-name="Path 20299"
+                                d="M85.433,33.744H27.6a1.1,1.1,0,1,1,0-2.195H85.4a3.917,3.917,0,0,0,3.768-2.708,4.317,4.317,0,0,0-.738-3.929l-.008-.01c-.8-1.038-2.542-1.509-5.181-1.4l-1.2.049.063-1.2a13.518,13.518,0,0,0-.172-2.963v-.007a7.708,7.708,0,0,0-1.782-3.806,6.859,6.859,0,0,0-7.2-1.762l-.006,0A6.142,6.142,0,0,0,68.9,18.264a1.1,1.1,0,1,1-2.138-.5,8.375,8.375,0,0,1,5.468-6.032,9.058,9.058,0,0,1,9.524,2.348l.029.032a9.9,9.9,0,0,1,2.307,4.907A15.716,15.716,0,0,1,84.31,21.3a11.4,11.4,0,0,1,3,.422,5.472,5.472,0,0,1,2.849,1.841,6.512,6.512,0,0,1,1.106,5.934l-.005.017a6.126,6.126,0,0,1-5.825,4.233Z"
+                                transform="translate(390.767 942.249)" fill="#cfe9fe" />
+                            <path id="Path_20300" data-name="Path 20300" d="M18,27.5H65.552"
+                                transform="translate(393.049 937.885)" fill="#ff2a2a" fill-rule="evenodd" />
+                            <path id="Path_20300_-_Outline" data-name="Path 20300 - Outline"
+                                d="M65.149,28.195H17.6A1.1,1.1,0,0,1,17.6,26H65.149a1.1,1.1,0,0,1,0,2.195Z"
+                                transform="translate(393.452 938.288)" fill="#cfe9fe" />
+                            <path id="Path_20301" data-name="Path 20301" d="M0,27.5H5.853"
+                                transform="translate(397.881 937.885)" fill="#ff2a2a" fill-rule="evenodd" />
+                            <path id="Path_20301_-_Outline" data-name="Path 20301 - Outline"
+                                d="M5.45,28.195H-.4a1.1,1.1,0,0,1-1.1-1.1A1.1,1.1,0,0,1-.4,26H5.45a1.1,1.1,0,0,1,0,2.195Z"
+                                transform="translate(398.284 938.288)" fill="#cfe9fe" />
+                            <path id="Path_20302" data-name="Path 20302"
+                                d="M342.8,37.195H13.6A1.1,1.1,0,1,1,13.6,35H342.8a1.1,1.1,0,0,1,0,2.195Z"
+                                transform="translate(346.242 1011.955)" fill="#cfe9fe" />
+                            <path id="Path_20303" data-name="Path 20303" d="M0,36.5H4.389"
+                                transform="translate(349.597 1011.553)" fill="#ff2a2a" fill-rule="evenodd" />
+                            <path id="Path_20303_-_Outline" data-name="Path 20303 - Outline"
+                                d="M3.987,37.195H-.4a1.1,1.1,0,0,1-1.1-1.1A1.1,1.1,0,0,1-.4,35H3.987a1.1,1.1,0,0,1,0,2.195Z"
+                                transform="translate(350 1011.955)" fill="#cfe9fe" />
+                            <path id="Path_20304" data-name="Path 20304"
+                                d="M234.1,26.923a1.1,1.1,0,0,1-.686-1.954L267-1.9l25.555,19.542a1.1,1.1,0,1,1-1.333,1.743L267.033.882l-32.25,25.8A1.093,1.093,0,0,1,234.1,26.923Z"
+                                transform="translate(287.053 1021.862)" fill="#cfe9fe" />
+                            <path id="Path_20305" data-name="Path 20305" d="M279.5,1V26.6"
+                                transform="translate(274.571 1021.082)" fill="#ff2a2a" fill-rule="evenodd" />
+                            <path id="Path_20305_-_Outline" data-name="Path 20305 - Outline"
+                                d="M279.1,27.3a1.1,1.1,0,0,1-1.1-1.1V.6a1.1,1.1,0,1,1,2.195,0V26.2A1.1,1.1,0,0,1,279.1,27.3Z"
+                                transform="translate(274.973 1021.485)" fill="#cfe9fe" />
+                            <path id="Path_20305-2" data-name="Path 20305" d="M279.5,1V11.8"
+                                transform="translate(299.444 1028.398)" fill="#ff2a2a" fill-rule="evenodd" />
+                            <path id="Path_20305_-_Outline-2" data-name="Path 20305 - Outline"
+                                d="M279.1,12.492a1.1,1.1,0,0,1-1.1-1.1V.6a1.1,1.1,0,1,1,2.195,0v10.8A1.1,1.1,0,0,1,279.1,12.492Z"
+                                transform="translate(299.847 1028.8)" fill="#cfe9fe" />
+                            <path id="Path_20306" data-name="Path 20306" d="M313.5,11Z"
+                                transform="translate(265.444 1018.398)" fill="#ff2a2a" fill-rule="evenodd" />
+                            <path id="Path_20306_-_Outline" data-name="Path 20306 - Outline"
+                                transform="translate(349.597 1021.35)" fill="#707070" />
+                            <path id="Path_20307" data-name="Path 20307"
+                                d="M335.286,29.335a1.092,1.092,0,0,1-.682-.238L310.416,9.888l-6.633,5.306a1.1,1.1,0,0,1-1.371-1.714l8-6.4,25.558,20.3a1.1,1.1,0,0,1-.683,1.957Z"
+                                transform="translate(268.531 1019.449)" fill="#cfe9fe" />
+                            <g id="Group_19815" data-name="Group 19815" transform="translate(404.099 970.141)">
+                                <path id="Path_20308" data-name="Path 20308"
+                                    d="M21.715,44.26V8.779a8.779,8.779,0,0,1,17.558,0v20.85H51.71V19.752a5.121,5.121,0,0,1,10.242,0V35.481a4.389,4.389,0,0,1-4.389,4.389H39.273v46.82H21.715V54.5H4.889A4.389,4.389,0,0,1,.5,50.112V28.531a5.121,5.121,0,0,1,10.242,0V44.26Z"
+                                    transform="translate(-0.5)" fill="#ff2a2a" fill-rule="evenodd" />
+                            </g>
+                            <g id="Group_19816" data-name="Group 19816" transform="translate(425.543 969.822)">
+                                <path id="Path_20309" data-name="Path 20309"
+                                    d="M1.681,8.2a9.447,9.447,0,0,1,4.389-3.77,8.891,8.891,0,0,1,7.184.319A8.546,8.546,0,0,1,17.238,8.8q.658,1.585,0-3.3L14.566,2.76,10.309.565,6.631,1.2l-2.994,1.3a31.058,31.058,0,0,0-2.2,2.257C1.4,4.874.844,7.095.814,7.219Q.783,7.342,1.681,8.2Z"
+                                    transform="translate(-0.813 -0.565)" fill="#ff2a2a" fill-rule="evenodd" />
+                            </g>
+                            <path id="Path_20310" data-name="Path 20310" d="M0,126.5H260.438"
+                                transform="translate(381.786 930.331)" fill="#acacac" fill-rule="evenodd" />
+                            <path id="Path_20310_-_Outline" data-name="Path 20310 - Outline"
+                                d="M260.036,127.195H-.4a1.1,1.1,0,0,1-1.1-1.1A1.1,1.1,0,0,1-.4,125H260.036a1.1,1.1,0,0,1,0,2.195Z"
+                                transform="translate(382.189 930.734)" fill="#90d0fe" />
+                            <path id="Path_20311" data-name="Path 20311" d="M362.5,126.5h6.959"
+                                transform="translate(284.48 930.331)" fill="#acacac" fill-rule="evenodd" />
+                            <path id="Path_20311_-_Outline" data-name="Path 20311 - Outline"
+                                d="M369.057,127.195H362.1a1.1,1.1,0,1,1,0-2.195h6.959a1.1,1.1,0,1,1,0,2.195Z"
+                                transform="translate(284.883 930.734)" fill="#90d0fe" />
+                            <path id="Path_20312" data-name="Path 20312" d="M107.5,20v5.853"
+                                transform="translate(352.93 958.919)" fill="#acacac" fill-rule="evenodd" />
+                            <path id="Path_20312_-_Outline" data-name="Path 20312 - Outline"
+                                d="M107.1,26.547a1.1,1.1,0,0,1-1.1-1.1V19.6a1.1,1.1,0,0,1,2.195,0V25.45A1.1,1.1,0,0,1,107.1,26.547Z"
+                                transform="translate(353.333 959.322)" fill="#90d0fe" />
+                            <path id="Path_20313" data-name="Path 20313" d="M113,29.138,117.138,25"
+                                transform="translate(351.454 957.577)" fill="#acacac" fill-rule="evenodd" />
+                            <path id="Path_20313_-_Outline" data-name="Path 20313 - Outline"
+                                d="M112.6,29.833a1.1,1.1,0,0,1-.776-1.873l4.138-4.138a1.1,1.1,0,1,1,1.552,1.552l-4.138,4.138A1.094,1.094,0,0,1,112.6,29.833Z"
+                                transform="translate(351.856 957.98)" fill="#90d0fe" />
+                            <path id="Path_20314" data-name="Path 20314" d="M37.5,32v5.853"
+                                transform="translate(371.72 955.698)" fill="#acacac" fill-rule="evenodd" />
+                            <path id="Path_20314_-_Outline" data-name="Path 20314 - Outline"
+                                d="M37.1,38.547a1.1,1.1,0,0,1-1.1-1.1V31.6a1.1,1.1,0,0,1,2.195,0V37.45A1.1,1.1,0,0,1,37.1,38.547Z"
+                                transform="translate(372.123 956.101)" fill="#90d0fe" />
+                            <path id="Path_20315" data-name="Path 20315" d="M44,41.138,48.138,37"
+                                transform="translate(369.975 954.356)" fill="#acacac" fill-rule="evenodd" />
+                            <path id="Path_20315_-_Outline" data-name="Path 20315 - Outline"
+                                d="M43.6,41.833a1.1,1.1,0,0,1-.776-1.873l4.138-4.138a1.1,1.1,0,1,1,1.552,1.552l-4.138,4.138A1.094,1.094,0,0,1,43.6,41.833Z"
+                                transform="translate(370.378 954.759)" fill="#90d0fe" />
+                            <path id="Path_20316" data-name="Path 20316" d="M0,0,4.138,4.138"
+                                transform="translate(404.214 995.495) rotate(180)" fill="#acacac" fill-rule="evenodd" />
+                            <path id="Path_20316_-_Outline" data-name="Path 20316 - Outline"
+                                d="M5.236,6.333a1.094,1.094,0,0,1-.776-.321L.321,1.873A1.1,1.1,0,0,1,1.873.321L6.012,4.46a1.1,1.1,0,0,1-.776,1.873Z"
+                                transform="translate(405.311 996.592) rotate(180)" fill="#90d0fe" />
+                            <path id="Path_20317" data-name="Path 20317" d="M71.5,0V5.853"
+                                transform="translate(362.594 964.288)" fill="#acacac" fill-rule="evenodd" />
+                            <path id="Path_20317_-_Outline" data-name="Path 20317 - Outline"
+                                d="M71.1,6.547A1.1,1.1,0,0,1,70,5.45V-.4a1.1,1.1,0,0,1,1.1-1.1,1.1,1.1,0,0,1,1.1,1.1V5.45A1.1,1.1,0,0,1,71.1,6.547Z"
+                                transform="translate(362.996 964.691)" fill="#90d0fe" />
+                            <path id="Path_20318" data-name="Path 20318" d="M79,9.138,83.138,5"
+                                transform="translate(360.58 962.946)" fill="#acacac" fill-rule="evenodd" />
+                            <path id="Path_20318_-_Outline" data-name="Path 20318 - Outline"
+                                d="M78.6,9.833a1.1,1.1,0,0,1-.776-1.873L81.96,3.821a1.1,1.1,0,0,1,1.552,1.552L79.373,9.512A1.094,1.094,0,0,1,78.6,9.833Z"
+                                transform="translate(360.983 963.349)" fill="#90d0fe" />
+                            <path id="Path_20319" data-name="Path 20319" d="M0,0,4.138,4.138"
+                                transform="translate(428.356 972.084) rotate(180)" fill="#acacac" fill-rule="evenodd" />
+                            <path id="Path_20319_-_Outline" data-name="Path 20319 - Outline"
+                                d="M5.236,6.333a1.094,1.094,0,0,1-.776-.321L.321,1.873A1.1,1.1,0,0,1,1.873.321L6.012,4.46a1.1,1.1,0,0,1-.776,1.873Z"
+                                transform="translate(429.453 973.182) rotate(180)" fill="#90d0fe" />
+                            <path id="Path_20320" data-name="Path 20320"
+                                d="M51.715,52.26V16.779a8.779,8.779,0,0,1,17.558,0v20.85H81.71V27.752a5.121,5.121,0,1,1,10.242,0V43.481a4.389,4.389,0,0,1-4.389,4.389H69.273v46.82H51.715V62.5H34.889A4.389,4.389,0,0,1,30.5,58.112V36.531a5.121,5.121,0,0,1,10.242,0V52.26Z"
+                                transform="translate(373.599 962.141)" fill="#cfe9fe" fill-rule="evenodd" />
+                            <path id="Path_20320_-_Outline" data-name="Path 20320 - Outline"
+                                d="M69.968,95.386H50.215V63.2H34.487A5.493,5.493,0,0,1,29,57.71V36.129a6.218,6.218,0,1,1,12.437,0V50.76h8.779V16.376a9.876,9.876,0,0,1,19.752,0V36.129H80.21V27.35a6.218,6.218,0,1,1,12.437,0V43.078a5.493,5.493,0,0,1-5.487,5.487H69.968ZM52.41,93.191H67.773V46.37H87.16a3.3,3.3,0,0,0,3.292-3.292V27.35a4.024,4.024,0,0,0-8.047,0V38.323H67.773V16.376a7.681,7.681,0,0,0-15.363,0V52.955H39.242V36.129a4.024,4.024,0,1,0-8.047,0V57.71A3.3,3.3,0,0,0,34.487,61H52.41Z"
+                                transform="translate(374.002 962.543)" fill="#90d0fe" />
+                            <path id="Path_20321" data-name="Path 20321"
+                                d="M77,84.608H88.339V79.121A5.121,5.121,0,0,1,93.46,74h0a5.121,5.121,0,0,1,5.121,5.121V90.46a4.389,4.389,0,0,1-4.389,4.389H77"
+                                transform="translate(361.117 944.424)" fill="#cfe9fe" fill-rule="evenodd" />
+                            <path id="Path_20321_-_Outline" data-name="Path 20321 - Outline"
+                                d="M94.192,95.544H77V93.35H94.192a3.3,3.3,0,0,0,3.292-3.292V78.718a4.024,4.024,0,0,0-8.047,0V85.3H77V83.108H87.242V78.718a6.218,6.218,0,1,1,12.437,0V90.058A5.493,5.493,0,0,1,94.192,95.544Z"
+                                transform="translate(361.117 944.827)" fill="#90d0fe" />
+                            <g id="Group_19819" data-name="Group 19819" transform="translate(612.23 1010.011)">
+                                <path id="Path_20322" data-name="Path 20322"
+                                    d="M12.1,38.347a1.1,1.1,0,0,1-1.1-1.1V3.6a1.1,1.1,0,1,1,2.195,0V37.25A1.1,1.1,0,0,1,12.1,38.347Z"
+                                    transform="translate(-2.221 0.426)" fill="#cfe9fe" />
+                                <path id="Path_20323" data-name="Path 20323"
+                                    d="M7.779,14.229H-1V-.4A1.1,1.1,0,0,1,.1-1.5a1.1,1.1,0,0,1,1.1,1.1V12.034H7.779a1.1,1.1,0,1,1,0,2.195Z"
+                                    transform="translate(1 1.5)" fill="#cfe9fe" />
+                                <path id="Path_20324" data-name="Path 20324"
+                                    d="M22.376,21.5H13.6a1.1,1.1,0,0,1,0-2.195h6.584V7.6a1.1,1.1,0,1,1,2.195,0Z"
+                                    transform="translate(-2.624 -0.647)" fill="#cfe9fe" />
+                                <path id="Path_20325" data-name="Path 20325"
+                                    d="M8.316,37.181H1V30.6a1.1,1.1,0,0,1,2.195,0v4.389H8.316a1.1,1.1,0,1,1,0,2.195Z"
+                                    transform="translate(0.463 -6.821)" fill="#cfe9fe" />
+                            </g>
+                            <path id="Ellipse_192" data-name="Ellipse 192"
+                                d="M16.826,0A16.826,16.826,0,1,1,0,16.826,16.826,16.826,0,0,1,16.826,0Z"
+                                transform="translate(590.91 927.304) rotate(59)" fill="#cfe9fe" />
+                            <path id="Ellipse_192_-_Outline" data-name="Ellipse 192 - Outline"
+                                d="M17.923,0A17.928,17.928,0,0,1,24.9,34.438,17.928,17.928,0,0,1,10.946,1.409,17.812,17.812,0,0,1,17.923,0Zm0,33.652A15.729,15.729,0,1,0,2.195,17.923,15.747,15.747,0,0,0,17.923,33.652Z"
+                                transform="translate(591.285 925.798) rotate(59)" fill="#90d0fe" />
+                            <path id="Ellipse_193" data-name="Ellipse 193"
+                                d="M34.018,0A34.027,34.027,0,0,1,47.26,65.362,34.02,34.02,0,0,1,4.844,16.513,34.186,34.186,0,0,1,17.524,4.259,1.1,1.1,0,1,1,18.59,6.178,31.833,31.833,0,1,0,34.018,2.195a1.1,1.1,0,1,1,0-2.195Z"
+                                transform="matrix(0.325, -0.946, 0.946, 0.325, 541.913, 971.482)" fill="#cfe9fe" />
+                            <path id="Ellipse_194" data-name="Ellipse 194"
+                                d="M25.239,0a25.245,25.245,0,0,1,9.825,48.494A25.244,25.244,0,0,1,11.832,3.852,25.049,25.049,0,0,1,19.65.621a1.1,1.1,0,1,1,.484,2.141,23.066,23.066,0,1,0,5.105-.567,1.1,1.1,0,0,1,0-2.195Z"
+                                transform="translate(611.258 974.736) rotate(178)" fill="#cfe9fe" />
+                        </g>
+                    </svg>
+                    <div class="su__noActivityFoundText">
+                        No activities found.
+                    </div>
+                </div>
+            </template>
+            <template if:true={isLoading}>
+                <div class="su_CustomerJourneyLoadingScreen">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="206" viewBox="0 0 520 206">
+                        <g id="Group_6" data-name="Group 6" transform="translate(-418 -326)">
+                            <rect id="Rectangle_1" data-name="Rectangle 1" width="104" height="6" rx="1"
+                                transform="translate(418 326)" fill="#edeceb" />
+                            <rect id="Rectangle_3" data-name="Rectangle 3" width="93" height="6" rx="1"
+                                transform="translate(558 326)" fill="#edeceb" />
+                            <rect id="Rectangle_4" data-name="Rectangle 4" width="93" height="6" rx="1"
+                                transform="translate(692 326)" fill="#edeceb" />
+                            <rect id="Rectangle_5" data-name="Rectangle 5" width="56" height="6" rx="1"
+                                transform="translate(881 326)" fill="#edeceb" />
+                            <rect id="Rectangle_9" data-name="Rectangle 9" width="57" height="6" rx="1"
+                                transform="translate(881 360)" fill="#edeceb" />
+                            <rect id="Rectangle_46" data-name="Rectangle 46" width="57" height="6" rx="1"
+                                transform="translate(881 502)" fill="#edeceb" />
+                            <rect id="Rectangle_35" data-name="Rectangle 35" width="140" height="6" rx="1"
+                                transform="translate(691 365)" fill="#edeceb" />
+                            <rect id="Rectangle_38" data-name="Rectangle 38" width="140" height="6" rx="1"
+                                transform="translate(691 436)" fill="#edeceb" />
+                            <rect id="Rectangle_40" data-name="Rectangle 40" width="140" height="6" rx="1"
+                                transform="translate(691 507)" fill="#edeceb" />
+                            <rect id="Rectangle_36" data-name="Rectangle 36" width="111" height="6" rx="1"
+                                transform="translate(691 378)" fill="#edeceb" />
+                            <rect id="Rectangle_47" data-name="Rectangle 47" width="98" height="6" rx="1"
+                                transform="translate(558 372)" fill="#edeceb" />
+                            <rect id="Rectangle_50" data-name="Rectangle 50" width="98" height="6" rx="1"
+                                transform="translate(418 372)" fill="#edeceb" />
+                            <rect id="Rectangle_48" data-name="Rectangle 48" width="98" height="6" rx="1"
+                                transform="translate(558 443)" fill="#edeceb" />
+                            <rect id="Rectangle_51" data-name="Rectangle 51" width="98" height="6" rx="1"
+                                transform="translate(418 443)" fill="#edeceb" />
+                            <rect id="Rectangle_49" data-name="Rectangle 49" width="98" height="6" rx="1"
+                                transform="translate(558 514)" fill="#edeceb" />
+                            <rect id="Rectangle_52" data-name="Rectangle 52" width="98" height="6" rx="1"
+                                transform="translate(418 514)" fill="#edeceb" />
+                            <rect id="Rectangle_37" data-name="Rectangle 37" width="111" height="6" rx="1"
+                                transform="translate(691 449)" fill="#eee" />
+                            <rect id="Rectangle_39" data-name="Rectangle 39" width="111" height="6" rx="1"
+                                transform="translate(691 520)" fill="#edeceb" />
+                            <rect id="Rectangle_21" data-name="Rectangle 21" width="50" height="6" rx="1"
+                                transform="translate(881 372)" fill="#edeceb" />
+                            <rect id="Rectangle_45" data-name="Rectangle 45" width="50" height="6" rx="1"
+                                transform="translate(881 514)" fill="#edeceb" />
+                            <rect id="Rectangle_22" data-name="Rectangle 22" width="40" height="6" rx="1"
+                                transform="translate(881 384)" fill="#edeceb" />
+                            <g id="Group_1" data-name="Group 1">
+                                <rect id="Rectangle_43" data-name="Rectangle 43" width="57" height="6" rx="1"
+                                    transform="translate(881 432)" fill="#edeceb" />
+                                <rect id="Rectangle_42" data-name="Rectangle 42" width="50" height="6" rx="1"
+                                    transform="translate(881 444)" fill="#edeceb" />
+                                <rect id="Rectangle_41" data-name="Rectangle 41" width="40" height="6" rx="1"
+                                    transform="translate(881 456)" fill="#edeceb" />
+                            </g>
+                            <rect id="Rectangle_44" data-name="Rectangle 44" width="40" height="6" rx="1"
+                                transform="translate(881 526)" fill="#edeceb" />
+                        </g>
+                    </svg>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

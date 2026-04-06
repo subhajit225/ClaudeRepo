@@ -1,0 +1,227 @@
+<template>
+  <div class="ag-filter-section su__justify-content-between su__text-right topButtons su__ag-filter-div filter-fixed-height">
+    <div class="date-labels">
+      <template if:true={createdChecked}>
+        <label>Created Date: {createdStartDate} - {createdEndDate}</label>
+      </template>
+      <template if:true={updatedChecked}>
+        <label>Updated Date: {updatedStartDate} - {updatedEndDate}</label>
+      </template>
+    </div>
+  
+  <!-- Slider Button that opens up the date modal-->
+    <lightning-button-icon title="Filters" class="expert-filters" icon-name="utility:slider" onclick={openDateModal}></lightning-button-icon>
+    <template if:true={DateModalFlag}>
+      <div class="su__ag-filter-dropdown su__ag-filter-position">
+        <div class="su_listing-style">
+          <ul>
+            <li>
+              <lightning-input type="checkbox" checked={createdChecked} onchange={handleChangeCreatedDate} label="Created Date"></lightning-input>
+              <template if:true={createdChecked}>
+                <div class="dateModalContent ">
+                  <div class="calendars">Start Date:<input type="date" data-id="createdStartDate" max={todaysDate} value={createdStartDate} onchange={handleCreatedDateChange}></input></div>
+                  <div class="calendars">End Date:<input type="date" data-id="createdEndDate" min={createdStartDate} max={todaysDate} value={createdEndDate} onchange={handleCreatedDateChange}></input></div>
+                </div>
+              </template>
+              <template if:false={createdChecked}>
+                <div class="dateModalContent disableDateDiv">
+                  <div class="calendars">Start Date:<input type="date" value={createdStartDate} disabled></input></div>
+                  <div class="calendars">End Date:<input type="date" value={createdEndDate} disabled></input> </div>
+                </div>
+              </template>
+            </li>
+            <li>
+              <lightning-input type="checkbox" checked={updatedChecked} onchange={handleChangeUpdatedDate} label="Updated Date"></lightning-input>
+              <template if:true={updatedChecked}>
+                <div class="dateModalContent">
+                  <div class="calendars">Start Date:<input type="date" data-id="updatedStartDate" max={todaysDate}  value={updatedStartDate} onchange={handleUpdatedDateChange}></input></div>
+                  <div class="calendars">End Date:<input type="date" data-id="updatedEndDate" min={updatedStartDate} max={todaysDate} value={updatedEndDate} onchange={handleUpdatedDateChange}></input></div>
+                </div>
+              </template>
+              <template if:false={updatedChecked}>
+                <div class="dateModalContent disableDateDiv">
+                  <div class="calendars">Start Date:<input type="date" value={updatedStartDate} disabled></input></div>
+                  <div class="calendars">End Date:<input type="date" value={updatedEndDate} disabled></input> </div>
+                </div>
+              </template>
+            </li>
+            </ul>
+        </div>
+      </div>
+      <div class="slds-backdrop slds-backdrop_open su__ag-backdrop" onclick={openDateModal} data-id="backdrop">
+      </div>
+    </template>  
+  </div>
+  
+  <!-- Date modal popup Code start-->
+  <div class="parent" onscroll={handleScroll}>
+   
+
+  <!-- Date modal popup Code end-->
+<!-- Data displayed in Knowledge Article Tab  -->
+    <template if:true={showArticles}>
+      <div  class="su-art-info su-agent-section" >
+        <template for:each={knowledgeArticleRecords} for:item="knowledgeArticle" for:index="index">
+          
+            
+              <div class={knowledgeArticle.listClass} key={knowledgeArticle} >
+                <template if:false={knowledgeArticle.expanded}>  
+                <div class="ag-list-subject su__cursor" onclick={expandInfoDiv} data-index={index} > 
+                    
+                    <div class="title-hidden" >
+                      <a class="su__article-heading " href={knowledgeArticle.previewUrl}
+                          target="_blank">
+                          <span title="Preview Article in Salesforce">
+                              <svg id="Icon_awesome-eye" data-name="Icon awesome-eye" xmlns="http://www.w3.org/2000/svg" width="15" height="9" viewBox="0 0 15 11">
+                                  <path id="Icon_awesome-eye-2" data-name="Icon awesome-eye" d="M14.909,9.582A8.319,8.319,0,0,0,7.5,4.5,8.32,8.32,0,0,0,.091,9.582a1.01,1.01,0,0,0,0,.836A8.319,8.319,0,0,0,7.5,15.5a8.32,8.32,0,0,0,7.409-5.082A1.01,1.01,0,0,0,14.909,9.582ZM7.5,14.125A3.951,3.951,0,0,1,3.75,10,3.951,3.951,0,0,1,7.5,5.875,3.951,3.951,0,0,1,11.25,10,3.949,3.949,0,0,1,7.5,14.125Zm0-6.875a2.274,2.274,0,0,0-.659.109A1.474,1.474,0,0,1,6.718,9.14a1.163,1.163,0,0,1-1.62.135,2.884,2.884,0,0,0,1.018,3,2.313,2.313,0,0,0,2.907-.1,2.91,2.91,0,0,0,.844-3.062A2.524,2.524,0,0,0,7.5,7.25Z" transform="translate(0 -4.5)" fill="#707070"/>
+                              </svg>
+                          </span>  
+                      </a>
+                        <span class="full-subject">
+                          <a class="tooltip-title">{knowledgeArticle.Title}
+                            <span>{knowledgeArticle.Title}</span>
+                          </a>
+                        </span>
+                    </div>
+                    
+                    <div class="ag-buttons">
+                    <button >
+                        <img class="agent-icon-img" src={knowledgeArticle.Icon} />   
+                        <span class="agent-name-width text-name-width" title={knowledgeArticle.OwnerName} >
+                          {knowledgeArticle.OwnerName}
+                        </span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="7.311" height="22" viewBox="0 0 7.311 7.311">
+                          <template if:true={knowledgeArticle.isActive}>
+                            <ellipse id="Ellipse_361" data-name="Ellipse 36" cx="3.656" cy="3.656" rx="3.656" ry="3.656" fill="#00b81e"/>
+                        </template>
+                        <template if:false={knowledgeArticle.isActive}>
+                            <ellipse id="Ellipse_362" data-name="Ellipse 36" cx="3.656" cy="3.656" rx="3.656" ry="3.656" fill="#9A9898"/>
+                        </template>
+                        </svg>
+                    </button>
+                    <button  class="attach-count" title="Attached to Case">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="16.999" viewBox="0 0 7.732 14.999">
+                        <path id="Icon_ionic-ios-attach-2" data-name="Icon ionic-ios-attach" d="M17.085,6.571a.523.523,0,0,0-.522.522V13.6a2.7,2.7,0,0,1-.736,1.844,2.649,2.649,0,0,1-1.858.793h-.455a2.6,2.6,0,0,1-1.834-.823,2.687,2.687,0,0,1-.8-1.848v-8.4a1.819,1.819,0,0,1,.579-1.322A1.992,1.992,0,0,1,12.831,3.3a1.863,1.863,0,0,1,1.881,1.868v7.839a1.058,1.058,0,0,1-.971,1.078,1.029,1.029,0,0,1-.944-1.078V8.54a.522.522,0,1,0-1.044,0v4.472a2.008,2.008,0,0,0,3.418,1.506,2.114,2.114,0,0,0,.586-1.506V5.172A2.926,2.926,0,0,0,12.821,2.25a2.937,2.937,0,0,0-2.082.854,2.888,2.888,0,0,0-.867,2.072v8.4a3.741,3.741,0,0,0,1.091,2.611,3.618,3.618,0,0,0,2.547,1.068h.455a3.656,3.656,0,0,0,2.541-1.074,3.76,3.76,0,0,0,.8-1.158,3.5,3.5,0,0,0,.3-1.409V7.094A.518.518,0,0,0,17.085,6.571Z" transform="translate(-9.872 -2.25)" fill="#707070"/>
+                        </svg >
+                        <span class="attach-articles-count-width">{knowledgeArticle.articleCount}</span>
+                    </button>
+                    </div>
+                   
+                </div>
+              </template>
+              <template if:true={knowledgeArticle.expanded}>
+                <div class="ag-list-subject su__cursor su__expandDiv-width">
+                    <div class="title-hidden">
+                      <a class="su__article-heading " href={knowledgeArticle.previewUrl}
+                          target="_blank">
+                          <span title="Preview Article in Salesforce">
+                              <svg id="Icon_awesome-eye-3" data-name="Icon awesome-eye" xmlns="http://www.w3.org/2000/svg" width="15" height="9" viewBox="0 0 15 11">
+                                  <path id="Icon_awesome-eye-4" data-name="Icon awesome-eye" d="M14.909,9.582A8.319,8.319,0,0,0,7.5,4.5,8.32,8.32,0,0,0,.091,9.582a1.01,1.01,0,0,0,0,.836A8.319,8.319,0,0,0,7.5,15.5a8.32,8.32,0,0,0,7.409-5.082A1.01,1.01,0,0,0,14.909,9.582ZM7.5,14.125A3.951,3.951,0,0,1,3.75,10,3.951,3.951,0,0,1,7.5,5.875,3.951,3.951,0,0,1,11.25,10,3.949,3.949,0,0,1,7.5,14.125Zm0-6.875a2.274,2.274,0,0,0-.659.109A1.474,1.474,0,0,1,6.718,9.14a1.163,1.163,0,0,1-1.62.135,2.884,2.884,0,0,0,1.018,3,2.313,2.313,0,0,0,2.907-.1,2.91,2.91,0,0,0,.844-3.062A2.524,2.524,0,0,0,7.5,7.25Z" transform="translate(0 -4.5)" fill="#707070"/>
+                              </svg>
+                          </span>  
+                      </a>
+                      <span class="full-subject" >
+                        <a  class="tooltip-title">{knowledgeArticle.Title}
+                          <span>{knowledgeArticle.Title}</span>
+                        </a>
+                      </span>
+                    </div>
+                </div>
+              </template>
+                <template if:true={knowledgeArticle.expanded}>
+                  <div class="article-details" >
+                    <div class="su__flex-vcenter-2">
+                      <div class="article-agent-details hide-320">
+                        <div>
+                            <div class="agent-icon">
+                                <img class="agent-icon-img" src={knowledgeArticle.Icon} >   
+                            </div> 
+                            <div class="su__flex-vcenter-3" >        
+                                <label class="agent-name agent-name-1 text-name-width" title={knowledgeArticle.OwnerName}>{knowledgeArticle.OwnerName}
+                                </label>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="7.311" height="14" viewBox="0 0 7.311 7.311">
+                                  <template if:true={knowledgeArticle.isActive}>
+                                        <ellipse id="Ellipse_363" data-name="Ellipse 36" cx="3.656" cy="3.656" rx="3.656" ry="3.656" fill="#00b81e"/>
+                                    </template>
+                                    <template if:false={knowledgeArticle.isActive}>
+                                        <ellipse id="Ellipse_364" data-name="Ellipse 36" cx="3.656" cy="3.656" rx="3.656" ry="3.656" fill="#9A9898"/>
+                                    </template>
+                                </svg>
+                                <label class="agent-desigantion su__text-truncate" title={knowledgeArticle.Role}>{knowledgeArticle.Role}</label>
+                            </div>
+                        </div> 
+                      </div>
+                    
+                      <div class="article-div-flex show-320">
+                        <span class="icon-margin-right">
+                          <a class="su__article-heading " href={knowledgeArticle.previewUrl}
+                                target="_blank">
+                            <span title="Preview Article in Salesforce">
+                                <svg id="Icon_awesome-eye-5" data-name="Icon awesome-eye" xmlns="http://www.w3.org/2000/svg" width="15" height="9" viewBox="0 0 15 11">
+                                    <path id="Icon_awesome-eye-6" data-name="Icon awesome-eye" d="M14.909,9.582A8.319,8.319,0,0,0,7.5,4.5,8.32,8.32,0,0,0,.091,9.582a1.01,1.01,0,0,0,0,.836A8.319,8.319,0,0,0,7.5,15.5a8.32,8.32,0,0,0,7.409-5.082A1.01,1.01,0,0,0,14.909,9.582ZM7.5,14.125A3.951,3.951,0,0,1,3.75,10,3.951,3.951,0,0,1,7.5,5.875,3.951,3.951,0,0,1,11.25,10,3.949,3.949,0,0,1,7.5,14.125Zm0-6.875a2.274,2.274,0,0,0-.659.109A1.474,1.474,0,0,1,6.718,9.14a1.163,1.163,0,0,1-1.62.135,2.884,2.884,0,0,0,1.018,3,2.313,2.313,0,0,0,2.907-.1,2.91,2.91,0,0,0,.844-3.062A2.524,2.524,0,0,0,7.5,7.25Z" transform="translate(0 -4.5)" fill="#707070"/>
+                                </svg>
+                            </span>
+                          </a>
+                        </span>    
+                        <span class="title-flex-2">    
+                          {knowledgeArticle.Title}
+                        </span>
+                        <div class="article-agent-details">
+                            <div>
+                                <div class="agent-icon">
+                                    <img class="agent-icon-img" src={knowledgeArticle.Icon}>   
+                                </div> 
+                                <div class="su__flex-vcenter-3 agent-name-div" >        
+                                    <label class="agent-name agent-name-1 text-name-width" title={knowledgeArticle.OwnerName} > {knowledgeArticle.OwnerName} 
+                                    </label>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="7.311" height="14" viewBox="0 0 7.311 7.311">
+                                      <template if:true={knowledgeArticle.isActive}>
+                                        <ellipse id="Ellipse_365" data-name="Ellipse 36" cx="3.656" cy="3.656" rx="3.656" ry="3.656" fill="#00b81e"/>
+                                    </template>
+                                    <template if:false={knowledgeArticle.isActive}>
+                                        <ellipse id="Ellipse_366" data-name="Ellipse 36" cx="3.656" cy="3.656" rx="3.656" ry="3.656" fill="#9A9898"/>
+                                    </template>
+                                    </svg>
+                                    <label class="agent-desigantion su__text-truncate" title={knowledgeArticle.Role}> {knowledgeArticle.Role}</label>
+                                </div>
+                            </div> 
+                        </div>
+                      </div> 
+                      <div>
+                        <span class="article-dates"> 
+                            <span class="date-div">
+                                <span class="article-text">Article Created : </span>
+                                <span>{knowledgeArticle.caseCreatedDate}</span>
+                            </span>
+                            <span class="date-div">
+                                <span class="article-text">Updated Date : </span>
+                                <span>{knowledgeArticle.lastModifiedDate}</span>
+                            </span> 
+                        </span>      
+                        <button class="attach-count" title="Attached To Case">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="16.999" viewBox="0 0 7.732 14.999">
+                            <path id="Icon_ionic-ios-attach" data-name="Icon ionic-ios-attach" d="M17.085,6.571a.523.523,0,0,0-.522.522V13.6a2.7,2.7,0,0,1-.736,1.844,2.649,2.649,0,0,1-1.858.793h-.455a2.6,2.6,0,0,1-1.834-.823,2.687,2.687,0,0,1-.8-1.848v-8.4a1.819,1.819,0,0,1,.579-1.322A1.992,1.992,0,0,1,12.831,3.3a1.863,1.863,0,0,1,1.881,1.868v7.839a1.058,1.058,0,0,1-.971,1.078,1.029,1.029,0,0,1-.944-1.078V8.54a.522.522,0,1,0-1.044,0v4.472a2.008,2.008,0,0,0,3.418,1.506,2.114,2.114,0,0,0,.586-1.506V5.172A2.926,2.926,0,0,0,12.821,2.25a2.937,2.937,0,0,0-2.082.854,2.888,2.888,0,0,0-.867,2.072v8.4a3.741,3.741,0,0,0,1.091,2.611,3.618,3.618,0,0,0,2.547,1.068h.455a3.656,3.656,0,0,0,2.541-1.074,3.76,3.76,0,0,0,.8-1.158,3.5,3.5,0,0,0,.3-1.409V7.094A.518.518,0,0,0,17.085,6.571Z" transform="translate(-9.872 -2.25)" fill="#707070"/>
+                            </svg>
+                            <span>{knowledgeArticle.articleCount}</span>
+                        </button>
+                        <button class="arrow-up-button" onclick={expandInfoDiv} data-index={index}>
+                            <svg height="10.399" viewBox="0 0 17.65 10.399" width="10.65" fill="#56C6FF">
+                              <path d="M14.946,9.937,8.817,3.81,2.689,9.937A1.575,1.575,0,0,1,.462,7.711L7.712.462a1.573,1.573,0,0,1,2.227,0l7.25,7.249a1.573,1.573,0,0,1,0,2.227A1.607,1.607,0,0,1,14.946,9.937Z" transform="translate(17.65 10.399) rotate(180)">
+                              </path>
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+              </div>
+            
+          
+        </template>
+        </div>
+    </template>
+    <template if:false={showArticles}>
+      <c-s-u_-no-results-template></c-s-u_-no-results-template>
+    </template>
+  </div>
+</template>

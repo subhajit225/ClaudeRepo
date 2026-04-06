@@ -1,0 +1,103 @@
+<apex:page showHeader="false" sidebar="false" cache="false" contentType="text/xml" controller="CustomReplacementController">
+    <apex:outputPanel layout="none" rendered="{!showCustomReplacementTable}">
+        <block font-size="{!template.SBQQ__FontSize__c}" font-family="{!template.SBQQ__FontFamily__c}">
+            <block font-weight="bold">
+                Replacement Summary
+            </block>
+            <block margin-top="1em" font-size="6">
+                <table table-layout="fixed" border-style="solid" border-width="1px">
+                    <table-column></table-column>
+                    <table-column column-width="15%"></table-column>
+                    <table-column></table-column>
+                    <table-column></table-column>
+                    <table-column></table-column>
+                    <table-column></table-column>
+                    <table-column></table-column>
+                    <table-column></table-column>
+                    <table-column></table-column>
+                    <table-column></table-column>
+                    <table-column></table-column>
+                    <table-header>
+                        <table-row background-color="#{!template.SBQQ__ShadingColor__c}" color="white">
+                            <table-cell padding="0.7em" border-style="solid" border-width="1px"><block font-weight="bold">Terminated SKU</block></table-cell>
+                            <table-cell padding="0.7em" border-style="solid" border-width="1px"><block font-weight="bold">Asset ID</block></table-cell>
+                            <table-cell padding="0.7em" border-style="solid" border-width="1px"><block font-weight="bold">Purchased Qty</block></table-cell>
+                            <table-cell padding="0.7em" border-style="solid" border-width="1px"><block font-weight="bold">Terminated Qty</block></table-cell>
+                            <table-cell padding="0.7em" border-style="solid" border-width="1px"><block font-weight="bold">Surviving Quantity</block></table-cell>
+                            <table-cell padding="0.7em" border-style="solid" border-width="1px"><block font-weight="bold">Original Quote</block></table-cell>
+                            <table-cell padding="0.7em" border-style="solid" border-width="1px"><block font-weight="bold">Original Order #</block></table-cell>
+                            <table-cell padding="0.7em" border-style="solid" border-width="1px"><block font-weight="bold">Original Start Date</block></table-cell>
+                            <table-cell padding="0.7em" border-style="solid" border-width="1px"><block font-weight="bold">Original End Date</block></table-cell>
+                            <table-cell padding="0.7em" border-style="solid" border-width="1px"><block font-weight="bold">Replacement Product</block></table-cell>
+                            <table-cell padding="0.7em" border-style="solid" border-width="1px"><block font-weight="bold">Replacement Product Qty</block></table-cell>
+                        </table-row>
+                    </table-header>
+                    <table-body>
+                        <apex:repeat value="{!rowWrapperList}" var="rowWrap">
+                            <table-row>
+                                <apex:outputPanel layout="none" rendered="{!rowWrap.replacedSKUWrap != null}">
+                                    <table-cell padding="0.7em" border-style="solid" border-width="1px" text-align="center" number-rows-spanned="{!rowWrap.rowSpanReplaced}">
+                                        <block>{!rowWrap.replacedSKUWrap.productCode}</block>
+                                    </table-cell>
+                                </apex:outputPanel>
+                                <apex:outputPanel layout="none" rendered="{!rowWrap.replacedSKUWrap != null}">
+                                    <table-cell margin="0.7em" border-style="solid" border-width="1px" text-align="center" number-rows-spanned="{!rowWrap.rowSpanReplaced}">
+                                        <block>{!rowWrap.replacedSKUWrap.assets}</block>
+                                    </table-cell>
+                                </apex:outputPanel>
+                                <apex:outputPanel layout="none" rendered="{!rowWrap.replacedSKUWrap != null}">
+                                    <table-cell padding="0.7em" border-style="solid" border-width="1px" text-align="center" number-rows-spanned="{!rowWrap.rowSpanReplaced}">
+                                        <block >{!rowWrap.replacedSKUWrap.purchasedQty}</block>
+                                    </table-cell>
+                                </apex:outputPanel>
+                                <apex:outputPanel layout="none" rendered="{!rowWrap.replacedSKUWrap != null}">
+                                    <table-cell padding="0.7em" border-style="solid" border-width="1px" text-align="center" number-rows-spanned="{!rowWrap.rowSpanReplaced}">
+                                        <block>{!rowWrap.replacedSKUWrap.terminatedQty}</block>
+                                    </table-cell>
+                                </apex:outputPanel>
+                                <apex:outputPanel layout="none" rendered="{!rowWrap.replacedSKUWrap != null}">
+                                    <table-cell padding="0.7em" border-style="solid" border-width="1px" text-align="center" number-rows-spanned="{!rowWrap.rowSpanReplaced}">
+                                        <block>{!rowWrap.replacedSKUWrap.survivingQty}</block>
+                                    </table-cell>
+                                </apex:outputPanel>
+                                <apex:outputPanel layout="none" rendered="{!rowWrap.replacedSKUWrap != null}">
+                                    <table-cell padding="0.7em" border-style="solid" border-width="1px" text-align="center" number-rows-spanned="{!rowWrap.rowSpanReplaced}">
+                                        <block>{!rowWrap.replacedSKUWrap.originalQuote}</block>
+                                    </table-cell>
+                                </apex:outputPanel>
+                                <apex:outputPanel layout="none" rendered="{!rowWrap.replacedSKUWrap != null}">
+                                    <table-cell padding="0.7em" border-style="solid" border-width="1px" text-align="center" number-rows-spanned="{!rowWrap.rowSpanReplaced}">
+                                        <block>{!rowWrap.replacedSKUWrap.originalOrder}</block>
+                                    </table-cell>
+                                </apex:outputPanel>
+                                <apex:outputPanel layout="none" rendered="{!rowWrap.replacedSKUWrap != null}">
+                                    <table-cell padding="0.7em" border-style="solid" border-width="1px" text-align="center" number-rows-spanned="{!rowWrap.rowSpanReplaced}">
+                                        <block>{!rowWrap.replacedSKUWrap.originalStartDate}</block>
+                                    </table-cell>
+                                </apex:outputPanel>
+                                <apex:outputPanel layout="none" rendered="{!rowWrap.replacedSKUWrap != null}">
+                                    <table-cell padding="0.7em" border-style="solid" border-width="1px" text-align="center" number-rows-spanned="{!rowWrap.rowSpanReplaced}">
+                                        <block>{!rowWrap.replacedSKUWrap.originalEndDate}</block>
+                                    </table-cell>
+                                </apex:outputPanel>
+                                <apex:outputPanel layout="none" rendered="{!rowWrap.replacementSKUWrap != null}">
+                                    <table-cell padding="0.7em" border-style="solid" border-width="1px" text-align="center" number-rows-spanned="{!rowWrap.rowSpanReplacement}">
+                                        <block >{!rowWrap.replacementSKUWrap.productCode}</block>
+                                    </table-cell>
+                                </apex:outputPanel>
+                                <apex:outputPanel layout="none" rendered="{!rowWrap.replacementSKUWrap != null}">
+                                    <table-cell padding="0.7em" border-style="solid" border-width="1px" text-align="center" number-rows-spanned="{!rowWrap.rowSpanReplacement}">
+                                        <block >{!rowWrap.replacementSKUWrap.quantity}</block>
+                                    </table-cell>
+                                </apex:outputPanel>
+                            </table-row>
+                        </apex:repeat>
+                    </table-body>
+                </table>
+            </block>
+            <block margin-top="1em">
+                {!customReplacementLabel}
+            </block>
+        </block>
+    </apex:outputPanel>
+</apex:page>

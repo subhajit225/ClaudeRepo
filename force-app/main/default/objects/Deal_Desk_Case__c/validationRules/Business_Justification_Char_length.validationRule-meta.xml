@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Business_Justification_Char_length</fullName>
+    <active>true</active>
+    <description>Business Justification must be atleast 10 character long</description>
+    <errorConditionFormula>LEN( Business_Justification__c ) &lt;10</errorConditionFormula>
+    <errorDisplayField>Business_Justification__c</errorDisplayField>
+    <errorMessage>Business Justification must be minimum 10 characters</errorMessage>
+</ValidationRule>

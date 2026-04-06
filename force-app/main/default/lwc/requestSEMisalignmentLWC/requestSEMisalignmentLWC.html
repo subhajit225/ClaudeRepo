@@ -1,0 +1,38 @@
+<template>
+    <lightning-quick-action-panel header="Request SE Misalignment">
+       
+        <lightning-record-edit-form record-id={recordId} object-api-name={objectApiName} if:true={showTable}>
+            <div>
+                <template if:true={showLoader}>
+                    <lightning-spinner alternative-text="Loading" size="medium" class="spinnerClass"></lightning-spinner>
+                </template> 
+                <lightning-layout >
+                    <lightning-layout-item padding="around-small" size="6">
+                        <div class="slds-p-bottom_small">
+                            <label for="opName">Opportunity Name</label>
+                            <lightning-output-field id="opName" variant="label-hidden" field-name="Name" required></lightning-output-field>
+                        </div>
+                        <div class="slds-p-bottom_small">
+                            <span style="color:red;">*</span><label for="seId">New SE</label>
+                            <lightning-input-field id="seId" variant="label-hidden" field-name="SE_Misalignment_User__c" required></lightning-input-field>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small" size="6" >
+                        <div class="slds-p-bottom_small">
+                            <label for="rseId">Rubrik Sales Engineer</label>
+                            <lightning-output-field id="rseId" variant="label-hidden" field-name="Rubrik_Sales_Engineer__c"></lightning-output-field>
+                        </div>
+                         <div class="slds-p-bottom_small">
+                            <span style="color:red;">*</span><label for="commentsId">SE Misalignment Comments</label>
+                            <lightning-input-field id="commentsId" variant="label-hidden" field-name="SE_Misalignment_Comments__c" required></lightning-input-field> 
+                        </div>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </div>        
+        </lightning-record-edit-form>
+        <div slot="footer">
+            <lightning-button variant="neutral" label="Cancel" onclick={handleCancel} ></lightning-button>
+            <lightning-button variant="brand" label="Save" onclick={handleSave} class="slds-m-left_x-small"></lightning-button>
+        </div>
+    </lightning-quick-action-panel>
+</template>

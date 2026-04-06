@@ -1,0 +1,435 @@
+<template>
+
+  <div>
+      <center>
+          <table style="width:40%">
+              <thead>
+                  <tr>
+                      <th colspan="4" style="background-color: rgb(201, 203, 207);text-align:center;">Health Score of Overall CX Score</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr>
+                      <td style="background-color: rgb(100, 149, 237);text-align:center;"><b>Excellent(>=75)</b></td>
+                      <td style="background-color: rgb(50, 205, 50);text-align:center;"><b>Good(>50-&lt;75)</b></td>
+                      <td style="background-color: rgb(228, 208, 10);text-align:center;"><b>Poor(>30-50)</b></td>
+                      <td style="background-color: rgb(222, 49, 99);text-align:center;"><b>Fragile(&lt;=30)</b></td>
+                  </tr>
+              </tbody>
+          </table>
+      </center>
+      <br/>
+
+  </div> 
+
+  <div class="slds-notify slds-notify_alert" role="alert">
+      <span class="slds-assistive-text">info</span>
+      <h2>
+         Account Score- Details
+      </h2>
+  </div><br/>
+  <template if:true={renderBlock}>
+    <div class="slds-grid slds-gutters">
+      <div class="slds-col">
+        <span>
+          Account Theater <br/>
+          {accountRecord.ETM_Theatre__c}
+        </span>
+      </div>
+      <div class="slds-col">
+        <span>
+          Account Preference <br/>
+          {accountRecord.Account_Preference__c}
+        </span>
+      </div>
+      <div class="slds-col">
+        <span>
+          CEM Account?<br/>
+          {isCSM}
+        </span>
+      </div>
+      <div class="slds-col">
+        <span>
+          FED Account? <br/>
+          {accountRecord.US_Federal_Account__c}
+        </span>
+      </div>
+      <!--div class="slds-col">
+        <span>
+          Entitlment Start Qtr <br/>
+          {accountRecord.MIN_ENT_START_QTR__c}
+        </span>
+      </div>
+      <div class="slds-col">
+        <span>
+          Entitlment End Qtr<br/>
+          {accountRecord.MIN_ENT_END_QTR__c}
+        </span>
+      </div-->
+      <div class="slds-col">
+        <span>
+          Revenue Segmment <br/>
+          {accountRecord.Annual_Revenue_Range__c}
+        </span>
+      </div>
+      <div class="slds-col">
+        <span>
+          Account Type <br/>
+          {accountRecord.Type}
+        </span>
+      </div>
+    </div>
+  </template>
+  <br/><br/>
+
+  <div class="slds-grid slds-gutters">
+      <div class="slds-col">
+        <span>
+          
+          <div class="gauge" style="text-align: center;">
+            <span  class="scoreClass" style={colorCode}>{scoreCode}</span>
+            <br/>
+            <canvas id="gauageChart"></canvas>        
+          
+            <br/>
+            <span id="res" class="scoreClass stepUp"  style={colorCode}></span> &nbsp;&nbsp; 
+          </div>
+          <template if:true={renderBlock}>
+            <div class="slds-grid slds-gutters">
+                <div class="slds-col">
+                  <span class="alignCenter">
+                    <div class="scoreClass" style={onboardingStyle}>  {score.OnBoarding_Score__c}</div><br/>
+                    <p>Onboarding Score</p>
+                  </span>
+                </div>
+                <div class="slds-col">
+                  <span class="alignCenter">
+                  <div class="scoreClass"  style={adoptionStyle}>  {score.Adoption_Score__c}</div><br/>
+                    <p>Adoption Score </p>
+                  </span>
+                </div>
+                <div class="slds-col">
+                  <span class="alignCenter">
+                    <div class="scoreClass"  style={productStyle}>  {score.Product_Score__c}</div><br/>
+                    <p>Product Score </p>
+                  </span>
+                </div>
+                <div class="slds-col">
+                  <span class="alignCenter">
+                    <div class="scoreClass" style={supportStyle}>  {score.Support_Score__c}</div><br/>
+                    <p>Support Score </p>
+                  </span>
+                </div>
+            </div>
+          </template>
+        </span>
+      </div>
+      <div class="slds-col">
+        <span>
+          <template if:true={renderBlock}>
+            <table class="slds-table slds-table_cell-buffer slds-table_header-hidden" aria-label=" Example headless table of Opportunities with no borders ">
+              <tbody>
+                  <tr class="slds-hint-parent">
+                    <td data-label="Account Name">
+                        <div class="slds-truncate" title="Polaris Account Name">Polaris Account Name</div>
+                    </td>
+                    <td data-label="Account Name">
+                      <div class="slds-truncate" title={accountRecord.Name}>{accountRecord.Name}</div>
+                    </td>
+                  </tr>
+                  <tr class="slds-hint-parent">
+                    <td data-label="Account Name">
+                        <div class="slds-truncate" title="Account Owner">Account Owner</div>
+                    </td>
+                    <td data-label="Account Name">
+                      <div class="slds-truncate" title={ownerName}>{ownerName}</div>
+                    </td>
+                  </tr>
+                  <tr class="slds-hint-parent">
+                    <td data-label="Account Name">
+                        <div class="slds-truncate" title="Sales Engineer">Sales Engineer</div>
+                    </td>
+                    <td data-label="Account Name">
+                      <div class="slds-truncate" title={Rubrik_Sales_Engineer}>{Rubrik_Sales_Engineer}</div>
+                    </td>
+                  </tr>
+                  <tr class="slds-hint-parent">
+                    <td data-label="Account Name">
+                        <div class="slds-truncate" title="CEM">CEM</div>
+                    </td>
+                    <td data-label="Account Name">
+                      <div class="slds-truncate" title={csmName}>{cemName}</div>
+                    </td>
+                  </tr>
+              </tbody>
+            </table>
+          </template>
+        </span>
+      </div>
+    </div>  
+
+
+    <template if:true={renderBlock}>
+
+      <div class="slds-grid slds-gutters">
+        <div class="slds-col">
+          <div class="slds-notify slds-notify_alert" role="alert">
+              <span class="slds-assistive-text">info</span>
+              <h2>
+                Onboarding Score- Details
+              </h2>
+          </div><br/>
+          <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped" aria-label="Example table of Opportunities with striped rows">
+            <thead>
+            <tr class="slds-line-height_reset">
+              <th class="" scope="col">
+                <div class="slds-truncate" title="Product Category">Product Category</div>
+              </th>
+              <th class="" scope="col">
+                <div class="slds-truncate" title="Product">Products</div>
+              </th>
+              <th class="" scope="col">
+                <div class="slds-truncate" title="Min Entitlment Start Date">Min Entitlment Start Date</div>
+              </th>
+              <th class="" scope="col">
+                <div class="slds-truncate" title="Activation Status">Activation Status</div>
+              </th>
+              <th class="" scope="col">
+                <div class="slds-truncate" title="#Entitelments">#Entitelments</div>
+              </th>
+              <th class="" scope="col">
+                <div class="slds-truncate" title="Onboarding Value">Onboarding Value</div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <template for:each={onboardingScoreDetails} for:item="row">
+              <tr class="slds-hint-parent" key={row.productCategory}>
+                <td >
+                  <div class="slds-truncate">{row.productCategory}</div>
+                </td>
+                <td >
+                  <div class="slds-truncate">{row.products}</div>
+                </td>
+                <td >
+                  <div class="slds-truncate">{row.startDate}</div>
+                </td>
+                <td >
+                  <div class="slds-truncate">{row.activationStatus}</div>
+                </td>
+                <td >
+                  <div class="slds-truncate">{row.entitlements}</div>
+                </td>
+                <td >
+                  <div class="slds-truncate">{row.onboardingValue}</div>
+                </td>
+              </tr>
+           </template>
+          </tbody>
+        </table>
+        </div>
+      </div>
+      <div class="slds-grid slds-gutters">
+        <div class="slds-col">
+          <div class="slds-notify slds-notify_alert" role="alert">
+              <span class="slds-assistive-text">info</span>
+              <h2>
+                Adoption Score- Details
+              </h2>
+          </div><br/>
+          <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped" aria-label="Example table of Opportunities with striped rows">
+            <thead>
+              <tr class="slds-line-height_reset">
+                <th class="" scope="col">
+                  <div class="slds-truncate" title="Product Category">Product Category</div>
+                </th>
+                <th class="" scope="col">
+                  <div class="slds-truncate" title="Product">Products</div>
+                </th>
+                <th class="" scope="col">
+                  <div class="slds-truncate" title="Activation Status">Activation Status</div>
+                </th>
+                <th class="" scope="col">
+                  <div class="slds-truncate" title="Adoption Value Score">Adoption Value Score</div>
+                </th>
+                <th class="" scope="col">
+                  <div class="slds-truncate" title="Adoption Value">Adoption Value</div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <template for:each={adoptionScoreDetails} for:item="row">
+                <tr class="slds-hint-parent" key={row.productCategory}>
+                  <td >
+                    <div class="slds-truncate">{row.productCategory}</div>
+                  </td>
+                  <td >
+                    <div class="slds-truncate">{row.products}</div>
+                  </td>
+                  <td >
+                    <div class="slds-truncate">{row.activationStatus}</div>
+                  </td>
+                  <td >
+                    <div class="slds-truncate">{row.adoptionValueScore}</div>
+                  </td>
+                  <td >
+                    <div class="slds-truncate">{row.adoptionValue}</div>
+                  </td>
+                </tr>
+            </template>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <br/><br/>
+      <div>
+          <div class="slds-notify slds-notify_alert" role="alert">
+              <span class="slds-assistive-text">info</span>
+              <h2>
+                Product Score- Details
+              </h2>
+          </div><br/>
+          <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped" aria-label="Example table of Opportunities with striped rows">
+            <thead>
+            <tr class="slds-line-height_reset">
+              <th class="" scope="col">
+                <div class="slds-truncate" title="Defect Score">Defect Score</div>
+              </th>
+              <th class="" scope="col">
+                <div class="slds-truncate" title="RFE Score">RFE Score</div>
+              </th>
+              <th class="" scope="col">
+                <div class="slds-truncate" title="#Defects">#Defects</div>
+              </th>
+              <th class="" scope="col">
+                <div class="slds-truncate" title="#RFEs">#RFEs</div>
+              </th>
+              <th class="" scope="col">
+                <div class="slds-truncate" title="#Defects Fixed">#Defects Fixed</div>
+              </th>
+              <th class="" scope="col">
+                <div class="slds-truncate" title="#Defects Unresolved">#Defects Unresolved</div>
+              </th>
+              <th class="" scope="col">
+                <div class="slds-truncate" title="#RFEs Committed">#RFEs Committed</div>
+              </th>
+              <th class="" scope="col">
+                <div class="slds-truncate" title="#RFEs Pending">#RFEs Pending</div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+              <tr class="slds-hint-parent">
+                <td >
+                  <div class="slds-truncate">{scoreProduct.DEFECT_SCORE__c}</div>
+                </td>
+                <td >
+                  <div class="slds-truncate">{scoreProduct.RFE_SCORE__c}</div>
+                </td>
+                <td >
+                  <div class="slds-truncate">{scoreProduct.DEF_CNT__c}</div>
+                </td>
+                <td >
+                  <div class="slds-truncate">{scoreProduct.RF_CNT__c}</div>
+                </td>
+                <td >
+                  <div class="slds-truncate">{scoreProduct.DEFECT_FIXED__c}</div>
+                </td>
+                <td >
+                  <div class="slds-truncate">{scoreProduct.DEFECT_UNRESOLVED__c}</div>
+                </td>
+                <td >
+                  <div class="slds-truncate">{scoreProduct.RFES_COMMIT__c}</div>
+                </td>
+                <td >
+                  <div class="slds-truncate">{scoreProduct.RFES_PENDING_COMMIT__c}</div>
+                </td>
+              </tr>
+          </tbody>
+        </table>
+
+      </div>
+      <br/><br/>
+      <div>
+          <div class="slds-notify slds-notify_alert" role="alert">
+              <span class="slds-assistive-text">info</span>
+              <h2>
+                Support Score- Details
+              </h2>
+          </div><br/>
+
+          <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped" aria-label="Example table of Opportunities with striped rows">
+            <thead>
+            <tr class="slds-line-height_reset">
+              <th class="" scope="col">
+                <div class="slds-truncate" title="TTR with JIRA Score">TTR with JIRA Score</div>
+              </th>
+              <th class="" scope="col">
+                <div class="slds-truncate" title="TTR without JIRA Score">TTR without JIRA Score</div>
+              </th>
+              <th class="" scope="col">
+                <div class="slds-truncate" title="P1/P2 Cases Score">P1/P2 Cases Score</div>
+              </th>
+              <th class="" scope="col">
+                <div class="slds-truncate" title="Escalation Score">Escalation Score</div>
+              </th>
+              <th class="" scope="col">
+                <div class="slds-truncate" title="Avg TTR with JIRA Score">Avg TTR with JIRA Score</div>
+              </th>
+              <th class="" scope="col">
+                <div class="slds-truncate" title="Avg TTR without JIRA Score">Avg TTR without JIRA Score</div>
+              </th>
+              <th class="" scope="col">
+                <div class="slds-truncate" title="#P1/P2 Cases">#P1/P2 Cases</div>
+              </th>
+              <th class="" scope="col">
+                <div class="slds-truncate" title="#P1 Cases">#P1 Cases</div>
+              </th>
+              <th class="" scope="col">
+                <div class="slds-truncate" title="#P1 Cases">#P2 Cases</div>
+              </th>
+              <th class="" scope="col">
+                <div class="slds-truncate" title="#Escalation">#Escalations</div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+              <tr class="slds-hint-parent">
+                <td >
+                  <div class="slds-truncate">{scoreSupport.TTR_WITH_JIRA_SCORE__c}</div>
+                </td>
+                <td >
+                  <div class="slds-truncate">{scoreSupport.TTR_WITHOUT_JIRA_SCORE__c}</div>
+                </td>
+                <td >
+                  <div class="slds-truncate">{scoreSupport.P1_P2_CASECOUNT_SCORE__c}</div>
+                </td>
+                <td >
+                  <div class="slds-truncate">{scoreSupport.ESCALATIONS_SCORE__c}</div>
+                </td>
+                <td >
+                  <div class="slds-truncate">{scoreSupport.AVG_TTR_WITH_JIRA__c}</div>
+                </td>
+                <td >
+                  <div class="slds-truncate">{scoreSupport.AVG_TTR_WITHOUT_JIRA__c}</div>
+                </td>
+                <td >
+                  <div class="slds-truncate">{scoreSupport.P1_P2_CASE_COUNT__c}</div>
+                </td>
+                <td >
+                  <div class="slds-truncate">{scoreSupport.P1_CASE_COUNT__c}</div>
+                </td>
+                <td >
+                  <div class="slds-truncate">{scoreSupport.P2_CASE_COUNT__c}</div>
+                </td>
+                <td >
+                  <div class="slds-truncate">{scoreSupport.ESC_CNT__c}</div>
+                </td>
+              </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </template>
+
+</template>

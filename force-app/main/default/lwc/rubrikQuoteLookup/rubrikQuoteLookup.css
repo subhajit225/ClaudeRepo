@@ -1,0 +1,323 @@
+/* ── Brand tokens ───────────────────────────────────────────── */
+/* Rubrik primary teal: #009dac  (matches rubrikSVGIcon cls-2)  */
+
+:host {
+    display: block;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ── Full-page wrapper ──────────────────────────────────────── */
+.page-wrapper {
+    min-height: 100vh;
+    background: #F4FAFB;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Soft teal blob in the background */
+.bg-teal-blob {
+    position: absolute;
+    width: 680px;
+    height: 680px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 157, 172, 0.09) 0%, transparent 65%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+/* ── Card ───────────────────────────────────────────────────── */
+.card {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 460px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.06),
+        0 8px 24px rgba(0, 0, 0, 0.08),
+        0 24px 48px rgba(0, 157, 172, 0.07);
+    overflow: hidden;
+    border: 1px solid rgba(0, 157, 172, 0.12);
+}
+
+/* ── Logo header ────────────────────────────────────────────── */
+.card-header {
+    background: #ffffff;
+    padding: 28px 36px 22px;
+}
+
+/* Let rubrikSVGIcon render in its natural teal (#009dac).
+   Width drives sizing — height follows the SVG's aspect ratio (135:38 ≈ 3.5:1). */
+.logo-wrap {
+    display: block;
+    width: 140px;
+}
+
+.logo-wrap c-rubrik-s-v-g-icon {
+    display: block;
+    width: 100%;
+}
+
+/* Teal gradient accent bar below the logo */
+.accent-bar {
+    height: 3px;
+    background: linear-gradient(90deg, #009dac 0%, #00c4b3 50%, #34d1bf 100%);
+}
+
+/* ── Card body ──────────────────────────────────────────────── */
+.card-body {
+    padding: 28px 36px 24px;
+}
+
+.card-title {
+    font-size: 21px;
+    font-weight: 700;
+    color: #1A2B36;
+    margin: 0 0 8px;
+    letter-spacing: -0.3px;
+    line-height: 1.25;
+}
+
+.card-subtitle {
+    font-size: 14px;
+    color: #607080;
+    margin: 0 0 26px;
+    line-height: 1.65;
+}
+
+/* ── Form ───────────────────────────────────────────────────── */
+.field-group {
+    margin-bottom: 18px;
+}
+
+.field-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #2D3E4A;
+    margin-bottom: 7px;
+    letter-spacing: 0.1px;
+}
+
+.label-icon {
+    width: 14px;
+    height: 14px;
+    color: #009dac;
+    flex-shrink: 0;
+}
+
+.field-input {
+    display: block;
+    width: 100%;
+    height: 46px;
+    padding: 0 14px;
+    font-size: 14px;
+    color: #1A2B36;
+    background: #F7FCFD;
+    border: 1.5px solid #C8E6EA;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+}
+
+.field-input::placeholder {
+    color: #9BBEC4;
+}
+
+.field-input:hover {
+    border-color: #009dac;
+}
+
+.field-input:focus {
+    border-color: #009dac;
+    background: #ffffff;
+    box-shadow: 0 0 0 3.5px rgba(0, 157, 172, 0.15);
+}
+
+.field-input.has-error {
+    border-color: #E53E3E;
+    background: #FFF5F5;
+}
+
+.field-input.has-error:focus {
+    box-shadow: 0 0 0 3.5px rgba(229, 62, 62, 0.13);
+}
+
+.field-error {
+    display: block;
+    margin-top: 5px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #C53030;
+}
+
+/* ── Submit button ──────────────────────────────────────────── */
+.btn-submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    height: 48px;
+    margin-top: 8px;
+    padding: 0 20px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #ffffff;
+    background: linear-gradient(135deg, #009dac 0%, #00b5a5 100%);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    letter-spacing: 0.2px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.btn-submit:hover:not(:disabled) {
+    background: linear-gradient(135deg, #008898 0%, #009e90 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(0, 157, 172, 0.38);
+}
+
+.btn-submit:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+.btn-submit:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+.btn-arrow {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    transition: transform 0.15s ease;
+}
+
+.btn-submit:hover:not(:disabled) .btn-arrow {
+    transform: translateX(3px);
+}
+
+/* ── Spinner ────────────────────────────────────────────────── */
+.spinner {
+    display: inline-block;
+    width: 17px;
+    height: 17px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: spin 0.65s linear infinite;
+    flex-shrink: 0;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ── Error alert ────────────────────────────────────────────── */
+.alert-error {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 14px;
+    padding: 12px 14px;
+    background: #FFF5F5;
+    border: 1px solid #FED7D7;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #C53030;
+    line-height: 1.5;
+}
+
+.alert-error svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+/* ── Success state ──────────────────────────────────────────── */
+.success-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 12px 0 8px;
+    animation: fadeUp 0.4s ease both;
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.success-icon {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #009dac 0%, #00c4b3 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    box-shadow: 0 6px 20px rgba(0, 157, 172, 0.35);
+}
+
+.success-icon svg {
+    width: 28px;
+    height: 28px;
+}
+
+.success-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1A2B36;
+    margin: 0 0 8px;
+}
+
+.success-msg {
+    font-size: 14px;
+    color: #607080;
+    margin: 0;
+}
+
+/* ── Card footer ────────────────────────────────────────────── */
+.card-footer {
+    padding: 14px 36px 18px;
+    border-top: 1px solid #EEF7F8;
+    font-size: 13px;
+    color: #8DA8B0;
+    text-align: center;
+}
+
+.card-footer a {
+    color: #009dac;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.card-footer a:hover {
+    text-decoration: underline;
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 480px) {
+    .card-header { padding: 22px 24px 18px; }
+    .card-body   { padding: 22px 24px 20px; }
+    .card-footer { padding: 12px 24px 16px; }
+    .card-title  { font-size: 19px; }
+}

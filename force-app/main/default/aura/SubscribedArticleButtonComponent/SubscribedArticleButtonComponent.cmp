@@ -1,0 +1,51 @@
+<aura:component controller ="LtngArticleListController" implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,force:hasRecordId" access="global">
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="UrlName"  type="string" />
+    <aura:attribute name="isSubscribed"  type="Boolean" />
+    <aura:attribute name="linkedCategory"  type="Object[]" />
+    <aura:attribute name="ModalOpen"  type="Boolean" />
+    <div class ="ContainerDiv slds-grid slds-wrap" style="    margin:auto;margin-top:2rem ;">
+        <div class ="slds-large-size--8-of-12 slds-Medium-size--8-of-12 slds-size--8-of-12 slds-grid slds-wrap Categories">
+            <b>CATEGORIES : &nbsp;</b>
+            <aura:iteration items="{!v.linkedCategory}" var="item" indexVar="index">
+                <lightning:badge label="{!item}"/>
+            </aura:iteration>
+        </div>
+        <div class ="slds-large-size--4-of-12 slds-Medium-size--4-of-12 slds-size--4-of-12  sub">
+            <lightning:button label="Return to Knowledge" class="redirectcls" onclick="{!c.redirect}"/>
+            <lightning:buttonStateful
+                                      state="{! v.isSubscribed }"
+                                      variant="brand"
+                                      labelWhenOff="Subscribe"
+                                      labelWhenOn="Unsubscibe"
+                                      onclick="{! c.manageSubscription }"
+                                      />
+            <div class="tooltip1"> 
+                <img style="width: 20px;     margin-left: 5px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAANOSURBVGhD7dlJyE1xHMbx15wMKcPCwspQosRCiR0bhOxQWIgdkQVhgQUZVpRiYSjTwsJYEtmQZAoRC0IiMhTKzPdZ3Hq7Pe85/+Hce6X3qc+C/r9z733vPf/hd9o6859nOOZjMw7jJC7gLI5jO5ZgArrhn8pE7MIL/InwHscwAz3QknTFXNyAe5Ox9EdYjt5oWsbhKtwbyvUMs9HQ6FtYjx9wb6JKur/6o/L0xTm4F22Ux9DkUVkG4TrcizXaa4xHdvRNXIN7kWZ5g6xvRvfEebiLx/qNl0i9vzQJDERS1sFdNNY+1N5EL6zGN7ixRc6gC6KiKfYn3AVjnIDLWrjxZZYhOPrUVa0TWrVdhsCNL/MOgxEUrdjuIimmwmUA3PgQOxGUqrYdshcuS+HGh/gELQmF0QbQFefYgJ6oZR4+w40NtQqF2Q1XmOsjtKi+avd/OW6jMLFb8VYaBhutnq7gX7UYNgvgCmL8gk6EOltMwhhMx0bo5+VqUu2BzSa4glA7MBQdZSS0DrjaFJdgcwiuIIR2AaMwB5qVtOC56Dzj6lM8gc0puIIQ+iD6WdX+fQcu09C+LscH2FyEK0ihRctlJtz4FPrj2Wh36QpSPISLJgE3PoUmD5ujcAUpDsIl5z6spzXPZhtcQYqFqI921TpcufEptEO3UQfQFcTSTe9mLZ1x3PhUB2CjNqYriHUTLmvgxqfS/WajXqzamK4ohvq+Lpfhxqcaiw6jXqwrijEZ9VE35jvc+BTPUXh+z53nv8I1pKtcCGULCtMd+rSuOMRduFS5fmgyGYHSrIC7QIiONnI60bnxKfScJShq7ash5i5S5h5ctCvWzuE+TiN1X6f7bDSCo12su1CIKSjLfrjaMlq0o3ME7mJl3mIW6mcVtYDUPUntmT1AH0SnHx7BXTSEPtAV6PnhLeQ8V/kCnTaTo3O8uuHu4s2i7bq+4ezo+USrPoy+xUWoLDrGPoV7sUZRE08LdOXRo4EqD19FdDDLuifKoplIrf0quyHt6aekKTZpdkqJmsjqiuf2cGu07dCGNWqxqzL6ua2EuibuDZbRDmIrgvZOzYp6sZph1AFUR0Z9J51v9NdWo0BnbD1Y1aqu/ZzOE4Vb8c50puVpa/sLVe+J6OGq49MAAAAASUVORK5CYII="/>
+                <span class="tooltiptext">{!$Label.c.S_R_Article_subscribe_info_label}</span>
+            </div>
+        </div>
+        
+        <aura:if isTrue="{!v.ModalOpen}">
+            <!--###### MODAL BOX Start From Here ######-->
+            <div class="demo-only" style="height: 640px;">
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <header class="slds-modal__header">
+                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">You have {!if( v.isSubscribed,'subscribed','unsubscribed')} to this category.</h2>
+                        </header>
+                        <footer class="slds-modal__footer">
+                            <button class="slds-button slds-button--brand" onclick="{!c.closeBttn}">Ok</button>
+                        </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </div>
+            
+            <div class="slds-backdrop slds-backdrop--open"></div>
+            <!--###### MODAL BOX Part END Here ######-->
+        </aura:if>
+    </div>
+    
+</aura:component>

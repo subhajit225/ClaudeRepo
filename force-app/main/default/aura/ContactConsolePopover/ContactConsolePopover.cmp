@@ -1,0 +1,66 @@
+<aura:component>
+    
+    <!-- GLOBAL ATTRIBUTES END-->
+     <!-- GLOBAL ATTRIBUTES -->        
+    <aura:attribute name="countriesAndStates" type="Object" access="global"/>
+    <aura:attribute name="departmentValues" type="Object" access="global"/>
+    <aura:attribute name="employeeRoleValues" type="Object" access="global"/>
+    <aura:attribute name="disabled" type="Boolean" default="false" access="global"/>
+    <aura:attribute name="participantRules" type="Object" access="global"/>
+    <aura:attribute name="employeeLabels" type="Object" access="global"/>
+    <aura:attribute name="regionRules" type="Object" access="global" />
+    <!-- GLOBAL ATTRIBUTES END-->
+    
+    <!-- PUBLIC ATTRIBUTES -->
+    <aura:attribute name="originalStakeHolder" type="Object" /> 
+    <aura:attribute name="stakeHolder" type="Object" /> 
+    <aura:attribute name="statesForCountry" type="Object[]"/>
+    <aura:attribute name="filterList" type="Object"/>
+    <aura:attribute name="campaignCount" type="string"/>
+    <aura:attribute name="popOverHeader" type="string" default="Campaigns"/>
+    <aura:attribute name="filterApplied" type="Boolean" default="false"/>  
+    <aura:attribute name="errorMsgToShow" type="Boolean" default="false"/>    
+    <aura:attribute name="isFilterClosed" type="Boolean" default="true" description="Filters are closed"/>
+    <aura:attribute name="defaultRegionId" type="String"/>
+    <!-- PUBLIC ATTRIBUTES END-->
+    <!-- PUBLIC ATTRIBUTES -->
+    <aura:attribute name="popoverBody" type="Aura.Component[]"/>
+    <!-- PUBLIC ATTRIBUTES END-->
+    <!-- HANDLERS -->
+
+    
+    <div id = "filterIdDiv">
+        <lightning:layout aura:id="filterId" class="" multipleRows="true">
+            <lightning:layoutItem flexibility="auto" class=" slds-align_absolute-center " size="12" largeDeviceSize="1" mediumDeviceSize="1" smallDeviceSize="1">
+                <div aura:id="dropdown" class="{!'slds-dropdown-trigger slds-dropdown-trigger_click ' + (v.isFilterClosed ? 'slds-is-closed': 'slds-is-open')}">
+                    
+                    <a href="" onclick="{!c.onFilterClick}">{!v.campaignCount}</a>
+                    <div  aura:id="filterIdTop" style="outline-color: white; border-style: outset;border-width: 1.2px;" onfocusout="{!c.cancel}" tabindex="0" class="slds-dropdown slds-dropdown_right slds-nubbin_right slds-p-around_x-small ahm-nubbin-width-large">
+                        <ul class="slds-dropdown__list" role="menu">
+                            <h1 style="background-color: #ffb75d;" class="slds-p-top_x-small slds-p-left_x-small slds-p-right_x-small">{!v.popOverHeader}</h1>
+                            <ui:scrollerWrapper class="ahm-filter-scrollerSize">
+                                <div class="slds-size_1-of-1">
+                                    <div class="slds-grid slds-wrap">
+                                        {!v.popoverBody}
+                                                                                           
+                                    </div>
+                                </div>
+                            </ui:scrollerWrapper>
+                        </ul>
+                        
+                        <div class="slds-show_inline-block slds-size_1-of-1 slds-m-vertical_small  slds-float_left ">                            
+                         <!--   <lightning:button variant="base" class="slds-p-horizontal_x-small slds-m-top_small"  
+                                              label="{!$Label.c.Clear_Filters_Label}" onclick="{! c.onClearFiltersClick }" />                            
+                            <lightning:button variant="brand" class="slds-wrap slds-m-horizontal_x-small slds-float_right slds-m-top_small" 
+                                              label="{!$Label.c.Apply_Button}" onclick="{!c.applyFilter }"/> 
+                            <lightning:button variant="Neutral" class=" slds-m-horizontal_x-small slds-float_right slds-m-top_small" 
+                                              label="{!$Label.c.Cancel_Button}" onclick="{!c.cancel }" /> -->
+                      </div>
+                        
+                    </div>
+                </div>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </div>
+    
+</aura:component>

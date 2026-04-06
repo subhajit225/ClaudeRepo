@@ -1,0 +1,38 @@
+<template>
+    <lightning-card title="Edit Opportunity Record" icon-name="standard:opportunity" class="renewalOppCmp">
+        <template if:true={isLoading}>
+            <div class="loadingSpinner">
+                <lightning-spinner alternative-text="Loading" size="large" variant="brand"></lightning-spinner>
+            </div>
+        </template>
+        <template if:true={isDataAvailable}>
+            <lightning-record-edit-form object-api-name="Opportunity" record-id={oppRecordId} onsubmit={handleSubmit}
+                onsuccess={handleSuccess} onerror={handleOnError} onload={handleOnload} layout-type="compact"
+                density="compact">
+                <!-- Dynamically generate fields -->
+                <div class="slds-grid slds-wrap">
+                    <template for:each={oppFields} for:item="field">
+                        <div key={field} class="slds-col slds-size_1-of-2 slds-p-around_small">
+                            <lightning-input-field key={field} field-name={field} class="inputTags">
+                            </lightning-input-field>
+                        </div>
+                    </template>
+                </div>
+                <!-- Submit Button -->
+                <div class="slds-grid slds-grid_align-center slds-m-top_medium">
+                    <lightning-button type="submit" label="Save" variant="brand" class="slds-m-top_medium">
+                    </lightning-button>
+                </div>
+            </lightning-record-edit-form>
+        </template>
+        <template if:false={showEditCmp}>
+            <div class="slds-grid slds-grid_align-center slds-m-top_medium">
+                <p class="slds-text-color_error">{errorMessage}</p>
+            </div>
+        </template>
+    </lightning-card>
+    <template if:true={enableform}>
+        <c-opportunity-stage-moving-confirmation record-id={oppRecordId} inactivate-std-popup={hideDOM}>
+        </c-opportunity-stage-moving-confirmation>
+    </template>
+</template>

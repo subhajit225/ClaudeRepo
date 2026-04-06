@@ -1,0 +1,70 @@
+(function(w, d, s, c, f, n, t, g, a, b, l) {
+    // Defines the global _ps object and initializes the _ps() function
+    // that will queue commands until the PactSafe Library is ready.
+    w['PactSafeObject'] = n;
+    w[n] = w[n] || function() {
+      (w[n].q = w[n].q || []).push(arguments)
+    },
+  
+    // Defines the event functions for the global _ps object.
+    w[n].on = function() {
+      (w[n].e = w[n].e || []).push(arguments)
+    },
+    w[n].once = function() {
+      (w[n].eo = w[n].eo || []).push(arguments)
+    },
+    w[n].off = function() {
+      (w[n].o = w[n].o || []).push(arguments)
+    },
+  
+    // Marks the time that the script is inserted.
+    w[n].t = 1 * new Date(),
+    w[n].l = 0;
+    
+    // Inserts a new script element to load the PactSafe Library JS file (ps.js).
+    a = d.createElement(s);
+    b = d.getElementsByTagName(s)[0];
+    a.async = 1;
+    a.src = c;
+    
+    // Marks that the script has started loading or failed to load.
+    a.onload = a.onreadystatechange = function() { w[n].l = 1 };
+    a.onerror = a.onabort = function() { w[n].l = 0 };
+    b.parentNode.insertBefore(a, b);
+    alert('loading file');
+    
+    // Retry loading the script from a fallback location after 4 seconds.
+    setTimeout(function() {
+      if (!w[n].l && !w[n].loaded) {
+        w[n].error = 1;
+        a = d.createElement(s);
+        a.async = 1;
+        a.src = f;
+        a.onload = a.onreadystatechange = function() { w[n].l = 1 };
+        a.onerror = a.onabort = function() { w[n].l = 0 };
+        b.parentNode.insertBefore(a, b);
+        
+        // Log the loading error via beacon.
+        l = function(u, e) {
+          try {
+            e = d.createElement('img');
+            e.src = 'https://d3r8bdci515tjv.cloudfront.net/error.gif?t=' + w[n].t + '&u=' + encodeURIComponent(u);
+            d.getElementsByTagName('body')[0].appendChild(e);
+          }
+          catch(x) {}
+        };
+        l(c);
+        
+        // Call the optional error callback function after a second failed attempt.
+        setTimeout(function() {
+          if (!w[n].l && !w[n].loaded) {
+            w[n].error = 1;
+            if (g && 'function' == typeof g) {
+              g.call(this);
+            }
+            l(f);
+          }
+        }, t);
+      }
+    }, t);
+  })

@@ -1,0 +1,84 @@
+<template>
+	<template if:true={isDeletionModalOpen}>
+		<section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+			class="slds-modal slds-fade-in-open">
+			<div class="slds-modal__container">
+				<button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick={handleAction} data-action="closeDeletionModalOpen">
+					<svg class="slds-button__icon slds-button__icon_large" aria-hidden="true">
+						<use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+					</svg>
+					<span class="slds-assistive-text">Cancel and close</span>
+				</button>
+				<div class="slds-modal__header">
+					<h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Delete Case</h1>
+				</div>
+				<div class="slds-modal__content slds-p-around_medium slds-text-align_center" id="modal-content-id-1">
+					<p>Are you sure you want to delete <b>{recordToDelete.Name} </b> ?</p>
+
+				</div>
+
+				<div class="slds-modal__footer">
+					<button class="slds-button slds-button_neutral" onclick={handleAction} data-action="closeDeletionModalOpen"> Cancel
+					</button>
+					<button class="slds-button slds-button_brand" onclick={handleAction} data-action="delete"> Delete
+					</button>
+				</div>
+			</div>
+		</section>
+		<div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+	</template>
+	<article class="slds-card slds-card_boundary">
+		<div class="slds-page-header slds-p-vertical_xx-small">
+			<div class={style}>
+				<div class="slds-col slds-has-flexi-truncate slds-card__header slds-grid slds-theme_shade no-pad">
+					<header class="slds-media slds-media_center slds-has-flexi-truncate ">
+						<div class="slds-media__figure">
+							<lightning-icon icon-name='standard:case' size="small"></lightning-icon>
+						</div>
+						<div class="slds-media__body">
+							<h2 class="slds-card__header-title">
+								<a class="slds-card__header-link">{title} ({totalItems})</a>
+							</h2>
+						</div>
+					</header>
+				</div>
+				<div class="slds-col slds-no-flex slds-grid slds-align-top">
+					<div class="slds-col">
+						<lightning-button-icon variant="border-filled" icon-name="utility:refresh"
+							alternative-text="refresh" title="refresh" onclick={handleAction} data-action="refresh">
+						</lightning-button-icon>
+					</div>
+				</div>
+			</div>
+			<template if:true={totalItems}>
+				<div class="slds-grid slds-p-vertical_x-small">
+					<div class="slds-col slds-align-bottom">
+						<p class="slds-text-body--small">{totalItems} Items • Filtered by
+							{filterby} • Updated {lastUpdatedInterval}</p>
+					</div>
+				</div>
+			</template>
+
+		</div>
+		<template if:true={isLoading}>
+			<lightning-spinner alternative-text="Loading" variant="brand" size="medium"></lightning-spinner>
+		</template>
+		<template if:true={totalItems}>
+			<div class="slds-card__body slds-card__body_inner no-pad border-top-lightgray">
+				<c-ce-datatable
+                        key-field="id"
+                        dt-data={tableData}
+                        columns={columns}
+						onrowaction={handleRowAction}
+						max-height="200">
+                </c-ce-datatable>
+			</div>
+			
+		</template>
+		<template if:true={error}>
+			<div class="slds-box slds-align_absolute-center">
+				<p class="slds-text-color_error">{error}</p>
+			</div>
+		</template>
+	</article>
+</template>

@@ -1,0 +1,18 @@
+<apex:page standardController="Account" extensions="Account_LookBookExtnClass" lightningStylesheets="true">
+    <apex:slds rendered="{!$User.UITheme != 'Theme3'}"/>
+    <apex:pageBlock >
+        <apex:pageBlockSection columns="2" rendered="{!NOT(noContent)}">
+            <apex:pageBlockSectionItem >
+                <apex:outputLink target="_blank" value="{!lookbook.Asset_URL__c}">{!lookbook.Asset_Label__c}</apex:outputLink>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputLink target="_blank" value="{!lookbook.Addnl_Asset_URL__c}">{!lookbook.Addnl_Asset_Label__c}</apex:outputLink>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection columns="2" rendered="{!noContent}">
+            <apex:outputText >{!$Label.NoContentToDisplay}</apex:outputText>
+        </apex:pageBlockSection>
+        
+    </apex:pageBlock> 
+     
+</apex:page>

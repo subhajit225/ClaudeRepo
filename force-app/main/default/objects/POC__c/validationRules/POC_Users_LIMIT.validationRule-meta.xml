@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>POC_Users_LIMIT</fullName>
+    <active>true</active>
+    <description>Number of Users must be between 10 - 500. Only for Polaris M365</description>
+    <errorConditionFormula>NOT(ISBLANK(Number_of_Users__c)) &amp;&amp; ( Number_of_Users__c &lt; 10 || Number_of_Users__c &gt; 500 ) &amp;&amp; INCLUDES( Product_Categories__c , &apos;Polaris M365&apos;)</errorConditionFormula>
+    <errorMessage>Number of Users must be between 10 - 500</errorMessage>
+</ValidationRule>

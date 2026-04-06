@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Escalation_Support</fullName>
+    <columns>NAME</columns>
+    <columns>Account__c</columns>
+    <columns>Escalation_Manager_Owner__c</columns>
+    <columns>Case__c</columns>
+    <columns>Case_Priority__c</columns>
+    <columns>Closed_Date__c</columns>
+    <columns>Customer_Geo__c</columns>
+    <columns>Status__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>RECORDTYPE</field>
+        <operation>equals</operation>
+        <value>Escalation__c.Escalation_Support</value>
+    </filters>
+    <label>Escalation Support</label>
+</ListView>

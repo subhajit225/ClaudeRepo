@@ -1,0 +1,405 @@
+<template>
+    <template if:true={featureSnippetStepsDataExist}>
+        <div class={featureSnippetClass}>
+            <div class={featureSnippetLeftClass}>
+                <div
+                    class="su__featureSnippet-title font-16 su__font-bold su__mb-2 su__text-truncate su__w-100_TurncateText su__loading-view">
+                    {featureSnippetData.header}
+                </div>
+                <div>
+                    <template if:true={isSnippetCollapsed}>
+                        <template for:each={featureThreeSnippetSteps} for:item="result" for:index-var="indexVar"
+                            for:end={maxSnippetSteps}>
+                            <div key={result} class="su__featureSnippet-list su__d-flex su__loading-view">
+                                <div class="su__steps-bullets"></div>
+                                <div
+                                    class="su__font-13 su__text-black regular su__mb-2 su__text-truncate su__w-100_TurncateText">
+                                    {result}
+                                </div>
+                            </div>
+                        </template>
+                    </template>
+                    <template if:true={isSnippetExpanded}>
+                        <template for:each={featureSnippetSteps} for:item="result" for:index-var="indexVar">
+                            <div key={result} class="su__featureSnippet-list su__d-flex su__loading-view">
+                                <div class="su__steps-bullets"></div>
+                                <div
+                                    class="su__font-13 su__text-black regular su__mb-2 su__text-truncate su__w-100_TurncateText">
+                                    {result}
+                                </div>
+                            </div>
+                        </template>
+                    </template>
+                    <template if:true={isSnippetMore}>
+                        <template if:true={isSnippetCollapsed}>
+                            <span class={showMoreClass} onclick={toggleSnippetCollapse}>
+                                (More)
+                            </span>
+                        </template>
+                    </template>
+                    <template if:false={isSnippetCollapsed}>
+                        <span class={showLessClass} onclick={toggleSnippetCollapse}>
+                            (Less)
+                        </span>
+                    </template>
+                </div>
+                <a class="su__text-decoration font-14 su__text-black hover-color-dblue su__font-bold su__text-truncate su__w-100_TurncateText su__mt-3 su__loading-view"
+                    style="width:100%" href={featureSnippetData.href} data-href={featureSnippetData.href}
+                    target="_blank" rel="noopener noreferrer" data-id={featureSnippetData._id} onclick={runScriptMethod}
+                    data-rank="0" data-sub={featureSnippetTitleToDisplayString} data-url={featureSnippetData.href}
+                    data-type={featureSnippetData.objName} data-index={featureSnippetData.sourceName}
+                    data-autotuned={featureSnippetData.autotuned}
+                    data-track={featureSnippetData.trackAnalytics}>
+                    <lightning-formatted-rich-text value={featureSnippetTitleToDisplay}></lightning-formatted-rich-text>
+                </a>
+                <div
+                    class="su__href-txt su__text-decoration su__color-lgray font-12 su__font-italic su__text-truncate su__w-100_TurncateText su__loading-view">
+                    {featureSnippetData.href}
+                </div>
+            </div>
+            <div class={featureSnippetRightClass}>
+                <div class="su__featureSnippet-response">
+                    <template if:false={featuredResponseRecorded}>
+                        <div class="su__d-flex su__w-100 su__justify-content-end">
+                            <div class="su__knowledge-feedback-row su__d-flex">
+                                <span class="su__featured-feedback su__cursor su__loading-view su__mr-2"
+                                    onclick={sendFeaturedSnippetFeedback} data-feedback="0">
+                                    <svg width="24" height="24" viewBox="0 0 12 12">
+                                        <path
+                                            d="M7.364,3H3.273a.912.912,0,0,0-.836.488L1.064,6.308A.708.708,0,0,0,1,6.6v.8a.862.862,0,0,0,.909.8H4.777l-.432,1.828-.014.128a.568.568,0,0,0,.2.424l.482.42L8,8.364A.739.739,0,0,0,8.273,7.8v-4A.862.862,0,0,0,7.364,3Zm0,4.8L5.391,9.536,5.9,7.4H1.909V6.6L3.273,3.8H7.364ZM9.182,3H11V7.8H9.182Z"
+                                            fill="#3E384A"></path>
+                                    </svg>
+                                </span>
+                                <span class="su__featured-feedback su__cursor su__loading-view"
+                                    onclick={sendFeaturedSnippetFeedback} data-feedback="1">
+                                    <svg width="24" height="24" viewBox="0 0 12 12">
+                                        <path
+                                            d="M10.091,3.8H7.223l.432-1.828.014-.128a.568.568,0,0,0-.2-.424L6.986,1,4,3.636a.739.739,0,0,0-.268.564v4a.862.862,0,0,0,.909.8H8.727a.912.912,0,0,0,.836-.488l1.373-2.82A.708.708,0,0,0,11,5.4V4.6A.862.862,0,0,0,10.091,3.8Zm0,1.6L8.727,8.2H4.636v-4L6.609,2.464,6.1,4.6h3.986ZM1,4.2H2.818V9H1Z"
+                                            fill="#3E384A"></path>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                    </template>
+                    <template if:true={thanksForFeedbackFeatureSnippet}>
+                        <div class="su__feedback-thankyou su__feedback-steps su__position-absolute su__loading-view">
+                            <div class="su__flex-vcenter su__font-12">
+                                <span class="su__thankyou-text su__whitespace-no">
+                                    {translationObject.Thank_you_for_your_response}!
+                                </span>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+                <template if:true={hasMultiMedia}>
+                    <div class={featuredThumbnailClass}>
+                        <div class="su__featured-thumbnail su__loading-view">
+                            <a class="su__position-relative su__d-flex" href={featureSnippetMultiMediaHrf_Or_Video_url}
+                                data-href={featureSnippetMultiMediaHrf_Or_Video_url} target="_blank"
+                                rel="noopener noreferrer" onclick={runScriptMethod} data-id={featureSnippetData._id}
+                                data-rank="0" data-sub={featureSnippetTitleToDisplayString}
+                                data-url={featureSnippetData.href} data-type={featureSnippetData.objName}
+                                data-index={featureSnippetData.sourceName} data-autotuned={featureSnippetData.autotuned}
+                                data-track={featureSnippetData.trackAnalytics}>
+                                <template if:true={hasThumbnail}>
+                                    <svg class="su__video-thumbnail-play" height="24px" viewBox="0 0 24 24" width="24px"
+                                        fill="#197ff2">
+                                        <path
+                                            d="M8 6.82v10.36c0 .79.87 1.27 1.54.84l8.14-5.18c.62-.39.62-1.29 0-1.69L9.54 5.98C8.87 5.55 8 6.03 8 6.82z" />
+                                    </svg>
+                                </template>
+                                <img src={featureSnippetMediaImgUrl} class="su__img-featured"
+                                    alt={featureSnippet_alt_attributes} />
+                            </a>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </template>
+
+    <template if:true={featureSnippetQuestionAnswer}>
+        <div
+            class="su__FeaturedSnippet  su__FeaturedSnippetQuestionAnswer su__bg-white su__sm-shadow su__fs-bg-blue su__radius-1 su__position-relative su__mb-3 su__p-3 su__d-md-flex su__overflow-hide su__w-100 su__md-none">
+            <div class={hasMultiMediaForQuestionAnswer}>
+                <div
+                    class="su__featureSnippet-title font-18 su__font-bold su__w-100_TurncateText su__text-truncate su__mb-2 su__loading-view">
+                    {featureSnippetData.questionAnswer.answer}
+                </div>
+                <div class="su__su__featureSnippet-desc font-12">
+                    <span class="su__text-black su__font-12 su__d-flex su__font-regular su__loading-view">
+                        {featureSnippetData.questionAnswer.short_summary}
+                    </span>
+                </div>
+                <div class="su__flex-vcenter su__loading-view su__pt-1">
+                    <a class="su__href-txt su__text-decoration su__color-lgray su__font-12 su__font-italic"
+                        href={featureSnippetData.href} data-href={featureSnippetData.href} target="_blank"
+                        rel="noopener noreferrer" onclick={runScriptMethod} data-id={featureSnippetData._id}
+                        data-rank="0" data-sub={featureSnippetTitleToDisplayString} data-url={featureSnippetData.href}
+                        data-type={featureSnippetData.objName} data-index={featureSnippetData.sourceName}
+                        data-autotuned={featureSnippetData.autotuned}
+                        data-track={featureSnippetData.trackAnalytics}>
+                        {featureSnippetData.href}
+                    </a>
+                </div>
+                <template if:true={featureSnippetMetadataExists}>
+                    <div class="su__su__featureSnippet-meta font-12">
+                        <template for:each={featureSnippetMetaData} for:item="item" for:index="indexValue">
+                            <template if:true={item.showMetaNotTag}>
+                                <div key={item} class="su__meta-date su__word-break">
+                                    <div class="su__meta-row su__mb-1 su__loading-view">
+                                        <template if:true={item.showMetaKey}>
+                                            <span
+                                                class="metaDataKey su__font-bold su__color-blue su__rtlmr-0 su__rtlml-2 su__loading-view">
+                                                {item.showMetaKey}
+                                            </span>
+                                            <span class="su__px-2">:</span>
+                                        </template>
+                                        <template if:true={item.metaKeyPost_time}>
+                                            <template for:each={item.value} for:item="metadataVal">
+                                                <lightning-formatted-date-time key={metadataVal} value={metadataVal}
+                                                    format="EEE dd MMM yyyy / hh:mm a"></lightning-formatted-date-time>
+                                            </template>
+                                        </template>
+                                        <template if:false={item.metaKeyPost_time}>
+                                            <template for:each={item.value} for:item="metadataVal"
+                                                for:index="singleVal">
+                                                <template if:true={item.singleVal}>
+                                                    <span key={metadataVal}
+                                                        class="su__color-lgray su__mr-2 su__rtlmr-0 su__rtlml-2 su__loading-view">{metadataVal}</span>
+                                                </template>
+                                            </template>
+                                        </template>
+                                    </div>
+                                </div>
+                            </template>
+                        </template>
+
+                        <template for:each={featureSnippetMetaData} for:item="item" for:index="indexValue">
+                            <template if:true={item.showMetaTag}>
+                                <div key={item} class="su__meta-row su__mb-1 su__loading-view">
+                                    <span
+                                        class="metaDataKey su__font-bold su__color-blue su__mr-2 su__rtlmr-0 su__rtlml-2 su__loading-view">
+                                        {item.showMetaDataTagKey}
+                                    </span>
+                                    <span class="metaDataKey">&lrm;:&lrm;</span>
+                                </div>
+                            </template>
+                        </template>
+                    </div>
+                </template>
+
+            </div>
+
+            <div class={featureSnippetRightClass}>
+                <template if:false={featuredResponseRecorded}>
+                    <div class="su__d-flex su__w-100 su__feedback-icon-above su__position-absolute su__zindex-1">
+                        <div class={fsAnsweredMultiMedia}>
+                            <span class="su__featured-feedback su__cursor su__loading-view su__mr-2"
+                                onclick={sendFeaturedSnippetFeedback} data-feedback="0">
+                                <svg width="24" height="24" viewBox="0 0 12 12">
+                                    <path
+                                        d="M7.364,3H3.273a.912.912,0,0,0-.836.488L1.064,6.308A.708.708,0,0,0,1,6.6v.8a.862.862,0,0,0,.909.8H4.777l-.432,1.828-.014.128a.568.568,0,0,0,.2.424l.482.42L8,8.364A.739.739,0,0,0,8.273,7.8v-4A.862.862,0,0,0,7.364,3Zm0,4.8L5.391,9.536,5.9,7.4H1.909V6.6L3.273,3.8H7.364ZM9.182,3H11V7.8H9.182Z"
+                                        fill="#3E384A"></path>
+                                </svg>
+                            </span>
+                            <span class="su__featured-feedback su__cursor su__loading-view"
+                                onclick={sendFeaturedSnippetFeedback} data-feedback="1">
+                                <svg width="24" height="24" viewBox="0 0 12 12">
+                                    <path
+                                        d="M10.091,3.8H7.223l.432-1.828.014-.128a.568.568,0,0,0-.2-.424L6.986,1,4,3.636a.739.739,0,0,0-.268.564v4a.862.862,0,0,0,.909.8H8.727a.912.912,0,0,0,.836-.488l1.373-2.82A.708.708,0,0,0,11,5.4V4.6A.862.862,0,0,0,10.091,3.8Zm0,1.6L8.727,8.2H4.636v-4L6.609,2.464,6.1,4.6h3.986ZM1,4.2H2.818V9H1Z"
+                                        fill="#3E384A"></path>
+                                </svg>
+                            </span>
+                        </div>
+
+                    </div>
+                </template>
+
+                <template if:true={thanksForFeedbackFeatureSnippet}>
+                    <div class={fsAnsweredMultiMediaFeedabckMsg}>
+                        <div class="su__flex-vcenter su__font-12">
+                            <span
+                                class="su__thankyou-text su__whitespace-no su__loading-view su__thankyou-textQuestionAnswered">
+                                {translationObject.Thank_you_for_your_response}!
+                            </span>
+                        </div>
+                    </div>
+                </template>
+
+                <template if:true={hasMultiMedia}>
+                    <div class="su__featureSnippet-right su__featured-thumbnail su__py-sm-2 su__align-self-center">
+                        <div class="su__featured-thumbnail su__loading-view">
+                            <a class="su__position-relative su__d-flex" href={featureSnippetMultiMediaHrf_Or_Video_url}
+                                data-href={featureSnippetMultiMediaHrf_Or_Video_url} target="_blank"
+                                rel="noopener noreferrer" onclick={runScriptMethod} data-id={featureSnippetData._id}
+                                data-rank="0" data-sub={featureSnippetTitleToDisplayString}
+                                data-url={featureSnippetData.href} data-type={featureSnippetData.objName}
+                                data-index={featureSnippetData.sourceName} data-autotuned={featureSnippetData.autotuned}
+                                data-track={featureSnippetData.trackAnalytics}>
+                                <template if:true={hasThumbnail}>
+                                    <svg class="su__video-thumbnail-play" height="24px" viewBox="0 0 24 24" width="24px"
+                                        fill="#197ff2">
+                                        <path
+                                            d="M8 6.82v10.36c0 .79.87 1.27 1.54.84l8.14-5.18c.62-.39.62-1.29 0-1.69L9.54 5.98C8.87 5.55 8 6.03 8 6.82z" />
+                                    </svg>
+                                </template>
+                                <img src={featureSnippetMediaImgUrl} class="su__img-featured"
+                                    alt={featureSnippet_alt_attributes} />
+                            </a>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+        </div>
+    </template>
+
+    <template if:true={featureSnippetMultiMediaGreatorOne}>
+        <div class="su__w-100 su__fs-multimedia-main su__mt-2 su__d-flex">
+            <template for:each={featureSnippetMultiMediaDataManipulation} for:item="result" for:index="indexVal">
+                <div key={result} class="su__fs-media su__bg-white su__sm-shadow">
+                    <div class="su__position-relative">
+                        <template if:false={result.response}>
+                            <div
+                                class="su__d-flex su__w-100 su__feedback-icon-above su__position-absolute su__justify-content-end su__zindex-1">
+                                <div class="su__feedback-row su__d-flex su__pt-2 su__pr-2">
+                                    <span class="su__featured-feedback su__cursor su__loading-view su__mr-2"
+                                        onclick={sendFeaturedSnippetFeedback} data-feedback="0"
+                                        data-featured-snippet="true" data-index={indexVal}>
+                                        <svg width="24" height="24" viewBox="0 0 12 12">
+                                            <path
+                                                d="M7.364,3H3.273a.912.912,0,0,0-.836.488L1.064,6.308A.708.708,0,0,0,1,6.6v.8a.862.862,0,0,0,.909.8H4.777l-.432,1.828-.014.128a.568.568,0,0,0,.2.424l.482.42L8,8.364A.739.739,0,0,0,8.273,7.8v-4A.862.862,0,0,0,7.364,3Zm0,4.8L5.391,9.536,5.9,7.4H1.909V6.6L3.273,3.8H7.364ZM9.182,3H11V7.8H9.182Z"
+                                                fill="#3E384A"></path>
+                                        </svg>
+                                    </span>
+                                    <span class="su__featured-feedback su__cursor su__loading-view"
+                                        onclick={sendFeaturedSnippetFeedback} data-feedback="1"
+                                        data-featured-snippet="true" data-index={indexVal}>
+                                        <svg width="24" height="24" viewBox="0 0 12 12">
+                                            <path
+                                                d="M10.091,3.8H7.223l.432-1.828.014-.128a.568.568,0,0,0-.2-.424L6.986,1,4,3.636a.739.739,0,0,0-.268.564v4a.862.862,0,0,0,.909.8H8.727a.912.912,0,0,0,.836-.488l1.373-2.82A.708.708,0,0,0,11,5.4V4.6A.862.862,0,0,0,10.091,3.8Zm0,1.6L8.727,8.2H4.636v-4L6.609,2.464,6.1,4.6h3.986ZM1,4.2H2.818V9H1Z"
+                                                fill="#3E384A"></path>
+                                        </svg>
+                                    </span>
+                                </div>
+                            </div>
+                        </template>
+                        <template if:true={result.timeoutResponse}>
+                            <div
+                                class="su__feedback-thankyou su__feedback-icon-above su__position-absolute su__right-0 su__zindex-1 su__loading-view">
+                                <div class="su__flex-vcenter su__font-12">
+                                    <span class="su__thankyou-text su__whitespace-no su__loading-view">
+                                        {translationObject.Thank_you_for_your_response}!
+                                    </span>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                    <a href={result.multiMediaHrfVideo_url} data-href={result.multiMediaHrfVideo_url} target="_blank"
+                        rel="noopener noreferrer" onclick={runScriptMethod} data-id={featureSnippetData._id}
+                        data-rank={indexVal} data-sub={titletoDisplay} data-url={result.multiMediaHrfVideo_url}
+                        data-type={featureSnippetData.objName} data-index={featureSnippetData.sourceName}
+                        data-autotuned={featureSnippetData.autotuned}
+                        data-track={featureSnippetData.trackAnalytics}>
+                        <div class="su__featured-thumbnail su__loading-view su__position-relative">
+                            <template if:true={result.thumbnailExists}>
+                                <svg class="su__video-thumbnail-play" height="24px" viewBox="0 0 24 24" width="24px"
+                                    fill="#197ff2">
+                                    <path
+                                        d="M8 6.82v10.36c0 .79.87 1.27 1.54.84l8.14-5.18c.62-.39.62-1.29 0-1.69L9.54 5.98C8.87 5.55 8 6.03 8 6.82z" />
+                                </svg>
+                            </template>
+                            <img src={result.showThumbnailUrl} class="su__img-featured" alt={result.alt_attributes} />
+                        </div>
+                        <div
+                            class="su__w-100_TurncateText su__text-truncate su__p-2 su__href-txt su__text-decoration su__color-lgray font-12 su__font-italic su__loading-view">
+                            {result.multiMediaHrfVideo_url}
+                        </div>
+                    </a>
+                </div>
+            </template>
+        </div>
+    </template>
+
+    <template if:true={featureSnippetMultiMediaEqualToOne}>
+        <div class="su__fs-media-content su__mb-3 su__mt-2 su__bg-white su__sm-shadow">
+            <div class="su__fs-inner-media su__d-md-flex su__overflow-hide">
+                <div class="su__w-25 su__featured-mobile-view-100 su__d-flex su__flex-vcenter">
+                    <div class="su__featured-thumbnail su__loading-view">
+                        <a class="su__d-flex su__position-relative" href={featureSnippetMultiMediaHrf_Or_Video_url}
+                            data-href={featureSnippetMultiMediaHrf_Or_Video_url} target="_blank"
+                            rel="noopener noreferrer" onclick={runScriptMethod} data-id={featureSnippetData._id}
+                            data-rank="0" data-sub={featureSnippetMultiMediaTitle} data-url={featureSnippetData.href}
+                            data-type={featureSnippetData.objName} data-index={featureSnippetData.sourceName}
+                            data-autotuned={featureSnippetData.autotuned}
+                            data-track={featureSnippetData.trackAnalytics}>
+                            <template if:true={hasThumbnail}>
+                                <svg class="su__video-thumbnail-play" height="24px" viewBox="0 0 24 24" width="24px"
+                                    fill="#197ff2">
+                                    <path
+                                        d="M8 6.82v10.36c0 .79.87 1.27 1.54.84l8.14-5.18c.62-.39.62-1.29 0-1.69L9.54 5.98C8.87 5.55 8 6.03 8 6.82z" />
+                                </svg>
+                            </template>
+                            <img src={featureSnippetMediaImgUrl} class="su__img-featured"
+                                alt={featureSnippet_alt_attributes} />
+                        </a>
+                    </div>
+                </div>
+                <div class="su__d-flex su__flex-column su__w-75 su__p-3 su__word-break su__featured-mobile-view-100">
+                    <span class="su__mb-1">
+                        <a class="su__text-decoration su__d-block font-16 su__text-black hover-color-dblue su__font-bold su__w-100_TurncateText su__text-truncate su__loading-view"
+                            href={featureSnippetData.href} data-href={featureSnippetData.href} target="_blank"
+                            rel="noopener noreferrer" data-id={featureSnippetData._id} onclick={runScriptMethod}
+                            data-rank="0" data-sub={featureSnippetTitleToDisplayString}
+                            data-url={featureSnippetData.href} data-type={featureSnippetData.objName}
+                            data-index={featureSnippetData.sourceName} data-autotuned={featureSnippetData.autotuned}
+                            data-track={featureSnippetData.trackAnalytics}>
+                            <lightning-formatted-rich-text
+                                value={featureSnippetTitleToDisplay}></lightning-formatted-rich-text>
+                        </a>
+                    </span>
+                    <div
+                        class="su__href-txt su__text-decoration su__color-lgray font-12 su__font-italic su__w-100_TurncateText su__text-truncate su__loading-view">
+                        {featureSnippetData.href}
+                    </div>
+                    <div class="su__featureSnippet-response su__mt-2">
+                        <template if:false={featuredResponseRecorded}>
+                            <div class="su__d-flex su__w-100 su__justify-content-start">
+                                <div class="su__knowledge-feedback-row su__d-flex">
+                                    <span class="su__featured-feedback su__cursor su__loading-view su__mr-2"
+                                        onclick={sendFeaturedSnippetFeedback} data-feedback="0">
+                                        <svg width="24" height="24" viewBox="0 0 12 12">
+                                            <path
+                                                d="M7.364,3H3.273a.912.912,0,0,0-.836.488L1.064,6.308A.708.708,0,0,0,1,6.6v.8a.862.862,0,0,0,.909.8H4.777l-.432,1.828-.014.128a.568.568,0,0,0,.2.424l.482.42L8,8.364A.739.739,0,0,0,8.273,7.8v-4A.862.862,0,0,0,7.364,3Zm0,4.8L5.391,9.536,5.9,7.4H1.909V6.6L3.273,3.8H7.364ZM9.182,3H11V7.8H9.182Z"
+                                                fill="#3E384A"></path>
+                                        </svg>
+                                    </span>
+                                    <span class="su__featured-feedback su__cursor su__loading-view"
+                                        onclick={sendFeaturedSnippetFeedback} data-feedback="1">
+                                        <svg width="24" height="24" viewBox="0 0 12 12">
+                                            <path
+                                                d="M10.091,3.8H7.223l.432-1.828.014-.128a.568.568,0,0,0-.2-.424L6.986,1,4,3.636a.739.739,0,0,0-.268.564v4a.862.862,0,0,0,.909.8H8.727a.912.912,0,0,0,.836-.488l1.373-2.82A.708.708,0,0,0,11,5.4V4.6A.862.862,0,0,0,10.091,3.8Zm0,1.6L8.727,8.2H4.636v-4L6.609,2.464,6.1,4.6h3.986ZM1,4.2H2.818V9H1Z"
+                                                fill="#3E384A"></path>
+                                        </svg>
+                                    </span>
+                                </div>
+                            </div>
+                        </template>
+                        <template if:true={thanksForFeedbackFeatureSnippet}>
+                            <div
+                                class="su__feedback-thankyou su__feedback-steps su__position-absolute su__loading-view">
+                                <div class="su__flex-vcenter su__font-12">
+                                    <span class="su__thankyou-text su__whitespace-no">
+                                        {translationObject.Thank_you_for_your_response}!
+                                    </span>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+</template>

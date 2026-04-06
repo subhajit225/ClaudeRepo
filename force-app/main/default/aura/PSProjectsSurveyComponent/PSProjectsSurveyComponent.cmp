@@ -1,0 +1,131 @@
+<aura:component implements="lightning:availableForFlowScreens" controller="PSProjectsSurveyController">
+    <aura:attribute name="hasCreateAccess" type="Boolean"/>
+    <aura:attribute name="accountId" type="String"/>
+    <aura:attribute name="psProjectId" type="String"/>
+    <aura:attribute name="allContactsList" type="List"/>
+    <aura:attribute name="contactsList" type="List"/>
+    <aura:attribute name="selectedContactsList" type="Contact[]"/>
+    <!--<aura:attribute name="tableColumns" type="String[]"/>-->
+    <aura:attribute name="currentPage" type="Integer" default="1"/>
+    <aura:attribute name="totalPages" type="Integer" default="1"/>
+    <aura:attribute name="allContactsLength" type="Integer" default="0"/>
+    <aura:attribute name="pageLimit" type="Integer"/>
+    <aura:attribute name="selectedSurvey" type="Survey" default="{'sobjectType': 'Survey'}"/>
+    <aura:attribute name="headerCheckboxArray" type="Boolean[]"/>
+    <aura:attribute name="headerCheckboxValueForCurrentPage" type="Boolean" default="false"/>
+    <aura:attribute name="isHeaderCheckboxDisabled" type="Boolean" default="false"/>
+    <aura:attribute name="isAtleastOneRowSelected" type="Boolean" default="false"/>
+    <aura:attribute name="showSpinner" type="Boolean" default="true"/>
+    <aura:attribute name="UITheme" type="string"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
+
+    <lightning:notificationsLibrary aura:id="messagePanel"/>
+
+    <aura:if isTrue="{!if(v.hasCreateAccess &amp;&amp; v.accountId != null &amp;&amp; v.allContactsLength > 0, true, false)}">
+        <div style="position: relative;">
+            <aura:if isTrue="{!v.showSpinner}">
+                <lightning:spinner alternativeText="Loading" />
+            </aura:if>
+            <div style="text-align:center;padding-top: 5px;">
+                <label class="surveyLabel">Request Feedback via Survey</label>
+            </div>
+            <br/>
+            <!--<span>Account : <ui:outputText aura:id="accountName"/></span>
+            <br/>
+            <span>PS Project : <ui:outputText aura:id="psProjectName"/></span>
+            <br/>-->
+            <lightning:recordEditForm recordId="{!v.psProjectId}" objectApiName="PS_Project__c">
+                <div class="slds-wrap slds-grid">
+                    <div class="slds-size_5-of-12" >
+                        <lightning:inputField fieldName="Account__c" disabled="true"/>
+                    </div>
+                    <div class="slds-size_1-of-12" >
+                    </div>
+                    <div class="slds-size_5-of-12" >
+                        <lightning:inputField fieldName="Name" disabled="true"/>
+                    </div>
+                </div>
+            </lightning:recordEditForm>
+            <br/>
+            <div style="border:1px solid #d8dde6;padding:5px;">
+                <div style="text-align:center">
+                    <lightning:button variant="brand" label="Send Survey" onclick="{!c.onSendSurvey}" disabled="{!if(and(v.isAtleastOneRowSelected, v.selectedSurvey.Id != null), false, true)}"/>
+                    <lightning:button variant="neutral" label="Cancel" onclick="{!c.onCancel}"/>
+                </div>
+                <br/>
+
+                <div style="width:40%;margin-left:29%;">
+                    <span class="surveyLookupLabel">
+                        <span class="requiredSymbol">*</span>
+                        Survey
+                    </span>
+                    <c:SingleCustomLookup aura:id="surveyLookup" objectAPIName="Survey"
+                                        IconName="standard:survey"
+                                        selectedRecord="{!v.selectedSurvey}"
+                                        label=""
+                                        sideDisplay="false"
+                                        displayText="Search Surveys..."/>
+                </div>
+
+                <br/>
+
+                <table aria-multiselectable="true" class="slds-table slds-table_bordered slds-table_fixed-layout slds-table_resizable-cols">
+                    <thead>
+                        <tr>
+                            <th style="width:5%;">
+                                <lightning:input type="checkbox"
+                                                checked="{!v.headerCheckboxValueForCurrentPage}"
+                                                label=""
+                                                name="headerCheckbox"
+                                                onchange="{!c.addRemoveAll}"
+                                                disabled="{!v.isHeaderCheckboxDisabled}"/>
+                            </th>
+                            <th style="width:22%;">Name</th>
+                            <th style="width:22%;">Email</th>
+                            <th style="width:22%;">Last Survey Sent Date/Time</th>
+                            <th style="width:27%;">Disable Reason</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <aura:iteration items="{!v.contactsList}" var="eachContact">
+                            <tr>
+                                <td>
+                                    <lightning:input type="checkbox"
+                                                    checked="{!eachContact.isSelected}"
+                                                    label=""
+                                                    name="{!eachContact.id}"
+                                                    onchange="{!c.addRemoveRow}"
+                                                    disabled="{!eachContact.isRowDisabled}"/>
+                                </td>
+                                <td>
+                                    {!eachContact.name}
+                                </td>
+                                <td>
+                                    {!eachContact.email}
+                                </td>
+                                <td>
+                                    {!eachContact.lastSurveySentDate}
+                                </td>
+                                <td>
+                                    {!eachContact.disableReason}
+                                </td>
+                            </tr>
+                        </aura:iteration>
+                    </tbody>
+                </table>
+
+                <br/>
+
+                <div style="text-align:center;margin-bottom: 10px">
+                    <lightning:button variant="neutral" label="{!$Label.c.Pagination_First}" onclick="{!c.goToFirstPage}" disabled="{!(v.currentPage == 1)}"/>
+                    <lightning:button variant="neutral" label="{!$Label.c.Pagination_Previous}" onclick="{!c.goToPreviousPage}" disabled="{!(v.currentPage == 1)}"/>
+                    <span class="pageNumbers">Page {!v.currentPage} of {!v.totalPages}</span>
+                    <lightning:button variant="neutral" label="{!$Label.c.Pagination_Next}" onclick="{!c.goToNextPage}" disabled="{!(v.currentPage == v.totalPages)}"/>
+                    <lightning:button variant="neutral" label="{!$Label.c.Pagination_Last}" onclick="{!c.goToLastPage}" disabled="{!(v.currentPage == v.totalPages)}"/>
+                </div>
+            </div>
+        </div>
+    </aura:if>
+
+</aura:component>

@@ -1,0 +1,168 @@
+.THIS.conatinerDiv {
+    max-width : 1140px;
+    margin : 50px auto;
+    position: relative;
+}
+
+.THIS .ideaTitle {
+    font-size: 34px;
+    line-height: 40px;
+    letter-spacing: -1.2px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+    font-family: Gotham-Light;
+    font-weight: bolder;
+}
+
+.THIS .prodDecp{
+    font-family: Gotham-Light !important;
+    color: #4A4A4A;
+    font-size : 16px;
+    padding-top: 30px;
+}
+
+.THIS .fields{
+      padding: 0 20px 0px 0;
+}
+
+.THIS .fieldLabel{
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 16px;
+    font-family: Gotham-Light;
+    color: #4a4a4a;
+}
+.THIS .buttoncenter{
+    text-align: center;
+    display: inline;
+}
+
+.THIS .hovercolor:hover{
+    text-decoration: none!important;
+    background-color: #3fb5c0;
+}
+
+.THIS .hovercolor{
+    text-align:center;
+    box-shadow: 0 2px 2px 0 hsla(0,9%,4%,.2);
+    border-radius: 2px!important;
+    font-size: 14px;
+    font-weight: 500!important;
+    text-transform: uppercase!important;
+    transition: .2s ease-in-out;
+    font-family: Gotham-light;
+    letter-spacing: -.5px;
+    border: 1px solid #009dac;
+    background-color: #009dac;
+    color: #ffffff!important;
+}
+
+.THIS .prodDecp ul li:first-child {
+    margin-bottom: 10px;
+}
+
+.THIS lightning-input > label {
+    font-weight: bold;
+    font-size: 16px;
+    font-family: Gotham-Medium;
+    color: #4a4a4a;
+}
+
+.THIS .redHighlightCell {
+    background-color: #f7c7c3;
+}
+
+.THIS .greenHighlightCell {
+    background-color: #F0F8E2;
+}
+
+.THIS .entitlementVerificationTitle {
+    font-size: 24px;
+    line-height: 40px;
+    letter-spacing: -0.2px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0px;
+    font-family: Gotham-Light;
+    margin-top: 25px;
+    font-weight: bolder;
+}
+
+.THIS .entitlementVerificationDescription{
+    font-family: Gotham-Light !important;
+    color: #4A4A4A;
+    font-size : 16px;
+    padding-top: 10px;
+}
+
+.THIS .errorDiv{
+    background-color: #FCF8E3;
+    width: 100%;
+    padding: 2rem;
+    font-size: 1.2rem;
+    font-family: Gotham-Light !important;
+    border-radius: 10px;
+    margin-top: 29px;
+}
+
+.THIS .successDiv{
+    background-color: #F0F8E2;
+    width: 100%;
+    padding: 2rem;
+    font-size: 1.2rem;
+    font-family: Gotham-Light !important;
+    border-radius: 10px;
+    margin-top: 29px;
+}
+
+.THIS .tableRows{
+    font-family: Gotham-Light !important;
+    font-size: 16px;
+}
+
+.THIS .tableHeader{
+    font-size: 16px;
+    text-transform: none;
+    letter-spacing: -0.04px;
+}
+
+.THIS .timeoutMessageDiv{
+    background-color: #deebff;
+    width: 100%;
+    padding: 2rem;
+    font-size: 1.2rem;
+    font-family: Gotham-Medium !important;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.THIS .spins::after {
+    position: absolute;
+    content: 'The registration token request has been submitted. The registration token will be provided momentarily on this page within 10 seconds.';
+    width: 100%;
+    text-align: center;
+    top: calc(50% + 3em);
+    font-weight: bold;
+    font-size: 17px;
+}
+
+/*@media queries goes here*/
+
+@media (max-width:1199px){
+    .THIS.conatinerDiv{
+        padding:0px 15px;
+    }
+}
+@media (max-width:991px){
+    .THIS .fields {
+        padding: 0;
+        width: 100%;
+        margin-bottom: 15px;
+        }
+    .THIS .buttoncenter {
+        margin: 0 auto;
+    }
+}

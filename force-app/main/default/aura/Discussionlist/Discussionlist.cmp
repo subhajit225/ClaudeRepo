@@ -1,0 +1,346 @@
+<aura:component controller="DataCategoryController" implements="forceCommunity:availableForAllPageTypes,force:hasRecordId" access="global" >
+    <aura:handler name="init" value="this" action="{!c.init}"/>
+    <aura:attribute name="questionList" type="Object"/>
+    <aura:attribute name="selectedCategoryLabel" type="String"/>
+    <aura:attribute name="selectedCategory" type="String"/>
+    <aura:attribute name="ProductFamily" type="String"/>
+    <aura:attribute name="allData" type="List"/>
+    <aura:attribute name="pinnedArticles" type="Object"/>
+    <aura:attribute name="currentPageNumber" type="Integer" default="1"/>
+    <aura:attribute name="pageSize" type="Integer" default="20"/>
+    <aura:attribute name="totalPages" type="Integer" default="false"/>
+    <aura:attribute name="totalPagesList" type="List" default="false"/>
+    <aura:attribute name="pageList" type="List" default="false"/>
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="userRecord" type="Object"/>
+    <force:recordData aura:id="recordLoader"
+                      recordId="{!$SObjectType.CurrentUser.Id}"
+                      fields="Name,Profile.Name"
+                      targetFields="{!v.userRecord}"
+                      />
+    
+    <div class="slds-grid" >
+        <div class="slds-col slds-size_1-of-12"></div>
+        <div class="topContainer">
+            <aura:if isTrue="{!v.pinnedArticles.length > 0}">
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered" style="border: 1px solid #DFDFDF;">
+                    <thead>
+                        <tr class="slds-line-height_reset ">
+                            <td class="slds-text-title trClass" scope="col">
+                                <div class="slds-truncate" title="Questions">Questions</div>
+                            </td>
+                            <td class="slds-text-title trClass" scope="col">
+                                <div class="slds-truncate" title="Likes">Likes</div>
+                            </td>
+                            <td class="slds-text-title trClass" scope="col">
+                                <div class="slds-truncate" title="Replies">Replies</div>
+                            </td>
+                            <td class="slds-text-title trClass" scope="col">
+                                <div class="slds-truncate" title="Best Answer">Best Answer</div>
+                            </td>
+                            <td class="slds-text-title trClass" scope="col">
+                                <div class="slds-truncate" title="Recent Activity">Recent Activity</div>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <aura:iteration items="{!v.pinnedArticles}" var="ques"  indexVar="index">
+                            <tr class="{!if(!empty(ques.feed.BestCommentId),'slds-hint-parent trBodyClass bestAnswer ','slds-hint-parent trBodyClass pinnedAnswer')}">
+                                <td class="headPad postCol" data-label="Opportunity Name" scope="row">
+                                    <div class="slds-truncate" title="{!ques.Title}">
+                                        <div class="slds-grid slds-gutters pinnedlastComment"> 
+                                            <div class="slds-col slds-size_2-of-12" style="padding-right:40px;">
+                                                <lightning:icon iconName="utility:pin" alternativeText="Connected" variant="" size="xx-small" class="slds-pinIcon"/>
+                                                <!--<img class="imageLogo" alt="Jason Rodgers" src="{!ques.userRecord.SmallPhotoUrl}" title="Jason Rodgers avatar" style="width: 85%;" />-->
+                                                <!-- added for Gamification - Start -->
+                                                <c:RubrikUserImage photoURL="{!ques.userRecord.SmallPhotoUrl}" name="{!ques.userRecord.CommunityNickname}" enableNavigation="true"
+                                                    userId="{!ques.userRecord.Id}" isRubrikEmployee="{!ques.isUserRubrikEmployee}" imageHeight="40px" imageWidth="40px"
+                                                    rubrikIconMargin="30px">
+                                                </c:RubrikUserImage>
+                                                <!--Gamification - End -->
+                                            </div>
+                                            <div class="slds-col slds-size_10-of-12" style="    padding-left: 0px;">
+                                                <p class="title">
+                                                    <a href="javascript:void(0)"  id="{!ques.feed.Id}" onclick="{!c.navigateto}">
+                                                        {!ques.feed.Title}
+                                                    </a>
+                                                </p>
+                                                <p class="User">{!ques.userRecord.CommunityNickname} - <ui:outputDateTime value="{!ques.feed.CreatedDate}"  /></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td data-label="Account Name"  class="headPad">
+                                    <div class="slds-truncate slds-m-left_small" title="{!ques.feed.LikeCount}">
+                                        <span class="slds-col">{!ques.feed.LikeCount}</span>
+                                    </div>
+                                </td>
+                                <td data-label="Close Date"  class="headPad">
+                                    <div class="slds-truncate slds-m-left_small" title="{!ques.feed.CommentCount}">
+                                        <span class="slds-col">{!ques.feed.CommentCount}</span>
+                                    </div>
+                                </td>
+                                <td data-label="Best Answer"  class="headPad">
+                                    <div class="slds-truncate slds-m-left_small" title="Best Answer">
+                                        <aura:if isTrue="{!!empty(ques.feed.BestCommentId)}">
+                                            <lightning:icon iconName="utility:check" size="xx-small" title="Best Answers" class="icon"/>
+                                        </aura:if> 
+                                    </div>
+                                </td>
+                                <!-- <td data-label="Prospecting" style="    height: 74px;"  class="{!if(!empty(ques.feed.BestCommentId),'headPad lastComment slds-grid ','headPad slds-grid ')}"> -->
+                                <td data-label="Prospecting" style="    height: 74px;"  class="headPad slds-grid">    
+                                    <div class="slds-col slds-size_10-of-12">
+                                        <div class="slds-truncate" title="User">
+                                            <aura:if isTrue="{!ques.feed.FeedComments.length > 0 }">
+                                                <div class="slds-grid slds-gutters"> 
+                                                    <div class="slds-col slds-size_3-of-12"  style="    padding-right: 0px;">
+                                                        <!--<img  class="imageLogo" alt="Jason Rodgers" src="{!ques.childuserRecord.SmallPhotoUrl}" title="Jason Rodgers avatar" />-->
+                                                        <!-- Gamification Changes - Start-->
+                                                        <c:RubrikUserImage photoURL="{!ques.childuserRecord.SmallPhotoUrl}" name="{!ques.childuserRecord.CommunityNickname}"
+                                                            enableNavigation="true" userId="{!ques.childuserRecord.Id}" isRubrikEmployee="{!ques.isCommentUserRubrikEmployee}" imageHeight="40px" imageWidth="40px"
+                                                            rubrikIconMargin="30px">
+                                                        </c:RubrikUserImage>
+                                                        <!-- Gamification Changes - End-->
+                                                    </div>
+                                                    <div class="slds-col slds-size_9-of-12"  style="    padding-left: 12.5px;">
+                                                        <p class="titleName" title="{!ques.childuserRecord.Name}">{!ques.childuserRecord.CommunityNickname}</p>
+                                                        <p class="dateClass"> 
+                                                            <ui:outputDateTime aura:id="oDateTime" format="MM/DD/YYYY - hh:mm a" value="{!ques.feed.FeedComments[0].CreatedDate}"  /></p>
+                                                    </div>
+                                                </div>
+                                                <aura:set attribute="else">
+                                                    <p class="noReply">No Activity</p>
+                                                </aura:set>
+                                            </aura:if>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_2-of-12">
+                                        <!-- <aura:if isTrue="{!!empty(ques.feed.BestCommentId)}">
+                                            <lightning:icon iconName="utility:check" alternativeText="Connected" variant="inverse" size="xx-small" class="slds-iconTick"/>
+                                        </aura:if> -->
+                                        <aura:if isTrue="{!or(false,or(or(v.userRecord.Profile.Name == 'Rubrik Customer Support User',v.userRecord.Profile.Name == 'Rubrik Customer Support Manager'),v.userRecord.Profile.Name == 'System Administrator'))}">
+                                            <lightning:buttonMenu aura:id="{!ques.feed.Id}" name="{!ques.feed.Id}" onselect="{! c.handleSelect }" alternativeText="Show menu" class="slds-buttonui">
+                                                <lightning:menuItem value="{!join(',', ques.feed.Id, 'pin')}" label="{!if(ques.isPinned,'Unpin','Pin')}" />
+                                                <!--lightning:menuItem value="{!join(',', ques.feed.Id, 'delete')}" label="delete" /-->
+                                            </lightning:buttonMenu>
+                                        </aura:if>
+                                    </div>
+                                </td>
+                                
+                            </tr>
+                        </aura:iteration> 
+                    </tbody>
+                </table>
+            </aura:if>
+                <div class="slds-grid floatrow" Style="    padding-bottom: 6px;">
+                   
+                    <div class="slds-size_4-of-4 alignPadded" style="    padding-right: 0.5rem;">
+                        <div class="paginationBlock slds-float_right">
+                            <aura:if isTrue="{! not(v.currentPageNumber == 1)}">
+                                <lightning:buttonIcon variant="bare" iconName="utility:chevronleft" alternativeText="View Left"
+                                                      disabled="{! v.currentPageNumber == 1}" onclick="{!c.onPrev}" />
+                            </aura:if>
+                            
+                            <div class="pagination">
+                                <aura:if isTrue="{!or(  v.currentPageNumber >= 5)}">
+                                    <a onclick="{!c.processMe}" name="1" class="{!if(v.currentPageNumber == pagi,'active','')}">1 </a>
+                                    <a>..</a>
+                                </aura:if>
+                                <aura:iteration items="{!v.totalPagesList}" var="pagi"  indexVar="index">
+                                    <aura:if isTrue="{!v.currentPageNumber == pagi+ 1}">
+                                        <a onclick="{!c.processMe}" name="{!index+1}" class="{!if(v.currentPageNumber == pagi,'active','')}">{!pagi} </a>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.currentPageNumber == pagi}">
+                                        <a onclick="{!c.processMe}" name="{!index+1}" class="{!if(v.currentPageNumber == pagi,'active','')}">{!pagi} </a>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.currentPageNumber == pagi -1 }">
+                                        <a onclick="{!c.processMe}" name="{!index+1}" class="{!if(v.currentPageNumber == pagi,'active','')}">{!pagi} </a>
+                                    </aura:if>
+                                </aura:iteration>
+                                <aura:if isTrue="{!or(  v.totalPages -1 > v.currentPageNumber)}">
+                                    <a>..</a>
+                                    <a onclick="{!c.processMe}" name="{!v.totalPages}" class="{!if(v.currentPageNumber == pagi,'active','')}">{!v.totalPages} </a>
+                                </aura:if>
+                                <lightning:buttonIcon variant="bare" iconName="utility:chevronright" alternativeText="View Next"
+                                                      disabled="{! v.currentPageNumber == v.totalPages}" onclick="{!c.onNext}" />
+                            </div>                    
+                        </div>
+                        <span class="topicsCount  slds-float_right">
+                            
+                            {!if(v.currentPageNumber == 1,v.currentPageNumber,(v.currentPageNumber*v.pageSize)-(v.pageSize-1))}   -
+                            {!if(v.allData.length > v.currentPageNumber*v.pageSize ,if(v.currentPageNumber == 1,v.currentPageNumber*v.pageSize,(v.currentPageNumber*v.pageSize)-1),v.allData.length )}  
+                            of {!v.allData.length} posts
+                        </span>
+                        
+                    </div>
+                </div> 
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered" style="border: 1px solid #DFDFDF;">
+                    <thead>
+                        <tr class="slds-line-height_reset ">
+                            <td class="slds-text-title trClass" scope="col">
+                                <div class="slds-truncate" title="Questions">Posts</div>
+                            </td>
+                            <td class="slds-text-title trClass" scope="col">
+                                <div class="slds-truncate" title="Votes">Likes</div>
+                            </td>
+                            <td class="slds-text-title trClass" scope="col">
+                                <div class="slds-truncate" title="Replies">Replies</div>
+                            </td>
+                            <td class="slds-text-title trClass" scope="col">
+                                <div class="slds-truncate" title="Best Answer">Best Answer</div>
+                            </td>
+                            <td class="slds-text-title trClass" scope="col">
+                                <div class="slds-truncate" title="Recent Activity">Recent Activity</div>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <aura:iteration items="{!v.questionList}" var="ques"  indexVar="index">
+                            <tr class="{!if(!empty(ques.feed.BestCommentId),'slds-hint-parent trBodyClass bestAnswer','slds-hint-parent trBodyClass')}">
+                                <td class="headPad postCol" data-label="Opportunity Name" scope="row">
+                                    <div class="slds-truncate" title="{!ques.Title}">
+                                        <div class="slds-grid slds-gutters"> 
+                                            <div class="slds-col slds-size_2-of-12" style="padding-right:40px;">
+                                            <!--<div class="slds-col slds-size_2-of-12 pointer" onclick="{!c.navigateToUserProfile}" data-id="{!ques.userRecord.Id}">-->
+                                                <!--<img class="imageLogo" alt="Jason Rodgers" src="{!ques.userRecord.SmallPhotoUrl}" title="Jason Rodgers avatar" style="width: 85%;" />-->
+                                                <!-- added for Gamification - Start -->
+                                                <c:RubrikUserImage photoURL="{!ques.userRecord.SmallPhotoUrl}" name="{!ques.userRecord.CommunityNickname}"
+                                                    enableNavigation="true" userId="{!ques.userRecord.Id}" isRubrikEmployee="{!ques.isUserRubrikEmployee}" imageHeight="40px" imageWidth="40px"
+                                                    rubrikIconMargin="30px">
+                                                </c:RubrikUserImage>
+                                                <!--Gamification - End -->
+                                            </div>
+                                            <div class="slds-col slds-size_10-of-12" style="padding-left: 0px;">
+                                                <p class="title">
+                                                    <a href="javascript:void(0)"  id="{!ques.feed.Id}" onclick="{!c.navigateto}">
+                                                       {!ques.feed.Title}
+                                                    </a>
+                                                </p>
+                                                <p class="User">{!ques.userRecord.CommunityNickname} - <ui:outputDateTime value="{!ques.feed.CreatedDate}"  /></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td data-label="Account Name"  class="headPad">
+                                    <div class="slds-truncate slds-m-left_small" title="{!ques.feed.LikeCount}">
+                                        <span class="slds-col">{!ques.feed.LikeCount}</span>
+                                    </div>
+                                </td>
+                                <td data-label="Close Date"  class="headPad">
+                                    <div class="slds-truncate slds-m-left_small" title="{!ques.feed.CommentCount}">
+                                        <span class="slds-col">{!ques.feed.CommentCount}</span>
+                                    </div>
+                                </td>
+                                <td data-label="Best Answer"  class="headPad">
+                                    <div class="slds-truncate slds-m-left_small" title="Best Answer">
+                                        <aura:if isTrue="{!!empty(ques.feed.BestCommentId)}">
+                                            <lightning:icon iconName="utility:check" size="xx-small" title="Best Answers" class="icon"/>
+                                        </aura:if> 
+                                    </div>
+                                </td>
+                                <!-- <td data-label="Prospecting" class="{!if(!empty(ques.feed.BestCommentId),'headPad lastComment','headPad')}"> -->
+                                <td data-label="Prospecting" class="headPad">
+                                    <div class="slds-col slds-size_10-of-12">
+                                        <div class="slds-truncate" title="User">
+                                            <aura:if isTrue="{!ques.feed.FeedComments.length > 0 }">
+                                                <div class="slds-grid slds-gutters pointer" onclick="{!c.navigateToUserProfile}" data-id="{!ques.childuserRecord.Id}"> 
+                                                    <div class="slds-col slds-size_3-of-12">
+                                                        <!--<img  class="imageLogo" alt="Jason Rodgers" src="{!ques.childuserRecord.SmallPhotoUrl}" title="Jason Rodgers avatar" />-->
+                                                        <!-- added for Gamification - Start -->
+                                                        <c:RubrikUserImage photoURL="{!ques.childuserRecord.SmallPhotoUrl}" name="{!ques.childuserRecord.CommunityNickname}"
+                                                            enableNavigation="false" userId="{!ques.childuserRecord.Id}" isRubrikEmployee="{!ques.isCommentUserRubrikEmployee}" imageHeight="40px" imageWidth="40px"
+                                                            rubrikIconMargin="30px">
+                                                        </c:RubrikUserImage>
+                                                        <!--Gamification - End -->
+                                                    </div>
+                                                    <div class="slds-col slds-size_9-of-12"  style="    padding-left: 12.5px;">
+                                                        <p class="titleName" title="{!ques.childuserRecord.Name}">{!ques.childuserRecord.CommunityNickname}</p>
+                                                        <p class="dateClass"> 
+                                                            <ui:outputDateTime aura:id="oDateTime" format="MM/DD/YYYY - hh:mm a" value="{!ques.feed.FeedComments[0].CreatedDate}"  /></p>
+                                                    </div>
+                                                </div>
+                                                <aura:set attribute="else">
+                                                    <p class="noReply">No Activity</p>
+                                                </aura:set>
+                                            </aura:if>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_2-of-12">
+                                        <!-- <aura:if isTrue="{!!empty(ques.feed.BestCommentId)}">
+                                            <lightning:icon iconName="utility:check" alternativeText="Connected" variant="inverse" size="xx-small" class="slds-iconTick"/>
+                                        </aura:if> -->
+                                        <aura:if isTrue="{!or(false,or(or(v.userRecord.Profile.Name == 'Rubrik Customer Support User',v.userRecord.Profile.Name == 'Rubrik Customer Support Manager'),v.userRecord.Profile.Name == 'System Administrator'))}">
+                                            <lightning:buttonMenu aura:id="{!ques.feed.Id}" name="{!ques.feed.Id}" onselect="{! c.handleSelect }" alternativeText="Show menu" class="slds-buttonui">
+                                                <lightning:menuItem value="{!join(',', ques.feed.Id, 'pin')}" label="{!if(ques.isPinned,'Unpin','Pin')}" />
+                                                <!--lightning:menuItem value="{!join(',', ques.feed.Id, 'delete')}" label="delete" /-->
+                                            </lightning:buttonMenu>
+                                        </aura:if>
+                                    </div>
+                                </td>
+                                
+                            </tr>
+                        </aura:iteration> 
+                    </tbody>
+                </table>
+                <div class="slds-grid slds-gutters floatrow">
+                    <div class="slds-size_4-of-4 "    style=" padding-right: 0.5rem; padding-top: 7px;">
+                        <div class="paginationBlock slds-float_right">
+                            <aura:if isTrue="{!not(v.currentPageNumber == 1)}">
+                                <lightning:buttonIcon variant="bare" iconName="utility:chevronleft" alternativeText="View Left"
+                                                      disabled="{! v.currentPageNumber == 1}" onclick="{!c.onPrev}" />
+                            </aura:if>
+                            <div class="pagination">
+                                <aura:if isTrue="{!or(  v.currentPageNumber >= 5)}">
+                                    <a onclick="{!c.processMe}" name="1" class="{!if(v.currentPageNumber == pagi,'active','')}">1 </a>
+                                    <a>... </a>
+                                </aura:if>
+                                <aura:iteration items="{!v.totalPagesList}" var="pagi"  indexVar="index">
+                                    
+                                    <aura:if isTrue="{!v.currentPageNumber == pagi+ 1}">
+                                        <a onclick="{!c.processMe}" name="{!index+1}" class="{!if(v.currentPageNumber == pagi,'active','')}">{!pagi} </a>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.currentPageNumber == pagi}">
+                                        <a onclick="{!c.processMe}" name="{!index+1}" class="{!if(v.currentPageNumber == pagi,'active','')}">{!pagi} </a>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.currentPageNumber == pagi -1 }">
+                                        <a onclick="{!c.processMe}" name="{!index+1}" class="{!if(v.currentPageNumber == pagi,'active','')}">{!pagi} </a>
+                                    </aura:if>
+                                </aura:iteration>
+                                <aura:if isTrue="{!or(  v.totalPages -1 > v.currentPageNumber)}">
+                                    <a>... </a>
+                                    <a onclick="{!c.processMe}" name="{!v.totalPages}" class="{!if(v.currentPageNumber == pagi,'active','')}">{!v.totalPages} </a>
+                                </aura:if>
+                                <lightning:buttonIcon variant="bare" iconName="utility:chevronright" alternativeText="View Right"
+                                                      disabled="{! v.currentPageNumber == v.totalPages}" onclick="{!c.onNext}" />
+                            </div>                    
+                        </div>
+                        <span class="topicsCount  slds-float_right" style="padding-bottom:2rem;   ">
+                            {!if(v.currentPageNumber == 1,v.currentPageNumber,(v.currentPageNumber*v.pageSize)-(v.pageSize-1))}   -
+                            {!if(v.allData.length > v.currentPageNumber*v.pageSize ,if(v.currentPageNumber == 1,v.currentPageNumber*v.pageSize,(v.currentPageNumber*v.pageSize)-1),v.questionList.length )}  
+                            of {!v.allData.length} posts
+                        </span>
+                        
+                    </div>
+                </div>
+                <aura:set attribute="else">
+                    <aura:if isTrue="{!v.questionList.length == 0}">
+                        <center>
+                            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning" role="alert">
+                                <span class="slds-assistive-text">warning</span>
+                                <span class="slds-icon_container slds-icon-utility-warning slds-m-right_x-small" title="Description of icon when needed">
+                                </span>
+                                <h2>Currently there are no post under {!v.selectedCategoryLabel} for  {!v.ProductFamily}. You can create a new post by clicking button on Top.
+                                </h2>
+                                
+                            </div>
+                        </center>
+                    </aura:if>
+                </aura:set>
+            
+        </div>
+        
+    </div>
+    <lightning:spinner aura:id="mySpinner" alternativeText="wait" class="slds-show"/>    
+</aura:component>

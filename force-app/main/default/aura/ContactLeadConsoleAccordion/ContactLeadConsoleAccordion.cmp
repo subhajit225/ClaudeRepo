@@ -1,0 +1,267 @@
+<aura:component >
+    <aura:attribute name="allLeadRecords" type="Object[]" />
+    <aura:attribute name="recordObj" type="object" />
+    <aura:attribute name="showContent" type="Boolean" default="false" />
+    <aura:attribute name="expendAll" type="Boolean" default="false" />
+    <aura:attribute name="isContactConsole" type="Boolean" default="true" />
+    <aura:attribute name="contactList" type="Object" default="[]"/>
+    <aura:handler name="change" value="{!v.expendAll}" action="{!c.expendAll}"/>
+      <lightning:workspaceAPI aura:id="workspace" />
+     <aura:if isTrue="{!v.isContactConsole}" >
+        <tr class="{! and(v.recordObj.Priority_Date__c, or(v.recordObj.Priority_Date__c>=v.recordObj.LastActivityDate,empty(v.recordObj.LastActivityDate)) ) ? 'tdcolorContact' :''}">
+            
+            <td data-label="Last Name"> 
+                <lightning:icon size="x-small" onclick="{!c.showContent}" iconName="{!v.showContent? 'utility:chevrondown':'utility:chevronright'}" alternativeText="Event" title="Event" />
+            </td>
+            
+             <td data-label="Last Name" style="width: 1rem;"> 
+                <lightning:input type="checkbox" name="{! v.recordObj.Id }" checked="{! v.recordObj.selected }"/>
+            </td>
+            
+             <td scope="row" data-label="First Name">
+                <div class="overflow_wrap" >
+                    <!--<a href="{! '/'+ v.recordObj.Id }"  target="_blank">{! v.recordObj.Name }</a>-->
+                    <a href="javascript:void(0)" onclick="{!c.openTab}" id="{! v.recordObj.Id }"  target="_blank">{!v.recordObj.Name}</a>
+                </div>
+            </td>
+            <td data-label="Last Name">
+                <div class="overflow_wrap">{!v.recordObj.Title}</div>
+            </td>
+                    
+            <td data-label="Last Name">
+                <div class="overflow_wrap">{!v.recordObj.Account.Name}</div>
+            </td>
+            
+            <td data-label="Last Name">
+                <div class="overflow_wrap">{!v.recordObj.Account.Owner.Name} </div>
+            </td>
+             <td data-label="Email">
+                <div class="overflow_wrap" >{! v.recordObj.Account_Routing_Status__c}</div>
+            </td>
+            <td data-label="Email">
+                <div class="overflow_wrap" >{! v.recordObj.Account.Account_Tier__c}</div>
+            </td>
+            
+            
+            <td data-label="Email">
+                <div class="overflow_wrap" >{! v.recordObj.Contact_Status__c}</div>
+            </td>
+            
+           <td data-label="Email">
+                <div class="overflow_wrap" > <lightning:formattedDateTime value="{! v.recordObj.Last_MQL_Date__c}"/> </div>
+            </td>
+            <td data-label="Email">
+                <div class="overflow_wrap" >  <lightning:formattedDateTime value="{! v.recordObj.Priority_Date__c}"/></div>
+            </td>
+            
+           <td data-label="Email">
+                <div class="overflow_wrap" ><lightning:formattedDateTime value="{! v.recordObj.LastActivityDate}"/></div>
+            </td>
+            <td data-label="Email">
+                <div class="overflow_wrap" >{! v.recordObj.MQL_Campaign_Type__c}</div>
+            </td>
+            
+            
+        </tr>
+        <tr class="{!v.showContent? '':'slds-hide'}" >
+            <td colspan="13" style="background: antiquewhite;">
+                <lightning:card title="Campaigns" class="headerBackground">
+                     <table class="slds-table slds-table--bordered slds-table--cell-buffer">
+                                                    <thead>
+                                                        <tr class="slds-text-title--caps">
+                                                            <th scope="col">
+                                                                <div class="overflow_wrap" title="First Name"> Name</div>
+                                                            </th>
+                                                            <th scope="col">
+                                                                <div class="overflow_wrap" title="Last Name">GTM Theme</div>
+                                                            </th>
+                                                            <th scope="col">
+                                                                <div class="overflow_wrap" title="Email">Type</div>
+                                                            </th>
+                                                            <th scope="col">
+                                                                <div class="overflow_wrap" title="Email">Campaign Member status</div>
+                                                            </th>
+                                                            <th scope="col">
+                                                                <div class="overflow_wrap" title="Email">Response Date</div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <aura:iteration items="{!v.recordObj.CampaignMembers}" var="cm" indexVar="i">
+                                                            <tr>
+                                                                <th scope="row" data-label="First Name">
+                                                                    <div class="overflow_wrap" >
+                                                                        <!--<a href="{! '/'+  cm.Campaign.Id }"  target="_blank">{! cm.Campaign.Name }</a>-->
+                                                                        <a href="javascript:void(0)" onclick="{!c.openTab}" id="{! cm.Campaign.Id }"  target="_blank">{! cm.Campaign.Name }</a>
+                                                                    </div>
+                                                                </th>
+                                                                <td data-label="Last Name">
+                                                                    <div class="overflow_wrap" >{! cm.Campaign.Campaign_Theme__c }</div>
+                                                                </td>
+                                                                <td data-label="Email">
+                                                                    <div class="overflow_wrap">{! cm.Campaign.Type }</div>
+                                                                </td>
+                                                                <td data-label="Email">
+                                                                    <div class="overflow_wrap">{! cm.Status }</div>
+                                                                </td>
+                                                                <td data-label="Email">
+                                                                    <div class="overflow_wrap">
+                                                                        <lightning:formattedDateTime value="{! cm.FCRM__FCR_Response_Date__c }"/></div>
+                                                                </td>
+                                                            </tr>
+                                                        </aura:iteration>
+                                                    </tbody>
+                                                </table>
+                    
+                </lightning:card>
+                
+            </td>
+        </tr>
+        
+    </aura:if>
+    
+    
+    <aura:if isTrue="{!!v.isContactConsole}" >
+         <tr class="{! and(v.recordObj.Priority_Date__c, or(v.recordObj.Priority_Date__c>=v.recordObj.LastActivityDate,empty(v.recordObj.LastActivityDate)) ) ? ' tdcolor' :''}">
+            <td data-label="Last Name"> 
+                <lightning:icon size="x-small" onclick="{!c.showContent}" iconName="{!v.showContent? 'utility:chevrondown':'utility:chevronright'}" alternativeText="Event" title="Event" />
+            </td>
+            <td data-label="Last Name"> 
+                <lightning:input type="checkbox" name="{! v.recordObj.Id }" checked="{! v.recordObj.selected }"/>
+            </td>
+            <th scope="row" data-label="First Name">
+                <div class="overflow_wrap" title="{! v.recordObj.ContactFirstRec.Account.Name }">
+                    <!--<a href="{! '/'+ v.recordObj.Id }"  target="_blank">{! v.recordObj.Name }</a>-->
+                    <a href="javascript:void(0)" onclick="{!c.openTab}" id="{! v.recordObj.Id }"  target="_blank">{! v.recordObj.Name }</a>
+                </div>
+            </th>
+            <td data-label="Last Name">
+                <div class="overflow_wrap">{! v.recordObj.Title }</div>
+            </td>
+             
+             
+            <!--
+            <td data-label="Lead Fit Score"> 
+                <div  > {! v.recordObj.Lead_FIT_Score1__c }</div> 
+            </td>
+			-->
+             
+           <!-- <td data-label="Lead  Owner"> 
+                
+                <div  >{! v.recordObj.Owner.Name}</div>
+            </td>-->
+            <td data-label="Email">
+                <div class="overflow_wrap" >{! v.recordObj.Company }</div>
+            </td>
+             
+            
+             
+            <td data-label="Last Name"> 
+                <div  class="{!greaterthanorequal(v.recordObj.L2A_Confidence_Code__c, 3)? 'overflow_wrap' :'slds-hide'}">{! v.recordObj.L2A_Account__r.Owner.Name }</div>
+            </td>
+              <td data-label="Email">
+                <div class="overflow_wrap" >{! v.recordObj.Account_Routing_Status__c}</div>
+            </td>
+             <td data-label="Account Tier"> 
+                
+                <div  > {! v.recordObj.L2AAccountTier__c }</div> 
+            </td>
+             
+             <td data-label="Email">
+                <div class="overflow_wrap" >{! v.recordObj.Status }</div>
+            </td>
+             
+             <td data-label="Email"> 
+                <div class="overflow_wrap" ><lightning:formattedDateTime value="{! v.recordObj.Last_MQL_Date__c}"/></div>
+            </td>
+             
+              <td data-label="Date" > 
+                
+                <div><lightning:formattedDateTime value="{!v.recordObj.Priority_Date__c}"/> </div>
+            </td>
+             
+            
+           
+            
+            <td data-label="Email">
+                <div class="overflow_wrap" ><lightning:formattedDateTime value="{!v.recordObj.LastActivityDate}"/></div>
+            </td>
+             <td data-label="Email">
+                <div class="overflow_wrap" >{!v.recordObj.MQL_Campaign_Type__c}</div>
+            </td>
+             
+            <!--<td data-label="Email">
+                <div class="overflow_wrap" >{! v.recordObj.L2A_Account__r.Name}</div>
+            </td>
+            <td data-label="Email">
+                <div class="overflow_wrap" >{! v.recordObj.L2A_Account__r.Account_Status__c}</div>
+            </td>-->
+           
+             
+             
+           <!-- <td data-label="Email">
+                <div class="overflow_wrap" >{! v.recordObj.tasksIn4Days+ v.recordObj.eventsIn4Days  }</div>
+            </td>-->
+            <!--<td data-label="Email"> 
+                <div class="overflow_wrap" >{! empty(v.recordObj.campaignResponse) ? 0: v.recordObj.campaignResponse}</div>
+            </td>-->
+        </tr>
+             <tr class="{!v.showContent? '':'slds-hide'}" >
+            <td colspan="13" style="background: antiquewhite;">
+                <lightning:card title="Campaigns" class="headerBackground">
+                    <table class="slds-table slds-table--bordered slds-table--cell-buffer">
+                        <thead>
+                            <tr class="slds-text-title--caps">
+                                <th scope="col">
+                                    <div class="overflow_wrap" title="First Name">Campaign Name</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="overflow_wrap" title="First Name">GTM Theme</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="overflow_wrap" title="Last Name">Type </div>
+                                </th>
+                                <th scope="col">
+                                    <div class="overflow_wrap" title="Last Name">Campaign Member status </div>
+                                </th>
+                                <th scope="col">
+                                    <div class="overflow_wrap" title="Email">Response Date</div>
+                                </th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <aura:iteration items="{! v.recordObj.CampaignMembers}" var="ct" indexVar="i">
+                                <tr>
+                                   
+                                    <th scope="row" data-label="First Name">
+                                        <div class="overflow_wrap" title="{! ct.FirstName }">
+                                            <!--<a href="{! '/'+  ct.Campaign.Id }"  target="_blank">{! ct.Campaign.Name }</a>-->
+                                            <a href="javascript:void(0)" onclick="{!c.openTab}" id="{! ct.Campaign.Id }"  target="_blank">{! ct.Campaign.Name }</a>
+                                        </div>
+                                    </th>
+                                    <td data-label="Last Name">
+                                        <div class="overflow_wrap" title="{! ct.LastName }">{! ct.Campaign.GTM_Play__c }</div>
+                                    </td>
+                                    <td data-label="Email">
+                                        <div class="overflow_wrap" title="{! ct.Email }">{! ct.Campaign.Type }</div>
+                                    </td>
+                                    <td data-label="Email">
+                                        <div class="overflow_wrap" title="{! ct.Email }">  {! ct.Status }</div>
+                                    </td>
+                                    <td data-label="Email">
+                                        <div class="overflow_wrap" title="{! ct.Email }">
+                                            <lightning:formattedDateTime value="{! ct.FCRM__FCR_Response_Date__c }"/></div>
+                                    </td>
+                                   
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                </lightning:card>
+            </td></tr>
+             
+         
+        
+    </aura:if>
+</aura:component>

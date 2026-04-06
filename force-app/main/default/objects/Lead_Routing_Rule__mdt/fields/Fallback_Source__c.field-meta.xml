@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Fallback_Source__c</fullName>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Fallback Source</label>
+    <required>false</required>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Account</fullName>
+                <default>true</default>
+                <label>Account</label>
+            </value>
+            <value>
+                <fullName>Account Territory</fullName>
+                <default>false</default>
+                <label>Account Territory</label>
+            </value>
+            <value>
+                <fullName>Next Rule</fullName>
+                <default>false</default>
+                <label>Next Rule</label>
+            </value>
+            <value>
+                <fullName>HardCoded User</fullName>
+                <default>false</default>
+                <label>HardCoded User</label>
+            </value>
+            <value>
+                <fullName>Patch Key</fullName>
+                <default>false</default>
+                <label>Patch Key</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

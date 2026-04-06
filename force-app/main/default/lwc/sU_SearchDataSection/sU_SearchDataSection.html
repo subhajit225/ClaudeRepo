@@ -1,0 +1,791 @@
+<template>
+    <!-- Contain Tab set -->
+    <div class="toast showFormBlock" data-id="toastId">
+        <lightning-button-icon icon-name="utility:copy" size="x-small" alternative-text="copy" class="slds-m-right_small su__copy-to-clip" title="Copy" onclick={copyLink}>
+        </lightning-button-icon>
+            Link Copied to Clipboard
+    </div>
+    <template if:true={showSendAsEmailBlock}>
+        <c-s-u_-send-as-email event-code={eventCode} email-href={emailHref} record-id={recordId} from-email={currentUserEmail} title ={ptitle} objectname ={objName} idd ={idd} sourcename={sourcename}></c-s-u_-send-as-email>
+    </template>
+    <div class="mainSUContainer">
+        <template if:true={totalresults}>
+                <div class={dataSectionClasses}>
+                    <c-s-u_-tabs merge-sources-type-index={mergeSourcesTypeIndex} tabsfilter={tabsfilter} event-code={eventCode} aggregationsdata={aggregationsdata}></c-s-u_-tabs>
+                </div>
+        </template>
+        <div class="suggestion font-12 su__loading-view su__d-none">
+            <b>{translationObject.Did_you_mean}: </b>
+            <a href="javascript:void(0)" onclick={correctSpelling}>{correctspell}</a>
+        </div>
+
+        <!-- SHow page and bookmark popups  -->
+        <div class="section2 su__d-flex su__w-100 su__line-height-n su__py-2">
+            <div class="su__d-flex su__flex-column su__wildcard-width">
+                <template if:true={hasWildcardSearch}>
+                    <span class="su__flex-vcenter su__radius su__border su__mb-1 su__mr-1 su__sticky su__width-128 ">
+                        <span
+                            class="su__sticky__filters su__cursor font-12 su__px-1 su__text-black  su__text-nowrap su__loading-view su__close-icon-txt su__text-normal su__flex-vcenter su__position-relative">
+                            Wildcard Search
+                        </span>
+                        <span
+                            class="su__cursor font-10  su__px-1 su__text-black  su__text-nowrap su__loading-view su__close-icon-txt su__text-normal su__flex-vcenter su__position-relative su__wildcard-cross"
+                            onclick={removeWildcardSearch}>
+                            X
+                        </span>
+                    </span>
+                </template>
+                <template if:true={totalresults}>
+                    <template if:false={mergedresults}>
+                        <div
+                            class="su__showing-results-heading su__align-self-center su__margin-auto-auto-auto-0 su__text-truncate-custom font-12 su__loading-view su__mw-100 su__showing-page-line">
+                            {translationObject.Showing_page} <span class="notranslate"> {pagenum} </span> {translationObject.of} <span class="notranslate"> {totalpages} </span>
+                            {translationObject.of}
+                            <span class="notranslate"> {totalresults} </span> {translationObject.results} ‌(<span class="notranslate"> {searchresultime}‌ </span>
+                            {translationObject.seconds}).
+                        </div>
+                    </template>
+                </template>
+                <template if:true={showHideGenerateAnswerButton}>
+                    <div class="su__loading-view su__gpt-generate su__cursor su__mt-4 " onclick={generateAnswer} >
+                        <span ><svg xmlns="http://www.w3.org/2000/svg" id="Group_18641" data-name="Group 18641" width="16.422" height="17.243" viewBox="0 0 16.422 17.243">
+                                          <g id="Group_18524" data-name="Group 18524">
+                                            <path id="Path_18304" data-name="Path 18304" d="M16.5,6.978l.653-1.466L18.6,4.851a.421.421,0,0,0,0-.762L17.15,3.427,16.5,1.953a.411.411,0,0,0-.752,0l-.653,1.466-1.454.662a.421.421,0,0,0,0,.762l1.446.662.653,1.474A.417.417,0,0,0,16.5,6.978ZM9.921,8.235,8.607,5.3a.822.822,0,0,0-1.5,0L5.79,8.235,2.9,9.567a.843.843,0,0,0,0,1.525L5.79,12.423,7.1,15.355a.822.822,0,0,0,1.5,0l1.314-2.932,2.892-1.332a.843.843,0,0,0,0-1.525Zm5.816,5.445-.653,1.466-1.446.662a.421.421,0,0,0,0,.762l1.446.662.653,1.474a.411.411,0,0,0,.752,0l.653-1.466,1.454-.662a.421.421,0,0,0,0-.762l-1.446-.662L16.5,13.68A.417.417,0,0,0,15.737,13.68Z" transform="translate(-2.415 -1.707)" fill="#fff"/>
+                                          </g>
+                                        </svg></span>
+                        <span class="su__pl-1"> Generate Answer</span>
+                
+                    </div>
+                </template>
+            </div>
+            <template if:true={totalresults}>
+                <template if:true={DataLoaded}>
+                    <c-s-u_-sort-by-section event-code={eventCode} sort-by-check={sortByCheck} class="su__ml-auto"
+                        translation-object={translationObject}></c-s-u_-sort-by-section>
+                </template>
+            </template>
+        </div>
+        <template if:true={showNoResults}>
+            <div>
+                <div class="su__loading-view show-no-results no-match">
+                    {translationObject.We_re_sorry__We_Cannot_find_any_matches_for_your_search_term_}
+                </div>
+                <template if:true={showBackupResults}>
+                    <div class="su__loading-view show-no-results recent-match">
+                        {translationObject.Showing_results_using_some_of_your_recent_search_terms}
+                    </div>
+                </template>
+            </div>
+        </template>
+            <template if:true={gptActive}>
+                <c-s-u_-gpt  class={hideGptOnFirstLoad} gpt-active={gptActive} generate-answer-btn={nogpt} case-subject-val={caseSubjectVal} record-id={recordId} end-point={endPoint} bearer={bearer} event-code={eventCode} fail-text={failText}
+                    empty-search-string={emptySearchString} uid={uid} total-results={totalResults} search-string={searchString}
+                    gpt-context={gptContext} gpt-links={gptLinks} page-num={pageNum} utility={isUtility}  big-screen-var={bigscreen} utility-top={utilityTop}
+                    search-string-from-banner={searchStringFromBanner} current-user-email={currentUserEmail} translation-object={translationObject}></c-s-u_-gpt>
+                    <c-s-u_-sandbox-gpt-feedback end-point={endPoint} event-code={eventCode} bearer={bearer} uid={uid} search-string={searchString} gpt-context={gptContext}> </c-s-u_-sandbox-gpt-feedback>
+        </template>
+
+        <!-- Clear All -->
+            <template if:true={showClearFiltersButton1}>
+                <div data-id="divblock" class="slds-col slds-size_4-of-12">
+                    <div class="slds-clearfix">
+                        <div class="slds-float_left">
+                            <template if:true={showClearFiltersButton1}>
+                            <label onclick={clearFilterForSlider1}
+                                class={clearAllClass}>
+                                    {translationObject.Clear_all_filters}
+                                </label>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        <!-- Result Set -->
+        <div class="Section3">
+            <template if:true={stickyFacets}>
+                <c-s-u_-sticky event-code={eventCode} loading={loading}  selected-sticky-filter={selectedStickyFilter} totalresults={totalresults}  toshow={stickyFacets} resizing={resizing}   big-screen-var={bigscreen}></c-s-u_-sticky>
+                </template>
+            <!-- End -->
+            <template if:true={previewModalVal}> 
+                <div>
+                    <div class="previewModal">
+                        <div class="su__d-flex su__justify-content-between su__p-2 su__flex-vcenter">        
+                            <div>
+                                <div class="su__line-clamp"><div class="su__font-14 su__ml-2">{typeofContentForPreview}</div></div>
+                                <div ><div class=" su__text-truncatePreviewLabel su__ml-2 su__px-2 su__f-regular su__color-black su__preview-contentLabel su__font-14 su__text-center ">{previewSourceLabel}</div></div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-12 su__text-center">
+                                <lightning-button-icon icon-name="utility:close" variant="bare" size="medium" class="su_video-preview-close"
+                                alternative-text="Close" onclick={closePreviewModal} title="Close"></lightning-button-icon>
+                            </div>
+                        </div>
+                        <div class="su__width-100 su__w-100 su__h-100p">
+                            <iframe class="PreviewIframeModal" width="420" height="345" src={previewSrcVal}>
+                            </iframe>
+                        </div>
+                    </div>
+                    <div class="su__Previewbackdrop" onclick={closePreviewModal}></div>
+                </div>
+                
+            </template>
+            <template if:true={mergedresults}>
+                <ul class="su__d-flex su__flex-wrap">
+                    <!-- For preview Start-->
+                    <div style="display:none;opacity:0" class="ModelTooltip slds-modal" onmouseleave={handleMouseout} onmouseenter={handleMouseover}>
+                        <div class="su__overflow-auto su__h-100">
+                            <template if:true={showArticlePreview}>
+                                <c-s-u_-article-preview-parent oncloseknowledgewidget={closeKnowledgeWidget} 
+                                articlerecorexists={articleRecordExists} 
+                                fileattachment={fileAttachment} 
+                                attachments={attached_Attachments} 
+                                showarticlepreview={showArticlePreview} 
+                                event-code={eventCode} 
+                                item={hoverResult} 
+                                onselection={currentDivHeightWidth} 
+                                ranger-id={rangerId}></c-s-u_-article-preview-parent>
+                            </template>
+                            <template if:false={showArticlePreview}>
+                                <c-s-u_-article-preview-parent oncloseknowledgewidget={closeKnowledgeWidget} 
+                                articlerecorexists={articleRecordExists} 
+                                fileattachment={fileAttachment} 
+                                attachments={attached_Attachments} 
+                                event-code={eventCode} 
+                                item={hoverResult} 
+                                onselection={currentDivHeightWidth} 
+                                ranger-id={rangerId}></c-s-u_-article-preview-parent>
+                            </template>
+                        </div>
+                        <div class="container" lwc:dom="manual"></div>
+                    </div>
+                    <!-- For preview Start   ArticleDetailsOnHoverParentComponent-->
+
+                    <template for:each={responselistdata} for:item="data" for:index="indexVar">
+                        <div class="su__bg-white  su__width-100 su__py-2 su__word-break" key={data.record.uniqueHitId}>
+                            <div
+                                class="su__list-items su__radius-1 su__position-relative su__p-1 su__pt-03 su__pb-04 su__mr-1 su__ml-1  results-div su__padding-lr">
+                                <template if:true={mergeSourcesTypeIndex}>
+                                    <template if:true={data.record.sourceLabel} >
+                                        <span data-name={data.record.sourceLabel}>
+                                            <lightning-formatted-rich-text value={data.record.sourceLabel}
+                                                class="su__loading-view font-10 su__position-absolute su-source-label su__content-name su__p-6 su__pb-0 su__width-less su__mx-1">
+                                            </lightning-formatted-rich-text>
+                                        </span>
+                                    </template>
+                                </template>
+                                <template if:false={mergeSourcesTypeIndex}>
+                                    <template if:true={data.record.objLabel}>
+                                        <span data-name={data.record.objLabel} class="su__position-relative">
+                                            <lightning-formatted-rich-text value={data.record.objLabel}
+                                                class="su__loading-view font-10 su__position-absolute su-source-label su__content-name su__p-6 su__pb-0 su__width-less su__mx-1">
+                                            </lightning-formatted-rich-text>
+                                        </span>
+                                    </template>
+                                </template>
+                                <template for:each={data.record.hits} for:item="mergedResults" for:index="index">
+                                    <div key={mergedResults.record.uniqueHitId} class="su__merged-results">
+                                        <div class="su__margin-btm">
+                                            <div class="su__d-flex">
+                                                <div class="su__flex-vcenter">
+                                                    <div class="su_search-link su__loading-view">
+                                                        <template if:true={mergedResults.record.allowLinkOpenNewTab}>
+                                                            <a class="getHref su__text-decoration su__text-black font-14 su__font-regular su__cursor su__loading-view linkadd su__mr-1"
+                                                                href={mergedResults.record.href} target="_blank"
+                                                                name={mergedResults.record.highlight.TitleToDisplay}
+                                                                onclick={runScriptMethod} data-id="titleToDisplay"
+                                                                oncontextmenu={runScriptMethod}
+                                                                onmousedown={runScriptMethod}
+                                                                data-rank={index}
+                                                                data-allowlinkopennewtab={mergedResults.record.allowLinkOpenNewTab}
+                                                                data-sub={mergedResults.record.highlight.TitleToDisplayString}
+                                                                data-url={mergedResults.record.href}
+                                                                data-track={mergedResults.record.trackAnalytics}
+                                                                data-type={mergedResults.record.objName}
+                                                                data-index={mergedResults.record.sourceName}
+                                                                data-autotuned={mergedResults.record.autotuned}
+                                                                data-recordid={mergedResults.record._id}>
+                                                                <template if:true={mergedResults.record.highlightTitleToDisplayString}>
+                                                                    <!-- For preview Start-->
+                                                                        <lightning-formatted-rich-text value={mergedResults.record.highlight.TitleToDisplay}
+                                                                        name={mergedResults.record} data-id={mergedResults.record.Id} data-recordid={mergedResults.record._id} class="underline"
+                                                                        style={mergedResults.styleColor} data-showmodal="showmodal" onmouseleave={linkMouseOut}
+                                                                        onmouseenter={articleMouseHover}>
+                                                                    </lightning-formatted-rich-text>
+                                                                    <!-- For preview Start-->
+                                                                </template>
+                                                                <template if:false={mergedResults.record.highlightTitleToDisplayString}>
+                                                                    <!-- For preview Start-->
+                                                                    <lightning-formatted-rich-text value={mergedResults.record.href}
+                                                                        name={mergedResults.record} data-id={mergedResults.record.Id} data-recordid={mergedResults.record._id} class="underline"
+                                                                        style={mergedResults.styleColor} data-showmodal="showmodal" onmouseleave={linkMouseOut}
+                                                                        onmouseenter={articleMouseHover}>
+                                                                    </lightning-formatted-rich-text>
+                                                                    <!-- For preview Start-->
+                                                                </template>
+                                                            </a>
+                                                        </template>
+                                                        <template if:false={mergedResults.record.allowLinkOpenNewTab}>
+                                                            <a class="getHref su__text-decoration su__text-black font-14 su__font-regular su__cursor su__loading-view linkadd su__mr-1"
+                                                                name={mergedResults.record.highlight.TitleToDisplay}
+                                                                onclick={runScriptMethod} data-id="titleToDisplay"
+                                                                data-rank={index}
+                                                                data-allowlinkopennewtab={mergedResults.record.allowLinkOpenNewTab}
+                                                                data-sub={mergedResults.record.highlight.TitleToDisplayString}
+                                                                data-url={mergedResults.record.href}
+                                                                data-type={mergedResults.record.objName}
+                                                                data-index={mergedResults.record.sourceName}
+                                                                data-autotuned={mergedResults.record.autotuned}
+                                                                data-recordid={mergedResults.record._id}>
+                                                                <template if:true={mergedResults.record.highlightTitleToDisplayString}>
+                                                                    <!-- For preview Start-->
+                                                                        <lightning-formatted-rich-text value={mergedResults.record.highlight.TitleToDisplay}
+                                                                        name={mergedResults.record} data-id={mergedResults.record.Id} data-recordid={mergedResults.record._id} class="underline"
+                                                                        style={mergedResults.styleColor} data-showmodal="showmodal" onmouseleave={linkMouseOut}
+                                                                        onmouseenter={articleMouseHover}>
+                                                                    </lightning-formatted-rich-text>
+                                                                    <!-- For preview Start-->
+                                                                </template>
+                                                                <template if:false={mergedResults.record.highlightTitleToDisplayString}>
+                                                                    <!-- For preview Start-->
+                                                                    <lightning-formatted-rich-text value={mergedResults.record.href}
+                                                                        name={mergedResults.record} data-id={mergedResults.record.Id} data-recordid={mergedResults.record._id} class="underline"
+                                                                        style={mergedResults.styleColor} data-showmodal="showmodal" onmouseleave={linkMouseOut}
+                                                                        onmouseenter={articleMouseHover}>
+                                                                    </lightning-formatted-rich-text>
+                                                                    <!-- For preview Start-->
+                                                                </template>
+                                                            </a>
+                                                            </template>
+                                                        <template if:true={mergedResults.record.bypass_filter}>
+                                                            <span class="su__auto-tuning su__loading-view" title="Boosted">
+                                                                <svg title="Boosted" xmlns="http://www.w3.org/2000/svg"
+                                                                    width="18" height="13.561" viewBox="0 0 22.505 13.561">
+                                                                    <g data-name="Component 69 – 3"
+                                                                        transform="translate(1.414 1.414)">
+                                                                        <path data-name="Path 13515"
+                                                                            d="M21.177,9l-8.5,8.5L8.208,13.025,1.5,19.733"
+                                                                            transform="translate(-1.5 -9)" fill="none"
+                                                                            stroke="#1770d4" stroke-linecap="round"
+                                                                            stroke-linejoin="round" stroke-width="2" />
+                                                                        <path data-name="Path 13516" d="M25.5,9h7.415v7.415"
+                                                                            transform="translate(-13.238 -9)" fill="none"
+                                                                            stroke="#1770d4" stroke-linecap="round"
+                                                                            stroke-linejoin="round" stroke-width="2" />
+                                                                    </g>
+                                                                </svg>
+                                                            </span>
+                                                        </template>
+                                                        <template if:true={mergedResults.record.autotuned}>
+                                                            <span class="su__auto-tuning su__loading-view" title="Auto tuned">
+                                                                <svg width="14" height="14" viewBox="0 0 16 16">
+                                                                    <defs>
+                                                                        <clipPath>
+                                                                            <rect width="14" height="14" />
+                                                                        </clipPath>
+                                                                    </defs>
+                                                                    <g clip-path="url(#clip-Tunning)">
+                                                                        <path data-name="Path 1567"
+                                                                            d="M3,15.444v1.778H8.333V15.444ZM3,4.778V6.556h8.889V4.778ZM11.889,19V17.222H19V15.444H11.889V13.667H10.111V19ZM6.556,8.333v1.778H3v1.778H6.556v1.778H8.333V8.333ZM19,11.889V10.111H10.111v1.778ZM13.667,8.333h1.778V6.556H19V4.778H15.444V3H13.667Z"
+                                                                            transform="translate(-3 -3)" fill="#8b8b8b" />
+                                                                    </g>
+                                                                </svg>
+                                                            </span>
+                                                        </template>
+
+                                                    </div>
+                                                </div>
+                                                <div class="su__d-flex-margin-custom su__loading-view actionIconClass">
+                                                    <div class="su__d-flex">
+                                                        <div>
+                                                            <template if:true={mergedResults.record.shareResultLink}>
+                                                                <lightning-button-menu alternative-text="Show menu"
+                                                                    icon-size="x-small" menu-alignment="right">
+                                                                    <template if:true={mergedResults.record.LinkViacaseComment}>
+                                                                        <a href={mergedResults.record.href} data-knowledgeid={mergedResults.record._id}
+                                                                            data-url={mergedResults.record.href} data-title={mergedResults.record.highlightTitleToDisplayString} data-showdettached={data.showDetachButton}
+                                                                            data-objname={mergedResults.record.objName} data-sourcename={mergedResults.record.sourceName} data-merge={mergedResults.record.merge}
+                                                                            data-id={mergedResults.record.Id} data-attached=0 data-index={indexVar} onclick={handleCaseComments} data-shouldattach={mergedResults.record.LinkViaAttachArticle}>
+                                                                            <lightning-menu-item value="MenuItemOne"
+                                                                                label="Send Link as case comment">
+                                                                            </lightning-menu-item>
+                                                                        </a>
+                                                                    </template>
+                                                                    <template if:true={mergedResults.record.LinkViaEmail}>
+                                                                        <a href={mergedResults.record.href} data-id={mergedResults.record.Id} data-title={mergedResults.record.highlightTitleToDisplayString}
+                                                                            data-url={mergedResults.record.href} data-objname={mergedResults.record.objName}
+                                                                            onclick={handleCaseCommentsEmail}>
+                                                                            <lightning-menu-item value="MenuItemOne"
+                                                                                label="Send Link via Email"></lightning-menu-item>
+                                                                        </a>
+                                                                    </template>
+                                                                </lightning-button-menu>
+                                                            </template>
+                                                        </div>
+                                                        <div class="">
+                                                            <lightning-button-icon icon-name="utility:copy" size="x-small"
+                                                                alternative-text="copy" name={mergedResults.record.Id}
+                                                                class="slds-m-left_xx-small" title="Copy to Clipboard"
+                                                                data-rank={indexVar}
+                                                                data-sub={mergedResults.record.highlight.TitleToDisplayString}
+                                                                data-url={mergedResults.record.href}
+                                                                data-type={mergedResults.record.objName}
+                                                                data-index={mergedResults.record.sourceName}
+                                                                data-recordid={mergedResults.record._id} onclick={copyLink}>
+                                                            </lightning-button-icon>
+                                                        </div>
+                                                        <div class="">
+                                                            <template if:true={mergedResults.record.showPreview}>
+                                                                <lightning-button-icon icon-name="utility:preview"
+                                                                    size="x-small" alternative-text="preview"
+                                                                    data-value={mergedResults.record.href}
+                                                                    class="slds-m-left_xx-small"
+                                                                    data-title={mergedResults.record.highlight.TitleToDisplayString}
+                                                                    data-type={mergedResults.record.objName}
+                                                                    data-index={mergedResults.record.sourceName} data-autotuned={mergedResults.record.autotuned}
+                                                                    data-allowlinkopennewtab={mergedResults.record.allowLinkOpenNewTab}
+                                                                    data-recordid={mergedResults.record._id} 
+                                                                    data-tag={mergedResults.record.contentTag}
+                                                                    name={mergedResults.record.highlight.TitleToDisplay}
+                                                                    data-id={mergedResults.record.Id} data-rank={indexVar}  data-sub={mergedResults.record.highlight.TitleToDisplayString}
+                                                                    data-url={mergedResults.record.href}
+                                                                    onclick={openPreviewModal}></lightning-button-icon>
+                                                            </template>
+                                                        </div>
+
+                                                        <template if:true={mergedResults.showArticles}>
+                                                            <template if:true={mergedResults.showAttachButton}>
+                                                                <div class="">
+                                                                    <lightning-button-icon icon-name="utility:attach"
+                                                                        size="x-small" alternative-text="Attach to case comment"
+                                                                        data-id={mergedResults.record.Id}
+                                                                        class="slds-m-left_xx-small"
+                                                                        data-url={mergedResults.record.href}
+                                                                        data-title={mergedResults.record.highlightTitleToDisplayString}
+                                                                        data-objname={mergedResults.record.objName}
+                                                                        data-sourcename={mergedResults.record.sourceName}
+                                                                        data-knowledgeid={mergedResults.record._id}
+                                                                        data-merge={mergedResults.record.merge} data-attached=0
+                                                                        data-index={indexVar} data-childindex={index}
+                                                                        title='Attach article to case'
+                                                                        onclick={attachToCaseCmt}>
+                                                                    </lightning-button-icon>
+                                                                </div>
+                                                            </template>
+                                                            <template if:true={mergedResults.showDetachButton}>
+                                                                <div class="">
+                                                                    <lightning-button-icon icon-name="utility:unlinked"
+                                                                        size="x-small" alternative-text="Attach to case comment"
+                                                                        data-id={mergedResults.record.Id}
+                                                                        class="slds-m-left_xx-small"
+                                                                        data-url={mergedResults.record.href}
+                                                                        data-title={mergedResults.record.highlightTitleToDisplayString}
+                                                                        data-objname={mergedResults.record.objName}
+                                                                        data-sourcename={mergedResults.record.sourceName}
+                                                                        data-knowledgeid={mergedResults.record._id}
+                                                                        data-merge={mergedResults.record.merge} data-attached=1
+                                                                        data-index={indexVar} data-childindex={index}
+                                                                        title='DeAttach article to case'
+                                                                        onclick={attachToCaseCmt}>
+                                                                    </lightning-button-icon>
+                                                                </div>
+                                                            </template>
+                                                        </template>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="su__divider su__d-md-none su__d-xs-block"></div>
+                                            <div class="su__pt-1 su__loading-view">
+                                                <lightning-formatted-rich-text
+                                                    value={mergedResults.record.highlight.SummaryToDisplay}>
+                                                </lightning-formatted-rich-text>
+                                                <span
+                                                    class="su__list-item-desc su__font-regular font-12 su__word-break su__loading-view su__text-normal su__d-block">
+                                                    <template if:true={mergedResults.record.showMore}>
+                                                        <lightning-formatted-rich-text
+                                                            value={mergedResults.record.highlight.SummaryToDisplay}>
+                                                        </lightning-formatted-rich-text>
+                                                    </template>
+                                                    <template if:true={mergedResults.record.showMore}>
+                                                        ...
+                                                    </template>
+                                                    <template if:false={mergedResults.record.showMore}>
+                                                        <lightning-formatted-rich-text
+                                                            value={mergedResults.record.highlight.SummaryToDisplayMax}>
+                                                        </lightning-formatted-rich-text>
+                                                    </template>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class=" su__loading-view su__float-right su-more-results su__cursor "
+                                            onclick={tabClicked} data-val={mergedResults.record.displayName}
+                                            data-merged={mergedResults.record.merged}
+                                            data-selected={mergedResults.record.selected}
+                                            data-objname={mergedResults.record.objName}
+                                            data-name={mergedResults.record.sourceName} data-ind={ind}
+                                            data-max={mergedResults.record.level} data-step={mergedResults.record.parent}>
+                                            More Results...
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </template>
+                </ul>
+            </template>
+            <template if:false={mergedresults}>
+                <div class="dataVal resultDataSection-MinHeight">
+                    <ul class="su__d-flex su__flex-wrap">
+                        <!-- For preview Start-->
+                        <div style="display:none;opacity:0" class="ModelTooltip slds-modal" onmouseleave={handleMouseout} onmouseenter={handleMouseover}>
+                            <div class="su__overflow-auto su__h-100">
+                                <template if:true={showArticlePreview}>
+                                    <c-s-u_-article-preview-parent 
+                                    oncloseknowledgewidget={closeKnowledgeWidget} 
+                                    articlerecorexists={articleRecordExists}  
+                                    fileattachment={fileAttachment} 
+                                    attachments={attached_Attachments}  
+                                    showarticlepreview={showArticlePreview}  
+                                    event-code={eventCode} 
+                                    item={hoverResult} 
+                                    onselection={currentDivHeightWidth}  
+                                    ranger-id={rangerId}></c-s-u_-article-preview-parent>
+                                </template>
+                                <template if:false={showArticlePreview}>
+                                    <c-s-u_-article-preview-parent 
+                                    oncloseknowledgewidget={closeKnowledgeWidget} 
+                                    articlerecorexists={articleRecordExists} 
+                                    fileattachment={fileAttachment} 
+                                    attachments={attached_Attachments} 
+                                    event-code={eventCode} 
+                                    item={hoverResult} 
+                                    onselection={currentDivHeightWidth}  
+                                    ranger-id={rangerId}></c-s-u_-article-preview-parent>
+                                </template>
+                            </div>
+                            <div class="container" lwc:dom="manual"></div>
+                        </div>
+                        
+                        <!-- For preview Start   ArticleDetailsOnHoverParentComponent-->
+                        <template for:each={responselistdata} for:item="data" for:index="indexVar">
+                            <div class="su__bg-white slds-border_bottom su__width-100 su__py-2 su__word-break"
+                              key={data.record.uniqueHitId}>
+                                <div class="su__d-flex">
+                                    <div class="su__flex-vcenter">
+                                        <template if:true={showIcon}>
+            
+                                            <template if:true={data.record.iconPresent}>
+                                                <div class="su__w-h-20px su__grid-none su__mr-2 su__rtlml-2 su__rtlmr-0">
+                                                    <img class="su__left-item-img su__w-100" src={data.record.icon} alt={data.record.icon} />
+                                                </div>
+                                            </template>
+                                        </template>
+                                        <div class="su_search-link su__loading-view">
+                                            <template if:true={data.record.allowLinkOpenNewTab}>
+                                                <a class="getHref su__text-decoration su__text-black font-14 su__font-regular su__cursor su__loading-view linkadd su__mr-1"
+                                                   href={data.record.href} target="_blank"
+                                                    name={data.record.highlight.TitleToDisplay} onclick={runScriptMethod}
+                                                    data-id={data.record.Id} data-rank={indexVar}
+                                                    data-allowlinkopennewtab={data.record.allowLinkOpenNewTab}
+                                                    data-sub={data.record.highlight.TitleToDisplayString}
+                                                    data-url={data.record.href} data-type={data.record.objName}
+                                                    data-track={data.record.trackAnalytics}
+                                                    data-index={data.record.sourceName} data-autotuned={data.record.autotuned}
+                                                    data-recordid={data.record._id}>
+                                                    <template if:true={data.record.highlightTitleToDisplayString}>
+                                                        <!-- For preview Start-->
+                                                        <lightning-formatted-rich-text value={data.record.highlight.TitleToDisplay}
+                                                            name={data.record} data-id={data.record.Id} data-recordid={data.record._id} class="underline"
+                                                            style={data.styleColor} data-showmodal="showmodal" onmouseleave={linkMouseOut}
+                                                            onmouseenter={articleMouseHover}>
+                                                        </lightning-formatted-rich-text>
+                                                        <!-- For preview Start-->
+                                                    </template>
+                                                    <template if:false={data.record.highlightTitleToDisplayString}>
+                                                        <!-- For preview Start-->
+                                                        <lightning-formatted-rich-text value={data.record.href}
+                                                            name={data.record} data-id={data.record.Id} data-recordid={data.record._id} class="underline"
+                                                            style={data.styleColor} data-showmodal="showmodal" onmouseleave={linkMouseOut}
+                                                            onmouseenter={articleMouseHover}>
+                                                        </lightning-formatted-rich-text>
+                                                        <!-- For preview Start-->
+                                                    </template>
+                                                </a>
+                                            </template>
+                                            <template if:false={data.record.allowLinkOpenNewTab}>
+                                                <a class="getHref su__text-decoration su__text-black font-14 su__font-regular su__cursor su__loading-view linkadd su__mr-1"
+                                                    name={data.record.highlight.TitleToDisplay} onclick={runScriptMethod}
+                                                    data-id={data.record.Id} data-rank={indexVar}
+                                                    data-sub={data.record.highlight.TitleToDisplayString}
+                                                    data-url={data.record.href} data-type={data.record.objName}
+                                                    data-index={data.record.sourceName} data-autotuned={data.record.autotuned}
+                                                    data-allowlinkopennewtab={data.record.allowLinkOpenNewTab}
+                                                    data-recordid={data.record._id}>
+                                                    <template if:true={data.record.highlightTitleToDisplayString}>
+                                                        <!-- For preview Start-->
+                                                            <lightning-formatted-rich-text value={data.record.highlight.TitleToDisplay}
+                                                            name={data.record} data-id={data.record.Id} data-recordid={data.record._id} class="underline"
+                                                            style={data.styleColor} data-showmodal="showmodal" onmouseleave={linkMouseOut}
+                                                            onmouseenter={articleMouseHover}>
+                                                        </lightning-formatted-rich-text>
+                                                        <!-- For preview Start-->
+                                                    </template>
+                                                    <template if:false={data.record.highlightTitleToDisplayString}>
+                                                        <!-- For preview Start-->
+                                                        <lightning-formatted-rich-text value={data.record.href}
+                                                            name={data.record} data-id={data.record.Id} data-recordid={data.record._id} class="underline"
+                                                            style={data.styleColor} data-showmodal="showmodal" onmouseleave={linkMouseOut}
+                                                            onmouseenter={articleMouseHover}>
+                                                        </lightning-formatted-rich-text>
+                                                        <!-- For preview Start-->
+                                                    </template>
+                                                </a>
+                                            </template>
+                                            <template if:true={data.record.contentTag}>
+                                                <span>
+                                                    <lightning-formatted-rich-text value={data.record.contentTag}
+                                                        class="font-10 su__font-regular su__content-name su__loading-view su__content-tag-padding">
+                                                    </lightning-formatted-rich-text>
+                                                </span>
+                                            </template>
+                                            <template if:true={data.record.bypass_filter}>
+                                                <span class="su__auto-tuning su__loading-view" title="Boosted">
+                                                    <svg title="Boosted" xmlns="http://www.w3.org/2000/svg" width="18"
+                                                        height="13.561" viewBox="0 0 22.505 13.561">
+                                                        <g id="Component_69_3" data-name="Component 69 – 3"
+                                                            transform="translate(1.414 1.414)">
+                                                            <path id="Path_13515" data-name="Path 13515"
+                                                                d="M21.177,9l-8.5,8.5L8.208,13.025,1.5,19.733"
+                                                                transform="translate(-1.5 -9)" fill="none" stroke="#1770d4"
+                                                                stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2" />
+                                                            <path id="Path_13516" data-name="Path 13516" d="M25.5,9h7.415v7.415"
+                                                                transform="translate(-13.238 -9)" fill="none" stroke="#1770d4"
+                                                                stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2" />
+                                                        </g>
+                                                    </svg>
+                                                </span>
+                                            </template>
+                                            <template if:true={data.record.autotuned}>
+                                                <span class="su__auto-tuning su__loading-view" title="Auto tuned">
+                                                    <svg width="14" height="14" viewBox="0 0 16 16">
+                                                        <defs>
+                                                            <clipPath id="clip-Tunning">
+                                                                <rect width="14" height="14" />
+                                                            </clipPath>
+                                                        </defs>
+                                                        <g id="Tunning" clip-path="url(#clip-Tunning)">
+                                                            <path id="Path_1567" data-name="Path 1567"
+                                                                d="M3,15.444v1.778H8.333V15.444ZM3,4.778V6.556h8.889V4.778ZM11.889,19V17.222H19V15.444H11.889V13.667H10.111V19ZM6.556,8.333v1.778H3v1.778H6.556v1.778H8.333V8.333ZM19,11.889V10.111H10.111v1.778ZM13.667,8.333h1.778V6.556H19V4.778H15.444V3H13.667Z"
+                                                                transform="translate(-3 -3)" fill="#8b8b8b" />
+                                                        </g>
+                                                    </svg>
+                                                </span>
+                                            </template>
+                                        </div>
+                                    </div>
+                                    <div class="su__d-flex-margin-custom su__loading-view actionIconClass">
+                                        <div class="su__d-flex">
+                                            <template if:true={caseIdExists}>
+                                                <div class="">
+                                                    <template if:true={data.record.shareResultLink}>
+                                                        <lightning-button-menu alternative-text="Show menu"
+                                                            icon-size="x-small" menu-alignment="right">
+                                                            <template if:true={data.record.LinkViacaseComment}>
+                                                                <a href={data.record.href} data-knowledgeid={data.record._id}
+                                                                    data-url={data.record.href} data-title={data.record.highlightTitleToDisplayString} data-showdettached={data.showDetachButton}
+                                                                    data-objname={data.record.objName} data-sourcename={data.record.sourceName} data-merge={data.record.merge}
+                                                                    data-id={data.record.Id} data-attached=0 data-index={indexVar} onclick={handleCaseComments} data-shouldattach={data.record.LinkViaAttachArticle}>
+                                                                    <lightning-menu-item value="MenuItemOne"
+                                                                        label="Send Link as case comment">
+                                                                    </lightning-menu-item>
+                                                                </a>
+                                                            </template>
+                                                            <template if:true={data.record.LinkViaEmail}>
+                                                                <a href={data.record.href} data-id={data.record.Id} data-title={data.record.highlightTitleToDisplayString}
+                                                                    data-url={data.record.href} data-objname={data.record.objName} data-sourcename={data.record.sourceName} data-showdettached={data.showDetachButton}
+                                                                    onclick={handleCaseCommentsEmail} data-merge={data.record.merge} data-attached=0 data-shouldattach={data.record.LinkViaAttachArticle} data-knowledgeid={data.record._id} data-index={indexVar}>
+                                                                    <lightning-menu-item value="MenuItemOne"
+                                                                        label="Send Link via Email"></lightning-menu-item>
+                                                                </a>
+                                                            </template>
+                                                        </lightning-button-menu>
+                                                    </template>
+                                                </div>
+                                            </template>
+                                            <template if:true={caseIdExists}>
+                                                <div class="">
+                                                    <lightning-button-icon icon-name="utility:copy" size="x-small"
+                                                        alternative-text="copy" name={data.record.Id} class="slds-m-left_xx-small"
+                                                        title="Copy to Clipboard" data-rank={indexVar}
+                                                        data-sub={data.record.highlight.TitleToDisplayString}
+                                                        data-url={data.record.href} data-type={data.record.objName}
+                                                        data-index={data.record.sourceName} data-recordid={data.record._id}
+                                                        onclick={copyLink}></lightning-button-icon>
+                                                </div>
+                                            </template>
+                                            <!-- <template if:true={caseIdExists}> -->
+                                                <div class="">
+                                                    <template if:true={data.record.showPreview}>
+                                                        <lightning-button-icon icon-name="utility:preview" size="x-small"
+                                                            alternative-text="preview" data-value={data.record.href}
+                                                            class="slds-m-left_xx-small"
+                                                            data-title={data.record.highlight.TitleToDisplayString} 
+                                                            data-type={data.record.objName}
+                                                            data-index={data.record.sourceName} data-autotuned={data.record.autotuned}
+                                                            data-allowlinkopennewtab={data.record.allowLinkOpenNewTab}
+                                                            data-recordid={data.record._id} name={data.record.highlight.TitleToDisplay}
+                                                            data-tag={data.record.contentTag}
+                                                            data-id={data.record.Id} data-rank={indexVar}  data-sub={data.record.highlight.TitleToDisplayString}
+                                                            data-url={data.record.href}
+                                                            onclick={openPreviewModal}>
+                                                        </lightning-button-icon>
+                                                    </template>
+                                                     
+                                                </div>
+                                            <!-- </template> -->
+                                           
+                                            <template if:true={caseIdExists}>
+                                                <template if:true={data.showArticles}>
+                                                    <template if:true={data.showAttachButton}>
+                                                        <div class="">
+                                                            <lightning-button-icon icon-name="utility:attach" size="x-small"
+                                                                alternative-text="Attach to case comment " data-id={data.record.Id}
+                                                                class="slds-m-left_xx-small" data-url={data.record.href}
+                                                                data-title={data.record.highlightTitleToDisplayString}
+                                                                data-objname={data.record.objName}
+                                                                data-sourcename={data.record.sourceName}
+                                                                data-knowledgeid={data.record._id} data-merge={data.record.merge}
+                                                                data-attached=0 data-index={indexVar} title='Attach article to case'
+                                                                onclick={attachToCaseCmt}>
+                                                            </lightning-button-icon>
+                                                        </div>
+                                                    </template>
+                                                    <template if:true={data.showDetachButton}>
+                                                        <div class="">
+                                                            <lightning-button-icon icon-name="utility:unlinked" size="x-small"
+                                                                alternative-text="Attach to case comment " data-id={data.record.Id}
+                                                                class="slds-m-left_xx-small" data-url={data.record.href}
+                                                                data-title={data.record.highlightTitleToDisplayString}
+                                                                data-objname={data.record.objName}
+                                                                data-sourcename={data.record.sourceName}
+                                                                data-knowledgeid={data.record._id} data-merge={data.record.merge}
+                                                                data-attached=1 data-index={indexVar}
+                                                                title='DeAttach article to case' onclick={attachToCaseCmt}>
+                                                            </lightning-button-icon>
+                                                        </div>
+                                                    </template>
+                                                </template>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="su__d-flex su__width-100 su__pt-1 su__overflow-visible su__flex-wrap">
+                                    <template for:each={data.record.metadata} for:item="metadata">
+                                        <template if:false={metadata.noMetadataValue}>
+                                            <div key={metadata.uniqueMetadataHitId}
+                                                class="su-metadata su__custom-li su__loading-view su__d-inline-flex su__align-items-center su__position-relative">
+                                                <template if:true={metadata.value}>
+                                                    <span class="su__custom-metadata su__loading-view">{metadata.value}</span>
+                                                </template>
+                                                <template if:true={metadata.seeMore}>
+                                                    <span>...</span>
+                                                    <div class="su__position-relative">
+                                                    <span class="su__see-metadata su__position-relative"  data-id={metadata.keyIndex} onmouseleave={handleMouseLeaveMetaData} onmouseenter={handleMouseEnterMetaData}>Seemore</span>
+                                                    <template if:true={metadata.original}>
+                                                        <span class="su__d-none">{metadata.original}</span>
+                                                    </template>
+                                                </div>
+                                                </template>
+                                            </div>
+                                        </template>
+                                    </template>
+                                </div>
+                                <div class="su__divider su__d-md-none su__d-xs-block"></div>
+                                <div class="su__pt-1 su__loading-view">
+                                    <template if:false={summaryCollapsible}>
+                                        <lightning-formatted-rich-text value={data.record.highlight.SummaryToDisplay}>
+                                        </lightning-formatted-rich-text>
+                                    </template>
+                                    <template if:true={summaryCollapsible}>
+                                        <span
+                                            class="su__list-item-desc su__font-regular font-12 su__word-break su__loading-view su__text-normal su__d-block">
+                                            <template if:true={data.record.showMore}>
+                                                <lightning-formatted-rich-text value={data.record.highlight.SummaryToDisplay}>
+                                                </lightning-formatted-rich-text>
+                                            </template>
+                                            <template if:true={data.record.showMore}>
+                                                ...
+                                            </template>
+                                            <template if:false={data.record.showMore}>
+                                                <lightning-formatted-rich-text
+                                                    value={data.record.highlight.SummaryToDisplayMax}>
+                                                </lightning-formatted-rich-text>
+                                            </template>
+                                            <template if:true={data.record.showMore}><span onclick={collapseSummary}
+                                                    data-index={indexVar} data-collapse=0
+                                                    class="font-12 su__text-nowrap su__color-blue su__cursor su__loading-view">
+                                                    {translationObject.Show_more}</span></template>
+                                            <template if:true={data.showLess}><span onclick={collapseSummary}
+                                                    data-index={indexVar} data-collapse=1
+                                                    class="font-12 su__text-nowrap su__color-blue su__cursor su__loading-view su__ml-1 ">{translationObject.Show_less}</span></template>
+                                        </span>
+                                    </template>
+
+                                </div>
+                                <template if:true={data.record.multipleVersions}>
+                                    <template if:true={data.record.version}>
+                                        <div class="su__pt-1 su__d-flex mergeVersionData  su__loading-view">
+                                            <div class="version-field-name">{data.record.versionFieldName}</div>
+                                            <template if:true={data.record.version}>
+                                                <div class="multiversion-main-box">
+                                                    <div class={data.record.showMRClass} data-id={data.record._id} data-rank={indexVar}
+                                                        onclick={handleInsideFilters}>
+                                                        <span>{data.record.version}</span>
+                                                        <div class="su__filter-arows merge-result-icon su__outline-none su__position-absolute">
+                                                            <i class="su__arrow-down"></i>
+                                                        </div>
+                                                    </div>
+                                                    <template if:true={data.record.showMR}>
+                                                        <div class="merge-result-data" data-id="mergeVersion" onmouseleave={mergeResultOutsideClick}>
+                                                            <template if:true={responselistdata.length}>
+                                                                <template for:each={data.record.hits} for:item="mergeListItem" for:index="indexVar">
+                                                                    <div key={mergeListItem.record.Id}>
+                                                                        <div class="merge-result-content ">
+                                                                            <a href={mergeListItem.record.href} target="_blank"
+                                                                                name={mergeListItem.record.highlight.TitleToDisplay}
+                                                                                onclick={runScriptMethod} data-id={mergeListItem.record.Id}
+                                                                                data-rank={indexVar}
+                                                                                data-allowlinkopennewtab={mergeListItem.record.allowLinkOpenNewTab}
+                                                                                data-sub={mergeListItem.record.highlight.TitleToDisplayString}
+                                                                                data-url={mergeListItem.record.href}
+                                                                                data-type={mergeListItem.record.objName}
+                                                                                data-index={mergeListItem.record.sourceName}
+                                                                                data-autotuned={mergeListItem.record.autotuned}
+                                                                                data-recordid={mergeListItem.record._id}
+                                                                                class="su__text-truncate-custom su__d-block mergeVersionData-decoration">
+                                                                                <lightning-formatted-rich-text value={mergeListItem.record.version}>
+                                                                                </lightning-formatted-rich-text>
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                </template>
+                                                            </template>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </template>
+                                </template>
+                            </div>
+                        </template>
+                    </ul>
+                    <!-- <div class={listViewMetadatarelatedTilesStatus}>
+                                <template if:false={hideTitle}>
+                                </template>
+                            </div> -->
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

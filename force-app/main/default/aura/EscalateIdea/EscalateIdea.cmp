@@ -1,0 +1,57 @@
+<aura:component controller="ManageAhaIdeaController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" access="global" >
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="message" type="String" default="Record updated successfully!"/>
+    <aura:attribute name="ahaUniqueId" type="String" default=""/>
+    <aura:attribute name="showEscalteModal" type="Boolean" default="false"/>
+    <aura:attribute name="hideEscalteModal" type="Boolean" default="false"/>
+    <aura:attribute name="showSpinner" type="Boolean" default="false"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doUpdate}"/>
+    <aura:attribute name="mapforParamters" type="Map" default="{}"/>
+    <!--Custom Styles for Modal Header and Footer-->
+
+    <aura:html tag="style">
+        .slds-p-around--medium {
+        padding: 0rem !important;
+        }
+        .slds-modal__content{
+        overflow-y:hidden !important;
+        height:unset !important;
+        max-height:unset !important;
+        }
+        .cuf-content {
+        padding: 0 0rem !important;
+        }
+    </aura:html>
+    <!--Modal Header-->
+    <div class="modal-header slds-modal__header slds-size_1-of-1">
+        <h4 style="font=size:25px" class="title slds-text-heading--medium">Escalate Idea</h4>
+    </div>
+    <!--End Modal Header-->
+    <aura:if isTrue="{!v.showEscalteModal}">
+        <!--Modal Body-->
+          <div style="padding-top: 20px;padding-bottom: 20px;" class="slds-modal__content slds-p-around--x-small slds-align_absolute-center slds-size_1-of-1 slds-is-relative">
+            <form class="slds-form--stacked">
+                <p style="font-size: 20px">Do you Really Want to Escalate the Idea?</p>
+            </form>
+        </div>
+        <!--End of Modal Body-->
+
+        <!--Modal Footer-->
+        <div class="modal-footer slds-modal__footer slds-size_1-of-1">
+            <lightning:button variant="Brand" class="slds-button" label="Escalate Idea" onclick="{!c.escalateIdea}"/>
+            <lightning:button variant="Brand" class="slds-button" label="Cancel" onclick="{!c.closeModal}"/>
+        </div>
+    </aura:if>
+     <aura:if isTrue="{!v.hideEscalteModal}">
+         <div style="padding-top: 20px;padding-bottom: 20px;" class="slds-modal__content slds-p-around--x-small slds-align_absolute-center slds-size_1-of-1 slds-is-relative">
+             <form class="slds-form--stacked">
+                 <p style="font-size: 20px">This Idea is already Escalated.</p>
+             </form>
+         </div>
+         <div class="modal-footer slds-modal__footer slds-size_1-of-1">
+             <lightning:button variant="Brand" class="slds-button" label="Cancel" onclick="{!c.closeModal}"/>
+         </div>
+     </aura:if>
+    <!--End of Modal Footer-->
+
+</aura:component>

@@ -1,0 +1,233 @@
+<aura:component extends="c:PC_UtilityCmp"
+    implements="forceCommunity:availableForAllPageTypes,force:lightningQuickAction,force:hasRecordId,lightning:actionOverride"
+    access="global" Controller="PC_PartnerFundReqController">
+    <aura:attribute name="newRecordError" type="String" />
+    <aura:attribute name="simplepfObject" type="Object" />
+    <aura:attribute name="sObjectType" type="string" default="PartnerFundRequest" description="object API Name" />
+    <aura:attribute name="activitytypeoptions" type="List" default="[]" />
+    <aura:attribute name="campaignfocusoptions" type="List" default="[]" />
+    <aura:attribute name="activityobjectiveoptions" type="List" default="[]" />
+    <aura:attribute name="wrap" type="PC_PartnerFundReqController.wrap" />
+    <aura:attribute name="Activity" type="string" />
+    <aura:attribute name="Activity_Objective__c" type="string" />
+    <aura:attribute name="PoCurrencyOptions" type="List" default="[]" />
+    <aura:attribute name="PO_Currency__c" type="string" />
+    <aura:attribute name="Campaign_Focus__c" type="string" />
+    <aura:attribute name="Alliances__c" type="string" />
+    <aura:attribute name="Title" type="string" />
+    <aura:attribute name="Activity_Start_Date__c" type="string" />
+    <aura:attribute name="Activity_End_Date__c" type="string" />
+    <aura:attribute name="RequestedAmount" type="string" />
+    <aura:attribute name="Description" type="string" />
+    <aura:attribute name="PAllianceSelected" type="List" default="[]" />
+    <aura:attribute name="allianceoptions" type="List" default="[]" />
+    <aura:attribute name="requiredFields" type="List"
+        default="Title,Activity_Objective__c,RequestedAmount,PO_Currency__c,Description,Activity_End_Date__c,Activity_Objective__c,Activity_Start_Date__c,Activity,Alliances__c" />
+    <aura:attribute name="reqFieldMsg" type="string" default="Complete this field." />
+    <aura:attribute name="showDocNames" type="boolean" default="false" />
+    <aura:attribute name="docNames" type="string" default="" />
+    <aura:attribute name="filetype" type="string" default=".pdf,.png,.jpg,.jpeg,.doc,.docx,.xls,.xlsx" />
+    <aura:attribute name="docIds" type="List" default="[]" />
+    
+    <!-- PRIT26-11 -->
+    <aura:attribute name="showDedicatedResourceSection" type="Boolean" default="false"/>
+    <aura:attribute name="Dedicated_Resource_Name__c" type="string" />
+    <aura:attribute name="Job_Title__c" type="string" />
+    <aura:attribute name="Measurements_of_Success_Q1__c" type="string" />
+    <aura:attribute name="Measurements_of_Success_Q2__c" type="string" />
+    <aura:attribute name="Measurements_of_Success_Q3__c" type="string" />
+    <aura:attribute name="Measurements_of_Success_Q4__c" type="string" />
+	<!-- PRIT26-11 -->
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <lightning:recordEditForm aura:id="recordEditForm" recordId="{!v.recordId}" objectApiName="PartnerFundRequest">
+        <lightning:messages />
+        <lightning:card>
+            <div class="heading-36 slds-m-bottom_large">Marketing Development Funds</div>
+            <div class="slds-p-left_small heading-22 slds-m-bottom_large">Request Information</div>
+            <div class="c-container">
+                <lightning:layout multipleRows="true">
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                        <div class="customRequired">
+                            <lightning:input aura:id="Title" name="Partner Fund Request Name" label="Activity Name"
+                                value="{!v.Title}" maxlength="35" />
+                        </div>
+                        <div role="alert" aura:id="Title_help" class="form-element__helpError none">{!v.reqFieldMsg}
+                        </div>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                        <div class="customRequired">
+                            <lightning:select name="Activity_Objective__c" aura:id="Activity_Objective__c"
+                                label="Activity Objective" value="{!v.Activity_Objective__c}">
+                                <aura:iteration items="{!v.activityobjectiveoptions}" var="item">
+                                    <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}" />
+                                </aura:iteration>
+                            </lightning:select>
+                        </div>
+                        <div role="alert" aura:id="Activity_Objective__c_help" class="form-element__helpError none">
+                            {!v.reqFieldMsg}</div>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                        <div class="customRequired">
+                            <lightning:select name="Activity" aura:id="Activity" label="Activity Type"
+                                value="{!v.Activity}" onchange="{!c.onActivityChange}">
+                                <aura:iteration items="{!v.activitytypeoptions}" var="item">
+                                    <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}" />
+                                </aura:iteration>
+                            </lightning:select>
+                        </div>
+                        <div role="alert" aura:id="Activity_help" class="form-element__helpError none">{!v.reqFieldMsg}
+                        </div>
+                    </lightning:layoutItem>
+                    <!-- PRIT26-11 -->
+                    <aura:if isTrue="{!v.showDedicatedResourceSection}">
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                            padding="around-small">
+                            <div class="customRequired">
+                                <lightning:input aura:id="Dedicated_Resource_Name__c" name="Dedicated Resource Name" label="Dedicated Resource Name"
+                                    value="{!v.Dedicated_Resource_Name__c}" maxlength="255" disabled="{!!v.showDedicatedResourceSection}"/>
+                                <div role="alert" aura:id="Dedicated_Resource_Name__c_help" class="form-element__helpError none">{!v.reqFieldMsg}
+                                </div>
+                            </div>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                            padding="around-small">
+                            <div class="customRequired">
+                                <lightning:input aura:id="Job_Title__c" name="Job Title" label="Job Title"
+                                    value="{!v.Job_Title__c}" maxlength="255" disabled="{!!v.showDedicatedResourceSection}"/>
+                                <div role="alert" aura:id="Job_Title__c_help" class="form-element__helpError none">{!v.reqFieldMsg}
+                                </div>
+                            </div>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                            padding="around-small">
+                            <div class="customRequired">
+                                <lightning:textarea aura:id="Measurements_of_Success_Q1__c" name="Measurements of Success Q1" label="Measurements of Success Q1"
+                                    value="{!v.Measurements_of_Success_Q1__c}" disabled="{!!v.showDedicatedResourceSection}"/>
+                                <div role="alert" aura:id="Measurements_of_Success_Q1__c_help" class="form-element__helpError none">{!v.reqFieldMsg}
+                                </div>
+                            </div>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                            padding="around-small">
+                            <div class="customRequired">
+                                <lightning:textarea aura:id="Measurements_of_Success_Q2__c" name="Measurements of Success Q2" label="Measurements Of Success Q2"
+                                    value="{!v.Measurements_of_Success_Q2__c}" disabled="{!!v.showDedicatedResourceSection}"/>
+                                <div role="alert" aura:id="Measurements_of_Success_Q2__c_help" class="form-element__helpError none">{!v.reqFieldMsg}
+                                </div>
+                            </div>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                            padding="around-small">
+                            <div class="customRequired">
+                                <lightning:textarea aura:id="Measurements_of_Success_Q3__c" name="Measurements of Success Q3" label="Measurements Of Success Q3"
+                                    value="{!v.Measurements_of_Success_Q3__c}" disabled="{!!v.showDedicatedResourceSection}"/>
+                                <div role="alert" aura:id="Measurements_of_Success_Q3__c_help" class="form-element__helpError none">{!v.reqFieldMsg}
+                                </div>
+                            </div>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                            padding="around-small">
+                            <div class="customRequired">
+                                <lightning:textarea aura:id="Measurements_of_Success_Q4__c" name="Measurements of Success Q4" label="Measurements Of Success Q4"
+                                    value="{!v.Measurements_of_Success_Q4__c}" disabled="{!!v.showDedicatedResourceSection}"/>
+                                <div role="alert" aura:id="Measurements_of_Success_Q4__c_help" class="form-element__helpError none">{!v.reqFieldMsg}
+                                </div>
+                            </div>
+                        </lightning:layoutItem>
+                    </aura:if>
+                    <!-- PRIT26-11 -->
+                    
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                        <div class="customRequired">
+                            <lightning:input aura:id="Description" label="Activity Description"
+                                value="{!v.Description}" />
+                        </div>
+                        <div role="alert" aura:id="Description_help" class="form-element__helpError none">
+                            {!v.reqFieldMsg}</div>
+                    </lightning:layoutItem>
+                    <!-- <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="4" padding="around-small">
+                        <div class="customRequired">
+                         <lightning:select name="Campaign_Focus__c" aura:id="Campaign_Focus__c" label="Campaign Focus" value="{!v.Campaign_Focus__c}">
+                                <aura:iteration items="{!v.campaignfocusoptions}" var="item">
+                                    <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                                </aura:iteration>
+                            </lightning:select>
+                            </div>
+                    <div role="alert" aura:id="Campaign_Focus__c_help" class="form-element__helpError none">{!v.reqFieldMsg}</div>
+                    </lightning:layoutItem> -->
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                        <div class="customRequired">
+                            <c:PC_reUsableMultiSelectLookup aura:id="Alliances__c"
+                                lstSelectedRecords="{!v.PAllianceSelected}" listOfSearchRecords="{!v.allianceoptions}"
+                                label="Alliance" />
+                        </div>
+                        <div role="alert" aura:id="Alliances__c_help" class="form-element__helpError none">
+                            {!v.reqFieldMsg}</div>
+                    </lightning:layoutItem>
+                    <!--PRIT25-368 -start-->
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                        <div class="customRequired">
+                            <lightning:helptext class="helpText" content="Please select the currency in which you’ll ultimately invoice Rubrik for reimbursement."/>
+                            <lightning:select name="PO_Currency" aura:id="PO_Currency__c" label="PO: Currency"
+                                value="{!v.PO_Currency__c}">
+                                <aura:iteration items="{!v.PoCurrencyOptions}" var="item">
+                                    <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}" />
+                                </aura:iteration>
+                            </lightning:select>
+                        </div>
+                        <div role="alert" aura:id="PO_Currency__c_help" class="form-element__helpError none">
+                            {!v.reqFieldMsg}</div>
+                    </lightning:layoutItem>
+                    <!--PRIT25-368 - end-->
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                        <div class="customRequired">
+                            <lightning:input aura:id="RequestedAmount" type="number" step="0.01" name="Requested Amount"
+                                label="Requested Amount (PO Currency)" value="{!v.RequestedAmount}" /><!-- PRIT25-368 -->
+                        </div>
+                        <div role="alert" aura:id="RequestedAmount_help" class="form-element__helpError none">
+                            {!v.reqFieldMsg}</div>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                        <div class="customRequired">
+                            <lightning:input aura:id="Activity_Start_Date__c" type="date" name="Activity Start Date"
+                                label="Activity Start Date" value="{!v.Activity_Start_Date__c}" />
+                        </div>
+                        <div role="alert" aura:id="Activity_Start_Date__c_help" class="form-element__helpError none">
+                            {!v.reqFieldMsg}</div>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                        <div class="customRequired">
+                            <lightning:input aura:id="Activity_End_Date__c" type="date" name="Activity End Date"
+                                label="Activity End Date" value="{!v.Activity_End_Date__c}" />
+                        </div>
+                        <div role="alert" aura:id="Activity_End_Date__c_help" class="form-element__helpError none">
+                            {!v.reqFieldMsg}</div>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12"
+                        padding="around-small">
+                        <lightning:fileUpload label="Upload File" name="uploadFile" multiple="true"
+                            accept="{!v.filetype}" onuploadfinished="{!c.handleUploadFinished}" />
+                    </lightning:layoutItem>
+                    <aura:if isTrue="{!v.showDocNames}">
+                        <div class="slds-text-body_small slds-text-color_error">{!v.docNames}</div>
+                    </aura:if>
+                </lightning:layout>
+                <div class="slds-m-top_large">
+                    <lightning:button label="Submit" variant="brand" onclick="{!c.handleSaveForm}" />
+                    <lightning:spinner aura:id="mySpinner" alternativeText="Saving.." title="Saving.." variant="brand"
+                        size="large" class="slds-hide" />
+                </div>
+            </div>
+        </lightning:card>
+    </lightning:recordEditForm>
+</aura:component>

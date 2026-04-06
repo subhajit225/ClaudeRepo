@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Pickup_fields_required</fullName>
+    <active>true</active>
+    <errorConditionFormula>Pickup_Required__c 
+&amp;&amp; (
+    ISBLANK(TEXT(Pickup_Country__c))
+    || ISBLANK( Available_Pick_Up_Day__c )
+    || ISBLANK( TEXT(Available_Pick_Up_Times__c ))
+    || ISBLANK( Contact_name__c )
+    || ISBLANK( Pick_up_Contact_Phone__c )
+    || ISBLANK( Pick_up_Contact_Email__c )
+)</errorConditionFormula>
+    <errorMessage>Please fill up the pickup details</errorMessage>
+</ValidationRule>

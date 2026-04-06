@@ -1,0 +1,629 @@
+<template>
+    <header class="partnership-application-header">
+        <svg onclick={handleRedirect} class="header-logo slds-m-right_large" width="145" height="44" viewBox="0 0 145 44" fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M115.678 14.251C113.984 14.251 113.22 14.7375 111.652 16.684V15.8436C111.652 14.8259 111.525 14.6937 110.55 14.6937H109.746C108.771 14.6937 108.644 14.8259 108.644 15.8436V31.8974C108.644 32.9151 108.771 33.0473 109.746 33.0473H110.55C111.525 33.0473 111.652 32.9151 111.652 31.8974V23.3617C111.652 21.1502 111.864 19.8243 112.33 18.9398C112.974 17.7186 114.375 17.1066 115.672 17.2955C115.974 17.3388 116.241 17.4451 116.529 17.5461C116.636 17.5832 116.759 17.6112 116.865 17.5631C116.974 17.5133 117.059 17.424 117.13 17.3277C117.302 17.0976 117.413 16.8199 117.544 16.5634C117.628 16.3984 117.711 16.2334 117.796 16.0641C117.968 15.7103 118.094 15.4453 118.094 15.313C118.135 14.7375 116.992 14.251 115.678 14.251Z"
+                fill="#070F52" />
+            <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M62.1291 14.251C60.4349 14.251 59.6712 14.7375 58.1036 16.684V15.8436C58.1036 14.8259 57.9764 14.6937 57.0013 14.6937H56.1965C55.2214 14.6937 55.0947 14.8259 55.0947 15.8436V31.8974C55.0947 32.9151 55.2214 33.0473 56.1965 33.0473H57.0013C57.9764 33.0473 58.1036 32.9151 58.1036 31.8974V23.3617C58.1036 21.1502 58.3149 19.8243 58.7812 18.9398C59.4243 17.7186 60.8266 17.1066 62.1225 17.2955C62.4246 17.3388 62.6927 17.4451 62.98 17.5461C63.0864 17.5832 63.2096 17.6112 63.316 17.5631C63.424 17.5133 63.5096 17.424 63.5806 17.3277C63.7528 17.0976 63.8644 16.8199 63.9946 16.5634C64.0782 16.3984 64.1624 16.2334 64.2475 16.0641C64.4178 15.7103 64.5445 15.4453 64.5445 15.313C64.587 14.7375 63.4427 14.251 62.1291 14.251Z"
+                fill="#070F52" />
+            <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M70.8448 25.3956C70.8448 27.1199 71.0145 28.0498 71.3952 28.8458C71.9881 29.9962 73.3021 30.7034 74.8275 30.7034C76.3105 30.7034 77.6243 29.9962 78.2182 28.8458C78.599 28.0498 78.7689 27.1199 78.7689 25.3956V15.8433C78.7689 14.8256 78.8963 14.6934 79.871 14.6934H80.6758C81.6506 14.6934 81.7773 14.8256 81.7773 15.8433V25.7495C81.7773 28.4481 81.354 29.9074 80.1676 31.2778C78.8963 32.782 76.9886 33.577 74.8275 33.577C72.6237 33.577 70.7181 32.782 69.4465 31.2778C68.2596 29.9074 67.8359 28.4481 67.8359 25.7495V15.8433C67.8359 14.8256 67.9626 14.6934 68.9377 14.6934H69.7425C70.7181 14.6934 70.8448 14.8256 70.8448 15.8433V25.3956Z"
+                fill="#070F52" />
+            <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M89.5087 23.8482C89.5087 27.9177 91.9253 30.7041 95.4002 30.7041C98.7476 30.7041 101.163 27.7844 101.163 23.7598C101.163 20.0452 98.6627 17.17 95.3577 17.17C91.9253 17.17 89.5087 19.9124 89.5087 23.8482ZM89.7218 17.3032C91.4581 15.2245 93.3233 14.2952 95.8659 14.2952C100.696 14.2952 104.256 18.3199 104.256 23.8482C104.256 29.4653 100.654 33.5777 95.781 33.5777C93.3233 33.5777 91.3739 32.6045 89.7218 30.5274V31.8973C89.7218 32.915 89.5943 33.0472 88.6189 33.0472H87.8148C86.8393 33.0472 86.7119 32.915 86.7119 31.8973V1.95547C86.7119 0.93887 86.8393 0.806641 87.8148 0.806641H88.6189C89.5943 0.806641 89.7218 0.93887 89.7218 1.95547V17.3032Z"
+                fill="#070F52" />
+            <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M125.03 31.8974C125.03 32.9151 124.902 33.0473 123.927 33.0473H123.122C122.147 33.0473 122.02 32.9151 122.02 31.8974V15.843C122.02 14.8265 122.147 14.6931 123.122 14.6931H123.927C124.902 14.6931 125.03 14.8265 125.03 15.843V31.8974ZM125.708 7.75244C125.708 8.99256 124.733 10.0103 123.546 10.0103C122.359 10.0103 121.385 8.99256 121.385 7.70799C121.385 6.51287 122.359 5.49463 123.546 5.49463C124.733 5.49463 125.708 6.51287 125.708 7.75244Z"
+                fill="#070F52" />
+            <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M139.499 15.2246C140.008 14.6935 140.008 14.6935 140.728 14.6935H142.042C142.804 14.6935 143.102 14.9151 143.102 15.4012C143.102 15.5779 142.932 15.8434 142.593 16.1973L136.532 22.5221L144.202 31.544C144.5 31.9418 144.669 32.2078 144.669 32.3845C144.669 32.8267 144.33 33.0477 143.567 33.0477H142.254C141.49 33.0477 141.49 33.0477 141.025 32.4728L134.413 24.6886L133.65 25.4847V31.8979C133.65 32.915 133.524 33.0477 132.55 33.0477H131.745C130.769 33.0477 130.643 32.915 130.643 31.8979V1.95599C130.643 0.938868 130.769 0.806641 131.745 0.806641H132.55C133.524 0.806641 133.65 0.938868 133.65 1.95599V21.4606L139.499 15.2246Z"
+                fill="#070F52" />
+            <mask id="mask0_791_267" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="14" y="0" width="14"
+                height="15">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M20.6793 0.316406C20.5537 0.361894 20.4355 0.436471 20.3357 0.540141L14.5891 6.5302C14.2359 6.89728 14.2359 7.4992 14.5891 7.86624L20.3357 13.8569C20.6894 14.2244 21.2657 14.2244 21.6185 13.8569L27.3615 7.86624C27.7137 7.4992 27.7137 6.89728 27.3615 6.5302L21.6185 0.540141C21.5191 0.436471 21.401 0.361894 21.2758 0.316406H20.6793Z"
+                    fill="white" />
+            </mask>
+            <g mask="url(#mask0_791_267)">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M20.6793 0.316406C20.5537 0.361894 20.4355 0.436471 20.3357 0.540141L14.5891 6.5302C14.2359 6.89728 14.2359 7.4992 14.5891 7.86624L20.3357 13.8569C20.6894 14.2244 21.2657 14.2244 21.6185 13.8569L27.3615 7.86624C27.7137 7.4992 27.7137 6.89728 27.3615 6.5302L21.6185 0.540141C21.5191 0.436471 21.401 0.361894 21.2758 0.316406H20.6793Z"
+                    fill="#070F52" />
+            </g>
+            <mask id="mask1_791_267" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="28" y="15" width="14"
+                height="15">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M34.6612 15.4793L28.9135 21.4693C28.5614 21.8369 28.5614 22.4377 28.9135 22.8054L34.6612 28.7955C35.0139 29.1625 35.5912 29.1625 35.9428 28.7955L41.6859 22.8054C42.0386 22.4377 42.0386 21.8358 41.6859 21.4683L35.9428 15.4793C35.767 15.2952 35.5349 15.2031 35.3023 15.2031C35.0697 15.2031 34.838 15.2952 34.6612 15.4793Z"
+                    fill="white" />
+            </mask>
+            <g mask="url(#mask1_791_267)">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M34.6612 15.4793L28.9135 21.4693C28.5614 21.8369 28.5614 22.4377 28.9135 22.8054L34.6612 28.7955C35.0139 29.1625 35.5912 29.1625 35.9428 28.7955L41.6859 22.8054C42.0386 22.4377 42.0386 21.8358 41.6859 21.4683L35.9428 15.4793C35.767 15.2952 35.5349 15.2031 35.3023 15.2031C35.0697 15.2031 34.838 15.2952 34.6612 15.4793Z"
+                    fill="#070F52" />
+            </g>
+            <mask id="mask2_791_267" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="10" y="37" width="4"
+                height="6">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M13.1473 37.8966L10.5936 40.5603C10.2408 40.9273 10.3118 41.4298 10.7512 41.6757L12.9502 42.7611C13.4113 42.9605 13.7879 42.6982 13.7879 42.1788V38.1738C13.7879 37.8554 13.6799 37.6855 13.5158 37.6855C13.4113 37.6855 13.2846 37.7543 13.1473 37.8966Z"
+                    fill="white" />
+            </mask>
+            <g mask="url(#mask2_791_267)">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M13.1473 37.8966L10.5936 40.5603C10.2408 40.9273 10.3118 41.4298 10.7512 41.6757L12.9502 42.7611C13.4113 42.9605 13.7879 42.6982 13.7879 42.1788V38.1738C13.7879 37.8554 13.6799 37.6855 13.5158 37.6855C13.4113 37.6855 13.2846 37.7543 13.1473 37.8966Z"
+                    fill="#070F52" />
+            </g>
+            <mask id="mask3_791_267" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="28" y="37" width="4"
+                height="6">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M28.1611 38.1738V42.1788C28.1611 42.6982 28.5377 42.9605 28.9988 42.7611L31.1979 41.6757C31.6373 41.4298 31.7087 40.9273 31.3565 40.5603L28.8022 37.8966C28.6649 37.7543 28.5377 37.6855 28.4338 37.6855C28.2691 37.6855 28.1611 37.8554 28.1611 38.1738Z"
+                    fill="white" />
+            </mask>
+            <g mask="url(#mask3_791_267)">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M28.1611 38.1738V42.1788C28.1611 42.6982 28.5377 42.9605 28.9988 42.7611L31.1979 41.6757C31.6373 41.4298 31.7087 40.9273 31.3565 40.5603L28.8022 37.8966C28.6649 37.7543 28.5377 37.6855 28.4338 37.6855C28.2691 37.6855 28.1611 37.8554 28.1611 38.1738Z"
+                    fill="#070F52" />
+            </g>
+            <mask id="mask4_791_267" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="28" y="29" width="8"
+                height="8">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M29.0677 29.6323C28.5696 29.6323 28.1611 30.0565 28.1611 30.5759V35.9789C28.1611 36.4972 28.5696 36.9235 29.0677 36.9235H34.2457C34.7439 36.9235 35.1524 36.4972 35.1524 35.9789V30.5759C35.1524 30.0565 34.7439 29.6323 34.2457 29.6323H29.0677Z"
+                    fill="white" />
+            </mask>
+            <g mask="url(#mask4_791_267)">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M29.0677 29.6323C28.5696 29.6323 28.1611 30.0565 28.1611 30.5759V35.9789C28.1611 36.4972 28.5696 36.9235 29.0677 36.9235H34.2457C34.7439 36.9235 35.1524 36.4972 35.1524 35.9789V30.5759C35.1524 30.0565 34.7439 29.6323 34.2457 29.6323H29.0677Z"
+                    fill="#070F52" />
+            </g>
+            <mask id="mask5_791_267" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="35" y="11" width="6"
+                height="4">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M38.6401 11.3112L36.0863 13.9772C35.734 14.3458 35.8531 14.6471 36.3518 14.6471H40.1924C40.69 14.6471 40.9414 14.2537 40.7508 13.7718L39.7094 11.4753C39.5746 11.2132 39.3592 11.0771 39.1342 11.0771C38.9654 11.0771 38.7905 11.1539 38.6401 11.3112Z"
+                    fill="white" />
+            </mask>
+            <g mask="url(#mask5_791_267)">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M38.6401 11.3112L36.0863 13.9772C35.734 14.3458 35.8531 14.6471 36.3518 14.6471H40.1924C40.69 14.6471 40.9414 14.2537 40.7508 13.7718L39.7094 11.4753C39.5746 11.2132 39.3592 11.0771 39.1342 11.0771C38.9654 11.0771 38.7905 11.1539 38.6401 11.3112Z"
+                    fill="#070F52" />
+            </g>
+            <mask id="mask6_791_267" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="28" y="1" width="4"
+                height="6">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M28.1611 2.09528V6.1003C28.1611 6.62023 28.4494 6.74506 28.8022 6.37745L31.3565 3.71326C31.7087 3.34672 31.6372 2.84371 31.1984 2.59828L28.9988 1.51293C28.8935 1.46692 28.7931 1.44629 28.7003 1.44629C28.3857 1.44629 28.1611 1.69436 28.1611 2.09528Z"
+                    fill="white" />
+            </mask>
+            <g mask="url(#mask6_791_267)">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M28.1611 2.09528V6.1003C28.1611 6.62023 28.4494 6.74506 28.8022 6.37745L31.3565 3.71326C31.7087 3.34672 31.6372 2.84371 31.1984 2.59828L28.9988 1.51293C28.8935 1.46692 28.7931 1.44629 28.7003 1.44629C28.3857 1.44629 28.1611 1.69436 28.1611 2.09528Z"
+                    fill="#070F52" />
+            </g>
+            <mask id="mask7_791_267" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="1" y="11" width="6"
+                height="4">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M2.2393 11.4753L1.19884 13.7734C1.00778 14.2537 1.25864 14.6471 1.75683 14.6471H5.59835C6.09704 14.6471 6.21665 14.3458 5.86341 13.9772L3.30915 11.3112C3.15863 11.1539 2.98429 11.0771 2.81502 11.0771C2.59 11.0771 2.37461 11.2132 2.2393 11.4753Z"
+                    fill="white" />
+            </mask>
+            <g mask="url(#mask7_791_267)">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M2.2393 11.4753L1.19884 13.7734C1.00778 14.2537 1.25864 14.6471 1.75683 14.6471H5.59835C6.09704 14.6471 6.21665 14.3458 5.86341 13.9772L3.30915 11.3112C3.15863 11.1539 2.98429 11.0771 2.81502 11.0771C2.59 11.0771 2.37461 11.2132 2.2393 11.4753Z"
+                    fill="#070F52" />
+            </g>
+            <mask id="mask8_791_267" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="6" y="7" width="8"
+                height="8">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M7.70353 7.35059C7.20536 7.35059 6.79688 7.77688 6.79688 8.29632V13.6971C6.79688 14.2171 7.20536 14.6428 7.70353 14.6428H12.8815C13.3802 14.6428 13.7882 14.2171 13.7882 13.6971V8.29632C13.7882 7.77688 13.3802 7.35059 12.8815 7.35059H7.70353Z"
+                    fill="white" />
+            </mask>
+            <g mask="url(#mask8_791_267)">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M7.70353 7.35059C7.20536 7.35059 6.79688 7.77688 6.79688 8.29632V13.6971C6.79688 14.2171 7.20536 14.6428 7.70353 14.6428H12.8815C13.3802 14.6428 13.7882 14.2171 13.7882 13.6971V8.29632C13.7882 7.77688 13.3802 7.35059 12.8815 7.35059H7.70353Z"
+                    fill="#070F52" />
+            </g>
+            <mask id="mask9_791_267" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="10" y="1" width="4"
+                height="6">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M12.9502 1.51293L10.7512 2.59828C10.3118 2.84371 10.2408 3.34672 10.5936 3.71326L13.1473 6.37745C13.5001 6.74506 13.7879 6.62023 13.7879 6.1003V2.09528C13.7879 1.69436 13.5634 1.44629 13.2487 1.44629C13.1554 1.44629 13.0556 1.46745 12.9502 1.51293Z"
+                    fill="white" />
+            </mask>
+            <g mask="url(#mask9_791_267)">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M12.9502 1.51293L10.7512 2.59828C10.3118 2.84371 10.2408 3.34672 10.5936 3.71326L13.1473 6.37745C13.5001 6.74506 13.7879 6.62023 13.7879 6.1003V2.09528C13.7879 1.69436 13.5634 1.44629 13.2487 1.44629C13.1554 1.44629 13.0556 1.46745 12.9502 1.51293Z"
+                    fill="#070F52" />
+            </g>
+            <mask id="mask10_791_267" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="35" y="29" width="6"
+                height="5">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M36.3518 29.6323C35.8531 29.6323 35.734 29.9331 36.0863 30.3006L38.6401 32.9677C38.9923 33.3357 39.4737 33.26 39.7094 32.802L40.7508 30.5055C40.9414 30.0257 40.69 29.6323 40.1924 29.6323H36.3518Z"
+                    fill="white" />
+            </mask>
+            <g mask="url(#mask10_791_267)">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M36.3518 29.6323C35.8531 29.6323 35.734 29.9331 36.0863 30.3006L38.6401 32.9677C38.9923 33.3357 39.4737 33.26 39.7094 32.802L40.7508 30.5055C40.9414 30.0257 40.69 29.6323 40.1924 29.6323H36.3518Z"
+                    fill="#070F52" />
+            </g>
+            <mask id="mask11_791_267" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="6" y="29" width="8"
+                height="8">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M7.70353 29.6322C7.20536 29.6322 6.79688 30.0564 6.79688 30.5758V35.9787C6.79688 36.4971 7.20536 36.9234 7.70353 36.9234H12.8815C13.3802 36.9234 13.7882 36.4971 13.7882 35.9787V30.5758C13.7882 30.0564 13.3802 29.6322 12.8815 29.6322H7.70353Z"
+                    fill="white" />
+            </mask>
+            <g mask="url(#mask11_791_267)">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M7.70353 29.6322C7.20536 29.6322 6.79688 30.0564 6.79688 30.5758V35.9787C6.79688 36.4971 7.20536 36.9234 7.70353 36.9234H12.8815C13.3802 36.9234 13.7882 36.4971 13.7882 35.9787V30.5758C13.7882 30.0564 13.3802 29.6322 12.8815 29.6322H7.70353Z"
+                    fill="#070F52" />
+            </g>
+            <mask id="mask12_791_267" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="1" y="29" width="6"
+                height="5">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M1.75683 29.6323C1.25864 29.6323 1.00778 30.0241 1.19884 30.505L2.2393 32.802C2.47546 33.26 2.95692 33.3357 3.30915 32.9677L5.86341 30.3006C6.21665 29.9331 6.09704 29.6323 5.59835 29.6323H1.75683Z"
+                    fill="white" />
+            </mask>
+            <g mask="url(#mask12_791_267)">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M1.75683 29.6323C1.25864 29.6323 1.00778 30.0241 1.19884 30.505L2.2393 32.802C2.47546 33.26 2.95692 33.3357 3.30915 32.9677L5.86341 30.3006C6.21665 29.9331 6.09704 29.6323 5.59835 29.6323H1.75683Z"
+                    fill="#070F52" />
+            </g>
+            <mask id="mask13_791_267" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="28" y="7" width="8"
+                height="8">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M29.0677 7.35059C28.5696 7.35059 28.1611 7.77688 28.1611 8.29632V13.6971C28.1611 14.2171 28.5696 14.6428 29.0677 14.6428H34.2457C34.7439 14.6428 35.1524 14.2171 35.1524 13.6971V8.29632C35.1524 7.77688 34.7439 7.35059 34.2457 7.35059H29.0677Z"
+                    fill="white" />
+            </mask>
+            <g mask="url(#mask13_791_267)">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M29.0677 7.35059C28.5696 7.35059 28.1611 7.77688 28.1611 8.29632V13.6971C28.1611 14.2171 28.5696 14.6428 29.0677 14.6428H34.2457C34.7439 14.6428 35.1524 14.2171 35.1524 13.6971V8.29632C35.1524 7.77688 34.7439 7.35059 34.2457 7.35059H29.0677Z"
+                    fill="#070F52" />
+            </g>
+            <mask id="mask14_791_267" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="14" y="30" width="14"
+                height="14">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M20.3357 30.4548L14.5891 36.4443C14.2359 36.8119 14.2359 37.4127 14.5891 37.7809L20.3357 43.7699C20.4158 43.8529 20.5075 43.9174 20.6049 43.9629H21.3499C21.4471 43.9174 21.5384 43.8529 21.6185 43.7699L27.3615 37.7809C27.7137 37.4127 27.7137 36.8119 27.3615 36.4443L21.6185 30.4548C21.4426 30.2707 21.2095 30.1792 20.9773 30.1792C20.7447 30.1792 20.5121 30.2707 20.3357 30.4548Z"
+                    fill="white" />
+            </mask>
+            <g mask="url(#mask14_791_267)">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M20.3357 30.4548L14.5891 36.4443C14.2359 36.8119 14.2359 37.4127 14.5891 37.7809L20.3357 43.7699C20.4158 43.8529 20.5075 43.9174 20.6049 43.9629H21.3499C21.4471 43.9174 21.5384 43.8529 21.6185 43.7699L27.3615 37.7809C27.7137 37.4127 27.7137 36.8119 27.3615 36.4443L21.6185 30.4548C21.4426 30.2707 21.2095 30.1792 20.9773 30.1792C20.7447 30.1792 20.5121 30.2707 20.3357 30.4548Z"
+                    fill="#070F52" />
+            </g>
+            <mask id="mask15_791_267" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="15" width="14"
+                height="15">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M6.01177 15.4793L0.264169 21.4693C-0.0880562 21.8369 -0.0880562 22.4377 0.264169 22.8054L6.01177 28.7955C6.3645 29.1625 6.94073 29.1625 7.29346 28.7955L13.037 22.8054C13.3892 22.4377 13.3892 21.8358 13.037 21.4683L7.29346 15.4793C7.1176 15.2952 6.88498 15.2031 6.65286 15.2031C6.42025 15.2031 6.18813 15.2952 6.01177 15.4793Z"
+                    fill="white" />
+            </mask>
+            <g mask="url(#mask15_791_267)">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M6.01177 15.4793L0.264169 21.4693C-0.0880562 21.8369 -0.0880562 22.4377 0.264169 22.8054L6.01177 28.7955C6.3645 29.1625 6.94073 29.1625 7.29346 28.7955L13.037 22.8054C13.3892 22.4377 13.3892 21.8358 13.037 21.4683L7.29346 15.4793C7.1176 15.2952 6.88498 15.2031 6.65286 15.2031C6.42025 15.2031 6.18813 15.2952 6.01177 15.4793Z"
+                    fill="#070F52" />
+            </g>
+        </svg>
+        <h1 class="heading-22 slds-p-left_large">Partnership Application</h1>
+    </header>
+    <template if:true={spinnerLoad}>
+        <lightning-spinner variant="brand" size="large"> </lightning-spinner>
+    </template>
+    <template if:false={spinnerLoad}>
+        <lightning-layout multiple-rows>
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+                <div class="slds-banner">
+                    <div class="slds-p-around_xx-large slds-card--left">
+                        <h2 class="heading-22 slds-m-bottom_medium">PARTNER PROGRAM</h2>
+                        <h1 class="heading-58 slds-m-bottom_medium" if:false={isSubmit}>Transform Your Business. Become a
+                            Rubrik Partner.</h1>
+                        <h1 class="heading-58" if:true={isSubmit}>Thank You for Registering!</h1>
+                        <p class="cardBodyDescription" if:false={isSubmit}>Rubrik partners are the foundation of our success. Rubrik connects you with top partners to help you meet your technology goals, such as product acquisition, implementation and integration, delivering Rubrik-as-a-service, and infrastructure outsourcing.</p>
+                        <p class="cardBodyDescription" if:true={isSubmit}>
+                            <lightning-formatted-rich-text value={saveMessage}></lightning-formatted-rich-text>
+                        </p>
+                    </div>
+                </div>
+            </lightning-layout-item>
+            <template if:false={isSubmit}>
+                <div class="section_header section_header--active" data-id="company-info-header">
+                    <span class="section_slno">1</span>
+                    <span class="section_check">
+                        <svg width="24" height="20" viewBox="0 0 24 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M1.22192 11.0747L9.15578 18.1614L22.7781 0.838501" stroke="#00A396"
+                                stroke-width="2.6521" stroke-linejoin="round" />
+                        </svg>
+                    </span>
+                    <h2 class="heading-36">Company Information</h2>
+                </div>
+                <lightning-layout-item onnextcompanyclick={handleCompanyNext} size="12" small-device-size="12"
+                    medium-device-size="12" large-device-size="12">
+                        <div class="slds-p-around_xx-large slds-p-right_none slds-size_1-of-2">
+                            <lightning-input type="text" name={fieldNames.companyName} label="Company Name" required
+                                value={companyName} onchange={handleChangeEvent}
+                                class="slds-p-around_small inputClass cmpInfo"></lightning-input>
+                            <lightning-input type="text" name={fieldNames.address1} label="Address 1" required
+                                value={address1} onchange={handleChangeEvent}
+                                class="slds-p-around_small inputClass cmpInfo"></lightning-input>
+                            <lightning-input type="text" name={fieldNames.address2} label="Address 2"
+                                value={address2} onchange={handleChangeEvent}
+                                class="slds-p-around_small inputClass"></lightning-input>
+                            <lightning-input type="text" name={fieldNames.city} label="City" required value={cityValue}
+                                onchange={handleChangeEvent} class="slds-p-around_small inputClass cmpInfo">
+                            </lightning-input>
+                            <lightning-combobox name={fieldNames.country} label="Country" value={countryValue}
+                                placeholder="--None--" onchange={handleChangeCountry} options={optionsCountry} required
+                                class="slds-p-around_small inputClass pc-dropdown cmpInfo"></lightning-combobox>
+                            <lightning-combobox name={fieldNames.state} label="State" value={stateValue}
+                                placeholder="--None--" options={optionsState} required onchange={handleChangeEvent}
+                                disabled={stateDisbaled} class="slds-p-around_small inputClass pc-dropdown cmpInfo">
+                            </lightning-combobox>
+                            <lightning-input type="text" name={fieldNames.postalCode} label="Postal Code" required
+                                value={postalCode} onchange={handleChangeEvent} max-length="20"
+                                class="slds-p-around_small inputClass cmpInfo"></lightning-input>
+                            <lightning-input type="text" name={fieldNames.website} label="Website" required
+                                value={website} onchange={handleChangeEvent}
+                                class="slds-p-around_small inputClass cmpInfo"></lightning-input>
+                            <lightning-textarea name={fieldNames.interestInRubrikPartner} required
+                                value={whyRubrikPartner} onchange={handleChangeEvent}
+                                label="Please provide an overview of your interest in becoming a Rubrik Partner."
+                                maxlength="150" class="slds-p-around_small inputClass cmpInfo"></lightning-textarea>
+                            <lightning-checkbox-group name="Core Business Focus"
+                                label="Please indicate what your core business is focussed on."
+                                options={coreBusinessOptions} value={coreBV} onchange={handleCoreBusinessOptions}
+                                required class="slds-p-around_small inputClass checkbox-group cmpInfo"></lightning-checkbox-group>
+                            <hr />
+                            <lightning-button variant="brand" label="Next" title="Next"
+                                onclick={handleNextCompanyInformation} class="slds-p-left_small">
+                            </lightning-button>
+                        </div>
+                </lightning-layout-item>
+                <div class="section_header" data-id="contact-info-header">
+                    <span class="section_slno">2</span>
+                    <span class="section_check">
+                        <svg width="24" height="20" viewBox="0 0 24 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M1.22192 11.0747L9.15578 18.1614L22.7781 0.838501" stroke="#00A396"
+                                stroke-width="2.6521" stroke-linejoin="round" />
+                        </svg>
+                    </span>
+                    <h2 class="heading-36">Contact Information</h2>
+                </div>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+                  
+                        <div class="slds-p-around_xx-large slds-p-right_none slds-size_1-of-2 ">
+                            <span class="slds-p-around_small cardBodyHeadline">Partner Portal Admin</span>
+                            <lightning-input type="text" label="First Name" required onchange={handleChangeEvent}
+                                name={fieldNames.firstName} class="slds-p-around_small inputClass conDetails">
+                            </lightning-input>
+                            <lightning-input type="text" label="Last Name" required onchange={handleChangeEvent}
+                                name={fieldNames.lastName} class="slds-p-around_small inputClass conDetails">
+                            </lightning-input>
+                            <lightning-input type="email" label="Email Address" required onchange={handleChangeEvent} 
+                                name={fieldNames.email} message-when-bad-input="Please enter a valid email"
+                                class="slds-p-around_small inputClass conDetails ppaClass">
+                            </lightning-input>
+                            <lightning-input type="text" label="Phone Number" required onchange={handleChangeEvent}
+                                name={fieldNames.phoneNumber}
+                                pattern="(\+\d{1,3}\s?)?((\(\d{3}\)\s?)|(\d{3})(\s|-?))(\d{3}(\s|-?))(\d{4})(\s?(([E|e]xt[:|.|]?)|x|X)(\s?\d+))?"
+                                class="slds-p-around_small inputClass conDetails"></lightning-input>
+                            <lightning-input type="text" label="Job Title" onchange={handleChangeEvent}
+                                name={fieldNames.title} class="slds-p-around_small inputClass "></lightning-input>
+                            <lightning-combobox name={fieldNames.contactType} label="Contact Type"
+                                value={partnerOnboardingRecord.Contact_Type__c} placeholder="Select"
+                                options={optionsContactType} required onchange={handleChangeEvent} disabled="true"
+                                class="slds-p-around_small inputClass pc-dropdown conDetails"></lightning-combobox>
+                            <hr />
+                            <span class="slds-p-around_small cardBodyHeadline">Sales Point of Contact</span>
+                            <lightning-input type="checkbox" label="Same as Partner Portal Admin"
+                                name={fieldNames.sameAsPartnerPortalAdmin} onchange={handleSalesPointAdminChange}
+                                class="slds-p-around_small inputClass conDetails" disabled={disableSalesPointCheck}>
+                            </lightning-input>
+                            <lightning-input type="text" label="First Name" required
+                                value={partnerOnboardingRecord.Sales_Contact_First_Name__c}
+                                name={fieldNames.salesFirstName} onchange={handleChangeEvent}
+                                class="slds-p-around_small inputClass conDetails" disabled={disableSalesPoint}>
+                            </lightning-input>
+                            <lightning-input type="text" label="Last Name" required
+                                value={partnerOnboardingRecord.Sales_Contact_Last_Name__c}
+                                name={fieldNames.salesLastName} onchange={handleChangeEvent}
+                                class="slds-p-around_small inputClass conDetails" disabled={disableSalesPoint}>
+                            </lightning-input>
+                            <lightning-input type="email" label="Email Address" required value={partnerOnboardingRecord.Sales_Contact_Email__c}
+                                name={fieldNames.salesEmail} onchange={handleChangeEvent} message-when-bad-input="Please enter a valid email"
+                                class="slds-p-around_small inputClass conDetails spClass" disabled={disableSalesPoint}>
+                            </lightning-input>
+                            <lightning-input type="text" label="Phone Number"
+                                value={partnerOnboardingRecord.Sales_Contact_Phone__c} onchange={handleChangeEvent}
+                                name={fieldNames.salesPhone}
+                                pattern="(\+\d{1,3}\s?)?((\(\d{3}\)\s?)|(\d{3})(\s|-?))(\d{3}(\s|-?))(\d{4})(\s?(([E|e]xt[:|.|]?)|x|X)(\s?\d+))?"
+                                class="slds-p-around_small inputClass" disabled={disableSalesPoint}></lightning-input>
+                            <lightning-input type="text" label="Job Title"
+                                value={partnerOnboardingRecord.Sales_Contact_Title__c} onchange={handleChangeEvent}
+                                name={fieldNames.salesTitle} class="slds-p-around_small inputClass"
+                                disabled={disableSalesPoint}></lightning-input>
+                            <lightning-combobox name={fieldNames.salesContactType} label="Contact Type"
+                                value={partnerOnboardingRecord.Sales_Point_Contact_Type__c} placeholder="Select"
+                                options={optionsContactType} required onchange={handleChangeEvent} disabled="true"
+                                class="slds-p-around_small inputClass pc-dropdown"></lightning-combobox>
+                            <hr />
+                            <span class="slds-p-around_small cardBodyHeadline">Technical Point of Contact</span>
+                            <lightning-input type="checkbox" label="Same as Partner Portal Admin"
+                                name={fieldNames.sameAsPartnerPortalAdminTech} checked={technicalPointAdmin}
+                                onchange={handleTechnicalPointAdminChange} class="slds-p-around_small inputClass conDetails"
+                                disabled={disableSalesPointCheck}></lightning-input>
+                            <lightning-input type="checkbox" label="Same as Sales Point of Contact"
+                                name={fieldNames.sameAsSalesPointOfContactTech} checked={technicalPointSales}
+                                onchange={handleTechnicalPointSalesChange} class="slds-p-around_small inputClass conDetails"
+                                disabled={disableTechPointCheck}></lightning-input>
+                            <lightning-input type="text" label="First Name" required onchange={handleChangeEvent}
+                                name={fieldNames.techFirstName} value={partnerOnboardingRecord.Technical_Contact_First_Name__c}
+                                class="slds-p-around_small inputClass  tpClass conDetails"
+                                disabled={disableTechnicalPoint}></lightning-input>
+                            <lightning-input type="text" label="Last Name" required onchange={handleChangeEvent}
+                                name={fieldNames.techLastName} value={partnerOnboardingRecord.Technical_Contact_Last_Name__c}
+                                class="slds-p-around_small inputClass  tpClass conDetails"
+                                disabled={disableTechnicalPoint}></lightning-input>
+                            <lightning-input type="email" label="Email Address" required name={fieldNames.techEmail}
+                                value={partnerOnboardingRecord.Technical_Contact_Email__c} onchange={handleChangeEvent}
+                                message-when-bad-input="Please enter a valid email" class="slds-p-around_small inputClass conDetails tpClass"
+                                disabled={disableTechnicalPoint}>
+                            </lightning-input>
+                            <lightning-input type="text" label="Phone Number"
+                                name={fieldNames.techPhone} value={partnerOnboardingRecord.Technical_Contact_Phone__c} onchange={handleChangeEvent}
+                                pattern="(\+\d{1,3}\s?)?((\(\d{3}\)\s?)|(\d{3})(\s|-?))(\d{3}(\s|-?))(\d{4})(\s?(([E|e]xt[:|.|]?)|x|X)(\s?\d+))?"
+                                class="slds-p-around_small inputClass" disabled={disableTechnicalPoint}>
+                            </lightning-input>
+                            <lightning-input type="text" label="Job Title" name={fieldNames.techTitle}
+                                value={partnerOnboardingRecord.Technical_Contact_Title__c} onchange={handleChangeEvent}
+                                class="slds-p-around_small inputClass" disabled={disableTechnicalPoint}>
+                            </lightning-input>
+                            <lightning-combobox name={fieldNames.techContactType} label="Contact Type"
+                                value={partnerOnboardingRecord.Technical_Point_Contact_Type__c} placeholder="Select"
+                                options={optionsContactType} required onchange={handleChangeEvent} disabled="true"
+                                class="slds-p-around_small inputClass pc-dropdown">
+                            </lightning-combobox>
+                            <hr />
+                            <lightning-button variant="brand" label="Back" title="Back"
+                                onclick={handleBackPartnerPortalAdmin} class="slds-m-left_small">
+                            </lightning-button>
+                            <lightning-button variant="brand" label="Next" title="Next"
+                                onclick={handleNextPartnerPortalAdmin} class="slds-m-left_large">
+                            </lightning-button>
+                        </div>
+                </lightning-layout-item>
+                <div class="section_header" data-id="business-info-header">
+                    <span class="section_slno">3</span>
+                    <span class="section_check">
+                        <svg width="24" height="20" viewBox="0 0 24 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M1.22192 11.0747L9.15578 18.1614L22.7781 0.838501" stroke="#00A396"
+                                stroke-width="2.6521" stroke-linejoin="round" />
+                        </svg>
+                    </span>
+                    <h2 class="heading-36">Business Information</h2>
+                </div>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+                   
+                        <div class="slds-p-around_xx-large slds-p-right_none slds-size_1-of-2 ">
+                            <div class="position-relative">
+                                <template if:true={showSpinner}>
+                                    <lightning-spinner alternative-text="Loading..." class="spinner" size="large"></lightning-spinner>
+                                </template>
+                                <template if:true={isSegmentShown}>
+                                    <lightning-combobox name={fieldNames.segment} label="Segment" value={segmentValue}
+                                        placeholder="Select" options={optionsSegment} required
+                                        onchange={handleChangeSegment} class="slds-p-around_small inputClass pc-dropdown">
+                                    </lightning-combobox>
+                                    <div class="slds-p-horizontal_small">
+                                        <template for:each={allSegmentValues} for:item="value">
+                                            <lightning-pill key={value} label={value} name={value}
+                                                onremove={handleRemoveSegment}></lightning-pill>
+                                        </template>
+                                    </div>
+                                </template>
+                                <lightning-combobox name={fieldNames.distributor} label="Distributor"
+                                    value={distributorValues} placeholder="Select" options={optionsDistributor} required={distiRequired}
+                                    onchange={handleChangeEvent} disabled={isDistributorDisabled}
+                                    class="slds-p-around_small inputClass pc-dropdown"></lightning-combobox>
+                            </div>
+                            <div class="slds-p-around_small">
+                                <div class="cardBodyTag slds-m-vertical_medium">Note to North America Resellers</div>
+                                <span class="text-16">
+                                    <p>Rubrik has a closed-source distribution model in North America for Partners
+                                        selling
+                                        into the non-Public Sector markets (Rubrik Public Sector markets include Fedral,
+                                        State, Local and state-funded Education).
+                                        This means that authorized partners who sell Rubrik products and services into
+                                        non-Public Sector US customers will be required to choose one Rubrik authorized
+                                        Distributor from whom to purchase. Once a reseller has selected their
+                                        distributor of choice, they will work exclusively with that distributor for all
+                                        Rubrik products and services for a minimum period of one year.
+                                    </p>
+                                </span>
+                            </div>
+                            <lightning-checkbox-group name="Vendors"
+                                label="Please indicate which vendors your organization works with today."
+                                options={vendorOptions} value={vendorValues} onchange={handleVendorChange} required
+                                class="slds-p-around_small inputClass  pc-checkbox-group seClass"></lightning-checkbox-group>
+                            <lightning-textarea name={fieldNames.additionalComments} value=""
+                                label="Additional Comments" maxlength="150" onchange={handleChangeEvent}
+                                class="slds-p-around_small inputClass"></lightning-textarea>
+                            <lightning-combobox name={fieldNames.referralSource} label="Referral Source"
+                                placeholder="Select" options={referralSourceOptions} required
+                                onchange={handleChangeEvent} class="slds-p-around_small inputClass pc-dropdown seClass">
+                            </lightning-combobox>
+                            <lightning-input type="text" label="Number of outside sales reps?"
+                                name={fieldNames.outsideSales} onchange={handleChangeEvent} required
+                                class="slds-p-around_small inputClass seClass"></lightning-input>
+                            <lightning-input type="text" label="Number of technical sales reps?"
+                                name={fieldNames.technicalSales} onchange={handleChangeEvent} required
+                                class="slds-p-around_small inputClass seClass"></lightning-input>
+                            <lightning-input type="text" label="Number of inside sales reps?"
+                                name={fieldNames.insideSales} onchange={handleChangeEvent} required
+                                class="slds-p-around_small inputClass seClass"></lightning-input>
+                            <hr />
+                            <lightning-button variant="brand" label="Back" title="Back"
+                                onclick={handleBackBusinessInformation} class="slds-m-left_small">
+                            </lightning-button>
+                            <lightning-button variant="brand" label="Next" title="Next"
+                                onclick={handleNextBusinessInformation} class="slds-m-left_large">
+                            </lightning-button>
+                        </div>
+                </lightning-layout-item>
+                <div class="section_header" data-id="legal-disclaimer-header">
+                    <span class="section_slno">4</span>
+                    <span class="section_check">
+                        <svg width="24" height="20" viewBox="0 0 24 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M1.22192 11.0747L9.15578 18.1614L22.7781 0.838501" stroke="#00A396"
+                                stroke-width="2.6521" stroke-linejoin="round" />
+                        </svg>
+                    </span>
+                    <h2 class="heading-36">Legal Disclaimer</h2>
+                </div>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+                
+                        <div class="slds-p-around_xx-large slds-p-right_none slds-size_1-of-2 ">
+                            <div class="slds-p-around_small">
+                                <span class="cardBodyTag">Disclaimer</span>
+                                <span class="text-16">
+                                    <p class="slds-p-top_medium">
+                                        By completing and submitting this Online Company Application ("Application"),
+                                        Company promises Rubrik: All the following information is accurate
+                                        , complete and current. Company will notify Rubrik promptly of all changes. The
+                                        person(s) completing this application and accepting
+                                        the Terms is authorized by the Company to do so. Once Rubrik's accepts Company's
+                                        application, the Company acknowledges and agrees it is bound
+                                        by the Terms, and, if Company do not agrees to all of these Terms, do not
+                                        proceed to complete this Application and accept these Terms.
+                                    </p>
+                                </span>
+                            </div>
+                            <lightning-radio-group name={fieldNames.employedByGovEntity}
+                                label="Is any owner, officer, or director of your company currently employed by a government entity (including public and state-owned entities) or have they been employed by a government entity within the past three years?"
+                                options={checkboxOptions} onchange={handleChangeEvent} required
+                                class="slds-p-around_small inputClass pa-radio-button-group disClass">
+                            </lightning-radio-group>
+                            <lightning-radio-group name={fieldNames.sellToGovEntity}
+                                label="Does your company do business with or sell to government entities (including public and state-owned entities)?"
+                                options={checkboxOptions} onchange={handleDisclaimer2Change} required
+                                class="slds-p-around_small inputClass pa-radio-button-group disClass">
+                            </lightning-radio-group>
+                            <template if:true={showDisclamer21}>
+                                <lightning-radio-group name={fieldNames.fcpap}
+                                    label="Does your company have FCPA policies or procedures in place designed to prevent violations of anticorruption regulations?"
+                                    options={checkboxOptions} onchange={handleChangeEvent} required
+                                    class="slds-p-around_small inputClass pa-radio-button-group disClass">
+                                </lightning-radio-group>
+                            </template>
+                            <lightning-radio-group name={fieldNames.rubRel}
+                                    label="Does any personnel, employee, owner, member, officer, or director of your company currently work for or with Rubrik in any capacity, or have any other employment, contractor, consulting, or business or financial relationship with Rubrik?"
+                                    options={checkboxOptions} onchange={handleChangeEvent} required
+                                    class="slds-p-around_small inputClass pa-radio-button-group disClass">
+                            </lightning-radio-group>
+                            <lightning-radio-group name={fieldNames.violationOfAntiCorruption}
+                                label="Has there ever been any violation, voluntary self-disclosure, investigation, government inquiry, allegation, or enforcement action by, against, or involving your company or anyone working on its behalf related to anti-corruption laws?"
+                                options={checkboxOptions} onchange={handleDisclaimer3Change} required
+                                class="slds-p-around_small inputClass pa-radio-button-group disClass">
+                            </lightning-radio-group>
+                            <template if:true={showDisclaimer31}>
+                                <lightning-input name={fieldNames.violationOfAnticorruptionLawNotes} type="text"
+                                    label="Please Explain" required onchange={handleChangeEvent}
+                                    class="inputClass disClass"></lightning-input>
+                            </template>
+                            <hr />
+                            <lightning-button variant="brand" label="Back" title="Back" onclick={handleBackDisclaimer}
+                                class="slds-m-left_small"></lightning-button>
+                            <lightning-button variant="brand" label="Next" title="Next" onclick={handleNextDisclaimer}
+                                class="slds-m-left_large"></lightning-button>
+                    </div>
+                </lightning-layout-item>
+                <div class="section_header" data-id="partnership--header">
+                    <span class="section_slno">5</span>
+                    <span class="section_check">
+                        <svg width="24" height="20" viewBox="0 0 24 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M1.22192 11.0747L9.15578 18.1614L22.7781 0.838501" stroke="#00A396"
+                                stroke-width="2.6521" stroke-linejoin="round" />
+                        </svg>
+                    </span>
+                    <h2 class="heading-36">Partnership Agreements</h2>
+                </div>
+                <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+                  
+                        <div class="slds-p-around_xx-large slds-p-right_none slds-size_1-of-2 ">
+                            <div class="slds-p-around_small">
+                                <span class="cardBodyTag">Terms & Conditions</span>
+                            </div>
+                            <div class="slds-p-around_small flex-box">
+                                <input type="checkbox" id="terms" name="MasterTermsAndConditions"
+                                    onchange={handlemasterTermsChange} checked={masterAgreementCheck} disabled
+                                    class="inputClass pc-checkbox slds-m-right_small"></input>
+                                <label for="terms" class="slds-form-element__label"> I agree to
+                                    the <a href="#" onclick={openMasterModel} class="agreement-link"> Master Terms and
+                                        Conditions</a></label>
+                            </div>
+                            <template if:true={showAgreementLabel}>
+                                <label class="agreement-label">Please sign the following agreements:</label>
+                            </template>
+                            <template if:true={resellerAgreement}>
+                                <div class="agreement-wrapper">
+                                    <input type="checkbox" id="reseller" name="ResellerAgreement"
+                                        onchange={handleResellerAgreementChange} checked={resellerAgreementCheck}
+                                        disabled class="inputClass pc-checkbox"></input>
+                                    <!-- <label for="reseller" style="display: inline;" class="slds-form-element__label"> I agree to the <a href="#" onclick={openResellerModel}> Reseller Agreement</a></label> -->
+                                    <a href="#" class="agreement-link" onclick={openResellerModel}> Reseller
+                                        Agreement</a>
+                                </div>
+                            </template>
+                            <template if:true={mspAgreement}>
+                                <div class="agreement-wrapper">
+                                    <input type="checkbox" id="msp" name="MSPAgreement"
+                                        onchange={handleMSPAgreementChange} checked={mspAgreementCheck} disabled
+                                        class="inputClass pc-checkbox"></input>
+                                    <!-- <label for="msp" style="display: inline;" class="slds-form-element__label"> I agree to the <a href="#" onclick={openMSPModel}> MSP Agreement</a></label> -->
+                                    <a href="#" class="agreement-link" onclick={openMSPModel}> MSP Agreement</a>
+                                </div>
+                            </template>
+                            <hr />
+                            <lightning-button variant="brand" label="Back" title="Back"
+                                onclick={handleBackPartnershipAgreement} class="slds-m-left_small">
+                            </lightning-button>
+                            <lightning-button variant="brand" label="Submit" title="Submit" onclick={handleSubmit}
+                                class="slds-m-left_large"></lightning-button>
+                    </div>
+                </lightning-layout-item>
+            </template>
+        </lightning-layout>
+    </template>
+    <!--MODAL CONTAINER-->
+    <template if:true={openMasterTermsModal}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <!-- modal header start -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        title="Close" onclick={hideModalBox}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse"
+                            size="small"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="heading-22">
+                        <template if:true={masterTermsAndConditionsAgreed}> Master Terms and Conditions</template>
+                        <template if:true={resellerAgreed}>Reseller Agreement</template>
+                        <template if:true={mspAgreed}>MSP Agreement</template>
+                    </h2>
+                </header>
+                <!-- modal body start -->
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning-layout>
+                        <lightning-layout-item size="12" small-device-size="12" medium-device-size="12"
+                            large-device-size="12" class="layout-item">
+                            <template if:true={masterTermsAndConditionsAgreed}>
+                                <iframe src={masterUrl} width="100%" height="100%" class="slds-p-around_medium"></iframe>
+                            </template>
+                            <template if:true={resellerAgreed}>
+                                <iframe src={resellerUrl} width="100%" height="100%" class="slds-p-around_medium"></iframe>
+                            </template>
+                            <template if:true={mspAgreed}>
+                                <iframe src={mspUrl} width="100%" height="100%" class="slds-p-around_medium"></iframe>
+                            </template>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

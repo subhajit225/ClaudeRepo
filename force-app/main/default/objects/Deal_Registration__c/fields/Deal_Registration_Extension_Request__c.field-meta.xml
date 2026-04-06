@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Deal_Registration_Extension_Request__c</fullName>
+    <label>Deal Registration Extension Request</label>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>Deal_Registration_Status__c</controllingField>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Pending Meeting Ext. Req. for next 10 Days</fullName>
+                <default>false</default>
+                <label>Pending Meeting Ext. Req. for next 10 Days</label>
+            </value>
+            <value>
+                <fullName>1st Deal Reg Ext. Req. for next 10 Days</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>1st Deal Reg Ext. Req. for next 10 Days</label>
+            </value>
+            <value>
+                <fullName>1st Deal Reg Ext. Req. for next 45 Days</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>1st Deal Reg Ext. Req. for next 45 Days</label>
+            </value>
+            <value>
+                <fullName>1st Meeting Ext. Req. for next 10 Days</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>1st Meeting Ext. Req. for next 10 Days</label>
+            </value>
+            <value>
+                <fullName>2nd Deal Reg Ext. Req. for next 10 Days</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>2nd Deal Reg Ext. Req. for next 10 Days</label>
+            </value>
+            <value>
+                <fullName>2nd Deal Reg Ext. Req. for next 45 Days</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>2nd Deal Reg Ext. Req. for next 45 Days</label>
+            </value>
+            <value>
+                <fullName>2nd Meeting Ext. Req. for next 10 Days</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>2nd Meeting Ext. Req. for next 10 Days</label>
+            </value>
+            <value>
+                <fullName>3rd Deal Reg Ext. Req. for next 45 Days</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>3rd Deal Reg Ext. Req. for next 45 Days</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Pending Meeting</controllingFieldValue>
+            <valueName>Pending Meeting Ext. Req. for next 10 Days</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

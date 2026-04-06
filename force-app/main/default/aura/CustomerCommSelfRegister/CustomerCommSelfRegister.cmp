@@ -1,0 +1,172 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" controller="SelfRegisterLightning">
+    <aura:attribute name="Email" type="String"/>
+    <aura:attribute name="firstName" type="String"/>
+    <aura:attribute name="lastName" type="String"/>
+    <aura:attribute name="title" type="String"/>
+    <aura:attribute name="phone" type="String"/>
+    <aura:attribute name="informationType" type="String"/>
+    <aura:attribute name="information" type="String"/>
+    <aura:attribute name="errorMessage" type="String"/>
+    <aura:attribute name="hasMultipleAcc" type="Boolean" default="false"/>
+    <aura:attribute name="hasError" type="Boolean" default="false"/>
+    <aura:attribute name="invalidEmail" type="Boolean" default="false"/>
+    <aura:attribute name="showError" type="Boolean" default="false"/>
+    <aura:attribute name="invalidPhone" type="Boolean" default="false"/>
+    <aura:attribute name="stopRegister" type="Boolean" default="false"/>
+    <!-- GTC denied -->
+    <aura:attribute name="isDeniedAccount" type="Boolean" default="false"/>
+    <aura:attribute name="spinner" type="boolean" default="FALSE"/>
+
+    <!--loading spinner start-->
+    <aura:if isTrue="{!v.spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading...</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    <!-- Loading spinner end-->   
+
+    <div class="slds-size_1-of-1 slds-wrap">
+        <div class="slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12  nopad" style="background-color: #2E4E52">
+            <div class="container">
+                <div class="slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12 ">
+                    <div class="slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12 " style="Padding:20px 15px;">
+                        <span class="block">
+                            <img src="{!$Resource.RubrikCustomerCommunity+'/RubrikCommunity/Images/logo.png'}" styleClass="headerlogo text-left" />
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    	<div class="slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12  nopad rubrik-banner" style="{!'background-image: url('+$Resource.RubrikCustomerCommunity+'/RubrikCommunity/Images/NewBanner.png);background-repeat: no-repeat;background-size: cover;'}">
+            <div class="container">
+                <div class="slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12  banner-cover">
+                    <div class="slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12  loginBlock">
+                        <div class="slds-large-size_7-of-12 slds-medium-size_7-of-12 slds-small-size_12-of-12 slds-x-small-size_12-of-12 nopad leftBlockLogin">
+                            <div class="slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-small-size_12-of-12  nopad col-md-2">
+                                <p class="paragraphHeading">World-Class 24/7 Support Committed to Your Success</p>
+                                <p class="Paragraph">
+                                    Rubrik provides around-the-clock support and customized support to deliver the best customer experience. Our highly experienced Support Engineers deliver proactive, real-time professional services 24/7 to increase your stability, efficiency, and effectiveness. If you have a question, we have an answer.
+                                </p>
+                                <a class="rubrik-btn rubrik-btn--main  " target="_blank" href="https://www.rubrik.com/wp-content/uploads/2018/03/DATA-SHEET-Rubrik-Premium-Support.pdf" title="Download Data Sheet"> Download Data Sheet </a>
+                            </div>
+                        </div>
+                        <div class="slds-large-size_5-of-12 slds-medium-size_5-of-12 slds-small-size_12-of-12 slds-x-small-size_12-of-12 nopad rightBlockLogin" style="">
+                            <div class="Absolute-Center is-Responsive text-center">
+                            	 <div class="Absolute-Center is-Responsive text-center">
+                                    <div class="container-fluid center marginContainer">
+                                        <div class="row text-left">
+                                            <h2 Class="loginHeading" style="font-size:23px !important;">
+                                                Register to Support Portal
+                                            </h2>
+                                            <div class="form-group login-form-group">
+
+                                                <lightning:input required="true" label="First Name" value="{!v.firstName}" Class="form-control block inputrubrik" maxlength="40"/>
+                                                <aura:if isTrue="{!and(v.hasError,or(v.firstName == '',v.firstName == null))}">
+                                                    <p style="color:red;">This field is required</p>
+                                                </aura:if>
+                                            </div>
+                                            <div class="form-group login-form-group">
+
+                                                <lightning:input label="Last Name" required="true" value="{!v.lastName}" Class="form-control block inputrubrik" maxlength="40"/>
+                                                <aura:if isTrue="{!and(v.hasError,or(v.lastName == '',v.lastName == null))}">
+                                                    <p style="color:red;">This field is required</p>
+                                                </aura:if>
+                                            </div>
+                                            <div class="form-group login-form-group">
+
+                                                <lightning:input aura:id = "email" label="Email" required="true" value="{!v.Email}" class="form-control block inputrubrik" onchange="{!c.onEmailChange}"/>
+                                                <aura:if isTrue="{!and(v.hasError,or(v.Email == '',v.Email == null))}">
+                                                    <p style="color:red;">This field is required</p>
+                                                </aura:if>
+                                                <aura:if isTrue="{!and(v.invalidEmail,v.Email!=null)}">
+                                                <p style="color:red;">Please enter correct Email</p>
+                                                </aura:if>
+                                            </div>
+                                            <div class="form-group login-form-group">
+                                                <lightning:input label="Title" required="true" value="{!v.title}" Class="form-control block inputrubrik"/>
+                                                <aura:if isTrue="{!and(v.hasError,or(v.title == '',v.title == null))}">
+                                                    <p style="color:red;">This field is required</p>
+                                                </aura:if>
+
+                                            </div>
+                                            <div class="form-group login-form-group">
+                                                <lightning:input label="Phone Number" required="true"  value="{!v.phone}" Class="form-control block inputrubrik"/>
+                                                <aura:if isTrue="{!and(v.hasError,or(v.phone == '',v.phone == null))}">
+                                                    <p style="color:red;">This field is required</p>
+                                                </aura:if>
+                                                <aura:if isTrue="{!and(v.invalidPhone,v.phone!=null)}">
+                                                    <p style="color:red;">Please enter correct phone number</p>
+                                                </aura:if>
+                                            </div>
+                                            By clicking <i>Register</i>, you confirm that you have read and agreed to the <a target="_blank" href="https://support.rubrik.com/resource/1641890920000/SupportCommunityTermsAndConditions#view=FitH">Terms and Conditions</a> and that you agree to the processing of your personal data by Rubrik as described in the <a target="_blank" href="https://www.rubrik.com/legal/privacy-policy">Privacy Policy</a>.
+                                            <lightning:button variant="brand" label="Register" title="Brand action" class="form-submit-btn" onclick="{!c.handleRegister}" disabled="{!v.stopRegister}" />
+                                            <div class="form-group" style="padding:10px 0px;text-align:center;margin-bottom:0px">
+                                            </div>
+                                            Register for <a href="https://partner.rubrik.com/s/login" target="_blank">Partner Portal</a> access.
+                                            <div class="form-group text-right">
+                                                <a href="/s/" class="loginreturn">Return to Log in</a><br />
+                                                <!--a href="{!$Page.SiteLogin}" class="loginreturn">Return to Log in</a><br /-->
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	<aura:if isTrue="{!v.showError}">
+        <div class="demo-only" style="height: 640px;">
+            <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header slds-modal__header_empty">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.closeModal}">
+                            <lightning:icon iconName="action:remove" alternativeText="Approved" size="xx-small"/>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <p>{!v.errorMessage}</p>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <button class="slds-button slds-button_neutral"  onclick="{!c.closeModal}">Close</button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </aura:if>
+    <aura:if isTrue="{!v.isDeniedAccount}">
+        <div class="demo-only" style="height: 640px;">
+            <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header slds-modal__header_empty">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.closeModal}">
+                            <lightning:icon iconName="action:remove" alternativeText="Approved" size="xx-small"/>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <div class="">
+                            <div class="">
+                                <span style="color:red;">Access Blocked:</span> The account you are attempting to register with is currently non-compliant with Global Trade Compliance regulations. As a result, your account cannot be created.
+                            </div>
+                        </div>  
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <button class="slds-button slds-button_neutral"  onclick="{!c.closeModal}">Close</button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </aura:if>
+
+</aura:component>

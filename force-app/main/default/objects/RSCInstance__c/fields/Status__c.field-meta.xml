@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Status__c</fullName>
+    <description>It represents the status of the RSC Instance</description>
+    <label>RSC Status</label>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>PENDING_CREATION</fullName>
+                <default>false</default>
+                <label>Pending Creation</label>
+            </value>
+            <value>
+                <fullName>PENDING_MIGRATION</fullName>
+                <default>false</default>
+                <label>Pending Migration</label>
+            </value>
+            <value>
+                <fullName>PENDING_POST_PROCESSING</fullName>
+                <default>false</default>
+                <label>Pending Post Processing</label>
+            </value>
+            <value>
+                <fullName>ACTIVE</fullName>
+                <default>false</default>
+                <label>Active</label>
+            </value>
+            <value>
+                <fullName>HOLD</fullName>
+                <default>false</default>
+                <label>Hold</label>
+            </value>
+            <value>
+                <fullName>GRACE</fullName>
+                <default>false</default>
+                <label>Grace</label>
+            </value>
+            <value>
+                <fullName>MARKED_FOR_DELETION</fullName>
+                <default>false</default>
+                <label>Marked For Deletion</label>
+            </value>
+            <value>
+                <fullName>DELETED</fullName>
+                <default>false</default>
+                <label>Deleted</label>
+            </value>
+            <value>
+                <fullName>SUSPENDED</fullName>
+                <default>false</default>
+                <label>Suspended</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

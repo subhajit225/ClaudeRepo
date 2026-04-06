@@ -1,0 +1,27 @@
+<template>
+    <lightning-quick-action-panel header="Approve Or Reject Risk Profile">
+        <lightning-record-edit-form
+            object-api-name="Risk_Profile__c"
+            record-id={recordId}
+            onsuccess={handleSuccess}
+            onsubmit={handleSubmit}
+        >
+            <lightning-input-field
+                field-name="Validation_Status_Approval__c"
+                onchange={handleValidationChange}>
+            </lightning-input-field>
+
+            <template if:true={showRejectedComment}>
+                <lightning-input-field
+                    field-name="Rejected_Comments__c"
+                    required>
+                </lightning-input-field>
+            </template>
+
+            <div class="slds-m-top_medium slds-text-align_right">
+                <lightning-button type="submit" label="Save" variant="brand"></lightning-button>
+                <lightning-button label="Cancel" variant="neutral" class="slds-m-left_small" onclick={closeModal}></lightning-button>
+            </div>
+        </lightning-record-edit-form>
+    </lightning-quick-action-panel>
+</template>

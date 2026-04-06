@@ -1,0 +1,117 @@
+<apex:page showHeader="false" sidebar="false" cache="false" controller="NetAppQuoteLinesContr" contentType="text/xml" action="{!init}">
+    <block>
+    
+        <table table-layout="fixed" width="99%" border-color="#000000" border-width="0px" border-style="solid">
+            <table-column column-width="10%" />
+            <table-column column-width="26%" />
+            <table-column column-width="5%" />
+            <table-column column-width="5%" />
+            <table-column column-width="12%" />
+            <table-column column-width="12%" />
+            <table-column column-width="6%" />
+            <table-column column-width="10%" />
+            <table-column column-width="12%" />
+            <table-header>
+                <table-row font-weight="bold" font-size="0.7em" text-align="left" background-color="#47baef" color="#ffffff">
+                    <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="2pt" text-align="center">
+                        <block>Product Code</block>
+                    </table-cell>
+                    <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="2pt" text-align="Left">
+                        <block>Product Description</block>
+                    </table-cell>
+                    <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="2pt" text-align="Left">
+                        <block>Qty</block>
+                    </table-cell>
+                    <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="2pt" text-align="center">
+                        <block>Term (Mos)</block>
+                    </table-cell>
+                    <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="2pt" text-align="center">
+                        <block>Unit List Price</block>
+                    </table-cell>
+                    <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="2pt" text-align="center">
+                        <block>List Total</block>
+                    </table-cell>
+                    <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="2pt" text-align="center">
+                        <block>Disc %</block>
+                    </table-cell>
+                    <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="2pt" text-align="center">
+                        <block>Unit Sale Price</block>
+                    </table-cell>
+                    <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-top="2pt" text-align="center">
+                        <block>Net Total Price</block>
+                    </table-cell>
+                </table-row>
+            </table-header>
+            <table-body>
+                <apex:repeat var="qli" value="{!lstQuoteLinesToDisplay}">
+                    <table-row font-size="0.7em">
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left">
+                            <block>{!qli.ql.SBQQ__ProductCode__c}</block>
+                        </table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left">
+                            <block>{!qli.ql.SBQQ__Description__c}</block>
+                        </table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left">
+                            <!--<block>{!qli.ql.SBQQ__Quantity__c} TB</block>-->
+                            <block>                           
+                                <apex:outputText value="{0,number,###,###,##0}" >       
+                                    <apex:param value="{!qli.ql.SBQQ__Quantity__c}"/> 
+                                </apex:outputText>
+                                <!--<apex:outputText value=" TB" rendered="{!IF(qli.ql.Product_Level__c != 'Hardware' && qli.ql.Product_Level__c != 'Support' ,true,false)}"/>-->
+                                <apex:outputText value=" TB" rendered="{!IF(qli.ql.Qty_Unit_of_Measure__c == 'BETB', true, false)}"/>
+                            </block>
+                        </table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left">
+                            <block>{!qli.ql.SBQQ__SubscriptionTerm__c}</block>
+                        </table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left">
+                            <block>{!qli.ql.List_Price__c}</block>
+                        </table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left">
+                            <block>{!qli.ListPrice}</block>
+                        </table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left">
+                            <block>{!qli.ql.Approval_Discount__c}</block>
+                        </table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left">
+                            <block>{!qli.MonthlyUnitSalesPrice}</block><!--List_Price__c-->
+                        </table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left">
+                            <block>{!qli.NetTotal}</block>
+                        </table-cell>
+                    </table-row>
+                </apex:repeat>
+                <table-row  font-size="0.7em">
+                    <table-cell border="0px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left">
+                        <block></block>
+                    </table-cell>
+                    <table-cell border="0px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left">
+                        <block></block>
+                    </table-cell>
+                    <table-cell border="0px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left">
+                        <!--<block>{!qli.ql.SBQQ__Quantity__c} TB</block>-->
+                        <block> </block>
+                    </table-cell>
+                    <table-cell border="0px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left">
+                        <block></block>
+                    </table-cell>
+                    <table-cell border="0px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left">
+                        <block></block>
+                    </table-cell>
+                    <table-cell border="0px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left">
+                        <block></block>
+                    </table-cell>
+                    <table-cell border="0px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left">
+                        <block></block>
+                    </table-cell>
+                    <table-cell border="0px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left">
+                        <block font-weight="bold">TOTAL:</block>
+                    </table-cell>
+                    <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-right="2pt" text-align="left">
+                        <block>${!netTotal}</block>
+                    </table-cell>
+                </table-row>
+            </table-body>
+        </table>
+    </block>
+</apex:page>

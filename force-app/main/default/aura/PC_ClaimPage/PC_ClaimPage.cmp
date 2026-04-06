@@ -1,0 +1,32 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,force:hasRecordId" access="global"  controller="PC_ClaimController">
+    <aura:attribute name="recordId" type="string" /> 
+    <aura:attribute name="url" type="string"/>
+    <aura:attribute name="ReturnHome" type="string"/>
+    <aura:attribute name="imageSrc" type="String" />
+    <aura:attribute name="ReturnIncentives" type="string"/>
+    <aura:attribute name="NoAttachment" type="boolean" default="false"/>
+    <aura:attribute name="docObj" type="List" />
+    <aura:handler name="init" value="{!this}" action="{!c.doinit}"/>
+    <!-- need to change style -->
+    <lightning:button label="Claim Now" variant="brand" onclick="{!c.handleClick}"/>
+    <div class="slds-p-top_large slds-p-left_xx-large">
+     <aura:if isTrue="{!not(empty(v.docObj))}">
+                
+                <aura:iteration var="sld" items="{!v.docObj}">
+                    <span class="slds-p-bottom_xx-large">
+                    <!--<a href="{!'https://devsb-rubrik.cs67.force.com/partnersnew/servlet/servlet.FileDownload?file='+sld.contentId}" target="_blank" id="theLink1"><b>{!sld.name}</b></a> -->
+                    <iframe  src="{!'https://devsb-rubrik.cs67.force.com/partnersnew/servlet/servlet.FileDownload?file='+sld.contentId}" width="50%" height="500px" frameBorder="0"><b>{!sld.name}</b></iframe>
+                    </span>
+                </aura:iteration>
+                
+            </aura:if>
+      
+              
+        <div class="slds-p-top_large">
+            <a onclick="{!c.homedetails}" style="width:100%;" data-index="{!index}">Return To Home</a> |
+            <a onclick="{!c.incentivesdetails}" style="width:100%;" data-index="{!index}">Return To Incentives</a> 
+        </div>
+    </div>
+    
+    
+</aura:component>

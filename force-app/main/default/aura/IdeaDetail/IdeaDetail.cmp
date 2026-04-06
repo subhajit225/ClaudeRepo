@@ -1,0 +1,182 @@
+<aura:component controller="IdeaDetailController" implements="forceCommunity:availableForAllPageTypes" access="global">
+    <aura:handler name="init" value="this" action="{!c.init}"/>
+    <aura:attribute name="isLiked" type="Boolean"/>
+    <aura:attribute name="UserLiked" type="Boolean"/>
+    <aura:attribute name="hasError" type="Boolean"/>
+    <aura:attribute name="ideaRec" type="Idea"/>
+    <aura:attribute name="commentText" type="String"/>
+    <aura:attribute name="showcommentBox" type="boolean" default="false"/>
+    
+    <div class="slds-wrap slds-grid slds-size_12-of-12 containterDiv">
+        
+        <!--<div class="slds-large-size_1-of-12"></div>-->
+        <div class="slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 ">
+            <div class="slds-wrap slds-grid">
+                <div class="slds-large-size--2-of-12 slds-Medium-size--2-of-12 slds-small-size--2-of-12 slds-max-small-size--2-of-12 detailTitle"></div>
+                <div class="slds-large-size--10-of-12 slds-Medium-size--10-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 detailTitle">{!v.ideaRec.Title}</div>
+            </div>
+            <div class="slds-wrap slds-grid slds-large-size--12-of-12 slds-Medium-size--12-of-12 slds-small-size--12-of-12 slds-max-small-size--12-of-12 mainDiv ">
+                <div class="slds-large-size--2-of-12 slds-Medium-size--2-of-12 slds-small-size--2-of-12 slds-max-small-size--2-of-12 voteDiv">
+                    <div class ="slds-max-x-small-hide">
+                        <div class= "slds-size_12-of-12 slds-text-align_center">
+                            <lightning:buttonIconStateful aura:id="Up" iconName="utility:like" selected="{! v.isLiked }" onclick="{! c.handleLike }" alternativeText="Like" disabled="{! v.UserLiked }"/>
+                            
+                        </div>
+                        <div class="slds-size_12-of-12 slds-text-align_center">
+                            <lightning:buttonIconStateful aura:id="Down" iconName="utility:dislike" selected="{! if(and(!v.isLiked, v.UserLiked),true,false) }" onclick="{! c.handleLike }" alternativeText="Dislike" disabled="{! v.UserLiked }"/>
+                            
+                        </div>
+                        <div class="slds-size_12-of-12 slds-text-align_center">
+                            {!v.ideaRec.VoteTotal}
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-wrap slds-large-size--10-of-12 slds-Medium-size--10-of-12 slds-small-size--10-of-12 slds-max-small-size--12-of-12 eachIdeaBlock">
+                    <div class="slds-size_12-of-12">
+                        <span>  <b>Status: </b> {!if(v.ideaRec.Status == null,'Submited',v.ideaRec.Status)}</span>
+                         <span style="word-break: break-word;"> | <b>Category: </b> {!v.ideaRec.Categories}</span>
+                    </div>
+                    <div class="slds-size_12-of-12 description">
+                        <aura:unescapedHtml value="{!v.ideaRec.Body}" />
+                    </div>
+                    <div class="slds-size_12-of-12">
+                        <span class ="commentDate">{!v.ideaRec.NumComments} Comments</span>
+                        <span class ="commentDate"> | Posted by {!v.ideaRec.CreatedBy.CommunityNickname} on <ui:outputDateTime value="{!v.ideaRec.CreatedDate}" format="MM/dd/yyyy hh:mm a"/></span>
+                    </div>
+                    <div class =" mobileviewDiv slds-x-small-show-only">
+                        <div class= "slds-size_12-of-12 slds-text-align_center">
+                            <lightning:buttonIconStateful aura:id="Up" iconName="utility:like" selected="{! v.isLiked }" onclick="{! c.handleLike }" alternativeText="Like" disabled="{! v.UserLiked }"/>
+                            
+                        </div>
+                        <div class="slds-size_12-of-12 slds-text-align_center">
+                            <lightning:buttonIconStateful aura:id="Down" iconName="utility:dislike" selected="{! if(and(!v.isLiked, v.UserLiked),true,false) }" onclick="{! c.handleLike }" alternativeText="Like" disabled="{! v.UserLiked }"/>
+                            
+                        </div>
+                        <div class="slds-size_12-of-12 slds-text-align_center">
+                            {!v.ideaRec.VoteTotal}
+                        </div>
+                    </div>
+                    {!v.ideaRec[1].comments}
+                    <aura:if isTrue="{!v.ideaRec.NumComments != 0}"> 
+                        <div class="slds-grid slds-wrap slds-size_12-of-12 commentSection">
+                            <div class="slds-size_12-of-12 commnentHeading">Comments</div>
+                            <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                <thead>
+                                    <tr class="slds-max-x-small-hide slds-line-height_reset">
+                                        <th class="slds-cell-wrap" scope="col" >
+                                            <div  class ="Comment" title="Comment">Comment</div>
+                                        </th>
+                                        <th class="slds-cell-wrap" scope="col">
+                                            <div  class ="Date" title="Date">Date</div>
+                                        </th>
+                                        <th class="slds-cell-wrap" scope="col">
+                                            <div class ="Commentor" title="Commentor">Commentor</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                    <aura:iteration items="{!v.ideaRec.Comments}" var="comment">
+                                        <tr class=" slds-max-x-small-hide slds-hint-parent ">
+                                            <td data-label="Comment" class="slds-cell-wrap" style="    word-break: break-word;">
+                                                <div   class ="Comment"  title="{!comment.CommentBody}">
+                                                    <aura:unescapedHtml value="{!comment.CommentBody}"/>
+                                                </div>
+                                            </td>
+                                            <td data-label="Date" class="slds-cell-wrap">
+                                                <div  class ="Comment"  title="{!comment.CreatedDate}">
+                                                    <ui:outputDateTime value="{!comment.CreatedDate}" format="MM/dd/yyyy hh:mm a"/>
+                                                </div>
+                                            </td>
+                                            <td data-label="Commentor" class="slds-cell-wrap">
+                                                <div  class ="Comment"  title="{!comment.CreatedBy.Name}">{!comment.CreatedBy.CommunityNickname}</div>
+                                            </td>
+                                        </tr>
+                                        <div class="table slds-x-small-show-only"> 
+                                            <div class="mobViewDiv">
+                                                <div class="PhonecaseContent">  
+                                                    <span class="slds-small-size--6-of-12 nameMob no-pad ">Comment  : </span>
+                                                    <span class="slds-small-size--6-of-12 no-pad Font"  style="    word-break: break-word;">
+                                                        <p class="slds-float_right nameMob">  <aura:unescapedHtml value="{!comment.CommentBody}"/></p>
+                                                    </span>
+                                                </div>
+                                                <div class="PhonecaseContent">  
+                                                    <span class="slds-small-size--6-of-12 nameMob no-pad ">Date  : </span>
+                                                    <span class="slds-small-size--6-of-12 no-pad Font">
+                                                        <p class="slds-float_right nameMob"> <ui:outputDateTime value="{!comment.CreatedDate}" format="MM/dd/yyyy hh:mm a"/></p>
+                                                    </span>
+                                                </div>
+                                                <div class="PhonecaseContent">  
+                                                    <span class="slds-small-size--6-of-12 nameMob no-pad ">Commentor  : </span>
+                                                    <span class="slds-small-size--6-of-12 no-pad Font">
+                                                        <p class="slds-float_right nameMob"> {!comment.CreatedBy.CommunityNickname}</p>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                    </aura:iteration>
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </aura:if> 
+                    <aura:if isTrue="{!v.showcommentBox}">
+                        <div class="demo-only" style="height: 640px;">
+                            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                                <div class="slds-modal__container">
+                                    <header class="slds-modal__header">
+                                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.Cancel}">
+                                            <lightning:icon iconName="action:remove" alternativeText="Approved" size="xx-small"/>
+                                            <span class="slds-assistive-text">Close</span>
+                                        </button>
+                                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Add Comment</h2>
+                                        
+                                        <br/>
+                                        <aura:if isTrue="{!v.hasError}">
+                                            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert">
+                                                <span class="slds-assistive-text">error</span>
+                                                <span class="slds-icon_container slds-icon-utility-error slds-m-right_x-small" title="Description of icon when needed">
+                                                    <lightning:icon iconName="utility:error" alternativeText="Error!" variant="inverse" size="xxSmall"/>
+                                                </span>
+                                                <h2>
+                                                    Comment is required.
+                                                </h2>
+                                                
+                                            </div>
+                                        </aura:if>
+                                        
+                                    </header>
+                                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                                        <lightning:inputRichText value="{!v.commentText}" placeholder="Add Comment..."/>
+                                        
+                                    </div>
+                                    <footer class="slds-modal__footer addCommentsbtn">
+                                        <lightning:button label="Add Comment" onclick="{!c.addComment}"/>
+                                        <lightning:button label="Cancel" onclick="{!c.Cancel}"/>
+                                    </footer>
+                                </div>
+                            </section>
+                            <div class="slds-backdrop slds-backdrop_open"></div>
+                        </div>
+                        <div class="slds-size_12-of-12">
+                           
+                        </div>
+                        <div class="slds-size_12-of-12 slds-text-align_center saveandCancel">
+                            
+                        </div>
+                        <aura:set attribute="else">
+                            <div class="slds-size_12-of-12 slds-text-align_center addCommentsbtn">
+                                <lightning:button label="Add Comment" onclick="{!c.showComment}"/>
+                            </div>
+                        </aura:set>
+                    </aura:if>
+                    
+                    
+                </div>
+            </div>
+        </div>
+        <div class="slds-large-size_1-of-12"></div>
+    </div>
+    <lightning:spinner aura:id="spinner" alternativeText="Loading" size="medium" class="slds-show" />
+</aura:component>

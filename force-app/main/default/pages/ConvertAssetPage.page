@@ -1,0 +1,589 @@
+<apex:page docType="html-5.0" controller="ConvertAssetController" lightningStylesheets="false" sidebar="false" showHeader="false">
+
+    <apex:slds />
+
+    <apex:includescript value="//code.jquery.com/jquery-1.11.1.min.js" />
+    <apex:includescript value="//cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js" />
+    <apex:stylesheet value="//cdn.datatables.net/1.10.4/css/jquery.dataTables.css" />
+
+    <style>
+        .hideError {
+            display: none !important;
+        }
+
+        .customMessage * {
+            color: #fff!important font-size: medium;
+            font-weight: bold;
+        }
+
+        .errorSpan {
+            font-size: medium;
+            font-weight: bold;
+        }
+
+        .overlay {
+            display: none;
+            height: 100%;
+            left: 0;
+            position: fixed;
+            top: 0;
+            opacity: 0.3;
+            -moz-opacity: 0.3;
+            width: 100%;
+            -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+            filter: alpha(opacity=30);
+            background: #000;
+            -khtml-opacity: 0.3;
+            z-index: 1000;
+        }
+
+        .loader {
+            background: url('/img/loading32.gif') scroll no-repeat 0 0;
+            width: 32px;
+            height: 32px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            z-index: 9999;
+        }
+    </style>
+
+    <script>
+        let j$ = jQuery.noConflict();
+        let assetEndDatePrevValue = 120;
+
+        function navigateToQle() {
+            window.top.location.href = '{!$Page.SBQQ__sb}?id={!$CurrentPage.Parameters.newid}';
+        }
+
+        function cancelAndNavigateToQle() {
+            event.preventDefault();
+            event.stopPropagation();
+
+            navigateToQle();
+        }
+
+        function fetchAssetFromEndDate() {
+            var selectedAssetEndDate = j$('[id$="assetEndDate"]').val();
+
+            if (selectedAssetEndDate < 120) {
+                j$("#endDateMessage").removeClass("hideError");
+                j$('[id$="assetEndDate"]').val(assetEndDatePrevValue);
+            } else {
+                j$("#endDateMessage").addClass("hideError");
+                assetEndDatePrevValue = selectedAssetEndDate;
+                refreshAssets();
+            }
+        }
+
+        function initDataTable() {
+            if (j$.fn.dataTable.isDataTable('[id$="expiredAssetTable"]')) return;
+            if (j$.fn.dataTable.isDataTable('[id$="convertAssetTable"]')) return;
+            if (j$.fn.dataTable.isDataTable('[id$="futureAssetTable"]')) return;
+
+            j$('[id$="expiredAssetTable"]').DataTable({
+                "searching": false,
+                "columnDefs": [
+                    {
+                        "targets": [0], //first column / numbering column
+                        "orderable": false, //set not orderable
+                    },
+                ]
+            });
+
+            j$('[id$="convertAssetTable"]').DataTable({
+                "searching": false,
+                "columnDefs": [
+                    {
+                        "targets": [0], //first column / numbering column
+                        "orderable": false, //set not orderable
+                    },
+                ]
+            });
+
+            j$('[id$="futureAssetTable"]').DataTable({
+                "searching": false,
+                "columnDefs": [
+                    {
+                        "targets": [0], //first column / numbering column
+                        "orderable": false, //set not orderable
+                    },
+                ]
+            });
+        }
+
+        function startLoading() {
+            j$('.loadingBox').show();
+        }
+
+        function stopLoading() {
+            j$('.loadingBox').hide();
+        }
+
+        j$(document).ready(() => {
+            initDataTable();
+
+            // Select all checkbox code
+            j$("[id$='SelectAll']").click(function (evt) {
+                j$(".childCheckbox").prop("checked", evt.target.checked);
+            });
+
+            j$(".childCheckbox").click(function () {
+                const all = j$(".childCheckbox").length;
+                const checked = j$(".childCheckbox:checked").length;
+
+                j$("[id$='SelectAll']").prop("checked", all == checked);
+            });
+        })
+
+        function alterRubrikEdition(el) {
+            if ({!isOnPremException
+        } == true && j$(el).closest("tr").find("[id$='licenseTypeInput']").val() == 'On Prem') {
+            j$(el).closest("tr").find("[id$='rubrikEditionInput']").children("option[value='Foundation']").hide();
+            j$(el).closest("tr").find("[id$='rubrikEditionInput']").children("option[value='Proactive']").hide();
+            j$(el).closest("tr").find("[id$='rubrikEditionInput']").val('Enterprise');
+        }
+        if ({!isOnPremException} == false || j$(el).closest("tr").find("[id$='licenseTypeInput']").val() != 'On Prem') {
+            j$(el).closest("tr").find("[id$='rubrikEditionInput']").children("option[value='Foundation']").show();
+            j$(el).closest("tr").find("[id$='rubrikEditionInput']").children("option[value='Proactive']").show();
+        }
+        }
+    </script>
+
+    <apex:pageMessages />
+
+    <div id="load_scrl" class="loadingBox loader" style="display:none"> </div>
+    <div class="loadingBox overlay"> </div>
+
+    <apex:form >
+        <apex:actionStatus onstart="startLoading();" onstop="stopLoading();" id="loadStatus" />
+
+        <apex:actionFunction name="refreshAssets" action="{!fetchEligibleAssetsForConversion}" status="loadStatus" />
+
+        <div id="endDateMessage" class="slds-notify slds-notify--alert slds-theme--error customMessage slds-theme--alert-texture hideError">
+            <span class="errorSpan" id="errorSpan">Asset end date should not be less than 120</span>
+        </div>
+
+        <div class="slds-page-header slds-m-vertical_small">
+            <div class="slds-page-header__row">
+                <div class="slds-page-header__col-title">
+                    <div class="slds-media">
+                        <div class="slds-media__figure">
+                            <span class="slds-icon_container slds-icon-standard-opportunity" title="opportunity">
+                                <svg class="slds-icon slds-page-header__icon" aria-hidden="true">
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="slds-media__body">
+                            <p class="slds-page-header__name-meta">{!conversionQuote.Name}</p>
+                            <div class="slds-page-header__name">
+                                <div class="slds-page-header__name-title">
+                                    <h1>
+                                        <apex:outputPanel rendered="{!NOT(showConversionPage)}" styleClass="slds-page-header__title slds-truncate">Conversion: Asset Selection</apex:outputPanel>
+                                        <apex:outputPanel rendered="{!showConversionPage}" styleClass="slds-page-header__title slds-truncate">Asset Upgrades</apex:outputPanel>
+                                    </h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <apex:outputPanel layout="block" rendered="{!NOT(showConversionPage)}">
+                <div class="slds-text-align_center">
+                    <apex:inputText styleClass="slds-input" value="{!strSearchAsset}" style="width: 25%" />
+                    <apex:commandButton value="Search" action="{!fetchEligibleAssetsForConversion}" status="loadStatus" styleClass="slds-button slds-button_neutral slds-m-left_small"
+                    />
+                    <apex:commandButton value="Clear" action="{!clearSearch}" status="loadStatus" styleClass="slds-button slds-button_neutral"
+                    />
+                </div>
+            </apex:outputPanel>
+
+            <apex:outputPanel layout="block" rendered="{!showConversionPage}" styleClass="slds-m-vertical_small">
+                <div class="slds-text-align_center slds-m-vertical_small">
+                    <apex:commandButton value="Save" action="{!convertAssets}" reRender="secondPage" styleClass="slds-button slds-button_neutral"
+                        oncomplete="if('{!isConversionError}' == 'false') navigateToQle();" status="loadStatus" />
+                    <apex:commandButton action="{!cancelAndBack}" value="Cancel" styleClass="slds-button slds-button_neutral" />
+                </div>
+            </apex:outputPanel>
+        </div>
+
+      <apex:outputPanel layout="block" rendered="{!NOT(showConversionPage)}">
+            <!--  <div class="slds-text-align_center slds-m-vertical_small">
+                <apex:outputPanel layout="block" rendered="{!showAssetEndDate}">
+                    <span class="slds-m-right_medium">Asset End Date</span>
+                    <apex:input id="assetEndDate" type="number" value="{!assetEndDateDays}" onchange="fetchAssetFromEndDate();" styleClass="slds-input"
+                        style="width: 25%" />
+                </apex:outputPanel>
+            </div>  commenting for CPQ22-2984 -->
+
+            <div class="slds-text-align_center slds-m-vertical_small">
+                Please select an Edition, Payment Option, Support Type and License Type for the Asset(s) you want to convert. These attributes
+                will determine the software product.
+            </div>
+        </apex:outputPanel>
+
+        <!-- First page for selection of assets -->
+        <apex:outputPanel layout="block" id="firstPage" rendered="{!NOT(showConversionPage)}" styleClass="slds-m-vertical_small">
+            <!-- Assets having support date in the past -->
+            <p class="slds-text-align_center slds-text-color_error" style="font-size: 0.8rem; font-weight: bold;">
+                The support on these assets has expired. The support must be renewed before the assets may be converted.
+            </p>
+
+            <table id="expiredAssetTable" class="slds-table slds-table_cell-buffer slds-table_bordered">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th class="" scope="col">
+                             <div class="slds-truncate" title="Select">
+                                <input type="checkbox" id="SelectAll" name="SelectAll" value="SelectAll" rendered="{!isDealOpsExp}" />
+                            </div> 
+                            
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="Name">Asset Name</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="ProductCode">Product Code</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="StartDate">Support Start Date</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="EndDate">Support End Date</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="Network">Network</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="RubrikEdition">Rubrik Edition</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="PaymentOptions">Payment Options</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="SupportType">Support Type</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="LicenseType">License Type</div>
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <apex:repeat value="{!lstWrapperAssets}" var="wrapper1">
+                        <apex:outputPanel rendered="{!wrapper1.asset.Premium_Support_End_Date__c < TODAY()-30}">
+                            <tr>
+                                <td>
+                                     <apex:inputCheckbox value="{!wrapper1.selected}" styleClass="childCheckbox" rendered="{!isDealOpsExp}" /> 
+                                </td>
+                                <td>{!wrapper1.asset.SerialNumber}</td>
+                                <td>{!wrapper1.asset.ProductCode}</td>
+                                <td>
+                                    <apex:outputText value="{0, date, MMMM d','  yyyy}">
+                                        <apex:param value="{!wrapper1.asset.Support_Start_Date__c}" />
+                                    </apex:outputText>
+                                </td>
+                                <td>
+                                    <apex:outputText value="{0, date, MMMM d','  yyyy}">
+                                        <apex:param value="{!wrapper1.asset.Premium_Support_End_Date__c}" />
+                                    </apex:outputText>
+                                </td>
+                                <td>{!wrapper1.asset.Product_Nic_Type__c}</td>
+                                <td>
+                                 <apex:selectList id="rubrikEditionInput" value="{!wrapper1.asset.Rubrik_Suite__c}" size="1" >
+                                        <apex:selectOption itemValue="Foundation" itemLabel="Foundation" rendered="{!OR(!isOnPremException, wrapper1.licenseType != 'On Prem')}"
+                                        />
+                                        <apex:selectOption itemValue="Business" itemLabel="Business" />
+                                        <apex:selectOption itemValue="Enterprise" itemLabel="Enterprise" />
+                                        <apex:selectOption itemValue="Proactive" itemLabel="Proactive"/>
+                                    </apex:selectList>
+                                </td>
+                                <td>
+                                 <apex:selectList id="paymentOptionsInput" value="{!wrapper1.asset.Payment_Options__c}" size="1">
+                                        <apex:selectOption itemValue="Prepay" itemLabel="Prepay" />
+                                        <apex:selectOption itemValue="Annual" itemLabel="Annual" />
+                                    </apex:selectList>
+                                </td>
+                                <td>
+                                <apex:selectList id="supportTypeInput" value="{!wrapper1.asset.Support_Type__c}" size="1">
+                                        <apex:selectOption itemValue="Premium" itemLabel="Premium" />
+                                        <apex:selectOption itemValue="L3" itemLabel="L3" />
+                                    </apex:selectList>
+                                </td>
+                                <td>
+                                <apex:selectList id="licenseTypeInput" value="{!wrapper1.licenseType}" size="1" onchange="alterRubrikEdition(this);">
+                                        <!-- <apex:actionSupport event="onchange" status="loadStatus" /> -->
+                                        <apex:selectOption itemValue="SaaS" itemLabel="SaaS" />
+                                        <apex:selectOption itemValue="On Prem" itemLabel="On Prem" rendered="{!OR(isFederalAccount, isOnPremException)}" />
+                                 </apex:selectList>
+                                </td>
+                            </tr>
+                        </apex:outputPanel>
+                    </apex:repeat>
+                </tbody>
+            </table>
+
+            <!-- Assets available for conversion  -->
+            <p class="slds-text-align_center slds-text-color_error" style="font-size: 0.8rem; font-weight: bold;">
+                Following assets are eligible for conversion
+            </p>
+
+            <table id="convertAssetTable" class="slds-table slds-table_cell-buffer slds-table_bordered">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="Select">
+                                <input type="checkbox" id="SelectAll" name="SelectAll" value="SelectAll" />
+                            </div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="Name">Asset Name</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="ProductCode">Product Code</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="StartDate">Support Start Date</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="EndDate">Support End Date</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="Network">Network</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="RubrikEdition">Rubrik Edition</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="PaymentOptions">Payment Options</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="SupportType">Support Type</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="LicenseType">License Type</div>
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <apex:repeat value="{!lstWrapperAssets}" var="wrapper2">
+                        <apex:outputPanel rendered="{!wrapper2.asset.Premium_Support_End_Date__c >= TODAY()-30 /* && wrapper2.asset.Premium_Support_End_Date__c <= assetEndDateRequired} */ }">
+                            <tr>
+                                <td>
+                                    <apex:inputCheckbox value="{!wrapper2.selected}" styleClass="childCheckbox" />
+                                </td>
+                                <td>{!wrapper2.asset.SerialNumber}</td>
+                                <td>{!wrapper2.asset.ProductCode}</td>
+                                <td>
+                                    <apex:outputText value="{0, date, MMMM d','  yyyy}">
+                                        <apex:param value="{!wrapper2.asset.Support_Start_Date__c}" />
+                                    </apex:outputText>
+                                </td>
+                                <td>
+                                    <apex:outputText value="{0, date, MMMM d','  yyyy}">
+                                        <apex:param value="{!wrapper2.asset.Premium_Support_End_Date__c}" />
+                                    </apex:outputText>
+                                </td>
+                                <td>{!wrapper2.asset.Product_Nic_Type__c}</td>
+                                <td>
+                                    <apex:selectList id="rubrikEditionInput2" value="{!wrapper2.asset.Rubrik_Suite__c}" size="1">
+                                        <apex:selectOption itemValue="Foundation" itemLabel="Foundation" rendered="{!OR(!isOnPremException, wrapper2.licenseType != 'On Prem')}"
+                                        />
+                                        <apex:selectOption itemValue="Business" itemLabel="Business" />
+                                        <apex:selectOption itemValue="Enterprise" itemLabel="Enterprise" />
+                                        <apex:selectOption itemValue="Proactive" itemLabel="Proactive" id="a01"/>
+                                    </apex:selectList>
+                                </td>
+                                <td>
+                                    <apex:selectList id="paymentOptionsInput2" value="{!wrapper2.asset.Payment_Options__c}" size="1">
+                                        <apex:selectOption itemValue="Prepay" itemLabel="Prepay" />
+                                        <apex:selectOption itemValue="Annual" itemLabel="Annual" />
+                                    </apex:selectList>
+                                </td>
+                                <td>
+                                    <apex:selectList id="supportTypeInput2" value="{!wrapper2.asset.Support_Type__c}" size="1">
+                                        <apex:selectOption itemValue="Premium" itemLabel="Premium" />
+                                        <apex:selectOption itemValue="L3" itemLabel="L3" />
+                                    </apex:selectList>
+                                </td>
+                                <td>
+                                    <apex:selectList id="licenseTypeInput2" value="{!wrapper2.licenseType}" size="1" onchange="alterRubrikEdition(this);">
+                                        <!-- <apex:actionSupport event="onchange" status="loadStatus" /> -->
+                                        <apex:selectOption itemValue="SaaS" itemLabel="SaaS" />
+                                        <apex:selectOption itemValue="On Prem" itemLabel="On Prem" rendered="{!OR(isFederalAccount, isOnPremException)}" />
+                                    </apex:selectList>
+                                </td>
+                            </tr>
+                        </apex:outputPanel>
+                    </apex:repeat>
+                </tbody>
+            </table>
+
+            <!-- Assets having support end date greater than entered asset end date -->
+          <!--  <p class="slds-text-align_center slds-text-color_error" style="font-size: 0.8rem; font-weight: bold;">
+                These assets are not eligible for conversion until the renewal is within {!assetEndDateDays} days
+            </p>  commenting for CPQ22-2984 -->
+
+          <!--  <table id="futureAssetTable" class="slds-table slds-table_cell-buffer slds-table_bordered">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th class="" scope="col">
+                             <div class="slds-truncate" title="Select">
+                                <input type="checkbox" id="SelectAll" name="SelectAll" value="SelectAll" />
+                            </div> 
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="Name">Asset Name</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="ProductCode">Product Code</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="StartDate">Support Start Date</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="EndDate">Support End Date</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="Network">Network</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="RubrikEdition">Rubrik Edition</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="PaymentOptions">Payment Options</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="SupportType">Support Type</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="LicenseType">License Type</div>
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <apex:repeat value="{!lstWrapperAssets}" var="wrapper">
+                        <apex:outputPanel rendered="{!wrapper.asset.Premium_Support_End_Date__c > assetEndDateRequired}">
+                            <tr>
+                                <td>
+                                    <apex:inputCheckbox value="{!wrapper.selected}" styleClass="childCheckbox" /> 
+                                </td>
+                                <td>{!wrapper.asset.SerialNumber}</td>
+                                <td>{!wrapper.asset.ProductCode}</td>
+                                <td>
+                                    <apex:outputText value="{0, date, MMMM d','  yyyy}">
+                                        <apex:param value="{!wrapper.asset.Support_Start_Date__c}" />
+                                    </apex:outputText>
+                                </td>
+                                <td>
+                                    <apex:outputText value="{0, date, MMMM d','  yyyy}">
+                                        <apex:param value="{!wrapper.asset.Premium_Support_End_Date__c}" />
+                                    </apex:outputText>
+                                </td>
+                                <td>{!wrapper.asset.Product_Nic_Type__c}</td>
+                                <td>{!wrapper.asset.Rubrik_Suite__c}
+                                </td>
+                                <td>{!wrapper.asset.Payment_Options__c}
+                                </td>
+                                <td>{!wrapper.asset.Support_Type__c}
+                                </td>
+                                <td>{!wrapper.licenseType}
+                                </td>
+                            </tr>
+                        </apex:outputPanel>
+                    </apex:repeat>
+                </tbody>
+            </table>  commenting for CPQ22-2984 -->
+        </apex:outputPanel> 
+
+        <!-- Second page for conversion -->
+        <apex:outputPanel layout="block" id="secondPage" rendered="{!showConversionPage}" styleClass="slds-m-vertical_small">
+            <apex:repeat value="{!selectedWrappers}" var="selectedWrapper">
+                <apex:variable value="{!selectedWrapper.asset}" var="currentAsset" />
+
+                <!-- Existing asset information -->
+                <div class="slds-theme_shade slds-p-around_small slds-grid" style="font-size: 1.15em">
+                    <span class="slds-size_1-of-5">
+                        <p style="font-weight: bold">Asset Name</p>
+                        <p>{!currentAsset.Name}</p>
+                    </span>
+                    <span class="slds-size_1-of-5">
+                        <p style="font-weight: bold">Rubrik Edition</p>
+                        <p>{!existingAssetMap[currentAsset.Name].Rubrik_Suite__c}</p>
+                    </span>
+                    <span class="slds-size_1-of-5">
+                        <p style="font-weight: bold">Payment Option</p>
+                        <p>{!existingAssetMap[currentAsset.Name].Payment_Options__c}</p>
+                    </span>
+                    <span class="slds-size_1-of-5">
+                        <p style="font-weight: bold">Support Type</p>
+                        <p>{!existingAssetMap[currentAsset.Name].Support_Type__c}</p>
+                    </span>
+                    <span class="slds-size_1-of-5">
+                        <p style="font-weight: bold">License Type</p>
+                        <p>Perpetual</p>
+                    </span>
+                </div>
+
+                <!-- Conversion message if missing mapping -->
+                <apex:outputPanel rendered="{!NOT(selectedWrapper.isConversionPossible)}">
+                    <div class="slds-m-vertical_small">
+                        <p class="slds-text-align_center slds-text-color_error" style="font-size: 1rem">
+                            {!selectedWrapper.conversionError}
+                        </p>
+                    </div>
+                </apex:outputPanel>
+
+                <!-- Conversion information -->
+                <apex:outputPanel rendered="{!selectedWrapper.isConversionPossible}">
+                    <div class="slds-m-vertical_small">
+                        <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                            <thead>
+                                <tr style="font-size: 1.15em">
+                                    <td class="slds-size_1-of-3" style="font-weight: bold">Upgrade From</td>
+                                    <td class="slds-size_1-of-3" style="font-weight: bold">Upgrade To</td>
+                                    <td class="slds-size_1-of-3" style="font-weight: bold">Product Description</td>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr>
+                                    <td class="slds-size_1-of-3">
+                                        {!selectedWrapper.asset.Product2.Name}
+                                    </td>
+                                    <td class="slds-size_1-of-3">
+                                        {!selectedWrapper.convertSaasProduct.Name}
+                                    </td>
+                                    <td class="slds-size_1-of-3" style="white-space: pre-wrap">{!selectedWrapper.convertSaasProduct.Description}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </apex:outputPanel>
+
+                <div class="slds-m-top_x-large" style="width: 100%;height: 2px;background: #4cb10d;" />
+            </apex:repeat>
+
+        </apex:outputPanel>
+
+        <apex:outputPanel layout="block" rendered="{!NOT(showConversionPage)}" styleClass="slds-m-vertical_small">
+            <div class="slds-text-align_center slds-m-vertical_small">
+                <apex:commandButton action="{!fetchConversionProducts}" status="loadStatus" value="Save" styleClass="slds-button slds-button_neutral"
+                />  
+                <apex:commandButton onclick="cancelAndNavigateToQle();" value="Cancel" styleClass="slds-button slds-button_neutral" />
+            </div>
+        </apex:outputPanel>
+
+        <apex:outputPanel layout="block" rendered="{!showConversionPage}" styleClass="slds-m-vertical_small">
+            <div class="slds-text-align_center slds-m-vertical_small">
+                <apex:commandButton value="Save" action="{!convertAssets}" reRender="secondPage" status="loadStatus" styleClass="slds-button slds-button_neutral"
+                    oncomplete="if('{!isConversionError}' == 'false') navigateToQle();" />
+                <apex:commandButton action="{!cancelAndBack}" value="Cancel" styleClass="slds-button slds-button_neutral" />
+            </div>
+        </apex:outputPanel>
+    </apex:form>
+
+    
+</apex:page>

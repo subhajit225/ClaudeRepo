@@ -1,0 +1,743 @@
+ ▐▛███▜▌   Claude Code v2.1.87
+▝▜█████▛▘  Sonnet 4.6 · API Usage Billing
+  ▘▘ ▝▝    ~/Cloud Project/RubrikClaudePOC
+
+❯ Write me a story, where as a user I want customer to get the links for        
+filling the OVF externally. Once Customer fills that information, it should get 
+ stored in salesforce as a record.                                              
+
+⏺ User Story: External OVF Link & Salesforce Record Creation
+
+  ---
+  Story Title
+
+  As a Sales/CSM user, I want to send customers a link to fill out an OVF 
+  externally, so that their responses are automatically captured as a Salesforce
+   record.
+
+  ---
+  User Story
+
+  ▎ As a Sales Representative or Customer Success Manager,
+  ▎ I want to generate and share a unique OVF (Opportunity Verification Form) 
+  link with my customer,
+  ▎ So that the customer can fill in required information at their convenience, 
+  and the submitted data is automatically stored as a record in Salesforce — 
+  without manual data entry on my end.
+
+  ---
+  Acceptance Criteria
+
+  Given I am on a Salesforce record (e.g., Opportunity or Account),
+  When I click "Generate OVF Link",
+  Then a unique, time-bound external form URL is generated and copied/sent to
+  the customer.
+
+  ---
+  Given the customer receives the OVF link,
+  When they open it in any browser (no Salesforce login required),
+  Then they see a branded form with the required fields to fill out.
+
+  ---
+  Given the customer completes and submits the OVF form,
+  When submission is confirmed,
+  Then:
+  - A new Salesforce record (e.g., OVF_Response__c) is created automatically
+  - The record is linked back to the originating Opportunity/Account
+  - The submitting user (Sales Rep / CSM) receives an in-app or email
+  notification
+  - The OVF link is marked as "Submitted" and can no longer be reused
+
+  ---
+  Given the OVF link expires before submission,
+  When the customer attempts to open it,
+  Then they see a friendly expiry message and are prompted to contact their rep.
+
+  ---
+  Out of Scope
+
+  - Customer authentication / Salesforce login
+  - Manual data entry by the rep after customer submission
+  - Editing a submitted OVF
+
+  ---
+  Notes / Open Questions
+
+  1. What object does the OVF record link to — Opportunity, Account, or a custom
+   object?
+  2. What fields are on the OVF form (customer-facing)?
+  3. What is the link expiry window (e.g., 7 days, 30 days)?
+  4. Is the external form hosted via Salesforce Experience Cloud, a third-party
+  form tool, or a custom web app?
+  5. Should the customer receive a confirmation email upon submission?
+
+  ---
+  Shall I kick off the 7-agent Salesforce workflow to design and build this
+  feature? If yes, please clarify the open questions above (especially Q1 and
+  Q4) so the design agent can produce an accurate implementation plan.
+
+❯ @"Marketplace BRD - Order Acceptance Automation.md" Create some user stories  
+out of this BRD                                                                 
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ I have enough from the key sections. Let me now produce the user stories.
+
+  ---
+  User Stories — Marketplace Order Acceptance Automation
+
+  Derived from BRD: Marketplace Order Automation v2.0 (Cyrus / David / Jenny)
+
+  ---
+  Epic 1: Order Data Ingestion & SFDC Capture
+
+  ---
+  US-01 — External Order Submission via Reseller/Customer
+
+  ▎ As an Order Management team member,
+  ▎ I want the system to only accept order data transmitted directly by the 
+  Customer or Reseller (not from internal Rubrik staff such as AE/BDM),
+  ▎ So that order intake integrity is maintained and internal workarounds are 
+  prevented.
+
+  Acceptance Criteria:
+  - System rejects/ignores transmissions originating from internal Rubrik users
+  - Only Customer or Partner-originated transmissions are accepted and processed
+  - Source of transmission is logged for audit purposes
+
+  BRD Ref: ORDB-01 | Priority: MVP/P0
+
+  ---
+  US-02 — Absorb Required Order Fields into Salesforce
+
+  ▎ As an Order Management team member,
+  ▎ I want the system to automatically capture all required order fields 
+  submitted by the Customer or Partner into the corresponding Salesforce fields,
+  ▎ So that manual data entry is eliminated and data accuracy is improved.
+
+  Required Fields:
+  - End User Name, Ship To Information (Company Name, Address), Contact (Name,
+  Phone, Email)
+  - Rubrik Quote PDF (Part Number, Quantity, $ Amount, Subscription Terms)
+  - Agreement to Additional Terms (auto-accepted if terms are present on the
+  quote)
+  - Marketplace Customer ID
+  - Azure only: "Waive 72-hour cancellation?" (True/False)
+
+  Acceptance Criteria:
+  - All fields are mapped and stored in the correct SFDC fields
+  - Rubrik Quote PDF is attached to the record
+  - If additional terms exist on the quote, they are auto-accepted
+  - Azure-specific "Waive 72-hour" flag is captured per order
+
+  BRD Ref: ORDB-02 | Priority: MVP/P0
+
+  ---
+  US-03 — Auto-Populate System-Generated Order Fields
+
+  ▎ As an Order Management team member,
+  ▎ I want the system to automatically populate certain fields upon order 
+  creation without requiring input from the Customer or Partner,
+  ▎ So that the order record is complete and consistent without manual 
+  intervention.
+
+  Auto-Populated Fields:
+  - Distributor PO Number = Marketplace Order
+  - End User PO = Marketplace Order
+  - Payment Terms = Standard Marketplace
+  - Carrier Information = "No Shipping Required" (default; no hardware sold on
+  Marketplace)
+
+  Acceptance Criteria:
+  - All four fields are set automatically at order creation
+  - No user input is required for these fields
+  - Values can be overridden by OM if needed
+
+  BRD Ref: ORDB-03 | Priority: MVP/P0
+
+  ---
+  Epic 2: Order Validation
+
+  ---
+  US-04 — Apply Standard Internal/External Booking Validations
+
+  ▎ As an Order Management team member,
+  ▎ I want all standard Stage PO booking validations to apply to Marketplace 
+  orders,
+  ▎ So that consistency is maintained across all order channels.
+
+  Acceptance Criteria:
+  - Fuzzy match for End User Name is applied
+  - Validation checks for non-primary quotes, incorrect product names, etc. are
+  enforced
+  - Validation rules align with existing Stage PO Validation Code (Confluence
+  reference)
+
+  BRD Ref: ORDB-04 | Priority: MVP/P0
+
+  ---
+  US-05 — Cross-Validate Proof of Marketplace Acceptance Against OVF/Quote (AWS)
+
+  ▎ As an Order Management team member,
+  ▎ I want the system to automatically cross-validate the AWS Proof of 
+  Acceptance against the OVF and Salesforce Quote,
+  ▎ So that discrepancies are caught before the order is processed.
+
+  Validation Rules:
+  - OVF Buyer (End User) AWS Tenant ID = exact match vs Customer AWS Account ID
+  on AWS Proof of Acceptance
+  - SFDC Quote Amount = exact match vs Purchase Amount on AWS Proof of
+  Acceptance
+
+  Acceptance Criteria:
+  - Both validations run automatically upon receipt of documents
+  - Mismatches block order progression and generate a Stage PO validation error
+  (see US-07)
+
+  BRD Ref: ORDB-06 (AWS) | Priority: MVP/P0
+
+  ---
+  US-06 — Cross-Validate Proof of Marketplace Acceptance Against OVF/Quote 
+  (Azure & GCP)
+
+  ▎ As an Order Management team member,
+  ▎ I want the system to automatically cross-validate Azure and GCP Proof of 
+  Acceptance against the OVF,
+  ▎ So that discrepancies on those platforms are also caught automatically.
+
+  Azure Validation:
+  - Buyer (End User) Name = fuzzy 80% match vs Company Name on Azure Proof of
+  Acceptance (Tackle notification)
+
+  GCP Validation:
+  - OVF Buyer GCP Billing Account = exact match vs Billing Account on GCP Proof
+  of Acceptance
+  - Buyer (End User) Name = fuzzy 80% match vs Customer on GCP Proof of
+  Acceptance
+
+  Acceptance Criteria:
+  - Validations run automatically per platform upon document receipt
+  - Fuzzy match threshold is configurable (default: 80%)
+  - Failures generate a Stage PO validation error
+
+  BRD Ref: ORDB-06 (Azure/GCP) | Priority: MVP/P0
+
+  ---
+  US-07 — New Stage PO Validation Error for Document Mismatch
+
+  ▎ As an Order Management team member,
+  ▎ I want a new Stage PO validation error to surface when the OVF/Quote does 
+  not match the Proof of Marketplace Acceptance,
+  ▎ So that the discrepancy is clearly flagged and actionable.
+
+  Acceptance Criteria:
+  - A new, distinct error type is created in Stage PO for this mismatch scenario
+  - Error message clearly identifies which fields mismatched and on which
+  document
+  - Error prevents order from proceeding until resolved
+
+  BRD Ref: ORDB-07 | Priority: MVP/P0
+
+  ---
+  US-08 — Consume and Apply CRSD on Orders
+
+  ▎ As an Order Management team member,
+  ▎ I want the system to consume a CRSD value when provided and apply existing 
+  CRSD policies,
+  ▎ So that customer-requested start dates are honored consistently.
+
+  Acceptance Criteria:
+  - CRSD field is captured from the inbound transmission
+  - Existing CRSD business policies are applied automatically
+  - No changes to the underlying CRSD policy logic
+
+  BRD Ref: ORDB-05 | Priority: P1
+
+  ---
+  Epic 3: Platform-Specific Fulfillment Routing
+
+  ---
+  US-09 — Route AWS & GCP Orders to Standard Fulfillment
+
+  ▎ As an Order Management team member,
+  ▎ I want AWS and GCP orders (once validated) to automatically trigger the 
+  standard fulfillment process,
+  ▎ So that these orders are processed without manual intervention.
+
+  Acceptance Criteria:
+  - Upon successful validation, AWS and GCP orders enter NetSuite as "Pending
+  Fulfillment"
+  - Standard provisioning logic is invoked (RSC/RSC-P as applicable)
+  - Manual routing step is eliminated for standard orders
+
+  BRD Ref: ORDB-10, ORDA-03, ORDP-01 | Priority: MVP/P0
+
+  ---
+  US-10 — Place Azure Orders on Manual Fulfillment Hold
+
+  ▎ As an Order Management team member,
+  ▎ I want Azure orders to automatically be placed on Manual Fulfillment hold 
+  upon booking,
+  ▎ So that the 72-hour Azure cancellation window is respected before 
+  fulfillment proceeds.
+
+  Acceptance Criteria:
+  - All Azure orders enter NetSuite as "Pending Approval"
+  - Manual Fulfillment flag is set automatically
+  - No Azure order proceeds to fulfillment without going through the
+  approval/hold release process
+
+  BRD Ref: ORDB-09, ORDA-01 | Priority: MVP/P0
+
+  ---
+  US-11 — Check and Apply 72-Hour Waiver for Azure Orders
+
+  ▎ As an Order Management team member,
+  ▎ I want the system to check whether a 72-hour cancellation waiver applies to 
+  an Azure order and act accordingly,
+  ▎ So that orders with a waiver can proceed without waiting and orders without 
+  one are correctly held.
+
+  Acceptance Criteria:
+  - System reads the "Waive 72-hour cancellation?" flag from the order
+  - If True: order is processed without the hold
+  - If False or absent: order is held for 72 hours
+  - 72-hour waiver logic does not apply to Azure renewal orders
+
+  BRD Ref: ORDB-08 | Priority: MVP/P0
+
+  ---
+  US-12 — Auto-Release Azure Hold and Fulfill After 72 Hours
+
+  ▎ As an Order Management team member,
+  ▎ I want the Azure Manual Fulfillment Hold to automatically release after 72 
+  hours (including weekends and holidays),
+  ▎ So that orders that have passed the cancellation window are fulfilled 
+  without manual intervention.
+
+  Acceptance Criteria:
+  - Timer starts at the moment the Azure order is subscribed
+  - 72-hour window includes weekends and holidays
+  - On expiry, hold is released and order proceeds to fulfillment automatically
+  - Order must be approved and meet all fulfillment criteria before
+  auto-fulfillment triggers
+
+  BRD Ref: ORDA-02 | Priority: MVP/P0
+
+  ---
+  Epic 4: Azure Order Auto-Approval
+
+  ---
+  US-13 — Auto-Approve Azure Orders via Azure Orders Report Matching
+
+  ▎ As an Order Management team member,
+  ▎ I want the system to automatically approve Azure orders when the Azure 
+  Orders Report data matches the acceptance data,
+  ▎ So that manual approval steps are eliminated for clean orders.
+
+  Auto-Approve Conditions (both must be true):
+  - Order Amount on Sales Order = Order Amount on Azure's Report
+  - Asset ID from Azure Orders Report = Subscription ID from Azure Tackle
+  Notification
+
+  Acceptance Criteria:
+  - System polls/receives Azure Orders Report and performs comparison
+  - If both conditions match → order auto-approves
+  - If either condition fails → order remains in Pending Approval state and
+  alert email is sent (see US-14)
+  - System accounts for up to 48-hour delay in Azure report availability after
+  acceptance
+
+  BRD Ref: ORDA-01 | Priority: MVP/P0
+
+  ---
+  US-14 — Alert OM When Azure Order Fails Auto-Approval
+
+  ▎ As an Order Management team member,
+  ▎ I want to receive an automated email alert when an Azure order cannot be 
+  auto-approved due to a mismatch,
+  ▎ So that I can investigate and manually resolve the discrepancy.
+
+  Email Spec:
+  - Subject: Azure Order Not Approved — Order's Report Amount Mismatch
+  - To: orders@rubrik.com, Cyrus Sharif, Vanny Ellis
+  - Body: Identifies the order number and reason (Subscription ID mismatch or
+  Amount mismatch)
+
+  Acceptance Criteria:
+  - Email fires immediately when auto-approval fails
+  - Email includes the specific order number and mismatch detail
+  - Order remains on hold until manually resolved
+
+  BRD Ref: ORDA-01 | Priority: MVP/P0
+
+  ---
+  Epic 5: Non-Standard Order Handling
+
+  ---
+  US-15 — Auto-Book Non-Standard Quotes and Flag for Manual Fulfillment
+
+  ▎ As an Order Management team member,
+  ▎ I want orders with non-standard quote structures (ramp, delayed start, 
+  recontracting) to auto-book and be automatically flagged for manual 
+  fulfillment,
+  ▎ So that these orders are captured in the system even though they require 
+  special handling downstream.
+
+  Acceptance Criteria:
+  - Orders with ramp, delayed start, or recontracting quotes are auto-booked
+  - Manual Fulfillment flag is set automatically upon booking
+  - No change to the downstream manual fulfillment process itself
+
+  BRD Ref: ORDB-14 | Priority: P1
+
+  ---
+  Epic 6: Notifications & Reporting
+
+  ---
+  US-16 — Notify Order Management When Documents Are Received
+
+  ▎ As an Order Management team member,
+  ▎ I want to receive a notification when key order documents (e.g., OVF) are 
+  received by the system,
+  ▎ So that I am aware of order intake activity in real time.
+
+  Acceptance Criteria:
+  - Notification is sent upon receipt of each key document (OVF, Proof of
+  Acceptance)
+  - Notification channel is email (email template to be defined)
+  - Notification includes order reference number and document type received
+
+  BRD Ref: ORDB-11 | Priority: P1
+
+  ---
+  US-17 — Notify Order Management When Stage PO Fails to Create
+
+  ▎ As an Order Management team member,
+  ▎ I want to receive an alert when a Stage PO fails to create,
+  ▎ So that I can take corrective action before the order stalls.
+
+  Acceptance Criteria:
+  - Alert fires immediately on Stage PO creation failure
+  - Alert includes order reference and failure reason
+  - Email template is defined and approved by OM
+
+  BRD Ref: ORDB-11 | Priority: P1
+
+  ---
+  US-18 — Report on Marketplace OVF and Acceptance Documents per Quote
+
+  ▎ As an Order Management team member,
+  ▎ I want a Salesforce report that tracks OVF and Marketplace Acceptance 
+  documents per Quote,
+  ▎ So that I can monitor document completeness and identify orders missing 
+  required artifacts.
+
+  Report Spec:
+  - Base object: Quote
+  - Tracked documents: Document 1 = OVF (incl. PDF), Document 2 = Marketplace
+  Acceptance
+  - Shows document receipt status per quote (e.g., "1 of 2 docs received for
+  Q-XXXXXX")
+  - Available within the existing PO at Rubrik report suite
+
+  Acceptance Criteria:
+  - Report is accessible in SFDC
+  - Document count is updated in real time as docs are received
+  - Incomplete document sets are clearly surfaced
+
+  BRD Ref: ORDB-13 | Priority: P1
+
+  ---
+  Epic 7: Extensibility
+
+  ---
+  US-19 — Support Onboarding of Future Cloud Marketplaces
+
+  ▎ As a Marketplace Operations or Engineering team member,
+  ▎ I want the order automation system to be designed for extensibility,
+  ▎ So that onboarding a new cloud marketplace requires minimal redevelopment.
+
+  Acceptance Criteria:
+  - Platform-specific validation logic is modular and configurable
+  - Adding a new marketplace does not require core system rewrites
+  - Design documentation captures the extensibility pattern
+
+  BRD Ref: ORDB-12 | Priority: P2
+
+  ---
+  Story Summary Table
+
+  ┌───────┬───────────────┬─────────────────────┬──────────┐
+  │ Story │     Epic      │       BRD Ref       │ Priority │
+  ├───────┼───────────────┼─────────────────────┼──────────┤
+  │ US-01 │ Ingestion     │ ORDB-01             │ MVP/P0   │
+  ├───────┼───────────────┼─────────────────────┼──────────┤
+  │ US-02 │ Ingestion     │ ORDB-02             │ MVP/P0   │
+  ├───────┼───────────────┼─────────────────────┼──────────┤
+  │ US-03 │ Ingestion     │ ORDB-03             │ MVP/P0   │
+  ├───────┼───────────────┼─────────────────────┼──────────┤
+  │ US-04 │ Validation    │ ORDB-04             │ MVP/P0   │
+  ├───────┼───────────────┼─────────────────────┼──────────┤
+  │ US-05 │ Validation    │ ORDB-06 (AWS)       │ MVP/P0   │
+  ├───────┼───────────────┼─────────────────────┼──────────┤
+  │ US-06 │ Validation    │ ORDB-06 (Azure/GCP) │ MVP/P0   │
+  ├───────┼───────────────┼─────────────────────┼──────────┤
+  │ US-07 │ Validation    │ ORDB-07             │ MVP/P0   │
+  ├───────┼───────────────┼─────────────────────┼──────────┤
+  │ US-08 │ Validation    │ ORDB-05             │ P1       │
+  ├───────┼───────────────┼─────────────────────┼──────────┤
+  │ US-09 │ Fulfillment   │ ORDB-10, ORDA-03    │ MVP/P0   │
+  ├───────┼───────────────┼─────────────────────┼──────────┤
+  │ US-10 │ Fulfillment   │ ORDB-09             │ MVP/P0   │
+  ├───────┼───────────────┼─────────────────────┼──────────┤
+  │ US-11 │ Fulfillment   │ ORDB-08             │ MVP/P0   │
+  ├───────┼───────────────┼─────────────────────┼──────────┤
+  │ US-12 │ Fulfillment   │ ORDA-02             │ MVP/P0   │
+  ├───────┼───────────────┼─────────────────────┼──────────┤
+  │ US-13 │ Approval      │ ORDA-01             │ MVP/P0   │
+  ├───────┼───────────────┼─────────────────────┼──────────┤
+  │ US-14 │ Approval      │ ORDA-01             │ MVP/P0   │
+  ├───────┼───────────────┼─────────────────────┼──────────┤
+  │ US-15 │ Non-Standard  │ ORDB-14             │ P1       │
+  ├───────┼───────────────┼─────────────────────┼──────────┤
+  │ US-16 │ Notifications │ ORDB-11             │ P1       │
+  ├───────┼───────────────┼─────────────────────┼──────────┤
+  │ US-17 │ Notifications │ ORDB-11             │ P1       │
+  ├───────┼───────────────┼─────────────────────┼──────────┤
+  │ US-18 │ Reporting     │ ORDB-13             │ P1       │
+  ├───────┼───────────────┼─────────────────────┼──────────┤
+  │ US-19 │ Extensibility │ ORDB-12             │ P2       │
+  └───────┴───────────────┴─────────────────────┴──────────┘
+
+  ---
+  19 user stories total across 7 epics. Would you like me to create these as
+  Jira issues, add acceptance criteria details, or prioritize a specific epic
+  for the first sprint?
+
+✻ Worked for 1m 47s
+
+❯ I need this whole thing to have only 10 stories, please respect that          
+
+⏺ ---
+  User Stories — Marketplace Order Acceptance Automation
+
+  10 stories | BRD v2.0 | Marketplace Order Automation
+
+  ---
+  US-01 — External Order Data Ingestion into Salesforce
+
+  ▎ As an Order Management team member,
+  ▎ I want the system to accept order transmissions only from Customers or 
+  Partners and automatically map all required fields into Salesforce,
+  ▎ So that order data is captured accurately without manual entry or internal 
+  workarounds.
+
+  Key Details:
+  - Transmissions from internal Rubrik staff (AE/BDM) are rejected
+  - Required fields captured: End User Name, Ship To, Contact, Rubrik Quote PDF,
+   Marketplace Customer ID, Azure "Waive 72-hr?" flag
+  - Additional terms on the quote are auto-accepted
+  - Auto-populated on creation: Distributor PO = Marketplace Order, End User PO
+  = Marketplace Order, Payment Terms = Standard Marketplace, Carrier = "No
+  Shipping Required"
+
+  BRD Ref: ORDB-01, ORDB-02, ORDB-03 | Priority: MVP/P0
+
+  ---
+  US-02 — Standard Booking Validations & CRSD Handling
+
+  ▎ As an Order Management team member,
+  ▎ I want all existing Stage PO booking validations to apply to Marketplace 
+  orders and any CRSD value to be consumed and honored,
+  ▎ So that Marketplace orders are held to the same integrity standards as all 
+  other order channels.
+
+  Key Details:
+  - Fuzzy match for End User Name, non-primary quote checks, incorrect product
+  name checks — all apply
+  - CRSD, when provided, is captured and existing CRSD policies are applied
+  automatically
+
+  BRD Ref: ORDB-04, ORDB-05 | Priority: MVP/P0
+
+  ---
+  US-03 — Cross-Validate Proof of Marketplace Acceptance Against OVF/Quote
+
+  ▎ As an Order Management team member,
+  ▎ I want the system to automatically cross-validate the Proof of Marketplace 
+  Acceptance against the OVF/Quote for each platform,
+  ▎ So that document discrepancies are caught before an order is processed, and 
+  a clear Stage PO error is raised.
+
+  Platform Rules:
+  - AWS: OVF Buyer AWS Tenant ID = exact match vs AWS Account ID; SFDC Quote
+  Amount = exact match vs Purchase Amount
+  - Azure: Buyer Name = fuzzy 80% match vs Company Name on Tackle notification
+  - GCP: GCP Billing Account = exact match vs Billing Account; Buyer Name =
+  fuzzy 80% match vs Customer
+  - Failures trigger a new, distinct Stage PO validation error identifying the
+  mismatched fields
+
+  BRD Ref: ORDB-06, ORDB-07 | Priority: MVP/P0
+
+  ---
+  US-04 — Route AWS & GCP Orders to Standard Fulfillment
+
+  ▎ As an Order Management team member,
+  ▎ I want validated AWS and GCP orders to automatically enter NetSuite as 
+  Pending Fulfillment and trigger standard provisioning,
+  ▎ So that these orders complete without any manual routing step.
+
+  Key Details:
+  - RSC products → RSC provisioning; RSC-P products → no RSC provisioning
+  (existing logic unchanged)
+  - Provisioning triggers immediately after successful validation
+
+  BRD Ref: ORDB-10, ORDA-03, ORDP-01 | Priority: MVP/P0
+
+  ---
+  US-05 — Azure 72-Hour Hold, Waiver Check & Auto-Release
+
+  ▎ As an Order Management team member,
+  ▎ I want Azure orders to be automatically placed on Manual Fulfillment hold, 
+  checked for a 72-hour waiver, and auto-released after 72 hours when eligible,
+  ▎ So that the Azure cancellation window is respected without manual tracking.
+
+  Key Details:
+  - All Azure orders enter NS as Pending Approval with Manual Fulfillment hold
+  - If "Waive 72-hr" = True → hold is skipped; False/absent → hold applied
+  - 72-hour waiver logic does not apply to Azure renewals
+  - Timer includes weekends and holidays; on expiry, hold releases and order
+  auto-fulfills (if approved and all criteria met)
+
+  BRD Ref: ORDB-08, ORDB-09, ORDA-02 | Priority: MVP/P0
+
+  ---
+  US-06 — Azure Order Auto-Approval via Orders Report Matching
+
+  ▎ As an Order Management team member,
+  ▎ I want Azure orders to auto-approve when the Azure Orders Report matches the
+   Tackle Proof of Acceptance,
+  ▎ So that clean Azure orders require no manual approval.
+
+  Auto-Approve Conditions (both must match):
+  - Order Amount on Sales Order = Order Amount on Azure Orders Report
+  - Asset ID on Azure Orders Report = Subscription ID on Azure Tackle
+  Notification
+  - System accounts for up to 48-hour delay in Azure report availability
+
+  BRD Ref: ORDA-01 | Priority: MVP/P0
+
+  ---
+  US-07 — Alert Order Management on Azure Auto-Approval Failure
+
+  ▎ As an Order Management team member,
+  ▎ I want to receive an automated email alert when an Azure order fails 
+  auto-approval due to a mismatch,
+  ▎ So that I can investigate and manually resolve before the order stalls.
+
+  Email Spec:
+  - To: orders@rubrik.com, Cyrus Sharif, Vanny Ellis
+  - Subject: Azure Order Not Approved — Order's Report Amount Mismatch
+  - Body: Order number + specific mismatch reason (Subscription ID or Amount)
+
+  BRD Ref: ORDA-01 | Priority: MVP/P0
+
+  ---
+  US-08 — Auto-Book Non-Standard Quotes with Manual Fulfillment Flag
+
+  ▎ As an Order Management team member,
+  ▎ I want orders with ramp, delayed start, or recontracting quote structures to
+   auto-book and be automatically flagged for manual fulfillment,
+  ▎ So that these orders are captured in the system without blocking the booking
+   pipeline.
+
+  Key Details:
+  - Applies to: GC Offer, Delayed Start, Ramp, Scale Utility, Recontracting
+  - Manual Fulfillment flag is set at booking time
+  - No changes to the downstream manual fulfillment process itself
+
+  BRD Ref: ORDB-14 | Priority: P1
+
+  ---
+  US-09 — Notify Order Management on Document Receipt and Stage PO Failures
+
+  ▎ As an Order Management team member,
+  ▎ I want automated email notifications when documents are received and when a 
+  Stage PO fails to create,
+  ▎ So that I have real-time visibility into order intake and processing 
+  failures.
+
+  Notifications:
+  1. Document Received — fires on OVF or Proof of Acceptance receipt; includes
+  order reference and document type
+  2. Stage PO Failed — fires on creation failure; includes order reference and
+  failure reason
+  - Email templates to be defined and approved by OM
+
+  BRD Ref: ORDB-11 | Priority: P1
+
+  ---
+  US-10 — Marketplace Document Tracking Report & System Extensibility
+
+  ▎ As an Order Management team member and a Marketplace Engineer,
+  ▎ I want a Salesforce report tracking OVF and Acceptance document completeness
+   per Quote, and a system architecture that supports onboarding new cloud 
+  marketplaces with minimal rework,
+  ▎ So that document gaps are visible and the platform can scale to new 
+  marketplaces without major redevelopment.
+
+  Report Details:
+  - Base object: Quote; tracks Document 1 (OVF + PDF) and Document 2
+  (Marketplace Acceptance)
+  - Shows "X of 2 docs received" status per Quote; updated in real time
+
+  Extensibility:
+  - Platform-specific validation logic is modular and configurable
+  - New marketplace onboarding does not require core system rewrites
+
+  BRD Ref: ORDB-12, ORDB-13 | Priority: P1/P2
+
+  ---
+  Summary Table
+
+  ┌───────┬────────────────────────────────────┬─────────────────┬──────────┐
+  │   #   │               Story                │     BRD Ref     │ Priority │
+  ├───────┼────────────────────────────────────┼─────────────────┼──────────┤
+  │ US-01 │ External Order Data Ingestion into │ ORDB-01, 02, 03 │ MVP/P0   │
+  │       │  Salesforce                        │                 │          │
+  ├───────┼────────────────────────────────────┼─────────────────┼──────────┤
+  │ US-02 │ Standard Booking Validations &     │ ORDB-04, 05     │ MVP/P0   │
+  │       │ CRSD Handling                      │                 │          │
+  ├───────┼────────────────────────────────────┼─────────────────┼──────────┤
+  │ US-03 │ Cross-Validate Proof of Acceptance │ ORDB-06, 07     │ MVP/P0   │
+  │       │  vs OVF/Quote                      │                 │          │
+  ├───────┼────────────────────────────────────┼─────────────────┼──────────┤
+  │ US-04 │ Route AWS & GCP Orders to Standard │ ORDB-10,        │ MVP/P0   │
+  │       │  Fulfillment                       │ ORDA-03         │          │
+  ├───────┼────────────────────────────────────┼─────────────────┼──────────┤
+  │ US-05 │ Azure 72-Hour Hold, Waiver Check & │ ORDB-08, 09,    │ MVP/P0   │
+  │       │  Auto-Release                      │ ORDA-02         │          │
+  ├───────┼────────────────────────────────────┼─────────────────┼──────────┤
+  │ US-06 │ Azure Order Auto-Approval via      │ ORDA-01         │ MVP/P0   │
+  │       │ Orders Report                      │                 │          │
+  ├───────┼────────────────────────────────────┼─────────────────┼──────────┤
+  │ US-07 │ Alert OM on Azure Auto-Approval    │ ORDA-01         │ MVP/P0   │
+  │       │ Failure                            │                 │          │
+  ├───────┼────────────────────────────────────┼─────────────────┼──────────┤
+  │ US-08 │ Auto-Book Non-Standard Quotes with │ ORDB-14         │ P1       │
+  │       │  Manual Flag                       │                 │          │
+  ├───────┼────────────────────────────────────┼─────────────────┼──────────┤
+  │ US-09 │ Notify OM on Document Receipt &    │ ORDB-11         │ P1       │
+  │       │ Stage PO Failures                  │                 │          │
+  ├───────┼────────────────────────────────────┼─────────────────┼──────────┤
+  │ US-10 │ Document Tracking Report & System  │ ORDB-12, 13     │ P1/P2    │
+  │       │ Extensibility                      │                 │          │
+  └───────┴────────────────────────────────────┴─────────────────┴──────────┘
+
+  ---
+  Exactly 10 stories. Would you like me to push these as Jira issues or
+  prioritize them into sprint-ready epics?
+
+✻ Worked for 51s

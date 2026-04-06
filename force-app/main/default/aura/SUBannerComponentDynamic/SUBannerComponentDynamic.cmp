@@ -1,0 +1,115 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,forceCommunity:searchInterface" access="global" controller="SU_Ltng.SULtngController" >
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" access="global"/>
+    <!-- Client Driven Input Variable -->
+    <aura:attribute name="PlaceHolderText" type="String" default="Search..." access="global"/>
+    <aura:attribute name="searchString" type="String" access="global" default=""/>
+    <aura:attribute name="isEnableTitleRedirect" type="Boolean" access="global" default="false"/>
+    <aura:attribute name="pagesize" type="String" default="10" access="global"/>
+    <aura:attribute name="advanceFilterData" type="String" access="global" description="This is to provide the type of the content source." default=""/>
+    <aura:attribute name="advanceFilterValue" type="String" access="global" description="This is to provide the value of the content source." default=""/>
+    <aura:attribute name="showMetadata" type="Boolean" access="global" default="false"/>
+    <aura:attribute name="showResultbody" type="Boolean" access="global" default="false"/>
+    <!-- Client Driven Input Variable ends here-->
+    <aura:attribute name="aggregation" type="String" default="[]" description="Used in the autosuggest for category selected to be passed in the search query."/>
+    <aura:attribute name="autosuggestList" type="List" default=""/>
+    <aura:attribute name="endPoint" type="String"/>
+    <aura:attribute name="uid" type="String"/>
+    <aura:attribute name="currentCommunityURL" type="String" default="" />
+    <aura:attribute name="delayCounter" type="Integer" default="0" />
+    <aura:attribute name="timer" type="Integer" default="0" />
+
+    <aura:attribute name="customSettingErrorMessage" type="String"/> 
+    <aura:attribute name="currentUserEmail" type="String" default=""/> 
+    <aura:attribute name="resultImgUrl" type="String" />
+    <aura:handler event="SU_Ltng:fillSearchBox" action="{!c.fillSearchBoxOnSuggest}"/>
+    <div class="slds-grid slds-wrap">
+        <div id="su_BannersearchBox" class="slds-col slds-large-size--1-of-1 slds-small-size--1-of-1 slds-medium-size--1-of-1 su-searchBoxDiv su-nopad">
+            <div class="su_BannerContainer su-nopad">
+                <aura:if isTrue="{!if(v.customSettingErrorMessage == '',true,false)}">
+                    
+                    <div class="slds-col slds-large-size--1-of-1 slds-small-size--1-of-1 slds-medium-size--1-of-1 su-searchBoxDiv su-nopad">
+                        <div class="slds-col slds-large-size--1-of-1 slds-small-size--1-of-1 slds-medium-size--1-of-1 su-searchBoxContainer su-nopad">
+                            <ui:inputText class="inputSearchKey inputBox" maxlength="500" placeholder="{!v.PlaceHolderText}" value="{!v.searchString}" keyup="{!c.enterKeySearch}" updateOn="keyup;mouseout" aura:id="searchBoxInput" blur="{!c.mouseleft}"/>
+                            <div class="su-searchBtnDIV">
+                                <a class="su-searchBtn" onclick="{!c.searchButtonPress}">Search</a>
+                            </div>
+                        </div>
+                        <span class="slds-large-size--1-of-1 slds-small-size--1-of-1 slds-medium-size--1-of-1 su-nopad" id="su-suggestions">
+                            <aura:if isTrue="{!if(v.autosuggestList.length > 0, true,false)}">
+                                <div class="su-autocompleteDiv" id="autosuggestElement" onmouseleave="{!c.mouseleft}">
+                                    <aura:iteration items="{!v.autosuggestList}" var="autosuggestItem">
+                                        <div class="slds-large-size--1-of-1 slds-small-size--1-of-1 slds-medium-size--1-of-1 su-autoSuggest-element">
+                                            
+                                            <div class="slds-large-size--1-of-1 slds-small-size--1-of-1 slds-medium-size--1-of-1  su_autosuggest_icon">
+                                                <aura:if isTrue="{!if(autosuggestItem.icon, true,false)}">
+                                                    <img class="su_AutosuggestResultImage" src="{!autosuggestItem.icon}"/>
+                                                </aura:if>
+                                                <h5 class="su-autosuggest-title"> 
+                                                    <a onclick="{!c.fillSearchbox}" id="{!autosuggestItem.highlight.TitleToDisplayString}" data-url = "{!autosuggestItem.href}">
+                                                        <aura:unescapedHtml value="{!autosuggestItem.highlight.TitleToDisplay}">
+                                                        </aura:unescapedHtml>
+                                                    </a>
+                                                    <aura:if isTrue="{!autosuggestItem.pfamily}">
+                                                        <span class="meta-source-name">
+                                                            <aura:unescapedHtml value="{!autosuggestItem.pfamily}">
+                                                            </aura:unescapedHtml>
+                                                        </span>
+                                                    </aura:if>
+                                                </h5>
+                                                
+                                            </div>
+                                            <aura:if isTrue="{!if((v.showMetadata || v.showResultbody ),true,false)}">
+                                                <div class="slds-large-size--1-of-1 slds-small-size--1-of-1 slds-medium-size--1-of-1 su-autosuggest-content">
+                                                    <aura:if isTrue="{!v.showResultbody}">
+                                                        <aura:iteration items="{!autosuggestItem.highlight.SummaryToDisplay}" var="summary">
+                                                            <div class="su-autoSummary-section-child"><aura:unescapedHtml value="{!summary}"></aura:unescapedHtml></div>
+                                                        </aura:iteration>
+                                                    </aura:if>
+                                                    <!-- this code is for the metadata content-->
+                                                    <aura:if isTrue="{!v.showMetadata}">
+                                                        <aura:if isTrue="{!if(autosuggestItem.metadata.length > 0,true,false)}">
+                                                            <div class="su-other-elements-section">
+                                                                <aura:iteration items="{!autosuggestItem.metadata}" var="metadata">
+                                                                    <aura:if isTrue="{!if(metadata.value.length > 0,true,false)}">
+                                                                        <span class="su-metadata">
+                                                                            <span style="margin-right: 15px;">
+                                                                                <b class="su-metadataTitle">{!if(metadata.key == 'post_time','Created Date',metadata.key)}</b>&lrm;:
+                                                                                <aura:if isTrue="{!if(metadata.key == 'post_time',true,false)}">
+                                                                                    <aura:iteration items="{!metadata.value}" var="metadataVal">
+                                                                                        <ui:outputDate value="{!metadataVal}" format="EEE dd MMM yyyy / hh:mm a"/>
+                                                                                    </aura:iteration>
+                                                                                    <aura:set attribute="else">
+                                                                                        <aura:iteration items="{!metadata.value}" var="metadataVal" indexVar="singleVal">
+                                                                                            <aura:if isTrue="{!singleVal == 0}">
+                                                                                                <span>&nbsp;{!metadataVal}</span>
+                                                                                                <aura:set attribute="else">
+                                                                                                    <span>,&nbsp;{!metadataVal}</span>
+                                                                                                </aura:set>
+                                                                                            </aura:if>
+                                                                                        </aura:iteration>
+                                                                                    </aura:set>
+                                                                                </aura:if>
+                                                                            </span>
+                                                                        </span>
+                                                                    </aura:if>
+                                                                </aura:iteration>
+                                                            </div> 
+                                                        </aura:if>
+                                                    </aura:if>
+                                                    <!-- code ends here-->
+                                                </div>
+                                            </aura:if>
+                                        </div>    
+                                    </aura:iteration>
+                                </div>
+                            </aura:if>
+                        </span>
+                    </div>
+                    <aura:set attribute="else">
+                        <span class="suBannerCustomSettingErrMsg">{!v.customSettingErrorMessage}</span>                
+                    </aura:set>
+                </aura:if>
+            </div>
+        </div>
+    </div>
+</aura:component>

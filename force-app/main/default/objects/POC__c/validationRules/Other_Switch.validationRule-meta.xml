@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Other_Switch</fullName>
+    <active>true</active>
+    <description>When Switch Type is &quot;Other Switch,&quot;  &quot;Other Switch&quot; field becomes required</description>
+    <errorConditionFormula>AND(
+ISPICKVAL( Switch_Type__c,&quot;Other - Fill in Field&quot;),
+ISBLANK( Other_Switch__c ))</errorConditionFormula>
+    <errorDisplayField>Other_Switch__c</errorDisplayField>
+    <errorMessage>This field is required when Switch Type is &quot;Other Switch&quot;</errorMessage>
+</ValidationRule>

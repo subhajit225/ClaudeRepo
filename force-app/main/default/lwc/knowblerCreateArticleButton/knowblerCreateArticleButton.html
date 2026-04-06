@@ -1,0 +1,17 @@
+<template>
+  <div class={flexipageregionwidth}>
+    <div class="create_article" onclick={openArticleCreate}>
+      <div
+        class="slds-popover slds-popover_tooltip slds-nubbin_top-right"
+        role="tooltip"
+      >
+        <div class="article_tooltip">Create article</div>
+      </div>
+      <img class="create_article_icon" src={createArticle} alt="" />
+    </div>
+  </div>
+  <div class="create_article_desktop" onclick={openArticleCreate}>
+    <img class="create_article_icon" src={createArticle} alt="" />
+    <div class="article_text">Create Article</div>
+  </div>
+</template>

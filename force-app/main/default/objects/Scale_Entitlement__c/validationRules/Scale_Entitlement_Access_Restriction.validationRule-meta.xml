@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Scale_Entitlement_Access_Restriction</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+NOT($Setup.ShGl_DisableBusinessLogic__c.Disable_Entitlement_Validation_Rules__c),
+NOT(ISNEW()),
+$User.Alias &lt;&gt; &apos;autoproc&apos;,
+NOT(INCLUDES($User.RBAC_Group__c, &apos;API&apos;)),
+NOT(INCLUDES($User.RBAC_Group__c, &apos;IT System Admin&apos;)),
+NOT(INCLUDES($User.RBAC_Group__c, &apos;IT Prod Ops Support&apos;)),
+NOT(INCLUDES($User.RBAC_Group__c, &apos;System - IT&apos;))
+)</errorConditionFormula>
+    <errorMessage>You aren’t authorized to edit scale entitlements, hence please create a support ticket with ProdOps Support or email &quot;ProdOpsapps@rubrik.com” with details</errorMessage>
+</ValidationRule>

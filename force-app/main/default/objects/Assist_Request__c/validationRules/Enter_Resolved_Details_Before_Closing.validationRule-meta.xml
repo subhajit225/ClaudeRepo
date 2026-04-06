@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Enter_Resolved_Details_Before_Closing</fullName>
+    <active>true</active>
+    <errorConditionFormula>IF( AND(ISPICKVAL(Status__c, &apos;Closed&apos;), 
+ISNULL(TEXT(Assist_Request_Fullfilled__c))), true, false )</errorConditionFormula>
+    <errorDisplayField>Assist_Request_Fullfilled__c</errorDisplayField>
+    <errorMessage>Please choose an option.</errorMessage>
+</ValidationRule>

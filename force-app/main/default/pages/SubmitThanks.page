@@ -1,0 +1,69 @@
+<apex:page cache="false" standardStylesheets="false" sidebar="false" showheader="false" applyBodyTag="false">
+    <style>
+    .pbSubsection, pbBody {
+    padding: 25px;
+    }
+    table {
+    padding: 5px;
+    }
+    td.labelCol {
+    font-size: 16px;
+    font-family: Gotham-Medium;
+    padding-left: 10px
+    }
+    td.dataCol {
+    padding: 5px;
+    padding-right: 15px;
+    }
+
+    td.data2Col {
+    padding: 5px;
+    padding-left: 15px;
+    }
+    td {
+    padding: 15px;
+    }
+    wrapper{
+    padding-bottom: 5px;
+    }
+    
+    .btnpad{
+    padding: 15px;
+    }
+    
+    </style>
+    <c:visualstrapblock >
+
+        <!--start header-->
+        <c:siteheader ></c:siteheader>
+        <!--end Header-->
+        
+        <!--start the Container-->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                <div style="margin-top: 50px"/>
+                    <br/>
+                    <apex:outputPanel layout="block" styleClass="alert alert-success"  rendered="{!IF($CurrentPage.parameters.type='ccr', true, false)}">
+                    Thank you for your submission. As a reminder, payouts will be processed monthly. 
+                    </apex:outputpanel> 
+                    <apex:outputPanel layout="block" styleClass="alert alert-success" rendered="{!IF($CurrentPage.parameters.type='dealreg', true, false)}">
+                     Thank you for your submission. You will receive an email confirmation shortly. <br/>
+                    </apex:outputpanel>                     
+                   
+                    <div style="margin-top: 200px"/>
+          
+                    
+                </div>
+             
+        </div>
+        </div>
+        <!--End the Container-->
+
+        <!--start the footer-->
+        <c:sitefooter rendered="{!NOT(ISPICKVAL($User.UserType,'PowerPartner'))}"/>
+        <c:psitefooter rendered="{!ISPICKVAL($User.UserType,'PowerPartner')}"/>
+        
+    </c:visualstrapblock>           
+                
+</apex:page>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>User_Can_Not_Be_Blank</fullName>
+    <active>true</active>
+    <description>User field can not be blank</description>
+    <errorConditionFormula>ISBLANK(User__c)</errorConditionFormula>
+    <errorDisplayField>User__c</errorDisplayField>
+    <errorMessage>User is required. Please enter.</errorMessage>
+</ValidationRule>

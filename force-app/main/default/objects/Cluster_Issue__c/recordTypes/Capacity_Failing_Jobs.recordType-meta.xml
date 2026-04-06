@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Capacity_Failing_Jobs</fullName>
+    <active>true</active>
+    <description>Record type corresponding to Capacity or Failing jobs issue for clusters</description>
+    <label>Capacity/Failing Jobs</label>
+    <picklistValues>
+        <picklist>Close_Reason__c</picklist>
+        <values>
+            <fullName>Case created</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Customer Resolved</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Existing Opportunity</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Incorrect Forecast data</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Opportunity created</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Priority__c</picklist>
+        <values>
+            <fullName>P1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>P2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>P3</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Status__c</picklist>
+        <values>
+            <fullName>Closed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>In Progress</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Open</fullName>
+            <default>true</default>
+        </values>
+    </picklistValues>
+</RecordType>

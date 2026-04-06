@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CompanyName_or_Account_is_mandatory</fullName>
+    <active>true</active>
+    <errorConditionFormula>ISNEW() &amp;&amp; (ISNULL(Account__c ) &amp;&amp; ISBLANK(Company_Name__c)) &amp;&amp; (RecordType.DeveloperName = &apos;Distributor&apos; || RecordType.DeveloperName = &apos;Service_Delivery&apos;)</errorConditionFormula>
+    <errorMessage>Please enter either Company Name or Account</errorMessage>
+</ValidationRule>

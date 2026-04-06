@@ -1,0 +1,499 @@
+@font-face {
+    font-family: 'Gotham-light';
+    src: url(../resource/Inter_Font_Family/Inter-font/Inter_18pt-Light.ttf);
+}
+@font-face {
+    font-family: Gotham-medium;
+    src: url(../resource/Inter_Font_Family/Inter-font/Inter_18pt-Bold.ttf);
+}
+
+@font-face {
+    font-family: 'inter-light';
+    src: url(../resource/Inter_Font_Family/Inter-font/Inter_18pt-Light.ttf);
+}
+@font-face {
+    font-family: 'inter-medium';
+    src: url(../resource/Inter_Font_Family/Inter-font/Inter_18pt-Bold.ttf);
+}
+
+strong{
+    font-family:'inter-medium' !important;
+}
+
+.forceKnowledgeArticleThumbVote button{ text-align: start;
+    /* padding: 4px; */
+    padding-left: 3px;
+    padding-bottom: 0.5rem;
+}
+.forceKnowledgeArticleThumbVote{margin-bottom:2rem !important;}
+/*=================== Topic Catglog ==================================== */
+.topicContent{
+background: none;
+}
+.topicContent:hover{
+    background-color: #009dac;
+    outline: 0;
+}
+.topicLink
+{background-color: #009dac;
+    color: #fff;
+    background: linear-gradient(136.42deg, #00B388 0%, #00B097 13.16%, #00A9BF 51.16%, #00A6D0 72.37%, #00A6D0 72.37%, #00A5D7 81.43%, #00A3E0 100%);
+}
+
+.topicImage{
+    background-size: 25% 47% !important;
+}
+
+li.ql-adduser{display:none !important;}
+.topicLabel {
+    width: 100% !important;
+    font-size: 18px !important;
+    position: relative;
+    font-family: inter-medium;
+    bottom: -90px;
+}
+/*===============================Remove "View File Details" Option Sitewide===========================*/
+a.slds-button.slds-button--icon-inverse.previewerActionLink[title="View File Details"] {
+    display: none !important;
+}
+
+/*===============================Remove "View File Details" Option Sitewide Ends===========================*/
+/*===============================Article Detail Page Css===========================*/
+.forceCommunityArticleThumbVote  .forceKnowledgeArticleThumbVote{
+    width: 1170px;
+    margin: auto;
+
+}
+/*CS21-346 : added to align Article Thumbvote*/
+.forceKnowledgeArticleThumbVote div {
+    align-items:baseline;
+    display:flex;
+    margin-block:auto;
+}
+/*********************************/
+button[title="View File Details"]{display:none !important;}
+.test-id__section.slds-section.slds-is-open.full.forcePageBlockSection.forcePageBlockSectionView:last-child{display:none;}
+.slds-spinner_container {
+    position: fixed;
+}
+.selfServiceArticleHeaderDetail .uiOutputDate , .selfServiceArticleHeaderDetail .article-type{
+    font-size : 14px !important;
+     font-family: inter-Light !important;
+}
+.su_BannerContainer {padding: 2rem 19rem !important;}
+.selfServiceArticleLayout .article-head 
+{
+    font-size: 30px !important ;
+    font-family: inter-Light !important;
+    font-weight: 500;
+}
+.preview-top-toolbar button {
+    display: none;
+}
+.preview-top-toolbar button[title="Download"] {
+    display: block !important;
+}
+.forceActionsContainer .menuButton{
+    display: none !important;
+}
+.profileVisibilitySection{display:none;}
+.forceKnowledgeArticleThumbVote .slds-box--x-small{
+    background : #eee !important;
+}
+.cuf-publisherTopics{display:none;}
+.cuf-actionItem[title="Edit Topics"]{display:none;}
+a[href*='profile'] {pointer-events: none !important;text-decoration: none !important; }
+.forceKnowledgeArticleThumbVote .slds-media__body{
+    font-size : 15px !important;
+    font-family : inter-Light !important;
+}
+.selfServiceUserProfileMenu .myAccount.uiMenuItem{display:none;}
+.selfServiceArticleLayout .slds-section.slds-is-open .slds-section__content{
+    padding: 0 1.6rem;
+}
+#upVoteButton .slds-button svg , #downVoteButton .slds-button svg {
+        width: 25px;
+    max-height: 20px;
+    min-height: 20px;
+}
+#upVoteButton .slds-button , #downVoteButton .slds-button{
+    border : none !important
+}
+.userSettingTabs .uiTabBar{display:none;}
+.userSettingTabs .tabs__content:first-child{display:none;}
+.selfServiceArticleLayout.article-column {
+    padding: 0 0px 0;
+    width: 1170px !important;
+    margin: auto;
+}
+
+.selfServiceArticleLayout .slds-form-element__control.slds-grid.itemBody{
+    padding: 1rem 1rem 0 1rem;
+}
+.forcePageBlockItemView .slds-form-element_readonly {
+    border : none !important;
+    }
+.selfServiceArticleHeaderDetail .timestamp-icon .slds-icon {
+    display : none !important;
+}
+.selfServiceArticleLayout .forcePageBlockSectionView.full .slds-section__title{display:block;}
+.selfServiceArticleLayout .article-summary{ 
+    font-size: 30px;
+    font-family: "inter-light";
+    padding-bottom: 20px !important;
+    color: #333;
+    display : none ;
+}
+.selfServiceArticleLayout .forcePageBlockSectionView.full .test-id__field-label{
+    font-size: 16px !important;
+    font-family: "inter-medium" !important;;
+    padding-bottom: 18px !important;
+    color: #666 !important;
+    font-weight : 300 !important;
+
+}
+/*.forcePageBlockItemView .slds-form-element__label {
+    padding-bottom : 18px !important;
+}*/
+.selfServiceArticleLayout .forcePageBlockSectionView.full .test-id__field-value {
+    color: #222222;
+    font-weight: normal;
+    font-size: 100%;
+    font-size: 16px !important;
+    font-family: "inter-light";
+    padding-bottom: 10px !important;
+    color: #666;
+}
+.selfServiceProfileMenuTrigger .profileIcon {
+    width: 26px !important;
+    height: 26px !important;
+    border-radius: 0 !important;
+    vertical-align: middle;
+}
+.forcePageBlockSection .slds-form-element:not([class*="slds-size"]) {
+    padding-bottom :0px !important;
+}
+.selfServiceArticleHeaderDetail .timestamp-icon{
+    display : none;
+}
+/*================================End===================================================*/
+
+
+
+/*=================profile icon Css===================*/
+.forceCommunityUserProfileDetail  .profileName{
+        position: relative;
+    top: 0px;
+    left: 9px;
+    font-size : 15px !important;
+    font-family : inter-Light !important;
+}
+.userDetailHeader .slds-button{    height: 34px;}
+.forceCommunityUserProfileHeaderDetail{
+    margin: 3rem 18rem;
+    border: 1px solid gray;
+    box-shadow: 1px 1px grey;
+}
+.selfServiceProfileMenuTrigger .triggerDownArrow {
+ 
+    margin-left: 11px  !important;
+    margin-bottom: 1px !important;
+    
+}
+.selfServiceProfileMenuTrigger .trigger-link:focus {
+    box-shadow: none !important;
+    border-radius: 5px;
+    color: #fff !important;
+}
+.selfServiceUserProfileMenu .selfServiceProfileMenuTrigger {
+    margin: 4px;
+}
+/*.forceCommunityUserProfileDetail  a{
+    color: #b1bcc0 !important;
+    background: black;
+    opacity: 0.8;
+    max-height: 40px;
+    min-height: 40px;
+}*/
+.forceCommunityUserProfileDetail  a{
+    font-family: inter-light;
+    font-size: 14px;
+    color: #000;
+}
+.selfServiceProfileMenuTrigger a:hover, .selfServiceProfileMenuTrigger a:focus, .selfServiceProfileMenuTrigger a:active {
+    color: #b1bcc0 !important;
+      opacity: 0.8;
+}
+.selfServiceProfileMenuTrigger a.trigger-link:focus {
+   color: gray!important;
+}
+.selfServiceProfileMenuTrigger a.trigger-link:focus .profileIcon {
+    box-shadow: none !important;
+    border: none !important;
+    outline: none !important;
+}
+.selfServiceArticleLayout .forcePageBlockSectionView.full .slds-section__title{
+    display:block !important;
+}
+
+.selfServiceArticleLayout .forcePageBlockSectionView.full .test-id__section-header-button.slds-section__title-action{  
+    background-color: rgb(0, 153, 222);
+    color: rgb(255, 255, 255);
+}
+.uiMenuItem .myAccount {
+    display : none !important;
+}
+
+/*=================== End Here==========================*/
+
+.siteforceCptBody .cCenterPanel {
+    max-width: 100% !important;
+    margin: 0px !important;
+}
+.siteforceCptBody {
+    border: none !important;
+}
+.siteforceCptBody .cCenterPanel .siteforceContentArea.siteforceSldsTwoCol84Layout>div.slds-col--padded{
+    padding:0px !important;
+}
+#su_BannersearchBox .su-searchBoxContainer .su-searchBtn{
+      margin-top: 0 !important;
+}
+/*css for profile page*/
+.forceCommunityUserProfileDetail .profileDetailView ul.branding-actions.slds-button-group.forceActionsContainer a.forceActionLink, .forceModalActionContainer--footerAction.forceModalActionContainer button.slds-button.slds-button--neutral {
+    padding-left: .9rem;
+    padding-right: .9rem;
+    box-shadow: 0 2px 2px 0 hsla(0,9%,4%,.2);
+    border-radius: 0px!important;
+    font-size: 14px;
+    font-weight: 500!important;
+    text-transform: uppercase!important;
+    transition: .2s ease-in-out;
+    font-family: inter-light;
+    letter-spacing: -.5px;
+    border: 1px solid #009dac;
+    background-color: #009dac;
+    color: #ffffff!important;
+}
+.forceCommunityUserProfileDetail .profileDetailView ul.branding-actions.slds-button-group.forceActionsContainer a.forceActionLink:hover, .forceModalActionContainer--footerAction.forceModalActionContainer button.slds-button.slds-button--neutral:hover{
+    text-decoration: none!important;
+    background-color: #3fb5c0;
+}
+.forceCommunityUserProfileDetail .profileDetailView h1.h1.slds-m-bottom--none.slds-wrap span.profileName {
+    font-family: inter-Medium;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+.detailsData.slds-m-bottom--large .slds-form_stacked .slds-form-element:not(.slds-is-editing){
+    padding:0 !important;
+}
+ .uiInput.uiInputPhone.uiInput--default.uiInput--input label.label.inputLabel.uiLabel-left.form-element__label.uiLabel, .slds-form-element__control .uiInput.uiInputText.uiInput--default.uiInput--input label.label.inputLabel.uiLabel-left.form-element__label.uiLabel, .full.forcePageBlock.forceRecordLayout.forceRecordView .test-id__section-content .test-id__field-label-container span.test-id__field-label, span.label.inputLabel.uiPicklistLabel-top.form-element__label.uiPicklistLabel span, .uiInput.uiInputTextArea.uiInput--default.uiInput--textarea label.label.inputLabel.uiLabel-left.form-element__label.uiLabel span {
+    font-size: 16px;
+    font-family: inter-light;
+    color: #666666;
+}
+ ul.branding-actions.slds-button-group.slds-m-left--xx-small.oneActionsRibbon.forceActionsContainer li.slds-button.slds-button--neutral.slds-truncate {
+    border-radius: 0;
+}
+.uiInput.uiInputTextArea.uiInput--default.uiInput--textarea textarea, .uiPopupTrigger a.select, .slds-form-element__control .uiInput.uiInputText.uiInput--default.uiInput--input input, .forceDetailPanelDesktop .uiInput .form-element__label, .uiInput.uiInputPhone.uiInput--default.uiInput--input input, .modal-header.slds-modal__header .title.slds-text-heading--medium, h3.slds-section__title.slds-theme--shade span.test-id__section-header-title{
+    font-family: inter-light;
+    font-size: 14px;
+}
+.slds-form-element.slds-form-element_readonly .test-id__field-label-container.slds-form-element__label span.test-id__field-label {
+    font-family: inter-light;
+    font-size: 11px;
+}
+.full.forcePageBlock.forceRecordLayout.forceRecordView .test-id__section-content span.uiOutputText {
+    font-family: inter-light;
+    font-size: 14px;
+    color: #000;
+}
+.full.forcePageBlock.forceRecordLayout.forceRecordView .test-id__section-content span {
+    font-family: inter-light;
+    font-size: 14px;
+    color: #000;
+}
+.forceCommunityUserProfileDetail .userBadge{
+    font-size: 16px !important;
+}
+span.label.inputLabel.uiPicklistLabel-left.form-element__label.uiPicklistLabel span, .slds-modal .modal-container.slds-modal__container .form-element__group label.uiLabel-top.form-element__label.uiLabel {
+    font-size: 16px;
+    font-family: inter-light;
+    color: #666666;
+}
+.slds-modal .modal-container.slds-modal__container .form-element__group .uiInput.uiInputText.uiInput--default.uiInput--input input {
+    font-family: inter-light;
+    font-size: 14px;
+    color: #000;
+}
+.forcePageBlockSectionRow .slds-form-element.slds-form-element_readonly.slds-grow.slds-hint-parent.override--slds-form-element {
+    margin-bottom: 10px;
+}
+span.test-id__field-value.slds-form-element__static.slds-grow.is-read-only a.forceOutputAddress, span.test-id__field-value.slds-form-element__static.slds-grow.is-read-only span.uiOutputTextArea, span.test-id__field-value.slds-form-element__static.slds-grow.is-read-only span.uiOutputPhone {
+    font-size: 14px;
+    color: #000;
+    font-family: inter-light;
+}
+span.test-id__field-value.slds-form-element__static.slds-grow.is-read-only a.forceOutputAddress:hover{
+    color: #23527c!important;
+    text-decoration: none;
+}
+.modal-header.slds-modal__header .title.slds-text-heading--medium, h3.slds-section__title.slds-theme--shade span.test-id__section-header-title {
+    font-size: 18px !important;
+}
+span.test-id__field-value.slds-form-element__static.slds-grow.is-read-only a.forceOutputAddress {
+    color: #009dac !important;
+}
+.modal-body.scrollable.slds-modal__content.slds-p-around--medium .uiInput--checkbox input[type="checkbox"]:checked {
+    background-color: #009dac;
+    border-color: #009dac;
+    box-shadow: none;
+}
+ .comm-page-custom-documentationdetail .siteforceSldsOneColLayout.siteforceContentArea .slds-col--padded{
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+/*css for profile detail page ends*/
+/*media queries goes here*/
+@media only screen and (max-width: 1199px) {
+    
+  .cCommunityTemplate .profileMenuRegion {
+        width: 250px;
+        position: absolute;
+        left: -25px !important;
+        right: 0 !important;
+        top: 0px !important;
+    }
+.cMyProducts .assetsDrpdwn .slds-accordion .slds-accordion__list-item section.slds-accordion__section.slds-is-open  {
+    width: auto;
+}
+.cMyProducts .slds-accordion .slds-accordion__list-item section.slds-accordion__section.slds-is-open .slds-accordion__content{
+    height: 300px;
+    overflow: scroll;
+}
+}
+@media only screen and (max-width: 1024px) {
+.menuList.popupTargetContainer ul.scrollable li.uiMenuItem > a {
+    font-size: 12px;
+    color: #333333;
+}
+
+.menuList.popupTargetContainer ul.scrollable li.uiMenuItem:hover {
+    background-color: rgba(25, 124, 190, 0.05);
+}
+.selfServiceUserProfileMenu .selfServiceProfileMenuTrigger .profileIcon {
+    float : right !important;
+    position: relative;
+    left: -25px;
+}
+.selfServiceProfileMenuTrigger .trigger-link:focus .profileIcon {
+    box-shadow: none;
+    outline: 0;
+}
+.selfServiceProfileMenuTrigger span.triggerDownArrow.down-arrow {
+    display: inline-block;
+    border-top: 5px solid;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    display: inline-block;
+    margin-left: 4px;
+    margin-bottom: 3px;
+    vertical-align: middle;
+}
+.selfServiceUserProfileMenu .profileName{
+     display: inline-block !important;
+}
+.selfServiceProfileMenuTrigger a.trigger-link.androidOnly span.profileName {
+   display: inline-block;
+    padding-left: 14px;
+}
+.cCommunityTemplate .profileMenuRegion {
+    left: -45px !important;
+}
+.comm-page-custom-myproducts .slds-col--padded.contentRegion.comm-layout-column {
+    overflow-x: hidden;
+}
+}
+@media only screen and (max-width: 991px) {
+    
+.cMyProducts .slds-accordion .slds-accordion__list-item section.slds-accordion__section.slds-is-open .slds-accordion__content .slds-table_cell-buffer tr > td:last-child {
+    padding: 0;
+}
+.slds-col--padded.slds-size--12-of-12.slds-medium-size--6-of-12.slds-medium-order--2.slds-large-size--6-of-12.slds-large-order--2.comm-layout-column {
+    width: 100%;
+    margin: 0 auto;
+}
+}
+@media only screen and (max-width: 480px) {
+     .SU_LtngSUBannerComponent{    padding: 10px 15px 0 15px !important;}
+.cMyProducts .slds-accordion .slds-accordion__list-item section.slds-accordion__section.slds-is-open {
+    width: 265px;
+}
+.cMyProducts [aria-labelledby="clusters__item"] .slds-large-size--12-of-12.slds-Medium-size--12-of-12.slds-small-size--12-of-12.slds-max-small-size--12-of-12 {
+    overflow: hidden;
+    width:100%;
+}
+ .containerDiv.cDocumentation .topbotmpad .slds-grid.padtop {
+    flex-direction: column !important;
+}
+ .cDocumentation .floatright {
+    text-align: center !important;
+}
+ .slds-col.slds-large-size_6-of-12.showingTotalResults > p {
+    text-align: center;
+    margin-bottom: 10px;
+}
+ .selfServiceProfileMenuTrigger a.trigger-link.androidOnly span.profileName {
+    max-width: 135px;
+}
+}
+.selfServiceArticleLayout .article-column { padding: 0 30px 0; }
+.showMoreDetailsLink{
+    display:none !important;
+}
+
+.forceCommunityCaseDeflection{
+    overflow:hidden !important;
+}
+.cuf-questionTitleLabel :nth-child(2){
+    display:none !important;
+}
+.cuf-questionTitleLabel:nth-child(1)::after{
+    content:'Title';
+}
+.questionbody::before{
+    content:'Description';
+}
+.forcePageBlockSectionEdit:nth-child(2){
+    display: none !important;
+}
+.uiTooltip{
+    display:none;
+}
+.selfServiceArticleLayout .uiTooltip{
+    display:none!important;
+}
+
+.cuf-entityAdditionalLabel{
+    display:none;
+}
+.forceChatterEntityCard .entityProfile .details .userAdditonalLabel {
+    display: none;
+}
+.forceChatterEntityCard .entityProfile .details .userTitle {
+    display: none;
+}
+/* added for Gamification */
+.supportCommunityPhoto {
+    pointer-events: none !important;
+}
+/* Gamification - end*/
+/* discussion change start*/
+.cuf-actorBadge {
+    display: none!important;
+}
+.cuf-actorDescription {
+    display: none!important;
+}
+/* discussion change end*/
+:root { --dxp-c-section-columns-max-width: 1170px; }

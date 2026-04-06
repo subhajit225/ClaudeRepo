@@ -1,0 +1,4 @@
+<aura:component extends="c:PC_UtilityCmp" implements="flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" access="global" Controller="PC_PartnerFundClaimController" >
+	<aura:attribute name="recordId" type="String" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInIt}" />
+</aura:component>

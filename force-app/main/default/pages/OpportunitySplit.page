@@ -1,0 +1,392 @@
+<apex:page id="pageId" extensions="OpportunitySplitController" standardController="Opportunity" sidebar="false" lightningStylesheets="true">
+<apex:outputPanel rendered="{!$User.UITheme != 'Theme3'}">
+        <style>
+            .msgIcon{
+             width: 14px !important;
+             height: 14px !important;
+            }
+            .errorM3{
+             font-size: 14px !important;
+            }
+            .messageCell{
+             font-size: 14px !important;
+            }
+            .messageTable{
+             font-size: 14px !important;
+            }
+        </style>
+    </apex:outputPanel>
+   <!--Created by PALAK-->
+     <head>
+       
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+         <script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    </head>
+ <apex:form id="formId"> 
+<div class="container">
+    <apex:pageMessages id="showmsg"></apex:pageMessages>
+     <div class="alert alert-danger alert-dismissable fade out" id="errorBar">
+       
+        <strong>Error!</strong> <span id="errorMsg"></span>
+    </div>
+    
+    <div class="row">
+        <div class="panel panel-default">
+             <div class="panel-heading">
+         <h3 class="panel-title pull-left">
+            <div>
+                    
+             </div>
+            
+
+        </h3>
+       <!--onclick="return performValidation()"-->
+        <apex:commandLink action="{!performValidation}"  value="Save" id="saveBtnId" styleclass="btn btn-default pull-right"/>
+        <apex:commandLink action="{!cancelAction}" value="Cancel" id="theCancelLink" styleclass="btn btn-default pull-right"/>
+        
+        <div class="clearfix"></div>
+                 <div><h3>
+                     {!primaryOpportunity.Name}
+                     </h3>
+                 
+             </div>
+    </div>
+          <div class="panel-body">
+                <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Team Member</th>
+              <th>Percentage (%)</th>
+              <th>Split Amount(TCV)</th> 
+              <th>Split Amount(ACV)</th> 
+              <th></th>
+              <th></th>
+              <!--//SAL22-317 <th>Amount</th>-->
+            </tr>
+          </thead>
+          <tbody id="myTable">
+            <tr>
+                <td>1</td>
+                <td>{!primaryOpportunity.Owner.Name}</td>
+                <td><apex:inputText id="user1Per" value="{!primaryOpportunity.Split_percentage__c}" onblur="handlePercChange(this.value,'0')" styleclass="numeric"/></td>
+                <td><apex:outputText id="user1Amt" value="{!primaryOpportunity.Amount}" styleclass="numeric"/></td>
+                <td><apex:outputText id="user1AmtACV" value="{!primaryOpportunity.ACV_Amount__c}" styleclass="numeric"/></td>
+                <td><apex:commandLink action="{!addRow}"  value="Add Row" id="theCommandLinkAdd" styleclass="btn btn-default" /></td>
+                <!--//SAL22-317 <td><apex:inputText id="user1Amt" value="{!primaryOpportunity.Split_Amount__c}" styleclass="numeric"/></td>-->
+            </tr>
+            <apex:repeat value="{!wrapperList}" var="wrap">
+            
+            <tr>
+              <td>{!wrap.index}</td>
+              <td><apex:inputField id="user2Oid" value="{!wrap.opp.OwnerId}"  required="false"/></td>
+              <td><apex:inputText id="user2Per" value="{!wrap.opp.Split_percentage__c}" onblur="handlePercChange(this.value,{!wrap.index})" styleclass="numeric"/></td>
+              <td><apex:outputText id="user2Amt" value="{!wrap.opp.Amount}" styleclass="numeric"/></td>
+              <td><apex:outputText id="user2AmtACV" value="{!wrap.opp.ACV_Amount__c}" styleclass="numeric"/></td>
+              <td><apex:commandLink action="{!addRow}"  value="Add Row" id="theCommandLinkAdd" styleclass="btn btn-default"  /></td>
+              <td><input type="button" class="deleteButton" id="deleteBtnId" onclick="deleteRowJS({!wrap.index})" value="Delete Row"/></td>
+              <!--//SAL22-317 <td><apex:inputText id="user2Amt" value="{!wrap.opp.Split_Amount__c}" styleclass="numeric"/> </td>-->
+             </tr>
+
+            </apex:repeat>     
+            <tr>
+                 <td></td>  
+                 <td>Totals</td> 
+                 <td><apex:outputText id="totalSplit" value="" styleclass="numeric"/></td> 
+                 <td><apex:outputText id="totalAmt" value="" styleclass="numeric"/></td> 
+                 <td><apex:outputText id="totalAmtACV" value="" styleclass="numeric"/></td> 
+            </tr>
+          </tbody>
+        </table>   
+      </div>
+
+          </div>    
+            <apex:inputHidden value="{!deleteRowIndex}" id="deleteRowIndexId" /> 
+            <apex:inputHidden value="{!disableButtons}" id="disableButtonsId" />    
+            <!--//SAL22-317 <apex:inputHidden value="{!staticAmount}" id="theHiddenInput" />-->
+            <div class="panel-footer acctName">Account Name: <apex:outputText value="{!primaryOpportunity.Account.Name}"></apex:outputText></div>                     
+            <div class="panel-footer optyTotalValue">Opportunity Total TCV Value: <apex:outputText value="{0, number, $###,##0.00}"><apex:param value="{!optyTotalValue}"/></apex:outputText></div>
+                <div class="panel-footer optyTotalValue">Opportunity Total ACV Value: <apex:outputText value="{0, number, $###,##0.00}"><apex:param value="{!optyTotalACVValue}"/></apex:outputText></div>
+            <!--//SAL22-317 <div class="panel-footer staticAmount" style="display:none">Opportunity Total Value: <apex:inputText id="optyTotalInput" value="{!staticAmount}" styleclass="numeric"/></div>-->
+
+
+        </div>
+            <div class="col-md-12 text-center">
+      <ul class="pagination pagination-lg pager" id="myPager"></ul>
+      </div>
+    </div>
+</div>
+      <apex:actionFunction action="{!deleteRow}" name="deleteRowAF">
+        <apex:param name="param" assignTo="{!deleteRowIndex}" value="" />
+    </apex:actionFunction>
+ </apex:form> 
+   <script>
+    
+        var j$ = jQuery.noConflict();
+         var performActionUser1;
+         var performActionUser2;
+         var performActionUser3;
+         var performActionUser4;
+         j$(document).ready(function(){
+             /*j$('#clickHere').click(function(){
+                 var xyz = j$('id$=userInput]').val();
+                 alert(xyz);
+            });*/
+            //SAL22-317
+             /*if(j$('[id$=theHiddenInput]').attr('value')=='0.00'){
+                 j$('.optyTotalValue').show();
+                 j$('.staticAmount').hide();
+             }
+             else{
+                 j$('.optyTotalValue').hide();
+                 j$('.staticAmount').show();
+                 }*/
+             j$('.numeric').keypress(function (event) {
+                return isNumber(event, this)
+            });
+            calculateTotalTableRows();
+            var disableButtonsVal = document.getElementById('pageId:formId:disableButtonsId').value;
+            if(disableButtonsVal == true || disableButtonsVal == 'true'){
+                j$('[id$=theCommandLinkAdd]').hide();
+                j$('[id$=deleteBtnId]').hide();
+                j$('[id$=saveBtnId]').hide();
+            }
+        });   
+         
+         function performValidation()
+            {
+               var message = '';
+               
+                if(j$.trim(j$('[id$=user1Per]').val()).length!==0){
+                
+                        performActionUser1=true;
+                    if(j$.trim(j$('[id$=user2Per]').val()).length!==0 || j$.trim(j$('[id$=user2Amt]').val()).length!==0 || j$.trim(j$('[id$=user2Oid]').val()).length!==0){
+                        
+                        if(((j$.trim(j$('[id$=user2Per]').val()).length!==0 && j$.trim(j$('[id$=user2Per]').val())!=='0.00') && (j$.trim(j$('[id$=user2Amt]').val()).length!==0 && j$.trim(j$('[id$=user2Amt]').val())!=='0.00')) && j$.trim(j$('[id$=user2Oid]').val()).length!==0){
+                            
+                            performActionUser2=false;
+                            message = 'Split #2 - You can not select both amount and percentage at the same time.';
+                            j$('#errorBar').removeClass('out');
+                            j$('#errorBar').addClass('in');
+                            j$('#errorMsg').html(message);
+                            return false;
+                        }
+                         if((j$.trim(j$('[id$=user2Per]').val()).length!==0 && j$.trim(j$('[id$=user2Oid]').val()).length!==0)
+                        || (j$.trim(j$('[id$=user2Amt]').val()).length!==0 && j$.trim(j$('[id$=user2Oid]').val()).length!==0)
+                        ){
+                            //alert(" found 3");
+                            performActionUser2=true;
+                        }
+                            
+                        
+                        else{
+                            performActionUser2=false;
+                            
+                            //alert("error 2");
+                            message = 'Split #2 - Percentage/Amount is required when User is selected and vice versa.';
+                            j$('#errorBar').removeClass('out');
+                            j$('#errorBar').addClass('in');
+                            j$('#errorMsg').html(message);
+                            return false;
+                            }
+                            
+                    
+                    }
+                    else{
+                            //alert("true 2");
+                        performActionUser2=true;
+                    }
+                    if(j$.trim(j$('[id$=user3Per]').val()).length!==0 || j$.trim(j$('[id$=user3Amt]').val()).length!==0 || j$.trim(j$('[id$=user3Oid]').val()).length!==0){
+                        
+                        if(((j$.trim(j$('[id$=user3Per]').val()).length!==0 && j$.trim(j$('[id$=user3Per]').val())!=='0.00') && (j$.trim(j$('[id$=user3Amt]').val()).length!==0 && j$.trim(j$('[id$=user3Amt]').val())!=='0.00')) && j$.trim(j$('[id$=user3Oid]').val()).length!==0){
+                            performActionUser3=false;
+                            message = 'Spit #3 - You can not select both amount and percentage at the same time.';
+                            j$('#errorBar').removeClass('out');
+                            j$('#errorBar').addClass('in');
+                            j$('#errorMsg').html(message);
+                            return false;
+                        }   
+                        if((j$.trim(j$('[id$=user3Per]').val()).length!==0 && j$.trim(j$('[id$=user3Oid]').val()).length!==0)
+                        || (j$.trim(j$('[id$=user3Amt]').val()).length!==0 && j$.trim(j$('[id$=user3Oid]').val()).length!==0)
+                        ){
+                            //alert(" found 3");
+                            performActionUser3=true;
+                        }
+                        else{
+                            performActionUser3=false;
+                            message = 'Spit #3 - Percentage/Amount is required when User is selected and vice versa.';
+                            j$('#errorBar').removeClass('out');
+                            j$('#errorBar').addClass('in');
+                            j$('#errorMsg').html(message);
+                            return false;
+                            }
+                    
+                    }else{
+                        //alert("true 3");
+                        performActionUser3=true;
+                    }
+                    if(j$.trim(j$('[id$=user4Per]').val()).length!==0 || j$.trim(j$('[id$=user4Amt]').val()).length!==0 || j$.trim(j$('[id$=user4Oid]').val()).length!==0){
+                        
+                        if(((j$.trim(j$('[id$=user4Per]').val()).length!==0 && j$.trim(j$('[id$=user4Per]').val())!=='0.00') && (j$.trim(j$('[id$=user4Amt]').val()).length!==0 && j$.trim(j$('[id$=user4Amt]').val())!=='0.00')) && j$.trim(j$('[id$=user4Oid]').val()).length!==0){
+                            performActionUser4=false;
+                            message = 'Split #4 - You can not select both amount and percentage at the same time.';
+                            j$('#errorBar').removeClass('out');
+                            j$('#errorBar').addClass('in');
+                            j$('#errorMsg').html(message);
+                            return false;
+                        }
+                        
+                        if((j$.trim(j$('[id$=user4Per]').val()).length!==0 && j$.trim(j$('[id$=user4Oid]').val()).length!==0)
+                        || (j$.trim(j$('[id$=user4Amt]').val()).length!==0 && j$.trim(j$('[id$=user4Oid]').val()).length!==0)
+                        ){    //alert(" found 4");
+                            performActionUser4=true;
+                        }
+                        else{
+                            performActionUser4=false;
+                            message = '4-Percentage/Amount is required when User is selected and vice versa.';
+                            //alert("error 4");
+                            j$('#errorBar').removeClass('out');
+                            j$('#errorBar').addClass('in');
+                            j$('#errorMsg').html(message);
+                            return false;
+                            }
+                    
+                    }else{
+                        performActionUser4=true;
+                        //alert("true 4");
+                        return validateAmountPer();
+                    }
+                        
+                }
+                else{
+                    performActionUser1=false;
+                    //alert("1 no");
+                    message = 'Percentage or Amount can not left blank.';
+                    j$('#errorBar').removeClass('out');
+                    j$('#errorBar').addClass('in');
+                    j$('#errorMsg').html(message);
+                    return false;
+                    }
+                
+                
+               if(performActionUser1==true){
+                  if(performActionUser2==true && performActionUser3==true && performActionUser4==true){
+                         message = '';
+                          j$('#errorBar').removeClass('in');
+                            j$('#errorBar').addClass('out');
+                             j$('#errorMsg').html(message);
+                  }
+                   else{
+                      // alert("error A");
+                       }
+               
+               }
+                else{
+                    //alert("error B")
+                    }
+                
+                
+            }
+    function validateAmountPer(){
+        var totalPer = parseFloat(j$.trim(j$('[id$=user1Per]').val()));
+        var message = '';
+        if(j$.trim(j$('[id$=user3Per]').val()) != '') {
+           totalPer += parseFloat(j$.trim(j$('[id$=user3Per]').val()));
+        }
+         if(j$.trim(j$('[id$=user2Per]').val()) != '') {
+             totalPer += parseFloat(j$.trim(j$('[id$=user2Per]').val()));
+         }
+         if(j$.trim(j$('[id$=user4Per]').val()) != '') {
+             totalPer += parseFloat(j$.trim(j$('[id$=user4Per]').val()));
+         } 
+         
+        //alert(totalPer);
+         if(totalPer > 100) {
+             message = 'Total percentage can not be greater than 100';
+             j$('#errorBar').removeClass('out');
+             j$('#errorBar').addClass('in');
+             j$('#errorMsg').html(message);
+             return false;
+         }
+        else if(totalPer < 100)
+        {
+            message = 'Total percentage can not be less than 100';
+             j$('#errorBar').removeClass('out');
+             j$('#errorBar').addClass('in');
+             j$('#errorMsg').html(message);
+             return false;
+            }
+        
+        return true;
+    }
+    function deleteRowJS(index){
+        document.getElementById('pageId:formId:deleteRowIndexId').value = index;
+        deleteRowAF(index);
+    }
+    function handlePercChange(percValue,index){
+        console.log(percValue);
+        console.log(index);
+        var totalAmount = 0;
+        var totalAmountACV = 0;
+        if('{!optyTotalValue}' != ''){
+            totalAmount = parseFloat('{!optyTotalValue}');
+            totalAmountACV = parseFloat('{!optyTotalACVValue}');
+            if(index == '0'){
+                j$('[id$=user1Amt]')[0].innerHTML = (totalAmount*percValue/100).toFixed(2);
+                j$('[id$=user1AmtACV]')[0].innerHTML = (totalAmountACV*percValue/100).toFixed(2);
+            }else{
+                j$('[id$=user2Amt]')[index-2].innerHTML = (totalAmount*percValue/100).toFixed(2);
+                j$('[id$=user2AmtACV]')[index-2].innerHTML = (totalAmountACV*percValue/100).toFixed(2);
+            }
+        }
+        calculateTotalPercAmount();
+    }
+    function calculateTotalTableRows(){
+        handlePercChange(j$('[id$=user1Per]')[0].value,0);
+        for(var i=0;i<j$('[id$=user2Per]').length;i++){
+            handlePercChange(j$('[id$=user2Per]')[i].value,i+2);
+        }
+    }
+    function calculateTotalPercAmount(){
+        var tsplit = 0;
+        var tamt = 0;
+        var tamtacv = 0;
+        if(j$('[id$=user1Per]')[0].value != '')
+            tsplit = tsplit+parseFloat(j$('[id$=user1Per]')[0].value);
+        if(j$('[id$=user1Amt]')[0].innerHTML != '')
+            tamt = tamt+parseFloat(j$('[id$=user1Amt]')[0].innerHTML);
+        if(j$('[id$=user1AmtACV]')[0].innerHTML != '')
+            tamtacv = tamtacv+parseFloat(j$('[id$=user1AmtACV]')[0].innerHTML);
+        for(var i=0;i<j$('[id$=user2Per]').length;i++){
+            if(j$('[id$=user2Per]')[i].value != '')
+                tsplit = tsplit+parseFloat(j$('[id$=user2Per]')[i].value);
+            if(j$('[id$=user2Amt]')[i].innerHTML != '')
+                tamt = tamt+parseFloat(j$('[id$=user2Amt]')[i].innerHTML);
+            if(j$('[id$=user2AmtACV]')[i].innerHTML != '')
+                tamtacv = tamtacv+parseFloat(j$('[id$=user2AmtACV]')[i].innerHTML);
+        }
+        if(isNaN(tsplit)){
+            tsplit = '';
+        }
+        j$('[id$=totalSplit]')[0].innerHTML = tsplit.toFixed(2);
+        j$('[id$=totalAmt]')[0].innerHTML = tamt.toFixed(2);
+        j$('[id$=totalAmtACV]')[0].innerHTML = tamtacv.toFixed(2);
+    }
+    /* */
+    function isNumber(evt, element) {
+        var charCode = (evt.which) ? evt.which : event.keyCode
+
+        if (
+            (charCode != 45 || j$(element).val().indexOf('-') != -1) &&      // “-” CHECK MINUS, AND ONLY ONE.
+            (charCode != 46 || j$(element).val().indexOf('.') != -1) &&      // “.” CHECK DOT, AND ONLY ONE.
+            (charCode < 48 || charCode > 57))
+            return false;
+
+        return true;
+    } 
+      
+   </script>
+ </apex:page>

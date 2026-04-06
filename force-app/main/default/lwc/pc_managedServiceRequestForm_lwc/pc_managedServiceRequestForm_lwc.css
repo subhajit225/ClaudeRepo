@@ -1,0 +1,18 @@
+.customRequired{
+    font-weight: 400; 
+} 
+.customRequired:before{    
+    content: "*";
+    margin: 0 0.125rem 0 0.125rem;
+    color: rgb(234, 0, 30);
+    float: left; 
+}
+.form-element__helpError {
+    color: rgb(234, 0, 30);
+}
+.none{
+    display:none; 
+}
+.slds-has-error [role=combobox] input[readonly] {
+    border-color: rgb(234, 0, 30);
+}
