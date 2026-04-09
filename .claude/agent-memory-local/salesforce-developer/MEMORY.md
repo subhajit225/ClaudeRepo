@@ -1,1 +1,0 @@
-- [Opportunity Trigger Pricebook Reassignment](opp-trigger-pricebook.md) -- OpportunityTrigger reassigns Pricebook2Id from Standard to CPQ PriceBook; OLI scripts must re-query after insert
